@@ -1086,6 +1086,7 @@ protected:
         const Point& minCoords, const Point& maxCoords,
         bool instantaneous = false
     );
+    bool clearSelections();
     void closeTopDialog();
     void doLogicPost();
     void doLogicPre();
@@ -1124,6 +1125,7 @@ protected:
         bool needsCtrl = false, bool needsShift = false
     );
     bool isInternalNameGood(const string& name) const;
+    bool isSelectionIdle() const;
     bool listPopup(
         const char* label, const vector<string>& items, string* pickedItem,
         bool useMonospace = false

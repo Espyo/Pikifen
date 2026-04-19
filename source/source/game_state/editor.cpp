@@ -220,6 +220,26 @@ void Editor::centerCamera(
 
 
 /**
+ * @brief Unselects everything from all registered selection controllers.
+ *
+ * @return Whether any of them had anything to unselect.
+ */
+bool Editor::clearSelections() {
+    bool unselectedSomething = false;
+    
+    forIdx(c, selectionControllers) {
+        forIdx(m, selectionControllers[c]->managers) {
+            if(selectionControllers[c]->managers[m]->clear()) {
+                unselectedSomething = true;
+            }
+        }
+    }
+    
+    return unselectedSomething;
+}
+
+
+/**
  * @brief Closes the topmost dialog that is still open.
  */
 void Editor::closeTopDialog() {
@@ -1368,6 +1388,22 @@ bool Editor::isInternalNameGood(const string& name) const {
         const bool isDigit = ch >= '0' && ch <= '9';
         const bool isUnderscore = ch == '_';
         if(!isLowercase && !isDigit && !isUnderscore) return false;
+    }
+    return true;
+}
+
+
+/**
+ * @brief Returns whether everything selection-related is idle, or if we're
+ * in the middle of some selection-related operation.
+ *
+ * @return Whether we're idle.
+ */
+bool Editor::isSelectionIdle() const {
+    forIdx(c, selectionControllers) {
+        if(!selectionControllers[c]->isIdle()) {
+            return false;
+        }
     }
     return true;
 }

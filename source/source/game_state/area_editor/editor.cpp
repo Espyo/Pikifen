@@ -587,7 +587,7 @@ AreaEditor::AreaEditor() :
     reviewSelCtrl.dragMoveRule = SelectionController::OP_RULE_ALWAYS;
     reviewSelCtrl.overlapsCycle = true;
     reviewSelCtrl.clickingSelectedUnselectsOthers = false;
-
+    
     selectionControllers.push_back(&layoutSelCtrl);
     selectionControllers.push_back(&mobsSelCtrl);
     selectionControllers.push_back(&pathsSelCtrl);
@@ -618,7 +618,7 @@ void AreaEditor::addNewMobCmd(float inputValue) {
         return;
     }
     
-    clearSelection();
+    clearSelections();
     setStatus("Use the canvas to place a new object.");
     subState = EDITOR_SUB_STATE_NEW_MOB;
 }
@@ -667,7 +667,7 @@ void AreaEditor::addNewPathCmd(float inputValue) {
         return;
     }
     
-    clearSelection();
+    clearSelections();
     pathDrawingStop1 = nullptr;
     setStatus("Use the canvas to draw a path.");
     subState = EDITOR_SUB_STATE_PATH_DRAWING;
@@ -686,7 +686,7 @@ void AreaEditor::addNewRegionCmd(float inputValue) {
         return;
     }
     
-    clearSelection();
+    clearSelections();
     registerChange("region creation");
     AreaRegion* newRegion = new AreaRegion();
     newRegion->pose.size = MISSION::EXIT_MIN_SIZE;
@@ -710,7 +710,7 @@ void AreaEditor::addNewReminderCmd(float inputValue) {
         return;
     }
     
-    clearSelection();
+    clearSelections();
     registerChange("reminder creation");
     AreaMakerReminder newReminder;
     game.curArea->reminders.push_back(newReminder);
@@ -735,7 +735,7 @@ void AreaEditor::addNewTreeShadowCmd(float inputValue) {
         return;
     }
     
-    clearSelection();
+    clearSelections();
     setStatus("Use the canvas to place a new tree shadow.");
     subState = EDITOR_SUB_STATE_NEW_SHADOW;
 }
@@ -803,7 +803,7 @@ void AreaEditor::cancelLayoutMoving() {
  * @param newState The new state.
  */
 void AreaEditor::changeState(const EDITOR_STATE newState) {
-    clearSelection();
+    clearSelections();
     state = newState;
     subState = EDITOR_SUB_STATE_NONE;
     setStatus();
@@ -863,7 +863,7 @@ void AreaEditor::circleSectorCmd(float inputValue) {
         return;
     }
     
-    clearSelection();
+    clearSelections();
     clearCircleSector();
     setStatus("Use the canvas to place a circular sector.");
     subState = EDITOR_SUB_STATE_CIRCLE_SECTOR;
@@ -885,7 +885,7 @@ void AreaEditor::clearCircleSector() {
 void AreaEditor::clearCurrentArea() {
     referenceFilePath.clear();
     updateReference();
-    clearSelection();
+    clearSelections();
     clearCircleSector();
     clearLayoutDrawing();
     clearLayoutMoving();
@@ -947,7 +947,7 @@ void AreaEditor::clearLayoutMoving() {
         forgetPreparedState(preMoveAreaData);
         preMoveAreaData = nullptr;
     }
-    clearSelection();
+    clearSelections();
     moving = false;
 }
 
@@ -966,26 +966,6 @@ void AreaEditor::clearProblems() {
     problemSectorPtr = nullptr;
     problemShadowPtr = nullptr;
     problemVertexPtr = nullptr;
-}
-
-
-/**
- * @brief Clears the data about the current selection.
- */
-void AreaEditor::clearSelection() {
-    if(subState == EDITOR_SUB_STATE_OCTEE) {
-        subState = EDITOR_SUB_STATE_NONE;
-    }
-    
-    vertexSelection.clear();
-    edgeSelection.clear();
-    sectorSelection.clear();
-    mobSelection.clear();
-    pathStopSelection.clear();
-    pathLinkSelection.clear();
-    shadowSelection.clear();
-    regionSelection.clear();
-    reminderSelection.clear();
 }
 
 
@@ -1116,7 +1096,7 @@ void AreaEditor::createArea(const string& requestedAreaPath) {
     
     finishNewSectorDrawing();
     
-    clearSelection();
+    clearSelections();
     
     //Give a texture to give to this sector.
     string textureToUse = findGoodFirstTexture();
@@ -1348,7 +1328,7 @@ void AreaEditor::deleteEdgeCmd(float inputValue) {
     bool success = deleteSelectedEdges();
     
     //Cleanup.
-    clearSelection();
+    clearSelections();
     subState = EDITOR_SUB_STATE_NONE;
     
     //Report.
@@ -1390,7 +1370,7 @@ void AreaEditor::deleteMobCmd(float inputValue) {
     deleteSelectedMobs();
     
     //Cleanup.
-    clearSelection();
+    clearSelections();
     subState = EDITOR_SUB_STATE_NONE;
     
     //Report.
@@ -1431,7 +1411,7 @@ void AreaEditor::deletePathCmd(float inputValue) {
     deleteSelectedPathStops();
     
     //Cleanup.
-    clearSelection();
+    clearSelections();
     subState = EDITOR_SUB_STATE_NONE;
     forIdx(s, game.curArea->pathStops) {
         game.curArea->fixPathStopIdxs(game.curArea->pathStops[s]);
@@ -1488,7 +1468,7 @@ void AreaEditor::deleteRegionCmd(float inputValue) {
     deleteSelectedRegions();
     
     //Cleanup.
-    clearSelection();
+    clearSelections();
     subState = EDITOR_SUB_STATE_NONE;
     
     //Report.
@@ -1561,7 +1541,7 @@ void AreaEditor::deleteTreeShadowCmd(float inputValue) {
     deleteSelectedTreeShadows();
     
     //Cleanup.
-    clearSelection();
+    clearSelections();
     subState = EDITOR_SUB_STATE_NONE;
     
     //Report.
@@ -2685,23 +2665,6 @@ void AreaEditor::handleLineError() {
 
 
 /**
- * @brief Returns whether everything selection-related is idle, or if we're
- * in the middle of some selection-related operation.
- *
- * @return Whether we're idle.
- */
-bool AreaEditor::isSelectionIdle() const {
-    if(moving) return false;
-    forIdx(c, selectionControllers) {
-        if(!selectionControllers[c]->isIdle()) {
-            return false;
-        }
-    }
-    return true;
-}
-
-
-/**
  * @brief Code to run for the layout drawing command.
  *
  * @param inputValue Value of the player input for the command.
@@ -2732,7 +2695,7 @@ void AreaEditor::layoutDrawingCmd(float inputValue) {
         return;
     }
     
-    clearSelection();
+    clearSelections();
     clearLayoutDrawing();
     updateLayoutDrawingStatusText();
     subState = EDITOR_SUB_STATE_DRAWING;
@@ -2776,7 +2739,7 @@ void AreaEditor::load() {
     quickPreviewTimer.stop();
     previewSong.clear();
     clearProblems();
-    clearSelection();
+    clearSelections();
     
     changeState(EDITOR_STATE_MAIN);
     game.audio.setCurrentSong(game.sysContentNames.sngEditors, false);
@@ -3391,7 +3354,7 @@ bool AreaEditor::saveArea(bool toBackup) {
     bool deletedSectors;
     game.curArea->cleanup(&deletedSectors);
     if(deletedSectors && sectorSelection.hasAny()) {
-        clearSelection();
+        clearSelections();
     }
     
     //Store everything into the relevant data nodes.
@@ -3548,6 +3511,9 @@ void AreaEditor::selectAllCmd(float inputValue) {
             shadowSelection.addAll(game.curArea->treeShadows.size());
             regionSelection.addAll(game.curArea->regions.size());
             
+        } else if(state == EDITOR_STATE_REVIEW) {
+            reminderSelection.addAll(game.curArea->reminders.size());
+            
         }
         
     } else if(
@@ -3574,7 +3540,7 @@ void AreaEditor::selectAllCmd(float inputValue) {
 void AreaEditor::selectionFilterCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
-    clearSelection();
+    clearSelections();
     if(!isShiftPressed) {
         selectionFilter =
             (SELECTION_FILTER)
@@ -3611,7 +3577,7 @@ void AreaEditor::selectionFilterCmd(float inputValue) {
  * @param label Label to search for.
  */
 void AreaEditor::selectPathStopsWithLabel(const string& label) {
-    clearSelection();
+    clearSelections();
     forIdx(s, game.curArea->pathStops) {
         if(game.curArea->pathStops[s]->label == label) {
             pathStopSelection.add(s);
@@ -3788,7 +3754,7 @@ void AreaEditor::setStateFromUndoOrRedoHistory(Area* state) {
     undoSaveLockOperation.clear();
     updateUndoHistory();
     
-    clearSelection();
+    clearSelections();
     clearCircleSector();
     clearLayoutDrawing();
     clearLayoutMoving();

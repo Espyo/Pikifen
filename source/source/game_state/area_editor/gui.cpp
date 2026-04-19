@@ -2807,7 +2807,7 @@ void AreaEditor::processGuiPanelLayout() {
                     Point(EDITOR::ICON_BMP_SIZE)
                 )
             ) {
-                clearSelection();
+                clearSelections();
             }
             setTooltip(
                 "Clear the selection.",

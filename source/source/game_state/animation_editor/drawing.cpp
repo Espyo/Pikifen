@@ -96,7 +96,7 @@ void AnimationEditor::drawCanvas() {
         s = curAnimInst.curAnim->frames[curAnimInst.curFrameIdx].spritePtr;
         
     } else if(
-        state == EDITOR_STATE_SPRITE || state == EDITOR_STATE_TOP ||
+        state == EDITOR_STATE_SPRITE || state == EDITOR_STATE_PIKMIN_TOP ||
         state == EDITOR_STATE_HITBOXES ||
         state == EDITOR_STATE_SPRITE_BITMAP ||
         state == EDITOR_STATE_SPRITE_TRANSFORM
@@ -110,7 +110,7 @@ void AnimationEditor::drawCanvas() {
     bool drawLeaderSilhouette = leaderSilhouetteVisible;
     float gridAlpha = gridVisible ? 0.33f : 0.0f;
     
-    if(state == EDITOR_STATE_SPRITE_TRANSFORM || state == EDITOR_STATE_TOP) {
+    if(state == EDITOR_STATE_SPRITE_TRANSFORM || state == EDITOR_STATE_PIKMIN_TOP) {
         drawHitboxes = false;
     }
     
@@ -269,7 +269,7 @@ void AnimationEditor::drawCanvas() {
                 1.0f / game.editorsView.cam.zoom
             );
             
-        } else if(state == EDITOR_STATE_TOP && s->topVisible) {
+        } else if(state == EDITOR_STATE_PIKMIN_TOP && s->topVisible) {
             curTransformationWidget.draw(
                 &s->topPose.pos,
                 &s->topPose.size,

@@ -1133,19 +1133,14 @@ void GuiEditor::processGuiPanelItems() {
                 Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
-            CustomGuiItemDef newItem;
-            newItem.name = "new_item";
-            setToDefaults(&newItem);
-            customItems.push_back(newItem);
-            rebuildAllItemsCache();
-            itemSelection.setSingle(allItems.size() - 1);
+            addNewCustomItemCmd(1.0f);
             curItemPtr = (CustomGuiItemDef*) allItems[allItems.size() - 1];
             duplicateString(curItemPtr->name, renameItemName);
             openInputPopup("renameItem");
             setStatus("Created a new custom GUI item.");
         }
         setTooltip(
-            "Create a new custom GUI item."
+            "Create a new custom GUI item.", "N"
         );
         
         if(curItemPtr) {
@@ -1157,17 +1152,9 @@ void GuiEditor::processGuiPanelItems() {
                     Point(EDITOR::ICON_BMP_SIZE)
                 )
             ) {
-                string deletedItemName = curItemPtr->name;
-                size_t customIdx =
-                    itemSelection.getSingleItemIdx() - hardcodedItems.size();
-                curItemPtr->clearBitmap();
-                customItems.erase(customItems.begin() + customIdx);
-                rebuildAllItemsCache();
-                itemSelection.clear();
-                changesMgr.markAsChanged();
-                setStatus("Deleted item \"" + deletedItemName + "\".");
+                deleteCmd(1.0f);
             }
-            setTooltip("Delete the current item.");
+            setTooltip("Delete the current item.", "Delete");
             
             //Rename item button.
             ImGui::SameLine();

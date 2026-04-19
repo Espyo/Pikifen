@@ -52,8 +52,22 @@ void GuiEditor::handleKeyCharCanvas(const ALLEGRO_EVENT& ev) {
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_0)) {
         resetCam(false);
         
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_A, true)) {
+        selectAllCmd(1.0f);
+        
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_N)) {
+        switch(state) {
+        case EDITOR_STATE_CUSTOM: {
+            addNewCustomItemCmd(1.0f);
+            break;
+        }
+        }
+        
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_X)) {
         snapModeCmd(1.0f);
+        
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_DELETE)) {
+        deleteCmd(1.0f);
         
     }
 }
@@ -82,8 +96,12 @@ void GuiEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT& ev) {
         
         if(!dialogs.empty()) {
             closeTopDialog();
-        } else {
-            quitCmd(1.0f);
+        } else if(!clearSelections()) {
+            if(state == EDITOR_STATE_MAIN) {
+                quitCmd(1.0f);
+            } else {
+                changeState(EDITOR_STATE_MAIN);
+            }
         }
         
     }

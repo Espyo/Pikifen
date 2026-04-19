@@ -76,17 +76,17 @@ private:
         //Body part editing.
         EDITOR_STATE_BODY_PART,
         
-        //Hitbox editing.
-        EDITOR_STATE_HITBOXES,
-        
         //Sprite bitmap editing.
         EDITOR_STATE_SPRITE_BITMAP,
         
         //Sprite transformations editing.
         EDITOR_STATE_SPRITE_TRANSFORM,
         
+        //Hitbox editing.
+        EDITOR_STATE_HITBOXES,
+        
         //Top editing.
-        EDITOR_STATE_TOP,
+        EDITOR_STATE_PIKMIN_TOP,
         
         //Info.
         EDITOR_STATE_INFO,
@@ -351,6 +351,7 @@ private:
     void reloadCmd(float inputValue);
     void restartAnimCmd(float inputValue);
     void saveCmd(float inputValue);
+    void selectAllCmd(float inputValue);
     void zoomAndPosResetCmd(float inputValue);
     void zoomEverythingCmd(float inputValue);
     void zoomInCmd(float inputValue);

@@ -142,6 +142,7 @@ private:
     void closeOptionsDialog();
     void createGuiDef(const string& internalName, const string& pack);
     void deleteCurrentGuiDef();
+    void deleteSelectedItems();
     void loadGuiDefFile(const string& path, bool shouldUpdateHistory);
     void openLoadDialog();
     void openNewDialog();
@@ -159,14 +160,17 @@ private:
     );
     string getFileTooltip(const string& path) const;
     SelectionController* getSelectionControllerThatIsDragMoving();
+    void addNewCustomItemCmd(float inputValue);
     void gridIntervalDecreaseCmd(float inputValue);
     void gridIntervalIncreaseCmd(float inputValue);
+    void deleteCmd(float inputValue);
     void deleteGuiDefCmd(float inputValue);
     void loadCmd(float inputValue);
     void quitCmd(float inputValue);
     void reloadCmd(float inputValue);
     void reloadGuiDefs();
     void renameItem(GuiItemDef* item, const string& newName);
+    void selectAllCmd(float inputValue);
     void setToDefaults(GuiItemDef* item);
     void setSelectionStatusText();
     void openExternallyCmd(float inputValue);

@@ -99,10 +99,11 @@ AnimationEditor::AnimationEditor() :
     registerCmd(&AnimationEditor::loadCmd, "load");
     registerCmd(&AnimationEditor::mobRadiusToggleCmd, "mob_radius_toggle");
     registerCmd(&AnimationEditor::playPauseAnimCmd, "play_pause_anim");
-    registerCmd(&AnimationEditor::restartAnimCmd, "restart_anim");
     registerCmd(&AnimationEditor::quitCmd, "quit");
     registerCmd(&AnimationEditor::reloadCmd, "reload");
+    registerCmd(&AnimationEditor::restartAnimCmd, "restart_anim");
     registerCmd(&AnimationEditor::saveCmd, "save");
+    registerCmd(&AnimationEditor::selectAllCmd, "select_all");
     registerCmd(
         &AnimationEditor::zoomAndPosResetCmd, "zoom_and_pos_reset"
     );
@@ -1542,6 +1543,22 @@ void AnimationEditor::saveCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
     saveAnimDb();
+}
+
+
+/**
+ * @brief Code to run for the select all command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AnimationEditor::selectAllCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(isSelectionIdle()) {
+        if(state == EDITOR_STATE_HITBOXES) {
+            hitboxSelection.addAll(curSprite->hitboxes.size());
+        }
+    }
 }
 
 

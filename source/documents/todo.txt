@@ -2,7 +2,7 @@
 
 Current tasks (tasks being worked on, but not yet committed)
     New editor selection system
-        Ctrl+A, Delete, unselecting with Ctrl, creating a new one with N, Esc to cancel transformation widget, etc.
+        Unselecting with Ctrl
         The ability to rotate the selection
         Test everything
             Area editor selection filter

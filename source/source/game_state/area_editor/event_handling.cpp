@@ -169,8 +169,8 @@ void AreaEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT& ev) {
                 cancelCircleSector();
             } else if(subState == EDITOR_SUB_STATE_NONE && moving) {
                 cancelLayoutMoving();
-            } else if(subState == EDITOR_SUB_STATE_NONE) {
-                clearSelection();
+            } else if(!clearSelections()) {
+                changeState(EDITOR_STATE_MAIN);
             }
             
         } else if(state == EDITOR_STATE_MOBS) {
@@ -185,24 +185,24 @@ void AreaEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT& ev) {
                 setStatus();
             } else if(subState == EDITOR_SUB_STATE_MISSION_MOBS) {
                 changeState(EDITOR_STATE_GAMEPLAY);
-            } else if(subState == EDITOR_SUB_STATE_NONE) {
-                clearSelection();
+            } else if(!clearSelections()) {
+                changeState(EDITOR_STATE_MAIN);
             }
             
         } else if(state == EDITOR_STATE_PATHS) {
             if(subState == EDITOR_SUB_STATE_PATH_DRAWING) {
                 subState = EDITOR_SUB_STATE_NONE;
                 setStatus();
-            } else if(subState == EDITOR_SUB_STATE_NONE) {
-                clearSelection();
+            } else if(!clearSelections()) {
+                changeState(EDITOR_STATE_MAIN);
             }
             
         } else if(state == EDITOR_STATE_DETAILS) {
             if(subState == EDITOR_SUB_STATE_NEW_SHADOW) {
                 subState = EDITOR_SUB_STATE_NONE;
                 setStatus();
-            } else if(subState == EDITOR_SUB_STATE_NONE) {
-                clearSelection();
+            } else if(!clearSelections()) {
+                changeState(EDITOR_STATE_MAIN);
             }
             
         } else if(state == EDITOR_STATE_MAIN) {
@@ -416,7 +416,7 @@ void AreaEditor::handleLmbDoubleClick(const ALLEGRO_EVENT& ev) {
                         splitEdge(
                             clickedEdge, game.editorsView.mouseCursorWorldPos
                         );
-                    clearSelection();
+                    clearSelections();
                     vertexSelection.setSingle(
                         game.curArea->findVertexIdx(newVertex)
                     );
@@ -737,7 +737,7 @@ void AreaEditor::handleLmbDownLayoutDrawing(const ALLEGRO_EVENT& ev) {
                     forgetPreparedState(
                         sectorSplitInfo.preSplitAreaData
                     );
-                    clearSelection();
+                    clearSelections();
                     clearLayoutDrawing();
                     subState = EDITOR_SUB_STATE_NONE;
                     setStatus(
@@ -1021,7 +1021,7 @@ void AreaEditor::handleLmbDownPaths(const ALLEGRO_EVENT& ev) {
                         clickedELink->link1, clickedELink->link2,
                         snapPoint(game.editorsView.mouseCursorWorldPos)
                     );
-                clearSelection();
+                clearSelections();
             }
         }
         
@@ -1102,7 +1102,7 @@ void AreaEditor::handleLmbDownPaths(const ALLEGRO_EVENT& ev) {
                         game.editorsView.cam.zoom
                     )
                 ) {
-                    clearSelection();
+                    clearSelections();
                     movingPathPreviewCheckpoint = c;
                     return;
                 }

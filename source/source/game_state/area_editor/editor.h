@@ -912,7 +912,6 @@ private:
     void clearLayoutDrawing();
     void clearLayoutMoving();
     void clearProblems();
-    void clearSelection();
     void clearTextureSuggestions();
     void clearUndoHistory();
     void closeLoadDialog();
@@ -1025,7 +1024,6 @@ private:
     void homogenizeSelectedPathLinks();
     void homogenizeSelectedPathStops();
     void homogenizeSelectedSectors();
-    bool isSelectionIdle() const;
     void loadAreaFolder(
         const string& requestedAreaPath,
         bool fromBackup, bool shouldUpdateHistory

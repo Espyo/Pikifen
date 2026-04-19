@@ -49,6 +49,9 @@ void AnimationEditor::handleKeyCharCanvas(const ALLEGRO_EVENT& ev) {
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_0)) {
         zoomAndPosResetCmd(1.0f);
         
+    } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_A, true)) {
+        selectAllCmd(1.0f);
+        
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_C, true)) {
         if(state == EDITOR_STATE_SPRITE_TRANSFORM) {
             comparison = !comparison;
@@ -95,25 +98,38 @@ void AnimationEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT& ev) {
         if(!dialogs.empty()) {
             closeTopDialog();
             
-        } else {
+        } else if(!clearSelections()) {
             switch(state) {
             case EDITOR_STATE_MAIN: {
                 quitCmd(1.0f);
                 break;
+                
+            } case EDITOR_STATE_ANIMATION:
+            case EDITOR_STATE_SPRITE:
+            case EDITOR_STATE_BODY_PART:
+            case EDITOR_STATE_INFO:
+            case EDITOR_STATE_TOOLS: {
+                changeState(EDITOR_STATE_MAIN);
+                break;
+                
             } case EDITOR_STATE_SPRITE_BITMAP: {
                 game.editorsView.cam.setPos(preSpriteBmpCamPos);
                 game.editorsView.cam.setZoom(preSpriteBmpCamZoom);
                 changeState(EDITOR_STATE_SPRITE);
                 break;
+                
             } case EDITOR_STATE_SPRITE_TRANSFORM: {
                 changeState(EDITOR_STATE_SPRITE);
                 break;
+                
             } case EDITOR_STATE_HITBOXES: {
                 changeState(EDITOR_STATE_SPRITE);
                 break;
-            } case EDITOR_STATE_TOP: {
+                
+            } case EDITOR_STATE_PIKMIN_TOP: {
                 changeState(EDITOR_STATE_SPRITE);
                 break;
+                
             }
             }
         }
@@ -260,7 +276,7 @@ void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
         }
         break;
         
-    } case EDITOR_STATE_TOP: {
+    } case EDITOR_STATE_PIKMIN_TOP: {
         if(curSprite && curSprite->topVisible) {
             curTransformationWidget.handleMouseDown(
                 game.editorsView.mouseCursorWorldPos,
@@ -328,7 +344,7 @@ void AnimationEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
         }
         break;
         
-    } case EDITOR_STATE_TOP: {
+    } case EDITOR_STATE_PIKMIN_TOP: {
         if(curSprite && curSprite->topVisible) {
             Bitmask8 flags = 0;
             if(topKeepAspectRatio) {
@@ -386,7 +402,7 @@ void AnimationEditor::handleLmbUp(const ALLEGRO_EVENT& ev) {
         curTransformationWidget.handleMouseUp();
         break;
         
-    } case EDITOR_STATE_TOP: {
+    } case EDITOR_STATE_PIKMIN_TOP: {
         if(curSprite && curSprite->topVisible) {
             curTransformationWidget.handleMouseUp();
         }

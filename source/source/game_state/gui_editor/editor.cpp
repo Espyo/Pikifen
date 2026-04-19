@@ -54,11 +54,13 @@ GuiEditor::GuiEditor() :
     registerCmd(
         &GuiEditor::gridIntervalIncreaseCmd, "grid_interval_increase"
     );
+    registerCmd(&GuiEditor::deleteCmd, "delete");
     registerCmd(&GuiEditor::deleteGuiDefCmd, "delete_gui_def");
     registerCmd(&GuiEditor::loadCmd, "load");
     registerCmd(&GuiEditor::quitCmd, "quit");
     registerCmd(&GuiEditor::reloadCmd, "reload");
     registerCmd(&GuiEditor::saveCmd, "save");
+    registerCmd(&GuiEditor::selectAllCmd, "select_all");
     registerCmd(&GuiEditor::snapModeCmd, "snap_mode");
     registerCmd(&GuiEditor::zoomAndPosResetCmd, "zoom_and_pos_reset");
     registerCmd(&GuiEditor::zoomInCmd, "zoom_in");
@@ -183,6 +185,49 @@ void GuiEditor::createGuiDef(
 
 
 /**
+ * @brief Code to run for the delete command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void GuiEditor::deleteCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(state == EDITOR_STATE_CUSTOM) {
+        if(inputValue < 0.5f) return;
+        
+        //Check if the user can delete.
+        if(!isSelectionIdle()) {
+            return;
+        }
+        
+        if(!itemSelection.hasAny()) {
+            setStatus("You have to select items to delete!", true);
+            return;
+        }
+        
+        //Prepare everything.
+        changesMgr.markAsChanged();
+        size_t singleDeletionIdx = itemSelection.getSingleItemIdx();
+        size_t nDeletions = itemSelection.getCount();
+        
+        //Delete!
+        deleteSelectedItems();
+        
+        //Cleanup.
+        rebuildAllItemsCache();
+        itemSelection.clear();
+        
+        //Report.
+        setStatus(
+            "Deleted " +
+            getAmountOrIdxDescription(singleDeletionIdx, nDeletions, "item") +
+            "."
+        );
+    }
+}
+
+
+/**
  * @brief Deletes the current GUI definition.
  */
 void GuiEditor::deleteCurrentGuiDef() {
@@ -288,6 +333,26 @@ void GuiEditor::deleteGuiDefCmd(float inputValue) {
 
 
 /**
+ * @brief Removes and deletes the selected custom GUI items.
+ */
+void GuiEditor::deleteSelectedItems() {
+    const set<size_t>& selectedItems = itemSelection.getItemIdxs();
+    set<size_t> selectedCustomIdxs;
+    
+    for(size_t iIdx : selectedItems) {
+        size_t customIdx = iIdx - hardcodedItems.size();
+        selectedCustomIdxs.insert(customIdx);
+        
+        //Clear its bitmap.
+        ((CustomGuiItemDef*) allItems[iIdx])->clearBitmap();
+    }
+    
+    //Finally, erase them from the vectors.
+    eraseIndexesInVector(selectedCustomIdxs, customItems);
+}
+
+
+/**
  * @brief Handles the logic part of the main loop of the GUI editor.
  */
 void GuiEditor::doLogic() {
@@ -364,6 +429,35 @@ GuiEditor::getSelectionControllerThatIsDragMoving() {
         return &itemSelCtrl;
     }
     return nullptr;
+}
+
+
+/**
+ * @brief Code to run for the add new custom GUI item command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void GuiEditor::addNewCustomItemCmd(float inputValue) {
+    CustomGuiItemDef newItem;
+    
+    newItem.name =
+        incrementNameTillUnique(
+            "new_item",
+    [this] (const string& n) {
+        forIdx(i, allItems) {
+            if(allItems[i]->name == n) {
+                return false;
+            }
+        }
+        return true;
+    },
+    "_"
+        );
+        
+    setToDefaults(&newItem);
+    customItems.push_back(newItem);
+    rebuildAllItemsCache();
+    itemSelection.setSingle(allItems.size() - 1);
 }
 
 
@@ -786,6 +880,29 @@ bool GuiEditor::saveGuiDef() {
 
 
 /**
+ * @brief Code to run for the select all command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void GuiEditor::selectAllCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    if(isSelectionIdle()) {
+        if(state == EDITOR_STATE_HARDCODED || state == EDITOR_STATE_CUSTOM) {
+            bool isCustomState = state == EDITOR_STATE_CUSTOM;
+            itemSelection.clear();
+            forIdx(i, allItems) {
+                bool isCustom = i >= hardcodedItems.size();
+                if(isCustom == isCustomState) {
+                    itemSelection.add(i);
+                }
+            }
+        }
+    }
+}
+
+
+/**
  * @brief Sets some of the GUI item's properties to some defaults.
  *
  * @param item Item to change.
@@ -830,6 +947,8 @@ void GuiEditor::setupForNewGuiDef() {
     customItems.clear();
     allItems.clear();
     itemSelection.clear();
+    
+    state = EDITOR_STATE_MAIN;
     
     //We could reset the camera directly, but if the player enters the editor
     //via the auto start maker tool, processGui() won't have a chance

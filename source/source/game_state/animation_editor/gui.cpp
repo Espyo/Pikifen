@@ -209,7 +209,7 @@ void AnimationEditor::processGuiControlPanel() {
     } case EDITOR_STATE_SPRITE_TRANSFORM: {
         processGuiPanelSpriteTransform();
         break;
-    } case EDITOR_STATE_TOP: {
+    } case EDITOR_STATE_PIKMIN_TOP: {
         processGuiPanelSpriteTop();
         break;
     } case EDITOR_STATE_INFO: {
@@ -2195,7 +2195,7 @@ void AnimationEditor::processGuiPanelSprite() {
     
         //Sprite Pikmin top button.
         if(ImGui::Button("Pikmin top", modeButtonsSize)) {
-            changeState(EDITOR_STATE_TOP);
+            changeState(EDITOR_STATE_PIKMIN_TOP);
         }
         setTooltip(
             "Edit the Pikmin's top (maturity) for this sprite."
@@ -2208,7 +2208,7 @@ void AnimationEditor::processGuiPanelSprite() {
     
         //Sprite leader light button.
         if(ImGui::Button("Leader light", modeButtonsSize)) {
-            changeState(EDITOR_STATE_TOP);
+            changeState(EDITOR_STATE_PIKMIN_TOP);
         }
         setTooltip(
             "Edit the leader's antenna light for this sprite."
