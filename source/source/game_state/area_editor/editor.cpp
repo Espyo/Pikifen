@@ -587,6 +587,12 @@ AreaEditor::AreaEditor() :
     reviewSelCtrl.dragMoveRule = SelectionController::OP_RULE_ALWAYS;
     reviewSelCtrl.overlapsCycle = true;
     reviewSelCtrl.clickingSelectedUnselectsOthers = false;
+
+    selectionControllers.push_back(&layoutSelCtrl);
+    selectionControllers.push_back(&mobsSelCtrl);
+    selectionControllers.push_back(&pathsSelCtrl);
+    selectionControllers.push_back(&detailsSelCtrl);
+    selectionControllers.push_back(&reviewSelCtrl);
 }
 
 
@@ -801,12 +807,7 @@ void AreaEditor::changeState(const EDITOR_STATE newState) {
     state = newState;
     subState = EDITOR_SUB_STATE_NONE;
     setStatus();
-    
-    layoutSelCtrl.disable(true);
-    mobsSelCtrl.disable(true);
-    pathsSelCtrl.disable(true);
-    detailsSelCtrl.disable(true);
-    reviewSelCtrl.disable(true);
+    disableAllSelectionControllers(true);
     
     switch(newState) {
     case EDITOR_STATE_LAYOUT: {
@@ -2414,33 +2415,6 @@ AreaEditor::SECTOR_SPLIT_RESULT AreaEditor::getSectorSplitEvaluation() {
 
 
 /**
- * @brief Returns which of the selection controllers is currently in a
- * drag move operation, or nullptr if none are.
- *
- * @return The controller.
- */
-Editor::SelectionController*
-AreaEditor::getSelectionControllerThatIsDragMoving() {
-    if(layoutSelCtrl.isDragMoving()) {
-        return &layoutSelCtrl;
-    }
-    if(mobsSelCtrl.isDragMoving()) {
-        return &mobsSelCtrl;
-    }
-    if(pathsSelCtrl.isDragMoving()) {
-        return &pathsSelCtrl;
-    }
-    if(detailsSelCtrl.isDragMoving()) {
-        return &detailsSelCtrl;
-    }
-    if(reviewSelCtrl.isDragMoving()) {
-        return &reviewSelCtrl;
-    }
-    return nullptr;
-}
-
-
-/**
  * @brief Focuses the camera on the problem found, if any.
  */
 void AreaEditor::goToProblem() {
@@ -2718,11 +2692,11 @@ void AreaEditor::handleLineError() {
  */
 bool AreaEditor::isSelectionIdle() const {
     if(moving) return false;
-    if(!layoutSelCtrl.isIdle()) return false;
-    if(!mobsSelCtrl.isIdle()) return false;
-    if(!pathsSelCtrl.isIdle()) return false;
-    if(!detailsSelCtrl.isIdle()) return false;
-    if(!reviewSelCtrl.isIdle()) return false;
+    forIdx(c, selectionControllers) {
+        if(!selectionControllers[c]->isIdle()) {
+            return false;
+        }
+    }
     return true;
 }
 

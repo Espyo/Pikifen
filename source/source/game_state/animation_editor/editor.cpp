@@ -163,6 +163,8 @@ AnimationEditor::AnimationEditor() :
     hitboxSelCtrl.dragMoveRule = SelectionController::OP_RULE_ONE_ITEM;
     hitboxSelCtrl.overlapsCycle = true;
     hitboxSelCtrl.clickingSelectedUnselectsOthers = true;
+    
+    selectionControllers.push_back(&hitboxSelCtrl);
 }
 
 
@@ -240,8 +242,7 @@ void AnimationEditor::changeState(const EDITOR_STATE newState) {
     stopSounds();
     
     state = newState;
-    
-    hitboxSelCtrl.disable(true);
+    disableAllSelectionControllers(true);
     
     if(newState == EDITOR_STATE_HITBOXES) {
         hitboxSelCtrl.enable(true);

@@ -1040,6 +1040,9 @@ protected:
     //Position of the operation error red flash effect.
     Point opErrorPos;
     
+    //List of all selection controllers, for convenience.
+    vector<SelectionController*> selectionControllers;
+    
     //Current state.
     size_t state = 0;
     
@@ -1329,4 +1332,6 @@ protected:
         size_t singleIdx, size_t amount,
         const string& singularTerm, const string& pluralTerm = ""
     ) const;
+    void disableAllSelectionControllers(bool disableManagers);
+    SelectionController* getSelectionControllerThatIsDragMoving();
 };

@@ -234,6 +234,18 @@ void Editor::closeTopDialog() {
 
 
 /**
+ * @brief Disables all registered selection controllers.
+ *
+ * @param disableManagers Whether to also disable their managers.
+ */
+void Editor::disableAllSelectionControllers(bool disableManagers) {
+    forIdx(c, selectionControllers) {
+        selectionControllers[c]->disable(true);
+    }
+}
+
+
+/**
  * @brief Handles the logic part of the main loop of the editor.
  * This is meant to be run after the editor's own logic code.
  */
@@ -602,6 +614,23 @@ ALLEGRO_COLOR Editor::getHighlightEffectReplacementColor(
             normalColor,
             changeAlpha(highlightEffectBaseColor, normalColor.a * 255)
         );
+}
+
+
+/**
+ * @brief Returns which of the selection controllers is currently in a
+ * drag move operation, or nullptr if none are.
+ *
+ * @return The controller.
+ */
+Editor::SelectionController*
+Editor::getSelectionControllerThatIsDragMoving() {
+    forIdx(c, selectionControllers) {
+        if(selectionControllers[c]->isDragMoving()) {
+            return selectionControllers[c];
+        }
+    }
+    return nullptr;
 }
 
 

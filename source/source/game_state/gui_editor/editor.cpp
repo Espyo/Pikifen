@@ -105,6 +105,8 @@ GuiEditor::GuiEditor() :
     itemSelCtrl.dragMoveRule = SelectionController::OP_RULE_NEVER;
     itemSelCtrl.overlapsCycle = true;
     itemSelCtrl.clickingSelectedUnselectsOthers = true;
+    
+    selectionControllers.push_back(&itemSelCtrl);
 }
 
 
@@ -114,7 +116,7 @@ GuiEditor::GuiEditor() :
  * @param newState The new state.
  */
 void GuiEditor::changeState(const EDITOR_STATE newState) {
-    itemSelCtrl.disable(true);
+    disableAllSelectionControllers(true);
     
     if(newState == EDITOR_STATE_CUSTOM || newState == EDITOR_STATE_HARDCODED) {
         itemSelCtrl.enable(true);
