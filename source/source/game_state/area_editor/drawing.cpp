@@ -303,10 +303,9 @@ void AreaEditor::drawCanvas() {
         
         if(state == EDITOR_STATE_TOOLS) {
             curTransformationWidget.draw(
-                &referenceCenter,
-                &referenceSize,
-                nullptr,
-                1.0f / game.editorsView.cam.zoom
+                game.editorsView.mouseCursorWorldPos,
+                &referenceCenter, &referenceSize,
+                nullptr, 1.0f / game.editorsView.cam.zoom
             );
         }
     }

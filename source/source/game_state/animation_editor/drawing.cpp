@@ -263,6 +263,7 @@ void AnimationEditor::drawCanvas() {
             Point curSpriteSize =
                 curSprite->tf.scale * curSprite->bmpSize;
             curTransformationWidget.draw(
+                game.editorsView.mouseCursorWorldPos,
                 &curSprite->tf.trans,
                 &curSpriteSize,
                 &curSprite->tf.rot,
@@ -271,6 +272,7 @@ void AnimationEditor::drawCanvas() {
             
         } else if(state == EDITOR_STATE_PIKMIN_TOP && s->topVisible) {
             curTransformationWidget.draw(
+                game.editorsView.mouseCursorWorldPos,
                 &s->topPose.pos,
                 &s->topPose.size,
                 &s->topPose.angle,

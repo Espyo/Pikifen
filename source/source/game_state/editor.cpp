@@ -448,6 +448,7 @@ void Editor::drawSelectionAndTransformationThings(
         ) {
             if(selectionSize.x != 0.0f || selectionSize.y != 0.0f) {
                 traWid.draw(
+                    game.editorsView.mouseCursorWorldPos,
                     &selectionCenter, &selectionSize,
                     useSelectionAngle ? &selectionAngle : nullptr,
                     1.0f / game.editorsView.cam.zoom, twFlags, twPadding
@@ -6366,6 +6367,7 @@ bool Editor::SelectionManager::startOperation() {
 /**
  * @brief Draws the widget.
  *
+ * @param mouseCoords Current mouse cursor coordinates.
  * @param center Center point.
  * @param size Width and height. If nullptr, no scale handles will be drawn.
  * @param angle Angle. If nullptr, the rotation handle will not be drawn.
@@ -6375,11 +6377,16 @@ bool Editor::SelectionManager::startOperation() {
  * @param flags Flags to use.
  */
 void Editor::TransformationWidget::draw(
-    const Point* const center, const Point* const size,
-    const float* const angle, float zoom, Bitmask8 flags, float padding
+    const Point& mouseCoords, const Point* const center,
+    const Point* const size, const float* const angle,
+    float zoom, Bitmask8 flags, float padding
 ) const {
     const ALLEGRO_COLOR ROT_HANDLE_COLOR = al_map_rgb(64, 64, 192);
+    const ALLEGRO_COLOR ROT_HANDLE_HI_COLOR = al_map_rgb(80, 80, 204);
+    const ALLEGRO_COLOR ROT_HANDLE_DRAG_COLOR = al_map_rgb(128, 128, 240);
     const ALLEGRO_COLOR NORMAL_HANDLE_COLOR = al_map_rgb(96, 96, 224);
+    const ALLEGRO_COLOR NORMAL_HANDLE_HI_COLOR = al_map_rgb(112, 112, 240);
+    const ALLEGRO_COLOR NORMAL_HANDLE_DRAG_COLOR = al_map_rgb(144, 144, 255);
     const ALLEGRO_COLOR OUTLINE_COLOR = al_map_rgb(32, 32, 160);
     if(!center) return;
     
@@ -6389,9 +6396,15 @@ void Editor::TransformationWidget::draw(
     
     //Draw the rotation handle.
     if(angle && radius >= 0.0f && !hasFlag(flags, TW_FLAG_DISABLE_ANGLE)) {
+        ALLEGRO_COLOR color =
+            movingHandle == 9 ?
+            ROT_HANDLE_DRAG_COLOR :
+            isMouseOnRotationHandle(mouseCoords, *center, radius, zoom) ?
+            ROT_HANDLE_HI_COLOR :
+            ROT_HANDLE_COLOR;
         al_draw_circle(
             center->x, center->y, radius,
-            ROT_HANDLE_COLOR, EDITOR::TW_ROTATION_HANDLE_THICKNESS * zoom
+            color, EDITOR::TW_ROTATION_HANDLE_THICKNESS * zoom
         );
     }
     
@@ -6422,9 +6435,15 @@ void Editor::TransformationWidget::draw(
             if(hasFlag(flags, TW_FLAG_DISABLE_SIZE)) continue;
         }
         
+        ALLEGRO_COLOR color =
+            movingHandle == h ?
+            NORMAL_HANDLE_DRAG_COLOR :
+            isMouseOnHandle(mouseCoords, handles, h, zoom) ?
+            NORMAL_HANDLE_HI_COLOR :
+            NORMAL_HANDLE_COLOR;
         al_draw_filled_circle(
             handles[h].x, handles[h].y,
-            EDITOR::TW_HANDLE_RADIUS * zoom, NORMAL_HANDLE_COLOR
+            EDITOR::TW_HANDLE_RADIUS * zoom, color
         );
     }
 }
@@ -6505,7 +6524,7 @@ Point Editor::TransformationWidget::getOldCenter() const {
 /**
  * @brief Handles the user having held the left mouse button down.
  *
- * @param mouseCoords Mouse coordinates.
+ * @param mouseCoords Current mouse cursor coordinates.
  * @param center Center point.
  * @param size Width and height. If nullptr, no scale handling
  * will be performed.
@@ -6538,22 +6557,15 @@ bool Editor::TransformationWidget::handleMouseDown(
             if(!size) continue;
             if(hasFlag(flags, TW_FLAG_DISABLE_SIZE)) continue;
         }
-        
-        if(
-            Distance(handles[h], mouseCoords) <=
-            EDITOR::TW_HANDLE_RADIUS * zoom
-        ) {
+
+        if(isMouseOnHandle(mouseCoords, handles, h, zoom)) {
             clickedHandle = h;
         }
     }
     
     //Check if the user clicked on the rotation handle.
     if(angle && !hasFlag(flags, TW_FLAG_DISABLE_ANGLE)) {
-        Distance d(*center, mouseCoords);
-        if(
-            d >= radius - EDITOR::TW_ROTATION_HANDLE_THICKNESS / 2.0f * zoom &&
-            d <= radius + EDITOR::TW_ROTATION_HANDLE_THICKNESS / 2.0f * zoom
-        ) {
+        if(isMouseOnRotationHandle(mouseCoords, *center, radius, zoom)) {
             clickedHandle = 9;
         }
     }
@@ -6573,7 +6585,7 @@ bool Editor::TransformationWidget::handleMouseDown(
 /**
  * @brief Handles the user having moved the mouse cursor.
  *
- * @param mouseCoords Mouse coordinates.
+ * @param mouseCoords Current mouse cursor coordinates.
  * @param center Center point.
  * @param size Width and height. If nullptr, no scale handling
  * will be performed.
@@ -6806,6 +6818,52 @@ bool Editor::TransformationWidget::handleMouseUp() {
     
     movingHandle = -1;
     return true;
+}
+
+
+/**
+ * @brief Returns whether the mouse cursor is on top of a non-rotation handle.
+ *
+ * @param mouseCoords Current mouse cursor coordinates.
+ * @param handles Array with the location of all handles.
+ * @param handleIdx Index of the handle to check.
+ * @param zoom Zoom the widget's components by this much.
+ * @return Whether it is on.
+ */
+bool Editor::TransformationWidget::isMouseOnHandle(
+    const Point& mouseCoords, Point* handles, size_t handleIdx, float zoom
+) const {
+    if(
+        Distance(handles[handleIdx], mouseCoords) <=
+        EDITOR::TW_HANDLE_RADIUS * zoom
+    ) {
+        return true;
+    }
+    return false;
+}
+
+
+/**
+ * @brief Returns whether the mouse cursor is on top of where the
+ * rotation handle is.
+ *
+ * @param mouseCoords Current mouse cursor coordinates.
+ * @param center Transformation widget center.
+ * @param radius Rotation handle radius.
+ * @param zoom Zoom the widget's components by this much.
+ * @return Whether it is on.
+ */
+bool Editor::TransformationWidget::isMouseOnRotationHandle(
+    const Point& mouseCoords, const Point& center, float radius, float zoom
+) const {
+    Distance d(center, mouseCoords);
+    if(
+        d >= radius - EDITOR::TW_ROTATION_HANDLE_THICKNESS / 2.0f * zoom &&
+        d <= radius + EDITOR::TW_ROTATION_HANDLE_THICKNESS / 2.0f * zoom
+    ) {
+        return true;
+    }
+    return false;
 }
 
 

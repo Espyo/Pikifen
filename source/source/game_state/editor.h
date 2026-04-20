@@ -627,9 +627,9 @@ protected:
         //--- Public function declarations ---
         
         void draw(
-            const Point* const center, const Point* const size,
-            const float* const angle, float zoom = 1.0f, Bitmask8 flags = 0,
-            float padding = 0.0f
+            const Point& mouseCoords, const Point* const center,
+            const Point* const size, const float* const angle,
+            float zoom = 1.0f, Bitmask8 flags = 0, float padding = 0.0f
         ) const;
         bool handleMouseDown(
             const Point& mouseCoords, const Point* const center,
@@ -675,6 +675,14 @@ protected:
             const float* const angle, float padding,
             Point* outHandles, float* outRadius,
             ALLEGRO_TRANSFORM* outTransform
+        ) const;
+        bool isMouseOnHandle(
+            const Point& mouseCoords, Point* handles,
+            size_t handleIdx, float zoom
+        ) const;
+        bool isMouseOnRotationHandle(
+            const Point& mouseCoords, const Point& center,
+            float radius, float zoom
         ) const;
         
     };
