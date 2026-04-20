@@ -329,10 +329,10 @@ protected:
         //Affects mouse clicking detection.
         bool itemsAreRectangular = true;
         
-        //Whether the items can be resized.
+        //Whether the individual items can be resized.
         bool itemsCanResize = false;
         
-        //Whether the items can rotate.
+        //Whether the individual items can rotate.
         bool itemsCanRotate = false;
         
         //Padding around each item.
@@ -368,7 +368,7 @@ protected:
         bool applyDirectTransformation(
             const Point& newCenter, const Point& newSize, float newAngle
         );
-        bool applyTransformation(
+        bool applySharedTransformation(
             const Point& newCenter, const Point& newSize, float newAngle
         );
         bool setHomogenized(bool homogenized);
@@ -477,6 +477,9 @@ protected:
         
         //Whether clicking a selected item unselects the other selected items.
         bool clickingSelectedUnselectsOthers = true;
+        
+        //Whether to allow rotating the entire selection.
+        bool allowSelectionRotation = false;
         
         
         //--- Public function declarations ---

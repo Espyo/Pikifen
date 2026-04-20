@@ -69,6 +69,7 @@ const float ZOOM_MIN_LEVEL = 0.05f;
 AnimationEditor::AnimationEditor() :
     loadDialogPicker(this) {
     
+    //Misc. things.
     comparisonBlinkTimer =
         Timer(
             0.6,
@@ -82,6 +83,7 @@ AnimationEditor::AnimationEditor() :
     zoomMinLevel = ANIM_EDITOR::ZOOM_MIN_LEVEL;
     zoomMaxLevel = ANIM_EDITOR::ZOOM_MAX_LEVEL;
     
+    //Register commands.
     auto registerCmd =
     [this] (void (AnimationEditor::* func)(float), const string& name) {
         commands.push_back(

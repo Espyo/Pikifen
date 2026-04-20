@@ -720,15 +720,15 @@ bool Editor::getSelectionTransformationWidgetParams(
     float* outSelectionAngle, bool* outUseAngle,
     Bitmask8* outFlags, float* outPadding
 ) const {
-    bool canChange;
-    float padding;
+    bool canChange = true;
+    float padding = 0.0f;
     if(!selCtrl.isTransformationWidgetAvailable(&canChange, &padding)) {
         return false;
     }
     
     Point selectionCenter, selectionSize;
-    float selectionAngle;
-    bool canChangeAngle;
+    float selectionAngle = 0.0f;
+    bool canChangeAngle = false;
     
     if(selCtrl.shouldDoSingleRotatingItem()) {
         //Single rotating item method.
@@ -737,9 +737,9 @@ bool Editor::getSelectionTransformationWidgetParams(
         );
         canChangeAngle = true;
     } else {
-        //Standard method.
+        //Shared transformation method.
         selCtrl.getTotalBBox(&selectionCenter, &selectionSize);
-        canChangeAngle = false;
+        canChangeAngle = selCtrl.allowSelectionRotation;
     }
     
     Bitmask8 flags = 0;
@@ -5090,7 +5090,7 @@ bool Editor::SelectionController::applyTransformation(
             );
         }
     } else {
-        //Standard method.
+        //Shared transformation method.
         forIdx(m, managers) {
             Point mNewCenter, mNewSize;
             managers[m]->calculateSelectionPortion(
@@ -5098,7 +5098,9 @@ bool Editor::SelectionController::applyTransformation(
                 newCenter, newSize,
                 &mNewCenter, &mNewSize
             );
-            managers[m]->applyTransformation(mNewCenter, mNewSize, newAngle);
+            managers[m]->applySharedTransformation(
+                mNewCenter, mNewSize, newAngle
+            );
         }
     }
     
@@ -5873,15 +5875,19 @@ bool Editor::SelectionManager::applyDirectTransformation(
 
 
 /**
- * @brief Applies a transformation the user performed on the geometry of
- * the selected items.
+ * @brief Applies a shared transformation the user performed on the geometry of
+ * the selected items combined.
+ * Some combinations are not supported, such as changing an item's angle
+ * directly (use applyDirectTransformation instead), or resizing AND rotating
+ * the selection in the same transformation, or rotating items with a non-zero
+ * size.
  *
  * @param newCenter The new selection center.
  * @param newSize The new selection size.
  * @param newAngle The new selection angle, if applicable.
  * @return Whether it was able to apply.
  */
-bool Editor::SelectionManager::applyTransformation(
+bool Editor::SelectionManager::applySharedTransformation(
     const Point& newCenter, const Point& newSize, float newAngle
 ) {
     if(!enabled) return false;
@@ -5906,7 +5912,16 @@ bool Editor::SelectionManager::applyTransformation(
         float iAngle;
         onGetInfo(i, &iCenter, &iSize, &iAngle);
         
-        if(itemsCanResize) {
+        if(newAngle != 0.0f) {
+            //Rotate the item about the center.
+            Point oldRelCoords = preOpItemCenters[i] - preOpSelCenter;
+            float oldAngle, oldMagnitude;
+            coordinatesToAngle(oldRelCoords, &oldAngle, &oldMagnitude);
+            iCenter =
+                angleToCoordinates(oldAngle + newAngle, oldMagnitude);
+            iCenter += preOpSelCenter;
+            
+        } else if(itemsCanResize) {
             //Position and resize the item according to the new shape.
             Point preTransCenterRatio =
                 (preOpItemCenters[i] - preTransTL) / preOpSelSize;
@@ -5920,6 +5935,7 @@ bool Editor::SelectionManager::applyTransformation(
                 //If there's only one item and it can't be resized, just move
                 //it. Pretty simple scenario.
                 iCenter = newCenter;
+                
             } else {
                 //Position the item based on the "centers-only" bounding
                 //box. Keep its size.
@@ -5943,11 +5959,8 @@ bool Editor::SelectionManager::applyTransformation(
                 } else {
                     iCenter.y = newCenter.y;
                 }
+                
             }
-        }
-        
-        if(itemsCanRotate && list.size() == 1) {
-            iAngle = newAngle;
         }
         
         onSetInfo(i, iCenter, iSize, iAngle);
@@ -6557,7 +6570,7 @@ bool Editor::TransformationWidget::handleMouseDown(
             if(!size) continue;
             if(hasFlag(flags, TW_FLAG_DISABLE_SIZE)) continue;
         }
-
+        
         if(isMouseOnHandle(mouseCoords, handles, h, zoom)) {
             clickedHandle = h;
         }
@@ -6649,8 +6662,8 @@ bool Editor::TransformationWidget::handleMouseMove(
     
     //Logic for moving the rotation handle.
     if(movingHandle == 9 && angle && !hasFlag(flags, TW_FLAG_DISABLE_ANGLE)) {
-        float oldMouseAngle = getAngle(*center, oldMouseCoords);
-        float newMouseAngle = getAngle(*center, mouseCoords);
+        float oldMouseAngle = getAngle(oldCenter, oldMouseCoords);
+        float newMouseAngle = getAngle(oldCenter, mouseCoords);
         *angle = oldAngle + (newMouseAngle) - (oldMouseAngle);
         return true;
     }

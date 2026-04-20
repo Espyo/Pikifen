@@ -38,6 +38,7 @@ const float ZOOM_MIN_LEVEL = 0.5f;
 GuiEditor::GuiEditor() :
     loadDialogPicker(this) {
     
+    //Misc. things.
     zoomMaxLevel = GUI_EDITOR::ZOOM_MAX_LEVEL;
     zoomMinLevel = GUI_EDITOR::ZOOM_MIN_LEVEL;
     
@@ -48,6 +49,7 @@ GuiEditor::GuiEditor() :
         );
     };
     
+    //Register commands.
     registerCmd(
         &GuiEditor::gridIntervalDecreaseCmd, "grid_interval_decrease"
     );

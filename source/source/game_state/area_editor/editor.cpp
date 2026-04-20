@@ -132,6 +132,7 @@ AreaEditor::AreaEditor() :
     backupTimer(game.options.areaEd.backupInterval),
     loadDialogPicker(this) {
     
+    //Misc. things.
     enableFlag(pathPreviewSettings.flags, PATH_FOLLOW_FLAG_IGNORE_OBSTACLES);
     pathPreviewTimer =
     Timer(AREA_EDITOR::PATH_PREVIEW_TIMER_DUR, [this] () {
@@ -155,6 +156,7 @@ AreaEditor::AreaEditor() :
     zoomMaxLevel = AREA_EDITOR::ZOOM_MAX_LEVEL;
     zoomMinLevel = AREA_EDITOR::ZOOM_MIN_LEVEL;
     
+    //Register commands.
     auto registerCmd =
     [this] (void (AreaEditor::* func)(float), const string& name) {
         commands.push_back(
@@ -553,6 +555,7 @@ AreaEditor::AreaEditor() :
     layoutSelCtrl.dragMoveRule = SelectionController::OP_RULE_ALWAYS;
     layoutSelCtrl.overlapsCycle = false;
     layoutSelCtrl.clickingSelectedUnselectsOthers = false;
+    layoutSelCtrl.allowSelectionRotation = true;
     
     mobsSelCtrl.managers.push_back(&mobSelection);
     mobsSelCtrl.onSnapPoint =
@@ -561,6 +564,7 @@ AreaEditor::AreaEditor() :
     mobsSelCtrl.dragMoveRule = SelectionController::OP_RULE_ALWAYS;
     mobsSelCtrl.overlapsCycle = true;
     mobsSelCtrl.clickingSelectedUnselectsOthers = false;
+    mobsSelCtrl.allowSelectionRotation = true;
     
     pathsSelCtrl.managers.push_back(&pathStopSelection);
     pathsSelCtrl.managers.push_back(&pathLinkSelection);
@@ -570,6 +574,7 @@ AreaEditor::AreaEditor() :
     pathsSelCtrl.dragMoveRule = SelectionController::OP_RULE_ALWAYS;
     pathsSelCtrl.overlapsCycle = true;
     pathsSelCtrl.clickingSelectedUnselectsOthers = false;
+    pathsSelCtrl.allowSelectionRotation = true;
     
     detailsSelCtrl.managers.push_back(&shadowSelection);
     detailsSelCtrl.managers.push_back(&regionSelection);
@@ -579,6 +584,7 @@ AreaEditor::AreaEditor() :
     detailsSelCtrl.dragMoveRule = SelectionController::OP_RULE_NEVER;
     detailsSelCtrl.overlapsCycle = true;
     detailsSelCtrl.clickingSelectedUnselectsOthers = false;
+    detailsSelCtrl.allowSelectionRotation = false;
     
     reviewSelCtrl.managers.push_back(&reminderSelection);
     reviewSelCtrl.onSnapPoint =
@@ -587,6 +593,7 @@ AreaEditor::AreaEditor() :
     reviewSelCtrl.dragMoveRule = SelectionController::OP_RULE_ALWAYS;
     reviewSelCtrl.overlapsCycle = true;
     reviewSelCtrl.clickingSelectedUnselectsOthers = false;
+    reviewSelCtrl.allowSelectionRotation = true;
     
     selectionControllers.push_back(&layoutSelCtrl);
     selectionControllers.push_back(&mobsSelCtrl);

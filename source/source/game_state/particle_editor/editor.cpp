@@ -39,9 +39,11 @@ const float ZOOM_MIN_LEVEL = 0.5f;
 ParticleEditor::ParticleEditor() :
     loadDialogPicker(this) {
     
+    //Misc. things.
     zoomMaxLevel = PARTICLE_EDITOR::ZOOM_MAX_LEVEL;
     zoomMinLevel = PARTICLE_EDITOR::ZOOM_MIN_LEVEL;
     
+    //Register commands.
     auto registerCmd =
     [this] (void (ParticleEditor::* func)(float), const string& name) {
         commands.push_back(
