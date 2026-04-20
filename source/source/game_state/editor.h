@@ -365,6 +365,9 @@ protected:
         
         bool startOperation();
         bool applyDragMove(const Point& cursorPos);
+        bool applyDirectTransformation(
+            const Point& newCenter, const Point& newSize, float newAngle
+        );
         bool applyTransformation(
             const Point& newCenter, const Point& newSize, float newAngle
         );
@@ -508,7 +511,9 @@ protected:
             Point* outCentersOnlyCenter = nullptr,
             Point* outCentersOnlySize = nullptr
         ) const;
-        bool getSelectedItemAngle(float* outAngle, bool* outCanChange) const;
+        void getSingleRotatingItemInfo(
+            Point* outCenter, Point* outSize, float* outAngle
+        ) const;
         size_t getSelectionTotalCount(
             bool* outCanChange = nullptr, float* outPadding = nullptr
         ) const;
@@ -517,6 +522,7 @@ protected:
             bool* outCanChange, float* outPadding
         ) const;
         bool isOpRuleRespected(OP_RULE rule) const;
+        bool shouldDoSingleRotatingItem() const;
         
         bool handleMouseUp();
         

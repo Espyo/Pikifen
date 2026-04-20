@@ -728,9 +728,19 @@ bool Editor::getSelectionTransformationWidgetParams(
     Point selectionCenter, selectionSize;
     float selectionAngle;
     bool canChangeAngle;
-    selCtrl.getTotalBBox(&selectionCenter, &selectionSize);
-    bool useAngle =
-        selCtrl.getSelectedItemAngle(&selectionAngle, &canChangeAngle);
+    
+    if(selCtrl.shouldDoSingleRotatingItem()) {
+        //Single rotating item method.
+        selCtrl.getSingleRotatingItemInfo(
+            &selectionCenter, &selectionSize, &selectionAngle
+        );
+        canChangeAngle = true;
+    } else {
+        //Standard method.
+        selCtrl.getTotalBBox(&selectionCenter, &selectionSize);
+        canChangeAngle = false;
+    }
+    
     Bitmask8 flags = 0;
     if(!canChange) {
         enableFlag(flags, TransformationWidget::TW_FLAG_DISABLE_CENTER);
@@ -746,7 +756,7 @@ bool Editor::getSelectionTransformationWidgetParams(
     *outSelectionCenter = selectionCenter;
     *outSelectionSize = selectionSize;
     *outSelectionAngle = selectionAngle;
-    *outUseAngle = useAngle;
+    *outUseAngle = canChangeAngle;
     *outFlags = flags;
     *outPadding = padding;
     
@@ -5070,14 +5080,25 @@ bool Editor::SelectionController::applyTransformation(
     Point preTransTL;
     centerAndSizeToCorners(preOpSelCenter, preOpSelSize, &preTransTL, nullptr);
     
-    forIdx(m, managers) {
-        Point mNewCenter, mNewSize;
-        managers[m]->calculateSelectionPortion(
-            preOpSelCenter, preOpSelSize,
-            newCenter, newSize,
-            &mNewCenter, &mNewSize
-        );
-        managers[m]->applyTransformation(mNewCenter, mNewSize, newAngle);
+    if(shouldDoSingleRotatingItem()) {
+        //Single rotating item method.
+        forIdx(m, managers) {
+            if(managers[m]->getCount() != 1) continue;
+            managers[m]->applyDirectTransformation(
+                newCenter, newSize, newAngle
+            );
+        }
+    } else {
+        //Standard method.
+        forIdx(m, managers) {
+            Point mNewCenter, mNewSize;
+            managers[m]->calculateSelectionPortion(
+                preOpSelCenter, preOpSelSize,
+                newCenter, newSize,
+                &mNewCenter, &mNewSize
+            );
+            managers[m]->applyTransformation(mNewCenter, mNewSize, newAngle);
+        }
     }
     
     return true;
@@ -5420,34 +5441,27 @@ bool Editor::SelectionController::getTotalBBox(
 
 
 /**
- * @brief Returns the angle of the selected item, if it's something that
- * can be edited. This only works for a single item being selected.
+ * @brief Returns the info of the selected item, taking into account that
+ * it is the only selected item, it is rectangular, and its angle
+ * can be changed with the transformation widget.
  *
- * @param outAngle The angle is returned here.
- * @param outCanChange Whether changing the angle is allowed is returned here.
- * @return Whether the item's angle can be edited.
+ * @param outCenter The item's center is returned here.
+ * @param outSize The item's size is returned here.
+ * @param outAngle The item's angle is returned here.
  */
-bool Editor::SelectionController::getSelectedItemAngle(
-    float* outAngle, bool* outCanChange
+void Editor::SelectionController::getSingleRotatingItemInfo(
+    Point* outCenter, Point* outSize, float* outAngle
 ) const {
-    if(getSelectionTotalCount() != 1) {
-        //Not supported.
-        return false;
-    }
-    
     forIdx(m, managers) {
         if(!managers[m]->itemsCanRotate) continue;
         size_t itemIdx = managers[m]->getSingleItemIdx();
         if(itemIdx == INVALID) continue;
         
-        Point center, size;
-        managers[m]->getItemInfo(itemIdx, &center, &size, outAngle);
-        *outCanChange = !managers[m]->disableChanges;
-        return true;
+        managers[m]->getItemInfo(itemIdx, outCenter, outSize, outAngle);
+        return;
     }
-    
-    return false;
 }
+
 
 /**
  * @brief Returns the total number of selected items.
@@ -5566,6 +5580,30 @@ bool Editor::SelectionController::isTransforming() const {
  */
 bool Editor::SelectionController::isCreatingRubberBand() const {
     return state == STATE_RUBBER_BAND;
+}
+
+
+/**
+ * @brief Returns whether the controller has exactly one item selected,
+ * it is rectangular, and its rotation can be changed
+ * with the transformation widget.
+ *
+ * @return Whether we should do a single rotating item method.
+ */
+bool Editor::SelectionController::shouldDoSingleRotatingItem() const {
+    if(getSelectionTotalCount() != 1) {
+        //Not supported.
+        return false;
+    }
+    
+    forIdx(m, managers) {
+        if(!managers[m]->itemsCanRotate) continue;
+        size_t itemIdx = managers[m]->getSingleItemIdx();
+        if(itemIdx == INVALID) continue;
+        return true;
+    }
+    
+    return false;
 }
 
 
@@ -5805,6 +5843,31 @@ bool Editor::SelectionManager::addAll(size_t totalAmount) {
     bool changed = selectedItems.addAll(totalAmount);
     if(changed && onSelectionChanged) onSelectionChanged();
     return changed;
+}
+
+
+/**
+ * @brief Applies a transformation the user performed on the geometry of
+ * the selected item directly.
+ *
+ * @param newCenter The new selection center.
+ * @param newSize The new selection size.
+ * @param newAngle The new selection angle.
+ * @return Whether it was able to apply.
+ */
+bool Editor::SelectionManager::applyDirectTransformation(
+    const Point& newCenter, const Point& newSize, float newAngle
+) {
+    if(!enabled) return false;
+    if(preOpSelSize.x <= 0.0f || preOpSelSize.y <= 0.0f) return false;
+    if(!onGetInfo || !onSetInfo) return false;
+    
+    const set<size_t>& list = selectedItems.getItemIdxs();
+    for(size_t i : list) {
+        onSetInfo(i, newCenter, newSize, newAngle);
+    }
+    
+    return true;
 }
 
 
@@ -6575,9 +6638,8 @@ bool Editor::TransformationWidget::handleMouseMove(
     //Logic for moving the rotation handle.
     if(movingHandle == 9 && angle && !hasFlag(flags, TW_FLAG_DISABLE_ANGLE)) {
         float oldMouseAngle = getAngle(*center, oldMouseCoords);
-        *angle =
-            oldAngle +
-            getAngle(*center, calculatedMouseCoords) - oldMouseAngle;
+        float newMouseAngle = getAngle(*center, mouseCoords);
+        *angle = oldAngle + (newMouseAngle) - (oldMouseAngle);
         return true;
     }
     
