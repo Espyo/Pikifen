@@ -1781,7 +1781,7 @@ int MissionMetricTypeSecsLeft::getAmount(size_t idxParam) const {
     if(game.curArea->mission.timeLimit == 0) return 0;
     int secsLeft =
         game.curArea->mission.timeLimit -
-        std::floor(game.states.gameplay->areaTimePassed);
+        floor(game.states.gameplay->areaTimePassed);
     return std::max(secsLeft, 0);
 }
 
