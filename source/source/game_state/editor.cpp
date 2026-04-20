@@ -5186,7 +5186,13 @@ bool Editor::SelectionController::chooseViaMouseDown(
     
     //Select it.
     if(finalItem.first != INVALID) {
-        managers[finalItem.first]->add(finalItem.second);
+        if(!managers[finalItem.first]->contains(finalItem.second)) {
+            //Just select it.
+            managers[finalItem.first]->add(finalItem.second);
+        } else if(addToSelectionMod) {
+            //Remove it from the selection.
+            managers[finalItem.first]->remove(finalItem.second);
+        }
     }
     
     //Check if we can start drag moving.

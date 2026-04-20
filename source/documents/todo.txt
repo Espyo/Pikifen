@@ -2,8 +2,8 @@
 
 Current tasks (tasks being worked on, but not yet committed)
     New editor selection system
-        Unselecting with Ctrl
-        The ability to rotate the selection
+        Selecting some loose path stops and links from the northwestern DEV Lab corridor and dragging them around makes the selection grow
+        Dragging the selected vertexes somewhere invalid, waiting there for some seconds, then dragging them elsewhere, and undoing causes them to go to the invalid spots
         Test everything
             Area editor selection filter
             OCTEE
@@ -16,13 +16,16 @@ Next tasks (roughly sorted most important first)
             Best way to solve this might be to make it so a status effect can give you invulnerability to attacks with a given hazard, but that would cause a cyclical dependency between hazards and statuses
         Rock Pikmin aren't being knocked back by the Cloaking Burrow-nit's attack
         https://github.com/Espyo/Pikifen/pull/91
-    Ice Pikmin can still grab treasures underwater, and I'm not sure how to stop that
+        Ice Pikmin can still grab treasures underwater, and I'm not sure how to stop that
     Move <direction> player actions have auto-repeat on for some reason
-    You can open the radar and start Go Here! during interludes
 
     --- 1.2.0 ---
-    Play a sound when a Pikmin or enemy is frozen, whenever a Glow Pikmin teleports, and when an ice vent emits vapor
-    Add a leader swap sound, so swapping to the rookie isn't silent
+    New sounds
+        Pikmin or enemy getting frozen
+        Glow Pikmin teleport
+        Ice vent emitting vapor
+        Leader swap sound, so swapping to the rookie isn't silent
+        Swarming jingle
     A checkbox for the attack hitboxes that makes it so the knockback simply pushes without actually making the Pikmin/leader fall over (thanks Helodity)
     Increase the size of all gates to 256, since a lot of the larger enemies and treasures have a hard time squeezing through
     Add a destroyed sprite to the gas pipe
@@ -32,13 +35,10 @@ Next tasks (roughly sorted most important first)
         Particles
         Glow Pellets should be internally pellets, but only able to be received by Lumiknolls
     Freezecake
-    Swarming jingle
     Other mission tweaks
         If a mission record is of a stage version that doesn't change the major or minor version digit, keep the record for the new version
         Mission records could save the time the player took, which is good for people who want to compare milliseconds, without interfering with the main, less-granular point-based scores. Each mission should specify whether a higher time is better or worse, and the time can be used to resolve score ties when deciding a new high score (thanks Helodity)
     All editors should have buttons to load/pick a thing, and buttons to create a thing, separated. As opposed to it all being bundled into one thing
-    Areas should be able to set their own rules, overwriting config.txt. This should be shown in the area details
-        What upgrades are on
     Global script and script variables, which apply to the whole area
         get_area_info -> get_misc_info
         A way for missions to obtain data about the mission, end it, update the score, change a HUD element's value, etc. through scripting
@@ -48,31 +48,6 @@ Next tasks (roughly sorted most important first)
         Add some script to DEV Lab
     
     --- 2.0.0 ---
-    Floors-over-floors; mostly for bridges
-        New thoughts
-            Since bridges are now more powerful, FOFs only have a purpose for overhangs. Which is such a rare thing that I'm thinking the effort isn't worth it at all
-            Plus overhangs can be faked using mobs that can be stood on top of
-            Instead of floors over floors, the maker should be able to place a secondary floor texture above the first one
-                The Z should be customizable; that way you can have, for instance, tall grass
-        Old thoughts
-            Revamp physics
-                The logic is the same as the old logic, except replace sectors with floors
-                Can I add slopes?
-                To figure out what floors to use:
-                    If the mob is touching the FOF, the FOF's Z
-                    Else, the normal floor Z
-                If the sector a mob is going into has a FOF, the FOF can be unaccounted for at collision check time, but then the mob may end up inside of it after it enters the sector, and needs to do a step up
-            To draw their shadows
-                4 pixels of purely black alpha 80%, then 8 pixels of gradient to alpha 0
-            Edge cases:
-                FOF stairways need to work well
-                [NEEDS BRAINSTORMING] Can a mob go from sector A's main floor (0), to sector B's main floor (50), to sector A's FOF (100), to sector B's FOF (150)? SHOULD it?
-            Precautions:
-                FOFs in dark sectors should be dark
-                Make sure users can create a FOF that's 0 units above the main floor, for decoration purposes, and that this does not have an impact on collisions and whatnot
-            Misc
-                Does it make sense to create a FOF above a bottomless pit?
-                https://www.deviantart.com/ronindude/art/Battlemap-Beach-Cave-730069774 I like the style of this -- maybe it can help with readability?
     Multiplayer co-op
         Controls should support multiple players, including a "none" player for things like maker tools, screenshot, etc.
         Menus
@@ -258,6 +233,31 @@ Next tasks (roughly sorted most important first)
             Take ideas from the Today's Report section of this file
             Competitive level results screen should feature a graph showing how different things changed over time -- Pikmin counts, progress towards an objective, etc., along with key moments
         Game statistics for how much time was spent in multiplayer should be changed to co-op time, and a new statistic for competitive play time should be added
+    Floors-over-floors; mostly for bridges
+        New thoughts
+            Since bridges are now more powerful, FOFs only have a purpose for overhangs. Which is such a rare thing that I'm thinking the effort isn't worth it at all
+            Plus overhangs can be faked using mobs that can be stood on top of
+            Instead of floors over floors, the maker should be able to place a secondary floor texture above the first one
+                The Z should be customizable; that way you can have, for instance, tall grass
+        Old thoughts
+            Revamp physics
+                The logic is the same as the old logic, except replace sectors with floors
+                Can I add slopes?
+                To figure out what floors to use:
+                    If the mob is touching the FOF, the FOF's Z
+                    Else, the normal floor Z
+                If the sector a mob is going into has a FOF, the FOF can be unaccounted for at collision check time, but then the mob may end up inside of it after it enters the sector, and needs to do a step up
+            To draw their shadows
+                4 pixels of purely black alpha 80%, then 8 pixels of gradient to alpha 0
+            Edge cases:
+                FOF stairways need to work well
+                [NEEDS BRAINSTORMING] Can a mob go from sector A's main floor (0), to sector B's main floor (50), to sector A's FOF (100), to sector B's FOF (150)? SHOULD it?
+            Precautions:
+                FOFs in dark sectors should be dark
+                Make sure users can create a FOF that's 0 units above the main floor, for decoration purposes, and that this does not have an impact on collisions and whatnot
+            Misc
+                Does it make sense to create a FOF above a bottomless pit?
+                https://www.deviantart.com/ronindude/art/Battlemap-Beach-Cave-730069774 I like the style of this -- maybe it can help with readability?
     Buried treasure
     Solid logic for enemies carrying treasures
         Breadbug tug-of-war logic

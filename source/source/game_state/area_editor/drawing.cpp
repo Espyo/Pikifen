@@ -1650,7 +1650,7 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
  * @param style Canvas style.
  */
 void AreaEditor::drawRegions(const AreaEdCanvasStyle& style) {
-    const ALLEGRO_COLOR REGION_OUTLINE_COLOR = al_map_rgb(128, 128, 64);
+    const ALLEGRO_COLOR REGION_OUTLINE_COLOR = al_map_rgb(192, 128, 64);
     
     if(state == EDITOR_STATE_DETAILS) {
         forIdx(r, game.curArea->regions) {
@@ -1658,7 +1658,10 @@ void AreaEditor::drawRegions(const AreaEdCanvasStyle& style) {
             
             drawRotatedRectangle(
                 rPtr->pose.pos, rPtr->pose.size, rPtr->pose.angle,
-                REGION_OUTLINE_COLOR, 4.0 / game.editorsView.cam.zoom
+                regionSelection.contains(r) ?
+                getSelectionEffectReplacementColor(REGION_OUTLINE_COLOR) :
+                REGION_OUTLINE_COLOR,
+                4.0 / game.editorsView.cam.zoom
             );
         }
     }
@@ -1870,7 +1873,7 @@ void AreaEditor::drawSectors(const AreaEdCanvasStyle& style) {
  * @param style Canvas style.
  */
 void AreaEditor::drawTreeShadows(const AreaEdCanvasStyle& style) {
-    const ALLEGRO_COLOR SHADOW_OUTLINE_COLOR = al_map_rgb(128, 128, 64);
+    const ALLEGRO_COLOR SHADOW_OUTLINE_COLOR = al_map_rgb(128, 192, 128);
     
     if(
         state == EDITOR_STATE_DETAILS ||
@@ -1910,6 +1913,8 @@ void AreaEditor::drawTreeShadows(const AreaEdCanvasStyle& style) {
             if(state == EDITOR_STATE_DETAILS) {
                 drawRotatedRectangle(
                     sPtr->pose.pos, sPtr->pose.size, sPtr->pose.angle,
+                    shadowSelection.contains(s) ?
+                    getSelectionEffectReplacementColor(SHADOW_OUTLINE_COLOR) :
                     SHADOW_OUTLINE_COLOR,
                     4.0 / game.editorsView.cam.zoom
                 );
