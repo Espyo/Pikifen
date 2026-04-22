@@ -469,7 +469,7 @@ void ParticleEditor::processGuiDialogOptions() {
                 ImGui::ImageButton(
                     "remBgButton", editorIcons[EDITOR_ICON_REMOVE],
                     Point(ImGui::GetTextLineHeight()), Point(), Point(1.0f),
-                    COLOR_EMPTY, mapAlpha(remBgAlpha)
+                    COLOR_EMPTY, mapAlpha(remBgAlpha * 255)
                 )
             ) {
                 game.options.partEd.bgPath.clear();
@@ -1152,7 +1152,7 @@ void ParticleEditor::processGuiPanelGenerator() {
                 ImGui::ImageButton(
                     "remBmpButton", editorIcons[EDITOR_ICON_REMOVE],
                     Point(ImGui::GetTextLineHeight()), Point(), Point(1.0f),
-                    COLOR_EMPTY, mapAlpha(remBmpAlpha)
+                    COLOR_EMPTY, mapAlpha(remBmpAlpha * 255)
                 )
             ) {
                 //We can't have living particles with destroyed bitmaps,

@@ -1211,12 +1211,12 @@ void GameplayState::drawLeaderCursor(
             sin(player->swarmAngle) * player->leaderPtr->swarmArrows[a]
         );
         float alpha =
-            64 + std::min(
-                191,
-                (int) (
-                    191 *
-                    (player->leaderPtr->swarmArrows[a] /
-                     (game.config.rules.leaderCursorMaxDist * 0.4))
+            0.25f + std::min(
+                0.75f,
+                0.75f *
+                (float) (
+                    player->leaderPtr->swarmArrows[a] /
+                    (game.config.rules.leaderCursorMaxDist * 0.40f)
                 )
             );
         drawBitmap(
@@ -1228,7 +1228,7 @@ void GameplayState::drawLeaderCursor(
                 -1
             ),
             player->swarmAngle,
-            mapAlpha(alpha)
+            mapAlpha(alpha * 255)
         );
     }
     
