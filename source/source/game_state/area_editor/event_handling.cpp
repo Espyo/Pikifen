@@ -169,6 +169,9 @@ void AreaEditor::handleKeyDownAnywhere(const ALLEGRO_EVENT& ev) {
                 cancelCircleSector();
             } else if(subState == EDITOR_SUB_STATE_NONE && moving) {
                 cancelLayoutMoving();
+            } else if(subState == EDITOR_SUB_STATE_OCTEE) {
+                subState = EDITOR_SUB_STATE_NONE;
+                moving = false;
             } else if(!clearSelections()) {
                 changeState(EDITOR_STATE_MAIN);
             }
@@ -1308,11 +1311,12 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
             enableFlag(flags, TransformationWidget::TW_FLAG_LOCK_CENTER);
         }
         curTransformationWidget.handleMouseMove(
-            snapPoint(game.editorsView.mouseCursorWorldPos),
+            game.editorsView.mouseCursorWorldPos,
             &referenceCenter,
             &referenceSize,
             nullptr,
-            1.0f / game.editorsView.cam.zoom, flags, 0.0f, 5.0f
+            1.0f / game.editorsView.cam.zoom, flags, 0.0f, 5.0f,
+        [this] (const Point & p) { return snapPoint(p); }
         );
         
         break;

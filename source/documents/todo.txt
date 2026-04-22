@@ -2,10 +2,7 @@
 
 Current tasks (tasks being worked on, but not yet committed)
     New editor selection system
-        Test everything
-            Area editor selection filter
-            OCTEE
-            Grabbing a path preview checkpoint that's on top of some other path element; also test cross-section checkpoints
+        Select geyser, destination, and clover at top-right of the start of DEV Lab, plus that corridor's sign, scale the selection downward, it'll just move it
 
 Next tasks (roughly sorted most important first)
     --- To fix ---

@@ -6423,13 +6423,17 @@ void Editor::TransformationWidget::draw(
     Point handles[9];
     float radius;
     getLocations(center, size, angle, padding, handles, &radius, nullptr);
-    
+    signed char mouseHandle =
+        getMouseHandle(
+            mouseCoords, center, size, angle, zoom, flags, handles, radius
+        );
+        
     //Draw the rotation handle.
     if(angle && radius >= 0.0f && !hasFlag(flags, TW_FLAG_DISABLE_ANGLE)) {
         ALLEGRO_COLOR color =
             movingHandle == 9 ?
             ROT_HANDLE_DRAG_COLOR :
-            isMouseOnRotationHandle(mouseCoords, *center, radius, zoom) ?
+            mouseHandle == 9 ?
             ROT_HANDLE_HI_COLOR :
             ROT_HANDLE_COLOR;
         al_draw_circle(
@@ -6468,7 +6472,7 @@ void Editor::TransformationWidget::draw(
         ALLEGRO_COLOR color =
             movingHandle == h ?
             NORMAL_HANDLE_DRAG_COLOR :
-            isMouseOnHandle(mouseCoords, handles, h, zoom) ?
+            mouseHandle == h ?
             NORMAL_HANDLE_HI_COLOR :
             NORMAL_HANDLE_COLOR;
         al_draw_filled_circle(
@@ -6542,6 +6546,50 @@ void Editor::TransformationWidget::getLocations(
 
 
 /**
+ * @brief Returns which of the handles the mouse cursor is on.
+ *
+ * @param mouseCoords Current mouse cursor coordinates.
+ * @param center Center point.
+ * @param size Width and height. If nullptr, no scale handling
+ * will be performed.
+ * @param angle Angle. If nullptr, no rotation handling will be performed.
+ * @param zoom Zoom the widget's components by this much.
+ * @param flags Flags to use.
+ * @param handles Array with the location of all handles.
+ * @param radius Rotation handle radius.
+ * @return The handle index.
+ */
+signed char Editor::TransformationWidget::getMouseHandle(
+    const Point& mouseCoords, const Point* const center,
+    const Point* const size, const float* const angle,
+    float zoom, Bitmask8 flags, Point* handles, float radius
+) const {
+    if(movingHandle != -1) {
+        return movingHandle;
+    }
+    for(unsigned char h = 0; h < 9; h++) {
+        if(h == 4) {
+            //Center.
+            if(hasFlag(flags, TW_FLAG_DISABLE_CENTER)) continue;
+        } else {
+            //Size.
+            if(!size) continue;
+            if(hasFlag(flags, TW_FLAG_DISABLE_SIZE)) continue;
+        }
+        if(isMouseOnHandle(mouseCoords, handles, h, zoom)) {
+            return h;
+        }
+    }
+    if(angle && !hasFlag(flags, TW_FLAG_DISABLE_ANGLE)) {
+        if(isMouseOnRotationHandle(mouseCoords, *center, radius, zoom)) {
+            return 9;
+        }
+    }
+    return -1;
+}
+
+
+/**
  * @brief Returns the center point before the user dragged the central handle.
  *
  * @return The old center.
@@ -6572,34 +6620,14 @@ bool Editor::TransformationWidget::handleMouseDown(
 ) {
     if(!center) return false;
     
-    signed char clickedHandle = -1;
     Point handles[9];
     float radius;
     getLocations(center, size, angle, padding, handles, &radius, nullptr);
-    
-    //Check if the user clicked on a translation or scale handle.
-    for(unsigned char h = 0; h < 9; h++) {
-        if(h == 4) {
-            //Center.
-            if(hasFlag(flags, TW_FLAG_DISABLE_CENTER)) continue;
-        } else {
-            //Size.
-            if(!size) continue;
-            if(hasFlag(flags, TW_FLAG_DISABLE_SIZE)) continue;
-        }
+    signed char clickedHandle =
+        getMouseHandle(
+            mouseCoords, center, size, angle, zoom, flags, handles, radius
+        );
         
-        if(isMouseOnHandle(mouseCoords, handles, h, zoom)) {
-            clickedHandle = h;
-        }
-    }
-    
-    //Check if the user clicked on the rotation handle.
-    if(angle && !hasFlag(flags, TW_FLAG_DISABLE_ANGLE)) {
-        if(isMouseOnRotationHandle(mouseCoords, *center, radius, zoom)) {
-            clickedHandle = 9;
-        }
-    }
-    
     if(clickedHandle != -1) {
         movingHandle = clickedHandle;
         oldCenter = center ? *center : Point();

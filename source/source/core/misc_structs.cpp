@@ -329,7 +329,7 @@ void Console::clear() {
  * @brief Draws the console onto the game window.
  */
 void Console::draw() const {
-    const ALLEGRO_COLOR CONSOLE_BG_COLOR = al_map_rgba(0, 0, 0, 96);
+    const ALLEGRO_COLOR CONSOLE_BG_COLOR = al_map_rgba(0, 0, 0, 160);
     if(text.empty()) return;
     
     float alphaMult = 1;

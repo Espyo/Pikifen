@@ -684,6 +684,11 @@ protected:
             Point* outHandles, float* outRadius,
             ALLEGRO_TRANSFORM* outTransform
         ) const;
+        signed char getMouseHandle(
+            const Point& mouseCoords, const Point* const center,
+            const Point* const size, const float* const angle,
+            float zoom, Bitmask8 flags, Point* handles, float radius
+        ) const;
         bool isMouseOnHandle(
             const Point& mouseCoords, Point* handles,
             size_t handleIdx, float zoom
