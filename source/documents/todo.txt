@@ -2,8 +2,6 @@
 
 Current tasks (tasks being worked on, but not yet committed)
     New editor selection system
-        Selecting some loose path stops and links from the northwestern DEV Lab corridor and dragging them around makes the selection grow
-        Dragging the selected vertexes somewhere invalid, waiting there for some seconds, then dragging them elsewhere, and undoing causes them to go to the invalid spots
         Test everything
             Area editor selection filter
             OCTEE

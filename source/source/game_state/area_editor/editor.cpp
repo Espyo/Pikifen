@@ -267,12 +267,15 @@ AreaEditor::AreaEditor() :
     };
     edgeSelection.onSelectionChanged =
     [this] () {
+        setSelectionStatusText();
+    };
+    edgeSelection.onAddUserSelectionDependencies =
+    [this] () {
         const set<size_t>& list = edgeSelection.getItemIdxs();
         for(size_t eIdx : list) {
             vertexSelection.add(game.curArea->edges[eIdx]->vertexIdxs[0]);
             vertexSelection.add(game.curArea->edges[eIdx]->vertexIdxs[1]);
         }
-        setSelectionStatusText();
     };
     edgeSelection.onCheckUnderCursor =
     [this] (size_t idx, const Point & cursorPos) {
@@ -310,6 +313,10 @@ AreaEditor::AreaEditor() :
     };
     sectorSelection.onSelectionChanged =
     [this] () {
+        setSelectionStatusText();
+    };
+    sectorSelection.onAddUserSelectionDependencies =
+    [this] () {
         const set<size_t>& list = sectorSelection.getItemIdxs();
         for(size_t sIdx : list) {
             Sector* sPtr = game.curArea->sectors[sIdx];
@@ -317,7 +324,6 @@ AreaEditor::AreaEditor() :
                 edgeSelection.add(game.curArea->findEdgeIdx(sPtr->edges[e]));
             }
         }
-        setSelectionStatusText();
     };
     sectorSelection.onCheckUnderCursor =
     [this] (size_t idx, const Point & cursorPos) {
@@ -436,6 +442,10 @@ AreaEditor::AreaEditor() :
     };
     pathLinkSelection.onSelectionChanged =
     [this] () {
+        setSelectionStatusText();
+    };
+    pathLinkSelection.onAddUserSelectionDependencies =
+    [this] () {
         const set<size_t>& list = pathLinkSelection.getItemIdxs();
         for(size_t lIdx : list) {
             pathStopSelection.add(
@@ -447,7 +457,6 @@ AreaEditor::AreaEditor() :
                 game.curArea->editorPathLinks[lIdx].link1->endIdx
             );
         }
-        setSelectionStatusText();
     };
     pathLinkSelection.onCheckUnderCursor =
     [this] (size_t idx, const Point & cursorPos) {
@@ -3928,7 +3937,7 @@ void AreaEditor::startPathStopMove() {
 /**
  * @brief Procedure to start moving the selected vertexes.
  */
-void AreaEditor::startVertexMove() {
+void AreaEditor::startLayoutMoving() {
     if(moving) return;
     
     preMoveAreaData = prepareState();

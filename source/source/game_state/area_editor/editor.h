@@ -1067,7 +1067,7 @@ private:
         const Point& where
     );
     void startPathStopMove();
-    void startVertexMove();
+    void startLayoutMoving();
     void traverseSectorForSplit(
         const Sector* sPtr, Vertex* begin, const Vertex* checkpoint,
         vector<Edge*>* edges, vector<Vertex*>* vertexes,

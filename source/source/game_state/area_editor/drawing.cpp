@@ -1520,7 +1520,7 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
                         middle.x + cos(angle + TAU / 4) * 4,
                         middle.y + sin(angle + TAU / 4) * 4
                     ),
-                    f2s(s1Ptr->links[l]->distance)
+                    f2s(game.curArea->editorPathLinks[l].link1->distance)
                 );
             }
         }

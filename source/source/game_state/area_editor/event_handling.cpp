@@ -1234,8 +1234,7 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                 !game.options.areaEd.selTrans,
                 snapPoint(game.editorsView.mouseCursorWorldPos),
             [this] {
-                startVertexMove();
-                registerChange("vertex movement");
+                startLayoutMoving();
             }
             );
             
@@ -1264,8 +1263,8 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
             pathPreviewCheckpoints[movingPathPreviewCheckpoint] =
                 snapPoint(game.editorsView.mouseCursorWorldPos);
             pathPreviewTimer.start(false);
+            
         } else {
-        
             handleSelectionAndTransformationLmbDrag(
                 pathsSelCtrl, curTransformationWidget,
                 !game.options.areaEd.selTrans,
