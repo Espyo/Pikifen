@@ -582,8 +582,6 @@ Misc things (so I don't forget)
                 Degrees to radians and vice-versa?
                 Bitmask set, unset, test?
                 Min and max?
-            Array manipulation
-            String splitting, joining, getting the size of, etc.
         Add some infinite loop protection logic
             I think just making it detect it ran over 1000 actions in a single event, even across states, should be enough
         Mobs could reference other mobs via their ID numbers (Mob::id)

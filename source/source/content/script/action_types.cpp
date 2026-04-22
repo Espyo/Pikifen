@@ -47,6 +47,35 @@ ScriptActionInstRunData::ScriptActionInstRunData(
 
 
 /**
+ * @brief Loading code for the list item adding script action type.
+ *
+ * @param def The action's definition.
+ * @param mt Mob type it belongs to, if any.
+ * @return Whether it succeeded.
+ */
+bool ScriptActionLoaders::addListItem(ScriptActionDef& def, MobType* mt) {
+    if(def.args.size() < 4) {
+        def.args.push_back("-1");
+    }
+    if(def.args.size() < 5) {
+        def.args.push_back("colon");
+    }
+    
+    bool delFound;
+    SCRIPT_ACTION_LIST_DELIMITER delimiter =
+        enumGetValue(scriptActionListDelimiterINames, def.args[4], &delFound);
+    if(!delFound) {
+        def.customError =
+            "Unknown list delimiter \"" + def.args[4] + "\"!";
+        return false;
+    }
+    def.args[4] = i2s(delimiter);
+    
+    return true;
+}
+
+
+/**
  * @brief Loading code for the arachnorb logic plan script action type.
  *
  * @param def The action's definition.
@@ -135,7 +164,7 @@ bool ScriptActionLoaders::followMobAsLeader(ScriptActionDef& def, MobType* mt) {
 
 
 /**
- * @brief Loading code for the area info getting script action type.
+ * @brief Loading code for the area info retrieval script action type.
  *
  * @param def The action's definition.
  * @param mt Mob type it belongs to, if any.
@@ -157,7 +186,7 @@ bool ScriptActionLoaders::getAreaInfo(ScriptActionDef& def, MobType* mt) {
 
 
 /**
- * @brief Loading code for the event info getting script action type.
+ * @brief Loading code for the event info retrieval script action type.
  *
  * @param def The action's definition.
  * @param mt Mob type it belongs to, if any.
@@ -179,7 +208,7 @@ bool ScriptActionLoaders::getEventInfo(ScriptActionDef& def, MobType* mt) {
 
 
 /**
- * @brief Loading code for the misc. info getting script action type.
+ * @brief Loading code for the misc. info retrieval script action type.
  *
  * @param def The action's definition.
  * @param mt Mob type it belongs to, if any.
@@ -201,7 +230,84 @@ bool ScriptActionLoaders::getMiscInfo(ScriptActionDef& def, MobType* mt) {
 
 
 /**
- * @brief Loading code for the mob info getting script action type.
+ * @brief Loading code for the list item retrieval script action type.
+ *
+ * @param def The action's definition.
+ * @param mt Mob type it belongs to, if any.
+ * @return Whether it succeeded.
+ */
+bool ScriptActionLoaders::getListItem(ScriptActionDef& def, MobType* mt) {
+    if(def.args.size() < 4) {
+        def.args.push_back("colon");
+    }
+    
+    bool delFound;
+    SCRIPT_ACTION_LIST_DELIMITER delimiter =
+        enumGetValue(scriptActionListDelimiterINames, def.args[3], &delFound);
+    if(!delFound) {
+        def.customError =
+            "Unknown list delimiter \"" + def.args[3] + "\"!";
+        return false;
+    }
+    def.args[3] = i2s(delimiter);
+    
+    return true;
+}
+
+
+/**
+ * @brief Loading code for the list item number retrieval script action type.
+ *
+ * @param def The action's definition.
+ * @param mt Mob type it belongs to, if any.
+ * @return Whether it succeeded.
+ */
+bool ScriptActionLoaders::getListItemNumber(ScriptActionDef& def, MobType* mt) {
+    if(def.args.size() < 4) {
+        def.args.push_back("colon");
+    }
+    
+    bool delFound;
+    SCRIPT_ACTION_LIST_DELIMITER delimiter =
+        enumGetValue(scriptActionListDelimiterINames, def.args[3], &delFound);
+    if(!delFound) {
+        def.customError =
+            "Unknown list delimiter \"" + def.args[3] + "\"!";
+        return false;
+    }
+    def.args[3] = i2s(delimiter);
+    
+    return true;
+}
+
+
+/**
+ * @brief Loading code for the list size retrieval script action type.
+ *
+ * @param def The action's definition.
+ * @param mt Mob type it belongs to, if any.
+ * @return Whether it succeeded.
+ */
+bool ScriptActionLoaders::getListSize(ScriptActionDef& def, MobType* mt) {
+    if(def.args.size() < 3) {
+        def.args.push_back("colon");
+    }
+    
+    bool delFound;
+    SCRIPT_ACTION_LIST_DELIMITER delimiter =
+        enumGetValue(scriptActionListDelimiterINames, def.args[2], &delFound);
+    if(!delFound) {
+        def.customError =
+            "Unknown list delimiter \"" + def.args[2] + "\"!";
+        return false;
+    }
+    def.args[2] = i2s(delimiter);
+    return true;
+}
+
+
+/**
+ * @brief Loading code for the mob info retrieval script action type.
  *
  * @param def The action's definition.
  * @param mt Mob type it belongs to, if any.
@@ -339,6 +445,35 @@ bool ScriptActionLoaders::receiveStatus(ScriptActionDef& def, MobType* mt) {
             "Unknown status effect \"" + def.args[0] + "\"!";
         return false;
     }
+    return true;
+}
+
+
+/**
+ * @brief Loading code for the list item removal script action type.
+ *
+ * @param def The action's definition.
+ * @param mt Mob type it belongs to, if any.
+ * @return Whether it succeeded.
+ */
+bool ScriptActionLoaders::removeListItem(ScriptActionDef& def, MobType* mt) {
+    if(def.args.size() < 3) {
+        def.args.push_back("-1");
+    }
+    if(def.args.size() < 4) {
+        def.args.push_back("colon");
+    }
+    
+    bool delFound;
+    SCRIPT_ACTION_LIST_DELIMITER delimiter =
+        enumGetValue(scriptActionListDelimiterINames, def.args[3], &delFound);
+    if(!delFound) {
+        def.customError =
+            "Unknown list delimiter \"" + def.args[3] + "\"!";
+        return false;
+    }
+    def.args[3] = i2s(delimiter);
+    
     return true;
 }
 
@@ -611,6 +746,47 @@ void ScriptActionRunners::addHealth(ScriptActionInstRunData& data) {
 
 
 /**
+ * @brief Code for the list item retrieval script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::addListItem(ScriptActionInstRunData& data) {
+    const string& listStr = data.args[1];
+    const string& newItem = data.args[2];
+    int idx = s2i(data.args[3]) - 1;
+    string delimiter =
+        enumGetName(
+            scriptActionListDelimiterChars,
+            (SCRIPT_ACTION_LIST_DELIMITER) s2i(data.args[4])
+        );
+        
+    vector<string> items = split(listStr, delimiter, true);
+    if(idx < 0) idx = items.size();
+    items.insert(items.begin() + idx, newItem);
+    string newListStr = join(items, delimiter);
+    data.scriptVM->vars[data.args[0]] = newListStr;
+}
+
+
+/**
+ * @brief Code for the string addition script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::addToString(ScriptActionInstRunData& data) {
+    const string& baseStr = data.args[1];
+    const string& newContent = data.args[2];
+    bool addSpace = data.args.size() >= 4 ? s2b(data.args[3]) : false;
+    
+    string result = baseStr;
+    if(addSpace) result += " ";
+    result += newContent;
+    
+    data.scriptVM->vars[data.args[0]] = result;
+}
+
+
+/**
  * @brief Code for the arachnorb logic plan script action type.
  *
  * @param data Data about the action call.
@@ -671,6 +847,20 @@ void ScriptActionRunners::calculate(ScriptActionInstRunData& data) {
     }
     
     data.scriptVM->vars[data.args[0]] = f2s(result);
+}
+
+
+/**
+ * @brief Code for the variable clearing script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::clearVar(ScriptActionInstRunData& data) {
+    const string& varName = data.args[0];
+    
+    if(data.scriptVM->vars.contains(varName)) {
+        data.scriptVM->vars[varName].clear();
+    }
 }
 
 
@@ -1109,7 +1299,7 @@ void ScriptActionRunners::getFloorZ(ScriptActionInstRunData& data) {
 
 
 /**
- * @brief Code for the focused mob var getting script action type.
+ * @brief Code for the focused mob var retrieval script action type.
  *
  * @param data Data about the action call.
  */
@@ -1117,6 +1307,74 @@ void ScriptActionRunners::getFocusVar(ScriptActionInstRunData& data) {
     if(!data.scriptVM->focusedMob) return;
     data.scriptVM->vars[data.args[0]] =
         data.scriptVM->focusedMob->scriptVM.vars[data.args[1]];
+}
+
+
+/**
+ * @brief Code for the list item retrieval script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::getListItem(ScriptActionInstRunData& data) {
+    const string& listStr = data.args[1];
+    int idx = s2i(data.args[2]) - 1;
+    string delimiter =
+        enumGetName(
+            scriptActionListDelimiterChars,
+            (SCRIPT_ACTION_LIST_DELIMITER) s2i(data.args[3])
+        );
+        
+    vector<string> items = split(listStr, delimiter, true);
+    if(idx >= 0 && idx < (int) items.size()) {
+        data.scriptVM->vars[data.args[0]] = trimSpaces(items[(size_t) idx]);
+    } else {
+        data.scriptVM->vars[data.args[0]] = "";
+    }
+}
+
+
+/**
+ * @brief Code for the list item number retrieval script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::getListItemNumber(ScriptActionInstRunData& data) {
+    const string& listStr = data.args[1];
+    const string& itemToSearch = data.args[2];
+    string delimiter =
+        enumGetName(
+            scriptActionListDelimiterChars,
+            (SCRIPT_ACTION_LIST_DELIMITER) s2i(data.args[3])
+        );
+        
+    vector<string> items = split(listStr, delimiter, true);
+    int idx = 0;
+    forIdx(i, items) {
+        if(items[i] == itemToSearch) {
+            idx = i + 1;
+            break;
+        }
+    }
+    
+    data.scriptVM->vars[data.args[0]] = i2s(idx);
+}
+
+
+/**
+ * @brief Code for the list size retrieval script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::getListSize(ScriptActionInstRunData& data) {
+    const string& listStr = data.args[1];
+    string delimiter =
+        enumGetName(
+            scriptActionListDelimiterChars,
+            (SCRIPT_ACTION_LIST_DELIMITER) s2i(data.args[2])
+        );
+        
+    data.scriptVM->vars[data.args[0]] =
+        i2s(getSplitCount(listStr, delimiter, true));
 }
 
 
@@ -1262,6 +1520,23 @@ void ScriptActionRunners::getRandomFloat(ScriptActionInstRunData& data) {
 void ScriptActionRunners::getRandomInt(ScriptActionInstRunData& data) {
     data.scriptVM->vars[data.args[0]] =
         i2s(game.rng.i(s2i(data.args[1]), s2i(data.args[2])));
+}
+
+
+/**
+ * @brief Code for the var presence retrieval script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::getVarPresence(ScriptActionInstRunData& data) {
+    const string& varName = data.args[1];
+    
+    bool exists = data.scriptVM->vars.contains(varName);
+    if(exists) {
+        exists = !data.scriptVM->vars[varName].empty();
+    }
+    
+    data.scriptVM->vars[data.args[0]] = b2s(exists);
 }
 
 
@@ -1597,6 +1872,28 @@ void ScriptActionRunners::release(ScriptActionInstRunData& data) {
  */
 void ScriptActionRunners::releaseStoredMobs(ScriptActionInstRunData& data) {
     data.scriptVM->mob->releaseStoredMobs();
+}
+
+
+/**
+ * @brief Code for the list item removal script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::removeListItem(ScriptActionInstRunData& data) {
+    const string& listStr = data.args[1];
+    int idx = s2i(data.args[2]) - 1;
+    string delimiter =
+        enumGetName(
+            scriptActionListDelimiterChars,
+            (SCRIPT_ACTION_LIST_DELIMITER) s2i(data.args[3])
+        );
+        
+    vector<string> items = split(listStr, delimiter, true);
+    if(idx < 0) idx = items.size() - 1;
+    items.erase(items.begin() + idx);
+    string newListStr = join(items, delimiter);
+    data.scriptVM->vars[data.args[0]] = newListStr;
 }
 
 

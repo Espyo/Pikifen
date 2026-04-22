@@ -1065,217 +1065,217 @@ void initFsmEventTypes() {
     contexts =
         getIdxBitmask(SCRIPT_CONTEXT_MOB) |
         getIdxBitmask(SCRIPT_CONTEXT_AREA);
-
+        
         
     //Unknown.
     commitEvent(
         FSM_EV_UNKNOWN,
         "unknown"
     );
-
+    
     //On enter.
     commitEvent(
         FSM_EV_ON_ENTER,
         "on_enter"
     );
-
+    
     //On leave.
     commitEvent(
         FSM_EV_ON_LEAVE,
         "on_leave"
     );
-
+    
     //On tick.
     commitEvent(
         FSM_EV_ON_TICK,
         "on_tick"
     );
-
+    
     //Timer.
     commitEvent(
         FSM_EV_TIMER,
         "on_timer"
     );
-
+    
     //Input received.
     commitEvent(
         FSM_EV_INPUT_RECEIVED,
         "on_input_received"
     );
-
+    
     
     //-Mob events-
     contexts = getIdxBitmask(SCRIPT_CONTEXT_MOB);
     
-
+    
     //On ready.
     commitEvent(
         FSM_EV_ON_READY,
         "on_ready"
     );
-
+    
     //Active leader changed.
     commitEvent(
         FSM_EV_ACTIVE_LEADER_CHANGED,
         "on_active_leader_changed"
     );
-
+    
     //Animation end.
     commitEvent(
         FSM_EV_ANIMATION_END,
         "on_animation_end"
     );
-
+    
     //Damage.
     commitEvent(
         FSM_EV_DAMAGE,
         "on_damage"
     );
-
+    
     //Far from home.
     commitEvent(
         FSM_EV_FAR_FROM_HOME,
         "on_far_from_home"
     );
-
+    
     //Finished receiving delivery.
     commitEvent(
         FSM_EV_FINISHED_RECEIVING_DELIVERY,
         "on_finish_receiving_delivery"
     );
-
+    
     //Focus off reach.
     commitEvent(
         FSM_EV_FOCUS_OFF_REACH,
         "on_focus_off_reach"
     );
-
+    
     //Frame signal.
     commitEvent(
         FSM_EV_FRAME_SIGNAL,
         "on_frame_signal"
     );
-
+    
     //Held.
     commitEvent(
         FSM_EV_HELD,
         "on_held"
     );
-
+    
     //Hitbox touch eat.
     commitEvent(
         FSM_EV_HITBOX_TOUCH_EAT,
         "on_hitbox_touch_eat"
     );
-
+    
     //Hitbox touch attack-normal.
     commitEvent(
         FSM_EV_HITBOX_TOUCH_A_N,
         "on_hitbox_touch_a_n"
     );
-
+    
     //Hitbox touch normal-normal.
     commitEvent(
         FSM_EV_HITBOX_TOUCH_N_N,
         "on_hitbox_touch_n_n"
     );
-
+    
     //Itch.
     commitEvent(
         FSM_EV_ITCH,
         "on_itch"
     );
-
+    
     //Landed.
     commitEvent(
         FSM_EV_LANDED,
         "on_land"
     );
-
+    
     //Left hazard.
     commitEvent(
         FSM_EV_LEFT_HAZARD,
         "on_leave_hazard"
     );
-
+    
     //Object in reach.
     commitEvent(
         FSM_EV_OBJECT_IN_REACH,
         "on_object_in_reach"
     );
-
+    
     //Opponent in reach.
     commitEvent(
         FSM_EV_OPPONENT_IN_REACH,
         "on_opponent_in_reach"
     );
-
+    
     //Thrown Pikmin landed.
     commitEvent(
         FSM_EV_THROWN_PIKMIN_LANDED,
         "on_pikmin_land"
     );
-
+    
     //Receive message.
     commitEvent(
         FSM_EV_RECEIVE_MESSAGE,
         "on_receive_message"
     );
-
+    
     //Released.
     commitEvent(
         FSM_EV_RELEASED,
         "on_released"
     );
-
+    
     //Reached destination.
     commitEvent(
         FSM_EV_REACHED_DESTINATION,
         "on_reach_destination"
     );
-
+    
     //Receiving delivery.
     commitEvent(
         FSM_EV_STARTED_RECEIVING_DELIVERY,
         "on_start_receiving_delivery"
     );
-
+    
     //Swallowed.
     commitEvent(
         FSM_EV_SWALLOWED,
         "on_swallowed"
     );
-
+    
     //Touched hazard.
     commitEvent(
         FSM_EV_TOUCHED_HAZARD,
         "on_touch_hazard"
     );
-
+    
     //Touched object.
     commitEvent(
         FSM_EV_TOUCHED_OBJECT,
         "on_touch_object"
     );
-
+    
     //Touched opponent.
     commitEvent(
         FSM_EV_TOUCHED_OPPONENT,
         "on_touch_opponent"
     );
-
+    
     //Touched wall.
     commitEvent(
         FSM_EV_TOUCHED_WALL,
         "on_touch_wall"
     );
-
+    
     //Weight added.
     commitEvent(
         FSM_EV_WEIGHT_ADDED,
         "on_weight_added"
     );
-
+    
     //Weight removed.
     commitEvent(
         FSM_EV_WEIGHT_REMOVED,
@@ -1517,6 +1517,31 @@ void initScriptActionTypes() {
         nullptr
     );
     
+    //Add list item.
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("list or string", SCRIPT_ACTION_PARAM_STRING, false, false);
+    queueParam("new item", SCRIPT_ACTION_PARAM_STRING, false, false);
+    queueParam("item number", SCRIPT_ACTION_PARAM_INT, false, false);
+    queueParam("list delimiter", SCRIPT_ACTION_PARAM_ENUM, true, true);
+    commitAction(
+        SCRIPT_ACTION_ADD_LIST_ITEM,
+        "add_list_item",
+        ScriptActionRunners::addListItem,
+        ScriptActionLoaders::addListItem
+    );
+    
+    //Add to string.
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("base string", SCRIPT_ACTION_PARAM_STRING, false, false);
+    queueParam("content to add", SCRIPT_ACTION_PARAM_STRING, false, false);
+    queueParam("add a space between", SCRIPT_ACTION_PARAM_BOOL, false, true);
+    commitAction(
+        SCRIPT_ACTION_ADD_TO_STRING,
+        "add_to_string",
+        ScriptActionRunners::addToString,
+        nullptr
+    );
+    
     //Calculate.
     queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
     queueParam("left operand", SCRIPT_ACTION_PARAM_FLOAT, false, false);
@@ -1527,6 +1552,15 @@ void initScriptActionTypes() {
         "calculate",
         ScriptActionRunners::calculate,
         ScriptActionLoaders::calculate
+    );
+    
+    //Clear var.
+    queueParam("var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    commitAction(
+        SCRIPT_ACTION_CLEAR_VAR,
+        "clear_var",
+        ScriptActionRunners::clearVar,
+        nullptr
     );
     
     //Ceil number.
@@ -1671,9 +1705,7 @@ void initScriptActionTypes() {
     );
     
     //Get focus var.
-    queueParam(
-        "destination var name", SCRIPT_ACTION_PARAM_STRING, true, false
-    );
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
     queueParam(
         "focused mob's var name", SCRIPT_ACTION_PARAM_STRING, true, false
     );
@@ -1682,6 +1714,41 @@ void initScriptActionTypes() {
         "get_focus_var",
         ScriptActionRunners::getFocusVar,
         nullptr
+    );
+    
+    //Get list item.
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("list or string", SCRIPT_ACTION_PARAM_STRING, false, false);
+    queueParam("item number", SCRIPT_ACTION_PARAM_INT, false, false);
+    queueParam("list delimiter", SCRIPT_ACTION_PARAM_ENUM, true, true);
+    commitAction(
+        SCRIPT_ACTION_GET_LIST_ITEM,
+        "get_list_item",
+        ScriptActionRunners::getListItem,
+        ScriptActionLoaders::getListItem
+    );
+    
+    //Get list item number.
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("list or string", SCRIPT_ACTION_PARAM_STRING, false, false);
+    queueParam("item to search", SCRIPT_ACTION_PARAM_INT, false, false);
+    queueParam("list delimiter", SCRIPT_ACTION_PARAM_ENUM, true, true);
+    commitAction(
+        SCRIPT_ACTION_GET_LIST_ITEM_NUMBER,
+        "get_list_item_number",
+        ScriptActionRunners::getListItemNumber,
+        ScriptActionLoaders::getListItemNumber
+    );
+    
+    //Get list size.
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("list or string", SCRIPT_ACTION_PARAM_STRING, false, false);
+    queueParam("list delimiter", SCRIPT_ACTION_PARAM_ENUM, true, true);
+    commitAction(
+        SCRIPT_ACTION_GET_LIST_SIZE,
+        "get_list_size",
+        ScriptActionRunners::getListSize,
+        ScriptActionLoaders::getListSize
     );
     
     //Get misc. info.
@@ -1724,6 +1791,16 @@ void initScriptActionTypes() {
         SCRIPT_ACTION_GET_RANDOM_INT,
         "get_random_int",
         ScriptActionRunners::getRandomInt,
+        nullptr
+    );
+    
+    //Get var presence.
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    commitAction(
+        SCRIPT_ACTION_GET_VAR_PRESENCE,
+        "get_var_presence",
+        ScriptActionRunners::getVarPresence,
         nullptr
     );
     
@@ -1777,6 +1854,18 @@ void initScriptActionTypes() {
         "print",
         ScriptActionRunners::print,
         nullptr
+    );
+    
+    //Remove list item.
+    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("list or string", SCRIPT_ACTION_PARAM_STRING, false, false);
+    queueParam("item number", SCRIPT_ACTION_PARAM_INT, false, false);
+    queueParam("list delimiter", SCRIPT_ACTION_PARAM_ENUM, true, true);
+    commitAction(
+        SCRIPT_ACTION_REMOVE_LIST_ITEM,
+        "remove_list_item",
+        ScriptActionRunners::removeListItem,
+        ScriptActionLoaders::removeListItem
     );
     
     //Round number.
@@ -2435,9 +2524,7 @@ void initScriptActionTypes() {
     queueParam(
         "angle or x coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, false
     );
-    queueParam(
-        "y coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, true
-    );
+    queueParam("y coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, true);
     commitAction(
         SCRIPT_ACTION_TURN_TO_ABSOLUTE,
         "turn_to_absolute",
@@ -2449,9 +2536,7 @@ void initScriptActionTypes() {
     queueParam(
         "angle or x coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, false
     );
-    queueParam(
-        "y coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, true
-    );
+    queueParam("y coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, true);
     commitAction(
         SCRIPT_ACTION_TURN_TO_RELATIVE,
         "turn_to_relative",

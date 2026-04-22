@@ -48,6 +48,10 @@ void duplicateString(const string& origStr, string& newStr);
 string f2s(float f);
 string getMatchingStringStarts(const string& s1, const string& s2);
 string getPathLastComponent(const string& s);
+size_t getSplitCount(
+    const string& text, const string& del = " ", bool incEmpty = false,
+    bool incDelimiters = false
+);
 bool isNumber(const string& s);
 string padString(const string& s, size_t size, char padding);
 string removeExtension(const string& s);
@@ -67,7 +71,7 @@ vector<string> semicolonListToVector(
 );
 vector<string> split(
     string text, const string& del = " ", bool incEmpty = false,
-    bool incDel = false
+    bool incDelimiters = false
 );
 bool strEndsWith(const string& s, const string& end);
 bool strPeek(const string& s, size_t where, const string& match);

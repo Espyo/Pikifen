@@ -43,11 +43,11 @@
       <tr><th>Event</th><th>Description</th></tr>
       <tr id="on-tick">
         <th style="text-align: left;"><code>on_tick</code></th>
-        <td>Triggered every single game frame. Use this for when you want to have something that is always up-to-date, like making the object constantly turn to the focused object's position. If you want to use this to keep track of time, you probably want to use the <a href="get-misc-info"><code>get_misc_info</code></a> action to obtain the frame's "delta T"; see <a href="script.html#tips">script tips</a> for more information.</td>
+        <td>Triggered every single game frame. Use this for when you want to have something that is always up-to-date, like making the object constantly turn to the focused object's position. If you want to use this to keep track of time, you probably want to use the <code><a href="get-misc-info">get_misc_info</a></code> action to obtain the frame's "delta T"; see <a href="script.html#tips">script tips</a> for more information.</td>
       </tr>
       <tr id="on-timer">
         <th style="text-align: left;"><code>on_timer</code></th>
-        <td>Triggered when the script's internal timer reaches 0. To have more than one timer, you can create custom timers by hand; see <a href="script.html#tips"><code>script tips</code></a>.</td>
+        <td>Triggered when the script's internal timer reaches 0. To have more than one timer, you can create custom timers by hand; see <a href="script.html#tips">script tips</a>.</td>
       </tr>
     </table>
 
@@ -401,6 +401,49 @@
       </tr>
     </table>
 
+    <h4 id="actions-common-list">List management</h4>
+
+    <p>Lists are just a string where all the items are laid out and separated by a space (or colon, or semicolon).</p>
+    
+    <table>
+      <tr><th>Action</th><th>Description</th></tr>
+      <tr id="add-list-item">
+        <th><code>add_list_item</code></th>
+        <td><dl>
+          <dt><code><b>add_list_item</b> &lt;destination_variable_name&gt; &lt;list_or_string&gt; &lt;new_item&gt; [&lt;item_number&gt;] [&lt;list_delimiter&gt;]</code></dt>
+          <dd>Adds a new item to a list (or a string of items separated by a delimiter). The new list is then placed inside of &lt;destination_variable_name&gt;. If you specify an item number, it will be placed in that position, with "1" making it the new first item, "2" making it the new second item, etc. "-1" is the default, and means it will be added to the end of the list. The list delimiter can be <code>colon</code> (default), <code>semicolon</code>, or <code>space</code>. If you want to create a new list with one item from scratch, you're better off using <code><a href="#set-var">set_var</a> &lt;new_list_var&gt; &lt;first_item&gt;</code>. See also <code><a href="#add-to-string">add_to_string</a></code>.</dd>
+        </dl></td>
+      </tr>
+      <tr id="get-list-item">
+        <th><code>get_list_item</code></th>
+        <td><dl>
+          <dt><code><b>get_list_item</b> &lt;destination_variable_name&gt; &lt;list_or_string&gt; &lt;item_number&gt; [&lt;list_delimiter&gt;]</code></dt>
+          <dd>Gets one of the items in a list (or a string of items separated by a delimiter). Item number "1" is the first one, "2" is the second, etc. The list delimiter can be <code>colon</code> (default), <code>semicolon</code>, or <code>space</code>.</dd>
+        </dl></td>
+      </tr>
+      <tr id="get-list-item-number">
+        <th><code>get_list_item_number</code></th>
+        <td><dl>
+          <dt><code><b>get_list_item_number</b> &lt;destination_variable_name&gt; &lt;list_or_string&gt; &lt;item_to_search&gt; [&lt;list_delimiter&gt;]</code></dt>
+          <dd>Checks the items in a list (or a string of items separated by a delimiter), and gets the number of the item you want to search for. Item number "1" means it's the first item in the list, "2" means the second, etc. If the item number returned is "0", that means the item is not on the list. The list delimiter can be <code>colon</code> (default), <code>semicolon</code>, or <code>space</code>.</dd>
+        </dl></td>
+      </tr>
+      <tr id="get-list-size">
+        <th><code>get_list_size</code></th>
+        <td><dl>
+          <dt><code><b>get_list_size</b> &lt;destination_variable_name&gt; &lt;list_or_string&gt; [&lt;list_delimiter&gt;]</code></dt>
+          <dd>Gets the amount of items in a list (or a string of items separated by a delimiter). The list delimiter can be <code>colon</code> (default), <code>semicolon</code>, or <code>space</code>.</dd>
+        </dl></td>
+      </tr>
+      <tr id="remove-list-item">
+        <th><code>remove_list_item</code></th>
+        <td><dl>
+          <dt><code><b>remove_list_item</b> &lt;destination_variable_name&gt; &lt;list_or_string&gt; [&lt;item_number&gt;] [&lt;list_delimiter&gt;]</code></dt>
+          <dd>Given the item number, removes that item from a list (or a string of items separated by a delimiter). The new list is then placed inside of &lt;destination_variable_name&gt;. Item number "1" will remove the first item, "2" will remove the second, etc. "-1" is the default, and means it will remove the item at the end of the list. The list delimiter can be <code>colon</code> (default), <code>semicolon</code>, or <code>space</code>.</dd>
+        </dl></td>
+      </tr>
+    </table>
+
     <h4 id="actions-common-focus">Focused object management</h4>
     
     <table>
@@ -528,6 +571,27 @@
     
     <table>
       <tr><th>Action</th><th>Description</th></tr>
+      <tr id="add-to-string">
+        <th><code>add_to_string</code></th>
+        <td><dl>
+          <dt><code><b>add_to_string</b> &lt;destination_variable_name&gt; &lt;base_string&gt; &lt;content_to_add&gt; [&lt;add_a_space_between&gt;]</code></dt>
+          <dd>Given a <a href="making.html#data-file-properties">string</a>, adds some more text to the end of it. If &lt;add_a_space_between&gt; is <code>true</code>, a space will be added between the base string and the new content. This is because you can't just write a space at the end of the content to add, since the script file will interpret that as you starting the next parameter of a script action. This action is very similar to <code><a href="#add-list-item">add_list_item</a></code>, but is more geared towards working with everyday strings, especially those that the player will read.</dd>
+        </dl></td>
+      </tr>
+      <tr id="clear-var">
+        <th><code>clear_var</code></th>
+        <td><dl>
+          <dt><code><b>clear_var</b> &lt;variable_name&gt;</code></dt>
+          <dd>Empties the data inside the given variable, if the script even has that variable. See also <code><a href="#get-var-presence">get_var_presence</a></code>.</dd>
+        </dl></td>
+      </tr>
+      <tr id="get-var-presence">
+        <th><code>get_var_presence</code></th>
+        <td><dl>
+          <dt><code><b>get_var_presence</b> &lt;destination_variable_name&gt; &lt;variable_name&gt;</code></dt>
+          <dd>Checks if the script has the variable &lt;variable_name&gt;, and also if that variable isn't empty. Then writes to &lt;destination_variable_name&gt; either <code>true</code> or <code>false</code> accordingly. See also <code><a href="#clear-var">clear_var</a></code>.</dd>
+        </dl></td>
+      </tr>
       <tr id="print">
         <th><code>print</code></th>
         <td><dl>
@@ -577,14 +641,14 @@
         <th><code>move_to_absolute</code></th>
         <td><dl>
           <dt><code><b>move_to_absolute</b> &lt;x&gt; &lt;y&gt; [&lt;z&gt;]</code></dt>
-          <dd>Tells the object to begin moving to the specified <a href="glossary.html#area-coordinates">area coordinates</a>. The Z coordinate will only be useful if the object can fly (see <code>set_flying</code>).</dd>
+          <dd>Tells the object to begin moving to the specified <a href="glossary.html#area-coordinates">area coordinates</a>. The Z coordinate will only be useful if the object can fly (see <code><a href="#set-flying">set_flying</a></code>).</dd>
         </dl></td>
       </tr>
       <tr id="move-to-relative">
         <th><code>move_to_relative</code></th>
         <td><dl>
           <dt><code><b>move_to_relative</b> &lt;x&gt; &lt;y&gt; [&lt;z&gt;]</code></dt>
-          <dd>Tells the object to begin moving to the specified <a href="glossary.html#relative-coordinates">relative coordinates</a>. The Z coordinate will only be useful if the object can fly (see <code>set_flying</code>).</dd>
+          <dd>Tells the object to begin moving to the specified <a href="glossary.html#relative-coordinates">relative coordinates</a>. The Z coordinate will only be useful if the object can fly (see <code><a href="#set-flying">set_flying</a></code>).</dd>
         </dl></td>
       </tr>
       <tr id="move-to-target">

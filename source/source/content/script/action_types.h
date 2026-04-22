@@ -37,11 +37,20 @@ enum SCRIPT_ACTION {
     //Add health.
     SCRIPT_ACTION_ADD_HEALTH,
     
+    //Add item to a list (split string).
+    SCRIPT_ACTION_ADD_LIST_ITEM,
+
+    //Add a string to another string.
+    SCRIPT_ACTION_ADD_TO_STRING,
+    
     //Plan something. Used for arachnorbs.
     SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC,
     
     //Perform a numeric calculation.
     SCRIPT_ACTION_CALCULATE,
+    
+    //Clear a variable.
+    SCRIPT_ACTION_CLEAR_VAR,
     
     //Ceil a float number.
     SCRIPT_ACTION_CEIL_NUMBER,
@@ -111,6 +120,15 @@ enum SCRIPT_ACTION {
     
     //Get a script variable's value from the focused mob.
     SCRIPT_ACTION_GET_FOCUS_VAR,
+
+    //Get an item of a list (split string).
+    SCRIPT_ACTION_GET_LIST_ITEM,
+
+    //Get the number of an item in a list (split string).
+    SCRIPT_ACTION_GET_LIST_ITEM_NUMBER,
+
+    //Get the size of a list (split string).
+    SCRIPT_ACTION_GET_LIST_SIZE,
     
     //Get misc. information.
     SCRIPT_ACTION_GET_MISC_INFO,
@@ -123,6 +141,9 @@ enum SCRIPT_ACTION {
     
     //Get a random integer number.
     SCRIPT_ACTION_GET_RANDOM_INT,
+
+    //Get a var's presence.
+    SCRIPT_ACTION_GET_VAR_PRESENCE,
     
     //Go to a different part of the script.
     SCRIPT_ACTION_GOTO,
@@ -171,6 +192,9 @@ enum SCRIPT_ACTION {
     
     //Release mobs that are stored inside.
     SCRIPT_ACTION_RELEASE_STORED_MOBS,
+    
+    //Remove item from a list (split string).
+    SCRIPT_ACTION_REMOVE_LIST_ITEM,
     
     //Remove a status effect.
     SCRIPT_ACTION_REMOVE_STATUS,
@@ -691,6 +715,37 @@ buildEnumNames(scriptActionStabilizeZTypeINames, SCRIPT_ACTION_STABILIZE_Z_TYPE)
 });
 
 
+//Delimiters for lists/strings in script actions.
+enum SCRIPT_ACTION_LIST_DELIMITER {
+
+    //Colons.
+    SCRIPT_ACTION_LIST_DELIMITER_COLON,
+
+    //Semicolon.
+    SCRIPT_ACTION_LIST_DELIMITER_SEMICOLON,
+
+    //Spaces.
+    SCRIPT_ACTION_LIST_DELIMITER_SPACE,
+
+};
+
+
+//Script action list delimiter enum naming (internal names).
+buildEnumNames(scriptActionListDelimiterINames, SCRIPT_ACTION_LIST_DELIMITER)({
+    { SCRIPT_ACTION_LIST_DELIMITER_COLON, "colon" },
+    { SCRIPT_ACTION_LIST_DELIMITER_SPACE, "space" },
+    { SCRIPT_ACTION_LIST_DELIMITER_SEMICOLON, "semicolon" },
+});
+
+
+//Script action list delimiter character listing.
+buildEnumNames(scriptActionListDelimiterChars, SCRIPT_ACTION_LIST_DELIMITER)({
+    { SCRIPT_ACTION_LIST_DELIMITER_COLON, "," },
+    { SCRIPT_ACTION_LIST_DELIMITER_SPACE, " " },
+    { SCRIPT_ACTION_LIST_DELIMITER_SEMICOLON, ";" },
+});
+
+
 //Types of variables that a parameter can use.
 enum SCRIPT_ACTION_PARAM {
 
@@ -803,9 +858,12 @@ struct ScriptActionType {
 namespace ScriptActionRunners {
 void absoluteNumber(ScriptActionInstRunData& data);
 void addHealth(ScriptActionInstRunData& data);
+void addListItem(ScriptActionInstRunData& data);
+void addToString(ScriptActionInstRunData& data);
 void arachnorbPlanLogic(ScriptActionInstRunData& data);
 void calculate(ScriptActionInstRunData& data);
 void ceilNumber(ScriptActionInstRunData& data);
+void clearVar(ScriptActionInstRunData& data);
 void deleteFunction(ScriptActionInstRunData& data);
 void drainLiquid(ScriptActionInstRunData& data);
 void easeNumber(ScriptActionInstRunData& data);
@@ -824,11 +882,15 @@ void getDistance(ScriptActionInstRunData& data);
 void getEventInfo(ScriptActionInstRunData& data);
 void getAreaInfo(ScriptActionInstRunData& data);
 void getFloorZ(ScriptActionInstRunData& data);
+void getListItem(ScriptActionInstRunData& data);
+void getListItemNumber(ScriptActionInstRunData& data);
+void getListSize(ScriptActionInstRunData& data);
 void getMiscInfo(ScriptActionInstRunData& data);
 void getMobInfo(ScriptActionInstRunData& data);
 void getFocusVar(ScriptActionInstRunData& data);
 void getRandomFloat(ScriptActionInstRunData& data);
 void getRandomInt(ScriptActionInstRunData& data);
+void getVarPresence(ScriptActionInstRunData& data);
 void holdFocus(ScriptActionInstRunData& data);
 void ifFunction(ScriptActionInstRunData& data);
 void interpolateNumber(ScriptActionInstRunData& data);
@@ -843,6 +905,7 @@ void print(ScriptActionInstRunData& data);
 void receiveStatus(ScriptActionInstRunData& data);
 void release(ScriptActionInstRunData& data);
 void releaseStoredMobs(ScriptActionInstRunData& data);
+void removeListItem(ScriptActionInstRunData& data);
 void removeStatus(ScriptActionInstRunData& data);
 void roundNumber(ScriptActionInstRunData& data);
 void saveFocusMemory(ScriptActionInstRunData& data);
@@ -898,6 +961,7 @@ void turnToTarget(ScriptActionInstRunData& data);
 
 
 namespace ScriptActionLoaders {
+bool addListItem(ScriptActionDef& call, MobType* mt);
 bool arachnorbPlanLogic(ScriptActionDef& call, MobType* mt);
 bool calculate(ScriptActionDef& call, MobType* mt);
 bool easeNumber(ScriptActionDef& call, MobType* mt);
@@ -905,6 +969,9 @@ bool focus(ScriptActionDef& call, MobType* mt);
 bool followMobAsLeader(ScriptActionDef& call, MobType* mt);
 bool getAreaInfo(ScriptActionDef& call, MobType* mt);
 bool getEventInfo(ScriptActionDef& call, MobType* mt);
+bool getListItem(ScriptActionDef& call, MobType* mt);
+bool getListItemNumber(ScriptActionDef& call, MobType* mt);
+bool getListSize(ScriptActionDef& call, MobType* mt);
 bool getMiscInfo(ScriptActionDef& call, MobType* mt);
 bool getMobInfo(ScriptActionDef& call, MobType* mt);
 bool holdFocus(ScriptActionDef& call, MobType* mt);
@@ -912,6 +979,7 @@ bool ifFunction(ScriptActionDef& call, MobType* mt);
 bool moveToTarget(ScriptActionDef& call, MobType* mt);
 bool playSound(ScriptActionDef& call, MobType* mt);
 bool receiveStatus(ScriptActionDef& call, MobType* mt);
+bool removeListItem(ScriptActionDef& call, MobType* mt);
 bool removeStatus(ScriptActionDef& call, MobType* mt);
 bool setAnimation(ScriptActionDef& call, MobType* mt);
 bool setFarReach(ScriptActionDef& call, MobType* mt);

@@ -132,6 +132,43 @@ string getPathLastComponent(const string& s) {
 
 
 /**
+ * @brief Returns how many substrings will be returned by split().
+ *
+ * @param text The string to split.
+ * @param del The delimiter. Default is space.
+ * @param incEmpty If true, include empty substrings on the vector.
+ * i.e. if two delimiters come together in a row,
+ * keep an empty substring between.
+ * @param incDelimiters If true, include the delimiters on the vector
+ * as a substring.
+ * @return The amount.
+ */
+size_t getSplitCount(
+    const string& text, const string& del, bool incEmpty, bool incDelimiters
+) {
+    size_t count = 0;
+    int pos = -1;
+    
+    do {
+        int prevPos = pos;
+        pos = text.find(del, pos + 1);
+        if((size_t) pos != string::npos) {
+            size_t subStrSize = (size_t) (pos - prevPos);
+            if(subStrSize > 0 || (subStrSize == 0 && incEmpty)) {
+                count++;
+            }
+            if(incDelimiters) {
+                count++;
+            }
+        }
+    } while((size_t) pos != string::npos);
+    
+    if(!text.empty()) count++;
+    
+    return count;
+}
+
+/**
  * @brief Checks if the contents of a string are a number or not.
  *
  * @param s String to check.
@@ -319,11 +356,12 @@ vector<string> semicolonListToVector(const string& s, const string& sep) {
  * @param incEmpty If true, include empty substrings on the vector.
  * i.e. if two delimiters come together in a row,
  * keep an empty substring between.
- * @param incDel If true, include the delimiters on the vector as a substring.
+ * @param incDelimiters If true, include the delimiters on the vector
+ * as a substring.
  * @return The substrings.
  */
 vector<string> split(
-    string text, const string& del, bool incEmpty, bool incDel
+    string text, const string& del, bool incEmpty, bool incDelimiters
 ) {
     vector<string> v;
     size_t pos;
@@ -340,7 +378,7 @@ vector<string> split(
                 v.push_back(sub);
                 
             //Add the delimiter to the vector, but only if requested.
-            if(incDel)
+            if(incDelimiters)
                 v.push_back(del);
                 
             //Delete everything before the delimiter,
