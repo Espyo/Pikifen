@@ -8,6 +8,8 @@ init {
 script {
     idling {
         on_enter {
+            stop_particles
+            start_particles glow_pikmin
             custom_actions_after
             if $follow_focus = true
                 load_focused_mob_memory 1
@@ -50,6 +52,8 @@ script {
             save_focused_mob_memory 1
             set_shadow_visibility false
             set_animation teleport_start
+            stop_particles
+            start_particles glow_pikmin_teleport_out
         }
         on_animation_end {
             //Check if the focus is valid.
@@ -74,11 +78,37 @@ script {
     teleported_to_leader {
         on_enter {
             set_animation teleport_end
+            stop_particles
+            start_particles glow_pikmin_teleport_in
         }
         on_animation_end {
             set_shadow_visibility true
             set_var follow_focus true
             set_state idling
+        }
+    }
+    dying {
+        on_enter {
+            set_timer 1.9
+        }
+        on_timer {
+            start_particles glow_pikmin_pop
+        }
+    }
+    knocked_down_dying {
+        on_enter {
+            set_timer 0.5
+        }
+        on_timer {
+            start_particles glow_pikmin_pop
+        }
+    }
+    crushed {
+        on_enter {
+            set_timer 1.2
+        }
+        on_timer {
+            start_particles glow_pikmin_pop
         }
     }
 }

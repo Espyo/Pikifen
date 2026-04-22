@@ -4,7 +4,7 @@ death_state = destroyed
 script {
     safe {
         on_enter {
-            set_timer 3
+            set_timer 3.2
             set_animation safe
             start_particles ice_vent_idling 0 0 300
         }
@@ -18,7 +18,7 @@ script {
     
     shooting {
         on_enter {
-            set_timer 3
+            set_timer 3.2
             set_animation shooting
             start_particles ice_vent_shooting 0 0 300
             //play_sound ice sound_id

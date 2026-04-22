@@ -22,8 +22,7 @@ Next tasks (roughly sorted most important first)
         Swarming jingle
     Increase the size of all gates to 256, since a lot of the larger enemies and treasures have a hard time squeezing through
     Should Mushroom Pikmin return to normal after being knocked down? Ideally it'd be after the Puffstool is killed, but that's a can of worms
-    Glow Pikmin
-        Particles
+    Lumiknolls
         Glow Pellets should be internally pellets, but only able to be received by Lumiknolls
     Freezecake
     Other mission tweaks
