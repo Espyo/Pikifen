@@ -6,7 +6,7 @@ engine_version=1.2.0
 animations{
 	destroyed{
 		frames{
-			safe{
+			destroyed{
 				duration=0.0000
 			}
 		}
@@ -25,23 +25,22 @@ animations{
 	}
 }
 sprites{
-	safe{
+	destroyed{
 		file=other_mobs/gas_pipe
-		file_pos=0.0000 0.0000
+		file_pos=0.0000 49.0000
 		file_size=48.0000 48.0000
 		hitboxes{
 			tube{
 				coords=0.0000 0.0000 0.0000
 				height=24.0000
-				radius=48.0000
-				type=0
+				radius=24.0000
+				type=2
 				value=1.0000
-				surface_type=0
 			}
 			gas{
 				coords=0.0000 0.0000 0.0000
 				height=64.0000
-				radius=48.0000
+				radius=24.0000
 				type=2
 				value=0.0000
 				hazard=poison

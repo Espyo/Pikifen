@@ -12,7 +12,6 @@ Next tasks (roughly sorted most important first)
         Rock Pikmin aren't being knocked back by the Cloaking Burrow-nit's attack
         https://github.com/Espyo/Pikifen/pull/91
         Ice Pikmin can still grab treasures underwater, and I'm not sure how to stop that
-    Move <direction> player actions have auto-repeat on for some reason
 
     --- 1.2.0 ---
     New sounds
@@ -21,10 +20,7 @@ Next tasks (roughly sorted most important first)
         Ice vent emitting vapor
         Leader swap sound, so swapping to the rookie isn't silent
         Swarming jingle
-    A checkbox for the attack hitboxes that makes it so the knockback simply pushes without actually making the Pikmin/leader fall over (thanks Helodity)
     Increase the size of all gates to 256, since a lot of the larger enemies and treasures have a hard time squeezing through
-    Add a destroyed sprite to the gas pipe
-    Add a glowing orange top graphic, and make it replace the top of Pikmin under the effects of a spicy spray
     Should Mushroom Pikmin return to normal after being knocked down? Ideally it'd be after the Puffstool is killed, but that's a can of worms
     Glow Pikmin
         Particles
@@ -949,6 +945,7 @@ Tasks for later on (I might never implement these)
         The ability for status effects to add/remove HP in absolute amounts, not relative
         Potential area editor optimization: When moving, scaling, etc. vertexes, create an std::set with all of the vertexes that aren't part of the selection, and then check only those. This is better than checking all vertexes and skipping out on the ones that aren't selected. Or something along these lines. This should help with the immense lag when you Ctrl+A an area's geometry and try to move it
         Suggestions
+            A checkbox for the attack hitboxes that makes it so the knockback simply pushes without actually making the Pikmin/leader fall over (thanks Helodity)
             Add an option for statuses to make the leader helpless until the player presses right-click or something (thanks Neo)
             An action with which to change a mob's home
             Could Queen Candypop Buds have script vars to control which types they can switch to? (thanks Darthvato)

@@ -9,6 +9,7 @@ particle_generator = spicy_sparkles
 particle_offset = 0 0 64
 reapply_rule = reset_time
 speed_multiplier = 1.5
+top_replacement = pikmin/spicy_top
 
 maker = Espyo
 version = 1.0.0
