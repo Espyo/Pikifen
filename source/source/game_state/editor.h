@@ -319,11 +319,6 @@ protected:
         //Callback for when the selection changed.
         std::function<void()> onSelectionChanged = nullptr;
         
-        //Callback for when the user changed some selection,
-        //and this manager's items need to check if they have any requirement
-        //items (from other managers) that should also be selected.
-        std::function<void()> onAddUserSelectionDependencies = nullptr;
-        
         //Callback for checking if an item is under the cursor, if it should
         //be different from the default checks.
         //The first argument is the item index.
@@ -1344,7 +1339,7 @@ protected:
     virtual void handleRmbDown(const ALLEGRO_EVENT& ev);
     virtual void handleRmbDrag(const ALLEGRO_EVENT& ev);
     virtual void handleRmbUp(const ALLEGRO_EVENT& ev);
-    void handleSelectionAndTransformationLmbDown(
+    bool handleSelectionAndTransformationLmbDown(
         SelectionController& selCtrl, TransformationWidget& traWid,
         bool skipTraWid
     );

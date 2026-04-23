@@ -5093,7 +5093,9 @@ void AreaEditor::processGuiPanelReview() {
             findProblems();
         }
         setTooltip(
-            "Search for problems with the area."
+            "Search for problems with the area.\n"
+            "Only one problem is shown at a time, and higher-priority\n"
+            "problems will appear before lower-priority ones."
         );
         
         //Problem texts.

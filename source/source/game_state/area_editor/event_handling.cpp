@@ -465,6 +465,7 @@ void AreaEditor::handleLmbDoubleClick(const ALLEGRO_EVENT& ev) {
                     pathLinkSelection.setSingle(
                         game.curArea->findPathStopIdx(newStop)
                     );
+                    updateSelectionRequirements();
                     highlightedPathStop = newStop;
                     doFakeClick = true;
                     fakeClickWorldPos = newStop->pos;
@@ -643,10 +644,14 @@ void AreaEditor::handleLmbDownLayout(const ALLEGRO_EVENT& ev) {
         
     } case EDITOR_SUB_STATE_NONE: {
 
-        handleSelectionAndTransformationLmbDown(
-            layoutSelCtrl, curTransformationWidget,
-            !game.options.areaEd.selTrans
-        );
+        if(
+            handleSelectionAndTransformationLmbDown(
+                layoutSelCtrl, curTransformationWidget,
+                !game.options.areaEd.selTrans
+            )
+        ) {
+            updateSelectionRequirements();
+        }
         
         vertexSelection.setHomogenized(false);
         edgeSelection.setHomogenized(false);
@@ -1112,10 +1117,14 @@ void AreaEditor::handleLmbDownPaths(const ALLEGRO_EVENT& ev) {
             }
         }
         
-        handleSelectionAndTransformationLmbDown(
-            pathsSelCtrl, curTransformationWidget,
-            !game.options.areaEd.selTrans
-        );
+        if(
+            handleSelectionAndTransformationLmbDown(
+                pathsSelCtrl, curTransformationWidget,
+                !game.options.areaEd.selTrans
+            )
+        ) {
+            updateSelectionRequirements();
+        }
         
         break;
         
@@ -1240,6 +1249,9 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                 startLayoutMoving();
             }
             );
+            if(layoutSelCtrl.isCreatingRubberBand()) {
+                updateSelectionRequirements();
+            }
             
         }
         
@@ -1277,6 +1289,9 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                 registerChange("path stop movement");
             }
             );
+            if(pathsSelCtrl.isCreatingRubberBand()) {
+                updateSelectionRequirements();
+            }
             
             const set<size_t>& selectedPathStops =
                 pathStopSelection.getItemIdxs();

@@ -269,14 +269,6 @@ AreaEditor::AreaEditor() :
     [this] () {
         setSelectionStatusText();
     };
-    edgeSelection.onAddUserSelectionDependencies =
-    [this] () {
-        const set<size_t>& list = edgeSelection.getItemIdxs();
-        for(size_t eIdx : list) {
-            vertexSelection.add(game.curArea->edges[eIdx]->vertexIdxs[0]);
-            vertexSelection.add(game.curArea->edges[eIdx]->vertexIdxs[1]);
-        }
-    };
     edgeSelection.onCheckUnderCursor =
     [this] (size_t idx, const Point & cursorPos) {
         return game.curArea->edges[idx] == highlightedEdge;
@@ -314,16 +306,6 @@ AreaEditor::AreaEditor() :
     sectorSelection.onSelectionChanged =
     [this] () {
         setSelectionStatusText();
-    };
-    sectorSelection.onAddUserSelectionDependencies =
-    [this] () {
-        const set<size_t>& list = sectorSelection.getItemIdxs();
-        for(size_t sIdx : list) {
-            Sector* sPtr = game.curArea->sectors[sIdx];
-            forIdx(e, sPtr->edges) {
-                edgeSelection.add(game.curArea->findEdgeIdx(sPtr->edges[e]));
-            }
-        }
     };
     sectorSelection.onCheckUnderCursor =
     [this] (size_t idx, const Point & cursorPos) {
@@ -443,20 +425,6 @@ AreaEditor::AreaEditor() :
     pathLinkSelection.onSelectionChanged =
     [this] () {
         setSelectionStatusText();
-    };
-    pathLinkSelection.onAddUserSelectionDependencies =
-    [this] () {
-        const set<size_t>& list = pathLinkSelection.getItemIdxs();
-        for(size_t lIdx : list) {
-            pathStopSelection.add(
-                game.curArea->findPathStopIdx(
-                    game.curArea->editorPathLinks[lIdx].link1->startPtr
-                )
-            );
-            pathStopSelection.add(
-                game.curArea->editorPathLinks[lIdx].link1->endIdx
-            );
-        }
     };
     pathLinkSelection.onCheckUnderCursor =
     [this] (size_t idx, const Point & cursorPos) {
@@ -1758,6 +1726,7 @@ void AreaEditor::doSectorSplit() {
     //not that you had a "triangle" and wanted to make a complex shape.
     if(!sectorSplitInfo.workingSector) {
         sectorSelection.setSingle(game.curArea->findSectorIdx(newSector));
+        updateSelectionRequirements();
     } else {
         float workingSectorArea =
             (
@@ -1778,6 +1747,7 @@ void AreaEditor::doSectorSplit() {
         } else {
             sectorSelection.setSingle(game.curArea->findSectorIdx(newSector));
         }
+        updateSelectionRequirements();
     }
     
     clearLayoutDrawing();
@@ -2235,6 +2205,7 @@ void AreaEditor::finishNewSectorDrawing() {
     
     //Select the new sector, making it ready for editing.
     sectorSelection.setSingle(game.curArea->findSectorIdx(newSector));
+    updateSelectionRequirements();
     
     clearLayoutDrawing();
     subState = EDITOR_SUB_STATE_NONE;
@@ -2453,6 +2424,7 @@ void AreaEditor::goToProblem() {
         edgeSelection.add(
             game.curArea->findEdgeIdx(problemEdgeIntersection.e2)
         );
+        updateSelectionRequirements();
         centerCamera(minCoords, maxCoords);
         
         break;
@@ -2468,6 +2440,7 @@ void AreaEditor::goToProblem() {
         changeState(EDITOR_STATE_LAYOUT);
         Sector* sPtr = game.curArea->problems.nonSimples.begin()->first;
         sectorSelection.setSingle(game.curArea->findSectorIdx(sPtr));
+        updateSelectionRequirements();
         centerCamera(sPtr->bbox[0], sPtr->bbox[1]);
         
         break;
@@ -2489,6 +2462,7 @@ void AreaEditor::goToProblem() {
         
         changeState(EDITOR_STATE_LAYOUT);
         edgeSelection.setSingle(game.curArea->findEdgeIdx(ePtr));
+        updateSelectionRequirements();
         centerCamera(minCoords, maxCoords);
         
         break;
@@ -2530,6 +2504,7 @@ void AreaEditor::goToProblem() {
         sectorSelection.setSingle(
             game.curArea->findSectorIdx(problemSectorPtr)
         );
+        updateSelectionRequirements();
         centerCamera(problemSectorPtr->bbox[0], problemSectorPtr->bbox[1]);
         
         break;
@@ -4293,6 +4268,37 @@ void AreaEditor::updateSectorTexture(
     game.content.bitmaps.list.free(sPtr->textureInfo.bmpName);
     sPtr->textureInfo.bmpName = internalName;
     sPtr->textureInfo.bitmap = game.content.bitmaps.list.get(internalName);
+}
+
+
+//Used when the user changed the selection, in order to select some
+//other things the managers may decide as requirements.
+void AreaEditor::updateSelectionRequirements() {
+    const set<size_t>& selectedSectors = sectorSelection.getItemIdxs();
+    for(size_t sIdx : selectedSectors) {
+        Sector* sPtr = game.curArea->sectors[sIdx];
+        forIdx(e, sPtr->edges) {
+            edgeSelection.add(game.curArea->findEdgeIdx(sPtr->edges[e]));
+        }
+    }
+    
+    const set<size_t>& selectedEdges = edgeSelection.getItemIdxs();
+    for(size_t eIdx : selectedEdges) {
+        vertexSelection.add(game.curArea->edges[eIdx]->vertexIdxs[0]);
+        vertexSelection.add(game.curArea->edges[eIdx]->vertexIdxs[1]);
+    }
+    
+    const set<size_t>& selectedLinks = pathLinkSelection.getItemIdxs();
+    for(size_t lIdx : selectedLinks) {
+        pathStopSelection.add(
+            game.curArea->findPathStopIdx(
+                game.curArea->editorPathLinks[lIdx].link1->startPtr
+            )
+        );
+        pathStopSelection.add(
+            game.curArea->editorPathLinks[lIdx].link1->endIdx
+        );
+    }
 }
 
 

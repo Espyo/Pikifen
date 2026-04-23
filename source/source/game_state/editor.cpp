@@ -1240,8 +1240,9 @@ void Editor::handleRmbUp(const ALLEGRO_EVENT& ev) {}
  * @param selCtrl The selection controller.
  * @param traWid The transformation widget.
  * @param skipTraWid Whether to skip the transformation widget's logic.
+ * @return Whether the selection was changed.
  */
-void Editor::handleSelectionAndTransformationLmbDown(
+bool Editor::handleSelectionAndTransformationLmbDown(
     SelectionController& selCtrl, TransformationWidget& traWid, bool skipTraWid
 ) {
     bool twHandled = false;
@@ -1271,11 +1272,14 @@ void Editor::handleSelectionAndTransformationLmbDown(
     if(twHandled) {
         selCtrl.startTransforming();
     } else {
-        selCtrl.chooseViaMouseDown(
-            game.editorsView.mouseCursorWorldPos,
-            isShiftPressed, isCtrlPressed
-        );
+        return
+            selCtrl.chooseViaMouseDown(
+                game.editorsView.mouseCursorWorldPos,
+                isShiftPressed, isCtrlPressed
+            );
     }
+    
+    return false;
 }
 
 
@@ -5189,9 +5193,6 @@ bool Editor::SelectionController::chooseViaMouseDown(
         if(!managers[finalItem.first]->contains(finalItem.second)) {
             //Just select it.
             managers[finalItem.first]->add(finalItem.second);
-            if(managers[finalItem.first]->onAddUserSelectionDependencies) {
-                managers[finalItem.first]->onAddUserSelectionDependencies();
-            }
         } else if(addToSelectionMod) {
             //Remove it from the selection.
             managers[finalItem.first]->remove(finalItem.second);
@@ -5822,14 +5823,6 @@ bool Editor::SelectionController::updateRubberBand(
         
         if(managers[m]->getItemIdxs() != newSelectedItems) {
             managers[m]->setItemIdxs(newSelectedItems);
-        }
-    }
-    
-    //Only add the requirements after the normal selections have been finished,
-    //so we know how to fulfill the requirements.
-    forIdx(m, managers) {
-        if(managers[m]->onAddUserSelectionDependencies) {
-            managers[m]->onAddUserSelectionDependencies();
         }
     }
     

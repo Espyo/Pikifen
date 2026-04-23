@@ -1086,6 +1086,7 @@ private:
     void updateReference();
     void updateLayoutDrawingStatusText();
     void updateSectorTexture(Sector* sPtr, const string& internalName);
+    void updateSelectionRequirements();
     void updateTextureSuggestions(const string& n);
     void updateUndoHistory();
     void drawArrow(
