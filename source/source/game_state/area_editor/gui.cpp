@@ -1887,10 +1887,7 @@ void AreaEditor::processGuiPanelEdge() {
                 ImGui::SetNextItemWidth(80);
                 string label = s == 0 ? "A-side" : "B-side";
                 if(ImGui::DragInt(label.c_str(), &sInt)) {
-                    if(
-                        sInt >= 0 &&
-                        sInt <= (int) game.curArea->sectors.size()
-                    ) {
+                    if(isIdxValid(sInt, game.curArea->sectors)) {
                         registerChange("edge sector patch");
                         Sector* oldSector = ePtr->sectors[s];
                         size_t newSectorIdx = (size_t) sInt;

@@ -242,6 +242,23 @@ bool isPermutation(const Container1T& cont1, const Container2T& cont2) {
 
 
 /**
+ * @brief Returns whether a given index number, as a signed int,
+ * is valid in the given container.
+ * 
+ * @tparam ContainerT Type of the container.
+ * @param idx The index.
+ * @param vec The container.
+ * @return Whether it is valid.
+ */
+template<class ContainerT>
+bool isIdxValid(int idx, const ContainerT& vec) {
+    if(idx < 0) return false;
+    if(idx >= (int) vec.size()) return false;
+    return true;
+}
+
+
+/**
  * @brief Deterministically randomly shuffles the contents of a vector.
  *
  * @tparam ContentT Type of contents of the vector.

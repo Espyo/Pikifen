@@ -42,7 +42,7 @@ void PacksMenu::changeInfo(int idx) {
     if(idx == -1) {
         newPackName = FOLDER_NAMES::BASE_PACK;
         packPtr = &game.content.packs.list[newPackName];
-    } else if(idx >= 0 && idx < (int) packOrder.size()) {
+    } else if(isIdxValid(idx, packOrder)) {
         newPackName = packOrder[idx];
         packPtr = &game.content.packs.list[newPackName];
     }

@@ -1211,7 +1211,7 @@ void AnimationEditor::processGuiPanelBodyPart() {
                 Point(EDITOR::ICON_BMP_SIZE)
             )
         ) {
-            if(selectedPart >= 0 && !db.bodyParts.empty()) {
+            if(isIdxValid(selectedPart, db.bodyParts)) {
                 string deletedPartName =
                     db.bodyParts[selectedPart]->name;
                 delete db.bodyParts[selectedPart];
@@ -1284,7 +1284,7 @@ void AnimationEditor::processGuiPanelBodyPart() {
                         int p2 =
                             (int) p +
                             (ImGui::GetMouseDragDelta(0).y < 0.0f ? -1 : 1);
-                        if(p2 >= 0 && p2 < (int) db.bodyParts.size()) {
+                        if(isIdxValid(p2, db.bodyParts)) {
                             BodyPart* pPtr = db.bodyParts[p];
                             db.bodyParts[p] = db.bodyParts[p2];
                             db.bodyParts[p2] = pPtr;

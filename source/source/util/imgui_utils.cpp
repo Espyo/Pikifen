@@ -16,6 +16,7 @@
 #include "imgui_utils.h"
 
 #include "allegro_utils.h"
+#include "container_utils.h"
 #include "math_utils.h"
 
 
@@ -178,7 +179,7 @@ bool ImGui::Combo(
             popupMaxHeightInItems
         );
         
-    if(itemIdx >= 0 && itemIdx < (int) items.size()) {
+    if(isIdxValid(itemIdx, items)) {
         *currentItem = items[itemIdx];
     } else {
         *currentItem = "";

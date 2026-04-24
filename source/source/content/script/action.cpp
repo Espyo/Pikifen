@@ -190,8 +190,8 @@ bool ScriptActionBlockDef::loadFromDataNode(
  * @brief Runs a block of actions.
  *
  * @param scriptVM Script VM in which these actions will be run.
- * @param customData1 Custom argument #1.
- * @param customData2 Custom argument #2.
+ * @param customData1 Custom data #1.
+ * @param customData2 Custom data #2.
  */
 void ScriptActionBlockDef::run(
     ScriptVM* scriptVM, void* customData1, void* customData2

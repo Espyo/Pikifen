@@ -2509,13 +2509,11 @@ void GameplayState::updateMobIsActiveFlag() {
             (mPtr->pos.y - game.curArea->bmap.topLeftCorner.y) /
             GEOMETRY::AREA_CELL_SIZE;
         if(
-            cellX < 0 ||
-            cellX >= (int) game.states.gameplay->areaActiveCells.size()
+            !isIdxValid(cellX, game.states.gameplay->areaActiveCells)
         ) {
             mPtr->isActive = false;
         } else if(
-            cellY < 0 ||
-            cellY >= (int) game.states.gameplay->areaActiveCells[0].size()
+            !isIdxValid(cellY, game.states.gameplay->areaActiveCells[0])
         ) {
             mPtr->isActive = false;
         } else {
