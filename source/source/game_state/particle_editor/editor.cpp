@@ -113,8 +113,7 @@ void ParticleEditor::closeLoadDialog() {
  * @brief Code to run when the options dialog is closed.
  */
 void ParticleEditor::closeOptionsDialog() {
-    saveOptions();
-    game.systemNotifications.add("Options saved.", false, false);
+    saveOptions(true);
 }
 
 

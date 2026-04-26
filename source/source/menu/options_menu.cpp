@@ -602,7 +602,7 @@ void OptionsMenu::deleteBind(
  */
 void OptionsMenu::draw() {
     ALLEGRO_COLOR CAPTURE_BG_COLOR = al_map_rgba(24, 24, 32, 192);
-
+    
     Menu::draw();
     if(packsMenu) packsMenu->draw();
     
@@ -1454,8 +1454,7 @@ void OptionsMenu::initGuiShortcutsPage() {
     );
     shortcutsGui.backItem->onActivate =
     [this] (const Point&) {
-        saveOptions();
-        game.systemNotifications.add("Options saved.", false, false);
+        saveOptions(true);
         transitionGuis(
             shortcutsGui, controlsGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
             OPTIONS_MENU::HUD_MOVE_TIME
@@ -1514,7 +1513,7 @@ void OptionsMenu::initGuiTopPage() {
     auto getIconLeft = [&iconsNode] (const string& name, const string& def) {
         return s2b(iconsNode->getChildByName(name)->getValueOrDefault(def));
     };
-
+    
     bool controlsIconLeft = getIconLeft("controls", "true");
     bool graphicsIconLeft = getIconLeft("graphics", "true");
     bool audioIconLeft = getIconLeft("audio", "true");
@@ -1540,8 +1539,7 @@ void OptionsMenu::initGuiTopPage() {
     );
     topGui.backItem->onActivate =
     [this] (const Point&) {
-        saveOptions();
-        game.systemNotifications.add("Options saved.", false, false);
+        saveOptions(true);
         leave();
     };
     topGui.backItem->onGetTooltip =
@@ -1893,7 +1891,7 @@ void OptionsMenu::populateBinds() {
  */
 void OptionsMenu::populateShortcutItems() {
     const ALLEGRO_COLOR EMPTY_SHORTCUT_COLOR = al_map_rgb(255, 192, 192);
-
+    
     shortcutItemsListBox->deleteAllChildren();
     
     GuiItem* itemToFocus = nullptr;

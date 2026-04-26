@@ -69,6 +69,7 @@ namespace OPTIONS {
 namespace ADVANCED_D {
 extern const bool DRAW_CURSOR_TRAIL;
 extern const bool ENGINE_DEV;
+extern const bool EXPO_MODE;
 extern const bool HIDE_STOPPED_MOUSE_CURSOR;
 extern const float JOYSTICK_MAX_DEADZONE;
 extern const float JOYSTICK_MIN_DEADZONE;
@@ -192,6 +193,9 @@ struct Options {
         
         //Is the player a developer of the engine?
         bool engineDev = ADVANCED_D::ENGINE_DEV;
+        
+        //Turn on some features that are helpful to show off the game?
+        bool expoMode = ADVANCED_D::EXPO_MODE;
         
         //Should the mouse cursor be hidden when stopped for some seconds?
         bool hideStoppedMouseCursor = ADVANCED_D::HIDE_STOPPED_MOUSE_CURSOR;
@@ -435,10 +439,10 @@ struct Options {
         //Show a standby type counter on the leader cursor?
         bool showLeaderCursorCounter =
             OPTIONS::MISC_D::SHOW_LEADER_CURSOR_COUNTER;
-        
+            
         //Show a control guide when idling?
         bool showControlGuide = OPTIONS::MISC_D::SHOW_CONTROL_GUIDE;
-            
+        
         //Show control bind icons on top of GUI elements?
         bool showGuiInputIcons = OPTIONS::MISC_D::SHOW_GUI_INPUT_ICONS;
         

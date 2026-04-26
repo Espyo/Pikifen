@@ -126,7 +126,7 @@ bool Inventory::handlePlayerAction(const Inpution::Action& action) {
     if(
         action.actionTypeId == PLAYER_ACTION_TYPE_INVENTORY &&
         action.value < 0.5f &&
-        game.options.controls.fastInventory
+        (game.options.controls.fastInventory || game.options.advanced.expoMode)
     ) {
         GuiItem* focusedItem = gui.getFocusedItem();
         if(focusedItem) {

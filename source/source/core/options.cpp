@@ -32,6 +32,9 @@ const bool DRAW_CURSOR_TRAIL = true;
 //Default value for whether the player is an engine developer.
 const bool ENGINE_DEV = false;
 
+//Default value for whether expo mode is enabled.
+const bool EXPO_MODE = false;
+
 //Default value for whether to hide the mouse cursor when stopped.
 const bool HIDE_STOPPED_MOUSE_CURSOR = false;
 
@@ -305,6 +308,7 @@ void Options::loadFromDataNode(DataNode* file) {
         
         aRS.set("draw_cursor_trail", advanced.drawCursorTrail);
         aRS.set("engine_developer", advanced.engineDev);
+        aRS.set("expo_mode", advanced.expoMode);
         aRS.set("fps", advanced.targetFps);
         aRS.set("hide_stopped_mouse_cursor", advanced.hideStoppedMouseCursor);
         aRS.set("joystick_max_deadzone", advanced.joystickMaxDeadzone);
@@ -606,6 +610,7 @@ void Options::saveToDataNode(DataNode* file) const {
         
         aGW.write("draw_cursor_trail", advanced.drawCursorTrail);
         aGW.write("engine_developer", advanced.engineDev);
+        aGW.write("expo_mode", advanced.expoMode);
         aGW.write("fps", advanced.targetFps);
         aGW.write("hide_stopped_mouse_cursor", advanced.hideStoppedMouseCursor);
         aGW.write("joystick_max_deadzone", advanced.joystickMaxDeadzone);

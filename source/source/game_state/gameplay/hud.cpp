@@ -148,6 +148,8 @@ Hud::Hud() :
     gui.registerCoords("mission_misc",             82,   20, 32, 10);
     gui.registerCoords("control_guide",            83,   55, 30, 50);
     gui.registerCoords("inventory_update",         50,   37, 12, 10);
+    gui.registerCoords("watermark_wordmark",     54.5,    8, 19,  8);
+    gui.registerCoords("watermark_logo",           40,    8,  8,  8);
     gui.readDataFile(hudFileNode);
     
     //Leader health and icons.
@@ -782,7 +784,12 @@ Hud::Hud() :
     controlGuide->controlCondensed = true;
     controlGuide->onDraw =
     [this, controlGuide] (const DrawInfo & draw) {
-        if(!game.options.misc.showControlGuide) return;
+        if(
+            !game.options.misc.showControlGuide &&
+            !game.options.advanced.expoMode
+        ) {
+            return;
+        }
         DrawInfo drawWithAlpha = draw;
         drawWithAlpha.tint.a *= controlGuideAlpha;
         drawFilledRoundedRectangle(
@@ -838,7 +845,34 @@ Hud::Hud() :
     inventoryUpdate->forceSquare = true;
     gui.addItem(inventoryUpdate, "inventory_update");
     
+    if(game.options.advanced.expoMode) {
     
+        //Watermark wordmark.
+        GuiItem* watermarkWordmark = new GuiItem();
+        watermarkWordmark->onDraw =
+        [this] (const DrawInfo & draw) {
+            drawBitmapInBox(
+                game.sysContent.bmpWordmark, draw.center, draw.size, true, 0.0f,
+                multAlpha(draw.tint, 0.80f)
+            );
+        };
+        gui.addItem(watermarkWordmark, "watermark_wordmark");
+        
+        //Watermark logo.
+        GuiItem* watermarkLogo = new GuiItem();
+        watermarkLogo->onDraw =
+        [this] (const DrawInfo & draw) {
+            drawBitmapInBox(
+                game.sysContent.bmpIcon, draw.center, draw.size, true, 0.0f,
+                multAlpha(draw.tint, 0.80f)
+            );
+        };
+        gui.addItem(watermarkLogo, "watermark_logo");
+        
+    }
+    
+    
+    //Bitmaps.
     DataNode* bitmapsNode = hudFileNode->getChildByName("bitmaps");
     
     auto loader = [&bitmapsNode] (ALLEGRO_BITMAP*& bmpVar, const string& name) {

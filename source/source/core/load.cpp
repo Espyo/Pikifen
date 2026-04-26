@@ -413,6 +413,8 @@ void loadMiscGraphics() {
         game.content.bitmaps.list.get(game.sysContentNames.bmpWarning);
     game.sysContent.bmpWaveRing =
         game.content.bitmaps.list.get(game.sysContentNames.bmpWaveRing);
+    game.sysContent.bmpWordmark =
+        game.content.bitmaps.list.get(game.sysContentNames.bmpWordmark);
 }
 
 
@@ -628,6 +630,7 @@ void unloadMiscResources() {
     game.content.bitmaps.list.free(game.sysContent.bmpVignette);
     game.content.bitmaps.list.free(game.sysContent.bmpWarning);
     game.content.bitmaps.list.free(game.sysContent.bmpWaveRing);
+    game.content.bitmaps.list.free(game.sysContent.bmpWordmark);
     
     //Fonts.
     al_destroy_font(game.sysContent.fntAreaName);

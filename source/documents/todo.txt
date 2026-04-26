@@ -6,6 +6,7 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Fog is broken (Cryptic Atrium)
     Vulnerability things
         Ice vent is hitting frozen Pikmin multiple times and eventually killing them
             Best way to solve this might be to make it so a status effect can give you invulnerability to attacks with a given hazard, but that would cause a cyclical dependency between hazards and statuses
@@ -910,9 +911,6 @@ Tasks for later on (I might never implement these)
         Visually it should probably look like some animated particle marker thing, but subtle and hopefully not too video-gamey
     Story mode
         A way to choose what landing site of the area you want to start the day in [PIKMIN 4]
-    Some sort of expo mode?
-        The game's logo should always be present on-screen in the corner
-        Don't save statistics, options, or mission records
     Discord rich presence
     [NEEDS BRAINSTORMING] Online play?
         It'd likely use deterministic lockstep https://gafferongames.com/post/deterministic_lockstep/

@@ -998,8 +998,7 @@ void AreaEditor::closeLoadDialog() {
  * @brief Code to run when the options dialog is closed.
  */
 void AreaEditor::closeOptionsDialog() {
-    saveOptions();
-    game.systemNotifications.add("Options saved.", false, false);
+    saveOptions(true);
 }
 
 

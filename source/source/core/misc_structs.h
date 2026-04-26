@@ -725,7 +725,7 @@ struct SystemContentList {
     //A hard bubble.
     ALLEGRO_BITMAP* bmpHardBubble = nullptr;
     
-    //Pikifen icon.
+    //Pikifen or game icon.
     ALLEGRO_BITMAP* bmpIcon = nullptr;
     
     //Idle glow.
@@ -847,6 +847,9 @@ struct SystemContentList {
     
     //Wave ring.
     ALLEGRO_BITMAP* bmpWaveRing = nullptr;
+    
+    //Pikifen or game wordmark.
+    ALLEGRO_BITMAP* bmpWordmark = nullptr;
     
     //Fonts.
     
@@ -1031,7 +1034,7 @@ struct SystemContentNames {
     //A hard bubble.
     string bmpHardBubble = "gui/hard_bubble";
     
-    //Pikifen icon.
+    //Pikifen or game icon.
     string bmpIcon = "gui/icon";
     
     //Idle glow.
@@ -1156,6 +1159,9 @@ struct SystemContentNames {
     
     //Wave ring.
     string bmpWaveRing = "effects/wave_ring";
+    
+    //Pikifen or game wordmark.
+    string bmpWordmark = "gui/wordmark";
     
     //Fonts.
     

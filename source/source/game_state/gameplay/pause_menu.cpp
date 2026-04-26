@@ -689,6 +689,10 @@ void PauseMenu::confirmOrLeave() {
     }
     }
     
+    if(game.options.advanced.expoMode) {
+        doConfirmation = true;
+    }
+    
     if(doConfirmation) {
         string activityType =
             game.curArea->type == AREA_TYPE_SIMPLE ?

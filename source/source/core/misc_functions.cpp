@@ -1195,13 +1195,28 @@ bool saveMissionRecords(DataNode* fileNode) {
 
 /**
  * @brief Saves the player's options.
+ *
+ * @param showNotification Whether to show a system notification with
+ * the result.
  */
-void saveOptions() {
+void saveOptions(bool showNotification) {
+    if(game.options.advanced.expoMode) {
+        if(showNotification) {
+            game.systemNotifications.add(
+                "Options not saved\n(expo mode).", true, false
+            );
+        }
+        return;
+    }
+    
     DataNode file("", "");
     game.options.saveToDataNode(&file);
     file.getChildOrAddNew("engine_version")->value =
         getEngineVersionString();
     file.saveFile(FILE_PATHS_FROM_ROOT::OPTIONS, true, true);
+    if(showNotification) {
+        game.systemNotifications.add("Options saved.", false, false);
+    }
 }
 
 
@@ -1268,6 +1283,8 @@ void saveScreenshot() {
  * @brief Saves the engine's lifetime statistics.
  */
 void saveStatistics() {
+    if(game.options.advanced.expoMode) return;
+    
     DataNode statsFile("", "");
     const Statistics& s = game.statistics;
     GetterWriter sGW(&statsFile);

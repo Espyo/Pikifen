@@ -275,8 +275,7 @@ void AnimationEditor::closeLoadDialog() {
  * @brief Code to run when the options dialog is closed.
  */
 void AnimationEditor::closeOptionsDialog() {
-    saveOptions();
-    game.systemNotifications.add("Options saved.", false, false);
+    saveOptions(true);
 }
 
 

@@ -2467,7 +2467,7 @@ void SystemNotificationManager::draw() const {
         pos, size, game.sysContent.bmpFrameBox,
         mapAlpha(visibility * 255)
     );
-    drawText(
+    drawTextLines(
         notifications.front().text,
         game.sysContent.fntStandard,
         pos, size * 0.90f, multAlpha(textBaseColor, visibility),

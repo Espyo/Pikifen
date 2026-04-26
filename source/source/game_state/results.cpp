@@ -752,6 +752,10 @@ void Results::initGuiMain() {
             conclusion =
                 "Played in after hours, so the "
                 "result past that point won't be saved.";
+        } else if(!game.options.advanced.expoMode) {
+            conclusion =
+                "This is an expo showcase, "
+                "so the result won't be saved.";
         } else if(!game.quickPlay.areaPath.empty()) {
             conclusion =
                 "This was an editor playtest, "
@@ -1059,6 +1063,7 @@ void Results::load() {
         isNewRecord &&
         game.quickPlay.areaPath.empty() &&
         !game.makerTools.usedHelpingTools &&
+        !game.options.advanced.expoMode &&
         !game.states.gameplay->afterHours
     ) {
         MissionRecord newRecord;
