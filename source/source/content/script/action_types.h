@@ -747,23 +747,39 @@ buildEnumNames(scriptActionListDelimiterChars, SCRIPT_ACTION_LIST_DELIMITER)({
 
 
 //Types of variables that a parameter can use.
-enum SCRIPT_ACTION_PARAM {
+enum SCRIPT_ACTION_PARAM_TYPE {
 
     //Signed integer.
-    SCRIPT_ACTION_PARAM_INT,
+    SCRIPT_ACTION_PARAM_TYPE_INT,
     
     //Float.
-    SCRIPT_ACTION_PARAM_FLOAT,
+    SCRIPT_ACTION_PARAM_TYPE_FLOAT,
     
     //Boolean.
-    SCRIPT_ACTION_PARAM_BOOL,
+    SCRIPT_ACTION_PARAM_TYPE_BOOL,
     
     //STL string.
-    SCRIPT_ACTION_PARAM_STRING,
+    SCRIPT_ACTION_PARAM_TYPE_STRING,
     
     //STL string that gets turned into an int.
-    SCRIPT_ACTION_PARAM_ENUM,
+    SCRIPT_ACTION_PARAM_TYPE_ENUM,
     
+};
+
+
+//Flags for the parameters.
+enum SCRIPT_ACTION_PARAM_FLAG {
+
+    //The argument has to be a constant, cannot be a variable.
+    SCRIPT_ACTION_PARAM_FLAG_CONST = 1 << 0,
+    
+    //If the argument is not specified, a default value will be used.
+    SCRIPT_ACTION_PARAM_FLAG_OPTIONAL = 1 << 1,
+
+    //This argument and any other ones after are considered to belong to
+    //this parameter.
+    SCRIPT_ACTION_PARAM_FLAG_VECTOR = 1 << 2,
+
 };
 
 
@@ -783,20 +799,20 @@ struct ScriptActionTypeParam {
     string name;
     
     //Type of variable it's meant to hold.
-    SCRIPT_ACTION_PARAM type = SCRIPT_ACTION_PARAM_STRING;
-    
-    //If true, it must be a constant value. Else, it can also be a var.
-    bool forceConst = false;
-    
-    //If true, this is an array of them (minimum amount 0).
-    bool isExtras = false;
+    SCRIPT_ACTION_PARAM_TYPE type = SCRIPT_ACTION_PARAM_TYPE_STRING;
+
+    //Flags. Use SCRIPT_ACTION_PARAM_FLAG.
+    Bitmask8 flags = 0;
+
+    //If this is optional, specify its default value here.
+    string defValue;
     
     
     //--- Public function declarations ---
     
     ScriptActionTypeParam(
-        const string& name, const SCRIPT_ACTION_PARAM type,
-        bool forceConst, bool isExtras
+        const string& name, const SCRIPT_ACTION_PARAM_TYPE type,
+        Bitmask8 flags = 0, const string& defValue = ""
     );
     
 };

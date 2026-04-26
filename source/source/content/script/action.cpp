@@ -431,18 +431,25 @@ bool ScriptActionDef::loadFromDataNode(DataNode* node, ScriptDef* scriptDef) {
     }
     
     //Check if there are too many or too few arguments.
-    size_t mandatoryParams = actionType->parameters.size();
-    
-    if(mandatoryParams > 0) {
-        if(actionType->parameters[mandatoryParams - 1].isExtras) {
-            mandatoryParams--;
+    size_t nMandatoryParams = 0;
+    size_t nFixedParams = 0;
+    bool hasVectorParam = false;
+    forIdx(p, actionType->parameters) {
+        ScriptActionTypeParam* pPtr = &actionType->parameters[p];
+        if(hasFlag(pPtr->flags, SCRIPT_ACTION_PARAM_FLAG_VECTOR)) {
+            hasVectorParam = true;
+        } else {
+            nFixedParams++;
+        }
+        if(!hasFlag(pPtr->flags, SCRIPT_ACTION_PARAM_FLAG_OPTIONAL)) {
+            nMandatoryParams++;
         }
     }
     
-    if(words.size() < mandatoryParams) {
+    if(words.size() < nMandatoryParams) {
         game.errors.report(
             "The \"" + actionType->name + "\" action needs " +
-            i2s(mandatoryParams) + " arguments, but this call only "
+            i2s(nMandatoryParams) + " arguments, but this call only "
             "has " + i2s(words.size()) + "! You're missing the \"" +
             actionType->parameters[words.size()].name + "\" parameter.",
             node
@@ -450,8 +457,8 @@ bool ScriptActionDef::loadFromDataNode(DataNode* node, ScriptDef* scriptDef) {
         return false;
     }
     
-    if(mandatoryParams == actionType->parameters.size()) {
-        if(words.size() > actionType->parameters.size()) {
+    if(!hasVectorParam) {
+        if(words.size() > nFixedParams) {
             game.errors.report(
                 "The \"" + actionType->name + "\" action only needs " +
                 i2s(actionType->parameters.size()) + " arguments, "
@@ -464,7 +471,11 @@ bool ScriptActionDef::loadFromDataNode(DataNode* node, ScriptDef* scriptDef) {
     
     //Fetch the arguments, and check if any of them are not allowed.
     forIdx(w, words) {
-        size_t paramIdx = std::min(w, actionType->parameters.size() - 1);
+        size_t paramIdx = w;
+        if(hasVectorParam && w > actionType->parameters.size() - 1) {
+            //This word just belongs to the final parameter.
+            paramIdx = actionType->parameters.size() - 1;
+        }
         bool isVar = (words[w][0] == '$' && words[w].size() > 1);
         
         if(isVar && words[w].size() >= 2 && words[w][1] == '$') {
@@ -474,7 +485,12 @@ bool ScriptActionDef::loadFromDataNode(DataNode* node, ScriptDef* scriptDef) {
         }
         
         if(isVar) {
-            if(actionType->parameters[paramIdx].forceConst) {
+            if(
+                hasFlag(
+                    actionType->parameters[paramIdx].flags,
+                    SCRIPT_ACTION_PARAM_FLAG_CONST
+                )
+            ) {
                 game.errors.report(
                     "Argument #" + i2s(w + 1) + " (\"" + words[w] + "\") is a "
                     "variable, but the parameter \"" +
@@ -499,6 +515,14 @@ bool ScriptActionDef::loadFromDataNode(DataNode* node, ScriptDef* scriptDef) {
         
         args.push_back(words[w]);
         argIsVar.push_back(isVar);
+    }
+    
+    //Check if any optional parameters were left out.
+    while(words.size() < nFixedParams) {
+        size_t paramIdx = words.size();
+        words.push_back(actionType->parameters[paramIdx].defValue);
+        args.push_back(words.back());
+        argIsVar.push_back(false);
     }
     
     //If this action needs extra parsing, do it now.

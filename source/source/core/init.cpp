@@ -1464,14 +1464,15 @@ void initScriptActionTypes() {
     vector<ScriptActionTypeParam> params;
     Bitmask8 contexts = 0;
     
+    //Convenient lambdas and aliases.
     auto queueParam =
         [&params] (
-            const string& paramName, SCRIPT_ACTION_PARAM paramType,
-            bool paramForceConst, bool paramIsExtras
+            const string& paramName, SCRIPT_ACTION_PARAM_TYPE paramType,
+            Bitmask8 paramFlags = 0, const string& paramDefValue = ""
     ) {
         params.push_back(
             ScriptActionTypeParam(
-                paramName, paramType, paramForceConst, paramIsExtras
+                paramName, paramType, paramFlags, paramDefValue
             )
         );
     };
@@ -1482,6 +1483,36 @@ void initScriptActionTypes() {
             ScriptActionTypeCode * actionRunCode,
             ScriptActionTypeLoadCode * actionLoadCode
     ) {
+        bool seenOptional = false;
+        forIdx(p, params) {
+            if(
+                hasFlag(params[p].flags, SCRIPT_ACTION_PARAM_FLAG_VECTOR) &&
+                p != params.size() - 1
+            ) {
+                engineAssert(
+                    false,
+                    "Script action type \"" + actionName +
+                    "\" has a vector parameter that is not the last parameter."
+                );
+            }
+            if(
+                !hasFlag(params[p].flags, SCRIPT_ACTION_PARAM_FLAG_OPTIONAL) &&
+                seenOptional
+            ) {
+                engineAssert(
+                    false,
+                    "Script action type \"" + actionName +
+                    "\" has a mandatory parameter that comes after "
+                    "an optional parameter."
+                );
+            }
+            if(
+                hasFlag(params[p].flags, SCRIPT_ACTION_PARAM_FLAG_OPTIONAL)
+            ) {
+                seenOptional = true;
+            }
+        }
+        
         ScriptActionType* actionTypePtr;
         actionTypePtr = &(game.scriptActionTypes[actionType]);
         actionTypePtr->type = actionType;
@@ -1492,6 +1523,15 @@ void initScriptActionTypes() {
         actionTypePtr->contexts = contexts;
         params.clear();
     };
+    
+    const SCRIPT_ACTION_PARAM_TYPE ptInt = SCRIPT_ACTION_PARAM_TYPE_INT;
+    const SCRIPT_ACTION_PARAM_TYPE ptFloat = SCRIPT_ACTION_PARAM_TYPE_FLOAT;
+    const SCRIPT_ACTION_PARAM_TYPE ptBool = SCRIPT_ACTION_PARAM_TYPE_BOOL;
+    const SCRIPT_ACTION_PARAM_TYPE ptString = SCRIPT_ACTION_PARAM_TYPE_STRING;
+    const SCRIPT_ACTION_PARAM_TYPE ptEnum = SCRIPT_ACTION_PARAM_TYPE_ENUM;
+    const SCRIPT_ACTION_PARAM_FLAG pfConst = SCRIPT_ACTION_PARAM_FLAG_CONST;
+    const SCRIPT_ACTION_PARAM_FLAG pfOpt = SCRIPT_ACTION_PARAM_FLAG_OPTIONAL;
+    const SCRIPT_ACTION_PARAM_FLAG pfVector = SCRIPT_ACTION_PARAM_FLAG_VECTOR;
     
     
     //-Common actions-
@@ -1508,8 +1548,8 @@ void initScriptActionTypes() {
     );
     
     //Absolute number.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("number", ptFloat);
     commitAction(
         SCRIPT_ACTION_ABSOLUTE_NUMBER,
         "absolute_number",
@@ -1518,11 +1558,11 @@ void initScriptActionTypes() {
     );
     
     //Add list item.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("list or string", SCRIPT_ACTION_PARAM_STRING, false, false);
-    queueParam("new item", SCRIPT_ACTION_PARAM_STRING, false, false);
-    queueParam("item number", SCRIPT_ACTION_PARAM_INT, false, false);
-    queueParam("list delimiter", SCRIPT_ACTION_PARAM_ENUM, true, true);
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("list or string", ptString);
+    queueParam("new item", ptString);
+    queueParam("item number", ptInt, pfOpt, "0");
+    queueParam("list delimiter", ptEnum, pfOpt, "colon");
     commitAction(
         SCRIPT_ACTION_ADD_LIST_ITEM,
         "add_list_item",
@@ -1531,10 +1571,10 @@ void initScriptActionTypes() {
     );
     
     //Add to string.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("base string", SCRIPT_ACTION_PARAM_STRING, false, false);
-    queueParam("content to add", SCRIPT_ACTION_PARAM_STRING, false, false);
-    queueParam("add a space between", SCRIPT_ACTION_PARAM_BOOL, false, true);
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("base string", ptString);
+    queueParam("content to add", ptString);
+    queueParam("add a space between", ptBool, pfOpt, "false");
     commitAction(
         SCRIPT_ACTION_ADD_TO_STRING,
         "add_to_string",
@@ -1543,10 +1583,10 @@ void initScriptActionTypes() {
     );
     
     //Calculate.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("left operand", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("operation", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    queueParam("right operand", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("left operand", ptFloat);
+    queueParam("operation", ptEnum, pfConst);
+    queueParam("right operand", ptFloat);
     commitAction(
         SCRIPT_ACTION_CALCULATE,
         "calculate",
@@ -1555,7 +1595,7 @@ void initScriptActionTypes() {
     );
     
     //Clear var.
-    queueParam("var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("var name", ptString, pfConst);
     commitAction(
         SCRIPT_ACTION_CLEAR_VAR,
         "clear_var",
@@ -1564,8 +1604,8 @@ void initScriptActionTypes() {
     );
     
     //Ceil number.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("number", ptFloat);
     commitAction(
         SCRIPT_ACTION_CEIL_NUMBER,
         "ceil_number",
@@ -1574,9 +1614,9 @@ void initScriptActionTypes() {
     );
     
     //Ease number.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("method", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("number", ptFloat);
+    queueParam("method", ptEnum, pfConst);
     commitAction(
         SCRIPT_ACTION_EASE_NUMBER,
         "ease_number",
@@ -1593,9 +1633,9 @@ void initScriptActionTypes() {
     );
     
     //Else if.
-    queueParam("comparand", SCRIPT_ACTION_PARAM_STRING, false, false);
-    queueParam("operation", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    queueParam("value", SCRIPT_ACTION_PARAM_STRING, false, true);
+    queueParam("comparand", ptString);
+    queueParam("operation", ptEnum, pfConst);
+    queueParam("value", ptString, pfVector);
     commitAction(
         SCRIPT_ACTION_ELSE_IF,
         "else_if",
@@ -1612,7 +1652,7 @@ void initScriptActionTypes() {
     );
     
     //Focus.
-    queueParam("target", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    queueParam("target", ptEnum, pfConst);
     commitAction(
         SCRIPT_ACTION_FOCUS,
         "focus",
@@ -1621,11 +1661,11 @@ void initScriptActionTypes() {
     );
     
     //Get angle.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("center x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("center y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("target x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("target y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("center x", ptFloat);
+    queueParam("center y", ptFloat);
+    queueParam("target x", ptFloat);
+    queueParam("target y", ptFloat);
     commitAction(
         SCRIPT_ACTION_GET_ANGLE,
         "get_angle",
@@ -1634,9 +1674,9 @@ void initScriptActionTypes() {
     );
     
     //Get angle clockwise difference.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("angle 1", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("angle 2", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("angle 1", ptFloat);
+    queueParam("angle 2", ptFloat);
     commitAction(
         SCRIPT_ACTION_GET_ANGLE_CW_DIFF,
         "get_angle_clockwise_difference",
@@ -1645,9 +1685,9 @@ void initScriptActionTypes() {
     );
     
     //Get angle smallest difference.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("angle 1", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("angle 2", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("angle 1", ptFloat);
+    queueParam("angle 2", ptFloat);
     commitAction(
         SCRIPT_ACTION_GET_ANGLE_SMALLEST_DIFF,
         "get_angle_smallest_difference",
@@ -1656,8 +1696,8 @@ void initScriptActionTypes() {
     );
     
     //Get area info.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("info", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("info", ptString, pfConst);
     commitAction(
         SCRIPT_ACTION_GET_AREA_INFO,
         "get_area_info",
@@ -1666,14 +1706,10 @@ void initScriptActionTypes() {
     );
     
     //Get coordinates from angle.
-    queueParam(
-        "x destination var name", SCRIPT_ACTION_PARAM_STRING, true, false
-    );
-    queueParam(
-        "y destination var name", SCRIPT_ACTION_PARAM_STRING, true, false
-    );
-    queueParam("angle", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("distance", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("x destination var name", ptString, pfConst);
+    queueParam("y destination var name", ptString, pfConst);
+    queueParam("angle", ptFloat);
+    queueParam("distance", ptFloat);
     commitAction(
         SCRIPT_ACTION_GET_COORDINATES_FROM_ANGLE,
         "get_coordinates_from_angle",
@@ -1682,11 +1718,11 @@ void initScriptActionTypes() {
     );
     
     //Get distance.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("center x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("center y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("target x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("target y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("center x", ptFloat);
+    queueParam("center y", ptFloat);
+    queueParam("target x", ptFloat);
+    queueParam("target y", ptFloat);
     commitAction(
         SCRIPT_ACTION_GET_DISTANCE,
         "get_distance",
@@ -1695,8 +1731,8 @@ void initScriptActionTypes() {
     );
     
     //Get event info.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("info", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("info", ptString, pfConst);
     commitAction(
         SCRIPT_ACTION_GET_EVENT_INFO,
         "get_event_info",
@@ -1705,10 +1741,8 @@ void initScriptActionTypes() {
     );
     
     //Get focus var.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam(
-        "focused mob's var name", SCRIPT_ACTION_PARAM_STRING, true, false
-    );
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("focused mob's var name", ptString, pfConst);
     commitAction(
         SCRIPT_ACTION_GET_FOCUS_VAR,
         "get_focus_var",
@@ -1717,10 +1751,10 @@ void initScriptActionTypes() {
     );
     
     //Get list item.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("list or string", SCRIPT_ACTION_PARAM_STRING, false, false);
-    queueParam("item number", SCRIPT_ACTION_PARAM_INT, false, false);
-    queueParam("list delimiter", SCRIPT_ACTION_PARAM_ENUM, true, true);
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("list or string", ptString);
+    queueParam("item number", ptInt, pfOpt, "0");
+    queueParam("list delimiter", ptEnum, pfOpt, "colon");
     commitAction(
         SCRIPT_ACTION_GET_LIST_ITEM,
         "get_list_item",
@@ -1729,10 +1763,10 @@ void initScriptActionTypes() {
     );
     
     //Get list item number.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("list or string", SCRIPT_ACTION_PARAM_STRING, false, false);
-    queueParam("item to search", SCRIPT_ACTION_PARAM_INT, false, false);
-    queueParam("list delimiter", SCRIPT_ACTION_PARAM_ENUM, true, true);
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("list or string", ptString);
+    queueParam("item to search", ptInt);
+    queueParam("list delimiter", ptEnum, pfOpt, "colon");
     commitAction(
         SCRIPT_ACTION_GET_LIST_ITEM_NUMBER,
         "get_list_item_number",
@@ -1741,9 +1775,9 @@ void initScriptActionTypes() {
     );
     
     //Get list size.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("list or string", SCRIPT_ACTION_PARAM_STRING, false, false);
-    queueParam("list delimiter", SCRIPT_ACTION_PARAM_ENUM, true, true);
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("list or string", ptString);
+    queueParam("list delimiter", ptEnum, pfOpt, "colon");
     commitAction(
         SCRIPT_ACTION_GET_LIST_SIZE,
         "get_list_size",
@@ -1752,8 +1786,8 @@ void initScriptActionTypes() {
     );
     
     //Get misc. info.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("info", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("info", ptString, pfConst);
     commitAction(
         SCRIPT_ACTION_GET_MISC_INFO,
         "get_misc_info",
@@ -1762,9 +1796,9 @@ void initScriptActionTypes() {
     );
     
     //Get mob info.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("target", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("info", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("target", ptString, pfConst);
+    queueParam("info", ptString, pfConst);
     commitAction(
         SCRIPT_ACTION_GET_MOB_INFO,
         "get_mob_info",
@@ -1773,9 +1807,9 @@ void initScriptActionTypes() {
     );
     
     //Get random float.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("minimum value", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("maximum value", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("minimum value", ptFloat);
+    queueParam("maximum value", ptFloat);
     commitAction(
         SCRIPT_ACTION_GET_RANDOM_FLOAT,
         "get_random_float",
@@ -1784,9 +1818,9 @@ void initScriptActionTypes() {
     );
     
     //Get random int.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("minimum value", SCRIPT_ACTION_PARAM_INT, false, false);
-    queueParam("maximum value", SCRIPT_ACTION_PARAM_INT, false, false);
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("minimum value", ptInt);
+    queueParam("maximum value", ptInt);
     commitAction(
         SCRIPT_ACTION_GET_RANDOM_INT,
         "get_random_int",
@@ -1795,8 +1829,8 @@ void initScriptActionTypes() {
     );
     
     //Get var presence.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("var name", ptString, pfConst);
     commitAction(
         SCRIPT_ACTION_GET_VAR_PRESENCE,
         "get_var_presence",
@@ -1805,7 +1839,7 @@ void initScriptActionTypes() {
     );
     
     //Goto.
-    queueParam("label name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("label name", ptString, pfConst);
     commitAction(
         SCRIPT_ACTION_GOTO,
         "goto",
@@ -1814,9 +1848,9 @@ void initScriptActionTypes() {
     );
     
     //If.
-    queueParam("comparand", SCRIPT_ACTION_PARAM_STRING, false, false);
-    queueParam("operation", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    queueParam("value", SCRIPT_ACTION_PARAM_STRING, false, true);
+    queueParam("comparand", ptString);
+    queueParam("operation", ptEnum, pfConst);
+    queueParam("value", ptString);
     commitAction(
         SCRIPT_ACTION_IF,
         "if",
@@ -1825,12 +1859,12 @@ void initScriptActionTypes() {
     );
     
     //Interpolate number.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("input number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("input start", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("input end", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("output start", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("output end", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("input number", ptFloat);
+    queueParam("input start", ptFloat);
+    queueParam("input end", ptFloat);
+    queueParam("output start", ptFloat);
+    queueParam("output end", ptFloat);
     commitAction(
         SCRIPT_ACTION_INTERPOLATE_NUMBER,
         "interpolate_number",
@@ -1839,7 +1873,7 @@ void initScriptActionTypes() {
     );
     
     //Label.
-    queueParam("label name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("label name", ptString, pfConst);
     commitAction(
         SCRIPT_ACTION_LABEL,
         "label",
@@ -1848,7 +1882,7 @@ void initScriptActionTypes() {
     );
     
     //Print.
-    queueParam("text", SCRIPT_ACTION_PARAM_STRING, false, true);
+    queueParam("text", ptString, pfVector);
     commitAction(
         SCRIPT_ACTION_PRINT,
         "print",
@@ -1857,10 +1891,10 @@ void initScriptActionTypes() {
     );
     
     //Remove list item.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("list or string", SCRIPT_ACTION_PARAM_STRING, false, false);
-    queueParam("item number", SCRIPT_ACTION_PARAM_INT, false, false);
-    queueParam("list delimiter", SCRIPT_ACTION_PARAM_ENUM, true, true);
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("list or string", ptString);
+    queueParam("item number", ptInt, pfOpt, "0");
+    queueParam("list delimiter", ptEnum, pfOpt, "colon");
     commitAction(
         SCRIPT_ACTION_REMOVE_LIST_ITEM,
         "remove_list_item",
@@ -1869,8 +1903,8 @@ void initScriptActionTypes() {
     );
     
     //Round number.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("number", ptFloat);
     commitAction(
         SCRIPT_ACTION_ROUND_NUMBER,
         "round_number",
@@ -1879,7 +1913,7 @@ void initScriptActionTypes() {
     );
     
     //Send message to focus.
-    queueParam("message", SCRIPT_ACTION_PARAM_STRING, false, false);
+    queueParam("message", ptString);
     commitAction(
         SCRIPT_ACTION_SEND_MESSAGE_TO_FOCUS,
         "send_message_to_focus",
@@ -1888,11 +1922,8 @@ void initScriptActionTypes() {
     );
     
     //Set focus var.
-    queueParam(
-        "focused mob's destination var name",
-        SCRIPT_ACTION_PARAM_STRING, false, false
-    );
-    queueParam("value", SCRIPT_ACTION_PARAM_STRING, false, false);
+    queueParam("focused mob's destination var name", ptString, pfConst);
+    queueParam("value", ptString);
     commitAction(
         SCRIPT_ACTION_SET_FOCUS_VAR,
         "set_focus_var",
@@ -1901,7 +1932,7 @@ void initScriptActionTypes() {
     );
     
     //Set state.
-    queueParam("state name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("state name", ptString, pfConst);
     commitAction(
         SCRIPT_ACTION_SET_STATE,
         "set_state",
@@ -1910,7 +1941,7 @@ void initScriptActionTypes() {
     );
     
     //Set timer.
-    queueParam("time", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("time", ptFloat);
     commitAction(
         SCRIPT_ACTION_SET_TIMER,
         "set_timer",
@@ -1919,8 +1950,8 @@ void initScriptActionTypes() {
     );
     
     //Set var.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("value", SCRIPT_ACTION_PARAM_STRING, false, false);
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("value", ptString);
     commitAction(
         SCRIPT_ACTION_SET_VAR,
         "set_var",
@@ -1929,7 +1960,7 @@ void initScriptActionTypes() {
     );
     
     //Show message from var.
-    queueParam("var name", SCRIPT_ACTION_PARAM_STRING, true, false);
+    queueParam("var name", ptString, pfConst);
     commitAction(
         SCRIPT_ACTION_SHOW_MESSAGE_FROM_VAR,
         "show_message_from_var",
@@ -1938,8 +1969,8 @@ void initScriptActionTypes() {
     );
     
     //Square root number.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("number", ptFloat);
     commitAction(
         SCRIPT_ACTION_SQUARE_ROOT_NUMBER,
         "square_root_number",
@@ -1952,7 +1983,7 @@ void initScriptActionTypes() {
     contexts = getIdxBitmask(SCRIPT_CONTEXT_MOB);
     
     //Add health.
-    queueParam("amount", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("amount", ptFloat);
     commitAction(
         SCRIPT_ACTION_ADD_HEALTH,
         "add_health",
@@ -1961,7 +1992,7 @@ void initScriptActionTypes() {
     );
     
     //Arachnorb plan logic.
-    queueParam("goal", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    queueParam("goal", ptEnum, pfConst);
     commitAction(
         SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC,
         "arachnorb_plan_logic",
@@ -1994,8 +2025,8 @@ void initScriptActionTypes() {
     );
     
     //Floor number.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("number", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("number", ptFloat);
     commitAction(
         SCRIPT_ACTION_FLOOR_NUMBER,
         "floor_number",
@@ -2004,8 +2035,8 @@ void initScriptActionTypes() {
     );
     
     //Follow mob as a leader.
-    queueParam("target", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    queueParam("silent", SCRIPT_ACTION_PARAM_BOOL, false, true);
+    queueParam("target", ptEnum, pfConst);
+    queueParam("silent", ptBool, pfOpt, "false");
     commitAction(
         SCRIPT_ACTION_FOLLOW_MOB_AS_LEADER,
         "follow_mob_as_leader",
@@ -2014,7 +2045,7 @@ void initScriptActionTypes() {
     );
     
     //Follow path randomly.
-    queueParam("label", SCRIPT_ACTION_PARAM_STRING, false, true);
+    queueParam("label", ptString, pfOpt);
     commitAction(
         SCRIPT_ACTION_FOLLOW_PATH_RANDOMLY,
         "follow_path_randomly",
@@ -2023,9 +2054,9 @@ void initScriptActionTypes() {
     );
     
     //Follow path to absolute.
-    queueParam("x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("label", SCRIPT_ACTION_PARAM_STRING, false, true);
+    queueParam("x", ptFloat);
+    queueParam("y", ptFloat);
+    queueParam("label", ptString, pfOpt);
     commitAction(
         SCRIPT_ACTION_FOLLOW_PATH_TO_ABSOLUTE,
         "follow_path_to_absolute",
@@ -2042,9 +2073,9 @@ void initScriptActionTypes() {
     );
     
     //Get floor Z.
-    queueParam("destination var name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("x", ptFloat);
+    queueParam("y", ptFloat);
     commitAction(
         SCRIPT_ACTION_GET_FLOOR_Z,
         "get_floor_z",
@@ -2053,8 +2084,8 @@ void initScriptActionTypes() {
     );
     
     //Hold focused mob.
-    queueParam("body part name", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    queueParam("hold above", SCRIPT_ACTION_PARAM_BOOL, false, true);
+    queueParam("body part name", ptEnum, pfConst);
+    queueParam("hold above", ptBool, pfOpt, "false");
     commitAction(
         SCRIPT_ACTION_HOLD_FOCUS,
         "hold_focused_mob",
@@ -2071,7 +2102,7 @@ void initScriptActionTypes() {
     );
     
     //Load focused mob memory.
-    queueParam("slot", SCRIPT_ACTION_PARAM_INT, false, false);
+    queueParam("slot", ptInt);
     commitAction(
         SCRIPT_ACTION_LOAD_FOCUS_MEMORY,
         "load_focused_mob_memory",
@@ -2080,9 +2111,9 @@ void initScriptActionTypes() {
     );
     
     //Move to absolute.
-    queueParam("x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("z", SCRIPT_ACTION_PARAM_FLOAT, false, true);
+    queueParam("x", ptFloat);
+    queueParam("y", ptFloat);
+    queueParam("z", ptFloat, pfOpt);
     commitAction(
         SCRIPT_ACTION_MOVE_TO_ABSOLUTE,
         "move_to_absolute",
@@ -2091,9 +2122,9 @@ void initScriptActionTypes() {
     );
     
     //Move to relative.
-    queueParam("x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("z", SCRIPT_ACTION_PARAM_FLOAT, false, true);
+    queueParam("x", ptFloat);
+    queueParam("y", ptFloat);
+    queueParam("z", ptFloat, pfOpt);
     commitAction(
         SCRIPT_ACTION_MOVE_TO_RELATIVE,
         "move_to_relative",
@@ -2102,7 +2133,7 @@ void initScriptActionTypes() {
     );
     
     //Move to target.
-    queueParam("target", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    queueParam("target", ptEnum, pfConst);
     commitAction(
         SCRIPT_ACTION_MOVE_TO_TARGET,
         "move_to_target",
@@ -2119,10 +2150,8 @@ void initScriptActionTypes() {
     );
     
     //Play sound.
-    queueParam("sound data", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    queueParam(
-        "sound ID destination var name", SCRIPT_ACTION_PARAM_STRING, true, true
-    );
+    queueParam("sound data", ptEnum, pfConst);
+    queueParam("sound ID destination var name", ptString, pfOpt);
     commitAction(
         SCRIPT_ACTION_PLAY_SOUND,
         "play_sound",
@@ -2131,7 +2160,7 @@ void initScriptActionTypes() {
     );
     
     //Receive status.
-    queueParam("status name", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    queueParam("status name", ptEnum, pfConst);
     commitAction(
         SCRIPT_ACTION_RECEIVE_STATUS,
         "receive_status",
@@ -2156,7 +2185,7 @@ void initScriptActionTypes() {
     );
     
     //Remove status.
-    queueParam("status name", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    queueParam("status name", ptEnum, pfConst);
     commitAction(
         SCRIPT_ACTION_REMOVE_STATUS,
         "remove_status",
@@ -2165,7 +2194,7 @@ void initScriptActionTypes() {
     );
     
     //Save focused mob memory.
-    queueParam("slot", SCRIPT_ACTION_PARAM_INT, false, false);
+    queueParam("slot", ptInt);
     commitAction(
         SCRIPT_ACTION_SAVE_FOCUS_MEMORY,
         "save_focused_mob_memory",
@@ -2174,7 +2203,7 @@ void initScriptActionTypes() {
     );
     
     //Send message to links.
-    queueParam("message", SCRIPT_ACTION_PARAM_STRING, false, false);
+    queueParam("message", ptString);
     commitAction(
         SCRIPT_ACTION_SEND_MESSAGE_TO_LINKS,
         "send_message_to_links",
@@ -2183,8 +2212,8 @@ void initScriptActionTypes() {
     );
     
     //Send message to nearby.
-    queueParam("distance", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("message", SCRIPT_ACTION_PARAM_STRING, false, false);
+    queueParam("distance", ptFloat);
+    queueParam("message", ptString);
     commitAction(
         SCRIPT_ACTION_SEND_MESSAGE_TO_NEARBY,
         "send_message_to_nearby",
@@ -2193,8 +2222,9 @@ void initScriptActionTypes() {
     );
     
     //Set animation.
-    queueParam("animation name", SCRIPT_ACTION_PARAM_STRING, true, false);
-    queueParam("options", SCRIPT_ACTION_PARAM_ENUM, true, true);
+    queueParam("animation name", ptString, pfConst);
+    queueParam("options", ptEnum, pfOpt, "normal");
+    queueParam("depend on mob speed", ptBool, pfOpt, "false");
     commitAction(
         SCRIPT_ACTION_SET_ANIMATION,
         "set_animation",
@@ -2203,7 +2233,7 @@ void initScriptActionTypes() {
     );
     
     //Set can block paths.
-    queueParam("blocks", SCRIPT_ACTION_PARAM_BOOL, false, false);
+    queueParam("blocks", ptBool);
     commitAction(
         SCRIPT_ACTION_SET_CAN_BLOCK_PATHS,
         "set_can_block_paths",
@@ -2212,7 +2242,7 @@ void initScriptActionTypes() {
     );
     
     //Set far reach.
-    queueParam("reach name", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    queueParam("reach name", ptEnum, pfConst);
     commitAction(
         SCRIPT_ACTION_SET_FAR_REACH,
         "set_far_reach",
@@ -2221,7 +2251,7 @@ void initScriptActionTypes() {
     );
     
     //Set flying.
-    queueParam("flying", SCRIPT_ACTION_PARAM_BOOL, false, false);
+    queueParam("flying", ptBool);
     commitAction(
         SCRIPT_ACTION_SET_FLYING,
         "set_flying",
@@ -2230,7 +2260,7 @@ void initScriptActionTypes() {
     );
     
     //Set gravity.
-    queueParam("multiplier", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("multiplier", ptFloat);
     commitAction(
         SCRIPT_ACTION_SET_GRAVITY,
         "set_gravity",
@@ -2239,7 +2269,7 @@ void initScriptActionTypes() {
     );
     
     //Set health.
-    queueParam("amount", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("amount", ptFloat);
     commitAction(
         SCRIPT_ACTION_SET_HEALTH,
         "set_health",
@@ -2248,7 +2278,7 @@ void initScriptActionTypes() {
     );
     
     //Set height.
-    queueParam("height", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("height", ptFloat);
     commitAction(
         SCRIPT_ACTION_SET_HEIGHT,
         "set_height",
@@ -2257,7 +2287,7 @@ void initScriptActionTypes() {
     );
     
     //Set hiding.
-    queueParam("hiding", SCRIPT_ACTION_PARAM_BOOL, false, false);
+    queueParam("hiding", ptBool);
     commitAction(
         SCRIPT_ACTION_SET_HIDING,
         "set_hiding",
@@ -2266,7 +2296,7 @@ void initScriptActionTypes() {
     );
     
     //Set huntable.
-    queueParam("huntable", SCRIPT_ACTION_PARAM_BOOL, false, false);
+    queueParam("huntable", ptBool);
     commitAction(
         SCRIPT_ACTION_SET_HUNTABLE,
         "set_huntable",
@@ -2275,7 +2305,7 @@ void initScriptActionTypes() {
     );
     
     //Set holdable.
-    queueParam("options", SCRIPT_ACTION_PARAM_ENUM, true, true);
+    queueParam("options", ptEnum, pfOpt | pfVector);
     commitAction(
         SCRIPT_ACTION_SET_HOLDABLE,
         "set_holdable",
@@ -2284,7 +2314,7 @@ void initScriptActionTypes() {
     );
     
     //Set limb animation.
-    queueParam("animation name", SCRIPT_ACTION_PARAM_STRING, false, false);
+    queueParam("animation name", ptString, pfConst);
     commitAction(
         SCRIPT_ACTION_SET_LIMB_ANIMATION,
         "set_limb_animation",
@@ -2293,7 +2323,7 @@ void initScriptActionTypes() {
     );
     
     //Set near reach.
-    queueParam("reach name", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    queueParam("reach name", ptEnum, pfConst);
     commitAction(
         SCRIPT_ACTION_SET_NEAR_REACH,
         "set_near_reach",
@@ -2302,7 +2332,7 @@ void initScriptActionTypes() {
     );
     
     //Set radius.
-    queueParam("radius", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("radius", ptFloat);
     commitAction(
         SCRIPT_ACTION_SET_RADIUS,
         "set_radius",
@@ -2311,8 +2341,8 @@ void initScriptActionTypes() {
     );
     
     //Set sector scroll.
-    queueParam("x speed", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("y speed", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("x speed", ptFloat);
+    queueParam("y speed", ptFloat);
     commitAction(
         SCRIPT_ACTION_SET_SECTOR_SCROLL,
         "set_sector_scroll",
@@ -2321,7 +2351,7 @@ void initScriptActionTypes() {
     );
     
     //Set shadow visibility.
-    queueParam("visible", SCRIPT_ACTION_PARAM_BOOL, false, false);
+    queueParam("visible", ptBool);
     commitAction(
         SCRIPT_ACTION_SET_SHADOW_VISIBILITY,
         "set_shadow_visibility",
@@ -2330,7 +2360,7 @@ void initScriptActionTypes() {
     );
     
     //Set tangible.
-    queueParam("tangible", SCRIPT_ACTION_PARAM_BOOL, false, false);
+    queueParam("tangible", ptBool);
     commitAction(
         SCRIPT_ACTION_SET_TANGIBLE,
         "set_tangible",
@@ -2339,7 +2369,7 @@ void initScriptActionTypes() {
     );
     
     //Set team.
-    queueParam("team name", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    queueParam("team name", ptEnum, pfConst);
     commitAction(
         SCRIPT_ACTION_SET_TEAM,
         "set_team",
@@ -2348,7 +2378,7 @@ void initScriptActionTypes() {
     );
     
     //Shake camera.
-    queueParam("amount", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("amount", ptFloat);
     commitAction(
         SCRIPT_ACTION_SHAKE_CAMERA,
         "shake_camera",
@@ -2357,7 +2387,7 @@ void initScriptActionTypes() {
     );
     
     //Spawn.
-    queueParam("spawn data", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    queueParam("spawn data", ptEnum, pfConst);
     commitAction(
         SCRIPT_ACTION_SPAWN,
         "spawn",
@@ -2366,8 +2396,8 @@ void initScriptActionTypes() {
     );
     
     //Stabilize Z.
-    queueParam("reference", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    queueParam("offset", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("reference", ptEnum, pfConst);
+    queueParam("offset", ptFloat);
     commitAction(
         SCRIPT_ACTION_STABILIZE_Z,
         "stabilize_z",
@@ -2376,9 +2406,9 @@ void initScriptActionTypes() {
     );
     
     //Start chomping.
-    queueParam("victim max", SCRIPT_ACTION_PARAM_INT, false, false);
-    queueParam("body part", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    queueParam("more body parts", SCRIPT_ACTION_PARAM_ENUM, true, true);
+    queueParam("victim max", ptInt);
+    queueParam("body part", ptEnum, pfConst);
+    queueParam("more body parts", ptEnum, pfOpt | pfVector);
     commitAction(
         SCRIPT_ACTION_START_CHOMPING,
         "start_chomping",
@@ -2403,8 +2433,10 @@ void initScriptActionTypes() {
     );
     
     //Start particles.
-    queueParam("generator name", SCRIPT_ACTION_PARAM_ENUM, true, false);
-    queueParam("offset coordinates", SCRIPT_ACTION_PARAM_FLOAT, false, true);
+    queueParam("generator name", ptEnum, pfConst);
+    queueParam("offset X", ptFloat, pfOpt, "0");
+    queueParam("offset Y", ptFloat, pfOpt, "0");
+    queueParam("offset Z", ptFloat, pfOpt, "0");
     commitAction(
         SCRIPT_ACTION_START_PARTICLES,
         "start_particles",
@@ -2445,7 +2477,7 @@ void initScriptActionTypes() {
     );
     
     //Stop sound.
-    queueParam("sound ID", SCRIPT_ACTION_PARAM_INT, false, false);
+    queueParam("sound ID", ptInt);
     commitAction(
         SCRIPT_ACTION_STOP_SOUND,
         "stop_sound",
@@ -2470,7 +2502,7 @@ void initScriptActionTypes() {
     );
     
     //Swallow.
-    queueParam("amount", SCRIPT_ACTION_PARAM_INT, false, false);
+    queueParam("amount", ptInt);
     commitAction(
         SCRIPT_ACTION_SWALLOW,
         "swallow",
@@ -2487,9 +2519,9 @@ void initScriptActionTypes() {
     );
     
     //Teleport to absolute.
-    queueParam("x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("z", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("x", ptFloat);
+    queueParam("y", ptFloat);
+    queueParam("z", ptFloat);
     commitAction(
         SCRIPT_ACTION_TELEPORT_TO_ABSOLUTE,
         "teleport_to_absolute",
@@ -2498,9 +2530,9 @@ void initScriptActionTypes() {
     );
     
     //Teleport to relative.
-    queueParam("x", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("y", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("z", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("x", ptFloat);
+    queueParam("y", ptFloat);
+    queueParam("z", ptFloat);
     commitAction(
         SCRIPT_ACTION_TELEPORT_TO_RELATIVE,
         "teleport_to_relative",
@@ -2509,10 +2541,10 @@ void initScriptActionTypes() {
     );
     
     //Throw focused mob.
-    queueParam("x coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("y coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("z coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, false);
-    queueParam("max height", SCRIPT_ACTION_PARAM_FLOAT, false, false);
+    queueParam("x coordinate", ptFloat);
+    queueParam("y coordinate", ptFloat);
+    queueParam("z coordinate", ptFloat);
+    queueParam("max height", ptFloat);
     commitAction(
         SCRIPT_ACTION_THROW_FOCUS,
         "throw_focused_mob",
@@ -2521,10 +2553,8 @@ void initScriptActionTypes() {
     );
     
     //Turn to absolute.
-    queueParam(
-        "angle or x coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, false
-    );
-    queueParam("y coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, true);
+    queueParam("angle or x coordinate", ptFloat);
+    queueParam("y coordinate", ptFloat, pfOpt);
     commitAction(
         SCRIPT_ACTION_TURN_TO_ABSOLUTE,
         "turn_to_absolute",
@@ -2533,10 +2563,8 @@ void initScriptActionTypes() {
     );
     
     //Turn to relative.
-    queueParam(
-        "angle or x coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, false
-    );
-    queueParam("y coordinate", SCRIPT_ACTION_PARAM_FLOAT, false, true);
+    queueParam("angle or x coordinate", ptFloat);
+    queueParam("y coordinate", ptFloat, pfOpt);
     commitAction(
         SCRIPT_ACTION_TURN_TO_RELATIVE,
         "turn_to_relative",
@@ -2545,7 +2573,7 @@ void initScriptActionTypes() {
     );
     
     //Turn to target.
-    queueParam("target", SCRIPT_ACTION_PARAM_ENUM, true, false);
+    queueParam("target", ptEnum, pfConst);
     commitAction(
         SCRIPT_ACTION_TURN_TO_TARGET,
         "turn_to_target",

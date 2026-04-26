@@ -54,23 +54,21 @@ ScriptActionInstRunData::ScriptActionInstRunData(
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::addListItem(ScriptActionDef& def, MobType* mt) {
-    if(def.args.size() < 4) {
-        def.args.push_back("-1");
-    }
-    if(def.args.size() < 5) {
-        def.args.push_back("colon");
-    }
+    //Get the relevant arguments.
+    string& delArg = def.args[4];
     
+    //Compile the arguments.
     bool delFound;
     SCRIPT_ACTION_LIST_DELIMITER delimiter =
-        enumGetValue(scriptActionListDelimiterINames, def.args[4], &delFound);
+        enumGetValue(scriptActionListDelimiterINames, delArg, &delFound);
     if(!delFound) {
         def.customError =
-            "Unknown list delimiter \"" + def.args[4] + "\"!";
+            "Unknown list delimiter \"" + delArg + "\"!";
         return false;
     }
     def.args[4] = i2s(delimiter);
     
+    //Finish.
     return true;
 }
 
@@ -85,16 +83,22 @@ bool ScriptActionLoaders::addListItem(ScriptActionDef& def, MobType* mt) {
 bool ScriptActionLoaders::arachnorbPlanLogic(
     ScriptActionDef& def, MobType* mt
 ) {
-    bool found;
+    //Get the relevant arguments.
+    string& typeArg = def.args[0];
+
+    //Compile the arguments.
+    bool typeFound;
     SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC_TYPE type =
         enumGetValue(
-            scriptActionArachnorbPlanLogicTypeINames, def.args[0], &found
+            scriptActionArachnorbPlanLogicTypeINames, typeArg, &typeFound
         );
-    if(!found) {
+    if(!typeFound) {
         reportEnumError(def, 0);
         return false;
     }
-    def.args[0] = i2s(type);
+    typeArg = i2s(type);
+
+    //Finish.
     return true;
 }
 
@@ -107,14 +111,20 @@ bool ScriptActionLoaders::arachnorbPlanLogic(
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::calculate(ScriptActionDef& def, MobType* mt) {
-    bool found;
+    //Get the relevant arguments.
+    string& typeArg = def.args[2];
+
+    //Compile the arguments.
+    bool typeFound;
     SCRIPT_ACTION_CALCULATE_TYPE type =
-        enumGetValue(scriptActionCalculateTypeINames, def.args[2], &found);
-    if(!found) {
+        enumGetValue(scriptActionCalculateTypeINames, typeArg, &typeFound);
+    if(!typeFound) {
         reportEnumError(def, 2);
         return false;
     }
-    def.args[2] = i2s(type);
+    typeArg = i2s(type);
+
+    //Finish.
     return true;
 }
 
@@ -127,14 +137,20 @@ bool ScriptActionLoaders::calculate(ScriptActionDef& def, MobType* mt) {
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::easeNumber(ScriptActionDef& def, MobType* mt) {
-    bool found;
+    //Get the relevant arguments.
+    string& methodArg = def.args[2];
+
+    //Compile the arguments.
+    bool methodFound;
     EASE_METHOD method =
-        enumGetValue(easeMethodINames, def.args[2], &found);
-    if(!found) {
+        enumGetValue(easeMethodINames, methodArg, &methodFound);
+    if(!methodFound) {
         reportEnumError(def, 2);
         return false;
     }
-    def.args[2] = i2s(method);
+    methodArg = i2s(method);
+
+    //Finish.
     return true;
 }
 
@@ -171,16 +187,22 @@ bool ScriptActionLoaders::followMobAsLeader(ScriptActionDef& def, MobType* mt) {
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::getAreaInfo(ScriptActionDef& def, MobType* mt) {
-    bool found;
+    //Get the relevant arguments.
+    string& typeArg = def.args[1];
+
+    //Compile the arguments.
+    bool typeFound;
     SCRIPT_ACTION_GET_AREA_INFO_TYPE type =
-        enumGetValue(scriptActionGetAreaInfoTypeINames, def.args[1], &found);
-    if(!found) {
+        enumGetValue(scriptActionGetAreaInfoTypeINames, typeArg, &typeFound);
+    if(!typeFound) {
         def.customError =
-            "Unknown info type \"" + def.args[1] + "\"! "
+            "Unknown info type \"" + typeArg + "\"! "
             "Did you mean to use a different \"get_*_info\" action?";
         return false;
     }
-    def.args[1] = i2s(type);
+    typeArg = i2s(type);
+
+    //Finish.
     return true;
 }
 
@@ -193,16 +215,22 @@ bool ScriptActionLoaders::getAreaInfo(ScriptActionDef& def, MobType* mt) {
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::getEventInfo(ScriptActionDef& def, MobType* mt) {
-    bool found;
+    //Get the relevant arguments.
+    string& typeArg = def.args[1];
+
+    //Compile the arguments.
+    bool typeFound;
     SCRIPT_ACTION_GET_EV_INFO_TYPE type =
-        enumGetValue(scriptActionGetEvInfoTypeINames, def.args[1], &found);
-    if(!found) {
+        enumGetValue(scriptActionGetEvInfoTypeINames, typeArg, &typeFound);
+    if(!typeFound) {
         def.customError =
-            "Unknown info type \"" + def.args[1] + "\"! "
+            "Unknown info type \"" + typeArg + "\"! "
             "Did you mean to use a different \"get_*_info\" action?";
         return false;
     }
-    def.args[1] = i2s(type);
+    typeArg = i2s(type);
+    
+    //Finish.
     return true;
 }
 
@@ -215,16 +243,22 @@ bool ScriptActionLoaders::getEventInfo(ScriptActionDef& def, MobType* mt) {
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::getMiscInfo(ScriptActionDef& def, MobType* mt) {
-    bool found;
+    //Get the relevant arguments.
+    string& typeArg = def.args[1];
+
+    //Compile the arguments.
+    bool typeFound;
     SCRIPT_ACTION_GET_MISC_INFO_TYPE type =
-        enumGetValue(scriptActionGetMiscInfoTypeINames, def.args[1], &found);
-    if(!found) {
+        enumGetValue(scriptActionGetMiscInfoTypeINames, typeArg, &typeFound);
+    if(!typeFound) {
         def.customError =
-            "Unknown info type \"" + def.args[1] + "\"! "
+            "Unknown info type \"" + typeArg + "\"! "
             "Did you mean to use a different \"get_*_info\" action?";
         return false;
     }
-    def.args[1] = i2s(type);
+    typeArg = i2s(type);
+
+    //Finish.
     return true;
 }
 
@@ -237,20 +271,21 @@ bool ScriptActionLoaders::getMiscInfo(ScriptActionDef& def, MobType* mt) {
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::getListItem(ScriptActionDef& def, MobType* mt) {
-    if(def.args.size() < 4) {
-        def.args.push_back("colon");
-    }
+    //Get the relevant arguments.
+    string& delArg = def.args[3];
     
+    //Compile the arguments.
     bool delFound;
     SCRIPT_ACTION_LIST_DELIMITER delimiter =
-        enumGetValue(scriptActionListDelimiterINames, def.args[3], &delFound);
+        enumGetValue(scriptActionListDelimiterINames, delArg, &delFound);
     if(!delFound) {
         def.customError =
-            "Unknown list delimiter \"" + def.args[3] + "\"!";
+            "Unknown list delimiter \"" + delArg + "\"!";
         return false;
     }
-    def.args[3] = i2s(delimiter);
+    delArg = i2s(delimiter);
     
+    //Finish.
     return true;
 }
 
@@ -263,20 +298,21 @@ bool ScriptActionLoaders::getListItem(ScriptActionDef& def, MobType* mt) {
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::getListItemNumber(ScriptActionDef& def, MobType* mt) {
-    if(def.args.size() < 4) {
-        def.args.push_back("colon");
-    }
-    
+    //Get the relevant arguments.
+    string& delArg = def.args[3];
+
+    //Compile the arguments.
     bool delFound;
     SCRIPT_ACTION_LIST_DELIMITER delimiter =
-        enumGetValue(scriptActionListDelimiterINames, def.args[3], &delFound);
+        enumGetValue(scriptActionListDelimiterINames, delArg, &delFound);
     if(!delFound) {
         def.customError =
-            "Unknown list delimiter \"" + def.args[3] + "\"!";
+            "Unknown list delimiter \"" + delArg + "\"!";
         return false;
     }
-    def.args[3] = i2s(delimiter);
+    delArg = i2s(delimiter);
     
+    //Finish.
     return true;
 }
 
@@ -289,19 +325,21 @@ bool ScriptActionLoaders::getListItemNumber(ScriptActionDef& def, MobType* mt) {
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::getListSize(ScriptActionDef& def, MobType* mt) {
-    if(def.args.size() < 3) {
-        def.args.push_back("colon");
-    }
+    //Get the relevant arguments.
+    string& delArg = def.args[2];
     
+    //Compile the arguments.
     bool delFound;
     SCRIPT_ACTION_LIST_DELIMITER delimiter =
-        enumGetValue(scriptActionListDelimiterINames, def.args[2], &delFound);
+        enumGetValue(scriptActionListDelimiterINames, delArg, &delFound);
     if(!delFound) {
         def.customError =
-            "Unknown list delimiter \"" + def.args[2] + "\"!";
+            "Unknown list delimiter \"" + delArg + "\"!";
         return false;
     }
-    def.args[2] = i2s(delimiter);
+    delArg = i2s(delimiter);
+
+    //Finish.
     return true;
 }
 
@@ -318,16 +356,22 @@ bool ScriptActionLoaders::getMobInfo(ScriptActionDef& def, MobType* mt) {
         return false;
     }
     
-    bool found;
+    //Get the relevant arguments.
+    string& typeArg = def.args[2];
+
+    //Compile the arguments.
+    bool typeFound;
     SCRIPT_ACTION_GET_MOB_INFO_TYPE type =
-        enumGetValue(scriptActionGetMobInfoTypeINames, def.args[2], &found);
-    if(!found) {
+        enumGetValue(scriptActionGetMobInfoTypeINames, typeArg, &typeFound);
+    if(!typeFound) {
         def.customError =
-            "Unknown info type \"" + def.args[2] + "\"! "
+            "Unknown info type \"" + typeArg + "\"! "
             "Did you mean to use a different \"get_*_info\" action?";
         return false;
     }
-    def.args[2] = i2s(type);
+    typeArg = i2s(type);
+
+    //Finish.
     return true;
 }
 
@@ -340,13 +384,19 @@ bool ScriptActionLoaders::getMobInfo(ScriptActionDef& def, MobType* mt) {
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::holdFocus(ScriptActionDef& def, MobType* mt) {
-    size_t pIdx = mt->animDb->findBodyPart(def.args[0]);
+    //Get the relevant arguments.
+    string& bodyPartArg = def.args[0];
+
+    //Compile the arguments.
+    size_t pIdx = mt->animDb->findBodyPart(bodyPartArg);
     if(pIdx == INVALID) {
         def.customError =
-            "Unknown body part \"" + def.args[0] + "\"!";
+            "Unknown body part \"" + bodyPartArg + "\"!";
         return false;
     }
-    def.args[0] = i2s(pIdx);
+    bodyPartArg = i2s(pIdx);
+
+    //Finish.
     return true;
 }
 
@@ -359,14 +409,20 @@ bool ScriptActionLoaders::holdFocus(ScriptActionDef& def, MobType* mt) {
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::ifFunction(ScriptActionDef& def, MobType* mt) {
-    bool found;
+    //Get the relevant arguments.
+    string& opArg = def.args[1];
+
+    //Compile the arguments.
+    bool opFound;
     SCRIPT_ACTION_IF_OP op =
-        enumGetValue(scriptActionIfOpINames, def.args[1], &found);
-    if(!found) {
+        enumGetValue(scriptActionIfOpINames, opArg, &opFound);
+    if(!opFound) {
         reportEnumError(def, 1);
         return false;
     }
-    def.args[1] = i2s(op);
+    opArg = i2s(op);
+
+    //Finish.
     return true;
 }
 
@@ -380,14 +436,20 @@ bool ScriptActionLoaders::ifFunction(ScriptActionDef& def, MobType* mt) {
 bool ScriptActionLoaders::loadMobTargetType(
     ScriptActionDef& def, size_t argIdx
 ) {
-    bool found;
+    //Get the relevant arguments.
+    string& typeArg = def.args[argIdx];
+
+    //Compile the arguments.
+    bool typeFound;
     SCRIPT_ACTION_MOB_TARGET_TYPE type =
-        enumGetValue(scriptActionMobTargetTypeINames, def.args[argIdx], &found);
-    if(!found) {
+        enumGetValue(scriptActionMobTargetTypeINames, typeArg, &typeFound);
+    if(!typeFound) {
         reportEnumError(def, argIdx);
         return false;
     }
-    def.args[argIdx] = i2s(type);
+    typeArg = i2s(type);
+
+    //Finish.
     return true;
 }
 
@@ -400,14 +462,20 @@ bool ScriptActionLoaders::loadMobTargetType(
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::moveToTarget(ScriptActionDef& def, MobType* mt) {
-    bool found;
+    //Get the relevant arguments.
+    string& typeArg = def.args[0];
+
+    //Compile the arguments.
+    bool typeFound;
     SCRIPT_ACTION_MOVE_TYPE type =
-        enumGetValue(scriptActionMoveTypeINames, def.args[0], &found);
-    if(!found) {
+        enumGetValue(scriptActionMoveTypeINames, typeArg, &typeFound);
+    if(!typeFound) {
         reportEnumError(def, 0);
         return false;
     }
-    def.args[0] = i2s(type);
+    typeArg = i2s(type);
+
+    //Finish.
     return true;
 }
 
@@ -420,14 +488,20 @@ bool ScriptActionLoaders::moveToTarget(ScriptActionDef& def, MobType* mt) {
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::playSound(ScriptActionDef& def, MobType* mt) {
+    //Get the relevant arguments.
+    string& nameArg = def.args[0];
+
+    //Compile the arguments.
     forIdx(s, mt->sounds) {
-        if(mt->sounds[s].name == def.args[0]) {
-            def.args[0] = i2s(s);
+        if(mt->sounds[s].name == nameArg) {
+            nameArg = i2s(s);
             return true;
         }
     }
     def.customError =
-        "Unknown sound info block \"" + def.args[0] + "\"!";
+        "Unknown sound info block \"" + nameArg + "\"!";
+
+    //Finish.
     return false;
 }
 
@@ -440,11 +514,17 @@ bool ScriptActionLoaders::playSound(ScriptActionDef& def, MobType* mt) {
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::receiveStatus(ScriptActionDef& def, MobType* mt) {
-    if(!isInMap(game.content.statusTypes.list, def.args[0])) {
+    //Get the relevant arguments.
+    string& statusArg = def.args[0];
+
+    //Compile the arguments.
+    if(!isInMap(game.content.statusTypes.list, statusArg)) {
         def.customError =
-            "Unknown status effect \"" + def.args[0] + "\"!";
+            "Unknown status effect \"" + statusArg + "\"!";
         return false;
     }
+
+    //Finish.
     return true;
 }
 
@@ -457,23 +537,21 @@ bool ScriptActionLoaders::receiveStatus(ScriptActionDef& def, MobType* mt) {
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::removeListItem(ScriptActionDef& def, MobType* mt) {
-    if(def.args.size() < 3) {
-        def.args.push_back("-1");
-    }
-    if(def.args.size() < 4) {
-        def.args.push_back("colon");
-    }
+    //Get the relevant arguments.
+    string& delArg = def.args[3];
     
+    //Compile the arguments.
     bool delFound;
     SCRIPT_ACTION_LIST_DELIMITER delimiter =
-        enumGetValue(scriptActionListDelimiterINames, def.args[3], &delFound);
+        enumGetValue(scriptActionListDelimiterINames, delArg, &delFound);
     if(!delFound) {
         def.customError =
-            "Unknown list delimiter \"" + def.args[3] + "\"!";
+            "Unknown list delimiter \"" + delArg + "\"!";
         return false;
     }
-    def.args[3] = i2s(delimiter);
+    delArg = i2s(delimiter);
     
+    //Finish.
     return true;
 }
 
@@ -486,11 +564,17 @@ bool ScriptActionLoaders::removeListItem(ScriptActionDef& def, MobType* mt) {
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::removeStatus(ScriptActionDef& def, MobType* mt) {
-    if(!isInMap(game.content.statusTypes.list, def.args[0])) {
+    //Get the relevant arguments.
+    string& statusArg = def.args[0];
+
+    //Compile the arguments.
+    if(!isInMap(game.content.statusTypes.list, statusArg)) {
         def.customError =
-            "Unknown status effect \"" + def.args[0] + "\"!";
+            "Unknown status effect \"" + statusArg + "\"!";
         return false;
     }
+
+    //Finish.
     return true;
 }
 
@@ -520,26 +604,30 @@ void ScriptActionLoaders::reportEnumError(
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::setAnimation(ScriptActionDef& def, MobType* mt) {
-    size_t aPos = mt->animDb->findAnimation(def.args[0]);
-    if(aPos == INVALID) {
+    //Get the relevant arguments.
+    string& animArg = def.args[0];
+    string& optionArg = def.args[1];
+
+    //Compile the arguments.
+    size_t aIdx = mt->animDb->findAnimation(animArg);
+    if(aIdx == INVALID) {
         def.customError =
-            "Unknown animation \"" + def.args[0] + "\"!";
+            "Unknown animation \"" + animArg + "\"!";
         return false;
     }
-    def.args[0] = i2s(aPos);
+    animArg = i2s(aIdx);
     
-    if(def.args.size() > 1) {
-        bool optionFound;
-        START_ANIM_OPTION option =
-            enumGetValue(startAnimOptionINames, def.args[1], &optionFound);
-        if(!optionFound) {
-            def.customError =
-                "Unknown animation start option \"" + def.args[1] + "\"!";
-            return false;
-        }
-        def.args[1] = i2s(option);
+    bool optionFound;
+    START_ANIM_OPTION option =
+        enumGetValue(startAnimOptionINames, optionArg, &optionFound);
+    if(!optionFound) {
+        def.customError =
+            "Unknown animation start option \"" + optionArg + "\"!";
+        return false;
     }
+    optionArg = i2s(option);
     
+    //Finish.
     return true;
 }
 
@@ -552,13 +640,19 @@ bool ScriptActionLoaders::setAnimation(ScriptActionDef& def, MobType* mt) {
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::setFarReach(ScriptActionDef& def, MobType* mt) {
+    //Get the relevant arguments.
+    string& reachArg = def.args[0];
+
+    //Compile the arguments.
     forIdx(r, mt->reaches) {
-        if(mt->reaches[r].name == def.args[0]) {
-            def.args[0] = i2s(r);
+        if(mt->reaches[r].name == reachArg) {
+            reachArg = i2s(r);
             return true;
         }
     }
-    def.customError = "Unknown reach \"" + def.args[0] + "\"!";
+    def.customError = "Unknown reach \"" + reachArg + "\"!";
+
+    //Finish.
     return false;
 }
 
@@ -571,15 +665,17 @@ bool ScriptActionLoaders::setFarReach(ScriptActionDef& def, MobType* mt) {
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::setHoldable(ScriptActionDef& def, MobType* mt) {
+    //Compile the arguments.
     forIdx(a, def.args) {
-        bool found;
+        string& arg = def.args[a];
+        bool flagFound;
         HOLDABILITY_FLAG flag =
-            enumGetValue(holdabilityFlagINames, def.args[a], &found);
-        if(!found) {
+            enumGetValue(holdabilityFlagINames, arg, &flagFound);
+        if(!flagFound) {
             reportEnumError(def, a);
             return false;
         }
-        def.args[a] = i2s(flag);
+        arg = i2s(flag);
     }
     return true;
 }
@@ -593,13 +689,19 @@ bool ScriptActionLoaders::setHoldable(ScriptActionDef& def, MobType* mt) {
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::setNearReach(ScriptActionDef& def, MobType* mt) {
+    //Get the relevant arguments.
+    string& reachArg = def.args[0];
+
+    //Compile the arguments.
     forIdx(r, mt->reaches) {
-        if(mt->reaches[r].name == def.args[0]) {
-            def.args[0] = i2s(r);
+        if(mt->reaches[r].name == reachArg) {
+            reachArg = i2s(r);
             return true;
         }
     }
-    def.customError = "Unknown reach \"" + def.args[0] + "\"!";
+    def.customError = "Unknown reach \"" + reachArg + "\"!";
+
+    //Finish.
     return false;
 }
 
@@ -612,13 +714,19 @@ bool ScriptActionLoaders::setNearReach(ScriptActionDef& def, MobType* mt) {
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::setTeam(ScriptActionDef& def, MobType* mt) {
-    bool found;
-    MOB_TEAM teamNr = enumGetValue(mobTeamINames, def.args[0], &found);
-    if(!found) {
+    //Get the relevant arguments.
+    string& teamArg = def.args[0];
+    
+    //Compile the arguments.
+    bool teamFound;
+    MOB_TEAM teamNr = enumGetValue(mobTeamINames, teamArg, &teamFound);
+    if(!teamFound) {
         reportEnumError(def, 0);
         return false;
     }
-    def.args[0] = i2s(teamNr);
+    teamArg = i2s(teamNr);
+
+    //Finish.
     return true;
 }
 
@@ -631,14 +739,20 @@ bool ScriptActionLoaders::setTeam(ScriptActionDef& def, MobType* mt) {
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::spawn(ScriptActionDef& def, MobType* mt) {
+    //Get the relevant arguments.
+    string& spawnArg = def.args[0];
+
+    //Compile the arguments.
     forIdx(s, mt->spawns) {
-        if(mt->spawns[s].name == def.args[0]) {
-            def.args[0] = i2s(s);
+        if(mt->spawns[s].name == spawnArg) {
+            spawnArg = i2s(s);
             return true;
         }
     }
     def.customError =
-        "Unknown spawn info block \"" + def.args[0] + "\"!";
+        "Unknown spawn info block \"" + spawnArg + "\"!";
+    
+    //Finish.
     return false;
 }
 
@@ -651,14 +765,20 @@ bool ScriptActionLoaders::spawn(ScriptActionDef& def, MobType* mt) {
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::stabilizeZ(ScriptActionDef& def, MobType* mt) {
-    bool found;
+    //Get the relevant arguments.
+    string& typeArg = def.args[0];
+
+    //Compile the arguments.
+    bool typeFound;
     SCRIPT_ACTION_STABILIZE_Z_TYPE type =
-        enumGetValue(scriptActionStabilizeZTypeINames, def.args[0], &found);
-    if(!found) {
+        enumGetValue(scriptActionStabilizeZTypeINames, typeArg, &typeFound);
+    if(!typeFound) {
         reportEnumError(def, 0);
         return false;
     }
-    def.args[0] = i2s(type);
+    typeArg = i2s(type);
+
+    //Finish.
     return true;
 }
 
@@ -671,15 +791,19 @@ bool ScriptActionLoaders::stabilizeZ(ScriptActionDef& def, MobType* mt) {
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::startChomping(ScriptActionDef& def, MobType* mt) {
-    for(size_t s = 1; s < def.args.size(); s++) {
-        size_t pNr = mt->animDb->findBodyPart(def.args[s]);
+    //Compile the arguments.
+    for(size_t a = 1; a < def.args.size(); a++) {
+        string& arg = def.args[a];
+        size_t pNr = mt->animDb->findBodyPart(arg);
         if(pNr == INVALID) {
             def.customError =
-                "Unknown body part \"" + def.args[s] + "\"!";
+                "Unknown body part \"" + arg + "\"!";
             return false;
         }
-        def.args[s] = i2s(pNr);
+        arg = i2s(pNr);
     }
+
+    //Finish.
     return true;
 }
 
@@ -692,11 +816,17 @@ bool ScriptActionLoaders::startChomping(ScriptActionDef& def, MobType* mt) {
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::startParticles(ScriptActionDef& def, MobType* mt) {
-    if(!isInMap(game.content.particleGens.list, def.args[0])) {
+    //Get the relevant arguments.
+    string& genArg = def.args[0];
+
+    //Compile the arguments.
+    if(!isInMap(game.content.particleGens.list, genArg)) {
         def.customError =
-            "Unknown particle generator \"" + def.args[0] + "\"!";
+            "Unknown particle generator \"" + genArg + "\"!";
         return false;
     }
+
+    //Finish.
     return true;
 }
 
@@ -709,14 +839,20 @@ bool ScriptActionLoaders::startParticles(ScriptActionDef& def, MobType* mt) {
  * @return Whether it succeeded.
  */
 bool ScriptActionLoaders::turnToTarget(ScriptActionDef& def, MobType* mt) {
-    bool found;
+    //Get the relevant arguments.
+    string& typeArg = def.args[0];
+
+    //Compile the arguments.
+    bool typeFound;
     SCRIPT_ACTION_TURN_TYPE type =
-        enumGetValue(scriptActionTurnTypeINames, def.args[0], &found);
-    if(!found) {
+        enumGetValue(scriptActionTurnTypeINames, typeArg, &typeFound);
+    if(!typeFound) {
         reportEnumError(def, 0);
         return false;
     }
-    def.args[0] = i2s(type);
+    typeArg = i2s(type);
+
+    //Finish.
     return true;
 }
 
@@ -731,7 +867,15 @@ bool ScriptActionLoaders::turnToTarget(ScriptActionDef& def, MobType* mt) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::absoluteNumber(ScriptActionInstRunData& data) {
-    data.scriptVM->vars[data.args[0]] = f2s(fabs(s2f(data.args[1])));
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& numberArg = data.args[1];
+
+    //Main logic.
+    float result = fabs(s2f(numberArg));
+
+    //Store the result.
+    data.scriptVM->vars[destVarArg] = f2s(result);
 }
 
 
@@ -741,7 +885,11 @@ void ScriptActionRunners::absoluteNumber(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::addHealth(ScriptActionInstRunData& data) {
-    data.scriptVM->mob->setHealth(true, false, s2f(data.args[0]));
+    //Get the arguments.
+    const string& healthArg = data.args[0];
+
+    //Main logic.
+    data.scriptVM->mob->setHealth(true, false, s2f(healthArg));
 }
 
 
@@ -751,20 +899,28 @@ void ScriptActionRunners::addHealth(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::addListItem(ScriptActionInstRunData& data) {
-    const string& listStr = data.args[1];
-    const string& newItem = data.args[2];
-    int idx = s2i(data.args[3]) - 1;
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& listArg = data.args[1];
+    const string& newItemArg = data.args[2];
+    const string& numberArg = data.args[3];
+    const string& delArg = data.args[4];
+
+    //Main logic.
     string delimiter =
         enumGetName(
             scriptActionListDelimiterChars,
-            (SCRIPT_ACTION_LIST_DELIMITER) s2i(data.args[4])
+            (SCRIPT_ACTION_LIST_DELIMITER) s2i(delArg)
         );
-        
-    vector<string> items = split(listStr, delimiter, true);
-    if(idx < 0) idx = items.size();
-    items.insert(items.begin() + idx, newItem);
+    vector<string> items = split(listArg, delimiter, true);
+    int idx = s2i(numberArg) - 1;
+    if(!isIdxValid(idx, items)) idx = items.size();
+
+    items.insert(items.begin() + idx, newItemArg);
     string newListStr = join(items, delimiter);
-    data.scriptVM->vars[data.args[0]] = newListStr;
+
+    //Store the result.
+    data.scriptVM->vars[destVarArg] = newListStr;
 }
 
 
@@ -774,15 +930,19 @@ void ScriptActionRunners::addListItem(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::addToString(ScriptActionInstRunData& data) {
-    const string& baseStr = data.args[1];
-    const string& newContent = data.args[2];
-    bool addSpace = data.args.size() >= 4 ? s2b(data.args[3]) : false;
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& baseStrArg = data.args[1];
+    const string& newContentArg = data.args[2];
+    const string& addSpaceArg = data.args[3];
+
+    //Main logic.
+    string result = baseStrArg;
+    if(s2b(addSpaceArg)) result += " ";
+    result += newContentArg;
     
-    string result = baseStr;
-    if(addSpace) result += " ";
-    result += newContent;
-    
-    data.scriptVM->vars[data.args[0]] = result;
+    //Store the result.
+    data.scriptVM->vars[destVarArg] = result;
 }
 
 
@@ -792,8 +952,12 @@ void ScriptActionRunners::addToString(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::arachnorbPlanLogic(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& typeArg = data.args[0];
+
+    //Main logic.
     data.scriptVM->mob->arachnorbPlanLogic(
-        (SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC_TYPE) s2i(data.args[0])
+        (SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC_TYPE) s2i(typeArg)
     );
 }
 
@@ -804,10 +968,17 @@ void ScriptActionRunners::arachnorbPlanLogic(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::calculate(ScriptActionInstRunData& data) {
-    float lhs = s2f(data.args[1]);
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& lhsArg = data.args[1];
+    const string& opArg = data.args[2];
+    const string& rhsArg = data.args[3];
+
+    //Main logic.
+    float lhs = s2f(lhsArg);
     SCRIPT_ACTION_CALCULATE_TYPE op =
-        (SCRIPT_ACTION_CALCULATE_TYPE) s2i(data.args[2]);
-    float rhs = s2f(data.args[3]);
+        (SCRIPT_ACTION_CALCULATE_TYPE) s2i(opArg);
+    float rhs = s2f(rhsArg);
     float result = 0;
     
     switch(op) {
@@ -846,7 +1017,8 @@ void ScriptActionRunners::calculate(ScriptActionInstRunData& data) {
     }
     }
     
-    data.scriptVM->vars[data.args[0]] = f2s(result);
+    //Store the result.
+    data.scriptVM->vars[destVarArg] = f2s(result);
 }
 
 
@@ -856,10 +1028,12 @@ void ScriptActionRunners::calculate(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::clearVar(ScriptActionInstRunData& data) {
-    const string& varName = data.args[0];
+    //Get the arguments.
+    const string& varArg = data.args[0];
     
-    if(data.scriptVM->vars.contains(varName)) {
-        data.scriptVM->vars[varName].clear();
+    //Main logic.
+    if(data.scriptVM->vars.contains(varArg)) {
+        data.scriptVM->vars[varArg].clear();
     }
 }
 
@@ -870,7 +1044,15 @@ void ScriptActionRunners::clearVar(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::ceilNumber(ScriptActionInstRunData& data) {
-    data.scriptVM->vars[data.args[0]] = f2s(ceil(s2f(data.args[1])));
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& numberArg = data.args[1];
+
+    //Main logic.
+    float result = ceil(s2f(numberArg));
+
+    //Store the result.
+    data.scriptVM->vars[destVarArg] = f2s(result);
 }
 
 
@@ -880,6 +1062,7 @@ void ScriptActionRunners::ceilNumber(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::deleteFunction(ScriptActionInstRunData& data) {
+    //Main logic.
     data.scriptVM->mob->toDelete = true;
 }
 
@@ -890,6 +1073,7 @@ void ScriptActionRunners::deleteFunction(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::drainLiquid(ScriptActionInstRunData& data) {
+    //Main logic.
     Sector* sPtr = getSector(data.scriptVM->mob->pos, nullptr, true);
     if(!sPtr) return;
     if(!sPtr->liquid) return;
@@ -903,9 +1087,17 @@ void ScriptActionRunners::drainLiquid(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::easeNumber(ScriptActionInstRunData& data) {
-    EASE_METHOD method =
-        (EASE_METHOD) s2i(data.args[2]);
-    data.scriptVM->vars[data.args[0]] = f2s(ease(s2f(data.args[1]), method));
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& numberArg = data.args[1];
+    const string& methodArg = data.args[2];
+
+    //Main logic.
+    EASE_METHOD method = (EASE_METHOD) s2i(methodArg);
+    float result = ease(s2f(numberArg), method);
+
+    //Store the result.
+    data.scriptVM->vars[destVarArg] = f2s(result);
 }
 
 
@@ -915,6 +1107,7 @@ void ScriptActionRunners::easeNumber(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::finishDying(ScriptActionInstRunData& data) {
+    //Main logic.
     data.scriptVM->mob->finishDying();
 }
 
@@ -925,7 +1118,15 @@ void ScriptActionRunners::finishDying(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::floorNumber(ScriptActionInstRunData& data) {
-    data.scriptVM->vars[data.args[0]] = f2s(floor(s2f(data.args[1])));
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& numberArg = data.args[1];
+
+    //Main logic.
+    float result = floor(s2f(numberArg));
+
+    //Store the result.
+    data.scriptVM->vars[destVarArg] = f2s(result);
 }
 
 
@@ -935,12 +1136,15 @@ void ScriptActionRunners::floorNumber(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::focus(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& typeArg = data.args[0];
+
+    //Main logic.
     SCRIPT_ACTION_MOB_TARGET_TYPE s =
-        (SCRIPT_ACTION_MOB_TARGET_TYPE) s2i(data.args[0]);
+        (SCRIPT_ACTION_MOB_TARGET_TYPE) s2i(typeArg);
     Mob* target = getTargetMob(data, s);
     
     if(!target) return;
-    
     data.scriptVM->focusOnMob(target);
 }
 
@@ -951,13 +1155,15 @@ void ScriptActionRunners::focus(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::followMobAsLeader(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& typeArg = data.args[0];
+    const string& silentArg = data.args[1];
+
+    //Main logic.
     SCRIPT_ACTION_MOB_TARGET_TYPE s =
-        (SCRIPT_ACTION_MOB_TARGET_TYPE) s2i(data.args[0]);
+        (SCRIPT_ACTION_MOB_TARGET_TYPE) s2i(typeArg);
     Mob* target = getTargetMob(data, s);
-    bool silent = false;
-    if(data.args.size() >= 2) {
-        silent = s2b(data.args[1]);
-    }
+    bool silent = s2b(silentArg);
     
     if(!target) return;
     if(target->health <= 0.0f) return;
@@ -980,15 +1186,14 @@ void ScriptActionRunners::followMobAsLeader(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::followPathRandomly(ScriptActionInstRunData& data) {
-    string label;
-    if(data.args.size() >= 1) {
-        label = data.args[0];
-    }
-    
+    //Get the arguments.
+    const string& labelArg = data.args[0];
+
+    //Main logic.
     //We need to decide what the final stop is going to be.
     //First, get all eligible stops.
     vector<PathStop*> choices;
-    if(label.empty()) {
+    if(labelArg.empty()) {
         //If there's no label, then any stop is eligible.
         choices.insert(
             choices.end(),
@@ -999,7 +1204,7 @@ void ScriptActionRunners::followPathRandomly(ScriptActionInstRunData& data) {
         //If there's a label, we should only pick stops that have the label.
         forIdx(s, game.curArea->pathStops) {
             PathStop* sPtr = game.curArea->pathStops[s];
-            if(sPtr->label == label) {
+            if(sPtr->label == labelArg) {
                 choices.push_back(sPtr);
             }
         }
@@ -1030,7 +1235,7 @@ void ScriptActionRunners::followPathRandomly(ScriptActionInstRunData& data) {
     settings.targetPoint = finalStop ? finalStop->pos : data.scriptVM->mob->pos;
     enableFlag(settings.flags, PATH_FOLLOW_FLAG_CAN_CONTINUE);
     enableFlag(settings.flags, PATH_FOLLOW_FLAG_SCRIPT_USE);
-    settings.label = label;
+    settings.label = labelArg;
     data.scriptVM->mob->followPath(
         settings, data.scriptVM->mob->getBaseSpeed(),
         data.scriptVM->mob->type->acceleration
@@ -1044,16 +1249,20 @@ void ScriptActionRunners::followPathRandomly(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::followPathToAbsolute(ScriptActionInstRunData& data) {
-    float x = s2f(data.args[0]);
-    float y = s2f(data.args[1]);
+    //Get the arguments.
+    const string& xArg = data.args[0];
+    const string& yArg = data.args[1];
+    const string& labelArg = data.args[2];
+
+    //Main logic.
+    float x = s2f(xArg);
+    float y = s2f(yArg);
     
     PathFollowSettings settings;
     settings.targetPoint = Point(x, y);
     enableFlag(settings.flags, PATH_FOLLOW_FLAG_CAN_CONTINUE);
     enableFlag(settings.flags, PATH_FOLLOW_FLAG_SCRIPT_USE);
-    if(data.args.size() >= 3) {
-        settings.label = data.args[2];
-    }
+    settings.label = labelArg;
     
     data.scriptVM->mob->followPath(
         settings, data.scriptVM->mob->getBaseSpeed(),
@@ -1068,13 +1277,21 @@ void ScriptActionRunners::followPathToAbsolute(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::getAngle(ScriptActionInstRunData& data) {
-    float centerX = s2f(data.args[1]);
-    float centerY = s2f(data.args[2]);
-    float focusX = s2f(data.args[3]);
-    float focusY = s2f(data.args[4]);
-    float angle = getAngle(Point(centerX, centerY), Point(focusX, focusY));
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& xArg = data.args[1];
+    const string& yArg = data.args[2];
+    const string& focusXArg = data.args[3];
+    const string& focusYArg = data.args[4];
+
+    //Main logic.
+    Point center(s2f(xArg), s2f(yArg));
+    Point focus(s2f(focusXArg), s2f(focusYArg));
+    float angle = getAngle(center, focus);
     angle = radToDeg(angle);
-    data.scriptVM->vars[data.args[0]] = f2s(angle);
+
+    //Store the result.
+    data.scriptVM->vars[destVarArg] = f2s(angle);
 }
 
 
@@ -1084,11 +1301,19 @@ void ScriptActionRunners::getAngle(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::getAngleCwDiff(ScriptActionInstRunData& data) {
-    float angle1 = degToRad(s2f(data.args[1]));
-    float angle2 = degToRad(s2f(data.args[2]));
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& angle1Arg = data.args[1];
+    const string& angle2Arg = data.args[2];
+
+    //Main logic.
+    float angle1 = degToRad(s2f(angle1Arg));
+    float angle2 = degToRad(s2f(angle2Arg));
     float diff = ::getAngleCwDiff(angle1, angle2);
     diff = radToDeg(diff);
-    data.scriptVM->vars[data.args[0]] = f2s(diff);
+
+    //Store the result.
+    data.scriptVM->vars[destVarArg] = f2s(diff);
 }
 
 
@@ -1098,11 +1323,19 @@ void ScriptActionRunners::getAngleCwDiff(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::getAngleSmallestDiff(ScriptActionInstRunData& data) {
-    float angle1 = degToRad(s2f(data.args[1]));
-    float angle2 = degToRad(s2f(data.args[2]));
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& angle1Arg = data.args[1];
+    const string& angle2Arg = data.args[2];
+
+    //Main logic.
+    float angle1 = degToRad(s2f(angle1Arg));
+    float angle2 = degToRad(s2f(angle2Arg));
     float diff = ::getAngleSmallestDiff(angle1, angle2);
     diff = radToDeg(diff);
-    data.scriptVM->vars[data.args[0]] = f2s(diff);
+
+    //Store the result.
+    data.scriptVM->vars[destVarArg] = f2s(diff);
 }
 
 
@@ -1113,21 +1346,29 @@ void ScriptActionRunners::getAngleSmallestDiff(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::getAreaInfo(ScriptActionInstRunData& data) {
-    string* var = &(data.scriptVM->vars[data.args[0]]);
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& typeArg = data.args[1];
+
+    //Main logic.
+    string result;
     SCRIPT_ACTION_GET_AREA_INFO_TYPE t =
-        (SCRIPT_ACTION_GET_AREA_INFO_TYPE) s2i(data.args[1]);
+        (SCRIPT_ACTION_GET_AREA_INFO_TYPE) s2i(typeArg);
         
     switch (t) {
     case SCRIPT_ACTION_GET_AREA_INFO_TYPE_DAY_MINUTES: {
-        *var = i2s(game.states.gameplay->dayMinutes);
+        result = i2s(game.states.gameplay->dayMinutes);
         break;
         
     } case SCRIPT_ACTION_GET_AREA_INFO_TYPE_FIELD_PIKMIN: {
-        *var = i2s(game.states.gameplay->mobs.pikmin.size());
+        result = i2s(game.states.gameplay->mobs.pikmin.size());
         break;
         
     }
     }
+
+    //Store the result.
+    data.scriptVM->vars[destVarArg] = result;
 }
 
 
@@ -1137,6 +1378,7 @@ void ScriptActionRunners::getAreaInfo(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::getChomped(ScriptActionInstRunData& data) {
+    //Main logic.
     if(data.actionDef->parentEvent == FSM_EV_HITBOX_TOUCH_EAT) {
         ((Mob*) (data.customData1))->chomp(
             data.scriptVM->mob,
@@ -1154,12 +1396,21 @@ void ScriptActionRunners::getChomped(ScriptActionInstRunData& data) {
 void ScriptActionRunners::getCoordinatesFromAngle(
     ScriptActionInstRunData& data
 ) {
-    float angle = s2f(data.args[2]);
+    //Get the arguments.
+    const string& xDestVarArg = data.args[0];
+    const string& yDestVarArg = data.args[1];
+    const string& angleArg = data.args[2];
+    const string& magnitudeArg = data.args[3];
+
+    //Main logic.
+    float angle = s2f(angleArg);
     angle = degToRad(angle);
-    float magnitude = s2f(data.args[3]);
+    float magnitude = s2f(magnitudeArg);
     Point p = angleToCoordinates(angle, magnitude);
-    data.scriptVM->vars[data.args[0]] = f2s(p.x);
-    data.scriptVM->vars[data.args[1]] = f2s(p.y);
+
+    //Store the result.
+    data.scriptVM->vars[xDestVarArg] = f2s(p.x);
+    data.scriptVM->vars[yDestVarArg] = f2s(p.y);
 }
 
 
@@ -1169,14 +1420,23 @@ void ScriptActionRunners::getCoordinatesFromAngle(
  * @param data Data about the action call.
  */
 void ScriptActionRunners::getDistance(ScriptActionInstRunData& data) {
-    float centerX = s2f(data.args[1]);
-    float centerY = s2f(data.args[2]);
-    float focusX = s2f(data.args[3]);
-    float focusY = s2f(data.args[4]);
-    data.scriptVM->vars[data.args[0]] =
-        f2s(
-            Distance(Point(centerX, centerY), Point(focusX, focusY)).toFloat()
-        );
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& centerXArg = data.args[1];
+    const string& centerYArg = data.args[2];
+    const string& focusXArg = data.args[3];
+    const string& focusYArg = data.args[4];
+
+    //Main logic.
+    float centerX = s2f(centerXArg);
+    float centerY = s2f(centerYArg);
+    float focusX = s2f(focusXArg);
+    float focusY = s2f(focusYArg);
+    float dist =
+        Distance(Point(centerX, centerY), Point(focusX, focusY)).toFloat();
+
+    //Store the result.
+    data.scriptVM->vars[destVarArg] = f2s(dist);
 }
 
 
@@ -1186,9 +1446,14 @@ void ScriptActionRunners::getDistance(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
-    string* var = &(data.scriptVM->vars[data.args[0]]);
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& typeArg = data.args[1];
+
+    //Main logic.
     SCRIPT_ACTION_GET_EV_INFO_TYPE t =
-        (SCRIPT_ACTION_GET_EV_INFO_TYPE) s2i(data.args[1]);
+        (SCRIPT_ACTION_GET_EV_INFO_TYPE) s2i(typeArg);
+    string result;
         
     switch (t) {
     case SCRIPT_ACTION_GET_EV_INFO_TYPE_BODY_PART: {
@@ -1198,7 +1463,7 @@ void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
             data.actionDef->parentEvent == FSM_EV_HITBOX_TOUCH_N_N ||
             data.actionDef->parentEvent == FSM_EV_DAMAGE
         ) {
-            *var =
+            result =
                 (
                     (HitboxInteraction*)(data.customData1)
                 )->h1->bodyPartName;
@@ -1208,7 +1473,7 @@ void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
             data.actionDef->parentEvent == FSM_EV_THROWN_PIKMIN_LANDED
         ) {
             if(data.scriptVM->mob) {
-                *var =
+                result =
                     data.scriptVM->mob->getClosestHitbox(
                         ((Mob*)(data.customData1))->pos
                     )->bodyPartName;
@@ -1218,7 +1483,7 @@ void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
         
     } case SCRIPT_ACTION_GET_EV_INFO_TYPE_FRAME_SIGNAL: {
         if(data.actionDef->parentEvent == FSM_EV_FRAME_SIGNAL) {
-            *var = i2s(*((size_t*)(data.customData1)));
+            result = i2s(*((size_t*)(data.customData1)));
         }
         break;
         
@@ -1227,7 +1492,7 @@ void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
             data.actionDef->parentEvent == FSM_EV_TOUCHED_HAZARD ||
             data.actionDef->parentEvent == FSM_EV_LEFT_HAZARD
         ) {
-            *var = ((Hazard*)data.customData1)->manifest->internalName;
+            result = ((Hazard*)data.customData1)->manifest->internalName;
         }
         break;
         
@@ -1236,7 +1501,7 @@ void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
             PLAYER_ACTION_TYPE playerActionTypeId =
                 (PLAYER_ACTION_TYPE)
                 ((Inpution::Action*) (data.customData1))->actionTypeId;
-            *var =
+            result =
                 game.controls.getActionTypeById(
                     playerActionTypeId
                 ).internalName;
@@ -1245,13 +1510,13 @@ void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
         
     } case SCRIPT_ACTION_GET_EV_INFO_TYPE_INPUT_VALUE: {
         if(data.actionDef->parentEvent == FSM_EV_INPUT_RECEIVED) {
-            *var = f2s(((Inpution::Action*) (data.customData1))->value);
+            result = f2s(((Inpution::Action*) (data.customData1))->value);
         }
         break;
         
     } case SCRIPT_ACTION_GET_EV_INFO_TYPE_MESSAGE: {
         if(data.actionDef->parentEvent == FSM_EV_RECEIVE_MESSAGE) {
-            *var = *((string*)(data.customData1));
+            result = *((string*)(data.customData1));
         }
         break;
         
@@ -1262,7 +1527,7 @@ void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
             data.actionDef->parentEvent == FSM_EV_HITBOX_TOUCH_N_N ||
             data.actionDef->parentEvent == FSM_EV_DAMAGE
         ) {
-            *var =
+            result =
                 (
                     (HitboxInteraction*)(data.customData1)
                 )->h2->bodyPartName;
@@ -1272,7 +1537,7 @@ void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
             data.actionDef->parentEvent == FSM_EV_THROWN_PIKMIN_LANDED
         ) {
             if(data.customData1 && data.scriptVM->mob) {
-                *var =
+                result =
                     ((Mob*)(data.customData1))->getClosestHitbox(
                         data.scriptVM->mob->pos
                     )->bodyPartName;
@@ -1282,6 +1547,9 @@ void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
         
     }
     }
+
+    //Store the result.
+    data.scriptVM->vars[destVarArg] = result;
 }
 
 
@@ -1291,10 +1559,18 @@ void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::getFloorZ(ScriptActionInstRunData& data) {
-    float x = s2f(data.args[1]);
-    float y = s2f(data.args[2]);
-    Sector* s = getSector(Point(x, y), nullptr, true);
-    data.scriptVM->vars[data.args[0]] = f2s(s ? s->z : 0);
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& xArg = data.args[1];
+    const string& yArg = data.args[2];
+
+    //Main logic.
+    Point p(s2f(xArg), s2f(yArg));
+    Sector* s = getSector(p, nullptr, true);
+    float result = s ? s->z : 0.0f;
+
+    //Store the result.
+    data.scriptVM->vars[destVarArg] = f2s(result);
 }
 
 
@@ -1304,9 +1580,16 @@ void ScriptActionRunners::getFloorZ(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::getFocusVar(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& focusVarArg = data.args[1];
+
+    //Main logic.
     if(!data.scriptVM->focusedMob) return;
-    data.scriptVM->vars[data.args[0]] =
-        data.scriptVM->focusedMob->scriptVM.vars[data.args[1]];
+    string result = data.scriptVM->focusedMob->scriptVM.vars[focusVarArg];
+
+    //Store the result.
+    data.scriptVM->vars[destVarArg] = result;
 }
 
 
@@ -1316,20 +1599,29 @@ void ScriptActionRunners::getFocusVar(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::getListItem(ScriptActionInstRunData& data) {
-    const string& listStr = data.args[1];
-    int idx = s2i(data.args[2]) - 1;
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& listArg = data.args[1];
+    const string& numberArg = data.args[2];
+    const string& delArg = data.args[3];
+
+    //Main logic.
     string delimiter =
         enumGetName(
             scriptActionListDelimiterChars,
-            (SCRIPT_ACTION_LIST_DELIMITER) s2i(data.args[3])
+            (SCRIPT_ACTION_LIST_DELIMITER) s2i(delArg)
         );
-        
-    vector<string> items = split(listStr, delimiter, true);
-    if(idx >= 0 && idx < (int) items.size()) {
-        data.scriptVM->vars[data.args[0]] = trimSpaces(items[(size_t) idx]);
-    } else {
-        data.scriptVM->vars[data.args[0]] = "";
+    vector<string> items = split(listArg, delimiter, true);
+    int idx = s2i(numberArg) - 1;
+    if(!isIdxValid(idx, items)) idx = items.size() - 1;
+    string item;
+
+    if(isIdxValid(idx, items)) {
+        item = trimSpaces(items[(size_t) idx]);
     }
+
+    //Store the result.
+    data.scriptVM->vars[destVarArg] = item;
 }
 
 
@@ -1339,24 +1631,30 @@ void ScriptActionRunners::getListItem(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::getListItemNumber(ScriptActionInstRunData& data) {
-    const string& listStr = data.args[1];
-    const string& itemToSearch = data.args[2];
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& listArg = data.args[1];
+    const string& itemArg = data.args[2];
+    const string& delArg = data.args[3];
+
+    //Main logic.
     string delimiter =
         enumGetName(
             scriptActionListDelimiterChars,
-            (SCRIPT_ACTION_LIST_DELIMITER) s2i(data.args[3])
+            (SCRIPT_ACTION_LIST_DELIMITER) s2i(delArg)
         );
-        
-    vector<string> items = split(listStr, delimiter, true);
-    int idx = 0;
+    vector<string> items = split(listArg, delimiter, true);
+    int number = 0;
+
     forIdx(i, items) {
-        if(items[i] == itemToSearch) {
-            idx = i + 1;
+        if(items[i] == itemArg) {
+            number = i + 1;
             break;
         }
     }
     
-    data.scriptVM->vars[data.args[0]] = i2s(idx);
+    //Store the result.
+    data.scriptVM->vars[destVarArg] = i2s(number);
 }
 
 
@@ -1366,15 +1664,22 @@ void ScriptActionRunners::getListItemNumber(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::getListSize(ScriptActionInstRunData& data) {
-    const string& listStr = data.args[1];
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& listArg = data.args[1];
+    const string& delArg = data.args[2];
+
+    //Main logic.
     string delimiter =
         enumGetName(
             scriptActionListDelimiterChars,
-            (SCRIPT_ACTION_LIST_DELIMITER) s2i(data.args[2])
+            (SCRIPT_ACTION_LIST_DELIMITER) s2i(delArg)
         );
         
-    data.scriptVM->vars[data.args[0]] =
-        i2s(getSplitCount(listStr, delimiter, true));
+    size_t size = getSplitCount(listArg, delimiter, true);
+    
+    //Store the result.
+    data.scriptVM->vars[destVarArg] = i2s(size);
 }
 
 
@@ -1384,17 +1689,25 @@ void ScriptActionRunners::getListSize(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::getMiscInfo(ScriptActionInstRunData& data) {
-    string* var = &(data.scriptVM->vars[data.args[0]]);
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& typeArg = data.args[1];
+
+    //Main logic.
+    string result;
     SCRIPT_ACTION_GET_MISC_INFO_TYPE t =
-        (SCRIPT_ACTION_GET_MISC_INFO_TYPE) s2i(data.args[1]);
+        (SCRIPT_ACTION_GET_MISC_INFO_TYPE) s2i(typeArg);
         
     switch (t) {
     case SCRIPT_ACTION_GET_MISC_INFO_TYPE_DELTA_T: {
-        *var = f2s(game.deltaT);
+        result = f2s(game.deltaT);
         break;
         
     }
     }
+
+    //Store the result.
+    data.scriptVM->vars[destVarArg] = result;
 }
 
 
@@ -1404,23 +1717,29 @@ void ScriptActionRunners::getMiscInfo(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::getMobInfo(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& targetArg = data.args[1];
+    const string& typeArg = data.args[2];
+
+    //Main logic.
+    string result;
     SCRIPT_ACTION_MOB_TARGET_TYPE s =
-        (SCRIPT_ACTION_MOB_TARGET_TYPE) s2i(data.args[1]);
+        (SCRIPT_ACTION_MOB_TARGET_TYPE) s2i(targetArg);
     Mob* target = getTargetMob(data, s);
     
     if(!target) return;
     
-    string* var = &(data.scriptVM->vars[data.args[0]]);
     SCRIPT_ACTION_GET_MOB_INFO_TYPE t =
-        (SCRIPT_ACTION_GET_MOB_INFO_TYPE) s2i(data.args[2]);
+        (SCRIPT_ACTION_GET_MOB_INFO_TYPE) s2i(typeArg);
         
     switch(t) {
     case SCRIPT_ACTION_GET_MOB_INFO_TYPE_ANGLE: {
-        *var = f2s(radToDeg(target->angle));
+        result = f2s(radToDeg(target->angle));
         break;
         
     } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_CHOMPED_PIKMIN: {
-        *var = i2s(target->chompingMobs.size());
+        result = i2s(target->chompingMobs.size());
         break;
         
     } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_FOCUS_DISTANCE: {
@@ -1428,76 +1747,79 @@ void ScriptActionRunners::getMobInfo(ScriptActionInstRunData& data) {
             float d =
                 Distance(target->pos, target->scriptVM.focusedMob->pos).
                 toFloat();
-            *var = f2s(d);
+            result = f2s(d);
         }
         break;
         
     } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_GROUP_TASK_POWER: {
         if(target->type->category->id == MOB_CATEGORY_GROUP_TASKS) {
-            *var = f2s(((GroupTask*)target)->getPower());
+            result = f2s(((GroupTask*)target)->getPower());
         }
         break;
         
     } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_HEALTH: {
-        *var = i2s(target->health);
+        result = i2s(target->health);
         break;
         
     } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_HEALTH_RATIO: {
         if(target->maxHealth != 0.0f) {
-            *var = f2s(target->health / target->maxHealth);
+            result = f2s(target->health / target->maxHealth);
         } else {
-            *var = "0";
+            result = "0";
         }
         break;
         
     } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_ID: {
-        *var = i2s(target->id);
+        result = i2s(target->id);
         break;
         
     } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_LATCHED_PIKMIN: {
-        *var = i2s(target->getLatchedPikminAmount());
+        result = i2s(target->getLatchedPikminAmount());
         break;
         
     } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_LATCHED_PIKMIN_WEIGHT: {
-        *var = i2s(target->getLatchedPikminWeight());
+        result = i2s(target->getLatchedPikminWeight());
         break;
         
     } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_MOB_CATEGORY: {
-        *var = target->type->category->internalName;
+        result = target->type->category->internalName;
         break;
         
     } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_MOB_TYPE: {
         if(target->type->manifest) {
-            *var = target->type->manifest->internalName;
+            result = target->type->manifest->internalName;
         } else {
-            *var = "";
+            result = "";
         }
         break;
         
     } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_STATE: {
-        *var = target->scriptVM.fsm.curState->name;
+        result = target->scriptVM.fsm.curState->name;
         break;
         
     } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_WEIGHT: {
         if(target->type->category->id == MOB_CATEGORY_SCALES) {
             Scale* sPtr = (Scale*)(target);
-            *var = i2s(sPtr->calculateCurWeight());
+            result = i2s(sPtr->calculateCurWeight());
         }
         break;
         
     } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_X: {
-        *var = f2s(target->pos.x);
+        result = f2s(target->pos.x);
         break;
         
     } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_Y: {
-        *var = f2s(target->pos.y);
+        result = f2s(target->pos.y);
         break;
         
     } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_Z: {
-        *var = f2s(target->z);
+        result = f2s(target->z);
         break;
     }
     }
+
+    //Store the result.
+    data.scriptVM->vars[destVarArg] = result;
 }
 
 
@@ -1507,8 +1829,16 @@ void ScriptActionRunners::getMobInfo(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::getRandomFloat(ScriptActionInstRunData& data) {
-    data.scriptVM->vars[data.args[0]] =
-        f2s(game.rng.f(s2f(data.args[1]), s2f(data.args[2])));
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& minArg = data.args[1];
+    const string& maxArg = data.args[2];
+
+    //Main logic.
+    float result = game.rng.f(s2f(minArg), s2f(maxArg));
+
+    //Store the result.
+    data.scriptVM->vars[destVarArg] = f2s(result);
 }
 
 
@@ -1518,8 +1848,16 @@ void ScriptActionRunners::getRandomFloat(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::getRandomInt(ScriptActionInstRunData& data) {
-    data.scriptVM->vars[data.args[0]] =
-        i2s(game.rng.i(s2i(data.args[1]), s2i(data.args[2])));
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& minArg = data.args[1];
+    const string& maxArg = data.args[2];
+
+    //Main logic.
+    int result = game.rng.i(s2i(minArg), s2i(maxArg));
+
+    //Store the result.
+    data.scriptVM->vars[destVarArg] = i2s(result);
 }
 
 
@@ -1529,14 +1867,18 @@ void ScriptActionRunners::getRandomInt(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::getVarPresence(ScriptActionInstRunData& data) {
-    const string& varName = data.args[1];
-    
-    bool exists = data.scriptVM->vars.contains(varName);
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& varArg = data.args[1];
+
+    //Main logic.
+    bool exists = data.scriptVM->vars.contains(varArg);
     if(exists) {
-        exists = !data.scriptVM->vars[varName].empty();
+        exists = !data.scriptVM->vars[varArg].empty();
     }
     
-    data.scriptVM->vars[data.args[0]] = b2s(exists);
+    //Store the result.
+    data.scriptVM->vars[destVarArg] = b2s(exists);
 }
 
 
@@ -1546,11 +1888,15 @@ void ScriptActionRunners::getVarPresence(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::holdFocus(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& bodyPartArg = data.args[0];
+    const string& aboveArg = data.args[1];
+
+    //Main logic.
     if(data.scriptVM->focusedMob) {
         data.scriptVM->mob->hold(
             data.scriptVM->focusedMob, HOLD_TYPE_PURPOSE_GENERAL,
-            s2i(data.args[0]), 0.0f, 0.0f, 0.5f,
-            data.args.size() >= 2 ? s2b(data.args[1]) : false,
+            s2i(bodyPartArg), 0.0f, 0.0f, 0.5f, s2b(aboveArg),
             HOLD_ROTATION_METHOD_COPY_HOLDER
         );
     }
@@ -1563,46 +1909,54 @@ void ScriptActionRunners::holdFocus(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::ifFunction(ScriptActionInstRunData& data) {
-    string lhs = data.args[0];
+    //Get the arguments.
+    const string& lhsArg = data.args[0];
+    const string& opArg = data.args[1];
+    string rhsArg = vectorTailToString(data.args, 2);
+
+    //Main logic.
+    bool result = false;
     SCRIPT_ACTION_IF_OP op =
-        (SCRIPT_ACTION_IF_OP) s2i(data.args[1]);
-    string rhs = vectorTailToString(data.args, 2);
+        (SCRIPT_ACTION_IF_OP) s2i(opArg);
     
     switch(op) {
     case SCRIPT_ACTION_IF_OP_EQUAL: {
-        if(isNumber(lhs) && isNumber(rhs)) {
-            data.returnValue = (s2f(lhs) == s2f(rhs));
+        if(isNumber(lhsArg) && isNumber(rhsArg)) {
+            result = (s2f(lhsArg) == s2f(rhsArg));
         } else {
-            data.returnValue = (lhs == rhs);
+            result = (lhsArg == rhsArg);
         }
         break;
         
     } case SCRIPT_ACTION_IF_OP_NOT: {
-        if(isNumber(lhs) && isNumber(rhs)) {
-            data.returnValue = (s2f(lhs) != s2f(rhs));
+        if(isNumber(lhsArg) && isNumber(rhsArg)) {
+            result = (s2f(lhsArg) != s2f(rhsArg));
         } else {
-            data.returnValue = (lhs != rhs);
+            result = (lhsArg != rhsArg);
         }
         break;
         
     } case SCRIPT_ACTION_IF_OP_LESS: {
-        data.returnValue = (s2f(lhs) < s2f(rhs));
+        result = (s2f(lhsArg) < s2f(rhsArg));
         break;
         
     } case SCRIPT_ACTION_IF_OP_MORE: {
-        data.returnValue = (s2f(lhs) > s2f(rhs));
+        result = (s2f(lhsArg) > s2f(rhsArg));
         break;
         
     } case SCRIPT_ACTION_IF_OP_LESS_E: {
-        data.returnValue = (s2f(lhs) <= s2f(rhs));
+        result = (s2f(lhsArg) <= s2f(rhsArg));
         break;
         
     } case SCRIPT_ACTION_IF_OP_MORE_E: {
-        data.returnValue = (s2f(lhs) >= s2f(rhs));
+        result = (s2f(lhsArg) >= s2f(rhsArg));
         break;
         
     }
     }
+
+    //Store the result.
+    data.returnValue = result;
 }
 
 
@@ -1612,13 +1966,23 @@ void ScriptActionRunners::ifFunction(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::interpolateNumber(ScriptActionInstRunData& data) {
-    data.scriptVM->vars[data.args[0]] =
-        f2s(
-            ::interpolateNumber(
-                s2f(data.args[1]), s2f(data.args[2]), s2f(data.args[3]),
-                s2f(data.args[4]), s2f(data.args[5])
-            )
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& inputArg = data.args[1];
+    const string& inputStartArg = data.args[2];
+    const string& inputEndArg = data.args[3];
+    const string& outputStartArg = data.args[4];
+    const string& outputEndArg = data.args[5];
+
+    //Main logic.
+    float result =
+        ::interpolateNumber(
+            s2f(inputArg), s2f(inputStartArg), s2f(inputEndArg),
+            s2f(outputStartArg), s2f(outputEndArg)
         );
+
+    //Store the result.
+    data.scriptVM->vars[destVarArg] = f2s(result);
 }
 
 
@@ -1628,6 +1992,7 @@ void ScriptActionRunners::interpolateNumber(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::linkWithFocus(ScriptActionInstRunData& data) {
+    //Main logic.
     if(!data.scriptVM->focusedMob) {
         return;
     }
@@ -1649,12 +2014,16 @@ void ScriptActionRunners::linkWithFocus(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::loadFocusMemory(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& slotArg = data.args[0];
+
+    //Main logic.
     if(data.scriptVM->mob->focusedMobMemory.empty()) {
         return;
     }
     
     data.scriptVM->focusOnMob(
-        data.scriptVM->mob->focusedMobMemory[s2i(data.args[0])]
+        data.scriptVM->mob->focusedMobMemory[s2i(slotArg)]
     );
 }
 
@@ -1665,9 +2034,15 @@ void ScriptActionRunners::loadFocusMemory(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::moveToAbsolute(ScriptActionInstRunData& data) {
-    float x = s2f(data.args[0]);
-    float y = s2f(data.args[1]);
-    float z = data.args.size() > 2 ? s2f(data.args[2]) : data.scriptVM->mob->z;
+    //Get the arguments.
+    const string& xArg = data.args[0];
+    const string& yArg = data.args[1];
+    const string& zArg = data.args[2];
+
+    //Main logic.
+    float x = s2f(xArg);
+    float y = s2f(yArg);
+    float z = zArg.empty() ? data.scriptVM->mob->z : s2f(zArg);
     data.scriptVM->mob->chase(
         Point(x, y), z,
         CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED
@@ -1681,9 +2056,15 @@ void ScriptActionRunners::moveToAbsolute(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::moveToRelative(ScriptActionInstRunData& data) {
-    float x = s2f(data.args[0]);
-    float y = s2f(data.args[1]);
-    float z = (data.args.size() > 2 ? s2f(data.args[2]) : 0);
+    //Get the arguments.
+    const string& xArg = data.args[0];
+    const string& yArg = data.args[1];
+    const string& zArg = data.args[2];
+
+    //Main logic.
+    float x = s2f(xArg);
+    float y = s2f(yArg);
+    float z = zArg.empty() ? 0.0f : s2f(zArg);
     Point p = rotatePoint(Point(x, y), data.scriptVM->mob->angle);
     data.scriptVM->mob->chase(
         data.scriptVM->mob->pos + p, data.scriptVM->mob->z + z,
@@ -1698,7 +2079,11 @@ void ScriptActionRunners::moveToRelative(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::moveToTarget(ScriptActionInstRunData& data) {
-    SCRIPT_ACTION_MOVE_TYPE t = (SCRIPT_ACTION_MOVE_TYPE) s2i(data.args[0]);
+    //Get the arguments.
+    const string& typeArg = data.args[0];
+
+    //Main logic.
+    SCRIPT_ACTION_MOVE_TYPE t = (SCRIPT_ACTION_MOVE_TYPE) s2i(typeArg);
     
     switch(t) {
     case SCRIPT_ACTION_MOVE_TYPE_AWAY_FROM_FOCUS: {
@@ -1787,6 +2172,7 @@ void ScriptActionRunners::moveToTarget(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::orderRelease(ScriptActionInstRunData& data) {
+    //Main logic.
     Mob* holder = data.scriptVM->mob->holder.m;
     if(holder) {
         holder->scriptVM.fsm.runEvent(FSM_EV_RELEASE_ORDER, nullptr, nullptr);
@@ -1800,10 +2186,15 @@ void ScriptActionRunners::orderRelease(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::playSound(ScriptActionInstRunData& data) {
-    size_t soundId = data.scriptVM->mob->playSound(s2i(data.args[0]));
-    if(data.args.size() >= 2) {
-        data.scriptVM->setVar(data.args[1], i2s(soundId));
-    }
+    //Get the arguments.
+    const string& soundArg = data.args[0];
+    const string& destVarArg = data.args[1];
+
+    //Main logic.
+    size_t soundId = data.scriptVM->mob->playSound(s2i(soundArg));
+
+    //Store the result.
+    if(!destVarArg.empty()) data.scriptVM->vars[destVarArg] = i2s(soundId);
 }
 
 
@@ -1813,6 +2204,10 @@ void ScriptActionRunners::playSound(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::print(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    string textArg = vectorTailToString(data.args, 0);
+
+    //Main logic.
     size_t seconds = floor(game.states.gameplay->gameplayTimePassed);
     size_t centiseconds =
         (game.states.gameplay->gameplayTimePassed - seconds) * 100;
@@ -1820,13 +2215,12 @@ void ScriptActionRunners::print(ScriptActionInstRunData& data) {
         resizeString(i2s(seconds), 4, true, true, true, ' ') + "." +
         resizeString(i2s(centiseconds), 2, true, true, true, '0');
         
-    string scriptText = vectorTailToString(data.args, 0);
     string speaker =
         data.scriptVM->mob ?
         data.scriptVM->mob->type->name :
         "Area";
     game.states.gameplay->printActionLogLines.push_back(
-        "[@" + timestamp + "s " + speaker + " said:] " + scriptText
+        "[@" + timestamp + "s " + speaker + " said:] " + textArg
     );
     if(game.states.gameplay->printActionLogLines.size() > 10) {
         game.states.gameplay->printActionLogLines.erase(
@@ -1849,8 +2243,12 @@ void ScriptActionRunners::print(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::receiveStatus(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& statusArg = data.args[0];
+
+    //Main logic.
     data.scriptVM->mob->applyStatus(
-        game.content.statusTypes.list[data.args[0]], false, false
+        game.content.statusTypes.list[statusArg], false, false
     );
 }
 
@@ -1861,6 +2259,7 @@ void ScriptActionRunners::receiveStatus(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::release(ScriptActionInstRunData& data) {
+    //Main logic.
     data.scriptVM->mob->releaseChompedPikmin();
 }
 
@@ -1871,6 +2270,7 @@ void ScriptActionRunners::release(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::releaseStoredMobs(ScriptActionInstRunData& data) {
+    //Main logic.
     data.scriptVM->mob->releaseStoredMobs();
 }
 
@@ -1881,19 +2281,29 @@ void ScriptActionRunners::releaseStoredMobs(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::removeListItem(ScriptActionInstRunData& data) {
-    const string& listStr = data.args[1];
-    int idx = s2i(data.args[2]) - 1;
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& listArg = data.args[1];
+    const string& numberArg = data.args[2];
+    const string& delArg = data.args[3];
+
+    //Main logic.
     string delimiter =
         enumGetName(
             scriptActionListDelimiterChars,
-            (SCRIPT_ACTION_LIST_DELIMITER) s2i(data.args[3])
+            (SCRIPT_ACTION_LIST_DELIMITER) s2i(delArg)
         );
-        
-    vector<string> items = split(listStr, delimiter, true);
-    if(idx < 0) idx = items.size() - 1;
-    items.erase(items.begin() + idx);
+    vector<string> items = split(listArg, delimiter, true);
+    int idx = s2i(numberArg) - 1;
+    if(!isIdxValid(idx, items)) idx = items.size() - 1;
+
+    if(isIdxValid(idx, items)) {
+        items.erase(items.begin() + idx);
+    }
     string newListStr = join(items, delimiter);
-    data.scriptVM->vars[data.args[0]] = newListStr;
+
+    //Store the result.
+    data.scriptVM->vars[destVarArg] = newListStr;
 }
 
 
@@ -1903,10 +2313,14 @@ void ScriptActionRunners::removeListItem(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::removeStatus(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& statusArg = data.args[0];
+
+    //Main logic.
     forIdx(s, data.scriptVM->mob->statuses) {
         if(
             data.scriptVM->mob->statuses[s].type->manifest->internalName ==
-            data.args[0]
+            statusArg
         ) {
             data.scriptVM->mob->statuses[s].prevState =
                 data.scriptVM->mob->statuses[s].state;
@@ -1922,7 +2336,15 @@ void ScriptActionRunners::removeStatus(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::roundNumber(ScriptActionInstRunData& data) {
-    data.scriptVM->vars[data.args[0]] = f2s(round(s2f(data.args[1])));
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& numberArg = data.args[1];
+
+    //Main logic.
+    float result = round(s2f(numberArg));
+
+    //Store the result.
+    data.scriptVM->vars[destVarArg] = f2s(result);
 }
 
 
@@ -1932,11 +2354,15 @@ void ScriptActionRunners::roundNumber(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::saveFocusMemory(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& slotArg = data.args[0];
+
+    //Main logic.
     if(!data.scriptVM->focusedMob) {
         return;
     }
     
-    data.scriptVM->mob->focusedMobMemory[s2i(data.args[0])] =
+    data.scriptVM->mob->focusedMobMemory[s2i(slotArg)] =
         data.scriptVM->focusedMob;
 }
 
@@ -1947,9 +2373,14 @@ void ScriptActionRunners::saveFocusMemory(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::sendMessageToFocus(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& msgArg = data.args[0];
+
+    //Main logic.
     if(!data.scriptVM->focusedMob) return;
+    string msgStr = msgArg;
     game.states.gameplay->sendScriptMessage(
-        data.scriptVM->mob, data.scriptVM->focusedMob, data.args[0]
+        data.scriptVM->mob, data.scriptVM->focusedMob, msgStr
     );
 }
 
@@ -1960,11 +2391,16 @@ void ScriptActionRunners::sendMessageToFocus(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::sendMessageToLinks(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& msgArg = data.args[0];
+
+    //Main logic.
     forIdx(l, data.scriptVM->mob->links) {
         if(data.scriptVM->mob->links[l] == data.scriptVM->mob) continue;
         if(!data.scriptVM->mob->links[l]) continue;
+        string msgStr = msgArg;
         game.states.gameplay->sendScriptMessage(
-            data.scriptVM->mob, data.scriptVM->mob->links[l], data.args[0]
+            data.scriptVM->mob, data.scriptVM->mob->links[l], msgStr
         );
     }
 }
@@ -1976,7 +2412,12 @@ void ScriptActionRunners::sendMessageToLinks(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::sendMessageToNearby(ScriptActionInstRunData& data) {
-    float d = s2f(data.args[0]);
+    //Get the arguments.
+    const string& distArg = data.args[0];
+    const string& msgArg = data.args[1];
+
+    //Main logic.
+    Distance d(s2f(distArg));
     
     forIdx(m2, game.states.gameplay->mobs.all) {
         if(game.states.gameplay->mobs.all[m2] == data.scriptVM->mob) {
@@ -1991,8 +2432,9 @@ void ScriptActionRunners::sendMessageToNearby(ScriptActionInstRunData& data) {
             continue;
         }
         
+        string msgStr = msgArg;
         game.states.gameplay->sendScriptMessage(
-            data.scriptVM->mob, game.states.gameplay->mobs.all[m2], data.args[1]
+            data.scriptVM->mob, game.states.gameplay->mobs.all[m2], msgStr
         );
     }
 }
@@ -2004,19 +2446,21 @@ void ScriptActionRunners::sendMessageToNearby(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::setAnimation(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& animArg = data.args[0];
+    const string& optionArg = data.args[1];
+    const string& mobSpeedArg = data.args[2];
+
+    //Main logic.
     START_ANIM_OPTION options = START_ANIM_OPTION_NORMAL;
     float mobSpeedBaseline = 0.0f;
-    if(data.args.size() > 1) {
-        options = (START_ANIM_OPTION) s2i(data.args[1]);
-    }
-    if(data.args.size() > 2) {
-        if(s2b(data.args[2])) {
-            mobSpeedBaseline = data.scriptVM->mob->type->moveSpeed;
-        };
-    }
+    options = (START_ANIM_OPTION) s2i(optionArg);
+    if(s2b(mobSpeedArg)) {
+        mobSpeedBaseline = data.scriptVM->mob->type->moveSpeed;
+    };
     
     data.scriptVM->mob->setAnimation(
-        s2i(data.args[0]), options, false, mobSpeedBaseline
+        s2i(animArg), options, false, mobSpeedBaseline
     );
 }
 
@@ -2027,7 +2471,11 @@ void ScriptActionRunners::setAnimation(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::setCanBlockPaths(ScriptActionInstRunData& data) {
-    data.scriptVM->mob->setCanBlockPaths(s2b(data.args[0]));
+    //Get the arguments.
+    const string& valueArg = data.args[0];
+
+    //Main logic.
+    data.scriptVM->mob->setCanBlockPaths(s2b(valueArg));
 }
 
 
@@ -2037,7 +2485,11 @@ void ScriptActionRunners::setCanBlockPaths(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::setFarReach(ScriptActionInstRunData& data) {
-    data.scriptVM->mob->farReach = s2i(data.args[0]);
+    //Get the arguments.
+    const string& reachArg = data.args[0];
+
+    //Main logic.
+    data.scriptVM->mob->farReach = s2i(reachArg);
     data.scriptVM->mob->updateInteractionSpan();
 }
 
@@ -2048,7 +2500,11 @@ void ScriptActionRunners::setFarReach(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::setFlying(ScriptActionInstRunData& data) {
-    if(s2b(data.args[0])) {
+    //Get the arguments.
+    const string& valueArg = data.args[0];
+
+    //Main logic.
+    if(s2b(valueArg)) {
         enableFlag(data.scriptVM->mob->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     } else {
         disableFlag(data.scriptVM->mob->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
@@ -2062,8 +2518,13 @@ void ScriptActionRunners::setFlying(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::setFocusVar(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& varArg = data.args[0];
+    const string& valueArg = data.args[1];
+
+    //Main logic.
     if(!data.scriptVM->focusedMob) return;
-    data.scriptVM->focusedMob->scriptVM.vars[data.args[0]] = data.args[1];
+    data.scriptVM->focusedMob->scriptVM.vars[varArg] = valueArg;
 }
 
 
@@ -2073,7 +2534,11 @@ void ScriptActionRunners::setFocusVar(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::setGravity(ScriptActionInstRunData& data) {
-    data.scriptVM->mob->gravityMult = s2f(data.args[0]);
+    //Get the arguments.
+    const string& gravityArg = data.args[0];
+
+    //Main logic.
+    data.scriptVM->mob->gravityMult = s2f(gravityArg);
 }
 
 
@@ -2083,7 +2548,11 @@ void ScriptActionRunners::setGravity(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::setHealth(ScriptActionInstRunData& data) {
-    data.scriptVM->mob->setHealth(false, false, s2f(data.args[0]));
+    //Get the arguments.
+    const string& healthArg = data.args[0];
+
+    //Main logic.
+    data.scriptVM->mob->setHealth(false, false, s2f(healthArg));
 }
 
 
@@ -2093,7 +2562,11 @@ void ScriptActionRunners::setHealth(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::setHeight(ScriptActionInstRunData& data) {
-    data.scriptVM->mob->height = s2f(data.args[0]);
+    //Get the arguments.
+    const string& heightArg = data.args[0];
+
+    //Main logic.
+    data.scriptVM->mob->height = s2f(heightArg);
     
     if(data.scriptVM->mob->type->walkable) {
         //Update the Z of mobs standing on top of it.
@@ -2113,7 +2586,11 @@ void ScriptActionRunners::setHeight(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::setHiding(ScriptActionInstRunData& data) {
-    if(s2b(data.args[0])) {
+    //Get the arguments.
+    const string& valueArg = data.args[0];
+
+    //Main logic.
+    if(s2b(valueArg)) {
         enableFlag(data.scriptVM->mob->flags, MOB_FLAG_HIDDEN);
     } else {
         disableFlag(data.scriptVM->mob->flags, MOB_FLAG_HIDDEN);
@@ -2127,6 +2604,7 @@ void ScriptActionRunners::setHiding(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::setHoldable(ScriptActionInstRunData& data) {
+    //Main logic.
     if(typeid(*(data.scriptVM->mob)) == typeid(Tool)) {
         unsigned char flags = 0;
         forIdx(i, data.args) {
@@ -2143,7 +2621,11 @@ void ScriptActionRunners::setHoldable(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::setHuntable(ScriptActionInstRunData& data) {
-    if(s2b(data.args[0])) {
+    //Get the arguments.
+    const string& valueArg = data.args[0];
+
+    //Main logic.
+    if(s2b(valueArg)) {
         disableFlag(data.scriptVM->mob->flags, MOB_FLAG_NON_HUNTABLE);
     } else {
         enableFlag(data.scriptVM->mob->flags, MOB_FLAG_NON_HUNTABLE);
@@ -2157,6 +2639,10 @@ void ScriptActionRunners::setHuntable(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::setLimbAnimation(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& animArg = data.args[0];
+
+    //Main logic.
     if(!data.scriptVM->mob->parent) {
         return;
     }
@@ -2165,9 +2651,7 @@ void ScriptActionRunners::setLimbAnimation(ScriptActionInstRunData& data) {
     }
     
     size_t a =
-        data.scriptVM->mob->parent->limbAnim.animDb->findAnimation(
-            data.args[0]
-        );
+        data.scriptVM->mob->parent->limbAnim.animDb->findAnimation(animArg);
     if(a == INVALID) {
         return;
     }
@@ -2185,7 +2669,11 @@ void ScriptActionRunners::setLimbAnimation(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::setNearReach(ScriptActionInstRunData& data) {
-    data.scriptVM->mob->nearReach = s2i(data.args[0]);
+    //Get the arguments.
+    const string& reachArg = data.args[0];
+
+    //Main logic.
+    data.scriptVM->mob->nearReach = s2i(reachArg);
     data.scriptVM->mob->updateInteractionSpan();
 }
 
@@ -2196,7 +2684,11 @@ void ScriptActionRunners::setNearReach(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::setRadius(ScriptActionInstRunData& data) {
-    data.scriptVM->mob->setRadius(s2f(data.args[0]));
+    //Get the arguments.
+    const string& radiusArg = data.args[0];
+
+    //Main logic.
+    data.scriptVM->mob->setRadius(s2f(radiusArg));
 }
 
 
@@ -2206,11 +2698,16 @@ void ScriptActionRunners::setRadius(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::setSectorScroll(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& xArg = data.args[0];
+    const string& yArg = data.args[1];
+
+    //Main logic.
     Sector* sPtr = getSector(data.scriptVM->mob->pos, nullptr, true);
     if(!sPtr) return;
     
-    sPtr->scroll.x = s2f(data.args[0]);
-    sPtr->scroll.y = s2f(data.args[1]);
+    sPtr->scroll.x = s2f(xArg);
+    sPtr->scroll.y = s2f(yArg);
 }
 
 
@@ -2220,7 +2717,11 @@ void ScriptActionRunners::setSectorScroll(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::setShadowVisibility(ScriptActionInstRunData& data) {
-    if(s2b(data.args[0])) {
+    //Get the arguments.
+    const string& valueArg = data.args[0];
+
+    //Main logic.
+    if(s2b(valueArg)) {
         disableFlag(data.scriptVM->mob->flags, MOB_FLAG_SHADOW_INVISIBLE);
     } else {
         enableFlag(data.scriptVM->mob->flags, MOB_FLAG_SHADOW_INVISIBLE);
@@ -2234,8 +2735,12 @@ void ScriptActionRunners::setShadowVisibility(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::setState(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& stateArg = data.args[0];
+
+    //Main logic.
     data.scriptVM->fsm.setState(
-        s2i(data.args[0]), data.customData1, data.customData2
+        s2i(stateArg), data.customData1, data.customData2
     );
 }
 
@@ -2246,7 +2751,11 @@ void ScriptActionRunners::setState(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::setTangible(ScriptActionInstRunData& data) {
-    if(s2b(data.args[0])) {
+    //Get the arguments.
+    const string& valueArg = data.args[0];
+
+    //Main logic.
+    if(s2b(valueArg)) {
         disableFlag(data.scriptVM->mob->flags, MOB_FLAG_INTANGIBLE);
     } else {
         enableFlag(data.scriptVM->mob->flags, MOB_FLAG_INTANGIBLE);
@@ -2260,7 +2769,11 @@ void ScriptActionRunners::setTangible(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::setTeam(ScriptActionInstRunData& data) {
-    data.scriptVM->mob->setTeam((MOB_TEAM) s2i(data.args[0]));
+    //Get the arguments.
+    const string& teamArg = data.args[0];
+
+    //Main logic.
+    data.scriptVM->mob->setTeam((MOB_TEAM) s2i(teamArg));
 }
 
 
@@ -2270,7 +2783,11 @@ void ScriptActionRunners::setTeam(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::setTimer(ScriptActionInstRunData& data) {
-    data.scriptVM->setTimer(s2f(data.args[0]));
+    //Get the arguments.
+    const string& durationArg = data.args[0];
+
+    //Main logic.
+    data.scriptVM->setTimer(s2f(durationArg));
 }
 
 
@@ -2280,7 +2797,12 @@ void ScriptActionRunners::setTimer(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::setVar(ScriptActionInstRunData& data) {
-    data.scriptVM->setVar(data.args[0], data.args[1]);
+    //Get the arguments.
+    const string& varArg = data.args[0];
+    const string& valueArg = data.args[1];
+
+    //Main logic.
+    data.scriptVM->setVar(varArg, valueArg);
 }
 
 
@@ -2290,6 +2812,10 @@ void ScriptActionRunners::setVar(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::shakeCamera(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& amountArg = data.args[0];
+
+    //Main logic.
     forIdx(p, game.states.gameplay->players) {
         Player* pPtr = &game.states.gameplay->players[p];
         float d =
@@ -2298,7 +2824,7 @@ void ScriptActionRunners::shakeCamera(ScriptActionInstRunData& data) {
             ::interpolateNumber(
                 d, 0.0f, DRAWING::CAM_SHAKE_DROPOFF_DIST, 1.0f, 0.0f
             );
-        pPtr->view.shaker.shake(s2f(data.args[0]) / 100.0f * strengthMult);
+        pPtr->view.shaker.shake(s2f(amountArg) / 100.0f * strengthMult);
     }
 }
 
@@ -2309,7 +2835,11 @@ void ScriptActionRunners::shakeCamera(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::showMessageFromVar(ScriptActionInstRunData& data) {
-    startGameplayMessage(data.scriptVM->vars[data.args[0]], nullptr);
+    //Get the arguments.
+    const string& varArg = data.args[0];
+
+    //Main logic.
+    startGameplayMessage(data.scriptVM->vars[varArg], nullptr);
 }
 
 
@@ -2319,8 +2849,12 @@ void ScriptActionRunners::showMessageFromVar(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::spawn(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& spawnArg = data.args[0];
+
+    //Main logic.
     data.scriptVM->mob->spawn(
-        &data.scriptVM->mob->type->spawns[s2i(data.args[0])]
+        &data.scriptVM->mob->type->spawns[s2i(spawnArg)]
     );
 }
 
@@ -2331,7 +2865,15 @@ void ScriptActionRunners::spawn(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::squareRootNumber(ScriptActionInstRunData& data) {
-    data.scriptVM->vars[data.args[0]] = f2s((float) sqrt(s2f(data.args[1])));
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& numberArg = data.args[1];
+
+    //Main logic.
+    float result = (float) sqrt(s2f(numberArg));
+
+    //Store the result.
+    data.scriptVM->vars[destVarArg] = f2s(result);
 }
 
 
@@ -2341,13 +2883,18 @@ void ScriptActionRunners::squareRootNumber(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::stabilizeZ(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& typeArg = data.args[0];
+    const string& offsetArg = data.args[1];
+
+    //Main logic.
     if(data.scriptVM->mob->links.empty() || !data.scriptVM->mob->links[0]) {
         return;
     }
     
     float bestMatchZ = data.scriptVM->mob->links[0]->z;
     SCRIPT_ACTION_STABILIZE_Z_TYPE t =
-        (SCRIPT_ACTION_STABILIZE_Z_TYPE) s2i(data.args[0]);
+        (SCRIPT_ACTION_STABILIZE_Z_TYPE) s2i(typeArg);
         
     for(size_t l = 1; l < data.scriptVM->mob->links.size(); l++) {
     
@@ -2371,7 +2918,7 @@ void ScriptActionRunners::stabilizeZ(ScriptActionInstRunData& data) {
         
     }
     
-    data.scriptVM->mob->z = bestMatchZ + s2f(data.args[1]);
+    data.scriptVM->mob->z = bestMatchZ + s2f(offsetArg);
 }
 
 
@@ -2381,7 +2928,11 @@ void ScriptActionRunners::stabilizeZ(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::startChomping(ScriptActionInstRunData& data) {
-    data.scriptVM->mob->chompMax = s2i(data.args[0]);
+    //Get the arguments.
+    const string& maxArg = data.args[0];
+
+    //Main logic.
+    data.scriptVM->mob->chompMax = s2i(maxArg);
     data.scriptVM->mob->chompBodyParts.clear();
     for(size_t p = 1; p < data.args.size(); p++) {
         data.scriptVM->mob->chompBodyParts.push_back(s2i(data.args[p]));
@@ -2395,6 +2946,7 @@ void ScriptActionRunners::startChomping(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::startDying(ScriptActionInstRunData& data) {
+    //Main logic.
     data.scriptVM->mob->startDying();
 }
 
@@ -2405,6 +2957,7 @@ void ScriptActionRunners::startDying(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::startHeightEffect(ScriptActionInstRunData& data) {
+    //Main logic.
     data.scriptVM->mob->startHeightEffect();
 }
 
@@ -2415,15 +2968,19 @@ void ScriptActionRunners::startHeightEffect(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::startParticles(ScriptActionInstRunData& data) {
-    float offsetX = 0;
-    float offsetY = 0;
-    float offsetZ = 0;
-    if(data.args.size() > 1) offsetX = s2f(data.args[1]);
-    if(data.args.size() > 2) offsetY = s2f(data.args[2]);
-    if(data.args.size() > 3) offsetZ = s2f(data.args[3]);
+    //Get the arguments.
+    const string& genArg = data.args[0];
+    const string& xArg = data.args[1];
+    const string& yArg = data.args[2];
+    const string& zArg = data.args[3];
+
+    //Main logic.
+    float offsetX = s2f(xArg);
+    float offsetY = s2f(yArg);
+    float offsetZ = s2f(zArg);
     
     ParticleGenerator pg =
-        standardParticleGenSetup(data.args[0], data.scriptVM->mob);
+        standardParticleGenSetup(genArg, data.scriptVM->mob);
     pg.followPosOffset = Point(offsetX, offsetY);
     pg.followZOffset = offsetZ;
     pg.id = MOB_PARTICLE_GENERATOR_ID_SCRIPT;
@@ -2437,6 +2994,7 @@ void ScriptActionRunners::startParticles(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::stop(ScriptActionInstRunData& data) {
+    //Main logic.
     data.scriptVM->mob->stopChasing();
     data.scriptVM->mob->stopTurning();
     data.scriptVM->mob->stopFollowingPath();
@@ -2449,6 +3007,7 @@ void ScriptActionRunners::stop(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::stopChomping(ScriptActionInstRunData& data) {
+    //Main logic.
     data.scriptVM->mob->chompMax = 0;
     data.scriptVM->mob->chompBodyParts.clear();
 }
@@ -2460,6 +3019,7 @@ void ScriptActionRunners::stopChomping(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::stopHeightEffect(ScriptActionInstRunData& data) {
+    //Main logic.
     data.scriptVM->mob->stopHeightEffect();
 }
 
@@ -2470,6 +3030,7 @@ void ScriptActionRunners::stopHeightEffect(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::stopParticles(ScriptActionInstRunData& data) {
+    //Main logic.
     data.scriptVM->mob->deleteParticleGenerator(
         MOB_PARTICLE_GENERATOR_ID_SCRIPT
     );
@@ -2482,7 +3043,11 @@ void ScriptActionRunners::stopParticles(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::stopSound(ScriptActionInstRunData& data) {
-    game.audio.destroySoundSource(s2i(data.args[0]));
+    //Get the arguments.
+    const string& idArg = data.args[0];
+
+    //Main logic.
+    game.audio.destroySoundSource(s2i(idArg));
 }
 
 
@@ -2492,6 +3057,7 @@ void ScriptActionRunners::stopSound(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::stopVertically(ScriptActionInstRunData& data) {
+    //Main logic.
     data.scriptVM->mob->speedZ = 0;
 }
 
@@ -2502,6 +3068,7 @@ void ScriptActionRunners::stopVertically(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::storeFocusInside(ScriptActionInstRunData& data) {
+    //Main logic.
     if(
         data.scriptVM->focusedMob &&
         !data.scriptVM->focusedMob->isStoredInsideMob()
@@ -2517,7 +3084,11 @@ void ScriptActionRunners::storeFocusInside(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::swallow(ScriptActionInstRunData& data) {
-    data.scriptVM->mob->swallowChompedPikmin(s2i(data.args[0]));
+    //Get the arguments.
+    const string& amountArg = data.args[0];
+
+    //Main logic.
+    data.scriptVM->mob->swallowChompedPikmin(s2i(amountArg));
 }
 
 
@@ -2527,6 +3098,7 @@ void ScriptActionRunners::swallow(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::swallowAll(ScriptActionInstRunData& data) {
+    //Main logic.
     data.scriptVM->mob->swallowChompedPikmin(
         data.scriptVM->mob->chompingMobs.size()
     );
@@ -2539,11 +3111,15 @@ void ScriptActionRunners::swallowAll(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::teleportToAbsolute(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& xArg = data.args[0];
+    const string& yArg = data.args[1];
+    const string& zArg = data.args[2];
+
+    //Main logic.
     data.scriptVM->mob->stopChasing();
     data.scriptVM->mob->chase(
-        Point(s2f(data.args[0]), s2f(data.args[1])),
-        s2f(data.args[2]),
-        CHASE_FLAG_TELEPORT
+        Point(s2f(xArg), s2f(yArg)), s2f(zArg), CHASE_FLAG_TELEPORT
     );
 }
 
@@ -2554,15 +3130,21 @@ void ScriptActionRunners::teleportToAbsolute(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::teleportToRelative(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& xArg = data.args[0];
+    const string& yArg = data.args[1];
+    const string& zArg = data.args[2];
+
+    //Main logic.
     data.scriptVM->mob->stopChasing();
     Point p =
         rotatePoint(
-            Point(s2f(data.args[0]), s2f(data.args[1])),
+            Point(s2f(xArg), s2f(yArg)),
             data.scriptVM->mob->angle
         );
     data.scriptVM->mob->chase(
         data.scriptVM->mob->pos + p,
-        data.scriptVM->mob->z + s2f(data.args[2]),
+        data.scriptVM->mob->z + s2f(zArg),
         CHASE_FLAG_TELEPORT
     );
 }
@@ -2574,6 +3156,13 @@ void ScriptActionRunners::teleportToRelative(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::throwFocus(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& xArg = data.args[0];
+    const string& yArg = data.args[1];
+    const string& zArg = data.args[2];
+    const string& maxHeightArg = data.args[3];
+
+    //Main logic.
     if(!data.scriptVM->focusedMob) {
         return;
     }
@@ -2582,8 +3171,7 @@ void ScriptActionRunners::throwFocus(ScriptActionInstRunData& data) {
         data.scriptVM->mob->release(data.scriptVM->focusedMob);
     }
     
-    float maxHeight = s2f(data.args[3]);
-    
+    float maxHeight = s2f(maxHeightArg);
     if(maxHeight == 0.0f) {
         //We just want to drop it, not throw it.
         return;
@@ -2592,7 +3180,7 @@ void ScriptActionRunners::throwFocus(ScriptActionInstRunData& data) {
     data.scriptVM->mob->startHeightEffect();
     calculateThrow(
         data.scriptVM->focusedMob->pos, data.scriptVM->focusedMob->z,
-        Point(s2f(data.args[0]), s2f(data.args[1])), s2f(data.args[2]),
+        Point(s2f(xArg), s2f(yArg)), s2f(zArg),
         maxHeight, MOB::GRAVITY_ADDER,
         &data.scriptVM->focusedMob->speed,
         &data.scriptVM->focusedMob->speedZ,
@@ -2607,13 +3195,18 @@ void ScriptActionRunners::throwFocus(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::turnToAbsolute(ScriptActionInstRunData& data) {
-    if(data.args.size() == 1) {
+    //Get the arguments.
+    const string& angleOrXArg = data.args[0];
+    const string& yArg = data.args[1];
+
+    //Main logic.
+    if(yArg.empty()) {
         //Turn to an absolute angle.
-        data.scriptVM->mob->face(degToRad(s2f(data.args[0])), nullptr);
+        data.scriptVM->mob->face(degToRad(s2f(angleOrXArg)), nullptr);
     } else {
         //Turn to some absolute coordinates.
-        float x = s2f(data.args[0]);
-        float y = s2f(data.args[1]);
+        float x = s2f(angleOrXArg);
+        float y = s2f(yArg);
         data.scriptVM->mob->face(
             getAngle(data.scriptVM->mob->pos, Point(x, y)), nullptr
         );
@@ -2627,16 +3220,21 @@ void ScriptActionRunners::turnToAbsolute(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::turnToRelative(ScriptActionInstRunData& data) {
-    if(data.args.size() == 1) {
+    //Get the arguments.
+    const string& angleOrXArg = data.args[0];
+    const string& yArg = data.args[1];
+
+    //Main logic.
+    if(yArg.empty()) {
         //Turn to a relative angle.
         data.scriptVM->mob->face(
-            data.scriptVM->mob->angle + degToRad(s2f(data.args[0])),
+            data.scriptVM->mob->angle + degToRad(s2f(angleOrXArg)),
             nullptr
         );
     } else {
         //Turn to some relative coordinates.
-        float x = s2f(data.args[0]);
-        float y = s2f(data.args[1]);
+        float x = s2f(angleOrXArg);
+        float y = s2f(yArg);
         Point p = rotatePoint(Point(x, y), data.scriptVM->mob->angle);
         data.scriptVM->mob->face(
             getAngle(data.scriptVM->mob->pos, data.scriptVM->mob->pos + p),
@@ -2652,7 +3250,11 @@ void ScriptActionRunners::turnToRelative(ScriptActionInstRunData& data) {
  * @param data Data about the action call.
  */
 void ScriptActionRunners::turnToTarget(ScriptActionInstRunData& data) {
-    SCRIPT_ACTION_TURN_TYPE t = (SCRIPT_ACTION_TURN_TYPE) s2i(data.args[0]);
+    //Get the arguments.
+    const string& targetArg = data.args[0];
+
+    //Main logic.
+    SCRIPT_ACTION_TURN_TYPE t = (SCRIPT_ACTION_TURN_TYPE) s2i(targetArg);
     
     switch(t) {
     case SCRIPT_ACTION_TURN_TYPE_ARACHNORB_HEAD_LOGIC: {
@@ -2686,18 +3288,17 @@ void ScriptActionRunners::turnToTarget(ScriptActionInstRunData& data) {
  *
  * @param name Name of the parameter.
  * @param type Type of parameter.
- * @param forceConst If true, this must be a constant value.
- * If false, it can also be a var.
- * @param isExtras If true, this is an array of them (minimum amount 0).
+ * @param flags Flags. Use SCRIPT_ACTION_PARAM_FLAG.
+ * @param defValue If this is optional, specify its default value here.
  */
 ScriptActionTypeParam::ScriptActionTypeParam(
-    const string& name, const SCRIPT_ACTION_PARAM type,
-    bool forceConst, bool isExtras
+    const string& name, const SCRIPT_ACTION_PARAM_TYPE type,
+    Bitmask8 flags, const string& defValue
 ):
     name(name),
     type(type),
-    forceConst(forceConst),
-    isExtras(isExtras) {
+    flags(flags),
+    defValue(defValue) {
     
 }
 

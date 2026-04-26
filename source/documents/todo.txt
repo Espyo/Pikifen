@@ -560,6 +560,7 @@ Misc things (so I don't forget)
             The ability for a mob to spawn another mob at a random angle
             A way for an object to spawn another, but in the process, feeding the spawned object some script vars of the spawner object
         hold_focused_mob should be able to specify the hold rotation method
+        show_message_from_var should just be show_message, right?
         A way to run actions on other mobs
             You can pick a mob's focused mob, you can pick a mob from the entire area that matches a certain filter of type/category/variable value, you can pick the mob's parent mob, etc.
         Add region trigger mobs, that output power based on how many mobs are inside the given region
