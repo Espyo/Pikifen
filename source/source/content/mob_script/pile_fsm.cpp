@@ -46,7 +46,6 @@ void PileFsm::createFsm(MobType* typ) {
     
     
     typ->scriptDef.fsm.states = efc.finish();
-    typ->scriptDef.fsm.compileStates();
     typ->scriptDef.fsm.setFirstState("idling");
     
     //Check if the number in the enum and the total match up.
@@ -73,7 +72,7 @@ void PileFsm::createFsm(MobType* typ) {
 void PileFsm::beAttacked(ScriptVM* scriptVM, void* info1, void* info2) {
     Pile* pilPtr = (Pile*) scriptVM->mob;
     HitboxInteraction* info = (HitboxInteraction*) info1;
-
+    
     GenMobFsm::beAttacked(scriptVM, info1, info2);
     
     size_t amountBefore = pilPtr->amount;

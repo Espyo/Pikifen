@@ -60,18 +60,22 @@ public:
     //List of which arguments are variable names.
     vector<bool> argIsVar;
     
-    //If something went wrong in parsing it, this describes the error.
-    string customError;
-    
     //Event the action belongs to, if any.
     FSM_EV parentEvent = FSM_EV_UNKNOWN;
+    
+    //Line in the data file from which it was read. If 0, this means
+    //this action definition was created or loaded from something that isn't
+    //the data node relevant to the mob type or area it is used in.
+    size_t dataFileLine = 0;
     
     
     //--- Public function declarations ---
     
     explicit ScriptActionDef(SCRIPT_ACTION type = SCRIPT_ACTION_UNKNOWN);
     explicit ScriptActionDef(ScriptActionCustomCode code);
-    bool loadFromDataNode(DataNode* node, ScriptDef* scriptDef);
+    bool loadFromDataNode(
+        DataNode* node, ScriptDef* scriptDef, bool isDataNodeRelevant = true
+    );
     bool run(ScriptVM* m, void* customData1, void* customData2);
     void unload();
     
@@ -89,10 +93,10 @@ public:
     
     //Actions to run.
     vector<ScriptActionDef*> list;
-
-
+    
+    
     //--- Public function declarations ---
-
+    
     bool loadFromDataNode(
         DataNode* node, ScriptDef* scriptDef, Bitmask8* outFlags = nullptr
     );
@@ -102,7 +106,7 @@ public:
         void* customData1 = nullptr, void* customData2 = nullptr
     );
     void unload();
-
+    
 };
 
 

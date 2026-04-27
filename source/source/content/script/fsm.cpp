@@ -124,62 +124,6 @@ FsmDef::FsmDef(ScriptDef* scriptDef) :
 
 
 /**
- * @brief Compiles some things about states, if necessary.
- *
- * @param fileNode Data node of the file it was loaded from, if any.
- * @return Whether it succeeded.
- */
-bool FsmDef::compileStates(DataNode* fileNode) {
-    bool success = true;
-    
-    //Fix actions that change the state that are using a string.
-    forIdx(s, states) {
-        FsmStateDef* state = states[s];
-        
-        for(size_t e = 0; e < N_FSM_EVENTS; e++) {
-            FsmEventDef* ev = state->events[e];
-            if(!ev) continue;
-            
-            forIdx(a, ev->actions.list) {
-                ScriptActionDef* call = ev->actions.list[a];
-                
-                if(call->actionType->type == SCRIPT_ACTION_SET_STATE) {
-                    string stateName = call->args[0];
-                    size_t stateIdx = 0;
-                    bool foundState = false;
-                    
-                    if(isNumber(stateName)) continue;
-                    
-                    for(; stateIdx < states.size(); stateIdx++) {
-                        if(states[stateIdx]->name == stateName) {
-                            foundState = true;
-                            break;
-                        }
-                    }
-                    
-                    if(!foundState) {
-                        stateIdx = INVALID;
-                        game.errors.report(
-                            "State \"" + state->name +
-                            "\" has an action to switch to an "
-                            "unknown state: \"" + stateName + "\"!",
-                            fileNode
-                        );
-                        success = false;
-                    }
-                    
-                    call->args[0] = i2s(stateIdx);
-                    
-                }
-            }
-        }
-    }
-    
-    return success;
-}
-
-
-/**
  * @brief Loads the FSM states from the states and global events data nodes.
  *
  * @param node The data node containing the states.
@@ -218,8 +162,6 @@ bool FsmDef::loadFromDataNode(
         success &= statePtr->loadFromDataNode(stateNode, globalNode, scriptDef);
         statePtr->id = s;
     }
-    
-    success &= compileStates(fileNode);
     
     //First state index.
     if(!firstStateNode->value.empty()) {

@@ -1480,8 +1480,7 @@ void initScriptActionTypes() {
     auto commitAction =
         [&params, &contexts] (
             SCRIPT_ACTION actionType, const string& actionName,
-            ScriptActionTypeCode * actionRunCode,
-            ScriptActionTypeLoadCode * actionLoadCode
+            ScriptActionTypeCode * actionRunCode
     ) {
         bool seenOptional = false;
         forIdx(p, params) {
@@ -1518,7 +1517,6 @@ void initScriptActionTypes() {
         actionTypePtr->type = actionType;
         actionTypePtr->name = actionName;
         actionTypePtr->code = actionRunCode;
-        actionTypePtr->extraLoadLogic = actionLoadCode;
         actionTypePtr->parameters = params;
         actionTypePtr->contexts = contexts;
         params.clear();
@@ -1543,7 +1541,6 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_UNKNOWN,
         "unknown",
-        nullptr,
         nullptr
     );
     
@@ -1553,8 +1550,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_ABSOLUTE_NUMBER,
         "absolute_number",
-        ScriptActionRunners::absoluteNumber,
-        nullptr
+        ScriptActionRunners::absoluteNumber
     );
     
     //Add list item.
@@ -1566,8 +1562,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_ADD_LIST_ITEM,
         "add_list_item",
-        ScriptActionRunners::addListItem,
-        ScriptActionLoaders::addListItem
+        ScriptActionRunners::addListItem
     );
     
     //Add to string.
@@ -1578,8 +1573,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_ADD_TO_STRING,
         "add_to_string",
-        ScriptActionRunners::addToString,
-        nullptr
+        ScriptActionRunners::addToString
     );
     
     //Calculate.
@@ -1590,8 +1584,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_CALCULATE,
         "calculate",
-        ScriptActionRunners::calculate,
-        ScriptActionLoaders::calculate
+        ScriptActionRunners::calculate
     );
     
     //Clear var.
@@ -1599,8 +1592,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_CLEAR_VAR,
         "clear_var",
-        ScriptActionRunners::clearVar,
-        nullptr
+        ScriptActionRunners::clearVar
     );
     
     //Ceil number.
@@ -1609,8 +1601,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_CEIL_NUMBER,
         "ceil_number",
-        ScriptActionRunners::ceilNumber,
-        nullptr
+        ScriptActionRunners::ceilNumber
     );
     
     //Ease number.
@@ -1620,15 +1611,13 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_EASE_NUMBER,
         "ease_number",
-        ScriptActionRunners::easeNumber,
-        ScriptActionLoaders::easeNumber
+        ScriptActionRunners::easeNumber
     );
     
     //Else.
     commitAction(
         SCRIPT_ACTION_ELSE,
         "else",
-        nullptr,
         nullptr
     );
     
@@ -1639,15 +1628,13 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_ELSE_IF,
         "else_if",
-        ScriptActionRunners::ifFunction,
-        ScriptActionLoaders::ifFunction
+        ScriptActionRunners::ifFunction
     );
     
     //End if.
     commitAction(
         SCRIPT_ACTION_END_IF,
         "end_if",
-        nullptr,
         nullptr
     );
     
@@ -1656,8 +1643,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_FOCUS,
         "focus",
-        ScriptActionRunners::focus,
-        ScriptActionLoaders::focus
+        ScriptActionRunners::focus
     );
     
     //Get angle.
@@ -1669,8 +1655,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_GET_ANGLE,
         "get_angle",
-        ScriptActionRunners::getAngle,
-        nullptr
+        ScriptActionRunners::getAngle
     );
     
     //Get angle clockwise difference.
@@ -1680,8 +1665,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_GET_ANGLE_CW_DIFF,
         "get_angle_clockwise_difference",
-        ScriptActionRunners::getAngleCwDiff,
-        nullptr
+        ScriptActionRunners::getAngleCwDiff
     );
     
     //Get angle smallest difference.
@@ -1691,8 +1675,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_GET_ANGLE_SMALLEST_DIFF,
         "get_angle_smallest_difference",
-        ScriptActionRunners::getAngleSmallestDiff,
-        nullptr
+        ScriptActionRunners::getAngleSmallestDiff
     );
     
     //Get area info.
@@ -1701,8 +1684,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_GET_AREA_INFO,
         "get_area_info",
-        ScriptActionRunners::getAreaInfo,
-        ScriptActionLoaders::getAreaInfo
+        ScriptActionRunners::getAreaInfo
     );
     
     //Get coordinates from angle.
@@ -1713,8 +1695,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_GET_COORDINATES_FROM_ANGLE,
         "get_coordinates_from_angle",
-        ScriptActionRunners::getCoordinatesFromAngle,
-        nullptr
+        ScriptActionRunners::getCoordinatesFromAngle
     );
     
     //Get distance.
@@ -1726,8 +1707,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_GET_DISTANCE,
         "get_distance",
-        ScriptActionRunners::getDistance,
-        nullptr
+        ScriptActionRunners::getDistance
     );
     
     //Get event info.
@@ -1736,8 +1716,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_GET_EVENT_INFO,
         "get_event_info",
-        ScriptActionRunners::getEventInfo,
-        ScriptActionLoaders::getEventInfo
+        ScriptActionRunners::getEventInfo
     );
     
     //Get focus var.
@@ -1746,8 +1725,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_GET_FOCUS_VAR,
         "get_focus_var",
-        ScriptActionRunners::getFocusVar,
-        nullptr
+        ScriptActionRunners::getFocusVar
     );
     
     //Get list item.
@@ -1758,8 +1736,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_GET_LIST_ITEM,
         "get_list_item",
-        ScriptActionRunners::getListItem,
-        ScriptActionLoaders::getListItem
+        ScriptActionRunners::getListItem
     );
     
     //Get list item number.
@@ -1770,8 +1747,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_GET_LIST_ITEM_NUMBER,
         "get_list_item_number",
-        ScriptActionRunners::getListItemNumber,
-        ScriptActionLoaders::getListItemNumber
+        ScriptActionRunners::getListItemNumber
     );
     
     //Get list size.
@@ -1781,8 +1757,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_GET_LIST_SIZE,
         "get_list_size",
-        ScriptActionRunners::getListSize,
-        ScriptActionLoaders::getListSize
+        ScriptActionRunners::getListSize
     );
     
     //Get misc. info.
@@ -1791,8 +1766,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_GET_MISC_INFO,
         "get_misc_info",
-        ScriptActionRunners::getMiscInfo,
-        ScriptActionLoaders::getMiscInfo
+        ScriptActionRunners::getMiscInfo
     );
     
     //Get mob info.
@@ -1802,8 +1776,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_GET_MOB_INFO,
         "get_mob_info",
-        ScriptActionRunners::getMobInfo,
-        ScriptActionLoaders::getMobInfo
+        ScriptActionRunners::getMobInfo
     );
     
     //Get random float.
@@ -1813,8 +1786,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_GET_RANDOM_FLOAT,
         "get_random_float",
-        ScriptActionRunners::getRandomFloat,
-        nullptr
+        ScriptActionRunners::getRandomFloat
     );
     
     //Get random int.
@@ -1824,8 +1796,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_GET_RANDOM_INT,
         "get_random_int",
-        ScriptActionRunners::getRandomInt,
-        nullptr
+        ScriptActionRunners::getRandomInt
     );
     
     //Get var presence.
@@ -1834,8 +1805,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_GET_VAR_PRESENCE,
         "get_var_presence",
-        ScriptActionRunners::getVarPresence,
-        nullptr
+        ScriptActionRunners::getVarPresence
     );
     
     //Goto.
@@ -1843,7 +1813,6 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_GOTO,
         "goto",
-        nullptr,
         nullptr
     );
     
@@ -1854,8 +1823,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_IF,
         "if",
-        ScriptActionRunners::ifFunction,
-        ScriptActionLoaders::ifFunction
+        ScriptActionRunners::ifFunction
     );
     
     //Interpolate number.
@@ -1868,8 +1836,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_INTERPOLATE_NUMBER,
         "interpolate_number",
-        ScriptActionRunners::interpolateNumber,
-        nullptr
+        ScriptActionRunners::interpolateNumber
     );
     
     //Label.
@@ -1877,7 +1844,6 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_LABEL,
         "label",
-        nullptr,
         nullptr
     );
     
@@ -1886,8 +1852,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_PRINT,
         "print",
-        ScriptActionRunners::print,
-        nullptr
+        ScriptActionRunners::print
     );
     
     //Remove list item.
@@ -1898,8 +1863,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_REMOVE_LIST_ITEM,
         "remove_list_item",
-        ScriptActionRunners::removeListItem,
-        ScriptActionLoaders::removeListItem
+        ScriptActionRunners::removeListItem
     );
     
     //Round number.
@@ -1908,8 +1872,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_ROUND_NUMBER,
         "round_number",
-        ScriptActionRunners::roundNumber,
-        nullptr
+        ScriptActionRunners::roundNumber
     );
     
     //Send message to focus.
@@ -1917,8 +1880,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SEND_MESSAGE_TO_FOCUS,
         "send_message_to_focus",
-        ScriptActionRunners::sendMessageToFocus,
-        nullptr
+        ScriptActionRunners::sendMessageToFocus
     );
     
     //Set focus var.
@@ -1927,8 +1889,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SET_FOCUS_VAR,
         "set_focus_var",
-        ScriptActionRunners::setFocusVar,
-        nullptr
+        ScriptActionRunners::setFocusVar
     );
     
     //Set list item.
@@ -1940,8 +1901,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SET_LIST_ITEM,
         "set_list_item",
-        ScriptActionRunners::setListItem,
-        ScriptActionLoaders::setListItem
+        ScriptActionRunners::setListItem
     );
     
     //Set state.
@@ -1949,8 +1909,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SET_STATE,
         "set_state",
-        ScriptActionRunners::setState,
-        nullptr
+        ScriptActionRunners::setState
     );
     
     //Set timer.
@@ -1958,8 +1917,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SET_TIMER,
         "set_timer",
-        ScriptActionRunners::setTimer,
-        nullptr
+        ScriptActionRunners::setTimer
     );
     
     //Set var.
@@ -1968,8 +1926,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SET_VAR,
         "set_var",
-        ScriptActionRunners::setVar,
-        nullptr
+        ScriptActionRunners::setVar
     );
     
     //Show message from var.
@@ -1977,8 +1934,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SHOW_MESSAGE_FROM_VAR,
         "show_message_from_var",
-        ScriptActionRunners::showMessageFromVar,
-        nullptr
+        ScriptActionRunners::showMessageFromVar
     );
     
     //Square root number.
@@ -1987,8 +1943,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SQUARE_ROOT_NUMBER,
         "square_root_number",
-        ScriptActionRunners::squareRootNumber,
-        nullptr
+        ScriptActionRunners::squareRootNumber
     );
     
     
@@ -2000,8 +1955,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_ADD_HEALTH,
         "add_health",
-        ScriptActionRunners::addHealth,
-        nullptr
+        ScriptActionRunners::addHealth
     );
     
     //Arachnorb plan logic.
@@ -2009,32 +1963,28 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC,
         "arachnorb_plan_logic",
-        ScriptActionRunners::arachnorbPlanLogic,
-        ScriptActionLoaders::arachnorbPlanLogic
+        ScriptActionRunners::arachnorbPlanLogic
     );
     
     //Delete.
     commitAction(
         SCRIPT_ACTION_DELETE,
         "delete",
-        ScriptActionRunners::deleteFunction,
-        nullptr
+        ScriptActionRunners::deleteFunction
     );
     
     //Drain liquid.
     commitAction(
         SCRIPT_ACTION_DRAIN_LIQUID,
         "drain_liquid",
-        ScriptActionRunners::drainLiquid,
-        nullptr
+        ScriptActionRunners::drainLiquid
     );
     
     //Finish dying.
     commitAction(
         SCRIPT_ACTION_FINISH_DYING,
         "finish_dying",
-        ScriptActionRunners::finishDying,
-        nullptr
+        ScriptActionRunners::finishDying
     );
     
     //Floor number.
@@ -2043,8 +1993,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_FLOOR_NUMBER,
         "floor_number",
-        ScriptActionRunners::floorNumber,
-        nullptr
+        ScriptActionRunners::floorNumber
     );
     
     //Follow mob as a leader.
@@ -2053,8 +2002,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_FOLLOW_MOB_AS_LEADER,
         "follow_mob_as_leader",
-        ScriptActionRunners::followMobAsLeader,
-        ScriptActionLoaders::followMobAsLeader
+        ScriptActionRunners::followMobAsLeader
     );
     
     //Follow path randomly.
@@ -2062,8 +2010,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_FOLLOW_PATH_RANDOMLY,
         "follow_path_randomly",
-        ScriptActionRunners::followPathRandomly,
-        nullptr
+        ScriptActionRunners::followPathRandomly
     );
     
     //Follow path to absolute.
@@ -2073,16 +2020,14 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_FOLLOW_PATH_TO_ABSOLUTE,
         "follow_path_to_absolute",
-        ScriptActionRunners::followPathToAbsolute,
-        nullptr
+        ScriptActionRunners::followPathToAbsolute
     );
     
     //Get chomped.
     commitAction(
         SCRIPT_ACTION_GET_CHOMPED,
         "get_chomped",
-        ScriptActionRunners::getChomped,
-        nullptr
+        ScriptActionRunners::getChomped
     );
     
     //Get floor Z.
@@ -2092,8 +2037,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_GET_FLOOR_Z,
         "get_floor_z",
-        ScriptActionRunners::getFloorZ,
-        nullptr
+        ScriptActionRunners::getFloorZ
     );
     
     //Hold focused mob.
@@ -2102,16 +2046,14 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_HOLD_FOCUS,
         "hold_focused_mob",
-        ScriptActionRunners::holdFocus,
-        ScriptActionLoaders::holdFocus
+        ScriptActionRunners::holdFocus
     );
     
     //Link with focused mob.
     commitAction(
         SCRIPT_ACTION_LINK_WITH_FOCUS,
         "link_with_focused_mob",
-        ScriptActionRunners::linkWithFocus,
-        nullptr
+        ScriptActionRunners::linkWithFocus
     );
     
     //Load focused mob memory.
@@ -2119,8 +2061,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_LOAD_FOCUS_MEMORY,
         "load_focused_mob_memory",
-        ScriptActionRunners::loadFocusMemory,
-        nullptr
+        ScriptActionRunners::loadFocusMemory
     );
     
     //Move to absolute.
@@ -2130,8 +2071,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_MOVE_TO_ABSOLUTE,
         "move_to_absolute",
-        ScriptActionRunners::moveToAbsolute,
-        nullptr
+        ScriptActionRunners::moveToAbsolute
     );
     
     //Move to relative.
@@ -2141,8 +2081,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_MOVE_TO_RELATIVE,
         "move_to_relative",
-        ScriptActionRunners::moveToRelative,
-        nullptr
+        ScriptActionRunners::moveToRelative
     );
     
     //Move to target.
@@ -2150,16 +2089,14 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_MOVE_TO_TARGET,
         "move_to_target",
-        ScriptActionRunners::moveToTarget,
-        ScriptActionLoaders::moveToTarget
+        ScriptActionRunners::moveToTarget
     );
     
     //Order release.
     commitAction(
         SCRIPT_ACTION_ORDER_RELEASE,
         "order_release",
-        ScriptActionRunners::orderRelease,
-        nullptr
+        ScriptActionRunners::orderRelease
     );
     
     //Play sound.
@@ -2168,8 +2105,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_PLAY_SOUND,
         "play_sound",
-        ScriptActionRunners::playSound,
-        ScriptActionLoaders::playSound
+        ScriptActionRunners::playSound
     );
     
     //Receive status.
@@ -2177,24 +2113,21 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_RECEIVE_STATUS,
         "receive_status",
-        ScriptActionRunners::receiveStatus,
-        ScriptActionLoaders::receiveStatus
+        ScriptActionRunners::receiveStatus
     );
     
     //Release.
     commitAction(
         SCRIPT_ACTION_RELEASE,
         "release",
-        ScriptActionRunners::release,
-        nullptr
+        ScriptActionRunners::release
     );
     
     //Release stored mobs.
     commitAction(
         SCRIPT_ACTION_RELEASE_STORED_MOBS,
         "release_stored_mobs",
-        ScriptActionRunners::releaseStoredMobs,
-        nullptr
+        ScriptActionRunners::releaseStoredMobs
     );
     
     //Remove status.
@@ -2202,8 +2135,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_REMOVE_STATUS,
         "remove_status",
-        ScriptActionRunners::removeStatus,
-        ScriptActionLoaders::removeStatus
+        ScriptActionRunners::removeStatus
     );
     
     //Save focused mob memory.
@@ -2211,8 +2143,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SAVE_FOCUS_MEMORY,
         "save_focused_mob_memory",
-        ScriptActionRunners::saveFocusMemory,
-        nullptr
+        ScriptActionRunners::saveFocusMemory
     );
     
     //Send message to links.
@@ -2220,8 +2151,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SEND_MESSAGE_TO_LINKS,
         "send_message_to_links",
-        ScriptActionRunners::sendMessageToLinks,
-        nullptr
+        ScriptActionRunners::sendMessageToLinks
     );
     
     //Send message to nearby.
@@ -2230,8 +2160,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SEND_MESSAGE_TO_NEARBY,
         "send_message_to_nearby",
-        ScriptActionRunners::sendMessageToNearby,
-        nullptr
+        ScriptActionRunners::sendMessageToNearby
     );
     
     //Set animation.
@@ -2241,8 +2170,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SET_ANIMATION,
         "set_animation",
-        ScriptActionRunners::setAnimation,
-        ScriptActionLoaders::setAnimation
+        ScriptActionRunners::setAnimation
     );
     
     //Set can block paths.
@@ -2250,8 +2178,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SET_CAN_BLOCK_PATHS,
         "set_can_block_paths",
-        ScriptActionRunners::setCanBlockPaths,
-        nullptr
+        ScriptActionRunners::setCanBlockPaths
     );
     
     //Set far reach.
@@ -2259,8 +2186,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SET_FAR_REACH,
         "set_far_reach",
-        ScriptActionRunners::setFarReach,
-        ScriptActionLoaders::setFarReach
+        ScriptActionRunners::setFarReach
     );
     
     //Set flying.
@@ -2268,8 +2194,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SET_FLYING,
         "set_flying",
-        ScriptActionRunners::setFlying,
-        nullptr
+        ScriptActionRunners::setFlying
     );
     
     //Set gravity.
@@ -2277,8 +2202,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SET_GRAVITY,
         "set_gravity",
-        ScriptActionRunners::setGravity,
-        nullptr
+        ScriptActionRunners::setGravity
     );
     
     //Set health.
@@ -2286,8 +2210,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SET_HEALTH,
         "set_health",
-        ScriptActionRunners::setHealth,
-        nullptr
+        ScriptActionRunners::setHealth
     );
     
     //Set height.
@@ -2295,8 +2218,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SET_HEIGHT,
         "set_height",
-        ScriptActionRunners::setHeight,
-        nullptr
+        ScriptActionRunners::setHeight
     );
     
     //Set hiding.
@@ -2304,8 +2226,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SET_HIDING,
         "set_hiding",
-        ScriptActionRunners::setHiding,
-        nullptr
+        ScriptActionRunners::setHiding
     );
     
     //Set huntable.
@@ -2313,8 +2234,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SET_HUNTABLE,
         "set_huntable",
-        ScriptActionRunners::setHuntable,
-        nullptr
+        ScriptActionRunners::setHuntable
     );
     
     //Set holdable.
@@ -2322,8 +2242,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SET_HOLDABLE,
         "set_holdable",
-        ScriptActionRunners::setHoldable,
-        ScriptActionLoaders::setHoldable
+        ScriptActionRunners::setHoldable
     );
     
     //Set limb animation.
@@ -2331,8 +2250,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SET_LIMB_ANIMATION,
         "set_limb_animation",
-        ScriptActionRunners::setLimbAnimation,
-        nullptr
+        ScriptActionRunners::setLimbAnimation
     );
     
     //Set near reach.
@@ -2340,8 +2258,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SET_NEAR_REACH,
         "set_near_reach",
-        ScriptActionRunners::setNearReach,
-        ScriptActionLoaders::setNearReach
+        ScriptActionRunners::setNearReach
     );
     
     //Set radius.
@@ -2349,8 +2266,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SET_RADIUS,
         "set_radius",
-        ScriptActionRunners::setRadius,
-        nullptr
+        ScriptActionRunners::setRadius
     );
     
     //Set sector scroll.
@@ -2359,8 +2275,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SET_SECTOR_SCROLL,
         "set_sector_scroll",
-        ScriptActionRunners::setSectorScroll,
-        nullptr
+        ScriptActionRunners::setSectorScroll
     );
     
     //Set shadow visibility.
@@ -2368,8 +2283,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SET_SHADOW_VISIBILITY,
         "set_shadow_visibility",
-        ScriptActionRunners::setShadowVisibility,
-        nullptr
+        ScriptActionRunners::setShadowVisibility
     );
     
     //Set tangible.
@@ -2377,8 +2291,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SET_TANGIBLE,
         "set_tangible",
-        ScriptActionRunners::setTangible,
-        nullptr
+        ScriptActionRunners::setTangible
     );
     
     //Set team.
@@ -2386,8 +2299,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SET_TEAM,
         "set_team",
-        ScriptActionRunners::setTeam,
-        ScriptActionLoaders::setTeam
+        ScriptActionRunners::setTeam
     );
     
     //Shake camera.
@@ -2395,8 +2307,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SHAKE_CAMERA,
         "shake_camera",
-        ScriptActionRunners::shakeCamera,
-        nullptr
+        ScriptActionRunners::shakeCamera
     );
     
     //Spawn.
@@ -2404,8 +2315,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SPAWN,
         "spawn",
-        ScriptActionRunners::spawn,
-        ScriptActionLoaders::spawn
+        ScriptActionRunners::spawn
     );
     
     //Stabilize Z.
@@ -2414,8 +2324,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_STABILIZE_Z,
         "stabilize_z",
-        ScriptActionRunners::stabilizeZ,
-        ScriptActionLoaders::stabilizeZ
+        ScriptActionRunners::stabilizeZ
     );
     
     //Start chomping.
@@ -2425,24 +2334,21 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_START_CHOMPING,
         "start_chomping",
-        ScriptActionRunners::startChomping,
-        ScriptActionLoaders::startChomping
+        ScriptActionRunners::startChomping
     );
     
     //Start dying.
     commitAction(
         SCRIPT_ACTION_START_DYING,
         "start_dying",
-        ScriptActionRunners::startDying,
-        nullptr
+        ScriptActionRunners::startDying
     );
     
     //Start height effect.
     commitAction(
         SCRIPT_ACTION_START_HEIGHT_EFFECT,
         "start_height_effect",
-        ScriptActionRunners::startHeightEffect,
-        nullptr
+        ScriptActionRunners::startHeightEffect
     );
     
     //Start particles.
@@ -2453,40 +2359,35 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_START_PARTICLES,
         "start_particles",
-        ScriptActionRunners::startParticles,
-        ScriptActionLoaders::startParticles
+        ScriptActionRunners::startParticles
     );
     
     //Stop.
     commitAction(
         SCRIPT_ACTION_STOP,
         "stop",
-        ScriptActionRunners::stop,
-        nullptr
+        ScriptActionRunners::stop
     );
     
     //Stop chomping.
     commitAction(
         SCRIPT_ACTION_STOP_CHOMPING,
         "stop_chomping",
-        ScriptActionRunners::stopChomping,
-        nullptr
+        ScriptActionRunners::stopChomping
     );
     
     //Stop height effect.
     commitAction(
         SCRIPT_ACTION_STOP_HEIGHT_EFFECT,
         "stop_height_effect",
-        ScriptActionRunners::stopHeightEffect,
-        nullptr
+        ScriptActionRunners::stopHeightEffect
     );
     
     //Stop particles.
     commitAction(
         SCRIPT_ACTION_STOP_PARTICLES,
         "stop_particles",
-        ScriptActionRunners::stopParticles,
-        nullptr
+        ScriptActionRunners::stopParticles
     );
     
     //Stop sound.
@@ -2494,24 +2395,21 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_STOP_SOUND,
         "stop_sound",
-        ScriptActionRunners::stopSound,
-        nullptr
+        ScriptActionRunners::stopSound
     );
     
     //Stop vertically.
     commitAction(
         SCRIPT_ACTION_STOP_VERTICALLY,
         "stop_vertically",
-        ScriptActionRunners::stopVertically,
-        nullptr
+        ScriptActionRunners::stopVertically
     );
     
     //Store focus inside.
     commitAction(
         SCRIPT_ACTION_STORE_FOCUS_INSIDE,
         "store_focus_inside",
-        ScriptActionRunners::storeFocusInside,
-        nullptr
+        ScriptActionRunners::storeFocusInside
     );
     
     //Swallow.
@@ -2519,16 +2417,14 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SWALLOW,
         "swallow",
-        ScriptActionRunners::swallow,
-        nullptr
+        ScriptActionRunners::swallow
     );
     
     //Swallow all.
     commitAction(
         SCRIPT_ACTION_SWALLOW_ALL,
         "swallow_all",
-        ScriptActionRunners::swallowAll,
-        nullptr
+        ScriptActionRunners::swallowAll
     );
     
     //Teleport to absolute.
@@ -2538,8 +2434,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_TELEPORT_TO_ABSOLUTE,
         "teleport_to_absolute",
-        ScriptActionRunners::teleportToAbsolute,
-        nullptr
+        ScriptActionRunners::teleportToAbsolute
     );
     
     //Teleport to relative.
@@ -2549,8 +2444,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_TELEPORT_TO_RELATIVE,
         "teleport_to_relative",
-        ScriptActionRunners::teleportToRelative,
-        nullptr
+        ScriptActionRunners::teleportToRelative
     );
     
     //Throw focused mob.
@@ -2561,8 +2455,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_THROW_FOCUS,
         "throw_focused_mob",
-        ScriptActionRunners::throwFocus,
-        nullptr
+        ScriptActionRunners::throwFocus
     );
     
     //Turn to absolute.
@@ -2571,8 +2464,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_TURN_TO_ABSOLUTE,
         "turn_to_absolute",
-        ScriptActionRunners::turnToAbsolute,
-        nullptr
+        ScriptActionRunners::turnToAbsolute
     );
     
     //Turn to relative.
@@ -2581,8 +2473,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_TURN_TO_RELATIVE,
         "turn_to_relative",
-        ScriptActionRunners::turnToRelative,
-        nullptr
+        ScriptActionRunners::turnToRelative
     );
     
     //Turn to target.
@@ -2590,8 +2481,7 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_TURN_TO_TARGET,
         "turn_to_target",
-        ScriptActionRunners::turnToTarget,
-        ScriptActionLoaders::turnToTarget
+        ScriptActionRunners::turnToTarget
     );
 }
 

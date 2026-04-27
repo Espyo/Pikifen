@@ -180,7 +180,7 @@ const string WEATHER = "weather";
 #pragma region File names
 
 
-//File names (not paths).
+//File names with extensions (not paths).
 namespace FILE_NAMES {
 
 //Area main data file.
@@ -205,7 +205,13 @@ const string AREA_REMINDERS = "reminders.txt";
 const string GAME_CONFIG = "config.txt";
 
 //Mob type animation file.
-const string MOB_TYPE_ANIMATION = "animations.txt";
+const string MOB_TYPE_ANIMATIONS = "animations.txt";
+
+//Mob type main data file.
+const string MOB_TYPE_MAIN_DATA = "data.txt";
+
+//Mob type script file.
+const string MOB_TYPE_SCRIPT = "script.txt";
 
 //System content names file.
 const string SYSTEM_CONTENT_NAMES = "system_content_names.txt";
@@ -216,11 +222,11 @@ const string DEBUG_CONFIG = "debug.txt";
 //Error log file.
 const string ERROR_LOG = "error_log.txt";
 
-//Mission records file.
-const string MISSION_RECORDS = "mission_records.txt";
-
 //Maker tools file.
 const string MAKER_TOOLS = "tools.txt";
+
+//Mission records file.
+const string MISSION_RECORDS = "mission_records.txt";
 
 //Options file.
 const string OPTIONS = "options.txt";

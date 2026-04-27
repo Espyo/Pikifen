@@ -1734,7 +1734,7 @@ void AnimationEditor::setupForNewAnimDbPost() {
         vector<string> pathParts = split(manifest.path, "/");
         if(
             pathParts.size() > 3 &&
-            pathParts[pathParts.size() - 1] == FILE_NAMES::MOB_TYPE_ANIMATION
+            pathParts[pathParts.size() - 1] == FILE_NAMES::MOB_TYPE_ANIMATIONS
         ) {
             MobCategory* cat =
                 game.mobCategories.getFromFolderName(

@@ -160,7 +160,6 @@ void ResourceFsm::createFsm(MobType* typ) {
     
     
     typ->scriptDef.fsm.states = efc.finish();
-    typ->scriptDef.fsm.compileStates();
     typ->scriptDef.fsm.setFirstState("idle_waiting");
     
     //Check if the number in the enum and the total match up.
@@ -186,7 +185,7 @@ void ResourceFsm::createFsm(MobType* typ) {
  */
 void ResourceFsm::handleDelivery(ScriptVM* scriptVM, void* info1, void* info2) {
     Resource* resPtr = (Resource*) scriptVM->mob;
-
+    
     if(
         resPtr->resType->deliveryResult ==
         RESOURCE_DELIVERY_RESULT_DAMAGE_MOB &&
@@ -211,7 +210,7 @@ void ResourceFsm::handleDelivery(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void ResourceFsm::handleDropped(ScriptVM* scriptVM, void* info1, void* info2) {
     Resource* resPtr = (Resource*) scriptVM->mob;
-
+    
     if(!resPtr->resType->vanishOnDrop) return;
     
     if(resPtr->resType->vanishDelay == 0) {
@@ -233,7 +232,7 @@ void ResourceFsm::handleReachDestination(
     ScriptVM* scriptVM, void* info1, void* info2
 ) {
     Resource* resPtr = (Resource*) scriptVM->mob;
-
+    
     if(resPtr->resType->deliveryResult == RESOURCE_DELIVERY_RESULT_STAY) {
         resPtr->stopFollowingPath();
         scriptVM->fsm.setState(RESOURCE_STATE_STAYING_AFTER_DELIVERY);
@@ -266,7 +265,7 @@ void ResourceFsm::handleStartMoving(
  */
 void ResourceFsm::loseMomentum(ScriptVM* scriptVM, void* info1, void* info2) {
     Resource* resPtr = (Resource*) scriptVM->mob;
-
+    
     resPtr->speed.x = 0;
     resPtr->speed.y = 0;
     resPtr->speedZ = 0;
@@ -284,7 +283,7 @@ void ResourceFsm::startBeingDelivered(
     ScriptVM* scriptVM, void* info1, void* info2
 ) {
     Resource* resPtr = (Resource*) scriptVM->mob;
-
+    
     if(
         resPtr->carryInfo->intendedMob &&
         resPtr->carryInfo->intendedMob->type->category->id ==

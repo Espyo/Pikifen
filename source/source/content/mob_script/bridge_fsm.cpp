@@ -60,7 +60,6 @@ void BridgeFsm::createFsm(MobType* typ) {
     
     
     typ->scriptDef.fsm.states = efc.finish();
-    typ->scriptDef.fsm.compileStates();
     typ->scriptDef.fsm.setFirstState("idling");
     
     //Check if the number in the enum and the total match up.
@@ -85,7 +84,7 @@ void BridgeFsm::createFsm(MobType* typ) {
  */
 void BridgeFsm::checkHealth(ScriptVM* scriptVM, void* info1, void* info2) {
     Bridge* briPtr = (Bridge*) scriptVM->mob;
-
+    
     if(briPtr->checkHealth()) {
         scriptVM->fsm.setState(BRIDGE_STATE_CREATING_CHUNK);
     }
@@ -118,7 +117,7 @@ void BridgeFsm::open(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void BridgeFsm::setAnim(ScriptVM* scriptVM, void* info1, void* info2) {
     Bridge* briPtr = (Bridge*) scriptVM->mob;
-
+    
     briPtr->setAnimation(
         BRIDGE_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );

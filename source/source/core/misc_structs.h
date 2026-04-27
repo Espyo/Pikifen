@@ -285,7 +285,8 @@ struct ErrorManager {
 
     //--- Public function declarations ---
     
-    void report(const string& s, const DataNode* d = nullptr);
+    void report(const string& text, const string& filePath, size_t fileLineNr);
+    void report(const string& text, const DataNode* dataNode = nullptr);
     void reportAreaLoadErrors();
     void prepareAreaLoad();
     bool sessionHasErrors();
@@ -306,8 +307,8 @@ struct ErrorManager {
     
     //--- Private function declarations ---
     
-    void emitInGameplay(const string& s);
-    void logToConsole(const string& s);
+    void emitInConsole(const string& s);
+    void logToStdOut(const string& s);
     void logToFile(const string& s);
     
 };

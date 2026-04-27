@@ -777,7 +777,8 @@ void MobType::loadFromDataNode(
         DataNode scriptFile;
         bool scriptFileExists = false;
         scriptFile.loadFile(
-            folderPath + "/script.txt", &scriptFileExists, true, true
+            folderPath + "/" + FILE_NAMES::MOB_TYPE_SCRIPT,
+            &scriptFileExists, true, true
         );
         
         loadCatScriptDataPre(&scriptFile);

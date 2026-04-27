@@ -390,10 +390,18 @@ ScriptActionDef::ScriptActionDef(ScriptActionCustomCode code) :
  *
  * @param node The data node.
  * @param scriptDef Script definition it belongs to, if any.
+ * @param isDataNodeRelevant Whether the action was loaded from a data node
+ * that is relevant to mob type or area it belongs to, or if it got loaded
+ * from an external source.
  * @return Whether it was successful.
  */
-bool ScriptActionDef::loadFromDataNode(DataNode* node, ScriptDef* scriptDef) {
+bool ScriptActionDef::loadFromDataNode(
+    DataNode* node, ScriptDef* scriptDef, bool isDataNodeRelevant
+) {
     actionType = nullptr;
+    if(isDataNodeRelevant) {
+        dataFileLine = node->lineNr;
+    }
     
     //First, get the name and arguments.
     vector<string> words = split(node->name);
@@ -523,17 +531,6 @@ bool ScriptActionDef::loadFromDataNode(DataNode* node, ScriptDef* scriptDef) {
         words.push_back(actionType->parameters[paramIdx].defValue);
         args.push_back(words.back());
         argIsVar.push_back(false);
-    }
-    
-    //If this action needs extra parsing, do it now.
-    if(actionType->extraLoadLogic) {
-        MobType* mt = nullptr;
-        if(scriptDef) mt = scriptDef->mobType;
-        bool success = actionType->extraLoadLogic(*this, mt);
-        if(!customError.empty()) {
-            game.errors.report(customError, node);
-        }
-        return success;
     }
     
     return true;

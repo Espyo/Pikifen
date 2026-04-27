@@ -14,6 +14,32 @@ Next tasks (roughly sorted most important first)
         Ice Pikmin can still grab treasures underwater, and I'm not sure how to stop that
 
     --- 1.2.0 ---
+    More powerful scripting
+        show_message_from_var should just be show_message, right?
+        Add region trigger mobs, that output power based on how many mobs are inside the given region
+        Add some infinite loop protection logic
+            I think just making it detect it ran over 1000 actions in a single event, even across states, should be enough
+        Mobs could reference other mobs via their ID numbers (Mob::id)
+            They could also focus on each other with this ID, stored in variables; this would deprecate the "focus mob memory" feature
+            get_misc_info player_1_leader_id
+        New actions
+            A way to run actions on other mobs
+            A way to pick a mob from the entire area that matches a certain filter of type/category/variable value?
+            Get the name of the focused mob's current state, animation
+            Typical programming things
+                An action that returns to the previous state. Useful for creating utility states that mimic functions
+                For loop
+                While loop
+                Functions you'd find in a math library
+                    Sin, cosine?
+                    Degrees to radians and vice-versa?
+                    Bitmask set, unset, test?
+                    Min and max?
+            Get a list of all linked mobs
+            Setting the camera position and zoom
+            Music control
+            Inventory control
+            Display something on the HUD
     New sounds
         Pikmin or enemy getting frozen
         Glow Pikmin teleport
@@ -377,7 +403,6 @@ Next tasks (roughly sorted most important first)
             A cutscene queue, in case multiple ones need to start at once
             Scripting for them
                 Among other things, a way to move the camera, both with teleport, and smoothly
-                Perhaps an action to start controlling a given mob from here on, so that actions apply to that mob only. To make sure there are no leaks, each "start_controlling_mob" action must have an equivalent closing "end_controlling_mob" within the same event.
         Area changes
             Areas should be able to specify whether they have a "types out on the field" limit like in Pikmin 4, and if so, they can also specify how many, and what are the recommended types [PIKMIN 4]
             Objects should be able to specify what days they do and don't appear in
@@ -438,7 +463,7 @@ Small tasks (for when I'm feeling lazy)
         Remove magic numbers and magic strings (make numbers and strings into constants)
         Try to refactor the mission strategy patterns to also work for the area editor logic
         Clean up some coupling problems using https://github.com/larspensjo/SimpleSignal
-        Organize named enums better. Maybe using some smart macros. Some use EnumNameDatabase, some use readEnumProp, some use reportEnumError, some do things their own way by themselves
+        Organize named enums better. Maybe using some smart macros. Some use EnumNameDatabase, some use readEnumProp, some do things their own way by themselves
             Largely fixed in Feb 06, but ideally there'd be a function or macro or something for custom enums, like those needed when iterating through a mob type's sounds to match string names, or the custom inactive logic property enum in MobType::loadFromDataNode. Basically, search the project for '== "' and see what could be improved
     
     
@@ -560,35 +585,11 @@ Misc things (so I don't forget)
             The ability for a mob to spawn another mob at a random angle
             A way for an object to spawn another, but in the process, feeding the spawned object some script vars of the spawner object
         hold_focused_mob should be able to specify the hold rotation method
-        show_message_from_var should just be show_message, right?
-        A way to run actions on other mobs
-            You can pick a mob's focused mob, you can pick a mob from the entire area that matches a certain filter of type/category/variable value, you can pick the mob's parent mob, etc.
-        Add region trigger mobs, that output power based on how many mobs are inside the given region
-        Typical programming things
-            An action that returns to the previous state. Useful for creating utility states that mimic functions
-            For loop
-            While loop
-            Functions you'd find in a math library
-                Sin, cosine?
-                Degrees to radians and vice-versa?
-                Bitmask set, unset, test?
-                Min and max?
-        Add some infinite loop protection logic
-            I think just making it detect it ran over 1000 actions in a single event, even across states, should be enough
-        Mobs could reference other mobs via their ID numbers (Mob::id)
-            They could also focus on each other with this ID, stored in variables; this would deprecate the "focus mob memory" feature
-            get_misc_info player_1_leader_id
         New events
             [NEEDS BRAINSTORMING] on_carrying_lift and on_carrying_drop events?
         New actions
-            Get the name of the focused mob's current state, animation
-            Get a list of all linked mobs
             [NEEDS BRAINSTORMING] Logic for an arachnorb to turn to/chase the focused mob? (thanks Neo)
             [NEEDS BRAINSTORMING] Logic for arachnorbs to move freely, instead of only forward? (thanks Neo)
-            Setting the camera position and zoom
-            Music control
-            Inventory control
-            Display something on the HUD
     Upgrades
         All of these can be toggled on or off in a mission, and can be unlocked in Story Mode
             In the mission select menu, probably show this as icons, and only for the collected ones, so it's not a wall of text
@@ -771,14 +772,11 @@ Misc things (so I don't forget)
     Should the numbers in Pikmin counters (and perhaps elsewhere?) have animated run-ups?
     Boss music logic for attack jingles
     Missions
-        An end event where you reach X sprays of type Y
+        An end event where you reach X sprays of type Y?
         An end event where you bring a certain treasure towards a certain point of the map, and Pikmin carry towards where a given leader is? A la Formidable Oak (thanks Kolabold)
         An end event where you have to construct a wonder
         An end event for an enemy/enemy type dying (thanks Neo)
         An end event for if a certain state is entered in an FSM, like checking if Bulborbs enter the "waking_up" state, meaning the player alerted a sleeping Bulborb (thanks Neo)
-        A way for something to give bonus points to the score (in score medal mode) (thanks Helodity)
-            From the script?
-            As a parameter in every single mob generator?
         In missions with no Onion, enemies should be delivered to the ship for more points. Maybe the mission maker should specify if enemies count for treasure points or not?
         The ability for treasure collection, enemy defeat, etc. to increase/decrease the amount of time you have left. This could make for tense missions where you constantly have to collect treasures to keep the clock above 0
     Code cleanup
@@ -950,11 +948,6 @@ Tasks for later on (I might never implement these)
                 You can just give the mob a status effect that changes its speed
         If a leader is on top of a moving walkable object, or on top of a scrolling sector, if they slide against the wall they will do it faster than normal
             This is kinda correct? Either way not a big deal I guess
-        Allowing a mob to run an action on behalf of another mob
-            Not really workable since when the script is compiled at load, anything involving arguments can only be compiled from the runner's point of view, not the caster's, so it'll be impossible to compile the script actions of the caster
-            Plus, anything involving script variables, states, focuses, and so on will just lead to endless spaghetti for the engine and for the script maker
-        Action groups for scripts (like functions)
-            Not really necessary since you can just create an aux state to do those
         Optimize the Armored Cannon Beetle's spritesheet, ever since its inhale sprites stopped using drawn lines and started using dust particles
         Fade some HUD items (or all?) when the mouse is on them? Would this be useful?
             This won't work for control schemes that don't use the mouse. Is this a problem, should the leader cursor be used instead, or is it fine if they don't fade out?

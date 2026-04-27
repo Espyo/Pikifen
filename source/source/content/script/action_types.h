@@ -39,7 +39,7 @@ enum SCRIPT_ACTION {
     
     //Add item to a list (split string).
     SCRIPT_ACTION_ADD_LIST_ITEM,
-
+    
     //Add a string to another string.
     SCRIPT_ACTION_ADD_TO_STRING,
     
@@ -120,13 +120,13 @@ enum SCRIPT_ACTION {
     
     //Get a script variable's value from the focused mob.
     SCRIPT_ACTION_GET_FOCUS_VAR,
-
+    
     //Get an item of a list (split string).
     SCRIPT_ACTION_GET_LIST_ITEM,
-
+    
     //Get the number of an item in a list (split string).
     SCRIPT_ACTION_GET_LIST_ITEM_NUMBER,
-
+    
     //Get the size of a list (split string).
     SCRIPT_ACTION_GET_LIST_SIZE,
     
@@ -141,7 +141,7 @@ enum SCRIPT_ACTION {
     
     //Get a random integer number.
     SCRIPT_ACTION_GET_RANDOM_INT,
-
+    
     //Get a var's presence.
     SCRIPT_ACTION_GET_VAR_PRESENCE,
     
@@ -723,13 +723,13 @@ enum SCRIPT_ACTION_LIST_DELIMITER {
 
     //Colons.
     SCRIPT_ACTION_LIST_DELIMITER_COLON,
-
+    
     //Semicolon.
     SCRIPT_ACTION_LIST_DELIMITER_SEMICOLON,
-
+    
     //Spaces.
     SCRIPT_ACTION_LIST_DELIMITER_SPACE,
-
+    
 };
 
 
@@ -778,11 +778,11 @@ enum SCRIPT_ACTION_PARAM_FLAG {
     
     //If the argument is not specified, a default value will be used.
     SCRIPT_ACTION_PARAM_FLAG_OPTIONAL = 1 << 1,
-
+    
     //This argument and any other ones after are considered to belong to
     //this parameter.
     SCRIPT_ACTION_PARAM_FLAG_VECTOR = 1 << 2,
-
+    
 };
 
 
@@ -803,10 +803,10 @@ struct ScriptActionTypeParam {
     
     //Type of variable it's meant to hold.
     SCRIPT_ACTION_PARAM_TYPE type = SCRIPT_ACTION_PARAM_TYPE_STRING;
-
+    
     //Flags. Use SCRIPT_ACTION_PARAM_FLAG.
     Bitmask8 flags = 0;
-
+    
     //If this is optional, specify its default value here.
     string defValue;
     
@@ -830,19 +830,6 @@ typedef void (ScriptActionTypeCode)(ScriptActionInstRunData& data);
 
 
 /**
- * @brief Function to run when a script action instance is loaded
- * from a script.
- *
- * The first parameter is the action call data.
- * The second parameter is the mob type it belongs to, if any.
- * Returns whether it loaded successfully.
- */
-typedef bool (ScriptActionTypeLoadCode)(
-    ScriptActionDef& call, MobType* mt
-);
-
-
-/**
  * @brief Info about a type of script action.
  */
 struct ScriptActionType {
@@ -857,9 +844,6 @@ struct ScriptActionType {
     
     //Code to run.
     ScriptActionTypeCode* code = nullptr;
-    
-    //Extra logic to run when this action is loaded from a script file.
-    ScriptActionTypeLoadCode* extraLoadLogic = nullptr;
     
     //Parameters that it can take.
     vector<ScriptActionTypeParam> parameters;
@@ -977,6 +961,13 @@ void throwFocus(ScriptActionInstRunData& data);
 void turnToAbsolute(ScriptActionInstRunData& data);
 void turnToRelative(ScriptActionInstRunData& data);
 void turnToTarget(ScriptActionInstRunData& data);
+
+SCRIPT_ACTION_MOB_TARGET_TYPE getMobTargetType(
+    const ScriptActionInstRunData& data, const string& name
+);
+void reportActionError(
+    const ScriptActionInstRunData& data, const string& info
+);
 };
 
 
@@ -1012,9 +1003,6 @@ bool stabilizeZ(ScriptActionDef& call, MobType* mt);
 bool startChomping(ScriptActionDef& call, MobType* mt);
 bool startParticles(ScriptActionDef& call, MobType* mt);
 bool turnToTarget(ScriptActionDef& call, MobType* mt);
-
-void reportEnumError(ScriptActionDef& call, size_t argIdx);
-bool loadMobTargetType(ScriptActionDef& call, size_t argIdx);
 };
 
 

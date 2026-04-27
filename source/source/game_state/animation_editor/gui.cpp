@@ -383,7 +383,7 @@ void AnimationEditor::processGuiDialogNew() {
             game.content.globalAnimDbs.manifestToPath(tempMan);
     } else {
         ContentManifest tempMan;
-        tempMan.internalName = FILE_NAMES::MOB_TYPE_ANIMATION;
+        tempMan.internalName = FILE_NAMES::MOB_TYPE_ANIMATIONS;
         tempMan.pack = newDialog.pack;
         if(newDialog.mobTypePtr) {
             newDialog.animPath =

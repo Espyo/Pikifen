@@ -52,7 +52,6 @@ public:
     //--- Public function declarations ---
     
     FsmDef(ScriptDef* scriptDef);
-    bool compileStates(DataNode* fileNode = nullptr);
     bool loadFromDataNode(
         DataNode* node, DataNode* globalNode, DataNode* firstStateName,
         DataNode* fileNode

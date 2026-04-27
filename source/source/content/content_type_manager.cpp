@@ -1059,7 +1059,7 @@ void MobAnimContentManager::fillCatManifestsFromPack(
                 internalName,
                 categoryPath + "/" +
                 internalName + "/" +
-                FILE_NAMES::MOB_TYPE_ANIMATION,
+                FILE_NAMES::MOB_TYPE_ANIMATIONS,
                 packName
             );
     }
@@ -1155,7 +1155,7 @@ string MobAnimContentManager::manifestToPath(
         FOLDER_PATHS_FROM_PACK::MOB_TYPES + "/" +
         category + "/" +
         type + "/" +
-        FILE_NAMES::MOB_TYPE_ANIMATION;
+        FILE_NAMES::MOB_TYPE_ANIMATIONS;
 }
 
 
@@ -1366,7 +1366,10 @@ void MobTypeContentManager::loadMobTypesOfCategory(
     map<string, ContentManifest>& man = manifests[category->id];
     for(auto& t : man) {
         bool fileWasOpened = false;
-        DataNode file(t.second.path + "/data.txt", &fileWasOpened);
+        DataNode file(
+            t.second.path + "/" + FILE_NAMES::MOB_TYPE_MAIN_DATA,
+            &fileWasOpened
+        );
         if(!fileWasOpened) continue;
         
         MobType* mt;

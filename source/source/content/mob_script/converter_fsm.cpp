@@ -83,7 +83,6 @@ void ConverterFsm::createFsm(MobType* typ) {
     
     
     typ->scriptDef.fsm.states = efc.finish();
-    typ->scriptDef.fsm.compileStates();
     typ->scriptDef.fsm.setFirstState("idling");
     
     //Check if the number in the enum and the total match up.
@@ -152,7 +151,7 @@ void ConverterFsm::finishBeingBumped(
     ScriptVM* scriptVM, void* info1, void* info2
 ) {
     Converter* conPtr = (Converter*) scriptVM->mob;
-
+    
     conPtr->close();
 }
 
@@ -182,7 +181,7 @@ void ConverterFsm::handleObjectTouch(
     ScriptVM* scriptVM, void* info1, void* info2
 ) {
     Mob* bumper = (Mob*) info1;
-
+    
     if(bumper->type->category->id == MOB_CATEGORY_LEADERS) {
         scriptVM->fsm.setState(CONVERTER_STATE_BUMPED);
     }
@@ -242,7 +241,7 @@ void ConverterFsm::handlePikmin(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void ConverterFsm::open(ScriptVM* scriptVM, void* info1, void* info2) {
     Converter* conPtr = (Converter*) scriptVM->mob;
-
+    
     conPtr->setAnimation(
         conPtr->getAnimationIdxFromBaseAndGroup(
             CONVERTER_ANIM_OPENING, N_CONVERTER_ANIMS, conPtr->currentTypeIdx

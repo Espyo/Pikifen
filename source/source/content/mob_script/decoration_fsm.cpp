@@ -45,7 +45,6 @@ void DecorationFsm::createFsm(MobType* typ) {
     
     
     typ->scriptDef.fsm.states = efc.finish();
-    typ->scriptDef.fsm.compileStates();
     typ->scriptDef.fsm.setFirstState("idling");
     
     //Check if the number in the enum and the total match up.
@@ -84,7 +83,7 @@ void DecorationFsm::beBumped(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void DecorationFsm::becomeIdle(ScriptVM* scriptVM, void* info1, void* info2) {
     Decoration* decPtr = (Decoration*) scriptVM->mob;
-
+    
     if(
         decPtr->decType->randomAnimationDelay &&
         decPtr->individualRandomAnimDelay
@@ -108,7 +107,7 @@ void DecorationFsm::becomeIdle(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void DecorationFsm::checkBump(ScriptVM* scriptVM, void* info1, void* info2) {
     Mob* toucher = (Mob*) info1;
-
+    
     if(
         toucher->speed.x == 0 && toucher->speed.y == 0 &&
         toucher->chaseInfo.state != CHASE_STATE_CHASING

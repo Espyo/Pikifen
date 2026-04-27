@@ -63,7 +63,6 @@ void DropFsm::createFsm(MobType* typ) {
     
     
     typ->scriptDef.fsm.states = efc.finish();
-    typ->scriptDef.fsm.compileStates();
     typ->scriptDef.fsm.setFirstState("falling");
     
     //Check if the number in the enum and the total match up.
@@ -104,7 +103,7 @@ void DropFsm::land(ScriptVM* scriptVM, void* info1, void* info2) {
 void DropFsm::onTouched(ScriptVM* scriptVM, void* info1, void* info2) {
     Drop* droPtr = (Drop*) scriptVM->mob;
     Mob* toucher = (Mob*) info1;
-
+    
     bool willDrink = false;
     
     if(droPtr->dosesLeft == 0) return;

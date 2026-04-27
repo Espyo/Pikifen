@@ -127,7 +127,6 @@ void PelletFsm::createFsm(MobType* typ) {
     
     
     typ->scriptDef.fsm.states = efc.finish();
-    typ->scriptDef.fsm.compileStates();
     typ->scriptDef.fsm.setFirstState("idle_waiting");
     
     //Check if the number in the enum and the total match up.

@@ -131,6 +131,8 @@ Why I do or don't do certain things
     Why not use enum class?
         In doing so I'd have to change the names from all-caps to PascalCase, but when I did it resulted in some conflicts, like MISSION_END_COND and MissionEndCond, which would be a bit annoying to clean up.
         But actually the main point is that I'd have to do so many conversions to int in so many places... That's not wrong per se, but it's ultra annoying.
+    Why not compile script action arguments from strings to integers? (e.g. "set_animation running" -> "set_animation 14", 14 being that animation's index.)
+        Arguments need to be strings because a number of them are read as strings and almost all can be a variable, whose name needs to be tracked. Before 1.2.0 any arguments that could be parsed and compiled down to an integer-in-a-string were so, but after measuring the performance difference was tiny and in some cases it was even slower to save compiled integers.
     Why not use clang-format?
         It's far too aggressive in its style, meaning that case-by-case doesn't exist and if your style is slightly different, you're out of luck
         There's no option to let it indent empty lines to the level of the code before it

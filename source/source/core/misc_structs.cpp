@@ -398,11 +398,11 @@ void Console::writeLog(float totalDuration, float fadeDuration) {
 
 
 /**
- * @brief Emits an error in the gameplay "info" window.
+ * @brief Emits an error in the console.
  *
  * @param s Full error description.
  */
-void ErrorManager::emitInGameplay(const string& s) {
+void ErrorManager::emitInConsole(const string& s) {
     string infoStr =
         "\n\n\n"
         "ERROR: " + s + "\n\n"
@@ -412,11 +412,11 @@ void ErrorManager::emitInGameplay(const string& s) {
 
 
 /**
- * @brief Logs an error to stdout (i.e. the console).
+ * @brief Logs an error to stdout.
  *
  * @param s Full error description.
  */
-void ErrorManager::logToConsole(const string& s) {
+void ErrorManager::logToStdOut(const string& s) {
     std::cout << s << std::endl;
 }
 
@@ -488,25 +488,45 @@ void ErrorManager::prepareAreaLoad() {
 /**
  * @brief Reports an error to the user and logs it.
  *
- * @param s String that represents the error.
- * @param d If not null, this will be used to obtain the file name
- * and line that caused the error.
+ * @param text Text that represents the error.
+ * @param filePath If not empty, this will be reported as the data file in
+ * which the error was found.
+ * @param fileLineNr If not 0, this will be reported as the data file's
+ * line number in which the error was found.
  */
-void ErrorManager::report(const string& s, const DataNode* d) {
-    string fullError = s;
-    if(d) {
-        fullError += " (" + d->filePath;
-        if(d->lineNr != 0) fullError += " line " + i2s(d->lineNr);
+void ErrorManager::report(
+    const string& text, const string& filePath, size_t fileLineNr
+) {
+    string fullError = text;
+    if(!filePath.empty()) {
+        fullError += " (" + filePath;
+        if(fileLineNr != 0) fullError += " line " + i2s(fileLineNr);
         fullError += ")";
     }
     
     if(firstAreaLoadError.empty()) firstAreaLoadError = fullError;
     
-    logToConsole(fullError);
+    logToStdOut(fullError);
     logToFile(fullError);
-    emitInGameplay(fullError);
+    emitInConsole(fullError);
     
     nrSessionErrors++;
+}
+
+
+/**
+ * @brief Reports an error to the user and logs it.
+ *
+ * @param text Text that represents the error.
+ * @param dataNode If not null, this will be used to obtain the file path
+ * and line in which the error was found.
+ */
+void ErrorManager::report(const string& text, const DataNode* dataNode) {
+    if(!dataNode) {
+        report(text, "", 0);
+    } else {
+        report(text, dataNode->filePath, dataNode->lineNr);
+    }
 }
 
 

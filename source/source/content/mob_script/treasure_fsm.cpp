@@ -133,7 +133,6 @@ void TreasureFsm::createFsm(MobType* typ) {
     
     
     typ->scriptDef.fsm.states = efc.finish();
-    typ->scriptDef.fsm.compileStates();
     typ->scriptDef.fsm.setFirstState("idle_waiting");
     
     //Check if the number in the enum and the total match up.
@@ -158,7 +157,7 @@ void TreasureFsm::createFsm(MobType* typ) {
  */
 void TreasureFsm::respawn(ScriptVM* scriptVM, void* info1, void* info2) {
     Treasure* trePtr = (Treasure*) scriptVM->mob;
-
+    
     trePtr->becomeUncarriable(); //Force all Pikmin to let go.
     trePtr->becomeCarriable(CARRY_DESTINATION_SHIP);
     trePtr->respawn();

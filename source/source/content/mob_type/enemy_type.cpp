@@ -143,7 +143,6 @@ void EnemyType::createAndAddCarryingStates() {
         scriptDef.fsm.states.begin(),
         newStates.begin(), newStates.end()
     );
-    scriptDef.fsm.compileStates();
 }
 
 
