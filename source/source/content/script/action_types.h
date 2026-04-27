@@ -250,6 +250,9 @@ enum SCRIPT_ACTION {
     //Set limb animation.
     SCRIPT_ACTION_SET_LIMB_ANIMATION,
     
+    //Set list item.
+    SCRIPT_ACTION_SET_LIST_ITEM,
+    
     //Set its near reach.
     SCRIPT_ACTION_SET_NEAR_REACH,
     
@@ -940,6 +943,7 @@ void setHiding(ScriptActionInstRunData& data);
 void setHoldable(ScriptActionInstRunData& data);
 void setHuntable(ScriptActionInstRunData& data);
 void setLimbAnimation(ScriptActionInstRunData& data);
+void setListItem(ScriptActionInstRunData& data);
 void setNearReach(ScriptActionInstRunData& data);
 void setRadius(ScriptActionInstRunData& data);
 void setState(ScriptActionInstRunData& data);
@@ -1000,6 +1004,7 @@ bool removeStatus(ScriptActionDef& call, MobType* mt);
 bool setAnimation(ScriptActionDef& call, MobType* mt);
 bool setFarReach(ScriptActionDef& call, MobType* mt);
 bool setHoldable(ScriptActionDef& call, MobType* mt);
+bool setListItem(ScriptActionDef& call, MobType* mt);
 bool setNearReach(ScriptActionDef& call, MobType* mt);
 bool setTeam(ScriptActionDef& call, MobType* mt);
 bool spawn(ScriptActionDef& call, MobType* mt);

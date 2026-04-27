@@ -682,6 +682,33 @@ bool ScriptActionLoaders::setHoldable(ScriptActionDef& def, MobType* mt) {
 
 
 /**
+ * @brief Loading code for the list item setting script action type.
+ *
+ * @param def The action's definition.
+ * @param mt Mob type it belongs to, if any.
+ * @return Whether it succeeded.
+ */
+bool ScriptActionLoaders::setListItem(ScriptActionDef& def, MobType* mt) {
+    //Get the relevant arguments.
+    string& delArg = def.args[4];
+    
+    //Compile the arguments.
+    bool delFound;
+    SCRIPT_ACTION_LIST_DELIMITER delimiter =
+        enumGetValue(scriptActionListDelimiterINames, delArg, &delFound);
+    if(!delFound) {
+        def.customError =
+            "Unknown list delimiter \"" + delArg + "\"!";
+        return false;
+    }
+    delArg = i2s(delimiter);
+    
+    //Finish.
+    return true;
+}
+
+
+/**
  * @brief Loading code for the near reach setting script action type.
  *
  * @param def The action's definition.
@@ -2660,6 +2687,39 @@ void ScriptActionRunners::setLimbAnimation(ScriptActionInstRunData& data) {
         data.scriptVM->mob->parent->limbAnim.animDb->animations[a];
     data.scriptVM->mob->parent->limbAnim.toStart();
     
+}
+
+
+/**
+ * @brief Code for the list item retrieval script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::setListItem(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& listArg = data.args[1];
+    const string& newItemArg = data.args[2];
+    const string& numberArg = data.args[3];
+    const string& delArg = data.args[4];
+
+    //Main logic.
+    string delimiter =
+        enumGetName(
+            scriptActionListDelimiterChars,
+            (SCRIPT_ACTION_LIST_DELIMITER) s2i(delArg)
+        );
+    vector<string> items = split(listArg, delimiter, true);
+    int idx = s2i(numberArg) - 1;
+    if(!isIdxValid(idx, items)) idx = items.size() - 1;
+    
+    if(isIdxValid(idx, items)) {
+        items[(size_t) idx] = newItemArg;
+    }
+    string newListStr = join(items, delimiter);
+
+    //Store the result.
+    data.scriptVM->vars[destVarArg] = newListStr;
 }
 
 

@@ -1931,6 +1931,19 @@ void initScriptActionTypes() {
         nullptr
     );
     
+    //Set list item.
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("list or string", ptString);
+    queueParam("new item", ptString);
+    queueParam("item number", ptInt, pfOpt, "0");
+    queueParam("list delimiter", ptEnum, pfOpt, "colon");
+    commitAction(
+        SCRIPT_ACTION_SET_LIST_ITEM,
+        "set_list_item",
+        ScriptActionRunners::setListItem,
+        ScriptActionLoaders::setListItem
+    );
+    
     //Set state.
     queueParam("state name", ptString, pfConst);
     commitAction(
