@@ -1411,13 +1411,13 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
             view.cam.pos +
             Point(game.curArea->weatherCondition.fogFar);
         Point fogCenter, fogSize;
-        cornersToCenterAndSize(fogTL, fogBR, &fogCenter, &fogSize);
         al_transform_coordinates(
             &view.worldToWindowTransform, &fogTL.x, &fogTL.y
         );
         al_transform_coordinates(
             &view.worldToWindowTransform, &fogBR.x, &fogBR.y
         );
+        cornersToCenterAndSize(fogTL, fogBR, &fogCenter, &fogSize);
         
         if(bmpFog) {
             drawBitmap(bmpFog, fogCenter, fogSize, 0, fogC);
