@@ -1508,7 +1508,7 @@ bool AnimationEditor::saveAnimDb() {
     );
     
     if(!fileNode.saveFile(manifest.path)) {
-        showSystemMessageBox(
+        showOSMessageBox(
             nullptr, "Save failed!",
             "Could not save the animation database!",
             (

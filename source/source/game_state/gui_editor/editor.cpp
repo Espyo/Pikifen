@@ -857,7 +857,7 @@ bool GuiEditor::saveGuiDef() {
     contentMd.saveMetadataToDataNode(&fileNode);
     
     if(!fileNode.saveFile(manifest.path)) {
-        showSystemMessageBox(
+        showOSMessageBox(
             nullptr, "Save failed!",
             "Could not save the GUI definition!",
             (

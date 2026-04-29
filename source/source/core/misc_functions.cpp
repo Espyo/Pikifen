@@ -232,7 +232,7 @@ void crash(const string& reason, const string& info, int exitStatus) {
     
     game.errors.report(errorStr);
     
-    showSystemMessageBox(
+    showOSMessageBox(
         nullptr, "Program crash!",
         "Pikifen has crashed!",
         "Sorry about that! To help fix this problem, please read the "
@@ -1152,7 +1152,7 @@ bool openManual(const string& page) {
 void reportFatalError(const string& s, const DataNode* dn) {
     game.errors.report(s, dn);
     
-    showSystemMessageBox(
+    showOSMessageBox(
         nullptr, "Fatal error!",
         "Pikifen has encountered a fatal error!",
         s.c_str(),
@@ -1555,20 +1555,20 @@ ParticleGenerator standardParticleGenSetup(
 
 
 /**
- * @brief Starts the display of a text message.
+ * @brief Starts the display of a cutscene message.
  *
- * If the text is empty, it closes the message box.
+ * If the text is empty, it closes the cutscene message box.
  * Any newline characters or slashes followed by n ("\n") will be used to
  * separate the message into lines.
  *
  * @param text Text to display.
  * @param speakerBmp Bitmap representing the speaker.
  */
-void startGameplayMessage(const string& text, ALLEGRO_BITMAP* speakerBmp) {
+void startCutsceneMessage(const string& text, ALLEGRO_BITMAP* speakerBmp) {
     if(!text.empty()) {
         string finalText = unescapeString(text);
-        game.states.gameplay->msgBox =
-            new GameplayMessageBox(finalText, speakerBmp);
+        game.states.gameplay->cutsceneMsgBox =
+            new CutsceneMessageBox(finalText, speakerBmp);
         for(Player& player : game.states.gameplay->players) {
             player.hud->gui.startAnimation(
                 GUI_MANAGER_ANIM_IN_TO_OUT,
@@ -1577,8 +1577,8 @@ void startGameplayMessage(const string& text, ALLEGRO_BITMAP* speakerBmp) {
             player.inventory->close();
         }
     } else {
-        delete game.states.gameplay->msgBox;
-        game.states.gameplay->msgBox = nullptr;
+        delete game.states.gameplay->cutsceneMsgBox;
+        game.states.gameplay->cutsceneMsgBox = nullptr;
         for(Player& player : game.states.gameplay->players) {
             player.hud->gui.startAnimation(
                 GUI_MANAGER_ANIM_OUT_TO_IN,

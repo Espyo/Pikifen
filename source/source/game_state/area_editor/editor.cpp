@@ -3380,7 +3380,7 @@ bool AreaEditor::saveArea(bool toBackup) {
     bool mainDataSaveOk = mainDataFile.saveFile(mainDataFilePath);
     
     if(!geoSaveOk || !mainDataSaveOk) {
-        showSystemMessageBox(
+        showOSMessageBox(
             nullptr, "Save failed!",
             "Could not save the area!",
             (

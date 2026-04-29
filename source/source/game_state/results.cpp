@@ -1074,7 +1074,7 @@ void Results::load() {
         savedSuccessfully = saveMissionRecords(&missionRecords);
         
         if(!savedSuccessfully) {
-            showSystemMessageBox(
+            showOSMessageBox(
                 nullptr, "Save failed!",
                 "Could not save this result!",
                 (

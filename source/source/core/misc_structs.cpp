@@ -32,7 +32,7 @@
 #pragma region Constants
 
 
-namespace GAMEPLAY_MSG_BOX {
+namespace CUTSCENE_MSG_BOX {
 
 //How quickly the advance button icon fades, in alpha [0 - 1] per second.
 const float ADVANCE_BUTTON_FADE_SPEED = 4.0f;
@@ -2355,16 +2355,18 @@ void SystemContentNames::load(DataNode* file) {
     
     //DEPRECATED in 1.1.0 by "menu_focus".
     sndRS.set("menu_selected", sndMenuFocus);
+    //DEPRECATED in 1.2.0 by "cutscene_message_char".
+    sndRS.set("gameplay_message_char", sndCutsceneMsgChar);
     
     sndRS.set("attack", sndAttack);
     sndRS.set("camera", sndCamera);
     sndRS.set("countdown_tick", sndCountdownTick);
+    sndRS.set("cutscene_message_char", sndCutsceneMsgChar);
     sndRS.set("ding", sndDing);
     sndRS.set("enemy_soul", sndEnemySoul);
     sndRS.set("frozen_liquid", sndFrozenLiquid);
     sndRS.set("frozen_liquid_crack", sndFrozenLiquidCrack);
     sndRS.set("frozen_liquid_thaw", sndFrozenLiquidThaw);
-    sndRS.set("gameplay_message_char", sndGameplayMsgChar);
     sndRS.set("go", sndGo);
     sndRS.set("medal_got_it", sndMedalGotIt);
     sndRS.set("menu_activate", sndMenuActivate);

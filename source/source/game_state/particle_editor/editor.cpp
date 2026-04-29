@@ -767,7 +767,7 @@ bool ParticleEditor::savePartGen() {
     loadedGen.saveToDataNode(&fileNode);
     
     if(!fileNode.saveFile(manifest.path)) {
-        showSystemMessageBox(
+        showOSMessageBox(
             nullptr, "Save failed!",
             "Could not save the particle generator!",
             (

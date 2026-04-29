@@ -205,13 +205,13 @@ enum SCRIPT_ACTION {
     //Save focused mob into focused mobs memory.
     SCRIPT_ACTION_SAVE_FOCUS_MEMORY,
     
-    //Send a message to the focused mob.
+    //Send a script message to the focused mob.
     SCRIPT_ACTION_SEND_MESSAGE_TO_FOCUS,
     
-    //Send a message to all linked mobs.
+    //Send a script message to all linked mobs.
     SCRIPT_ACTION_SEND_MESSAGE_TO_LINKS,
     
-    //Send a message to nearby mobs.
+    //Send a script message to nearby mobs.
     SCRIPT_ACTION_SEND_MESSAGE_TO_NEARBY,
     
     //Set animation.
@@ -283,7 +283,10 @@ enum SCRIPT_ACTION {
     //Shake the camera.
     SCRIPT_ACTION_SHAKE_CAMERA,
     
-    //Show a message that is inside a script variable.
+    //Show a cutscene message.
+    SCRIPT_ACTION_SHOW_CUTSCENE_MESSAGE,
+    
+    //Show a cutscene message that is inside a script variable.
     SCRIPT_ACTION_SHOW_MESSAGE_FROM_VAR,
     
     //Spawn something.
@@ -515,8 +518,8 @@ enum SCRIPT_ACTION_GET_EV_INFO_TYPE {
     //Get the value of the input that triggered the event.
     SCRIPT_ACTION_GET_EV_INFO_TYPE_INPUT_VALUE,
     
-    //Get message that triggered the event.
-    SCRIPT_ACTION_GET_EV_INFO_TYPE_MESSAGE,
+    //Get script message that triggered the event.
+    SCRIPT_ACTION_GET_EV_INFO_TYPE_SCRIPT_MESSAGE,
     
     //Get the other body part that triggered the event.
     SCRIPT_ACTION_GET_EV_INFO_TYPE_OTHER_BODY_PART,
@@ -531,7 +534,7 @@ buildEnumNames(scriptActionGetEvInfoTypeINames, SCRIPT_ACTION_GET_EV_INFO_TYPE)(
     { SCRIPT_ACTION_GET_EV_INFO_TYPE_HAZARD, "hazard" },
     { SCRIPT_ACTION_GET_EV_INFO_TYPE_INPUT_NAME, "input_name" },
     { SCRIPT_ACTION_GET_EV_INFO_TYPE_INPUT_VALUE, "input_value" },
-    { SCRIPT_ACTION_GET_EV_INFO_TYPE_MESSAGE, "message" },
+    { SCRIPT_ACTION_GET_EV_INFO_TYPE_SCRIPT_MESSAGE, "message" },
     { SCRIPT_ACTION_GET_EV_INFO_TYPE_OTHER_BODY_PART, "other_body_part" },
 });
 
@@ -938,6 +941,7 @@ void setTeam(ScriptActionInstRunData& data);
 void setTimer(ScriptActionInstRunData& data);
 void setVar(ScriptActionInstRunData& data);
 void shakeCamera(ScriptActionInstRunData& data);
+void showCutsceneMessage(ScriptActionInstRunData& data);
 void showMessageFromVar(ScriptActionInstRunData& data);
 void spawn(ScriptActionInstRunData& data);
 void squareRootNumber(ScriptActionInstRunData& data);

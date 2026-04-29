@@ -441,6 +441,8 @@ void loadMiscSounds() {
         game.content.sounds.list.get(game.sysContentNames.sndCamera);
     game.sysContent.sndCountdownTick =
         game.content.sounds.list.get(game.sysContentNames.sndCountdownTick);
+    game.sysContent.sndCutsceneMsgChar =
+        game.content.sounds.list.get(game.sysContentNames.sndCutsceneMsgChar);
     game.sysContent.sndDing =
         game.content.sounds.list.get(game.sysContentNames.sndDing);
     game.sysContent.sndEnemySoul =
@@ -451,8 +453,6 @@ void loadMiscSounds() {
         game.content.sounds.list.get(game.sysContentNames.sndFrozenLiquidCrack);
     game.sysContent.sndFrozenLiquidThaw =
         game.content.sounds.list.get(game.sysContentNames.sndFrozenLiquidThaw);
-    game.sysContent.sndGameplayMsgChar =
-        game.content.sounds.list.get(game.sysContentNames.sndGameplayMsgChar);
     game.sysContent.sndGo =
         game.content.sounds.list.get(game.sysContentNames.sndGo);
     game.sysContent.sndMedalGotIt =
@@ -644,12 +644,12 @@ void unloadMiscResources() {
     game.content.sounds.list.free(game.sysContent.sndAttack);
     game.content.sounds.list.free(game.sysContent.sndCamera);
     game.content.sounds.list.free(game.sysContent.sndCountdownTick);
+    game.content.sounds.list.free(game.sysContent.sndCutsceneMsgChar);
     game.content.sounds.list.free(game.sysContent.sndDing);
     game.content.sounds.list.free(game.sysContent.sndEnemySoul);
     game.content.sounds.list.free(game.sysContent.sndFrozenLiquid);
     game.content.sounds.list.free(game.sysContent.sndFrozenLiquidCrack);
     game.content.sounds.list.free(game.sysContent.sndFrozenLiquidThaw);
-    game.content.sounds.list.free(game.sysContent.sndGameplayMsgChar);
     game.content.sounds.list.free(game.sysContent.sndGo);
     game.content.sounds.list.free(game.sysContent.sndMedalGotIt);
     game.content.sounds.list.free(game.sysContent.sndMenuActivate);

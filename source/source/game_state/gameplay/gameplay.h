@@ -140,7 +140,7 @@ enum BOSS_MUSIC_STATE {
 #pragma region Classes
 
 
-struct GameplayMessageBox;
+struct CutsceneMessageBox;
 
 
 /**
@@ -297,8 +297,8 @@ public:
     //List of all mobs in the area.
     MobLists mobs;
     
-    //Information about the message box currently active, if any.
-    GameplayMessageBox* msgBox = nullptr;
+    //Information about the currently active cutscene message box, if any.
+    CutsceneMessageBox* cutsceneMsgBox = nullptr;
     
     //Numeric ID of the next mob to be created. 0 cannot be assigned.
     size_t nextMobId = 1;
@@ -567,7 +567,7 @@ private:
     void drawInGameText(Player* player);
     void drawBigMsg();
     void drawLightingFilter(const Viewport& view);
-    void drawGameplayMessageBox();
+    void drawCutsceneMessageBox();
     void drawOnionMenu();
     void drawPauseMenu();
     void drawPrecipitation();
@@ -619,9 +619,9 @@ private:
 
 
 /**
- * @brief Info about the current gameplay message box, if any.
+ * @brief Info about the current cutscene message box, if any.
  */
-struct GameplayMessageBox {
+struct CutsceneMessageBox {
 
     //--- Public members ---
     
@@ -667,7 +667,7 @@ struct GameplayMessageBox {
     
     //--- Public function declarations ---
     
-    GameplayMessageBox(const string& text, ALLEGRO_BITMAP* speakerIcon);
+    CutsceneMessageBox(const string& text, ALLEGRO_BITMAP* speakerIcon);
     void advance();
     void close();
     void tick(float deltaT);

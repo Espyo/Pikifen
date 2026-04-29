@@ -29,8 +29,8 @@ const ALLEGRO_COLOR CARRYING_COLOR_MOVE =
 const ALLEGRO_COLOR CARRYING_COLOR_STOP =
 { 0.38f, 0.75f, 0.75f, 1.00f };
 
-//Default value for the gameplay message character interval.
-const float GAMEPLAY_MSG_CHAR_INTERVAL = 0.03f;
+//Default value for the cutscene message character interval.
+const float CUTSCENE_MSG_CHAR_INTERVAL = 0.03f;
 
 //Default value for the mouse cursor spin speed.
 const float MOUSE_CURSOR_SPIN_SPEED = degToRad(180.0f);
@@ -219,11 +219,15 @@ void GameConfig::load(DataNode* file) {
         
         //DEPRECATED in 1.1.0 by "mouse_cursor_spin_speed".
         aRS.set("cursor_spin_speed", aestheticGen.mouseCursorSpinSpeed);
+        //DEPRECATED in 1.2.0 by "cutscene_msg_char_interval".
+        aRS.set(
+            "gameplay_msg_char_interval", aestheticGen.cutsceneMsgChInterval
+        );
         
         aRS.set("carrying_color_move", aestheticGen.carryingColorMove);
         aRS.set("carrying_color_stop", aestheticGen.carryingColorStop);
         aRS.set(
-            "gameplay_msg_char_interval", aestheticGen.gameplayMsgChInterval
+            "cutscene_msg_char_interval", aestheticGen.cutsceneMsgChInterval
         );
         aRS.set("mouse_cursor_spin_speed", aestheticGen.mouseCursorSpinSpeed);
         aRS.set("no_pikmin_color", aestheticGen.noPikminColor);

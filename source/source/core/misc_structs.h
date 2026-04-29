@@ -45,7 +45,7 @@ using std::vector;
 #pragma region Constants
 
 
-namespace GAMEPLAY_MSG_BOX {
+namespace CUTSCENE_MSG_BOX {
 extern const float ADVANCE_BUTTON_FADE_SPEED;
 extern const float BUTTON_OFFSET_MULT;
 extern const float BUTTON_OFFSET_TIME_MULT;
@@ -897,6 +897,9 @@ struct SystemContentList {
     //10 second countdown second tick.
     ALLEGRO_SAMPLE* sndCountdownTick = nullptr;
     
+    //Cutscene message character being typed out.
+    ALLEGRO_SAMPLE* sndCutsceneMsgChar = nullptr;
+    
     //Useless attack ding.
     ALLEGRO_SAMPLE* sndDing = nullptr;
     
@@ -911,9 +914,6 @@ struct SystemContentList {
     
     //Frozen liquid thaws completely.
     ALLEGRO_SAMPLE* sndFrozenLiquidThaw = nullptr;
-    
-    //Gameplay message character being typed out.
-    ALLEGRO_SAMPLE* sndGameplayMsgChar = nullptr;
     
     //"Go!" big message.
     ALLEGRO_SAMPLE* sndGo = nullptr;
@@ -1204,6 +1204,9 @@ struct SystemContentNames {
     //10 second countdown second tick.
     string sndCountdownTick = "gui/countdown_tick";
     
+    //Cutscene message character being typed out.
+    string sndCutsceneMsgChar = "gui/cutscene_message_char";
+    
     //Useless attack ding.
     string sndDing = "effects/ding";
     
@@ -1218,9 +1221,6 @@ struct SystemContentNames {
     
     //Frozen liquid thaws completely.
     string sndFrozenLiquidThaw = "nature/frozen_liquid_thaw";
-    
-    //Gameplay message character being typed out.
-    string sndGameplayMsgChar = "gui/gameplay_message_char";
     
     //"Go!" big message.
     string sndGo = "gui/go";

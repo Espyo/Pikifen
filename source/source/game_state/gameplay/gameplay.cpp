@@ -199,26 +199,26 @@ void BigMessageInfo::tick(float deltaT) {
 
 
 #pragma endregion
-#pragma region Gameplay message box
+#pragma region Cutscene message box
 
 
 /**
- * @brief Constructs a new message box info object.
+ * @brief Constructs a new cutscene message box info object.
  *
  * @param text Text to display.
  * @param speakerIcon If not nullptr, use this bitmap to represent who
  * is talking.
  */
-GameplayMessageBox::GameplayMessageBox(
+CutsceneMessageBox::CutsceneMessageBox(
     const string& text, ALLEGRO_BITMAP* speakerIcon
 ):
     speakerIcon(speakerIcon) {
     
-    string message = unescapeString(text);
-    if(message.size() && message.back() == '\n') {
-        message.pop_back();
+    string unescapedText = unescapeString(text);
+    if(unescapedText.size() && unescapedText.back() == '\n') {
+        unescapedText.pop_back();
     }
-    vector<StringToken> tokens = tokenizeString(message);
+    vector<StringToken> tokens = tokenizeString(unescapedText);
     setStringTokenWidths(
         tokens, game.sysContent.fntStandard, game.sysContent.fntSlim,
         al_get_font_line_height(game.sysContent.fntStandard), true
@@ -243,7 +243,7 @@ GameplayMessageBox::GameplayMessageBox(
  * @brief Handles the user having pressed the button to continue the message,
  * or to skip to showing everything in the current section.
  */
-void GameplayMessageBox::advance() {
+void CutsceneMessageBox::advance() {
     if(
         transitionTimer > 0.0f ||
         misinputProtectionTimer > 0.0f ||
@@ -263,7 +263,7 @@ void GameplayMessageBox::advance() {
             close();
         } else {
             //Start swiping to go to the next section.
-            swipeTimer = GAMEPLAY_MSG_BOX::TOKEN_SWIPE_DURATION;
+            swipeTimer = CUTSCENE_MSG_BOX::TOKEN_SWIPE_DURATION;
         }
     } else {
         //Skip the text typing and show everything in this section.
@@ -276,7 +276,7 @@ void GameplayMessageBox::advance() {
 /**
  * @brief Closes the message box, even if it is still writing something.
  */
-void GameplayMessageBox::close() {
+void CutsceneMessageBox::close() {
     if(!transitionIn && transitionTimer > 0.0f) return;
     transitionIn = false;
     transitionTimer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
@@ -288,7 +288,7 @@ void GameplayMessageBox::close() {
  *
  * @param deltaT How long the frame's tick is, in seconds.
  */
-void GameplayMessageBox::tick(float deltaT) {
+void CutsceneMessageBox::tick(float deltaT) {
     size_t tokensInSection = 0;
     for(size_t l = 0; l < 3; l++) {
         size_t lineIdx = curSection * 3 + l;
@@ -312,7 +312,7 @@ void GameplayMessageBox::tick(float deltaT) {
     if(!transitionIn || transitionTimer == 0.0f) {
     
         //Animate the text.
-        if(game.config.aestheticGen.gameplayMsgChInterval == 0.0f) {
+        if(game.config.aestheticGen.cutsceneMsgChInterval == 0.0f) {
             skippedAtToken = 0;
             curToken = tokensInSection + 1;
         } else {
@@ -321,12 +321,12 @@ void GameplayMessageBox::tick(float deltaT) {
                 size_t prevToken = curToken;
                 curToken =
                     totalTokenAnimTime /
-                    game.config.aestheticGen.gameplayMsgChInterval;
+                    game.config.aestheticGen.cutsceneMsgChInterval;
                 curToken =
                     std::min(curToken, tokensInSection + 1);
                 if(prevToken != curToken) {
                     game.audio.addNewUiSoundSource(
-                    game.sysContent.sndGameplayMsgChar, {
+                    game.sysContent.sndCutsceneMsgChar, {
                         .stackMinPos = 0.05f,
                         .volume = 0.5f,
                         .volumeDeviation = 0.1f,
@@ -339,7 +339,7 @@ void GameplayMessageBox::tick(float deltaT) {
                         //doesn't accidentally go to the next section when they
                         //were just trying to skip the text.
                         misinputProtectionTimer =
-                            GAMEPLAY_MSG_BOX::MISINPUT_PROTECTION_DURATION;
+                            CUTSCENE_MSG_BOX::MISINPUT_PROTECTION_DURATION;
                     }
                 }
             } else {
@@ -370,7 +370,7 @@ void GameplayMessageBox::tick(float deltaT) {
         advanceButtonAlpha =
             std::min(
                 advanceButtonAlpha +
-                GAMEPLAY_MSG_BOX::ADVANCE_BUTTON_FADE_SPEED * deltaT,
+                CUTSCENE_MSG_BOX::ADVANCE_BUTTON_FADE_SPEED * deltaT,
                 1.0f
             );
     } else {
@@ -378,7 +378,7 @@ void GameplayMessageBox::tick(float deltaT) {
             std::max(
                 0.0f,
                 advanceButtonAlpha -
-                GAMEPLAY_MSG_BOX::ADVANCE_BUTTON_FADE_SPEED * deltaT
+                CUTSCENE_MSG_BOX::ADVANCE_BUTTON_FADE_SPEED * deltaT
             );
     }
 }
@@ -490,10 +490,10 @@ void GameplayState::doLogic() {
  *
  * @param clear Is it a clear or a failure?
  * @param zeroTime Consider the time left as 0?
- * @param neutralMood Whether to use neutral mood messages and jingles,
+ * @param neutralMood Whether to use neutral mood big messages and jingles,
  * or to pick based on the clear status.
- * @param showTimesUpMsg Whether to show a "Time's up!" message, or one of the
- * normal mission end messages.
+ * @param showTimesUpMsg Whether to show a "Time's up!" big message, or one of
+ * the normal mission end messages.
  * @param cond Mission end condition responsible for this end, if any.
  * @param silent Whether it can play a jingle and such.
  * @return Whether it was able to end the mission.
@@ -1640,7 +1640,8 @@ void GameplayState::loadGameContent() {
 void GameplayState::sendScriptMessage(
     Mob* sender, Mob* receiver, string& msg
 ) const {
-    FsmEventDef* ev = receiver->scriptVM.fsm.getEvent(FSM_EV_RECEIVE_MESSAGE);
+    FsmEventDef* ev =
+        receiver->scriptVM.fsm.getEvent(FSM_EV_RECEIVE_SCRIPT_MESSAGE);
     if(!ev) return;
     ev->run(&receiver->scriptVM, (void*) &msg, (void*) sender);
 }
@@ -1778,9 +1779,9 @@ void GameplayState::unload() {
         bmpFog = nullptr;
     }
     
-    if(msgBox) {
-        delete msgBox;
-        msgBox = nullptr;
+    if(cutsceneMsgBox) {
+        delete cutsceneMsgBox;
+        cutsceneMsgBox = nullptr;
     }
     if(onionMenu) {
         delete onionMenu;

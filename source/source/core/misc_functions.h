@@ -208,7 +208,7 @@ vector<vector<StringToken> > splitLongStringWithTokens(
 ParticleGenerator standardParticleGenSetup(
     const string& internalName, Mob* targetMob
 );
-void startGameplayMessage(const string& text, ALLEGRO_BITMAP* speakerBmp);
+void startCutsceneMessage(const string& text, ALLEGRO_BITMAP* speakerBmp);
 vector<StringToken> tokenizeString(const string& s);
 void transitionGuis(
     GuiManager& from, GuiManager& to, GUI_MANAGER_ANIM anim1, float duration

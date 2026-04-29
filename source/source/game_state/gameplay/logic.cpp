@@ -750,7 +750,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
         );
     }
     
-    if(!msgBox) {
+    if(!cutsceneMsgBox) {
     
         /************************************
         *                              .-.  *
@@ -1081,10 +1081,10 @@ void GameplayState::doGameplayLogic(float deltaT) {
         
     } else {
     
-        //Displaying a gameplay message.
-        msgBox->tick(deltaT);
-        if(msgBox->toDelete) {
-            startGameplayMessage("", nullptr);
+        //Displaying a cutscene message.
+        cutsceneMsgBox->tick(deltaT);
+        if(cutsceneMsgBox->toDelete) {
+            startCutsceneMessage("", nullptr);
         }
         
     }

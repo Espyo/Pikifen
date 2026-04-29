@@ -528,7 +528,7 @@ void GameplayState::handlePlayerAction(const Inpution::Action& action) {
         FSM_EV_INPUT_RECEIVED, (void*) &action
     );
     
-    if(!msgBox && !onionMenu && !pauseMenu) {
+    if(!cutsceneMsgBox && !onionMenu && !pauseMenu) {
         switch(action.actionTypeId) {
         case PLAYER_ACTION_TYPE_GROUP_CURSOR: {
             player->swarmToLeaderCursor = isDown;
@@ -625,12 +625,12 @@ void GameplayState::handlePlayerAction(const Inpution::Action& action) {
         }
         }
         
-    } else if(msgBox) {
-        //Displaying a message.
+    } else if(cutsceneMsgBox) {
+        //Displaying a cutscene message.
         if(action.actionTypeId == PLAYER_ACTION_TYPE_THROW && isDown) {
-            msgBox->advance();
+            cutsceneMsgBox->advance();
         } else if(action.actionTypeId == PLAYER_ACTION_TYPE_PAUSE && isDown) {
-            msgBox->close();
+            cutsceneMsgBox->close();
         }
         
     }

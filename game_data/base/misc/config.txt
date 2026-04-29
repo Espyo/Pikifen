@@ -1,7 +1,7 @@
 aesthetic_general {
     carrying_color_move = 255 255 255
     carrying_color_stop = 96 192 192
-    gameplay_msg_char_interval = 0.03
+    cutscene_msg_char_interval = 0.03
     mouse_cursor_spin_speed = 180
     no_pikmin_color = 168 190 230
 }

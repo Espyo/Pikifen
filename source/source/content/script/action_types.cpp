@@ -759,8 +759,8 @@ void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
         }
         break;
         
-    } case SCRIPT_ACTION_GET_EV_INFO_TYPE_MESSAGE: {
-        if(data.actionDef->parentEvent == FSM_EV_RECEIVE_MESSAGE) {
+    } case SCRIPT_ACTION_GET_EV_INFO_TYPE_SCRIPT_MESSAGE: {
+        if(data.actionDef->parentEvent == FSM_EV_RECEIVE_SCRIPT_MESSAGE) {
             result = *((string*)(data.customData1));
         }
         break;
@@ -1772,7 +1772,7 @@ void ScriptActionRunners::saveFocusMemory(ScriptActionInstRunData& data) {
 
 
 /**
- * @brief Code for the focused mob message sending script action type.
+ * @brief Code for the focused mob script message sending script action type.
  *
  * @param data Data about the action call.
  */
@@ -1790,7 +1790,7 @@ void ScriptActionRunners::sendMessageToFocus(ScriptActionInstRunData& data) {
 
 
 /**
- * @brief Code for the linked mob message sending script action type.
+ * @brief Code for the linked mob script message sending script action type.
  *
  * @param data Data about the action call.
  */
@@ -1811,7 +1811,7 @@ void ScriptActionRunners::sendMessageToLinks(ScriptActionInstRunData& data) {
 
 
 /**
- * @brief Code for the nearby mob message sending script action type.
+ * @brief Code for the nearby mob script message sending script action type.
  *
  * @param data Data about the action call.
  */
@@ -2364,7 +2364,21 @@ void ScriptActionRunners::shakeCamera(ScriptActionInstRunData& data) {
 
 
 /**
- * @brief Code for the show message from var script action type.
+ * @brief Code for the show cutscene message script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::showCutsceneMessage(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    string textArg = vectorTailToString(data.args, 0);
+    
+    //Main logic.
+    startCutsceneMessage(textArg, nullptr);
+}
+
+
+/**
+ * @brief Code for the show cutscene message from var script action type.
  *
  * @param data Data about the action call.
  */
@@ -2373,7 +2387,7 @@ void ScriptActionRunners::showMessageFromVar(ScriptActionInstRunData& data) {
     const string& varArg = data.args[0];
     
     //Main logic.
-    startGameplayMessage(data.scriptVM->vars[varArg], nullptr);
+    startCutsceneMessage(data.scriptVM->vars[varArg], nullptr);
 }
 
 
@@ -2958,7 +2972,7 @@ Mob* getTriggerMob(ScriptActionInstRunData& data) {
         return (Mob*)(data.customData1);
         
     } else if(
-        data.actionDef->parentEvent == FSM_EV_RECEIVE_MESSAGE
+        data.actionDef->parentEvent == FSM_EV_RECEIVE_SCRIPT_MESSAGE
     ) {
         return(Mob*)(data.customData2);
         

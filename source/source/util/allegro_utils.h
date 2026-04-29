@@ -103,7 +103,7 @@ void setCombinedClippingRectangles(
     float x1, float y1, float w1, float h1,
     float x2, float y2, float w2, float h2
 );
-int showSystemMessageBox(
+int showOSMessageBox(
     ALLEGRO_DISPLAY* display, char const* title, char const* heading,
     char const* text, char const* buttons, int flags
 );

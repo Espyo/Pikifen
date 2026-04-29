@@ -603,9 +603,9 @@ void setCombinedClippingRectangles(
 
 
 /**
- * @brief Shows a native message box. It is better to call this rather than
- * al_show_native_message_box() directly because it does not reset the locale
- * after it is done.
+ * @brief Shows a native operative system message box. It is better to call
+ * this rather than al_show_native_message_box() directly because it
+ * does not reset the locale after it is done.
  *
  * @param display Display responsible for this dialog.
  * @param title Title to display on the dialog.
@@ -617,7 +617,7 @@ void setCombinedClippingRectangles(
  * 1 if the OK or Yes button was pressed.
  * 2 if the Cancel or No button was pressed.
  */
-int showSystemMessageBox(
+int showOSMessageBox(
     ALLEGRO_DISPLAY* display, char const* title, char const* heading,
     char const* text, char const* buttons, int flags
 ) {

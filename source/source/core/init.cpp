@@ -1216,9 +1216,9 @@ void initFsmEventTypes() {
         "on_pikmin_land"
     );
     
-    //Receive message.
+    //Receive script message.
     commitEvent(
-        FSM_EV_RECEIVE_MESSAGE,
+        FSM_EV_RECEIVE_SCRIPT_MESSAGE,
         "on_receive_message"
     );
     
@@ -1875,7 +1875,7 @@ void initScriptActionTypes() {
         ScriptActionRunners::roundNumber
     );
     
-    //Send message to focus.
+    //Send script message to focus.
     queueParam("message", ptString);
     commitAction(
         SCRIPT_ACTION_SEND_MESSAGE_TO_FOCUS,
@@ -1929,7 +1929,16 @@ void initScriptActionTypes() {
         ScriptActionRunners::setVar
     );
     
-    //Show message from var.
+    //Show cutscene message.
+    queueParam("text", ptString, pfVector);
+    commitAction(
+        SCRIPT_ACTION_SHOW_CUTSCENE_MESSAGE,
+        "show_cutscene_message",
+        ScriptActionRunners::showCutsceneMessage
+    );
+    
+    //DEPRECATED in 1.2.0 by "show_cutscene_message".
+    //Show cutscene message from var.
     queueParam("var name", ptString, pfConst);
     commitAction(
         SCRIPT_ACTION_SHOW_MESSAGE_FROM_VAR,
@@ -2146,7 +2155,7 @@ void initScriptActionTypes() {
         ScriptActionRunners::saveFocusMemory
     );
     
-    //Send message to links.
+    //Send script message to links.
     queueParam("message", ptString);
     commitAction(
         SCRIPT_ACTION_SEND_MESSAGE_TO_LINKS,
@@ -2154,7 +2163,7 @@ void initScriptActionTypes() {
         ScriptActionRunners::sendMessageToLinks
     );
     
-    //Send message to nearby.
+    //Send script message to nearby.
     queueParam("distance", ptFloat);
     queueParam("message", ptString);
     commitAction(

@@ -169,8 +169,8 @@ void GameplayState::doGameDrawing(
             
             drawBigMsg();
             
-            if(msgBox) {
-                drawGameplayMessageBox();
+            if(cutsceneMsgBox) {
+                drawCutsceneMessageBox();
             } else if(onionMenu) {
                 drawOnionMenu();
             } else if(pauseMenu) {
@@ -711,9 +711,9 @@ void GameplayState::drawDebugTools(Player* player) {
 
 
 /**
- * @brief Draws a gameplay message box.
+ * @brief Draws a cutscene message box.
  */
-void GameplayState::drawGameplayMessageBox() {
+void GameplayState::drawCutsceneMessageBox() {
     const ALLEGRO_COLOR DARKENER_COLOR = COLOR_BLACK;
     
     //Mouse cursor.
@@ -723,9 +723,9 @@ void GameplayState::drawGameplayMessageBox() {
     
     //Transition things.
     float transitionRatio =
-        msgBox->transitionIn ?
-        msgBox->transitionTimer / GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME :
-        (1 - msgBox->transitionTimer / GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME);
+        cutsceneMsgBox->transitionIn ?
+        cutsceneMsgBox->transitionTimer / GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME :
+        (1 - cutsceneMsgBox->transitionTimer / GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME);
     int lineHeight = al_get_font_line_height(game.sysContent.fntStandard);
     float boxHeight = lineHeight * 4;
     float offset =
@@ -749,9 +749,9 @@ void GameplayState::drawGameplayMessageBox() {
     );
     
     //Draw the speaker's icon, if any.
-    if(msgBox->speakerIcon) {
+    if(cutsceneMsgBox->speakerIcon) {
         drawBitmap(
-            msgBox->speakerIcon,
+            cutsceneMsgBox->speakerIcon,
             Point(
                 40,
                 game.winH - boxHeight - 16 + offset
@@ -771,52 +771,52 @@ void GameplayState::drawGameplayMessageBox() {
     //Draw the button to advance, if it's time.
     float advanceButtonYOffset =
         sin(
-            msgBox->totalTokenAnimTime *
-            GAMEPLAY_MSG_BOX::BUTTON_OFFSET_TIME_MULT
-        ) * GAMEPLAY_MSG_BOX::BUTTON_OFFSET_MULT;
+            cutsceneMsgBox->totalTokenAnimTime *
+            CUTSCENE_MSG_BOX::BUTTON_OFFSET_TIME_MULT
+        ) * CUTSCENE_MSG_BOX::BUTTON_OFFSET_MULT;
     drawPlayerActionInputSourceIcon(
         PLAYER_ACTION_TYPE_THROW,
         Point(
             game.winW -
-            (GAMEPLAY_MSG_BOX::MARGIN + GAMEPLAY_MSG_BOX::PADDING + 8.0f),
+            (CUTSCENE_MSG_BOX::MARGIN + CUTSCENE_MSG_BOX::PADDING + 8.0f),
             game.winH -
-            (GAMEPLAY_MSG_BOX::MARGIN + GAMEPLAY_MSG_BOX::PADDING + 8.0f) +
+            (CUTSCENE_MSG_BOX::MARGIN + CUTSCENE_MSG_BOX::PADDING + 8.0f) +
             offset + advanceButtonYOffset
         ),
         Point(32.0f),
         true, game.sysContent.fntSlim,
-        mapAlpha(msgBox->advanceButtonAlpha * 255)
+        mapAlpha(cutsceneMsgBox->advanceButtonAlpha * 255)
     );
     
     //Draw the message's text.
     size_t tokenIdx = 0;
     for(size_t l = 0; l < 3; l++) {
-        size_t lineIdx = msgBox->curSection * 3 + l;
-        if(lineIdx >= msgBox->tokensPerLine.size()) {
+        size_t lineIdx = cutsceneMsgBox->curSection * 3 + l;
+        if(lineIdx >= cutsceneMsgBox->tokensPerLine.size()) {
             break;
         }
         
         //Figure out what scaling is necessary, if any.
         unsigned int totalWidth = 0;
         float xScale = 1.0f;
-        forIdx(t, msgBox->tokensPerLine[lineIdx]) {
-            totalWidth += msgBox->tokensPerLine[lineIdx][t].width;
+        forIdx(t, cutsceneMsgBox->tokensPerLine[lineIdx]) {
+            totalWidth += cutsceneMsgBox->tokensPerLine[lineIdx][t].width;
         }
         const float maxTextWidth =
-            (GAMEPLAY_MSG_BOX::MARGIN + GAMEPLAY_MSG_BOX::PADDING) * 2;
+            (CUTSCENE_MSG_BOX::MARGIN + CUTSCENE_MSG_BOX::PADDING) * 2;
         if(totalWidth > game.winW - maxTextWidth) {
             xScale = (game.winW - maxTextWidth) / totalWidth;
         }
         
         float caret =
-            GAMEPLAY_MSG_BOX::MARGIN + GAMEPLAY_MSG_BOX::PADDING;
+            CUTSCENE_MSG_BOX::MARGIN + CUTSCENE_MSG_BOX::PADDING;
         float startY =
-            game.winH - lineHeight * 4 + GAMEPLAY_MSG_BOX::PADDING + offset;
+            game.winH - lineHeight * 4 + CUTSCENE_MSG_BOX::PADDING + offset;
             
-        forIdx(t, msgBox->tokensPerLine[lineIdx]) {
+        forIdx(t, cutsceneMsgBox->tokensPerLine[lineIdx]) {
             tokenIdx++;
-            if(tokenIdx >= msgBox->curToken) break;
-            StringToken& curToken = msgBox->tokensPerLine[lineIdx][t];
+            if(tokenIdx >= cutsceneMsgBox->curToken) break;
+            StringToken& curToken = cutsceneMsgBox->tokensPerLine[lineIdx][t];
             
             float x = caret;
             float y = startY + lineHeight * l;
@@ -825,41 +825,41 @@ void GameplayState::drawGameplayMessageBox() {
             
             //Change the token's position and alpha, if it needs animating.
             //First, check for the typing animation.
-            if(tokenIdx >= msgBox->skippedAtToken) {
-                thisTokenAnimTime = msgBox->totalSkipAnimTime;
+            if(tokenIdx >= cutsceneMsgBox->skippedAtToken) {
+                thisTokenAnimTime = cutsceneMsgBox->totalSkipAnimTime;
             } else {
                 thisTokenAnimTime =
-                    msgBox->totalTokenAnimTime -
+                    cutsceneMsgBox->totalTokenAnimTime -
                     (
                         (tokenIdx + 1) *
-                        game.config.aestheticGen.gameplayMsgChInterval
+                        game.config.aestheticGen.cutsceneMsgChInterval
                     );
             }
             if(
                 thisTokenAnimTime > 0 &&
-                thisTokenAnimTime < GAMEPLAY_MSG_BOX::TOKEN_ANIM_DURATION
+                thisTokenAnimTime < CUTSCENE_MSG_BOX::TOKEN_ANIM_DURATION
             ) {
                 float ratio =
-                    thisTokenAnimTime / GAMEPLAY_MSG_BOX::TOKEN_ANIM_DURATION;
+                    thisTokenAnimTime / CUTSCENE_MSG_BOX::TOKEN_ANIM_DURATION;
                 x +=
-                    GAMEPLAY_MSG_BOX::TOKEN_ANIM_X_AMOUNT *
+                    CUTSCENE_MSG_BOX::TOKEN_ANIM_X_AMOUNT *
                     ease(ratio, EASE_METHOD_UP_AND_DOWN_ELASTIC);
                 y +=
-                    GAMEPLAY_MSG_BOX::TOKEN_ANIM_Y_AMOUNT *
+                    CUTSCENE_MSG_BOX::TOKEN_ANIM_Y_AMOUNT *
                     ease(ratio, EASE_METHOD_UP_AND_DOWN_ELASTIC);
                 alpha = ratio;
             }
             
             //Now, for the swiping animation.
-            if(msgBox->swipeTimer > 0.0f) {
+            if(cutsceneMsgBox->swipeTimer > 0.0f) {
                 float ratio =
                     1.0f -
                     (
-                        msgBox->swipeTimer /
-                        GAMEPLAY_MSG_BOX::TOKEN_SWIPE_DURATION
+                        cutsceneMsgBox->swipeTimer /
+                        CUTSCENE_MSG_BOX::TOKEN_SWIPE_DURATION
                     );
-                x += GAMEPLAY_MSG_BOX::TOKEN_SWIPE_X_AMOUNT * ratio;
-                y += GAMEPLAY_MSG_BOX::TOKEN_SWIPE_Y_AMOUNT * ratio;
+                x += CUTSCENE_MSG_BOX::TOKEN_SWIPE_X_AMOUNT * ratio;
+                y += CUTSCENE_MSG_BOX::TOKEN_SWIPE_Y_AMOUNT * ratio;
                 alpha = std::max(0.0f, alpha - ratio);
             }
             

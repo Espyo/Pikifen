@@ -43,7 +43,7 @@
       <tr><th>Event</th><th>Description</th></tr>
       <tr id="on-tick">
         <th style="text-align: left;"><code>on_tick</code></th>
-        <td>Triggered every single game frame. Use this for when you want to have something that is always up-to-date, like making the object constantly turn to the focused object's position. If you want to use this to keep track of time, you probably want to use the <code><a href="get-misc-info">get_misc_info</a></code> action to obtain the frame's "delta T"; see <a href="script.html#tips">script tips</a> for more information.</td>
+        <td>Triggered every single game frame. Use this for when you want to have something that is always up-to-date, like making the object constantly turn to the focused object's position. If you want to use this to keep track of time, you probably want to use the <code><a href="#get-misc-info">get_misc_info</a></code> action to obtain the frame's "delta T"; see <a href="script.html#tips">script tips</a> for more information.</td>
       </tr>
       <tr id="on-timer">
         <th style="text-align: left;"><code>on_timer</code></th>
@@ -538,7 +538,7 @@
               <li><code><b>group_task_power</b></code>: For group task type objects, this is the "Pikmin power" currently being applied.</li>
               <li><code><b>health</b></code>: The object's current health.</li>
               <li><code><b>health_ratio</b></code>: The object's current health ratio. 0 for 0%, 1 for 100%, 0.5 for 50%, etc.</li>
-              <li><code><b>id</b></code>: The object's numeric ID. The first object that spawns in the area has ID 0, the second has ID 1, etc.</li>
+              <li><code><b>id</b></code>: The object's numeric ID. The first object that spawns in the area has ID 1, the second has ID 2, etc.</li>
               <li><code><b>latched_pikmin</b></code>: How many Pikmin are currently latched on to it.</li>
               <li><code><b>latched_pikmin_weight</b></code>: Total weight of the Pikmin that are currently latched on to it.</li>
               <li><code><b>mob_category</b></code>: Category of the mob. This is the category's internal name, which is basically the same name as the corresponding folder in <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/mob_types</code> but in singular.</li>
@@ -613,11 +613,18 @@
           <dd>Send a script message to the currently focused mob. Objects that receive a message will be thrown the <code><a href="#on-receive-message">on_receive_message</a></code> event.</dd>
         </dl></td>
       </tr>
+      <tr id="show-cutscene-message">
+        <th><code>show_cutscene_message</code></th>
+        <td><dl>
+          <dt><code><b>show_cutscene_message</b> &lt;text&gt;</code></dt>
+          <dd><b>Pauses gameplay and shows a cutscene message on the HUD using the provided text. You can make use of <a href="misc_features.html#markup">markup</a> for this.</dd>
+        </dl></td>
+      </tr>
       <tr id="show-message-from-var">
         <th><code>show_message_from_var</code></th>
         <td><dl>
           <dt><code><b>show_message_from_var</b> &lt;variable_name&gt;</code></dt>
-          <dd>Shows a gameplay message on the GUI using the text inside the specific variable. You can make use of <a href="misc_features.html#markup">markup</a> for this.</dd>
+          <dd><b>Deprecated in 1.2.0!</b> Please use <code><a href="#show-cutscene-message">show_cutscene_message</a></code> instead. Pauses gameplay and shows a cutscene message on the HUD using the text inside the specific variable. You can make use of <a href="misc_features.html#markup">markup</a> for this.</dd>
         </dl></td>
       </tr>
     </table>
@@ -926,14 +933,14 @@
         <th><code>send_message_to_links</code></th>
         <td><dl>
           <dt><code><b>send_message_to_links</b> &lt;message&gt;</code></dt>
-          <dd>Same as <code>send_message_to_focus</code>, but it sends it to all linked objects.</dd>
+          <dd>Same as <code><a href="#send-message-to-focus">send_message_to_focus</a></code>, but it sends it to all linked objects.</dd>
         </dl></td>
       </tr>
       <tr id="send-message-to-nearby">
         <th><code>send_message_to_nearby</code></th>
         <td><dl>
           <dt><code><b>send_message_to_nearby</b> &lt;distance&gt; &lt;message&gt;</code></dt>
-          <dd>Same as <code>send_message_to_focus</code>, but it sends it to all objects that are within the specified distance.</dd>
+          <dd>Same as <code><a href="#send-message-to-focus">send_message_to_focus</a></code>, but it sends it to all objects that are within the specified distance.</dd>
         </dl></td>
       </tr>
     </table>

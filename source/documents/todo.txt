@@ -15,7 +15,6 @@ Next tasks (roughly sorted most important first)
 
     --- 1.2.0 ---
     More powerful scripting
-        show_message_from_var should just be show_message, right?
         Add region trigger mobs, that output power based on how many mobs are inside the given region
         Add some infinite loop protection logic
             I think just making it detect it ran over 1000 actions in a single event, even across states, should be enough
@@ -59,7 +58,7 @@ Next tasks (roughly sorted most important first)
         get_area_info -> get_misc_info
         A way for missions to obtain data about the mission, end it, update the score, change a HUD element's value, etc. through scripting
         A way for the area script to focus on some mobs
-        A way for objects to send messages to the area
+        A way for objects to send script messages to the area
         A button in the area editor that creates/opens the script file externally?
         Add some script to DEV Lab
     
@@ -703,7 +702,7 @@ Misc things (so I don't forget)
         The ability to tint the background image
         Move it to the details section
         Foreground
-    Small gameplay messages
+    Gameplay notifications
         Useful for making characters talk mid-mission, via scripting
         Also useful for stating that an obstacle was destroyed and stuff like that [PIKMIN 4]
     Areas should be able to include "decals", in the same vein as tree shadows. These are a lightweight way to add leaves, rocks, pebbles, sticks, small plants, cobwebs, etc. to the area's terrain without using sectors or objects
@@ -963,7 +962,7 @@ Tasks for later on (I might never implement these)
             Whistle dot colors?
             The medal colors
     Possible solutions to known issues
-        Regarding true fullscreen crashing when a system message box appears -- remove all native message boxes, and implement my own, or come up with alternative ways to supply the information
+        Regarding true fullscreen crashing when a operative system message box appears -- remove all native message boxes, and implement my own, or come up with alternative ways to supply the information
     Specific requested features
         An enemy that can heal, for instance, 20HP for each Pikmin eaten
         An attribute for Pikmin types that makes it possible to throw them farther/closer than standard

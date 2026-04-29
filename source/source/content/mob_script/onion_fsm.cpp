@@ -39,7 +39,7 @@ void OnionFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_FINISHED_RECEIVING_DELIVERY); {
             efc.run(OnionFsm::receiveMob);
         }
-        efc.newEvent(FSM_EV_RECEIVE_MESSAGE); {
+        efc.newEvent(FSM_EV_RECEIVE_SCRIPT_MESSAGE); {
             efc.run(OnionFsm::checkStartGenerating);
         }
     }
@@ -54,7 +54,7 @@ void OnionFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_FINISHED_RECEIVING_DELIVERY); {
             efc.run(OnionFsm::receiveMob);
         }
-        efc.newEvent(FSM_EV_RECEIVE_MESSAGE); {
+        efc.newEvent(FSM_EV_RECEIVE_SCRIPT_MESSAGE); {
             efc.run(OnionFsm::checkStopGenerating);
         }
     }
@@ -72,7 +72,7 @@ void OnionFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_ANIMATION_END); {
             efc.changeState("idling");
         }
-        efc.newEvent(FSM_EV_RECEIVE_MESSAGE); {
+        efc.newEvent(FSM_EV_RECEIVE_SCRIPT_MESSAGE); {
             efc.run(OnionFsm::checkStartGenerating);
         }
     }
@@ -97,7 +97,7 @@ void OnionFsm::createFsm(MobType* typ) {
  * @brief When an Onion has to check if it started generating Pikmin.
  *
  * @param scriptVM The script VM responsible.
- * @param info1 Pointer to the message received.
+ * @param info1 Pointer to the script message received.
  * @param info2 Unused.
  */
 void OnionFsm::checkStartGenerating(
@@ -115,7 +115,7 @@ void OnionFsm::checkStartGenerating(
  * @brief When an Onion has to check if it stopped generating Pikmin.
  *
  * @param scriptVM The script VM responsible.
- * @param info1 Pointer to the message received.
+ * @param info1 Pointer to the script message received.
  * @param info2 Unused.
  */
 void OnionFsm::checkStopGenerating(

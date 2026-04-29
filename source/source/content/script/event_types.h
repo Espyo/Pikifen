@@ -92,8 +92,8 @@ enum FSM_EV {
     //When it reaches its destination.
     FSM_EV_REACHED_DESTINATION,
     
-    //When it receives a message from another mob.
-    FSM_EV_RECEIVE_MESSAGE,
+    //When it receives a script message.
+    FSM_EV_RECEIVE_SCRIPT_MESSAGE,
     
     //When it is safely released from the leader's/enemy's grasp.
     FSM_EV_RELEASED,
@@ -322,7 +322,7 @@ buildEnumNames(scriptEvScriptFileINames, FSM_EV)({
     { FSM_EV_OBJECT_IN_REACH, "on_object_in_reach" },
     { FSM_EV_OPPONENT_IN_REACH, "on_opponent_in_reach" },
     { FSM_EV_THROWN_PIKMIN_LANDED, "on_pikmin_land" },
-    { FSM_EV_RECEIVE_MESSAGE, "on_receive_message" },
+    { FSM_EV_RECEIVE_SCRIPT_MESSAGE, "on_receive_message" },
     { FSM_EV_RELEASED, "on_released" },
     { FSM_EV_REACHED_DESTINATION, "on_reach_destination" },
     { FSM_EV_STARTED_RECEIVING_DELIVERY, "on_start_receiving_delivery" },

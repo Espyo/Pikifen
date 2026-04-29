@@ -33,7 +33,7 @@ namespace GAME_CONFIG {
 namespace AESTHETIC_GENERAL_D {
 extern const ALLEGRO_COLOR CARRYING_COLOR_MOVE;
 extern const ALLEGRO_COLOR CARRYING_COLOR_STOP;
-extern const float GAMEPLAY_MSG_CHAR_INTERVAL;
+extern const float CUTSCENE_MSG_CHAR_INTERVAL;
 extern const float MOUSE_CURSOR_SPIN_SPEED;
 extern const ALLEGRO_COLOR NO_PIKMIN_COLOR;
 }
@@ -137,9 +137,9 @@ struct GameConfig {
             AESTHETIC_GENERAL_D::CARRYING_COLOR_STOP;
             
         //These many seconds until a new character of
-        //the gameplay message is drawn.
-        float gameplayMsgChInterval =
-            AESTHETIC_GENERAL_D::GAMEPLAY_MSG_CHAR_INTERVAL;
+        //the cutscene message is drawn.
+        float cutsceneMsgChInterval =
+            AESTHETIC_GENERAL_D::CUTSCENE_MSG_CHAR_INTERVAL;
             
         //How much the mouse cursor spins per second.
         float mouseCursorSpinSpeed =

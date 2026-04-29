@@ -13,7 +13,7 @@ script{
         on_receive_message {
             get_event_info msg message
             if $msg = interact
-                show_message_from_var text
+                show_cutscene_message $text
             end_if
         }
     }

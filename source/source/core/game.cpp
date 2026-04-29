@@ -589,7 +589,7 @@ void Game::processSystemInfo() {
             curArea->version.empty() ? "-" : curArea->version;
         areaMakerStr =
             curArea->maker.empty() ? "-" : curArea->maker;
-
+            
         size_t activeMobCount = 0;
         forIdx(m, states.gameplay->mobs.all) {
             if(states.gameplay->mobs.all[m]->isActive) {
@@ -700,7 +700,7 @@ int Game::start() {
             "Could not find the \"" + FOLDER_NAMES::GAME_DATA + "\" folder! "
             "If you are running the engine from a zip file, "
             "you have to unpack it first.";
-        showSystemMessageBox(
+        showOSMessageBox(
             nullptr, header.c_str(), header.c_str(), text.c_str(),
             nullptr, ALLEGRO_MESSAGEBOX_ERROR
         );
