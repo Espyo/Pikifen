@@ -101,10 +101,17 @@ bool FsmEventDef::loadFromDataNode(
  * @param scriptVM Script VM in which these actions will be run.
  * @param customData1 Custom argument #1.
  * @param customData2 Custom argument #2.
+ * @param resetNConsecutiveActions Whether to reset the global number of
+ * consecutive script actions that detects infinite loops.
  */
 void FsmEventDef::run(
-    ScriptVM* scriptVM, void* customData1, void* customData2
+    ScriptVM* scriptVM, void* customData1, void* customData2,
+    bool resetNConsecutiveActions
 ) {
+    if(resetNConsecutiveActions) {
+        game.nConsecutiveScriptActions = 0;
+    }
+
     if(scriptVM->mob) {
         if(scriptVM->mob->parent && scriptVM->mob->parent->relayEvents) {
             Mob* parentMob = scriptVM->mob->parent->m;

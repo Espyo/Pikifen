@@ -55,6 +55,10 @@ const size_t FRAMERATE_AVG_SAMPLE_SIZE = 60;
 //Only save the latest N FPS samples.
 const size_t FRAMERATE_HISTORY_SIZE = 300;
 
+//Maximum number of consecutive script actions allowed. Any more and it is
+//likely an infinite loop.
+const size_t MAX_CONSECUTIVE_SCRIPT_ACTIONS = 1000;
+
 }
 
 

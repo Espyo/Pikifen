@@ -209,6 +209,24 @@ void ScriptActionBlockDef::run(
     
     forIdx(a, list) {
     
+        //Prevent infinite loops.
+        game.nConsecutiveScriptActions++;
+        if(
+            game.nConsecutiveScriptActions >
+            GAME::MAX_CONSECUTIVE_SCRIPT_ACTIONS
+        ) [[unlikely]] {
+            ScriptActionInstRunData data(scriptVM, list[a]);
+            ScriptActionRunners::reportActionError(
+                data,
+                "Failed to run action! Since the game already ran " +
+                i2s(game.nConsecutiveScriptActions - 1) +
+                " actions in a row, it's probably in an infinite loop "
+                "infinite loops. Please correct the script to make sure "
+                "this doesn't happen!"
+            );
+            return;
+        }
+        
         switch(list[a]->actionType->type) {
         case SCRIPT_ACTION_IF: {
             flowCodeToRun = FLOW_CODE_CONDITION;

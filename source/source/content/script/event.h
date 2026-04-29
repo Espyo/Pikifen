@@ -54,7 +54,8 @@ public:
     );
     void run(
         ScriptVM* scriptVM,
-        void* customData1 = nullptr, void* customData2 = nullptr
+        void* customData1 = nullptr, void* customData2 = nullptr,
+        bool resetNConsecutiveActions = true
     );
     void unload();
     

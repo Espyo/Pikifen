@@ -293,13 +293,16 @@ void FsmInst::init() {
  * @param type The event's type.
  * @param customData1 Custom argument #1 to pass to the code.
  * @param customData2 Custom argument #2 to pass to the code.
+ * @param resetNConsecutiveActions Whether to reset the global number of
+ * consecutive script actions that detects infinite loops.
  */
 void FsmInst::runEvent(
-    const FSM_EV type, void* customData1, void* customData2
+    const FSM_EV type, void* customData1, void* customData2,
+    bool resetNConsecutiveActions
 ) {
     FsmEventDef* e = getEvent(type);
     if(e) {
-        e->run(script, customData1, customData2);
+        e->run(script, customData1, customData2, resetNConsecutiveActions);
     }
 }
 
@@ -320,7 +323,7 @@ bool FsmInst::setState(size_t newState, void* info1, void* info2) {
             prevStateNames[p] = prevStateNames[p - 1];
         }
         prevStateNames[0] = curState->name;
-        runEvent(FSM_EV_ON_LEAVE, info1, info2);
+        runEvent(FSM_EV_ON_LEAVE, info1, info2, false);
     }
     
     if(newState < script->scriptDef->fsm.states.size() && newState != INVALID) {
@@ -328,7 +331,7 @@ bool FsmInst::setState(size_t newState, void* info1, void* info2) {
         curState = script->scriptDef->fsm.states[newState];
         
         //Run the code to enter the new state.
-        runEvent(FSM_EV_ON_ENTER, info1, info2);
+        runEvent(FSM_EV_ON_ENTER, info1, info2, false);
         
         return true;
     }

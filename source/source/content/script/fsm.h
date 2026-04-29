@@ -96,7 +96,8 @@ public:
     void init();
     void runEvent(
         const FSM_EV type,
-        void* customData1 = nullptr, void* customData2 = nullptr
+        void* customData1 = nullptr, void* customData2 = nullptr,
+        bool resetNConsecutiveActions = true
     );
     bool setState(
         size_t newState, void* info1 = nullptr, void* info2 = nullptr

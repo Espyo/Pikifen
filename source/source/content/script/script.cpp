@@ -11,6 +11,7 @@
 #include <algorithm>
 
 #include "../mob/mob.h"
+#include "../../core/game.h"
 #include "script.h"
 
 
@@ -138,6 +139,7 @@ void ScriptVM::init(ScriptDef* scriptDef, Mob* mobPtr) {
     this->scriptDef = scriptDef;
     mob = mobPtr;
     
+    game.nConsecutiveScriptActions = 0;
     scriptDef->initActions.run(this);
     fsm.init();
 }

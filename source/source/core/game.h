@@ -45,6 +45,7 @@ extern const float FADE_DURATION;
 extern const float FADE_SLOW_DURATION;
 extern const size_t FRAMERATE_AVG_SAMPLE_SIZE;
 extern const size_t FRAMERATE_HISTORY_SIZE;
+extern const size_t MAX_CONSECUTIVE_SCRIPT_ACTIONS;
 }
 
 
@@ -135,6 +136,9 @@ public:
     
     //A dummy FSM state for FSMs with no state to use.
     FsmStateDef* dummyFsmState = nullptr;
+
+    //Consecutive count of actions ran in a row. Used to detect infinite loops.
+    size_t nConsecutiveScriptActions = 0;
     
     //Error manager.
     ErrorManager errors;
