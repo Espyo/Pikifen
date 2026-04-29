@@ -934,6 +934,23 @@ long GameplayState::getAmountOfTotalPikmin(
 
 
 /**
+ * @brief Goes through all mobs and returns the mob has the given ID number.
+ *
+ * @param id The ID.
+ * @return The mob.
+ */
+Mob* GameplayState::getMobById(size_t id) const {
+    if(id == 0) return nullptr;
+    
+    forIdx(m, mobs.all) {
+        if(mobs.all[m]->id == id) return mobs.all[m];
+    }
+    
+    return nullptr;
+}
+
+
+/**
  * @brief Returns the closest group member of a given standby subgroup.
  * In the case all candidate members are out of reach,
  * this returns the closest. Otherwise, it returns the closest
@@ -1479,6 +1496,7 @@ void GameplayState::load() {
         );
         
         if(scriptFileExists) {
+            scriptDef.unload();
             scriptDef.loadFromDataNode(&scriptFile);
             scriptVM.clear();
             scriptVM.init(&scriptDef);
@@ -1747,6 +1765,9 @@ void GameplayState::unload() {
         
         stopAllLeaders();
     }
+    
+    scriptVM.clear();
+    scriptDef.unload();
     
     while(!mobs.all.empty()) {
         deleteMob(*mobs.all.begin(), true);

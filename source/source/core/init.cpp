@@ -1085,6 +1085,18 @@ void initFsmEventTypes() {
         "on_leave"
     );
     
+    //Focus off reach.
+    commitEvent(
+        FSM_EV_FOCUS_OFF_REACH,
+        "on_focus_off_reach"
+    );
+    
+    //Input received.
+    commitEvent(
+        FSM_EV_INPUT_RECEIVED,
+        "on_input_received"
+    );
+    
     //On tick.
     commitEvent(
         FSM_EV_ON_TICK,
@@ -1095,12 +1107,6 @@ void initFsmEventTypes() {
     commitEvent(
         FSM_EV_TIMER,
         "on_timer"
-    );
-    
-    //Input received.
-    commitEvent(
-        FSM_EV_INPUT_RECEIVED,
-        "on_input_received"
     );
     
     
@@ -1142,12 +1148,6 @@ void initFsmEventTypes() {
     commitEvent(
         FSM_EV_FINISHED_RECEIVING_DELIVERY,
         "on_finish_receiving_delivery"
-    );
-    
-    //Focus off reach.
-    commitEvent(
-        FSM_EV_FOCUS_OFF_REACH,
-        "on_focus_off_reach"
     );
     
     //Frame signal.
@@ -1646,6 +1646,14 @@ void initScriptActionTypes() {
         ScriptActionRunners::focus
     );
     
+    //Focus on ID.
+    queueParam("mob ID", ptInt);
+    commitAction(
+        SCRIPT_ACTION_FOCUS_ON_ID,
+        "focus_on_id",
+        ScriptActionRunners::focusOnId
+    );
+    
     //Get angle.
     queueParam("destination var name", ptString, pfConst);
     queueParam("center x", ptFloat);
@@ -1955,6 +1963,13 @@ void initScriptActionTypes() {
         ScriptActionRunners::squareRootNumber
     );
     
+    //Unfocus.
+    commitAction(
+        SCRIPT_ACTION_UNFOCUS,
+        "unfocus",
+        ScriptActionRunners::unfocus
+    );
+    
     
     //-Mob script actions-
     contexts = getIdxBitmask(SCRIPT_CONTEXT_MOB);
@@ -2065,6 +2080,7 @@ void initScriptActionTypes() {
         ScriptActionRunners::linkWithFocus
     );
     
+    //DEPRECATED in 1.2.0 by "get_mob_info" and "focus_on_id".
     //Load focused mob memory.
     queueParam("slot", ptInt);
     commitAction(
@@ -2147,6 +2163,7 @@ void initScriptActionTypes() {
         ScriptActionRunners::removeStatus
     );
     
+    //DEPRECATED in 1.2.0 by "get_mob_info" and "focus_on_id".
     //Save focused mob memory.
     queueParam("slot", ptInt);
     commitAction(

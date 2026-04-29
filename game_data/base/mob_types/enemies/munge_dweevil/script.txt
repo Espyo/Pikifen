@@ -23,8 +23,8 @@ script {
             if $has_treasure = false
                 get_mob_info t trigger mob_category
                 if $t = treasure
+                    get_mob_info treasure_id trigger id
                     focus trigger
-                    save_focused_mob_memory 1
                     set_state chasing_treasure
                 end_if
             end_if
@@ -159,7 +159,7 @@ script {
             if $has_treasure = true
                 set_animation releasing
                 remove_status dweevil_with_treasure
-                load_focused_mob_memory 1
+                focus_on_id $treasure_id
                 get_mob_info a self angle
                 get_mob_info x self x
                 get_mob_info y self y

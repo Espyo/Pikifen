@@ -376,6 +376,23 @@ void ScriptActionRunners::focus(ScriptActionInstRunData& data) {
 
 
 /**
+ * @brief Code for the focus on ID script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::focusOnId(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& idArg = data.args[0];
+    
+    //Main logic.
+    Mob* target = game.states.gameplay->getMobById(s2i(idArg));
+    
+    if(!target) return;
+    data.scriptVM->focusOnMob(target);
+}
+
+
+/**
  * @brief Code for the follow mob as leader script action type.
  *
  * @param data Data about the action call.
@@ -978,6 +995,19 @@ void ScriptActionRunners::getMiscInfo(ScriptActionInstRunData& data) {
     switch (type) {
     case SCRIPT_ACTION_GET_MISC_INFO_TYPE_DELTA_T: {
         result = f2s(game.deltaT);
+        break;
+        
+    } case SCRIPT_ACTION_GET_MISC_INFO_PLAYER_1_LEADER_ID:
+    case SCRIPT_ACTION_GET_MISC_INFO_PLAYER_2_LEADER_ID:
+    case SCRIPT_ACTION_GET_MISC_INFO_PLAYER_3_LEADER_ID:
+    case SCRIPT_ACTION_GET_MISC_INFO_PLAYER_4_LEADER_ID: {
+        int playerIdx =
+            (int) type - (int) SCRIPT_ACTION_GET_MISC_INFO_PLAYER_1_LEADER_ID;
+        size_t leaderId =
+            game.states.gameplay->players[playerIdx].leaderPtr ?
+            game.states.gameplay->players[playerIdx].leaderPtr->id :
+            0;
+        result = i2s(leaderId);
         break;
         
     }
@@ -2878,6 +2908,17 @@ void ScriptActionRunners::turnToTarget(ScriptActionInstRunData& data) {
         
     }
     }
+}
+
+
+/**
+ * @brief Code for the unfocus script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::unfocus(ScriptActionInstRunData& data) {
+    //Main logic.
+    data.scriptVM->unfocusFromMob();
 }
 
 

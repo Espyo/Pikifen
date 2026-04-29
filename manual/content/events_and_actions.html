@@ -462,6 +462,13 @@
           <dd>Focuses on <a href="#target-mob">a given mob</a> from here on out.</dd>
         </dl></td>
       </tr>
+      <tr id="focus-on-id">
+        <th><code>focus_on_id</code></th>
+        <td><dl>
+          <dt><code><b>focus_on_id</b> &lt;mob_id&gt;</code></dt>
+          <dd>Focuses on the mob with the given ID from here on out. Use <code><a href="#get-mob-info">get_mob_info</a></code> to obtain a mob's ID. If this is called with an ID of 0 or an ID that no mob has, nothing will happen.</dd>
+        </dl></td>
+      </tr>
       <tr id="get-focus-var">
         <th><code>get_focus_var</code></th>
         <td><dl>
@@ -474,6 +481,13 @@
         <td><dl>
           <dt><code><b>set_focus_var</b> &lt;focus_destination_variable_name&gt; &lt;value&gt;</code></dt>
           <dd>Sets the variable &lt;focus_destination_variable_name&gt; of the focused mob to the value &lt;value&gt;.</dd>
+        </dl></td>
+      </tr>
+      <tr id="unfocus">
+        <th><code>unfocus</code></th>
+        <td><dl>
+          <dt><code><b>unfocus</b></code></dt>
+          <dd>Loses focus on whatever object it had focus, if any.</dd>
         </dl></td>
       </tr>
     </table>
@@ -518,9 +532,13 @@
         <td><dl>
           <dt><code><b>get_misc_info</b> &lt;destination_variable_name&gt; &lt;information&gt;</code></dt>
           <dd>
-            Sets the variable &lt;destination_variable_name&gt; to some special information. The possible data are:
+            Sets the variable &lt;destination_variable_name&gt; to some special information about miscellaneous things. The possible data are:
             <ul>
               <li><code><b>delta_t</b></code>: The amount of time that passed between the previous frame and the current frame. Use this to keep track of time; see <a href="script.html#tips">script tips</a> for more information.</li>
+              <li><code><b>player_1_leader_id</b></code>: The ID number of the leader that player 1 is currently controlling. It will be 0 if player 1 is not controlling any leader.</li>
+              <li><code><b>player_2_leader_id</b></code>: Same as <code>player_1_leader_id</code> but for player 2.</li>
+              <li><code><b>player_3_leader_id</b></code>: Same as <code>player_1_leader_id</code> but for player 3.</li>
+              <li><code><b>player_4_leader_id</b></code>: Same as <code>player_1_leader_id</code> but for player 4.</li>
             </ul>
           </dd>
         </dl></td>
@@ -530,7 +548,7 @@
         <td><dl>
           <dt><code><b>get_mob_info</b> &lt;destination_variable_name&gt; &lt;target_mob&gt; &lt;information&gt;</code></dt>
           <dd>
-            Sets the variable &lt;destination_variable_name&gt; to some special information about <a href="#target-mob">a given object</a>. The possible keywords for &lt;information&gt; are:
+            Sets the variable &lt;destination_variable_name&gt; to some special information about <a href="#target-mob">a given object</a>. The possible data are:
             <ul>
               <li><code><b>angle</b></code>: Current angle (in degrees).</li>
               <li><code><b>chomped_pikmin</b></code>: How many Pikmin it currently has chomped.</li>
@@ -880,14 +898,14 @@
         <th><code>load_focused_mob_memory</code></th>
         <td><dl>
           <dt><code><b>load_focused_mob_memory</b> &lt;slot_number&gt;</code></dt>
-          <dd>Obtains a saved mob from the "focused mob memory", and focuses on that one instead. Does nothing if there is no mob in the specified slot, or if that specified mob has already disappeared. See also: <code>save_focused_mob_memory</code>.</dd>
+          <dd><b>Deprecated in 1.2.0!</b> Please use <code><a href="#get-mob-info">get_mob_info</a></code> and <code><a href="#focus-on-id">focus_on_id</a></code> instead. Obtains a saved mob from the "focused mob memory", and focuses on that one instead. Does nothing if there is no mob in the specified slot, or if that specified mob has already disappeared. See also: <code>save_focused_mob_memory</code>.</dd>
         </dl></td>
       </tr>
       <tr id="save-focused-mob-memory">
         <th><code>save_focused_mob_memory</code></th>
         <td><dl>
           <dt><code><b>save_focused_mob_memory</b> &lt;slot_number&gt;</code></dt>
-          <dd>Saves the currently focused mob into the "focused mob memory", in the specified slot number. Does nothing if there is no currently focused mob. See also: <code>load_focused_mob_memory</code>.</dd>
+          <dd><b>Deprecated in 1.2.0!</b> Please use <code><a href="#get-mob-info">get_mob_info</a></code> and <code><a href="#focus-on-id">focus_on_id</a></code> instead.Saves the currently focused mob into the "focused mob memory", in the specified slot number. Does nothing if there is no currently focused mob. See also: <code>load_focused_mob_memory</code>.</dd>
         </dl></td>
       </tr>
     </table>

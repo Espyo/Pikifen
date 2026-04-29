@@ -1090,6 +1090,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
     }
     
     replayTimer.tick(deltaT);
+    tickAreaScript(deltaT);
     
     if(!readyForInput) {
         readyForInput = true;

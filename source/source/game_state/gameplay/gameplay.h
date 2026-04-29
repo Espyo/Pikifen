@@ -486,6 +486,7 @@ public:
     long getAmountOfTotalPikmin(
         const PikminType* filter = nullptr, bool aliveOnly = false
     );
+    Mob* getMobById(size_t id) const;
     void isNearEnemyAndBoss(bool* nearEnemy, bool* nearBoss);
     bool isPaused() const;
     void tryPause();

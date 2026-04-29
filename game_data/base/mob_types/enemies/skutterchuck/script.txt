@@ -28,7 +28,7 @@ script {
                 get_mob_info t trigger mob_type
                 if $t = crystal_nodule
                     focus trigger
-                    save_focused_mob_memory 1
+                    get_mob_info nodule_id trigger id
                     set_state chasing_nodule
                 end_if
             end_if
@@ -128,8 +128,7 @@ script {
         on_opponent_in_reach {
             if $ignoring = false
                 focus trigger
-                save_focused_mob_memory 2
-                load_focused_mob_memory 1
+                get_mob_info opponent_id trigger id
                 set_state preparing
             end_if
         }
@@ -161,8 +160,7 @@ script {
         on_opponent_in_reach {
             if $ignoring = false
                 focus trigger
-                save_focused_mob_memory 2
-                load_focused_mob_memory 1
+                get_mob_info opponent_id trigger id
                 set_state preparing
             end_if
         }
@@ -190,8 +188,7 @@ script {
         on_opponent_in_reach {
             if $ignoring = false
                 focus trigger
-                save_focused_mob_memory 2
-                load_focused_mob_memory 1
+                get_mob_info opponent_id trigger id
                 set_state preparing
             end_if
         }
@@ -201,7 +198,7 @@ script {
         on_enter {
             stop
             set_animation preparing
-            load_focused_mob_memory 2
+            focus_on_id $opponent_id
         }
         on_tick {
             get_mob_info target_x focus x
@@ -227,7 +224,7 @@ script {
             set_animation flinging
         }
         on_frame_signal {
-            load_focused_mob_memory 1
+            focus_on_id $nodule_id
             throw_focused_mob $target_x $target_y $target_z 300
             send_message_to_focus be_flung
             set_var has_nodule false
@@ -265,7 +262,7 @@ script {
             set_animation dying
         }
         on_animation_end {
-            load_focused_mob_memory 1
+            focus_on_id $nodule_id
             finish_dying
             if $has_nodule = true
                 send_message_to_focus be_dropped

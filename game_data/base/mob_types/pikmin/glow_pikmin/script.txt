@@ -12,7 +12,7 @@ script {
             start_particles glow_pikmin
             custom_actions_after
             if $follow_focus = true
-                load_focused_mob_memory 1
+                focus_on_id $leader_id
                 follow_mob_as_leader focus true
                 set_var follow_focus false
             else
@@ -49,7 +49,7 @@ script {
     }
     teleporting_to_leader {
         on_enter {
-            save_focused_mob_memory 1
+            get_mob_info leader_id focus id
             set_shadow_visibility false
             set_animation teleport_start
             stop_particles

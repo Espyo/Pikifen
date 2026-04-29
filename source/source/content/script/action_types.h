@@ -82,6 +82,9 @@ enum SCRIPT_ACTION {
     //Focus on another mob.
     SCRIPT_ACTION_FOCUS,
     
+    //Focus on a mob given its ID.
+    SCRIPT_ACTION_FOCUS_ON_ID,
+    
     //Follow a mob as its leader.
     SCRIPT_ACTION_FOLLOW_MOB_AS_LEADER,
     
@@ -355,6 +358,9 @@ enum SCRIPT_ACTION {
     //Turn towards a target.
     SCRIPT_ACTION_TURN_TO_TARGET,
     
+    //Unfocus.
+    SCRIPT_ACTION_UNFOCUS,
+    
     //Total amount of script actions.
     N_SCRIPT_ACTIONS,
     
@@ -545,12 +551,28 @@ enum SCRIPT_ACTION_GET_MISC_INFO_TYPE {
     //Get the frame's delta T.
     SCRIPT_ACTION_GET_MISC_INFO_TYPE_DELTA_T,
     
+    //ID number of player 1's leader.
+    SCRIPT_ACTION_GET_MISC_INFO_PLAYER_1_LEADER_ID,
+    
+    //ID number of player 2's leader.
+    SCRIPT_ACTION_GET_MISC_INFO_PLAYER_2_LEADER_ID,
+    
+    //ID number of player 3's leader.
+    SCRIPT_ACTION_GET_MISC_INFO_PLAYER_3_LEADER_ID,
+    
+    //ID number of player 4's leader.
+    SCRIPT_ACTION_GET_MISC_INFO_PLAYER_4_LEADER_ID,
+    
 };
 
 
 //Script action get misc. info type enum naming (internal names).
 buildEnumNames(scriptActionGetMiscInfoTypeINames, SCRIPT_ACTION_GET_MISC_INFO_TYPE)({
     { SCRIPT_ACTION_GET_MISC_INFO_TYPE_DELTA_T, "delta_t" },
+    { SCRIPT_ACTION_GET_MISC_INFO_PLAYER_1_LEADER_ID, "player_1_leader_id" },
+    { SCRIPT_ACTION_GET_MISC_INFO_PLAYER_2_LEADER_ID, "player_2_leader_id" },
+    { SCRIPT_ACTION_GET_MISC_INFO_PLAYER_3_LEADER_ID, "player_3_leader_id" },
+    { SCRIPT_ACTION_GET_MISC_INFO_PLAYER_4_LEADER_ID, "player_4_leader_id" },
 });
 
 
@@ -876,6 +898,7 @@ void easeNumber(ScriptActionInstRunData& data);
 void finishDying(ScriptActionInstRunData& data);
 void floorNumber(ScriptActionInstRunData& data);
 void focus(ScriptActionInstRunData& data);
+void focusOnId(ScriptActionInstRunData& data);
 void followMobAsLeader(ScriptActionInstRunData& data);
 void followPathRandomly(ScriptActionInstRunData& data);
 void followPathToAbsolute(ScriptActionInstRunData& data);
@@ -965,6 +988,7 @@ void throwFocus(ScriptActionInstRunData& data);
 void turnToAbsolute(ScriptActionInstRunData& data);
 void turnToRelative(ScriptActionInstRunData& data);
 void turnToTarget(ScriptActionInstRunData& data);
+void unfocus(ScriptActionInstRunData& data);
 
 SCRIPT_ACTION_MOB_TARGET_TYPE getMobTargetType(
     const ScriptActionInstRunData& data, const string& name
