@@ -1495,7 +1495,7 @@ void GameplayState::doMenuLogic() {
  * @brief Ticks the logic of the finite-state machine script.
  */
 void GameplayState::doScriptLogic() {
-    if(!scriptVM.fsm.curState) return;
+    if(!loaded) return;
     
     //Timer events.
     FsmEventDef* timerEv = scriptVM.fsm.getEvent(FSM_EV_TIMER);

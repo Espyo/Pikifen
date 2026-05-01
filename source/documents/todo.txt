@@ -15,22 +15,21 @@ Next tasks (roughly sorted most important first)
 
     --- 1.2.0 ---
     More powerful scripting
+        Create a ready block, that triggers when the area is ready, and move some on_ready and init things there (maybe even delete on_ready)
         Add region trigger mobs, that output power based on how many mobs are inside the given region
-        Mobs sending power script messages to each other should have them formatted like "power 3" instead of just "3"
         New actions
             A way to run actions on other mobs
             A way to pick a mob from the entire area that matches a certain filter of type/category/variable value?
-            Get the name of the focused mob's current state, animation
             Typical programming things
                 An action that returns to the previous state. Useful for creating utility states that mimic functions
                 For loop
+                    After this is done, use the new list management actions to create id<->power maps for the logic gates, as well as allowing them to accept multiple inputs
                 While loop
                 Functions you'd find in a math library
                     Sin, cosine?
                     Degrees to radians and vice-versa?
                     Bitmask set, unset, test?
                     Min and max?
-            Get a list of all linked mobs
             Setting the camera position and zoom
             Music control
             Inventory control
@@ -51,10 +50,8 @@ Next tasks (roughly sorted most important first)
         Mission records could save the time the player took, which is good for people who want to compare milliseconds, without interfering with the main, less-granular point-based scores. Each mission should specify whether a higher time is better or worse, and the time can be used to resolve score ties when deciding a new high score (thanks Helodity)
     All editors should have buttons to load/pick a thing, and buttons to create a thing, separated. As opposed to it all being bundled into one thing
     Global script and script variables, which apply to the whole area
-        get_area_info -> get_misc_info
         A way for missions to obtain data about the mission, end it, update the score, change a HUD element's value, etc. through scripting
         A way for the area script to focus on some mobs
-        A way for objects to send script messages to the area
         A button in the area editor that creates/opens the script file externally?
         A maker tool to debug the area's script with, like the mob info tool
         Add some script to DEV Lab

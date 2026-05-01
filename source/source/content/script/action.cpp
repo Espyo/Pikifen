@@ -227,6 +227,7 @@ void ScriptActionBlockDef::run(
             return;
         }
         
+        //Figure out the flow code to run.
         switch(list[a]->actionType->type) {
         case SCRIPT_ACTION_IF: {
             flowCodeToRun = FLOW_CODE_CONDITION;
@@ -255,6 +256,7 @@ void ScriptActionBlockDef::run(
         }
         }
         
+        //Run the flow code.
         switch(flowCodeToRun) {
         case FLOW_CODE_CONDITION: {
             //Condition statement. Look out for its return value, and
