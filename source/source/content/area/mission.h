@@ -143,6 +143,24 @@ buildEnumNames(missionMetricNames, MISSION_METRIC)({
 });
 
 
+//Mission metric enum naming (internal names).
+buildEnumNames(missionMetricINames, MISSION_METRIC)({
+    { MISSION_METRIC_MOB_GROUP_CLEARED_MOBS, "mob_group_cleared_mobs" },
+    { MISSION_METRIC_MOB_GROUP_HEALTH, "mob_group_health" },
+    { MISSION_METRIC_SECS_LEFT, "seconds_left" },
+    { MISSION_METRIC_SECS_PASSED, "seconds_passed" },
+    { MISSION_METRIC_LEADERS_IN_REGION, "leaders_in_region" },
+    { MISSION_METRIC_LIVING_PIKMIN, "living_pikmin" },
+    { MISSION_METRIC_PIKMIN_BORN, "pikmin_born" },
+    { MISSION_METRIC_PIKMIN_LOST, "pikmin_lost" },
+    { MISSION_METRIC_LEADERS_LOST, "leaders_lost" },
+    { MISSION_METRIC_OBJECT_COLLECTION_PTS, "object_collection_points" },
+    { MISSION_METRIC_TREASURE_COLLECTION_PTS, "treasure_collection_points" },
+    { MISSION_METRIC_ENEMY_COLLECTION_PTS, "enemy_collection_points" },
+    { MISSION_METRIC_ENEMY_DEFEAT_PTS, "enemy_defeat_points" },
+});
+
+
 //Possible end conditions for missions.
 enum MISSION_END_COND {
 

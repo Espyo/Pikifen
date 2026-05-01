@@ -1027,6 +1027,49 @@ void ScriptActionRunners::getMiscInfo(ScriptActionInstRunData& data) {
 
 
 /**
+ * @brief Code for the mission metric obtaining script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::getMissionMetric(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& metricArg = data.args[1];
+    const string& numberArg = data.args[2];
+    const string& getAutoTargetArg = data.args[3];
+    
+    //Main logic.
+    if(game.curArea->type != AREA_TYPE_MISSION) {
+        return;
+    }
+    
+    string result;
+    bool metricFound;
+    MISSION_METRIC metric =
+        enumGetValue(missionMetricINames, metricArg, &metricFound);
+    if(!metricFound) {
+        reportActionError(
+            data,
+            "Unknown mission metric \"" + metricArg + "\"!"
+        );
+        return;
+    }
+    
+    MissionMetricType* metricTypePtr = game.missionMetricTypes[metric];
+    size_t indexParam = s2i(numberArg) - 1;
+    
+    if(s2b(getAutoTargetArg)) {
+        result = i2s(metricTypePtr->getTarget(indexParam, INVALID));
+    } else {
+        result = i2s(metricTypePtr->getAmount(indexParam));
+    }
+    
+    //Store the result.
+    data.scriptVM->vars[destVarArg] = result;
+}
+
+
+/**
  * @brief Code for the mob info obtaining script action type.
  *
  * @param data Data about the action call.

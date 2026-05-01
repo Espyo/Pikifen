@@ -1778,6 +1778,17 @@ void initScriptActionTypes() {
         ScriptActionRunners::getMiscInfo
     );
     
+    //Get mission metric.
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("metric", ptEnum, pfConst);
+    queueParam("number data", ptInt, pfOpt, "1");
+    queueParam("get auto target instead", ptBool, pfOpt, "false");
+    commitAction(
+        SCRIPT_ACTION_GET_MISSION_METRIC,
+        "get_mission_metric",
+        ScriptActionRunners::getMissionMetric
+    );
+    
     //Get mob info.
     queueParam("destination var name", ptString, pfConst);
     queueParam("target", ptString, pfConst);

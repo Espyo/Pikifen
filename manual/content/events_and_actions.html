@@ -545,6 +545,30 @@
           </dd>
         </dl></td>
       </tr>
+      <tr id="get-mission-metric">
+        <th><code>get_mission_metric</code></th>
+        <td><dl>
+          <dt><code><b>get_mission_metric</b> &lt;destination_variable_name&gt; &lt;metric&gt; [&lt;number_data&gt;] [&lt;get_auto_target_instead&lt;]</code></dt>
+          <dd>
+            Sets the variable &lt;destination_variable_name&gt; to some information about a <a href="mission.html">mission</a> metric. Some metrics also need data about a number to check, like the "leaders in region" metric needing to know the region number. In those cases, &lt;number_data&gt; needs to specify the intended number. Normally this action obtains the current value of a metric, but most metrics can obtain an automatic "target" value, like the "seconds left" metric using this to recommend to the total amount of seconds in the time limit. To obtain this information instead, &lt;get_auto_target_instead&gt; should be <code>true</code>. The possible metrics are:
+            <ul>
+              <li><code><b>mob_group_cleared_mobs</b></code>: Cleared mobs in a mob group. Needs the mob group number.</li>
+              <li><code><b>mob_group_health</b></code>: Combined health of the mobs in a mob group. Needs the mob group number.</li>
+              <li><code><b>seconds_left</b></code>: Seconds left in the time limit.</li>
+              <li><code><b>seconds_passed</b></code>: Seconds passed in the mission.</li>
+              <li><code><b>leaders_in_region</b></code>: Leaders inside an area region. Needs the region number.</li>
+              <li><code><b>living_pikmin</b></code>: Pikmin currently alive in total.</li>
+              <li><code><b>pikmin_born</b></code>: Pikmin born so far.</li>
+              <li><code><b>pikmin_lost</b></code>: Pikmin lost so far.</li>
+              <li><code><b>leaders_lost</b></code>: Leaders lost so far.</li>
+              <li><code><b>object_collection_points</b></code>: Object collection points obtained.</li>
+              <li><code><b>treasure_collection_points</b></code>: Treasure collection points obtained.</li>
+              <li><code><b>enemy_collection_points</b></code>: Enemy collection points obtained.</li>
+              <li><code><b>enemy_defeat_points</b></code>: Enemy defeat points obtained.</li>
+            </ul>
+          </dd>
+        </dl></td>
+      </tr>
       <tr id="get-mob-info">
         <th><code>get_mob_info</code></th>
         <td><dl>
