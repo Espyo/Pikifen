@@ -28,7 +28,7 @@ BodyPart::BodyPart(const string& name) :
  * @param bpn Name of the body part.
  * @param bpi Index of the body part in the animation database.
  * @param bpp Pointer to the body part.
- * @param pos Hitbox's coordinates, from the center of the mob.
+ * @param center Hitbox's coordinates, from the center of the mob.
  * @param z Z coordinate of the bottom point of the hitbox.
  * @param height The hitbox's total height.
  * 0 means it spans indefinitely across the Z axis.
@@ -41,7 +41,7 @@ Hitbox::Hitbox(
     bodyPartName(bpn),
     bodyPartIdx(bpi),
     bodyPartPtr(bpp),
-    pos(pos),
+    center(pos),
     z(z),
     height(height),
     radius(radius) {
@@ -62,8 +62,8 @@ Point Hitbox::getCurPos(const Point& mobPos, float mobAngle) const {
     float mobAngleSin = sin(mobAngle);
     return
         Point(
-            mobPos.x + (pos.x * mobAngleCos - pos.y * mobAngleSin),
-            mobPos.y + (pos.x * mobAngleSin + pos.y * mobAngleCos)
+            mobPos.x + (center.x * mobAngleCos - center.y * mobAngleSin),
+            mobPos.y + (center.x * mobAngleSin + center.y * mobAngleCos)
         );
 }
 
@@ -84,7 +84,7 @@ Point Hitbox::getCurPos(
 ) const {
     return
         Point(
-            mobPos.x + (pos.x * mobAngleCos - pos.y * mobAngleSin),
-            mobPos.y + (pos.x * mobAngleSin + pos.y * mobAngleCos)
+            mobPos.x + (center.x * mobAngleCos - center.y * mobAngleSin),
+            mobPos.y + (center.x * mobAngleSin + center.y * mobAngleCos)
         );
 }

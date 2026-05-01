@@ -116,7 +116,7 @@ size_t AudioManager::addNewMobSoundSource(
         addNewSoundSource(
             sample,
             ambiance ? SOUND_TYPE_AMBIANCE_POS : SOUND_TYPE_GAMEPLAY_POS,
-            config, mPtr->pos
+            config, mPtr->center
         );
     mobSources[sourceId] = mPtr;
     return sourceId;
@@ -932,7 +932,7 @@ void AudioManager::tick(float deltaT) {
         if(mobSourceIt == mobSources.end()) continue;
         Mob* mobPtr = mobSourceIt->second;
         if(!mobPtr || mobPtr->toDelete) continue;
-        s.second.pos = mobPtr->pos;
+        s.second.pos = mobPtr->center;
     }
     
     //Emit playbacks from sources that want to emit.
@@ -1288,7 +1288,7 @@ void AudioManager::updatePlaybackVolumeAndPan(size_t playbackIdx) {
 
 /**
  * @brief Loads data from a data node.
- * 
+ *
  * @param node The node.
  */
 void DataNodeSound::loadFromDataNode(DataNode* node) {

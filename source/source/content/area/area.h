@@ -115,8 +115,8 @@ struct MobGen {
     //Mob type.
     MobType* type = nullptr;
     
-    //Position.
-    Point pos;
+    //Center.
+    Point center;
     
     //Angle.
     float angle = 0.0f;
@@ -140,7 +140,7 @@ struct MobGen {
     //--- Public function declarations ---
     
     explicit MobGen(
-        const Point& pos = Point(),
+        const Point& center = Point(),
         MobType* type = nullptr, float angle = 0, const string& vars = "",
         bool boss = false
     );
@@ -208,8 +208,8 @@ struct AreaMakerReminder {
 
     //--- Public members ---
     
-    //Position.
-    Point pos;
+    //Center coordinates.
+    Point center;
     
     //Text.
     string text;

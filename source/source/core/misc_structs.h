@@ -163,17 +163,17 @@ struct Camera {
 
     //--- Public members ---
     
-    //Current position.
-    Point pos;
+    //Current center coordinates.
+    Point center;
     
-    //Position it wants to be at.
-    Point targetPos;
-    
-    //Zoom it wants to be at.
-    float targetZoom = 1.0f;
+    //Center coordinates it wants to be at.
+    Point targetCenter;
     
     //Current zoom.
     float zoom = 1.0f;
+    
+    //Zoom it wants to be at.
+    float targetZoom = 1.0f;
     
     
     //--- Public function declarations ---
@@ -1473,7 +1473,7 @@ struct LeaderPrompt {
     string text;
     
     //Coordinates of the focal point.
-    Point pos;
+    Point focusPos;
     
     //Visibility. 0 is hidden, 1 is fully visible. Mid values for transitioning.
     float visibility = 0.0f;

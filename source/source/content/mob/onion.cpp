@@ -59,12 +59,12 @@ const float SPIT_V_SPEED = 600.0f;
 /**
  * @brief Constructs a new Onion object.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Onion type this mob belongs to.
  * @param angle Starting angle.
  */
-Onion::Onion(const Point& pos, OnionType* type, float angle) :
-    Mob(pos, type, angle),
+Onion::Onion(const Point& center, OnionType* type, float angle) :
+    Mob(center, type, angle),
     oniType(type) {
     
     nest = new PikminNest(this, oniType->nest);
@@ -142,7 +142,7 @@ void Onion::generate() {
         game.statistics.pikminBirths++;
         game.states.gameplay->pikminBorn++;
         game.states.gameplay->pikminBornPerType[oniType->nest->pikTypes[t]]++;
-        game.states.gameplay->lastPikminBornPos = pos;
+        game.states.gameplay->lastPikminBornPos = center;
         
         size_t totalAfter = game.states.gameplay->mobs.pikmin.size() + 1;
         
@@ -209,7 +209,7 @@ void Onion::spitPikminSeed(size_t typeIdx) {
         return;
     }
     ::spitPikminSeed(
-        pos, z + ONION::NEW_SEED_Z_OFFSET, oniType->nest->pikTypes[typeIdx],
+        center, z + ONION::NEW_SEED_Z_OFFSET, oniType->nest->pikTypes[typeIdx],
         nSpits, ONION::SPIT_H_SPEED, ONION::SPIT_H_SPEED_DEVIATION,
         ONION::SPIT_V_SPEED
     );
@@ -257,7 +257,7 @@ void Onion::tickClassSpecifics(float deltaT) {
         if(!player.leaderPtr) continue;
         if(
             bBoxCheck(
-                player.leaderPtr->pos, pos,
+                player.leaderPtr->center, center,
                 player.leaderPtr->radius + radius * 3
             )
         ) {
@@ -266,7 +266,7 @@ void Onion::tickClassSpecifics(float deltaT) {
         
         if(
             bBoxCheck(
-                player.leaderCursorWorld, pos,
+                player.leaderCursorWorld, center,
                 player.leaderPtr->radius + radius * 3
             )
         ) {

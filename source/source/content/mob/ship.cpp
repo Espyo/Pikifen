@@ -41,12 +41,12 @@ const unsigned char CONTROL_POINT_RING_AMOUNT = 4;
 /**
  * @brief Constructs a new ship object.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Ship type this mob belongs to.
  * @param angle Starting angle.
  */
-Ship::Ship(const Point& pos, ShipType* type, float angle) :
-    Mob(pos, type, angle),
+Ship::Ship(const Point& center, ShipType* type, float angle) :
+    Mob(center, type, angle),
     shiType(type),
     controlPointFinalPos(
         rotatePoint(type->controlPointOffset, angle)
@@ -72,8 +72,8 @@ Ship::Ship(const Point& pos, ShipType* type, float angle) :
     
     nest = new PikminNest(this, shiType->nest);
     
-    controlPointFinalPos += pos;
-    receptacleFinalPos += pos;
+    controlPointFinalPos += center;
+    receptacleFinalPos += center;
 }
 
 
@@ -231,7 +231,7 @@ void Ship::healLeader(Leader* l) const {
  */
 bool Ship::isLeaderOnCp(const Leader* l) const {
     return
-        Distance(l->pos, controlPointFinalPos) <=
+        Distance(l->center, controlPointFinalPos) <=
         shiType->controlPointRadius;
 }
 

@@ -43,15 +43,15 @@ void PikminCategory::clearTypes() {
 /**
  * @brief Creates a Pikmin and adds it to the list of Pikmin.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Mob type.
  * @param angle Starting angle.
  * @return The mob.
  */
 Mob* PikminCategory::createMob(
-    const Point& pos, MobType* type, float angle
+    const Point& center, MobType* type, float angle
 ) {
-    Pikmin* m = new Pikmin(pos, (PikminType*) type, angle);
+    Pikmin* m = new Pikmin(center, (PikminType*) type, angle);
     game.states.gameplay->mobs.pikmin.push_back(m);
     return m;
 }

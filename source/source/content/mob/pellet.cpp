@@ -17,12 +17,12 @@
 /**
  * @brief Constructs a new pellet object.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Pellet type this mob belongs to.
  * @param angle Starting angle.
  */
-Pellet::Pellet(const Point& pos, PelletType* type, float angle) :
-    Mob(pos, type, angle),
+Pellet::Pellet(const Point& center, PelletType* type, float angle) :
+    Mob(center, type, angle),
     pelType(type) {
     
     becomeCarriable(CARRY_DESTINATION_ONION);
@@ -60,7 +60,7 @@ void Pellet::drawMob() {
     eff.tf.scale *= radius * 2.0f / bmpSize;
     
     drawBitmapWithEffects(curSPtr->bitmap, eff);
-
+    
     if(pelType->drawNumber) {
         drawBitmapWithEffects(pelType->bmpNumber, eff);
     }

@@ -21,12 +21,12 @@
 /**
  * @brief Constructs a new pile object.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Pile type this mob belongs to.
  * @param angle Starting angle.
  */
-Pile::Pile(const Point& pos, PileType* type, float angle) :
-    Mob(pos, type, angle),
+Pile::Pile(const Point& center, PileType* type, float angle) :
+    Mob(center, type, angle),
     pilType(type),
     amount(type->maxAmount) {
     

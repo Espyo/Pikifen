@@ -42,15 +42,15 @@ void CustomCategory::clearTypes() {
 /**
  * @brief Creates a custom mob and adds it to the list of custom mobs.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Mob type.
  * @param angle Starting angle.
  * @return The mob.
  */
 Mob* CustomCategory::createMob(
-    const Point& pos, MobType* type, float angle
+    const Point& center, MobType* type, float angle
 ) {
-    Mob* m = new Mob(pos, type, angle);
+    Mob* m = new Mob(center, type, angle);
     return m;
 }
 

@@ -43,15 +43,15 @@ void ShipCategory::clearTypes() {
 /**
  * @brief Creates a ship and adds it to the list of ships.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Mob type.
  * @param angle Starting angle.
  * @return The mob.
  */
 Mob* ShipCategory::createMob(
-    const Point& pos, MobType* type, float angle
+    const Point& center, MobType* type, float angle
 ) {
-    Ship* m = new Ship(pos, (ShipType*) type, angle);
+    Ship* m = new Ship(center, (ShipType*) type, angle);
     game.states.gameplay->mobs.ships.push_back(m);
     return m;
 }

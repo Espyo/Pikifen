@@ -358,7 +358,7 @@ void Area::clone(Area& other) {
     forIdx(s, pathStops) {
         PathStop* sPtr = pathStops[s];
         PathStop* osPtr = other.pathStops[s];
-        osPtr->pos = sPtr->pos;
+        osPtr->center = sPtr->center;
         sPtr->clone(osPtr);
         osPtr->links.reserve(sPtr->links.size());
         forIdx(l, sPtr->links) {
@@ -1331,7 +1331,7 @@ void Area::loadGeometryFromDataNode(
         string typeStr;
         string linksStr;
         
-        mRS.set("p", newMob->pos);
+        mRS.set("p", newMob->center);
         mRS.set("angle", newMob->angle);
         mRS.set("boss", newMob->isBoss);
         mRS.set("vars", newMob->vars);
@@ -1394,7 +1394,7 @@ void Area::loadGeometryFromDataNode(
         ReaderSetter sRS(stopNode);
         PathStop* newStop = new PathStop();
         
-        sRS.set("pos", newStop->pos);
+        sRS.set("pos", newStop->center);
         sRS.set("radius", newStop->radius);
         sRS.set("flags", newStop->flags);
         sRS.set("label", newStop->label);
@@ -2480,7 +2480,7 @@ void Area::loadRemindersFromDataNode(DataNode* node) {
         
         ReaderSetter rRS(reminderNode);
         
-        rRS.set("pos", newReminder.pos);
+        rRS.set("pos", newReminder.center);
         rRS.set("text", newReminder.text);
         
         reminders.push_back(newReminder);
@@ -2641,7 +2641,7 @@ void Area::saveGeometryToDataNode(DataNode* node) {
         if(mPtr->type) {
             mGW.write("type", mPtr->type->manifest->internalName);
         }
-        mGW.write("p", mPtr->pos);
+        mGW.write("p", mPtr->center);
         if(mPtr->angle != 0) {
             mGW.write("angle", mPtr->angle);
         }
@@ -2676,7 +2676,7 @@ void Area::saveGeometryToDataNode(DataNode* node) {
         DataNode* pathStopNode = pathStopsNode->addNew("s");
         GetterWriter sGW(pathStopNode);
         
-        sGW.write("pos", sPtr->pos);
+        sGW.write("pos", sPtr->center);
         if(sPtr->radius != PATHS::MIN_STOP_RADIUS) {
             sGW.write("radius", sPtr->radius);
         }
@@ -2901,7 +2901,7 @@ void Area::saveRemindersToDataNode(DataNode* node) {
         
         GetterWriter rGW(reminderNode);
         
-        rGW.write("pos", reminderPtr->pos);
+        rGW.write("pos", reminderPtr->center);
         rGW.write("text", reminderPtr->text);
     }
 }
@@ -3055,18 +3055,18 @@ Point Blockmap::getTopLeftCorner(size_t col, size_t row) const {
 /**
  * @brief Constructs a new mob generator object.
  *
- * @param pos Coordinates.
+ * @param center Coordinates.
  * @param type The mob type.
  * @param angle Angle it is facing.
  * @param vars String representation of the script vars.
  * @param boss Whether it is a boss encounter.
  */
 MobGen::MobGen(
-    const Point& pos, MobType* type, float angle, const string& vars,
+    const Point& center, MobType* type, float angle, const string& vars,
     bool boss
 ) :
     type(type),
-    pos(pos),
+    center(center),
     angle(angle),
     isBoss(boss),
     vars(vars) {
@@ -3083,7 +3083,7 @@ MobGen::MobGen(
  */
 void MobGen::clone(MobGen* destination, bool includePosition) const {
     destination->angle = angle;
-    if(includePosition) destination->pos = pos;
+    if(includePosition) destination->center = center;
     destination->type = type;
     destination->isBoss = isBoss;
     destination->vars = vars;

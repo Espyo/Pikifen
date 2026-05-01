@@ -43,15 +43,15 @@ void InteractableCategory::clearTypes() {
 /**
  * @brief Creates an interactable and adds it to the list of interactables.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Mob type.
  * @param angle Starting angle.
  * @return The mob.
  */
 Mob* InteractableCategory::createMob(
-    const Point& pos, MobType* type, float angle
+    const Point& center, MobType* type, float angle
 ) {
-    Interactable* m = new Interactable(pos, (InteractableType*) type, angle);
+    Interactable* m = new Interactable(center, (InteractableType*) type, angle);
     game.states.gameplay->mobs.interactables.push_back(m);
     return m;
 }

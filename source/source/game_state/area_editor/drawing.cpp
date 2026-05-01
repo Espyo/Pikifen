@@ -438,8 +438,8 @@ void AreaEditor::drawCanvas() {
         if(pathDrawingStop1) {
             Point hotspot = snapPoint(game.editorsView.mouseCursorWorldPos);
             al_draw_line(
-                pathDrawingStop1->pos.x,
-                pathDrawingStop1->pos.y,
+                pathDrawingStop1->center.x,
+                pathDrawingStop1->center.y,
                 hotspot.x,
                 hotspot.y,
                 AREA_EDITOR::DRAWING_NEW_LINE_COLOR,
@@ -447,7 +447,7 @@ void AreaEditor::drawCanvas() {
             );
             
             if(game.options.areaEd.showPathLinkLength) {
-                drawLineDist(hotspot, pathDrawingStop1->pos);
+                drawLineDist(hotspot, pathDrawingStop1->center);
             }
         }
     }
@@ -1191,7 +1191,7 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
                 
                 if(showLink) {
                     drawArrow(
-                        mPtr->pos, m2Ptr->pos,
+                        mPtr->center, m2Ptr->center,
                         mPtr->type->radius, m2Ptr->type->radius,
                         AREA_EDITOR::MOB_LINK_THICKNESS,
                         LINK_COLOR
@@ -1209,7 +1209,7 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
                 
                 if(showStore) {
                     drawArrow(
-                        mPtr->pos, m2Ptr->pos,
+                        mPtr->center, m2Ptr->center,
                         mPtr->type->radius, m2Ptr->type->radius,
                         AREA_EDITOR::MOB_LINK_THICKNESS,
                         STORE_COLOR
@@ -1264,7 +1264,7 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
                 if(!spawnInfo) continue;
                 
                 Point cPos =
-                    mPtr->pos +
+                    mPtr->center +
                     rotatePoint(spawnInfo->coordsXY, mPtr->angle);
                 MobType* cType =
                     game.mobCategories.findMobType(
@@ -1292,14 +1292,14 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
         //Draw the mob.
         if(mPtr->type && mPtr->type->rectangularDim.x != 0) {
             drawRotatedRectangle(
-                mPtr->pos, mPtr->type->rectangularDim,
+                mPtr->center, mPtr->type->rectangularDim,
                 mPtr->angle, color,
                 1.0f / game.editorsView.cam.zoom
             );
         }
         
         al_draw_filled_circle(
-            mPtr->pos.x, mPtr->pos.y,
+            mPtr->center.x, mPtr->center.y,
             radius, color
         );
         
@@ -1308,13 +1308,13 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
         float lt = radius / 8.0;
         
         al_draw_line(
-            mPtr->pos.x - lrw * 0.8, mPtr->pos.y - lrh * 0.8,
-            mPtr->pos.x + lrw * 0.8, mPtr->pos.y + lrh * 0.8,
+            mPtr->center.x - lrw * 0.8, mPtr->center.y - lrh * 0.8,
+            mPtr->center.x + lrw * 0.8, mPtr->center.y + lrh * 0.8,
             arrowColor, lt
         );
         
-        float tx1 = mPtr->pos.x + lrw;
-        float ty1 = mPtr->pos.y + lrh;
+        float tx1 = mPtr->center.x + lrw;
+        float ty1 = mPtr->center.y + lrh;
         float tx2 = tx1 + cos(mPtr->angle - (TAU / 4 + TAU / 8)) * radius * 0.5;
         float ty2 = ty1 + sin(mPtr->angle - (TAU / 4 + TAU / 8)) * radius * 0.5;
         float tx3 = tx1 + cos(mPtr->angle + (TAU / 4 + TAU / 8)) * radius * 0.5;
@@ -1332,7 +1332,7 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
                 mPtr->type->territoryRadius > 0.0f
             ) {
                 al_draw_circle(
-                    mPtr->pos.x, mPtr->pos.y, mPtr->type->territoryRadius,
+                    mPtr->center.x, mPtr->center.y, mPtr->type->territoryRadius,
                     territoryColor, 1.0f / game.editorsView.cam.zoom
                 );
             }
@@ -1342,7 +1342,7 @@ void AreaEditor::drawMobs(const AreaEdCanvasStyle& style) {
                 mPtr->type->terrainRadius > 0.0f
             ) {
                 al_draw_circle(
-                    mPtr->pos.x, mPtr->pos.y, mPtr->type->terrainRadius,
+                    mPtr->center.x, mPtr->center.y, mPtr->type->terrainRadius,
                     terrainColor, 1.0f / game.editorsView.cam.zoom
                 );
             }
@@ -1403,7 +1403,7 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
             
             //Draw the stop.
             al_draw_filled_circle(
-                sPtr->pos.x, sPtr->pos.y,
+                sPtr->center.x, sPtr->center.y,
                 sPtr->radius,
                 color
             );
@@ -1411,7 +1411,7 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
             //Draw the debug path stop index.
             if(debugPathIdxs) {
                 drawDebugText(
-                    DEBUG_STOP_COLOR, sPtr->pos, i2s(s)
+                    DEBUG_STOP_COLOR, sPtr->center, i2s(s)
                 );
             }
         }
@@ -1426,7 +1426,7 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
                 game.curArea->findPathStopIdx(elPtr->link1->startPtr);
             size_t s2Idx = elPtr->link1->endIdx;
             float angle =
-                getAngle(s1Ptr->pos, s2Ptr->pos);
+                getAngle(s1Ptr->center, s2Ptr->center);
             Point offset1 =
                 angleToCoordinates(angle, s1Ptr->radius);
             Point offset2 =
@@ -1460,10 +1460,10 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
             
             //Draw the link.
             al_draw_line(
-                s1Ptr->pos.x + offset1.x,
-                s1Ptr->pos.y + offset1.y,
-                s2Ptr->pos.x - offset2.x,
-                s2Ptr->pos.y - offset2.y,
+                s1Ptr->center.x + offset1.x,
+                s1Ptr->center.y + offset1.y,
+                s2Ptr->center.x - offset2.x,
+                s2Ptr->center.y - offset2.y,
                 color,
                 AREA_EDITOR::PATH_LINK_THICKNESS / game.editorsView.cam.zoom
             );
@@ -1471,9 +1471,9 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
             //Draw a triangle down the middle for one-ways.
             if(isOneWay) {
                 float midX =
-                    (s1Ptr->pos.x + s2Ptr->pos.x) / 2.0f;
+                    (s1Ptr->center.x + s2Ptr->center.x) / 2.0f;
                 float midY =
-                    (s1Ptr->pos.y + s2Ptr->pos.y) / 2.0f;
+                    (s1Ptr->center.y + s2Ptr->center.y) / 2.0f;
                 const float delta =
                     (AREA_EDITOR::PATH_LINK_THICKNESS * 4) /
                     game.editorsView.cam.zoom;
@@ -1498,23 +1498,23 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
                 bool drawDist = false;
                 Point otherPoint;
                 if(s1Ptr == preMovePivotStop) {
-                    otherPoint.x = s2Ptr->pos.x;
-                    otherPoint.y = s2Ptr->pos.y;
+                    otherPoint.x = s2Ptr->center.x;
+                    otherPoint.y = s2Ptr->center.y;
                     drawDist = true;
                 } else if(s2Ptr == preMovePivotStop) {
-                    otherPoint.x = s1Ptr->pos.x;
-                    otherPoint.y = s1Ptr->pos.y;
+                    otherPoint.x = s1Ptr->center.x;
+                    otherPoint.y = s1Ptr->center.y;
                     drawDist = true;
                 }
                 
                 if(drawDist) {
-                    drawLineDist(preMovePivotStop->pos, otherPoint);
+                    drawLineDist(preMovePivotStop->center, otherPoint);
                 }
             }
             
             //Draw the debug link index.
             if(debugPathIdxs && (isOneWay || s1Idx < s2Idx)) {
-                Point middle = (s1Ptr->pos + s2Ptr->pos) / 2.0f;
+                Point middle = (s1Ptr->center + s2Ptr->center) / 2.0f;
                 drawDebugText(
                     DEBUG_LINK_COLOR,
                     Point(
@@ -1534,7 +1534,7 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
                 PathStop* sPtr = game.curArea->pathStops[s];
                 float d =
                     Distance(
-                        game.editorsView.mouseCursorWorldPos, sPtr->pos
+                        game.editorsView.mouseCursorWorldPos, sPtr->center
                     ).toFloat() -
                     sPtr->radius;
                     
@@ -1548,7 +1548,7 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
                 al_draw_line(
                     game.editorsView.mouseCursorWorldPos.x,
                     game.editorsView.mouseCursorWorldPos.y,
-                    closest->pos.x, closest->pos.y,
+                    closest->center.x, closest->center.y,
                     CLOSEST_LINE_COLOR, 2.0 / game.editorsView.cam.zoom
                 );
             }
@@ -1563,22 +1563,22 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
                 al_draw_line(
                     pathPreviewCheckpoints[0].x,
                     pathPreviewCheckpoints[0].y,
-                    pathPreview[0]->pos.x,
-                    pathPreview[0]->pos.y,
+                    pathPreview[0]->center.x,
+                    pathPreview[0]->center.y,
                     PREVIEW_OK_COLOR, linesThickness
                 );
                 for(size_t s = 0; s < pathPreview.size() - 1; s++) {
                     al_draw_line(
-                        pathPreview[s]->pos.x,
-                        pathPreview[s]->pos.y,
-                        pathPreview[s + 1]->pos.x,
-                        pathPreview[s + 1]->pos.y,
+                        pathPreview[s]->center.x,
+                        pathPreview[s]->center.y,
+                        pathPreview[s + 1]->center.x,
+                        pathPreview[s + 1]->center.y,
                         PREVIEW_OK_COLOR, linesThickness
                     );
                 }
                 al_draw_line(
-                    pathPreview.back()->pos.x,
-                    pathPreview.back()->pos.y,
+                    pathPreview.back()->center.x,
+                    pathPreview.back()->center.y,
                     pathPreviewCheckpoints[1].x,
                     pathPreviewCheckpoints[1].y,
                     PREVIEW_OK_COLOR, linesThickness
@@ -1599,8 +1599,8 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
                 for(size_t c = 0; c < 2; c++) {
                     if(pathPreviewClosest[c]) {
                         al_draw_line(
-                            pathPreviewClosest[c]->pos.x,
-                            pathPreviewClosest[c]->pos.y,
+                            pathPreviewClosest[c]->center.x,
+                            pathPreviewClosest[c]->center.y,
                             pathPreviewCheckpoints[c].x,
                             pathPreviewCheckpoints[c].y,
                             PREVIEW_INVALID_COLOR, linesThickness
@@ -1691,10 +1691,10 @@ void AreaEditor::drawReminders(const AreaEdCanvasStyle& style) {
             
             //Draw the reminder.
             drawFilledRoundedRectangle(
-                rPtr->pos, Point(AREA_EDITOR::REMINDER_SIZE), 8.0f, color
+                rPtr->center, Point(AREA_EDITOR::REMINDER_SIZE), 8.0f, color
             );
             drawText(
-                "!", game.sysContent.fntAreaName, rPtr->pos,
+                "!", game.sysContent.fntAreaName, rPtr->center,
                 Point(AREA_EDITOR::REMINDER_SIZE)
             );
         }

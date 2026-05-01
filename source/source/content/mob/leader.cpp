@@ -141,12 +141,12 @@ const float TIDY_SINGLE_DISMISS_DURATION = 3.0f;
 /**
  * @brief Constructs a new leader object.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Leader type this mob belongs to.
  * @param angle Starting angle.
  */
-Leader::Leader(const Point& pos, LeaderType* type, float angle) :
-    Mob(pos, type, angle),
+Leader::Leader(const Point& center, LeaderType* type, float angle) :
+    Mob(center, type, angle),
     leaType(type),
     autoThrowRepeater(&game.autoThrowSettings),
     healthWheelShaker([] (float s, float t) { return simpleNoise(s, t); }) {
@@ -182,9 +182,9 @@ Leader::Leader(const Point& pos, LeaderType* type, float angle) :
                 LEADER::SWARM_PARTICLE_MAX_DURATION
             );
         p.friction = LEADER::SWARM_PARTICLE_FRICTION;
-        p.pos = this->pos;
-        p.pos.x += game.rng.f(-this->radius * 0.5f, this->radius * 0.5f);
-        p.pos.y += game.rng.f(-this->radius * 0.5f, this->radius * 0.5f);
+        p.center = this->center;
+        p.center.x += game.rng.f(-this->radius * 0.5f, this->radius * 0.5f);
+        p.center.y += game.rng.f(-this->radius * 0.5f, this->radius * 0.5f);
         p.priority = PARTICLE_PRIORITY_MEDIUM;
         p.size.setKeyframeValue(0, LEADER::SWARM_PARTICLE_SIZE);
         float pSpeed =
@@ -256,7 +256,7 @@ bool Leader::canGrabGroupMember(Mob* m) const {
     
     //Check if the mob is within range.
     if(
-        Distance(m->pos, pos) >
+        Distance(m->center, center) >
         game.config.leaders.groupMemberGrabRange
     ) {
         return false;
@@ -369,7 +369,7 @@ void Leader::dismissDetails() {
                 LEADER::DISMISS_PARTICLE_MAX_DURATION
             );
         par.friction = LEADER::DISMISS_PARTICLE_FRICTION;
-        par.pos = pos;
+        par.center = center;
         par.priority = PARTICLE_PRIORITY_MEDIUM;
         par.size.setKeyframeValue(
             0,
@@ -417,18 +417,18 @@ void Leader::dismissLogic() {
         forIdx(m, group->members) {
             Mob* memberPtr = group->members[m];
             
-            if(memberPtr->pos.x < groupBBox.tl.x || m == 0)
-                groupBBox.tl.x = memberPtr->pos.x;
-            if(memberPtr->pos.x > groupBBox.br.x || m == 0)
-                groupBBox.br.x = memberPtr->pos.x;
-            if(memberPtr->pos.y < groupBBox.tl.y || m == 0)
-                groupBBox.tl.y = memberPtr->pos.y;
-            if(memberPtr->pos.y > groupBBox.br.y || m == 0)
-                groupBBox.br.y = memberPtr->pos.y;
+            if(memberPtr->center.x < groupBBox.tl.x || m == 0)
+                groupBBox.tl.x = memberPtr->center.x;
+            if(memberPtr->center.x > groupBBox.br.x || m == 0)
+                groupBBox.br.x = memberPtr->center.x;
+            if(memberPtr->center.y < groupBBox.tl.y || m == 0)
+                groupBBox.tl.y = memberPtr->center.y;
+            if(memberPtr->center.y > groupBBox.br.y || m == 0)
+                groupBBox.br.y = memberPtr->center.y;
         }
         
         Point groupCenter = rectCornersToRect(groupBBox).center;
-        baseAngle = getAngle(pos, groupCenter);
+        baseAngle = getAngle(center, groupCenter);
     }
     
     /**
@@ -694,14 +694,14 @@ void Leader::dismissLogic() {
                 keepCurType
             ) {
                 tidySingleDismissRelCenter = subgroupsInfo[s].center;
-                tidySingleDismissLeaderPos = pos;
+                tidySingleDismissLeaderPos = center;
                 tidySingleDismissTime = LEADER::TIDY_SINGLE_DISMISS_DURATION;
                 continue;
             }
             
             specificDismiss(
                 subgroupsInfo[s].members,
-                subgroupsInfo[s].center, pos
+                subgroupsInfo[s].center, center
             );
         }
         
@@ -791,7 +791,7 @@ void Leader::drawMob() {
             (lightEff.tf.scale.x + lightEff.tf.scale.y) / 2.0f;
         Point topBmpSize = getBitmapDimensions(lightBmp);
         lightEff.tf.trans +=
-            pos + rotatePoint(lightCoords, angle) * avgScale;
+            center + rotatePoint(lightCoords, angle) * avgScale;
         lightEff.tf.scale *= lightSize / topBmpSize;
         lightEff.tf.rot += angle + lightAngle;
         lightEff.tintColor = leaType->lightBmpTint;
@@ -799,7 +799,7 @@ void Leader::drawMob() {
         drawBitmapWithEffects(lightBmp, lightEff);
         
         //This is the best place to position the light particles, so do that.
-        antennaPG->baseParticle.pos = lightEff.tf.trans;
+        antennaPG->baseParticle.center = lightEff.tf.trans;
         antennaPG->baseParticle.bmpAngle = lightEff.tf.rot;
         antennaPG->baseParticle.z = z + height + 1.0f;
         adjustKeyframeInterpolatorValues<float>(
@@ -827,7 +827,7 @@ void Leader::drawMob() {
                 SPRITE_BMP_EFFECT_DELIVERY |
                 SPRITE_BMP_EFFECT_CARRY
             );
-            sparkEff.tf.trans = pos;
+            sparkEff.tf.trans = center;
             Point leaderBmpSize =
                 getBitmapDimensions(curSPtr->bitmap) * leaSpriteEff.tf.scale;
             Point sparkBmpSize = getBitmapDimensions(sparkS->bitmap);
@@ -915,7 +915,7 @@ void Leader::getGroupSpotInfo(
         }
     }
     
-    *outSpot = followingGroup->pos;
+    *outSpot = followingGroup->center;
     *outDist = distance;
 }
 
@@ -965,7 +965,7 @@ bool Leader::orderPikminToOnion(
         
         candidates.push_back(
             std::make_pair(
-                Distance(mobPtr->pos, nPtr->mPtr->pos),
+                Distance(mobPtr->center, nPtr->mPtr->center),
                 (Pikmin*) mobPtr
             )
         );
@@ -1346,7 +1346,7 @@ void Leader::updateThrowVariables() {
     throweeMaxZ = z + maxHeight;
     
     calculateThrow(
-        pos,
+        center,
         z,
         player->throwDest,
         targetZ,

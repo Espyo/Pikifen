@@ -2104,7 +2104,7 @@ void PikminFsm::becomeIdle(ScriptVM* scriptVM, void* info1, void* info2) {
     if(pikPtr->pikType->canFly) {
         enableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
         pikPtr->chase(
-            pikPtr->pos,
+            pikPtr->center,
             pikPtr->groundSector->z + PIKMIN::FLIER_ABOVE_FLOOR_HEIGHT
         );
     }
@@ -2320,7 +2320,7 @@ void PikminFsm::beThrownAfterPluck(
 ) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
-    float throwAngle = getAngle(pikPtr->pos, scriptVM->focusedMob->pos);
+    float throwAngle = getAngle(pikPtr->center, scriptVM->focusedMob->center);
     pikPtr->speedZ = PIKMIN::THROW_VER_SPEED;
     pikPtr->speed = angleToCoordinates(throwAngle, PIKMIN::THROW_HOR_SPEED);
     pikPtr->face(throwAngle + TAU / 2.0f, nullptr, true);
@@ -2697,7 +2697,7 @@ void PikminFsm::decideAttack(ScriptVM* scriptVM, void* info1, void* info2) {
         Distance d;
         Hitbox* closestH =
             scriptVM->focusedMob->getClosestHitbox(
-                pikPtr->pos, HITBOX_TYPE_NORMAL, &d
+                pikPtr->center, HITBOX_TYPE_NORMAL, &d
             );
         float hZ = 0;
         
@@ -2789,18 +2789,18 @@ void PikminFsm::doImpactBounce(ScriptVM* scriptVM, void* info1, void* info2) {
             impactAngle =
                 getAngle(
                     getClosestPointInRotatedRectangle(
-                        pikPtr->pos,
+                        pikPtr->center,
                         Rect(
-                            scriptVM->focusedMob->pos,
+                            scriptVM->focusedMob->center,
                             scriptVM->focusedMob->rectangularDim
                         ),
                         scriptVM->focusedMob->angle,
                         nullptr
                     ),
-                    pikPtr->pos
+                    pikPtr->center
                 );
         } else {
-            impactAngle = getAngle(scriptVM->focusedMob->pos, pikPtr->pos);
+            impactAngle = getAngle(scriptVM->focusedMob->center, pikPtr->center);
         }
         impactSpeed = 200.0f;
     }
@@ -3078,7 +3078,7 @@ void PikminFsm::flailToLeader(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     Mob* caller = (Mob*) info1;
     
-    pikPtr->chase(caller->pos, caller->z);
+    pikPtr->chase(caller->center, caller->z);
 }
 
 
@@ -3244,7 +3244,7 @@ void PikminFsm::goToCarriableObject(
         carriableMob->type->customCarrySpots.empty()
     ) {
         carriableMob->carryInfo->rotatePoints(
-            getAngle(carriableMob->pos, pikPtr->pos)
+            getAngle(carriableMob->center, pikPtr->center)
         );
     }
     
@@ -3255,7 +3255,7 @@ void PikminFsm::goToCarriableObject(
         
         Point spotOffset =
             rotatePoint(spotPtr->pos, carriableMob->angle);
-        Distance d(pikPtr->pos, carriableMob->pos + spotOffset);
+        Distance d(pikPtr->center, carriableMob->center + spotOffset);
         
         if(closestSpot == INVALID || d < closestSpotDist) {
             closestSpot = s;
@@ -3273,7 +3273,7 @@ void PikminFsm::goToCarriableObject(
     closestSpotPtr->pikPtr = pikPtr;
     
     pikPtr->chase(
-        &carriableMob->pos, &carriableMob->z,
+        &carriableMob->center, &carriableMob->z,
         closestSpotOffset, 0.0f
     );
     scriptVM->setTimer(PIKMIN::GOTO_TIMEOUT);
@@ -3365,7 +3365,7 @@ void PikminFsm::goToOnion(ScriptVM* scriptVM, void* info1, void* info2) {
     Point coords =
         nestPtr->mPtr->getHitbox(
             legFootBPIdx
-        )->getCurPos(nestPtr->mPtr->pos, nestPtr->mPtr->angle);
+        )->getCurPos(nestPtr->mPtr->center, nestPtr->mPtr->angle);
         
     if(pikPtr->pikType->canFly) {
         enableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
@@ -3423,19 +3423,19 @@ void PikminFsm::goToOpponent(ScriptVM* scriptVM, void* info1, void* info2) {
         bool isInside = false;
         offset =
             getClosestPointInRotatedRectangle(
-                pikPtr->pos,
+                pikPtr->center,
                 Rect(
-                    scriptVM->focusedMob->pos,
+                    scriptVM->focusedMob->center,
                     scriptVM->focusedMob->rectangularDim
                 ),
                 scriptVM->focusedMob->angle,
                 &isInside
-            ) - scriptVM->focusedMob->pos;
+            ) - scriptVM->focusedMob->center;
         targetDist -= scriptVM->focusedMob->radius;
     }
     
     pikPtr->chase(
-        &scriptVM->focusedMob->pos, &scriptVM->focusedMob->z,
+        &scriptVM->focusedMob->center, &scriptVM->focusedMob->z,
         offset, 0.0f, 0,
         targetDist
     );
@@ -3488,7 +3488,7 @@ void PikminFsm::goToTool(ScriptVM* scriptVM, void* info1, void* info2) {
     scriptVM->focusOnMob(tooPtr);
     
     pikPtr->chase(
-        &tooPtr->pos, &tooPtr->z,
+        &tooPtr->center, &tooPtr->z,
         Point(), 0.0f, 0,
         pikPtr->radius + tooPtr->radius
     );
@@ -3672,7 +3672,7 @@ void PikminFsm::landOnMobWhileHolding(
             Leader* lPtr = game.states.gameplay->mobs.leaders[l];
             if(!lPtr->player) continue;
             if(!lPtr->isViableLeader(pikPtr)) continue;
-            Distance d(pikPtr->pos, lPtr->pos);
+            Distance d(pikPtr->center, lPtr->center);
             if(!closestLeader || d < closestLeaderDist) {
                 closestLeaderDist = d;
                 closestLeader = lPtr;
@@ -3721,7 +3721,7 @@ void PikminFsm::landWhileHolding(ScriptVM* scriptVM, void* info1, void* info2) {
             Leader* lPtr = game.states.gameplay->mobs.leaders[l];
             if(!lPtr->player) continue;
             if(!lPtr->isViableLeader(pikPtr)) continue;
-            Distance d(pikPtr->pos, lPtr->pos);
+            Distance d(pikPtr->center, lPtr->center);
             if(!closestLeader || d < closestLeaderDist) {
                 closestLeaderDist = d;
                 closestLeader = lPtr;
@@ -3822,8 +3822,8 @@ void PikminFsm::panicNewChase(ScriptVM* scriptVM, void* info1, void* info2) {
     
     pikPtr->chase(
         Point(
-            pikPtr->pos.x + game.rng.f(-1000, 1000),
-            pikPtr->pos.y + game.rng.f(-1000, 1000)
+            pikPtr->center.x + game.rng.f(-1000, 1000),
+            pikPtr->center.y + game.rng.f(-1000, 1000)
         ),
         pikPtr->z
     );
@@ -3849,18 +3849,18 @@ void PikminFsm::prepareToAttack(ScriptVM* scriptVM, void* info1, void* info2) {
         bool isInside = false;
         Point target =
             getClosestPointInRotatedRectangle(
-                pikPtr->pos,
+                pikPtr->center,
                 Rect(
-                    scriptVM->focusedMob->pos,
+                    scriptVM->focusedMob->center,
                     scriptVM->focusedMob->rectangularDim
                 ),
                 scriptVM->focusedMob->angle,
                 &isInside
             );
-        pikPtr->face(getAngle(pikPtr->pos, target), nullptr);
+        pikPtr->face(getAngle(pikPtr->center, target), nullptr);
         
     } else {
-        pikPtr->face(0, &scriptVM->focusedMob->pos);
+        pikPtr->face(0, &scriptVM->focusedMob->center);
         
     }
     
@@ -3887,16 +3887,16 @@ void PikminFsm::reachCarriableObject(
             carriableMob->carryInfo->spotInfo[pikPtr->tempI].pos,
             carriableMob->angle
         );
-    Point finalPos = carriableMob->pos + spotOffset;
+    Point finalPos = carriableMob->center + spotOffset;
     
     pikPtr->chase(
-        &carriableMob->pos, &carriableMob->z,
+        &carriableMob->center, &carriableMob->z,
         spotOffset, 0.0f,
         CHASE_FLAG_TELEPORT |
         CHASE_FLAG_TELEPORTS_CONSTANTLY
     );
     
-    pikPtr->face(getAngle(finalPos, carriableMob->pos), nullptr);
+    pikPtr->face(getAngle(finalPos, carriableMob->center), nullptr);
     
     //Let the carriable mob know that a new Pikmin has grabbed on.
     pikPtr->carryingMob->scriptVM.fsm.runEvent(
@@ -3952,7 +3952,7 @@ void PikminFsm::rechaseOpponent(ScriptVM* scriptVM, void* info1, void* info2) {
     bool canContinueAttacking =
         scriptVM->focusedMob &&
         scriptVM->focusedMob->health > 0 &&
-        Distance(pikPtr->pos, scriptVM->focusedMob->pos) <=
+        Distance(pikPtr->center, scriptVM->focusedMob->center) <=
         (
             pikPtr->radius + scriptVM->focusedMob->radius +
             PIKMIN::GROUNDED_ATTACK_DIST
@@ -3998,7 +3998,7 @@ void PikminFsm::releaseTool(ScriptVM* scriptVM, void* info1, void* info2) {
         tooPtr->scriptVM.setVar("gentle_release", "false");
     }
     pikPtr->release(tooPtr);
-    tooPtr->pos = pikPtr->pos;
+    tooPtr->center = pikPtr->center;
     tooPtr->speed = Point();
     tooPtr->pushAmount = 0.0f;
     pikPtr->subgroupTypePtr =
@@ -4230,7 +4230,7 @@ void PikminFsm::startDrinking(ScriptVM* scriptVM, void* info1, void* info2) {
     pikPtr->leaveGroup();
     pikPtr->stopChasing();
     scriptVM->focusOnMob(droPtr);
-    pikPtr->face(getAngle(pikPtr->pos, droPtr->pos), nullptr);
+    pikPtr->face(getAngle(pikPtr->center, droPtr->center), nullptr);
     pikPtr->setAnimation(PIKMIN_ANIM_DRINKING);
 }
 
@@ -4319,7 +4319,7 @@ void PikminFsm::startImpactLunge(ScriptVM* scriptVM, void* info1, void* info2) {
         scriptVM->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
     );
     
-    pikPtr->chase(&scriptVM->focusedMob->pos, &scriptVM->focusedMob->z);
+    pikPtr->chase(&scriptVM->focusedMob->center, &scriptVM->focusedMob->z);
     pikPtr->setAnimation(PIKMIN_ANIM_ATTACKING);
 }
 
@@ -4587,7 +4587,7 @@ void PikminFsm::stopInGroup(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
     pikPtr->stopChasing();
-    pikPtr->face(0, &pikPtr->followingGroup->pos);
+    pikPtr->face(0, &pikPtr->followingGroup->center);
     
     if(pikPtr->pikType->canFly) {
         enableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);

@@ -19,12 +19,12 @@
 /**
  * @brief Constructs a new drop object.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Drop type this mob belongs to.
  * @param angle Starting angle.
  */
-Drop::Drop(const Point& pos, DropType* type, float angle) :
-    Mob(pos, type, angle),
+Drop::Drop(const Point& center, DropType* type, float angle) :
+    Mob(center, type, angle),
     droType(type),
     dosesLeft(droType->totalDoses) {
     

@@ -308,7 +308,7 @@ void ResourceFsm::startWaiting(ScriptVM* scriptVM, void* info1, void* info2) {
     
     if(resPtr->originPile) {
         resPtr->carryInfo->mustReturn = true;
-        resPtr->carryInfo->returnPoint = resPtr->originPile->pos;
+        resPtr->carryInfo->returnPoint = resPtr->originPile->center;
         resPtr->carryInfo->returnDist =
             resPtr->originPile->radius +
             game.config.pikmin.standardRadius +

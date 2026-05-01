@@ -1334,7 +1334,7 @@ void LeaderFsm::beAttacked(ScriptVM* scriptVM, void* info1, void* info2) {
         leaPtr->healthWheelShaker.shake(1.0f);
     }
     if(healthBefore > 0.0f && leaPtr->health < healthBefore) {
-        game.states.gameplay->lastHurtLeaderPos = leaPtr->pos;
+        game.states.gameplay->lastHurtLeaderPos = leaPtr->center;
         game.statistics.leaderDamageSuffered += healthBefore - leaPtr->health;
     }
     
@@ -1671,7 +1671,7 @@ void LeaderFsm::decidePluckAction(
     
     if(!leaPtr->queuedPluckCancel) {
         newPikmin =
-            getClosestSprout(leaPtr->pos, &d, false);
+            getClosestSprout(leaPtr->center, &d, false);
     }
     
     if(leaPtr->queuedPluckCancel) {
@@ -1722,7 +1722,7 @@ void LeaderFsm::doThrow(ScriptVM* scriptVM, void* info1, void* info2) {
     heldPtr->startHeightEffect();
     
     heldPtr->stopChasing();
-    heldPtr->pos = leaPtr->pos;
+    heldPtr->center = leaPtr->center;
     heldPtr->z = leaPtr->z;
     
     heldPtr->zCap = leaPtr->throweeMaxZ;
@@ -2006,7 +2006,7 @@ void LeaderFsm::getKod(ScriptVM* scriptVM, void* info1, void* info2) {
     leaPtr->becomeUncarriable();
     leaPtr->setAnimation(LEADER_ANIM_KO);
     
-    game.states.gameplay->lastHurtLeaderPos = leaPtr->pos;
+    game.states.gameplay->lastHurtLeaderPos = leaPtr->center;
 }
 
 
@@ -2053,7 +2053,7 @@ void LeaderFsm::goPluck(ScriptVM* scriptVM, void* info1, void* info2) {
     leaPtr->autoPlucking = true;
     leaPtr->pluckTarget = pikPtr;
     leaPtr->chase(
-        &pikPtr->pos, &pikPtr->z,
+        &pikPtr->center, &pikPtr->z,
         Point(), 0.0f,
         CHASE_FLAG_ANY_ANGLE,
         pikPtr->radius + leaPtr->radius
@@ -2220,7 +2220,7 @@ void LeaderFsm::move(ScriptVM* scriptVM, void* info1, void* info2) {
         &finalCoords, &dummyAngle, &dummyMagnitude
     );
     finalCoords *= leaPtr->type->moveSpeed;
-    finalCoords += leaPtr->pos;
+    finalCoords += leaPtr->center;
     leaPtr->chase(
         finalCoords, leaPtr->z, CHASE_FLAG_ANY_ANGLE,
         PATHS::DEF_CHASE_TARGET_DISTANCE,
@@ -2309,7 +2309,7 @@ void LeaderFsm::release(ScriptVM* scriptVM, void* info1, void* info2) {
     
     //Reset the Pikmin's position to match the leader's,
     //so that the leader doesn't release the Pikmin inside a wall behind them.
-    heldPtr->pos = leaPtr->pos;
+    heldPtr->center = leaPtr->center;
     heldPtr->z = leaPtr->z;
     heldPtr->face(leaPtr->angle + TAU / 2.0f, nullptr, true);
     leaPtr->release(heldPtr);
@@ -2331,7 +2331,7 @@ void LeaderFsm::searchSeed(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* newPikmin = nullptr;
     if(!leaPtr->queuedPluckCancel) {
         newPikmin =
-            getClosestSprout(leaPtr->pos, &d, false);
+            getClosestSprout(leaPtr->center, &d, false);
     }
     
     if(newPikmin && d <= game.config.leaders.nextPluckRange) {
@@ -2547,7 +2547,7 @@ void LeaderFsm::spray(ScriptVM* scriptVM, void* info1, void* info2) {
             if(amPtr == leaPtr) continue;
             
             if(
-                Distance(leaPtr->pos, amPtr->pos) >
+                Distance(leaPtr->center, amPtr->center) >
                 sprayTypeRef.distanceRange + amPtr->radius
             ) {
                 continue;
@@ -2556,7 +2556,7 @@ void LeaderFsm::spray(ScriptVM* scriptVM, void* info1, void* info2) {
             float angleDiff =
                 getAngleSmallestDiff(
                     shootAngle,
-                    getAngle(leaPtr->pos, amPtr->pos)
+                    getAngle(leaPtr->center, amPtr->center)
                 );
             if(angleDiff > sprayTypeRef.angleRange / 2) continue;
             
@@ -2696,7 +2696,7 @@ void LeaderFsm::startDrinking(ScriptVM* scriptVM, void* info1, void* info2) {
     
     leaPtr->leaveGroup();
     leaPtr->stopChasing();
-    leaPtr->face(getAngle(leaPtr->pos, droPtr->pos), nullptr);
+    leaPtr->face(getAngle(leaPtr->center, droPtr->center), nullptr);
     leaPtr->setAnimation(LEADER_ANIM_DRINKING);
     scriptVM->focusOnMob(droPtr);
 }
@@ -2935,7 +2935,7 @@ void LeaderFsm::tickActiveState(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->face(
-        getAngle(leaPtr->pos, leaPtr->player->leaderCursorWorld), nullptr
+        getAngle(leaPtr->center, leaPtr->player->leaderCursorWorld), nullptr
     );
     
     bool shouldBeTurning =

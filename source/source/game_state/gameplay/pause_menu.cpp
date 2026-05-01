@@ -134,7 +134,7 @@ PauseMenu::PauseMenu(bool startOnRadar) {
     radarSelectedLeader = game.states.gameplay->players[0].leaderPtr;
     
     if(radarSelectedLeader) {
-        radarView.cam.setPos(radarSelectedLeader->pos);
+        radarView.cam.setPos(radarSelectedLeader->center);
     }
     radarView.cam.setZoom(game.states.gameplay->players[0].radarZoom);
     
@@ -608,7 +608,7 @@ void PauseMenu::calculateGoHerePath() {
         Leader* lPtr = game.states.gameplay->mobs.leaders[l];
         if(
             lPtr->health > 0 &&
-            Distance(lPtr->pos, radarCursor) <= 24.0f / radarView.cam.zoom
+            Distance(lPtr->center, radarCursor) <= 24.0f / radarView.cam.zoom
         ) {
             radarCursorLeader = lPtr;
             break;
@@ -618,7 +618,7 @@ void PauseMenu::calculateGoHerePath() {
     if(
         !radarSelectedLeader ||
         radarCursorLeader ||
-        Distance(radarSelectedLeader->pos, radarCursor) < 128.0f
+        Distance(radarSelectedLeader->center, radarCursor) < 128.0f
     ) {
         goHerePath.clear();
         goHerePathResult = PATH_RESULT_ERROR;
@@ -649,7 +649,7 @@ void PauseMenu::calculateGoHerePath() {
         
     goHerePathResult =
         getPath(
-            radarSelectedLeader->pos,
+            radarSelectedLeader->center,
             radarCursor,
             settings,
             goHerePath, nullptr, nullptr, nullptr
@@ -989,14 +989,14 @@ void PauseMenu::drawRadar(
                 );
                 
             drawBitmap(
-                bmpRadarOnionBulb, oPtr->pos,
+                bmpRadarOnionBulb, oPtr->center,
                 Point(24.0f / radarView.cam.zoom),
                 0.0f,
                 targetColor
             );
         }
         drawBitmap(
-            bmpRadarOnionSkeleton, oPtr->pos,
+            bmpRadarOnionSkeleton, oPtr->center,
             Point(24.0f / radarView.cam.zoom)
         );
     }
@@ -1006,7 +1006,7 @@ void PauseMenu::drawRadar(
         Ship* sPtr = game.states.gameplay->mobs.ships[s];
         
         drawBitmap(
-            bmpRadarShip, sPtr->pos,
+            bmpRadarShip, sPtr->center,
             Point(24.0f / radarView.cam.zoom)
         );
     }
@@ -1018,7 +1018,7 @@ void PauseMenu::drawRadar(
         
         drawBitmap(
             ePtr->health > 0 ? bmpRadarEnemyAlive : bmpRadarEnemyDead,
-            ePtr->pos,
+            ePtr->center,
             Point(24.0f / radarView.cam.zoom),
             ePtr->health > 0 ? game.timePassed : 0.0f
         );
@@ -1029,11 +1029,11 @@ void PauseMenu::drawRadar(
         Leader* lPtr = game.states.gameplay->mobs.leaders[l];
         
         drawBitmap(
-            lPtr->leaType->bmpIcon, lPtr->pos,
+            lPtr->leaType->bmpIcon, lPtr->center,
             Point(40.0f / radarView.cam.zoom)
         );
         drawBitmap(
-            bmpRadarLeaderBubble, lPtr->pos,
+            bmpRadarLeaderBubble, lPtr->center,
             Point(48.0f / radarView.cam.zoom),
             0.0f,
             radarSelectedLeader == lPtr ?
@@ -1041,7 +1041,7 @@ void PauseMenu::drawRadar(
             INACTIVE_LEADER_COLOR
         );
         drawFilledEquilateralTriangle(
-            lPtr->pos +
+            lPtr->center +
             rotatePoint(Point(24.5f / radarView.cam.zoom, 0.0f), lPtr->angle),
             6.0f / radarView.cam.zoom,
             lPtr->angle,
@@ -1053,7 +1053,7 @@ void PauseMenu::drawRadar(
         );
         if(lPtr->health <= 0) {
             drawBitmap(
-                bmpRadarLeaderX, lPtr->pos,
+                bmpRadarLeaderX, lPtr->center,
                 Point(36.0f / radarView.cam.zoom)
             );
         }
@@ -1064,7 +1064,7 @@ void PauseMenu::drawRadar(
         Treasure* tPtr = game.states.gameplay->mobs.treasures[t];
         
         drawBitmap(
-            bmpRadarTreasure, tPtr->pos,
+            bmpRadarTreasure, tPtr->center,
             Point(32.0f / radarView.cam.zoom),
             sin(game.timePassed * 2.0f) * (TAU * 0.05f)
         );
@@ -1079,7 +1079,7 @@ void PauseMenu::drawRadar(
         }
         
         drawBitmap(
-            bmpRadarTreasure, rPtr->pos,
+            bmpRadarTreasure, rPtr->center,
             Point(32.0f / radarView.cam.zoom),
             sin(game.timePassed * 2.0f) * (TAU * 0.05f)
         );
@@ -1096,7 +1096,7 @@ void PauseMenu::drawRadar(
         }
         
         drawBitmap(
-            bmpRadarTreasure, pPtr->pos,
+            bmpRadarTreasure, pPtr->center,
             Point(32.0f / radarView.cam.zoom),
             sin(game.timePassed * 2.0f) * (TAU * 0.05f)
         );
@@ -1107,7 +1107,7 @@ void PauseMenu::drawRadar(
         Pikmin* pPtr = game.states.gameplay->mobs.pikmin[p];
         
         drawBitmap(
-            bmpRadarPikmin, pPtr->pos,
+            bmpRadarPikmin, pPtr->center,
             Point(16.0f / radarView.cam.zoom),
             0.0f,
             pPtr->pikType->mainColor
@@ -1121,7 +1121,7 @@ void PauseMenu::drawRadar(
     }
     for(const auto& o : obstacles) {
         drawBitmap(
-            bmpRadarObstacle, o->pos,
+            bmpRadarObstacle, o->center,
             Point(40.0f / radarView.cam.zoom),
             o->angle
         );
@@ -1143,7 +1143,7 @@ void PauseMenu::drawRadar(
                     ) + 0.5f;
                 alpha = std::clamp(alpha, 0.0f, 1.0f);
                 drawBitmap(
-                    game.sysContent.bmpMissionMob, mPtr->pos,
+                    game.sysContent.bmpMissionMob, mPtr->center,
                     Point(PAUSE_MENU::MISSION_MOB_MARKER_SIZE) /
                     radarView.cam.zoom,
                     0.0f, multAlpha(game.config.guiColors.gold, alpha)
@@ -1167,7 +1167,7 @@ void PauseMenu::drawRadar(
             //Go directly from A to B.
             
             drawGoHereSegment(
-                lPtr->pos,
+                lPtr->center,
                 lPtr->pathInfo->settings.targetPoint,
                 color, &pathTexturePoint
             );
@@ -1182,8 +1182,8 @@ void PauseMenu::drawRadar(
             if(firstStop >= lPtr->pathInfo->path.size()) continue;
             
             drawGoHereSegment(
-                lPtr->pos,
-                lPtr->pathInfo->path[firstStop]->pos,
+                lPtr->center,
+                lPtr->pathInfo->path[firstStop]->center,
                 color, &pathTexturePoint
             );
             for(
@@ -1192,13 +1192,13 @@ void PauseMenu::drawRadar(
                 s++
             ) {
                 drawGoHereSegment(
-                    lPtr->pathInfo->path[s - 1]->pos,
-                    lPtr->pathInfo->path[s]->pos,
+                    lPtr->pathInfo->path[s - 1]->center,
+                    lPtr->pathInfo->path[s]->center,
                     color, &pathTexturePoint
                 );
             }
             drawGoHereSegment(
-                lPtr->pathInfo->path.back()->pos,
+                lPtr->pathInfo->path.back()->center,
                 lPtr->pathInfo->settings.targetPoint,
                 color, &pathTexturePoint
             );
@@ -1221,7 +1221,7 @@ void PauseMenu::drawRadar(
         //Go directly from A to B.
         
         drawGoHereSegment(
-            radarSelectedLeader->pos,
+            radarSelectedLeader->center,
             radarCursor,
             NEW_GO_HERE_COLOR, &pathTexturePoint
         );
@@ -1241,19 +1241,19 @@ void PauseMenu::drawRadar(
         
         if(!goHerePath.empty()) {
             drawGoHereSegment(
-                radarSelectedLeader->pos,
-                goHerePath[0]->pos,
+                radarSelectedLeader->center,
+                goHerePath[0]->center,
                 color, &pathTexturePoint
             );
             for(size_t s = 1; s < goHerePath.size(); s++) {
                 drawGoHereSegment(
-                    goHerePath[s - 1]->pos,
-                    goHerePath[s]->pos,
+                    goHerePath[s - 1]->center,
+                    goHerePath[s]->center,
                     color, &pathTexturePoint
                 );
             }
             drawGoHereSegment(
-                goHerePath.back()->pos,
+                goHerePath.back()->center,
                 radarCursor,
                 color, &pathTexturePoint
             );
@@ -2428,11 +2428,11 @@ void PauseMenu::initStatusPage() {
  */
 void PauseMenu::panRadar(Point amount) {
     Point delta = amount / radarView.cam.zoom;
-    radarView.cam.pos += delta;
-    radarView.cam.pos.x =
-        std::clamp(radarView.cam.pos.x, radarLimits.tl.x, radarLimits.br.x);
-    radarView.cam.pos.y =
-        std::clamp(radarView.cam.pos.y, radarLimits.tl.y, radarLimits.br.y);
+    radarView.cam.center += delta;
+    radarView.cam.center.x =
+        std::clamp(radarView.cam.center.x, radarLimits.tl.x, radarLimits.br.x);
+    radarView.cam.center.y =
+        std::clamp(radarView.cam.center.y, radarLimits.tl.y, radarLimits.br.y);
 }
 
 
@@ -2627,7 +2627,7 @@ void PauseMenu::tick(float deltaT) {
         if(mouseInRadar) {
             radarCursor = radarView.mouseCursorWorldPos;
         } else {
-            radarCursor = radarView.cam.pos;
+            radarCursor = radarView.cam.center;
         }
         
         goHereCalcTime -= deltaT;

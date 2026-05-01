@@ -289,7 +289,7 @@ void ScriptActionRunners::deleteFunction(ScriptActionInstRunData& data) {
  */
 void ScriptActionRunners::drainLiquid(ScriptActionInstRunData& data) {
     //Main logic.
-    Sector* sPtr = getSector(data.scriptVM->mob->pos, nullptr, true);
+    Sector* sPtr = getSector(data.scriptVM->mob->center, nullptr, true);
     if(!sPtr) return;
     if(!sPtr->liquid) return;
     sPtr->liquid->startDraining();
@@ -461,7 +461,7 @@ void ScriptActionRunners::followPathRandomly(ScriptActionInstRunData& data) {
         while(!finalStop && tries < 5) {
             size_t c = game.rng.i(0, (int) choices.size() - 1);
             if(
-                Distance(choices[c]->pos, data.scriptVM->mob->pos) >
+                Distance(choices[c]->center, data.scriptVM->mob->center) >
                 PATHS::DEF_CHASE_TARGET_DISTANCE
             ) {
                 finalStop = choices[c];
@@ -475,7 +475,7 @@ void ScriptActionRunners::followPathRandomly(ScriptActionInstRunData& data) {
     //so it can emit the FSM_EV_REACHED_DESTINATION event, and hopefully
     //make it clear that there was an error.
     PathFollowSettings settings;
-    settings.targetPoint = finalStop ? finalStop->pos : data.scriptVM->mob->pos;
+    settings.targetPoint = finalStop ? finalStop->center : data.scriptVM->mob->center;
     enableFlag(settings.flags, PATH_FOLLOW_FLAG_CAN_CONTINUE);
     enableFlag(settings.flags, PATH_FOLLOW_FLAG_SCRIPT_USE);
     settings.label = labelArg;
@@ -737,7 +737,7 @@ void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
             if(data.scriptVM->mob) {
                 result =
                     data.scriptVM->mob->getClosestHitbox(
-                        ((Mob*)(data.customData1))->pos
+                        ((Mob*)(data.customData1))->center
                     )->bodyPartName;
             }
         }
@@ -801,7 +801,7 @@ void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
             if(data.customData1 && data.scriptVM->mob) {
                 result =
                     ((Mob*)(data.customData1))->getClosestHitbox(
-                        data.scriptVM->mob->pos
+                        data.scriptVM->mob->center
                     )->bodyPartName;
             }
         }
@@ -1118,7 +1118,7 @@ void ScriptActionRunners::getMobInfo(ScriptActionInstRunData& data) {
     } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_FOCUS_DISTANCE: {
         if(target->scriptVM.focusedMob) {
             float d =
-                Distance(target->pos, target->scriptVM.focusedMob->pos).
+                Distance(target->center, target->scriptVM.focusedMob->center).
                 toFloat();
             result = f2s(d);
         }
@@ -1186,11 +1186,11 @@ void ScriptActionRunners::getMobInfo(ScriptActionInstRunData& data) {
         break;
         
     } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_X: {
-        result = f2s(target->pos.x);
+        result = f2s(target->center.x);
         break;
         
     } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_Y: {
-        result = f2s(target->pos.y);
+        result = f2s(target->center.y);
         break;
         
     } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_Z: {
@@ -1493,7 +1493,7 @@ void ScriptActionRunners::moveToRelative(ScriptActionInstRunData& data) {
     float z = zArg.empty() ? 0.0f : s2f(zArg);
     Point p = rotatePoint(Point(x, y), data.scriptVM->mob->angle);
     data.scriptVM->mob->chase(
-        data.scriptVM->mob->pos + p, data.scriptVM->mob->z + z,
+        data.scriptVM->mob->center + p, data.scriptVM->mob->z + z,
         CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED
     );
 }
@@ -1525,13 +1525,13 @@ void ScriptActionRunners::moveToTarget(ScriptActionInstRunData& data) {
         if(data.scriptVM->focusedMob) {
             float a =
                 getAngle(
-                    data.scriptVM->mob->pos,
-                    data.scriptVM->focusedMob->pos
+                    data.scriptVM->mob->center,
+                    data.scriptVM->focusedMob->center
                 );
             Point offset = Point(2000, 0);
             offset = rotatePoint(offset, a + TAU / 2.0);
             data.scriptVM->mob->chase(
-                data.scriptVM->mob->pos + offset,
+                data.scriptVM->mob->center + offset,
                 data.scriptVM->mob->z,
                 CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED
             );
@@ -1543,7 +1543,7 @@ void ScriptActionRunners::moveToTarget(ScriptActionInstRunData& data) {
     } case SCRIPT_ACTION_MOVE_TYPE_FOCUS: {
         if(data.scriptVM->focusedMob) {
             data.scriptVM->mob->chase(
-                &data.scriptVM->focusedMob->pos,
+                &data.scriptVM->focusedMob->center,
                 &data.scriptVM->focusedMob->z,
                 Point(), 0.0f,
                 CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED
@@ -1556,7 +1556,7 @@ void ScriptActionRunners::moveToTarget(ScriptActionInstRunData& data) {
     } case SCRIPT_ACTION_MOVE_TYPE_FOCUS_POS: {
         if(data.scriptVM->focusedMob) {
             data.scriptVM->mob->chase(
-                data.scriptVM->focusedMob->pos,
+                data.scriptVM->focusedMob->center,
                 data.scriptVM->focusedMob->z,
                 CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED
             );
@@ -1585,7 +1585,7 @@ void ScriptActionRunners::moveToTarget(ScriptActionInstRunData& data) {
         Point des;
         forIdx(l, data.scriptVM->mob->links) {
             if(!data.scriptVM->mob->links[l]) continue;
-            des += data.scriptVM->mob->links[l]->pos;
+            des += data.scriptVM->mob->links[l]->center;
         }
         des = des / data.scriptVM->mob->links.size();
         
@@ -1943,8 +1943,8 @@ void ScriptActionRunners::sendMessageToNearby(ScriptActionInstRunData& data) {
         }
         if(
             Distance(
-                data.scriptVM->mob->pos,
-                game.states.gameplay->mobs.all[m2]->pos
+                data.scriptVM->mob->center,
+                game.states.gameplay->mobs.all[m2]->center
             ) > d
         ) {
             continue;
@@ -2326,7 +2326,7 @@ void ScriptActionRunners::setSectorScroll(ScriptActionInstRunData& data) {
     const string& yArg = data.args[1];
     
     //Main logic.
-    Sector* sPtr = getSector(data.scriptVM->mob->pos, nullptr, true);
+    Sector* sPtr = getSector(data.scriptVM->mob->center, nullptr, true);
     if(!sPtr) return;
     
     sPtr->scroll.x = s2f(xArg);
@@ -2467,7 +2467,7 @@ void ScriptActionRunners::shakeCamera(ScriptActionInstRunData& data) {
     forIdx(p, game.states.gameplay->players) {
         Player* pPtr = &game.states.gameplay->players[p];
         float d =
-            Distance(data.scriptVM->mob->pos, pPtr->view.cam.pos).toFloat();
+            Distance(data.scriptVM->mob->center, pPtr->view.cam.center).toFloat();
         float strengthMult =
             ::interpolateNumber(
                 d, 0.0f, DRAWING::CAM_SHAKE_DROPOFF_DIST, 1.0f, 0.0f
@@ -2850,7 +2850,7 @@ void ScriptActionRunners::teleportToRelative(ScriptActionInstRunData& data) {
             data.scriptVM->mob->angle
         );
     data.scriptVM->mob->chase(
-        data.scriptVM->mob->pos + p,
+        data.scriptVM->mob->center + p,
         data.scriptVM->mob->z + s2f(zArg),
         CHASE_FLAG_TELEPORT
     );
@@ -2886,7 +2886,7 @@ void ScriptActionRunners::throwFocus(ScriptActionInstRunData& data) {
     
     data.scriptVM->mob->startHeightEffect();
     calculateThrow(
-        data.scriptVM->focusedMob->pos, data.scriptVM->focusedMob->z,
+        data.scriptVM->focusedMob->center, data.scriptVM->focusedMob->z,
         Point(s2f(xArg), s2f(yArg)), s2f(zArg),
         maxHeight, MOB::GRAVITY_ADDER,
         &data.scriptVM->focusedMob->speed,
@@ -2915,7 +2915,7 @@ void ScriptActionRunners::turnToAbsolute(ScriptActionInstRunData& data) {
         float x = s2f(angleOrXArg);
         float y = s2f(yArg);
         data.scriptVM->mob->face(
-            getAngle(data.scriptVM->mob->pos, Point(x, y)), nullptr
+            getAngle(data.scriptVM->mob->center, Point(x, y)), nullptr
         );
     }
 }
@@ -2944,7 +2944,7 @@ void ScriptActionRunners::turnToRelative(ScriptActionInstRunData& data) {
         float y = s2f(yArg);
         Point p = rotatePoint(Point(x, y), data.scriptVM->mob->angle);
         data.scriptVM->mob->face(
-            getAngle(data.scriptVM->mob->pos, data.scriptVM->mob->pos + p),
+            getAngle(data.scriptVM->mob->center, data.scriptVM->mob->center + p),
             nullptr
         );
     }
@@ -2979,13 +2979,13 @@ void ScriptActionRunners::turnToTarget(ScriptActionInstRunData& data) {
         
     } case SCRIPT_ACTION_TURN_TYPE_FOCUSED_MOB: {
         if(data.scriptVM->focusedMob) {
-            data.scriptVM->mob->face(0, &data.scriptVM->focusedMob->pos);
+            data.scriptVM->mob->face(0, &data.scriptVM->focusedMob->center);
         }
         break;
         
     } case SCRIPT_ACTION_TURN_TYPE_HOME: {
         data.scriptVM->mob->face(
-            getAngle(data.scriptVM->mob->pos, data.scriptVM->mob->home),
+            getAngle(data.scriptVM->mob->center, data.scriptVM->mob->home),
             nullptr
         );
         break;

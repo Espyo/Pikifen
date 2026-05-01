@@ -74,12 +74,12 @@ const float THROW_VER_SPEED = 900.0f;
 /**
  * @brief Constructs a new Pikmin object.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Pikmin type this mob belongs to.
  * @param angle Starting angle.
  */
-Pikmin::Pikmin(const Point& pos, PikminType* type, float angle) :
-    Mob(pos, type, angle),
+Pikmin::Pikmin(const Point& center, PikminType* type, float angle) :
+    Mob(center, type, angle),
     pikType(type) {
     
     invulnPeriod = Timer(PIKMIN::INVULN_PERIOD);
@@ -184,7 +184,7 @@ void Pikmin::drawMob() {
         float avgScale = (topEff.tf.scale.x + topEff.tf.scale.y) / 2.0f;
         Point topBmpSize = getBitmapDimensions(topBmp);
         topEff.tf.trans +=
-            pos + rotatePoint(topCoords, angle) * avgScale;
+            center + rotatePoint(topCoords, angle) * avgScale;
         topEff.tf.scale *= topSize / topBmpSize;
         topEff.tf.rot += angle + topAngle;
         
@@ -200,7 +200,7 @@ void Pikmin::drawMob() {
         BitmapEffect idleEff = pikSpriteEff;
         Point glowBmpSize =
             getBitmapDimensions(game.sysContent.bmpIdleGlow);
-        idleEff.tf.trans = pos;
+        idleEff.tf.trans = center;
         idleEff.tf.scale =
             (game.config.pikmin.standardRadius * 8) / glowBmpSize;
         idleEff.tf.rot =
@@ -222,11 +222,11 @@ void Pikmin::drawMob() {
 void Pikmin::finishDyingClassSpecifics() {
     //Essentials.
     toDelete = true;
-    game.states.gameplay->lastPikminDeathPos = pos;
+    game.states.gameplay->lastPikminDeathPos = center;
     
     //Soul.
     Particle par(
-        pos, LARGE_FLOAT,
+        center, LARGE_FLOAT,
         radius * 2, 2.0f
     );
     par.bitmap = game.sysContent.bmpPikminSoul;
@@ -248,7 +248,7 @@ void Pikmin::finishDyingClassSpecifics() {
             &type->sounds[dyingSoundIdx];
         game.audio.addNewPosSoundSource(
             dyingSound->sample,
-            pos, false, dyingSound->config
+            center, false, dyingSound->config
         );
     }
 }
@@ -482,8 +482,8 @@ void Pikmin::latch(Mob* m, const Hitbox* h) {
     
     //Shuffle it slightly, randomly, so that multiple Pikmin thrown
     //at the exact same spot aren't perfectly overlapping each other.
-    pos.x += game.rng.f(-2.0f, 2.0f);
-    pos.y += game.rng.f(-2.0f, 2.0f);
+    center.x += game.rng.f(-2.0f, 2.0f);
+    center.y += game.rng.f(-2.0f, 2.0f);
     
     float hOffsetDist;
     float hOffsetAngle;
@@ -586,7 +586,7 @@ void Pikmin::readScriptVars(const ScriptVarReader& svr) {
 void Pikmin::startDyingClassSpecifics() {
     game.states.gameplay->pikminDeaths++;
     game.states.gameplay->pikminDeathsPerType[pikType]++;
-    game.states.gameplay->lastPikminDeathPos = pos;
+    game.states.gameplay->lastPikminDeathPos = center;
     game.statistics.pikminDeaths++;
     
     enableFlag(flags, MOB_FLAG_INTANGIBLE);
@@ -664,7 +664,7 @@ void Pikmin::tickClassSpecifics(float deltaT) {
 /**
  * @brief Returns the sprout closest to a leader. Used when auto-plucking.
  *
- * @param pos Coordinates of the leader.
+ * @param pos Center coordinates of the leader.
  * @param d Variable to return the distance to. nullptr for none.
  * @param ignoreReserved If true, ignore any sprouts that are "reserved"
  * (i.e. already chosen to be plucked by another leader).
@@ -685,7 +685,7 @@ Pikmin* getClosestSprout(
             continue;
         }
         
-        Distance dis(pos, game.states.gameplay->mobs.pikmin[p]->pos);
+        Distance dis(pos, game.states.gameplay->mobs.pikmin[p]->center);
         if(closestPikmin == nullptr || dis < closestDist) {
         
             if(

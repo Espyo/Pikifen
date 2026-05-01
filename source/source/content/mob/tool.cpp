@@ -14,14 +14,14 @@
 /**
  * @brief Constructs a new tool object.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Tool type this mob belongs to.
  * @param angle Starting angle.
  */
 Tool::Tool(
-    const Point& pos, ToolType* type, float angle
+    const Point& center, ToolType* type, float angle
 ):
-    Mob(pos, type, angle),
+    Mob(center, type, angle),
     tooType(type) {
     
     team = MOB_TEAM_NONE;

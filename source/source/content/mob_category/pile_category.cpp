@@ -43,15 +43,15 @@ void PileCategory::clearTypes() {
 /**
  * @brief Creates a pile and adds it to the list of piles.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Mob type.
  * @param angle Starting angle.
  * @return The mob.
  */
 Mob* PileCategory::createMob(
-    const Point& pos, MobType* type, float angle
+    const Point& center, MobType* type, float angle
 ) {
-    Pile* m = new Pile(pos, (PileType*) type, angle);
+    Pile* m = new Pile(center, (PileType*) type, angle);
     game.states.gameplay->mobs.piles.push_back(m);
     return m;
 }

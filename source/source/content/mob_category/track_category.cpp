@@ -43,15 +43,15 @@ void TrackCategory::clearTypes() {
 /**
  * @brief Creates a track and adds it to the list of tracks.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Mob type.
  * @param angle Starting angle.
  * @return The mob.
  */
 Mob* TrackCategory::createMob(
-    const Point& pos, MobType* type, float angle
+    const Point& center, MobType* type, float angle
 ) {
-    Track* m = new Track(pos, (TrackType*) type, angle);
+    Track* m = new Track(center, (TrackType*) type, angle);
     game.states.gameplay->mobs.tracks.push_back(m);
     return m;
 }

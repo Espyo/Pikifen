@@ -27,7 +27,7 @@
 /**
  * @brief Constructs a new particle object.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param z Starting Z coordinate.
  * @param initialSize Initial size.
  * @param duration Total lifespan.
@@ -36,13 +36,13 @@
  * @param initialColor Initial color.
  */
 Particle::Particle(
-    const Point& pos, const float z,
+    const Point& center, const float z,
     const float initialSize, const float duration,
     const PARTICLE_PRIORITY priority, const ALLEGRO_COLOR initialColor
 ) :
     duration(duration),
     time(duration),
-    pos(pos),
+    center(center),
     z(z),
     size(initialSize),
     color(initialColor),
@@ -75,12 +75,12 @@ void Particle::draw() {
     
     if(bitmap) {
         drawBitmap(
-            bitmap, pos, Point(finalSize, -1),
+            bitmap, center, Point(finalSize, -1),
             bmpAngle, finalColor
         );
     } else {
         al_draw_filled_circle(
-            pos.x, pos.y,
+            center.x, center.y,
             finalSize * 0.5,
             finalColor
         );
@@ -143,9 +143,9 @@ void Particle::tick(const float deltaT) {
     float t = 1.0f - time / duration;
     
     Point totalVelocity = linearSpeed.get(t);
-    float outwardsAngle = getAngle(pos - origin);
+    float outwardsAngle = getAngle(center - origin);
     
-    if(pos == origin) {
+    if(center == origin) {
         outwardsAngle = game.rng.f(-180, 180);
     }
     totalVelocity +=
@@ -161,7 +161,7 @@ void Particle::tick(const float deltaT) {
     totalFrictionApplied += newFriction;
     totalVelocity -= newFriction;
     
-    pos += totalVelocity * deltaT;
+    center += totalVelocity * deltaT;
     
     if(bmpAngleType == PARTICLE_ANGLE_TYPE_DIRECTION) {
         coordinatesToAngle(totalVelocity, &bmpAngle, nullptr);
@@ -266,7 +266,7 @@ ParticleGenerator::ParticleGenerator(
  */
 void ParticleGenerator::emit(ParticleManager& manager) {
     if(!canEmit) return;
-    Point basePPos = baseParticle.pos;
+    Point basePPos = baseParticle.center;
     float basePZ = baseParticle.z;
     Point offs = followPosOffset;
     if(followAngle) {
@@ -320,13 +320,13 @@ void ParticleGenerator::emit(ParticleManager& manager) {
         newP.friction +=
             game.rng.f(-frictionDeviation, frictionDeviation);
             
-        newP.pos = basePPos;
+        newP.center = basePPos;
         newP.origin = basePPos;
         Point offset = emission.getEmissionOffset(p / (float) finalNr);
         if(followAngle) {
             offset = rotatePoint(offset, *followAngle);
         }
-        newP.pos += offset;
+        newP.center += offset;
         
         newP.z = basePZ;
         
@@ -619,7 +619,7 @@ void ParticleGenerator::saveToDataNode(DataNode* node) {
  */
 void ParticleGenerator::tick(float deltaT, ParticleManager& manager) {
     if(followMob) {
-        baseParticle.pos = followMob->pos;
+        baseParticle.center = followMob->center;
         baseParticle.z = followMob->z;
     }
     emissionTimer -= deltaT;
@@ -758,14 +758,14 @@ void ParticleManager::clear() {
 /**
  * @brief Deletes a particle from the list, freeing up its slot.
  *
- * @param pos Position in the list.
+ * @param slot Slot number in the list.
  */
-void ParticleManager::deleteParticle(size_t pos) {
-    if(pos > count) return;
+void ParticleManager::deleteParticle(size_t slot) {
+    if(slot > count) return;
     
     //To delete a particle, let's simply move its data to the start of
     //the "dead" particles. A particle is considered dead if its time is 0.
-    particles[pos].time = 0.0f;
+    particles[slot].time = 0.0f;
     
     //Because the first "count" members are alive, we'll swap this dead
     //particle with the last living one. This means this particle
@@ -778,7 +778,7 @@ void ParticleManager::deleteParticle(size_t pos) {
     }
     
     //Place the last live particle on this now-unused position.
-    particles[pos] = particles[count - 1];
+    particles[slot] = particles[count - 1];
     //And this new "dead" particle should be marked as such.
     particles[count - 1].time = 0.0f;
     
@@ -801,7 +801,7 @@ void ParticleManager::fillComponentList(
         Particle* pPtr = &particles[c];
         float pSize =
             pPtr->size.get((pPtr->duration - pPtr->time) / pPtr->duration);
-        RectCorners pCorners(pPtr->pos - pSize, pPtr->pos + pSize);
+        RectCorners pCorners(pPtr->center - pSize, pPtr->center + pSize);
         if(
             camera.tl != camera.br &&
             !rectanglesIntersect(pCorners, camera)

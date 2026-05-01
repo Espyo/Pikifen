@@ -43,15 +43,15 @@ void ToolCategory::clearTypes() {
 /**
  * @brief Creates a tool and adds it to the list of tools.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Mob type.
  * @param angle Starting angle.
  * @return The mob.
  */
 Mob* ToolCategory::createMob(
-    const Point& pos, MobType* type, float angle
+    const Point& center, MobType* type, float angle
 ) {
-    Tool* m = new Tool(pos, (ToolType*) type, angle);
+    Tool* m = new Tool(center, (ToolType*) type, angle);
     game.states.gameplay->mobs.tools.push_back(m);
     return m;
 }

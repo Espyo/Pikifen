@@ -410,17 +410,17 @@ void AnimationEditor::drawSideViewHitbox(
     }
     
     al_draw_filled_rectangle(
-        hPtr->pos.x - hPtr->radius,
+        hPtr->center.x - hPtr->radius,
         -zToUse,
-        hPtr->pos.x + hPtr->radius,
+        hPtr->center.x + hPtr->radius,
         -zToUse - hToUse,
         color
     );
     
     al_draw_rectangle(
-        hPtr->pos.x - hPtr->radius,
+        hPtr->center.x - hPtr->radius,
         -zToUse,
-        hPtr->pos.x + hPtr->radius,
+        hPtr->center.x + hPtr->radius,
         -zToUse - hToUse,
         outlineColor, outlineThickness
     );
@@ -650,11 +650,11 @@ void AnimationEditor::drawTopDownViewHitbox(
     if(hPtr->radius <= 0) return;
     
     al_draw_filled_circle(
-        hPtr->pos.x, hPtr->pos.y, hPtr->radius, color
+        hPtr->center.x, hPtr->center.y, hPtr->radius, color
     );
     
     al_draw_circle(
-        hPtr->pos.x, hPtr->pos.y,
+        hPtr->center.x, hPtr->center.y,
         hPtr->radius, outlineColor, outlineThickness
     );
 }

@@ -43,15 +43,15 @@ void ScaleCategory::clearTypes() {
 /**
  * @brief Creates a scale and adds it to the list of scales.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Mob type.
  * @param angle Starting angle.
  * @return The mob.
  */
 Mob* ScaleCategory::createMob(
-    const Point& pos, MobType* type, float angle
+    const Point& center, MobType* type, float angle
 ) {
-    Scale* m = new Scale(pos, (ScaleType*) type, angle);
+    Scale* m = new Scale(center, (ScaleType*) type, angle);
     game.states.gameplay->mobs.scales.push_back(m);
     return m;
 }

@@ -16,14 +16,14 @@
 /**
  * @brief Constructs a new group task object.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Group task type this mob belongs to.
  * @param angle Starting angle.
  */
 GroupTask::GroupTask(
-    const Point& pos, GroupTaskType* type, float angle
+    const Point& center, GroupTaskType* type, float angle
 ):
-    Mob(pos, type, angle),
+    Mob(center, type, angle),
     tasType(type),
     powerGoal(type->powerGoal) {
     
@@ -320,7 +320,7 @@ void GroupTask::updateSpotAbsolutePositions() {
     ALLEGRO_TRANSFORM t;
     al_identity_transform(&t);
     al_rotate_transform(&t, angle);
-    al_translate_transform(&t, pos.x, pos.y);
+    al_translate_transform(&t, center.x, center.y);
     
     forIdx(s, spots) {
         Point* p = &(spots[s].absolutePos);

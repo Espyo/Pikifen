@@ -43,15 +43,15 @@ void DecorationCategory::clearTypes() {
 /**
  * @brief Creates a decoration and adds it to the list of decorations.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Mob type.
  * @param angle Starting angle.
  * @return The mob.
  */
 Mob* DecorationCategory::createMob(
-    const Point& pos, MobType* type, float angle
+    const Point& center, MobType* type, float angle
 ) {
-    Decoration* m = new Decoration(pos, (DecorationType*) type, angle);
+    Decoration* m = new Decoration(center, (DecorationType*) type, angle);
     game.states.gameplay->mobs.decorations.push_back(m);
     return m;
 }

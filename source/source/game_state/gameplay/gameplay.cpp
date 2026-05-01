@@ -514,7 +514,7 @@ bool GameplayState::endMission(
     if(!silent) {
         //Zoom in on the reason, if possible.
         for(Player& player : players) {
-            Point newCamPos = player.view.cam.targetPos;
+            Point newCamPos = player.view.cam.targetCenter;
             float newCamZoom = player.view.cam.targetZoom;
             
             if(cond) {
@@ -525,7 +525,7 @@ bool GameplayState::endMission(
                         cond, &newCamPos, &newCamZoom
                     )
                 ) {
-                    player.view.cam.targetPos = newCamPos;
+                    player.view.cam.targetCenter = newCamPos;
                     player.view.cam.targetZoom = newCamZoom;
                 }
             }
@@ -606,7 +606,7 @@ void GameplayState::enter() {
     
     for(Player& player : players) {
         if(player.leaderPtr) {
-            player.view.cam.setPos(player.leaderPtr->pos);
+            player.view.cam.setPos(player.leaderPtr->center);
         } else {
             player.view.cam.setPos(Point());
         }
@@ -661,7 +661,7 @@ void GameplayState::enter() {
             player.leaderCursorWin = game.mouseCursor.winPos;
         } else if(player.leaderPtr) {
             player.leaderCursorWorld =
-                player.leaderPtr->pos +
+                player.leaderPtr->center +
                 angleToCoordinates(
                     player.leaderPtr->angle,
                     game.config.rules.leaderCursorMaxDist / 2.0f
@@ -999,7 +999,7 @@ Mob* GameplayState::getClosestGroupMember(
             continue;
         }
         
-        Distance d(player->leaderPtr->pos, memberPtr->pos);
+        Distance d(player->leaderPtr->center, memberPtr->center);
         
         if(
             (canGrab && !canGrabClosest[maturity]) ||
@@ -1070,7 +1070,7 @@ Mob* GameplayState::getPointMobOnLeaderCursor(Player* player) const {
         if(mPtr->isStoredInsideMob()) continue;
         if(!mPtr->scriptVM.fsm.curState) continue;
         
-        Distance d(player->leaderCursorWorld, mPtr->pos);
+        Distance d(player->leaderCursorWorld, mPtr->center);
         if(d > mPtr->radius) continue;
         if(closest && d > closestDist) continue;
         
@@ -1339,7 +1339,7 @@ void GameplayState::load() {
     //Save each path stop's sector.
     forIdx(s, game.curArea->pathStops) {
         game.curArea->pathStops[s]->sectorPtr =
-            getSector(game.curArea->pathStops[s]->pos, nullptr, true);
+            getSector(game.curArea->pathStops[s]->center, nullptr, true);
     }
     
     //Create liquids.
@@ -2073,7 +2073,7 @@ bool MissionMobGroupStatus::remove(Mob* m) {
     if(it == remaining.end()) {
         return false;
     }
-    game.states.gameplay->lastMobClearedPos = m->pos;
+    game.states.gameplay->lastMobClearedPos = m->center;
     remaining.erase(it);
     return true;
 }

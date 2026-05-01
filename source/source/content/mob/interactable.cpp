@@ -14,14 +14,14 @@
 /**
  * @brief Constructs a new interactable object.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Interactable type this mob belongs to.
  * @param angle Starting angle.
  */
 Interactable::Interactable(
-    const Point& pos, InteractableType* type, float angle
+    const Point& center, InteractableType* type, float angle
 ):
-    Mob(pos, type, angle),
+    Mob(center, type, angle),
     intType(type) {
     
 }

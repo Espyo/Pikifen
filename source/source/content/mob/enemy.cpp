@@ -45,12 +45,12 @@ const float SOUL_SIZE_MULT = 0.7;
 /**
  * @brief Constructs a new enemy object.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Enemy type this mob belongs to.
  * @param angle Starting angle.
  */
-Enemy::Enemy(const Point& pos, EnemyType* type, float angle) :
-    Mob(pos, type, angle),
+Enemy::Enemy(const Point& center, EnemyType* type, float angle) :
+    Mob(center, type, angle),
     eneType(type),
     reviveTimer(type->reviveTime),
     isBoss(false) {
@@ -125,7 +125,7 @@ void Enemy::finishDyingClassSpecifics() {
                 ENEMY::SOUL_MAX_PITCH, ENEMY::SOUL_MIN_PITCH
             );
             
-        Particle par(pos, LARGE_FLOAT, soulSize, 2, PARTICLE_PRIORITY_MEDIUM);
+        Particle par(center, LARGE_FLOAT, soulSize, 2, PARTICLE_PRIORITY_MEDIUM);
         par.bitmap = game.sysContent.bmpEnemySoul;
         par.friction = 0.5f;
         par.linearSpeed = KeyframeInterpolator<Point>(Point(-50, -50));
@@ -140,7 +140,7 @@ void Enemy::finishDyingClassSpecifics() {
         game.states.gameplay->particles.addParticle(par);
         
         game.audio.addNewPosSoundSource(
-            game.sysContent.sndEnemySoul, pos, false,
+            game.sysContent.sndEnemySoul, center, false,
         { .volume = 0.2f, .speed = soulPitch, .speedDeviation = 0.02f }
         );
     }

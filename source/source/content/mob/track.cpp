@@ -14,14 +14,14 @@
 /**
  * @brief Constructs a new track object.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Track type this mob belongs to.
  * @param angle Starting angle.
  */
 Track::Track(
-    const Point& pos, TrackType* type, float angle
+    const Point& center, TrackType* type, float angle
 ):
-    Mob(pos, type, angle),
+    Mob(center, type, angle),
     traType(type) {
     
     team = MOB_TEAM_NONE;

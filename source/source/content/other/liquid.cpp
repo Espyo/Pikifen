@@ -380,7 +380,7 @@ void Liquid::tick(float deltaT) {
                 Pikmin* pikPtr = (Pikmin*) mobsOn[m];
                 if(pikPtr->pikType->chillsLiquids) {
                     chillingMobs++;
-                    firstChillingMobPos = pikPtr->pos;
+                    firstChillingMobPos = pikPtr->center;
                 }
             }
         }

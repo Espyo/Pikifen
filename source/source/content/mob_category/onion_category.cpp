@@ -43,15 +43,15 @@ void OnionCategory::clearTypes() {
 /**
  * @brief Creates an Onion and adds it to the list of Onions.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Mob type.
  * @param angle Starting angle.
  * @return The mob.
  */
 Mob* OnionCategory::createMob(
-    const Point& pos, MobType* type, float angle
+    const Point& center, MobType* type, float angle
 ) {
-    Onion* m = new Onion(pos, (OnionType*) type, angle);
+    Onion* m = new Onion(center, (OnionType*) type, angle);
     game.states.gameplay->mobs.onions.push_back(m);
     return m;
 }

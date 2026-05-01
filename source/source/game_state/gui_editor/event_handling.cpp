@@ -20,19 +20,19 @@
  */
 void GuiEditor::handleKeyCharCanvas(const ALLEGRO_EVENT& ev) {
     if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_LEFT)) {
-        game.editorsView.cam.targetPos.x -=
+        game.editorsView.cam.targetCenter.x -=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.editorsView.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_RIGHT)) {
-        game.editorsView.cam.targetPos.x +=
+        game.editorsView.cam.targetCenter.x +=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.editorsView.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_UP)) {
-        game.editorsView.cam.targetPos.y -=
+        game.editorsView.cam.targetCenter.y -=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.editorsView.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_DOWN)) {
-        game.editorsView.cam.targetPos.y +=
+        game.editorsView.cam.targetCenter.y +=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.editorsView.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_MINUS)) {

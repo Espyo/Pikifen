@@ -34,14 +34,14 @@ const float STEP_HEIGHT = 10;
 /**
  * @brief Constructs a new bridge object.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Bridge type this mob belongs to.
  * @param angle Starting angle.
  */
-Bridge::Bridge(const Point& pos, BridgeType* type, float angle) :
-    Mob(pos, type, angle),
+Bridge::Bridge(const Point& center, BridgeType* type, float angle) :
+    Mob(center, type, angle),
     briType(type),
-    startPos(pos) {
+    startPos(center) {
     
     team = MOB_TEAM_OBSTACLE;
     
@@ -106,7 +106,7 @@ bool Bridge::checkHealth() {
                 );
                 
             forIdx(m, prevChunkComponents) {
-                prevChunkComponents[m]->pos +=
+                prevChunkComponents[m]->center +=
                     offset;
                 prevChunkComponents[m]->setRectangularDim(
                     Point(
@@ -219,7 +219,7 @@ bool Bridge::checkHealth() {
         radius;
     Point offset(chunkWidth * chunks - mobRadius, 0);
     offset = rotatePoint(offset, angle);
-    pos = startPos + offset;
+    center = startPos + offset;
     z = startZ + prevChunkComponents[0]->z;
     groundSector = prevChunkComponents[0]->groundSector;
     
@@ -312,8 +312,8 @@ void Bridge::drawComponent(Mob* m) {
         al_transform_coordinates(
             &angleTransform, &vertexes[v].x, &vertexes[v].y
         );
-        vertexes[v].x += m->pos.x;
-        vertexes[v].y += m->pos.y;
+        vertexes[v].x += m->center.x;
+        vertexes[v].y += m->center.y;
     }
     
     al_draw_prim(vertexes, nullptr, texture, 0, 8, ALLEGRO_PRIM_TRIANGLE_STRIP);
@@ -348,8 +348,8 @@ void Bridge::readScriptVars(const ScriptVarReader& svr) {
  */
 void Bridge::setup() {
     if(!links.empty() && links[0]) {
-        totalLength = Distance(pos, links[0]->pos).toFloat();
-        face(getAngle(pos, links[0]->pos), nullptr, true);
+        totalLength = Distance(center, links[0]->center).toFloat();
+        face(getAngle(center, links[0]->center), nullptr, true);
         deltaZ = links[0]->z - z;
         totalChunksNeeded =
             std::max(

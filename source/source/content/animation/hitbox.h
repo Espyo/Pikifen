@@ -118,7 +118,7 @@ public:
     BodyPart* bodyPartPtr = nullptr;
     
     //Center of the hitbox (relative coordinates).
-    Point pos;
+    Point center;
     
     //Bottom of the hitbox (relative coordinates).
     float z = 0.0f;

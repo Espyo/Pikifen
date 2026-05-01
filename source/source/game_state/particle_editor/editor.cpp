@@ -574,9 +574,9 @@ void ParticleEditor::openExternallyCmd(float inputValue) {
 void ParticleEditor::panCam(const ALLEGRO_EVENT& ev) {
     game.editorsView.cam.setPos(
         Point(
-            game.editorsView.cam.pos.x -
+            game.editorsView.cam.center.x -
             ev.mouse.dx / game.editorsView.cam.zoom,
-            game.editorsView.cam.pos.y -
+            game.editorsView.cam.center.y -
             ev.mouse.dy / game.editorsView.cam.zoom
         )
     );
@@ -669,7 +669,7 @@ void ParticleEditor::quickPlayCmd(float inputValue) {
     game.quickPlay.areaPath = game.options.partEd.quickPlayAreaPath;
     game.quickPlay.content = manifest.path;
     game.quickPlay.editor = game.states.particleEd;
-    game.quickPlay.camPos = game.editorsView.cam.pos;
+    game.quickPlay.camPos = game.editorsView.cam.center;
     game.quickPlay.camZ = game.editorsView.cam.zoom;
     leave();
 }
@@ -731,7 +731,7 @@ void ParticleEditor::reloadPartGens() {
  * @brief Resets the camera's X and Y coordinates.
  */
 void ParticleEditor::resetCamXY() {
-    game.editorsView.cam.targetPos = Point();
+    game.editorsView.cam.targetCenter = Point();
 }
 
 
@@ -857,7 +857,7 @@ void ParticleEditor::zoomAndPosResetCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
     if(game.editorsView.cam.targetZoom == 1.0f) {
-        game.editorsView.cam.targetPos = Point();
+        game.editorsView.cam.targetCenter = Point();
     } else {
         game.editorsView.cam.targetZoom = 1.0f;
     }

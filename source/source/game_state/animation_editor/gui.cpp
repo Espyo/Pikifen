@@ -2155,7 +2155,7 @@ void AnimationEditor::processGuiPanelSprite() {
     
     //Sprite bitmap button.
     if(ImGui::Button("Bitmap", modeButtonsSize)) {
-        preSpriteBmpCamPos = game.editorsView.cam.targetPos;
+        preSpriteBmpCamPos = game.editorsView.cam.targetCenter;
         preSpriteBmpCamZoom = game.editorsView.cam.targetZoom;
         matchingSpriteBmpPos = curSprite->bmpPos;
         matchingSpriteBmpSize = curSprite->bmpSize;
@@ -2588,7 +2588,7 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
         Hitbox* curHitbox = &curSprite->hitboxes[curHitboxIdx];
         
         //Hitbox center value.
-        if(ImGui::DragFloat2("Center", (float*) &curHitbox->pos, 0.05f)) {
+        if(ImGui::DragFloat2("Center", (float*) &curHitbox->center, 0.05f)) {
             changesMgr.markAsChanged();
         }
         setTooltip(

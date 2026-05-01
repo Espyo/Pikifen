@@ -20,12 +20,12 @@
 /**
  * @brief Constructs a new treasure object.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Treasure type this mob belongs to.
  * @param angle Starting angle.
  */
-Treasure::Treasure(const Point& pos, TreasureType* type, float angle) :
-    Mob(pos, type, angle),
+Treasure::Treasure(const Point& center, TreasureType* type, float angle) :
+    Mob(center, type, angle),
     treType(type) {
     
     becomeCarriable(CARRY_DESTINATION_SHIP);
@@ -86,6 +86,6 @@ int Treasure::getMissionPoints(bool* applicableInThisMission) const {
             *applicableInThisMission = true;
         }
     }
-
+    
     return (int) treType->points;
 }

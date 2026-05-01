@@ -241,33 +241,33 @@ void GameplayState::drawBackground(
     bgV[0].y =
         0;
     bgV[0].u =
-        (view.cam.pos.x - finalZoom.x) / game.curArea->bgBmpZoom;
+        (view.cam.center.x - finalZoom.x) / game.curArea->bgBmpZoom;
     bgV[0].v =
-        (view.cam.pos.y - finalZoom.y) / game.curArea->bgBmpZoom;
+        (view.cam.center.y - finalZoom.y) / game.curArea->bgBmpZoom;
     bgV[1].x =
         bmpW;
     bgV[1].y =
         0;
     bgV[1].u =
-        (view.cam.pos.x + finalZoom.x) / game.curArea->bgBmpZoom;
+        (view.cam.center.x + finalZoom.x) / game.curArea->bgBmpZoom;
     bgV[1].v =
-        (view.cam.pos.y - finalZoom.y) / game.curArea->bgBmpZoom;
+        (view.cam.center.y - finalZoom.y) / game.curArea->bgBmpZoom;
     bgV[2].x =
         bmpW;
     bgV[2].y =
         bmpH;
     bgV[2].u =
-        (view.cam.pos.x + finalZoom.x) / game.curArea->bgBmpZoom;
+        (view.cam.center.x + finalZoom.x) / game.curArea->bgBmpZoom;
     bgV[2].v =
-        (view.cam.pos.y + finalZoom.y) / game.curArea->bgBmpZoom;
+        (view.cam.center.y + finalZoom.y) / game.curArea->bgBmpZoom;
     bgV[3].x =
         0;
     bgV[3].y =
         bmpH;
     bgV[3].u =
-        (view.cam.pos.x - finalZoom.x) / game.curArea->bgBmpZoom;
+        (view.cam.center.x - finalZoom.x) / game.curArea->bgBmpZoom;
     bgV[3].v =
-        (view.cam.pos.y + finalZoom.y) / game.curArea->bgBmpZoom;
+        (view.cam.center.y + finalZoom.y) / game.curArea->bgBmpZoom;
         
     al_draw_prim(
         bgV, nullptr, game.curArea->bgBmp,
@@ -951,7 +951,7 @@ void GameplayState::drawInGameText(Player* player) {
                         break;
                     }
                     Point p =
-                        mobPtr->pos + rotatePoint(hPtr->pos, mobPtr->angle);
+                        mobPtr->center + rotatePoint(hPtr->center, mobPtr->angle);
                     al_draw_filled_circle(p.x, p.y, hPtr->radius, hc);
                 }
             }
@@ -966,8 +966,8 @@ void GameplayState::drawInGameText(Player* player) {
                     forIdx(h, s->hitboxes) {
                         Hitbox* hPtr = &s->hitboxes[h];
                         Point p =
-                            mobPtr->pos +
-                            rotatePoint(hPtr->pos, mobPtr->angle);
+                            mobPtr->center +
+                            rotatePoint(hPtr->center, mobPtr->angle);
                         al_draw_circle(
                             p.x, p.y,
                             hPtr->radius, COLOR_WHITE, 1
@@ -979,13 +979,13 @@ void GameplayState::drawInGameText(Player* player) {
                     rectToRectCorners(Rect(Point(), mobPtr->rectangularDim));
                 vector<Point> rectVertices {
                     rotatePoint(mobCorners.tl, mobPtr->angle) +
-                    mobPtr->pos,
+                    mobPtr->center,
                     rotatePoint(Point(mobCorners.tl.x, mobCorners.br.y),  mobPtr->angle) +
-                    mobPtr->pos,
+                    mobPtr->center,
                     rotatePoint(mobCorners.br, mobPtr->angle) +
-                    mobPtr->pos,
+                    mobPtr->center,
                     rotatePoint(Point(mobCorners.br.x, mobCorners.tl.y), mobPtr->angle) +
-                    mobPtr->pos
+                    mobPtr->center
                 };
                 float vertices[] {
                     rectVertices[0].x,
@@ -1001,7 +1001,7 @@ void GameplayState::drawInGameText(Player* player) {
                 al_draw_polygon(vertices, 4, 0, COLOR_WHITE, 1, 10);
             } else {
                 al_draw_circle(
-                    mobPtr->pos.x, mobPtr->pos.y,
+                    mobPtr->center.x, mobPtr->center.y,
                     mobPtr->radius, COLOR_WHITE, 1
                 );
             }
@@ -1030,7 +1030,7 @@ void GameplayState::drawInGameText(Player* player) {
         Path* path = game.makerTools.infoLock->pathInfo;
         Point targetPos =
             hasFlag(path->settings.flags, PATH_FOLLOW_FLAG_FOLLOW_MOB) ?
-            path->settings.targetMob->pos :
+            path->settings.targetMob->center :
             path->settings.targetPoint;
             
         if(!path->path.empty()) {
@@ -1045,10 +1045,10 @@ void GameplayState::drawInGameText(Player* player) {
                 }
                 
                 al_draw_line(
-                    path->path[s]->pos.x,
-                    path->path[s]->pos.y,
-                    path->path[s + 1]->pos.x,
-                    path->path[s + 1]->pos.y,
+                    path->path[s]->center.x,
+                    path->path[s]->center.y,
+                    path->path[s + 1]->center.x,
+                    path->path[s + 1]->center.y,
                     isBlocked ? BLOCKED_F_LINE_COLOR : FREE_F_LINE_COLOR,
                     2.0f
                 );
@@ -1056,11 +1056,11 @@ void GameplayState::drawInGameText(Player* player) {
             
             //Colored circles for the first and last stops.
             al_draw_filled_circle(
-                path->path[0]->pos.x, path->path[0]->pos.y,
+                path->path[0]->center.x, path->path[0]->center.y,
                 16.0f, FIRST_STOP_COLOR
             );
             al_draw_filled_circle(
-                path->path.back()->pos.x, path->path.back()->pos.y,
+                path->path.back()->center.x, path->path.back()->center.y,
                 16.0f, LAST_STOP_COLOR
             );
             
@@ -1073,8 +1073,8 @@ void GameplayState::drawInGameText(Player* player) {
             bool isBlocked = path->blockReason != PATH_BLOCK_REASON_NONE;
             //Line directly to the target.
             al_draw_line(
-                game.makerTools.infoLock->pos.x,
-                game.makerTools.infoLock->pos.y,
+                game.makerTools.infoLock->center.x,
+                game.makerTools.infoLock->center.y,
                 targetPos.x,
                 targetPos.y,
                 isBlocked ? BLOCKED_LINE_COLOR : FREE_LINE_COLOR,
@@ -1084,16 +1084,16 @@ void GameplayState::drawInGameText(Player* player) {
             bool isBlocked = path->blockReason != PATH_BLOCK_REASON_NONE;
             //Line to the next stop, and circle for the next stop in blue.
             al_draw_line(
-                game.makerTools.infoLock->pos.x,
-                game.makerTools.infoLock->pos.y,
-                path->path[path->curPathStopIdx]->pos.x,
-                path->path[path->curPathStopIdx]->pos.y,
+                game.makerTools.infoLock->center.x,
+                game.makerTools.infoLock->center.y,
+                path->path[path->curPathStopIdx]->center.x,
+                path->path[path->curPathStopIdx]->center.y,
                 isBlocked ? BLOCKED_LINE_COLOR : FREE_LINE_COLOR,
                 4.0f
             );
             al_draw_filled_circle(
-                path->path[path->curPathStopIdx]->pos.x,
-                path->path[path->curPathStopIdx]->pos.y,
+                path->path[path->curPathStopIdx]->center.x,
+                path->path[path->curPathStopIdx]->center.y,
                 10.0f,
                 isBlocked ? BLOCKED_STOP_COLOR : FREE_STOP_COLOR
             );
@@ -1140,13 +1140,13 @@ void GameplayState::drawInGameText(Player* player) {
                 ];
             ALLEGRO_COLOR color = FAR_REACH_COLOR;
             drawReach(
-                game.makerTools.infoLock->pos,
+                game.makerTools.infoLock->center,
                 game.makerTools.infoLock->angle,
                 game.makerTools.infoLock->radius,
                 farReach->angle1, farReach->radius1, color
             );
             drawReach(
-                game.makerTools.infoLock->pos,
+                game.makerTools.infoLock->center,
                 game.makerTools.infoLock->angle,
                 game.makerTools.infoLock->radius,
                 farReach->angle2, farReach->radius2, color
@@ -1159,13 +1159,13 @@ void GameplayState::drawInGameText(Player* player) {
                 ];
             ALLEGRO_COLOR color = NEAR_REACH_COLOR;
             drawReach(
-                game.makerTools.infoLock->pos,
+                game.makerTools.infoLock->center,
                 game.makerTools.infoLock->angle,
                 game.makerTools.infoLock->radius,
                 nearReach->angle1, nearReach->radius1, color
             );
             drawReach(
-                game.makerTools.infoLock->pos,
+                game.makerTools.infoLock->center,
                 game.makerTools.infoLock->angle,
                 game.makerTools.infoLock->radius,
                 nearReach->angle2, nearReach->radius2, color
@@ -1204,7 +1204,7 @@ void GameplayState::drawLeaderCursor(
     //Swarm arrows.
     size_t nArrows = player->leaderPtr->swarmArrows.size();
     for(size_t a = 0; a < nArrows; a++) {
-        Point pos(
+        Point center(
             cos(player->swarmAngle) * player->leaderPtr->swarmArrows[a],
             sin(player->swarmAngle) * player->leaderPtr->swarmArrows[a]
         );
@@ -1219,7 +1219,7 @@ void GameplayState::drawLeaderCursor(
             );
         drawBitmap(
             game.sysContent.bmpSwarmArrow,
-            player->leaderPtr->pos + pos,
+            player->leaderPtr->center + center,
             Point(
                 16 * (1 + player->leaderPtr->swarmArrows[a] /
                       game.config.rules.leaderCursorMaxDist),
@@ -1233,14 +1233,14 @@ void GameplayState::drawLeaderCursor(
     //Whistle rings.
     size_t nRings = player->whistle.rings.size();
     float leaderCursorAngle =
-        getAngle(player->leaderPtr->pos, player->leaderCursorWorld);
+        getAngle(player->leaderPtr->center, player->leaderCursorWorld);
     float leaderCursorDist =
-        Distance(player->leaderPtr->pos, player->leaderCursorWorld).toFloat();
+        Distance(player->leaderPtr->center, player->leaderCursorWorld).toFloat();
     for(size_t r = 0; r < nRings; r++) {
-        Point pos(
-            player->leaderPtr->pos.x + cos(leaderCursorAngle) *
+        Point center(
+            player->leaderPtr->center.x + cos(leaderCursorAngle) *
             player->whistle.rings[r],
-            player->leaderPtr->pos.y + sin(leaderCursorAngle) *
+            player->leaderPtr->center.y + sin(leaderCursorAngle) *
             player->whistle.rings[r]
         );
         float ringToWhistleDist = leaderCursorDist - player->whistle.rings[r];
@@ -1259,7 +1259,7 @@ void GameplayState::drawLeaderCursor(
         unsigned char n = player->whistle.ringColors[r];
         drawBitmap(
             game.sysContent.bmpBrightRing,
-            pos,
+            center,
             Point(scale),
             0.0f,
             al_map_rgba(
@@ -1403,8 +1403,8 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
     if(fogC.a > 0) {
         //Start by drawing the central fog fade out effect.
         RectCorners fogCorners(
-            view.cam.pos - Point(game.curArea->weatherCondition.fogFar),
-            view.cam.pos + Point(game.curArea->weatherCondition.fogFar)
+            view.cam.center - Point(game.curArea->weatherCondition.fogFar),
+            view.cam.center + Point(game.curArea->weatherCondition.fogFar)
         );
         al_transform_coordinates(
             &view.worldToWindowTransform, &fogCorners.tl.x, &fogCorners.tl.y
@@ -1479,9 +1479,9 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
                 continue;
             }
             
-            Point pos = mPtr->pos;
+            Point center = mPtr->center;
             al_transform_coordinates(
-                &view.worldToWindowTransform, &pos.x, &pos.y
+                &view.worldToWindowTransform, &center.x, &center.y
             );
             float radius = 4.0f * view.cam.zoom;
             
@@ -1494,7 +1494,7 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
             al_draw_scaled_bitmap(
                 game.sysContent.bmpSpotlight,
                 0, 0, 64, 64,
-                pos.x - radius, pos.y - radius,
+                center.x - radius, center.y - radius,
                 radius * 2.0, radius * 2.0,
                 0
             );
@@ -1641,7 +1641,7 @@ void GameplayState::drawThrowPreview(Player* player) {
         unsigned char nVertexes =
             getThrowPreviewVertexes(
                 vertexes, 0.0f, 1.0f,
-                player->leaderPtr->pos, player->throwDest,
+                player->leaderPtr->center, player->throwDest,
                 changeAlpha(
                     game.config.aestheticGen.noPikminColor,
                     GAMEPLAY::PREVIEW_ALPHA / 2.0f * 255
@@ -1665,12 +1665,12 @@ void GameplayState::drawThrowPreview(Player* player) {
     game.curArea->bmap.getEdgesInRect(
         RectCorners(
             Point(
-                std::min(player->leaderPtr->pos.x, player->throwDest.x),
-                std::min(player->leaderPtr->pos.y, player->throwDest.y)
+                std::min(player->leaderPtr->center.x, player->throwDest.x),
+                std::min(player->leaderPtr->center.y, player->throwDest.y)
             ),
             Point(
-                std::max(player->leaderPtr->pos.x, player->throwDest.x),
-                std::max(player->leaderPtr->pos.y, player->throwDest.y)
+                std::max(player->leaderPtr->center.x, player->throwDest.x),
+                std::max(player->leaderPtr->center.y, player->throwDest.y)
             )
         ),
         candidateEdges
@@ -1679,7 +1679,7 @@ void GameplayState::drawThrowPreview(Player* player) {
     float wallCollisionR = 2.0f;
     bool wallIsBlockingSector = false;
     Distance leaderToDestDist(
-        player->leaderPtr->pos, player->throwDest
+        player->leaderPtr->center, player->throwDest
     );
     float throwHAngle = 0.0f;
     float throwVAngle = 0.0f;
@@ -1708,7 +1708,7 @@ void GameplayState::drawThrowPreview(Player* player) {
         float r = 0.0f;
         if(
             !lineSegsIntersect(
-                player->leaderPtr->pos, player->throwDest,
+                player->leaderPtr->center, player->throwDest,
                 v2p(e->vertexes[0]), v2p(e->vertexes[1]),
                 &r, nullptr
             )
@@ -1776,7 +1776,7 @@ void GameplayState::drawThrowPreview(Player* player) {
         unsigned char nVertexes =
             getThrowPreviewVertexes(
                 vertexes, 0.0f, 1.0f,
-                player->leaderPtr->pos, player->throwDest,
+                player->leaderPtr->center, player->throwDest,
                 changeAlpha(
                     player->leaderPtr->throwee->type->mainColor,
                     GAMEPLAY::PREVIEW_ALPHA * 255
@@ -1795,11 +1795,11 @@ void GameplayState::drawThrowPreview(Player* player) {
         //Wall collision.
         
         Point collisionPoint(
-            player->leaderPtr->pos.x +
-            (player->throwDest.x - player->leaderPtr->pos.x) *
+            player->leaderPtr->center.x +
+            (player->throwDest.x - player->leaderPtr->center.x) *
             wallCollisionR,
-            player->leaderPtr->pos.y +
-            (player->throwDest.y - player->leaderPtr->pos.y) *
+            player->leaderPtr->center.y +
+            (player->throwDest.y - player->leaderPtr->center.y) *
             wallCollisionR
         );
         
@@ -1809,7 +1809,7 @@ void GameplayState::drawThrowPreview(Player* player) {
             unsigned char nVertexes =
                 getThrowPreviewVertexes(
                     vertexes, 0.0f, wallCollisionR,
-                    player->leaderPtr->pos, player->throwDest,
+                    player->leaderPtr->center, player->throwDest,
                     changeAlpha(
                         player->leaderPtr->throwee->type->mainColor,
                         GAMEPLAY::PREVIEW_ALPHA * 255
@@ -1839,7 +1839,7 @@ void GameplayState::drawThrowPreview(Player* player) {
             unsigned char nVertexes =
                 getThrowPreviewVertexes(
                     vertexes, 0.0f, wallCollisionR,
-                    player->leaderPtr->pos, player->throwDest,
+                    player->leaderPtr->center, player->throwDest,
                     changeAlpha(
                         player->leaderPtr->throwee->type->mainColor,
                         GAMEPLAY::COLLISION_ALPHA * 255
@@ -1857,7 +1857,7 @@ void GameplayState::drawThrowPreview(Player* player) {
             nVertexes =
                 getThrowPreviewVertexes(
                     vertexes, wallCollisionR, 1.0f,
-                    player->leaderPtr->pos, player->throwDest,
+                    player->leaderPtr->center, player->throwDest,
                     changeAlpha(
                         player->leaderPtr->throwee->type->mainColor,
                         GAMEPLAY::PREVIEW_ALPHA * 255

@@ -14,14 +14,14 @@
 /**
  * @brief Constructs a new bouncer object.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Bouncer type this mob belongs to.
  * @param angle Starting angle.
  */
 Bouncer::Bouncer(
-    const Point& pos, BouncerType* type, float angle
+    const Point& center, BouncerType* type, float angle
 ):
-    Mob(pos, type, angle),
+    Mob(center, type, angle),
     bouType(type) {
     
     team = MOB_TEAM_NONE;

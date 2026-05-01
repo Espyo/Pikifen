@@ -44,15 +44,15 @@ void LeaderCategory::clearTypes() {
 /**
  * @brief Creates a leader and adds it to the list of leaders.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Mob type.
  * @param angle Starting angle.
  * @return The mob.
  */
 Mob* LeaderCategory::createMob(
-    const Point& pos, MobType* type, float angle
+    const Point& center, MobType* type, float angle
 ) {
-    Leader* m = new Leader(pos, (LeaderType*) type, angle);
+    Leader* m = new Leader(center, (LeaderType*) type, angle);
     game.states.gameplay->mobs.leaders.push_back(m);
     game.states.gameplay->updateAvailableLeaders();
     return m;

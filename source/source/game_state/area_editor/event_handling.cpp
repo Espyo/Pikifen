@@ -84,19 +84,19 @@ void AreaEditor::handleKeyCharAnywhere(const ALLEGRO_EVENT& ev) {
  */
 void AreaEditor::handleKeyCharCanvas(const ALLEGRO_EVENT& ev) {
     if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_LEFT)) {
-        game.editorsView.cam.targetPos.x -=
+        game.editorsView.cam.targetCenter.x -=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.editorsView.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_RIGHT)) {
-        game.editorsView.cam.targetPos.x +=
+        game.editorsView.cam.targetCenter.x +=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.editorsView.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_UP)) {
-        game.editorsView.cam.targetPos.y -=
+        game.editorsView.cam.targetCenter.y -=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.editorsView.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_DOWN)) {
-        game.editorsView.cam.targetPos.y +=
+        game.editorsView.cam.targetCenter.y +=
             AREA_EDITOR::KEYBOARD_PAN_AMOUNT / game.editorsView.cam.zoom;
             
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_MINUS)) {
@@ -440,7 +440,7 @@ void AreaEditor::handleLmbDoubleClick(const ALLEGRO_EVENT& ev) {
                 MobGen* newMob = addNewMobUnderCursor();
                 highlightedMob = newMob;
                 doFakeClick = true;
-                fakeClickWorldPos = newMob->pos;
+                fakeClickWorldPos = newMob->center;
             }
         }
         break;
@@ -468,7 +468,7 @@ void AreaEditor::handleLmbDoubleClick(const ALLEGRO_EVENT& ev) {
                     updateSelectionRequirements();
                     highlightedPathStop = newStop;
                     doFakeClick = true;
-                    fakeClickWorldPos = newStop->pos;
+                    fakeClickWorldPos = newStop->center;
                 }
             }
         }
@@ -804,7 +804,7 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
         for(size_t mobIdx : origSelection) {
             MobGen* selMg = game.curArea->mobGenerators[mobIdx];
             MobGen* newMg = new MobGen(*selMg);
-            newMg->pos = Point(hotspot + (selMg->pos) - newSelectionCenter);
+            newMg->center = Point(hotspot + (selMg->center) - newSelectionCenter);
             game.curArea->mobGenerators.push_back(newMg);
             mobSelection.add(game.curArea->mobGenerators.size() - 1);
         }

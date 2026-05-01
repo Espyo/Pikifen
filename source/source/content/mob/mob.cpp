@@ -156,19 +156,19 @@ const float SWARM_VERTICAL_SCALE = 0.5f;
 /**
  * @brief Constructs a new mob object.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Mob type this mob belongs to.
  * @param angle Starting angle.
  */
-Mob::Mob(const Point& pos, MobType* type, float angle) :
+Mob::Mob(const Point& center, MobType* type, float angle) :
     type(type),
-    pos(pos),
+    center(center),
     angle(angle),
     radius(type->radius),
     height(type->height),
     rectangularDim(type->rectangularDim),
     intendedTurnAngle(angle),
-    home(pos),
+    home(center),
     id(game.states.gameplay->nextMobId),
     health(type->maxHealth),
     maxHealth(type->maxHealth),
@@ -178,7 +178,7 @@ Mob::Mob(const Point& pos, MobType* type, float angle) :
     
     game.states.gameplay->nextMobId++;
     
-    Sector* sec = getSector(pos, nullptr, true);
+    Sector* sec = getSector(center, nullptr, true);
     if(sec) {
         z = sec->z;
     } else {
@@ -248,7 +248,7 @@ bool Mob::addToGroup(Mob* newMember) {
     
     if(group->members.size() == 1) {
         //If this is the first member, update the anchor position.
-        group->anchor = pos;
+        group->anchor = center;
         group->anchorAngle = TAU / 2.0f;
     }
     
@@ -610,7 +610,7 @@ void Mob::arachnorbFootMoveLogic() {
             Point(),
             parent->m->getHitbox(
                 parent->limbParentBodyPart
-            )->pos
+            )->center
         );
         
     Point finalPos = s2p(parent->m->scriptVM.vars["_destination_pos"]);
@@ -658,10 +658,10 @@ void Mob::arachnorbHeadTurnLogic() {
                 Point(),
                 getHitbox(
                     links[l]->parent->limbParentBodyPart
-                )->pos
+                )->center
             );
         float curAngle =
-            getAngle(pos, links[l]->pos) - angle;
+            getAngle(center, links[l]->center) - angle;
         float angleDeviation =
             getAngleCwDiff(defaultAngle, curAngle);
         if(angleDeviation > M_PI) {
@@ -698,13 +698,13 @@ void Mob::arachnorbPlanLogic(
     
     switch(goal) {
     case SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC_TYPE_HOME: {
-        amountToTurn = getAngleCwDiff(angle, getAngle(pos, home));
+        amountToTurn = getAngleCwDiff(angle, getAngle(center, home));
         if(amountToTurn > TAU / 2)  amountToTurn -= TAU;
         if(amountToTurn < -TAU / 2) amountToTurn += TAU;
         
         if(fabs(amountToTurn) < TAU * 0.05) {
             //We can also start moving towards home now.
-            amountToMove = Distance(pos, home).toFloat();
+            amountToMove = Distance(center, home).toFloat();
         }
         break;
         
@@ -728,7 +728,7 @@ void Mob::arachnorbPlanLogic(
         sign(amountToTurn) *
         std::min((double) fabs(amountToTurn), (double) maxTurnAngle);
         
-    Point destinationPos = pos;
+    Point destinationPos = center;
     float destinationAngle = angle + amountToTurn;
     normalizeAngle(destinationAngle);
     
@@ -914,7 +914,7 @@ void Mob::calculateAttackKnockback(
             *outKbExists = true;
             *outKbStrength = attackH->knockbackStrength;
             *outKbStrength *= offenseMultiplier * (1.0f / defenseMultiplier);
-            *outKbAngle = getAngle(attackH->getCurPos(pos, angle), victim->pos);
+            *outKbAngle = getAngle(attackH->getCurPos(center, angle), victim->center);
             break;
         } case KNOCKBACK_TYPE_DIRECTIONAL: {
             *outKbExists = true;
@@ -947,7 +947,7 @@ bool Mob::calculateCarryingDestination(
     PikminType** outTargetType, Mob** outTargetMob, Point* outTargetPoint
 ) const {
     *outTargetMob = nullptr;
-    *outTargetPoint = pos;
+    *outTargetPoint = center;
     if(!carryInfo) return false;
     
     switch(carryInfo->destination) {
@@ -970,7 +970,7 @@ bool Mob::calculateCarryingDestination(
         Onion* target = calculateCarryingOnion(outTargetType);
         if(target) {
             *outTargetMob = target;
-            *outTargetPoint = (*outTargetMob)->pos;
+            *outTargetPoint = (*outTargetMob)->center;
             return true;
         }
         
@@ -983,7 +983,7 @@ bool Mob::calculateCarryingDestination(
         Onion* oniTarget = calculateCarryingOnion(outTargetType);
         if(oniTarget) {
             *outTargetMob = oniTarget;
-            *outTargetPoint = (*outTargetMob)->pos;
+            *outTargetPoint = (*outTargetMob)->center;
             return true;
         }
         
@@ -1005,7 +1005,7 @@ bool Mob::calculateCarryingDestination(
         Distance closestLinkDist;
         
         forIdx(s, links) {
-            Distance d(pos, links[s]->pos);
+            Distance d(center, links[s]->center);
             
             if(!closestLink || d < closestLinkDist) {
                 closestLink = links[s];
@@ -1015,7 +1015,7 @@ bool Mob::calculateCarryingDestination(
         
         if(closestLink) {
             *outTargetMob = closestLink;
-            *outTargetPoint = closestLink->pos;
+            *outTargetPoint = closestLink->center;
             return true;
         }
         
@@ -1062,7 +1062,7 @@ bool Mob::calculateCarryingDestination(
         forIdx(m, mobsPerType) {
             if(mobsPerType[m].second != decidedType) continue;
             
-            Distance d(pos, mobsPerType[m].first->pos);
+            Distance d(center, mobsPerType[m].first->center);
             if(closestTargetIdx == INVALID || d < closestTargetDist) {
                 closestTargetDist = d;
                 closestTargetIdx = m;
@@ -1072,7 +1072,7 @@ bool Mob::calculateCarryingDestination(
         //Finally, set the destination data.
         *outTargetType = decidedType;
         *outTargetMob = links[closestTargetIdx];
-        *outTargetPoint = (*outTargetMob)->pos;
+        *outTargetPoint = (*outTargetMob)->center;
         
         return true;
         
@@ -1128,7 +1128,7 @@ Onion* Mob::calculateCarryingOnion(PikminType** outTargetType) const {
         }
         if(!hasType) continue;
         
-        Distance d(pos, oPtr->pos);
+        Distance d(center, oPtr->center);
         if(closestOnionIdx == INVALID || d < closestOnionDist) {
             closestOnionDist = d;
             closestOnionIdx = o;
@@ -1153,7 +1153,7 @@ Ship* Mob::calculateCarryingShip() const {
     
     forIdx(s, game.states.gameplay->mobs.ships) {
         Ship* sPtr = game.states.gameplay->mobs.ships[s];
-        Distance d(pos, sPtr->controlPointFinalPos);
+        Distance d(center, sPtr->controlPointFinalPos);
         
         if(!closestShip || d < closestShipDist) {
             closestShip = sPtr;
@@ -1378,7 +1378,7 @@ void Mob::chaseNextPathStop(float speed, float acceleration) {
     }
     
     chase(
-        nextStop->pos, nextStopZ,
+        nextStop->center, nextStopZ,
         CHASE_FLAG_ANY_ANGLE | CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED,
         PATHS::DEF_CHASE_TARGET_DISTANCE,
         speed, acceleration
@@ -1450,7 +1450,7 @@ void Mob::circleAround(
     circlingInfo->speed = speed;
     circlingInfo->canFreeMove = canFreeMove;
     circlingInfo->curAngle =
-        getAngle((m ? m->pos : p), pos);
+        getAngle((m ? m->center : p), center);
 }
 
 
@@ -1707,8 +1707,8 @@ void Mob::doAttackEffects(
     }
     
     //Calculate the particle's final position.
-    Point attackHPos = attackH->getCurPos(attacker->pos, attacker->angle);
-    Point victimHPos = victimH->getCurPos(pos, angle);
+    Point attackHPos = attackH->getCurPos(attacker->center, attacker->angle);
+    Point victimHPos = victimH->getCurPos(center, angle);
     
     float edgesD;
     float aToVAngle;
@@ -1741,7 +1741,7 @@ void Mob::doAttackEffects(
         standardParticleGenSetup(
             particleInternalName, nullptr
         );
-    pg.baseParticle.pos = particlePos;
+    pg.baseParticle.center = particlePos;
     pg.baseParticle.z = particleZ;
     pg.emit(game.states.gameplay->particles);
     
@@ -1749,7 +1749,7 @@ void Mob::doAttackEffects(
         //Play the sound.
         game.audio.addNewPosSoundSource(
             game.sysContent.sndAttack,
-            pos, false, { .volume = 0.6f }
+            center, false, { .volume = 0.6f }
         );
         
         //Damage squash and stretch animation.
@@ -1760,7 +1760,7 @@ void Mob::doAttackEffects(
         //Play the sound.
         game.audio.addNewPosSoundSource(
             game.sysContent.sndDing,
-            pos, false, { .volume = 0.3f }
+            center, false, { .volume = 0.3f }
         );
     }
 }
@@ -1794,24 +1794,24 @@ void Mob::drawLimb() {
     
     Point parentEnd;
     if(parent->limbParentBodyPart == INVALID) {
-        parentEnd = parent->m->pos;
+        parentEnd = parent->m->center;
     } else {
         parentEnd =
             parent->m->getHitbox(
                 parent->limbParentBodyPart
             )->getCurPos(
-                parent->m->pos, parent->m->angleCos, parent->m->angleSin
+                parent->m->center, parent->m->angleCos, parent->m->angleSin
             );
     }
     
     Point childEnd;
     if(parent->limbChildBodyPart == INVALID) {
-        childEnd = pos;
+        childEnd = center;
     } else {
         childEnd =
             getHitbox(
                 parent->limbChildBodyPart
-            )->getCurPos(pos, angleCos, angleSin);
+            )->getCurPos(center, angleCos, angleSin);
     }
     
     float p2cAngle = getAngle(parentEnd, childEnd);
@@ -2076,7 +2076,7 @@ Hitbox* Mob::getClosestHitbox(
         
         float thisD =
             Distance(
-                hPtr->getCurPos(pos, angleCos, angleSin), p
+                hPtr->getCurPos(center, angleCos, angleSin), p
             ).toFloat() - hPtr->radius;
         if(closestHitbox == nullptr || thisD < closestHitboxDist) {
             closestHitboxDist = thisD;
@@ -2109,22 +2109,22 @@ Distance Mob::getDistanceBetween(
         bool isInside = false;
         Point hotspot =
             getClosestPointInRotatedRectangle(
-                pos,
-                Rect(m2Ptr->pos, m2Ptr->rectangularDim),
+                center,
+                Rect(m2Ptr->center, m2Ptr->rectangularDim),
                 m2Ptr->angle,
                 &isInside
             );
         if(isInside) {
             mobToHotspotDist = Distance(0.0f);
         } else {
-            mobToHotspotDist = Distance(pos, hotspot);
+            mobToHotspotDist = Distance(center, hotspot);
         }
         distPadding = radius;
     } else {
         if(regularDistanceCache) {
             mobToHotspotDist = *regularDistanceCache;
         } else {
-            mobToHotspotDist = Distance(pos, m2Ptr->pos);
+            mobToHotspotDist = Distance(center, m2Ptr->center);
         }
         distPadding = radius + m2Ptr->radius;
     }
@@ -2263,10 +2263,10 @@ void Mob::getHitboxHoldPoint(
     const Mob* mobToHold, const Hitbox* hPtr,
     float* offsetDist, float* offsetAngle, float* verticalDist
 ) const {
-    Point actualHPos = hPtr->getCurPos(pos, angleCos, angleSin);
+    Point actualHPos = hPtr->getCurPos(center, angleCos, angleSin);
     float actualHZ = z + hPtr->z;
     
-    Point posDif = mobToHold->pos - actualHPos;
+    Point posDif = mobToHold->center - actualHPos;
     coordinatesToAngle(posDif, offsetAngle, offsetDist);
     
     //Relative to 0 degrees.
@@ -2411,7 +2411,7 @@ void Mob::getSpriteBitmapEffects(
         ALLEGRO_COLOR effTint;
         
         getSpriteBasicEffects(
-            pos, angle, angleCos, angleSin,
+            center, angle, angleCos, angleSin,
             sPtr, nextSPtr, interpolationFactor,
             &effTrans, &effAngle, &effScale, &effTint
         );
@@ -2516,7 +2516,7 @@ void Mob::getSpriteBitmapEffects(
                     Point v2 = v2p(fadeEdges[n][e]->vertexes[1]);
                     float segmentRatio;
                     Point closestPos =
-                        getClosestPointInLineSeg(v1, v2, pos, &segmentRatio);
+                        getClosestPointInLineSeg(v1, v2, center, &segmentRatio);
                     if(segmentRatio < 0) {
                         Point v2ToV1 = v2 - v1;
                         closestPos -= v2ToV1 * abs(segmentRatio);
@@ -2526,7 +2526,7 @@ void Mob::getSpriteBitmapEffects(
                         closestPos -= v2ToV1 * (segmentRatio - 1);
                     }
                     
-                    Distance d(closestPos, pos);
+                    Distance d(closestPos, center);
                     closestDist[n] = closestDist[n] <= d ? closestDist[n] : d;
                 }
             }
@@ -2635,7 +2635,7 @@ void Mob::getSpriteBitmapEffects(
                     );
                 newScale = ease(newScale, EASE_METHOD_OUT);
                 
-                Point targetPos = scriptVM.focusedMob->pos;
+                Point targetPos = scriptVM.focusedMob->center;
                 
                 if(
                     scriptVM.focusedMob->type->category->id ==
@@ -2645,7 +2645,7 @@ void Mob::getSpriteBitmapEffects(
                     targetPos = shiPtr->receptacleFinalPos;
                 }
                 
-                Point endOffset = targetPos - pos;
+                Point endOffset = targetPos - center;
                 
                 float absorbRatio =
                     interpolateNumber(
@@ -2709,7 +2709,7 @@ void Mob::getSpriteBitmapEffects(
             newOffset +=
                 interpolatePoint(
                     deliveryInfo->animTimeRatioLeft, 0.0f, 1.0f,
-                    deliveryInfo->finalPoint - pos, 0.0f
+                    deliveryInfo->finalPoint - center, 0.0f
                 );
                 
             info->tf.trans += newOffset;
@@ -2868,8 +2868,8 @@ void Mob::handleStatusEffectLoss(StatusType* staType) {
 bool Mob::hasClearLine(const Mob* targetMob) const {
     //First, get a bounding box of the line to check.
     //This will help with performance later.
-    RectCorners bBox(pos, pos);
-    updateMinMaxCoords(bBox, targetMob->pos);
+    RectCorners bBox(center, center);
+    updateMinMaxCoords(bBox, targetMob->center);
     
     const float selfMaxZ = z + height;
     const float targetMobMaxZ = targetMob->z + targetMob->height;
@@ -2903,8 +2903,8 @@ bool Mob::hasClearLine(const Mob* targetMob) const {
             !rectanglesIntersect(
                 bBox,
                 RectCorners(
-                    mPtr->pos - mPtr->physicalSpan,
-                    mPtr->pos + mPtr->physicalSpan
+                    mPtr->center - mPtr->physicalSpan,
+                    mPtr->center + mPtr->physicalSpan
                 )
             )
         ) {
@@ -2914,8 +2914,8 @@ bool Mob::hasClearLine(const Mob* targetMob) const {
         if(mPtr->rectangularDim.x != 0.0f) {
             if(
                 lineSegIntersectsRotatedRectangle(
-                    pos, targetMob->pos,
-                    Rect(mPtr->pos, mPtr->rectangularDim), mPtr->angle
+                    center, targetMob->center,
+                    Rect(mPtr->center, mPtr->rectangularDim), mPtr->angle
                 )
             ) {
                 return false;
@@ -2923,8 +2923,8 @@ bool Mob::hasClearLine(const Mob* targetMob) const {
         } else {
             if(
                 circleIntersectsLineSeg(
-                    mPtr->pos, mPtr->radius,
-                    pos, targetMob->pos,
+                    mPtr->center, mPtr->radius,
+                    center, targetMob->center,
                     nullptr, nullptr
                 )
             ) {
@@ -2938,7 +2938,7 @@ bool Mob::hasClearLine(const Mob* targetMob) const {
     //both mobs, so use the lowest of the two Zs as a cut-off point.
     if(
         areWallsBetween(
-            pos, targetMob->pos,
+            center, targetMob->center,
             std::min(z + height, targetMob->z + targetMob->height) +
             GEOMETRY::STEP_HEIGHT
         )
@@ -3037,7 +3037,7 @@ bool Mob::isOffCamera(const Viewport& viewport) const {
     }
     
     float radiusToUse = std::max(spriteBound, collisionBound);
-    return !bBoxCheck(viewport.worldCorners, pos, radiusToUse);
+    return !bBoxCheck(viewport.worldCorners, center, radiusToUse);
 }
 
 
@@ -3049,10 +3049,10 @@ bool Mob::isOffCamera(const Viewport& viewport) const {
  */
 bool Mob::isPointOn(const Point& p) const {
     if(rectangularDim.x == 0) {
-        return Distance(p, pos) <= radius;
+        return Distance(p, center) <= radius;
         
     } else {
-        Point pDelta = p - pos;
+        Point pDelta = p - center;
         pDelta = rotatePoint(pDelta, -angle);
         pDelta += rectangularDim / 2.0f;
         
@@ -3154,7 +3154,7 @@ void Mob::moveToPathEnd(float speed, float acceleration) {
         pathInfo->settings.targetMob
     ) {
         chase(
-            &(pathInfo->settings.targetMob->pos),
+            &(pathInfo->settings.targetMob->center),
             &(pathInfo->settings.targetMob->z),
             Point(), 0.0f,
             CHASE_FLAG_ANY_ANGLE,
@@ -3327,8 +3327,8 @@ void Mob::releaseStoredMobs() {
  * @brief Respawns an object back to its home.
  */
 void Mob::respawn() {
-    pos = home;
-    centerSector = getSector(pos, nullptr, true);
+    center = home;
+    centerSector = getSector(center, nullptr, true);
     groundSector = centerSector;
     z = centerSector->z + 100;
 }
@@ -3559,7 +3559,7 @@ Mob* Mob::spawn(const MobType::SpawnInfo* info, MobType* typePtr) {
     float newAngle = 0;
     
     if(info->relative) {
-        newXY = pos + rotatePoint(info->coordsXY, angle);
+        newXY = center + rotatePoint(info->coordsXY, angle);
         newZ = z + info->coordsZ;
         newAngle = angle + info->angle;
     } else {
@@ -3629,7 +3629,7 @@ void Mob::startDying() {
             Mob* member = group->members[0];
             member->scriptVM.fsm.runEvent(
                 FSM_EV_DISMISSED,
-                (void*) & (member->pos)
+                (void*) & (member->center)
             );
             if(type->category->id != MOB_CATEGORY_LEADERS) {
                 //The Pikmin were likely following an enemy.
@@ -4003,7 +4003,7 @@ void Mob::tickBrain(float deltaT) {
     if(circlingInfo) {
         Point circlingCenter =
             circlingInfo->circlingMob ?
-            circlingInfo->circlingMob->pos :
+            circlingInfo->circlingMob->center :
             circlingInfo->circlingPoint;
         float circlingZ =
             circlingInfo->circlingMob ?
@@ -4049,7 +4049,7 @@ void Mob::tickBrain(float deltaT) {
     
         //Calculate where the target is.
         Point finalTargetPos = getChaseTarget();
-        Distance horizDist = Distance(pos, finalTargetPos);
+        Distance horizDist = Distance(center, finalTargetPos);
         float finalTargetZ = chaseInfo.offsetZ;
         if(chaseInfo.origZ) finalTargetZ += *chaseInfo.origZ;
         float vertDist = fabs(z - finalTargetZ);
@@ -4089,7 +4089,7 @@ void Mob::tickBrain(float deltaT) {
             
             //Let the mob think about facing the actual target.
             if(!type->canFreeMove && horizDist > 0.0f) {
-                face(getAngle(pos, finalTargetPos), nullptr);
+                face(getAngle(center, finalTargetPos), nullptr);
             }
             
         } else {
@@ -4271,7 +4271,7 @@ void Mob::tickMiscLogic(float deltaT) {
         if(!player.leaderPtr) continue;
         isCursorOn |=
             bBoxCheck(
-                player.leaderCursorWorld, pos,
+                player.leaderCursorWorld, center,
                 player.leaderPtr->radius + radius
             );
     }
@@ -4318,7 +4318,7 @@ void Mob::tickMiscLogic(float deltaT) {
         Group::MODE oldMode = group->mode;
         bool isHolding = getMobHeldInHand();
         bool isFarFromGroup =
-            Distance(group->getAverageMemberPos(), pos) >
+            Distance(group->getAverageMemberPos(), center) >
             MOB::GROUP_SHUFFLE_DIST + (group->radius + radius);
         bool isSwarming =
             playerIfLeader && playerIfLeader->swarmMagnitude != 0.0f;
@@ -4343,7 +4343,7 @@ void Mob::tickMiscLogic(float deltaT) {
                     Point(radius + MOB::GROUP_SPOT_INTERVAL * 2.0f, 0.0f),
                     group->anchorAngle
                 );
-            group->anchor = pos + newAnchorRelPos;
+            group->anchor = center + newAnchorRelPos;
             
             al_identity_transform(&group->transform);
             al_rotate_transform(
@@ -4363,7 +4363,7 @@ void Mob::tickMiscLogic(float deltaT) {
                 );
             movePoint(
                 groupMidPoint,
-                pos,
+                center,
                 type->moveSpeed,
                 group->radius + radius + MOB::GROUP_SPOT_INTERVAL * 2.0f,
                 &mov,
@@ -4386,7 +4386,7 @@ void Mob::tickMiscLogic(float deltaT) {
                     Point(radius + MOB::GROUP_SPOT_INTERVAL * 2.0f, 0.0f),
                     group->anchorAngle
                 );
-            group->anchor = pos + newAnchorRelPos;
+            group->anchor = center + newAnchorRelPos;
             
             float intensityDist =
                 game.config.rules.leaderCursorMaxDist *
@@ -4457,7 +4457,7 @@ void Mob::tickScript(float deltaT) {
         FsmEventDef* forEv = scriptVM.fsm.getEvent(FSM_EV_FOCUS_OFF_REACH);
         
         if(farReach != INVALID && forEv) {
-            float angleToFocus = getAngle(pos, focus->pos);
+            float angleToFocus = getAngle(center, focus->center);
             if(
                 !isMobInReach(
                     &type->reaches[farReach],
@@ -4497,7 +4497,7 @@ void Mob::tickScript(float deltaT) {
         if(!player.leaderPtr) continue;
         if(!player.whistle.whistling) continue;
         if(!player.leaderPtr->isViableLeader(this)) continue;
-        if(Distance(pos, player.whistle.center) > player.whistle.radius) {
+        if(Distance(center, player.whistle.center) > player.whistle.radius) {
             continue;
         }
         
@@ -4533,7 +4533,7 @@ void Mob::tickScript(float deltaT) {
             
             getGroupSpotInfo(&targetPos, &targetDist);
             
-            Distance d(pos, targetPos);
+            Distance d(center, targetPos);
             if(d > targetDist) {
                 spotFarEv->run(&scriptVM, (void*) &targetPos);
             }
@@ -4560,7 +4560,7 @@ void Mob::tickScript(float deltaT) {
     //Far away from home.
     FsmEventDef* farFromHomeEv = scriptVM.fsm.getEvent(FSM_EV_FAR_FROM_HOME);
     if(farFromHomeEv) {
-        Distance d(pos, home);
+        Distance d(center, home);
         if(d >= type->territoryRadius) {
             farFromHomeEv->run(&scriptVM);
         }
@@ -4605,9 +4605,9 @@ bool Mob::tickTrackRide() {
             trackInfo->checkpoints[trackInfo->curCpIdx + 1]
         );
     Point curCpPos =
-        curCp->getCurPos(trackInfo->m->pos, trackInfo->m->angle);
+        curCp->getCurPos(trackInfo->m->center, trackInfo->m->angle);
     Point nextCpPos =
-        nextCp->getCurPos(trackInfo->m->pos, trackInfo->m->angle);
+        nextCp->getCurPos(trackInfo->m->center, trackInfo->m->angle);
         
     Point destXy(
         interpolateNumber(

@@ -38,14 +38,14 @@ const float SPIT_V_SPEED = 1200.0f;
 /**
  * @brief Constructs a new converter object.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Convert type this mob belongs to.
  * @param angle Starting angle.
  */
 Converter::Converter(
-    const Point& pos, ConverterType* type, float angle
+    const Point& center, ConverterType* type, float angle
 ) :
-    Mob(pos, type, angle),
+    Mob(center, type, angle),
     conType(type),
     inputPikminLeft(conType->totalInputPikmin),
     currentType(conType->availablePikminTypes[0]),
@@ -112,7 +112,7 @@ void Converter::spit() {
         }
         
         spitPikminSeed(
-            pos, z + CONVERTER::NEW_SEED_Z_OFFSET, currentType,
+            center, z + CONVERTER::NEW_SEED_Z_OFFSET, currentType,
             nSpits, CONVERTER::SPIT_H_SPEED, CONVERTER::SPIT_H_SPEED_DEVIATION,
             CONVERTER::SPIT_V_SPEED
         );

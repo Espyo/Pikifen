@@ -256,7 +256,7 @@ DeliveryInfo::DeliveryInfo() :
  * @param leaderPtr Mob this group info struct belongs to.
  */
 Group::Group(Mob* leaderPtr) :
-    anchor(leaderPtr->pos),
+    anchor(leaderPtr->center),
     transform(game.identityTransform) {
 }
 
@@ -314,7 +314,7 @@ size_t Group::getAmountByType(const MobType* type) const {
 Point Group::getAverageMemberPos() const {
     Point avg;
     forIdx(m, members) {
-        avg += members[m]->pos;
+        avg += members[m]->center;
     }
     return avg / members.size();
 }
@@ -633,7 +633,7 @@ void Group::reassignSpots() {
             Mob* mPtr = members[m];
             if(mPtr->groupSpotIdx != INVALID) continue;
             
-            Distance d(mPtr->pos, spotPos);
+            Distance d(mPtr->center, spotPos);
             
             if(!closestMob || d < closestDist) {
                 closestMob = mPtr;
@@ -672,7 +672,7 @@ void Group::sort(SubgroupType* leadingType) {
             if(mPtr->subgroupTypePtr != curType) continue;
             if(mPtr->groupSpotIdx != INVALID) continue;
             
-            Distance d(mPtr->pos, spotPos);
+            Distance d(mPtr->center, spotPos);
             
             if(!closestMember || d < closestDist) {
                 closestMember = mPtr;
@@ -752,8 +752,8 @@ Point HoldInfo::getFinalPos(float* outZ) const {
     
     if(hPtr) {
         //Hitbox.
-        finalPos = rotatePoint(hPtr->pos, m->angle);
-        finalPos += m->pos;
+        finalPos = rotatePoint(hPtr->center, m->angle);
+        finalPos += m->center;
         
         finalPos +=
             angleToCoordinates(
@@ -763,7 +763,7 @@ Point HoldInfo::getFinalPos(float* outZ) const {
         *outZ = m->z + hPtr->z + (hPtr->height * verticalDist);
     } else {
         //Body center.
-        finalPos = m->pos;
+        finalPos = m->center;
         
         finalPos +=
             angleToCoordinates(
@@ -811,7 +811,7 @@ Path::Path(
     
     result =
         getPath(
-            m->pos, settings.targetPoint, settings,
+            m->center, settings.targetPoint, settings,
             path, nullptr, nullptr, nullptr
         );
 }
@@ -920,10 +920,10 @@ bool PikminNest::callPikmin(Mob* mPtr, size_t typeIdx) {
             );
         Point spawnCoords =
             mPtr->getHitbox(legHoleBPIdx)->getCurPos(
-                mPtr->pos, mPtr->angle
+                mPtr->center, mPtr->angle
             );
         float spawnAngle =
-            getAngle(mPtr->pos, spawnCoords);
+            getAngle(mPtr->center, spawnCoords);
             
         //Create the Pikmin.
         Pikmin* newPikmin =
@@ -1260,7 +1260,7 @@ float calculateMobPhysicalSpan(
  * @brief Creates a mob, adding it to the corresponding vectors.
  *
  * @param category The category the new mob belongs to.
- * @param pos Initial position.
+ * @param center Initial position.
  * @param type Type of the new mob.
  * @param angle Initial facing angle.
  * @param vars Script variables.
@@ -1272,12 +1272,12 @@ float calculateMobPhysicalSpan(
  * @return The new mob.
  */
 Mob* createMob(
-    MobCategory* category, const Point& pos, MobType* type,
+    MobCategory* category, const Point& center, MobType* type,
     float angle, const string& vars,
     std::function<void(Mob*)> codeAfterCreation,
     size_t firstStateOverride
 ) {
-    Mob* mPtr = category->createMob(pos, type, angle);
+    Mob* mPtr = category->createMob(center, type, angle);
     
     if(mPtr->type->walkable) {
         game.states.gameplay->mobs.walkables.push_back(mPtr);
@@ -1396,7 +1396,7 @@ Mob* createMob(
 Mob* createMob(MobGen* gen) {
     Mob* mPtr =
         createMob(
-            gen->type->category, gen->pos, gen->type,
+            gen->type->category, gen->center, gen->type,
             gen->angle, gen->vars
         );
         
@@ -1529,7 +1529,7 @@ void deleteMob(Mob* mPtr, bool completeDestruction) {
 string getErrorMessageMobInfo(Mob* m) {
     return
         "type \"" + m->type->name + "\", coordinates " +
-        p2s(m->pos) + ", area \"" + game.curArea->name + "\"";
+        p2s(m->center) + ", area \"" + game.curArea->name + "\"";
 }
 
 

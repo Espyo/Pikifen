@@ -77,7 +77,7 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
     }
     
     Distance leaderToCursorDist(
-        player->leaderPtr->pos, player->leaderCursorWorld
+        player->leaderPtr->center, player->leaderCursorWorld
     );
     for(size_t a = 0; a < player->leaderPtr->swarmArrows.size(); ) {
         player->leaderPtr->swarmArrows[a] +=
@@ -106,9 +106,9 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
     if(leaderToCursorDist > game.config.rules.whistleMaxDist) {
         whistleDist = game.config.rules.whistleMaxDist;
         float whistleAngle =
-            getAngle(player->leaderPtr->pos, player->leaderCursorWorld);
+            getAngle(player->leaderPtr->center, player->leaderCursorWorld);
         whistlePos = angleToCoordinates(whistleAngle, whistleDist);
-        whistlePos += player->leaderPtr->pos;
+        whistlePos += player->leaderPtr->center;
     } else {
         whistleDist = leaderToCursorDist.toFloat();
         whistlePos = player->leaderCursorWorld;
@@ -124,10 +124,10 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
     
     if(leaderToCursorDist > game.config.rules.throwMaxDist) {
         float throwAngle =
-            getAngle(player->leaderPtr->pos, player->leaderCursorWorld);
+            getAngle(player->leaderPtr->center, player->leaderCursorWorld);
         player->throwDest =
             angleToCoordinates(throwAngle, game.config.rules.throwMaxDist);
-        player->throwDest += player->leaderPtr->pos;
+        player->throwDest += player->leaderPtr->center;
     } else {
         player->throwDest = player->leaderCursorWorld;
     }
@@ -135,7 +135,7 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
     player->throwDestMob = nullptr;
     forIdx(m, mobs.all) {
         Mob* mPtr = mobs.all[m];
-        if(!bBoxCheck(player->throwDest, mPtr->pos, mPtr->physicalSpan)) {
+        if(!bBoxCheck(player->throwDest, mPtr->center, mPtr->physicalSpan)) {
             //Too far away; of course the leader's cursor isn't on it.
             continue;
         }
@@ -294,23 +294,23 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         float leaderCursorWeight = game.options.misc.leaderCursorCamWeight;
         float groupWeight = 0.0f;
         
-        Point groupCenter = player->leaderPtr->pos;
+        Point groupCenter = player->leaderPtr->center;
         if(!player->leaderPtr->group->members.empty()) {
             RectCorners groupBBox(
-                player->leaderPtr->group->members[0]->pos,
-                player->leaderPtr->group->members[0]->pos
+                player->leaderPtr->group->members[0]->center,
+                player->leaderPtr->group->members[0]->center
             );
             for(
                 size_t m = 1; m < player->leaderPtr->group->members.size(); m++
             ) {
                 Mob* member = player->leaderPtr->group->members[m];
-                updateMinMaxCoords(groupBBox, member->pos);
+                updateMinMaxCoords(groupBBox, member->center);
             }
             Rect groupRect = rectCornersToRect(groupBBox);
             groupCenter = groupRect.center;
             groupWeight = 0.1f;
             
-            Distance groupDist(player->leaderPtr->pos, groupCenter);
+            Distance groupDist(player->leaderPtr->center, groupCenter);
             if(groupDist > 500) {
                 //If the group is too far away, limit how far the camera can go.
                 float extra = groupDist.toFloat() / 500;
@@ -324,8 +324,8 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         leaderCursorWeight /= weightSums;
         groupWeight /= weightSums;
         
-        player->view.cam.targetPos =
-            player->leaderPtr->pos * leaderWeight +
+        player->view.cam.targetCenter =
+            player->leaderPtr->center * leaderWeight +
             player->leaderCursorWorld * leaderCursorWeight +
             groupCenter * groupWeight;
     }
@@ -345,8 +345,8 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
             PLAYER_ACTION_TYPE_WHISTLE,
             "Wake up",
             Point(
-                player->leaderPtr->pos.x,
-                player->leaderPtr->pos.y - player->leaderPtr->radius
+                player->leaderPtr->center.x,
+                player->leaderPtr->center.y - player->leaderPtr->radius
             )
         );
         leaderPromptDone = true;
@@ -363,8 +363,8 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
             PLAYER_ACTION_TYPE_WHISTLE,
             "Get up",
             Point(
-                player->leaderPtr->pos.x,
-                player->leaderPtr->pos.y - player->leaderPtr->radius
+                player->leaderPtr->center.x,
+                player->leaderPtr->center.y - player->leaderPtr->radius
             )
         );
         leaderPromptDone = true;
@@ -381,8 +381,8 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
             PLAYER_ACTION_TYPE_THROW,
             "Stop throwing",
             Point(
-                player->leaderPtr->pos.x,
-                player->leaderPtr->pos.y - player->leaderPtr->radius
+                player->leaderPtr->center.x,
+                player->leaderPtr->center.y - player->leaderPtr->radius
             )
         );
         leaderPromptDone = true;
@@ -398,8 +398,8 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
             PLAYER_ACTION_TYPE_WHISTLE,
             "Stop",
             Point(
-                player->leaderPtr->pos.x,
-                player->leaderPtr->pos.y - player->leaderPtr->radius
+                player->leaderPtr->center.x,
+                player->leaderPtr->center.y - player->leaderPtr->radius
             )
         );
         leaderPromptDone = true;
@@ -415,8 +415,8 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
             PLAYER_ACTION_TYPE_WHISTLE,
             "Stop",
             Point(
-                player->leaderPtr->pos.x,
-                player->leaderPtr->pos.y - player->leaderPtr->radius
+                player->leaderPtr->center.x,
+                player->leaderPtr->center.y - player->leaderPtr->radius
             )
         );
         leaderPromptDone = true;
@@ -433,8 +433,8 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
                 PLAYER_ACTION_TYPE_THROW,
                 "Shake",
                 Point(
-                    player->leaderPtr->pos.x,
-                    player->leaderPtr->pos.y - player->leaderPtr->radius
+                    player->leaderPtr->center.x,
+                    player->leaderPtr->center.y - player->leaderPtr->radius
                 )
             );
             leaderPromptDone = true;
@@ -449,7 +449,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         player->closeToShipToHeal = nullptr;
         forIdx(s, mobs.ships) {
             Ship* sPtr = mobs.ships[s];
-            d = Distance(player->leaderPtr->pos, sPtr->pos);
+            d = Distance(player->leaderPtr->center, sPtr->center);
             if(!sPtr->isLeaderOnCp(player->leaderPtr)) {
                 continue;
             }
@@ -466,8 +466,8 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
                 player->leaderPrompt.setContents(
                     PLAYER_ACTION_TYPE_THROW, "Repair suit",
                     Point(
-                        player->closeToShipToHeal->pos.x,
-                        player->closeToShipToHeal->pos.y -
+                        player->closeToShipToHeal->center.x,
+                        player->closeToShipToHeal->center.y -
                         player->closeToShipToHeal->radius
                     )
                 );
@@ -483,7 +483,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
             forIdx(i, mobs.interactables) {
                 d =
                     Distance(
-                        player->leaderPtr->pos, mobs.interactables[i]->pos
+                        player->leaderPtr->center, mobs.interactables[i]->center
                     );
                 if(d > mobs.interactables[i]->intType->triggerRange) {
                     continue;
@@ -496,8 +496,8 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
                         PLAYER_ACTION_TYPE_THROW,
                         player->closeToInteractableToUse->intType->promptText,
                         Point(
-                            player->closeToInteractableToUse->pos.x,
-                            player->closeToInteractableToUse->pos.y -
+                            player->closeToInteractableToUse->center.x,
+                            player->closeToInteractableToUse->center.y -
                             player->closeToInteractableToUse->radius
                         )
                     );
@@ -511,15 +511,15 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         d = 0;
         player->closeToPikminToPluck = nullptr;
         if(!leaderPromptDone) {
-            Pikmin* p = getClosestSprout(player->leaderPtr->pos, &d, false);
+            Pikmin* p = getClosestSprout(player->leaderPtr->center, &d, false);
             if(p && d <= game.config.leaders.pluckRange) {
                 player->closeToPikminToPluck = p;
                 player->leaderPrompt.setEnabled(true);
                 player->leaderPrompt.setContents(
                     PLAYER_ACTION_TYPE_THROW, "Pluck",
                     Point(
-                        p->pos.x,
-                        p->pos.y -
+                        p->center.x,
+                        p->center.y -
                         p->radius
                     )
                 );
@@ -534,7 +534,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         if(!leaderPromptDone) {
             forIdx(o, mobs.onions) {
                 if(!mobs.onions[o]->nest->nestType->hasMenu) continue;
-                d = Distance(player->leaderPtr->pos, mobs.onions[o]->pos);
+                d = Distance(player->leaderPtr->center, mobs.onions[o]->center);
                 if(d > game.config.leaders.onionOpenRange) continue;
                 if(d < closestD || !player->closeToNestToOpen) {
                     player->closeToNestToOpen = mobs.onions[o]->nest;
@@ -543,8 +543,8 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
                     player->leaderPrompt.setContents(
                         PLAYER_ACTION_TYPE_THROW, "Check",
                         Point(
-                            player->closeToNestToOpen->mPtr->pos.x,
-                            player->closeToNestToOpen->mPtr->pos.y -
+                            player->closeToNestToOpen->mPtr->center.x,
+                            player->closeToNestToOpen->mPtr->center.y -
                             player->closeToNestToOpen->mPtr->radius
                         )
                     );
@@ -552,7 +552,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
                 }
             }
             forIdx(s, mobs.ships) {
-                d = Distance(player->leaderPtr->pos, mobs.ships[s]->pos);
+                d = Distance(player->leaderPtr->center, mobs.ships[s]->center);
                 if(!mobs.ships[s]->isLeaderOnCp(player->leaderPtr)) {
                     continue;
                 }
@@ -566,8 +566,8 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
                     player->leaderPrompt.setContents(
                         PLAYER_ACTION_TYPE_THROW, "Check",
                         Point(
-                            player->closeToNestToOpen->mPtr->pos.x,
-                            player->closeToNestToOpen->mPtr->pos.y -
+                            player->closeToNestToOpen->mPtr->center.x,
+                            player->closeToNestToOpen->mPtr->center.y -
                             player->closeToNestToOpen->mPtr->radius
                         )
                     );
@@ -613,12 +613,12 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     }
     
     float leaderCursorAngle =
-        getAngle(player->leaderPtr->pos, player->leaderCursorWorld);
+        getAngle(player->leaderPtr->center, player->leaderCursorWorld);
         
     if(player->swarmToLeaderCursor) {
         player->swarmAngle = leaderCursorAngle;
         Distance leaderToCursorDist(
-            player->leaderPtr->pos, player->leaderCursorWorld
+            player->leaderPtr->center, player->leaderCursorWorld
         );
         player->swarmMagnitude =
             leaderToCursorDist.toFloat() /
@@ -689,7 +689,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     ) {
         float leaderToMouseCursorDist =
             Distance(
-                player->leaderPtr->pos,
+                player->leaderPtr->center,
                 player->view.mouseCursorWorldPos
             ).toFloat();
         float moveStrength =
@@ -700,7 +700,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         
         float leaderToMouseCursorAngle =
             getAngle(
-                player->leaderPtr->pos,
+                player->leaderPtr->center,
                 player->view.mouseCursorWorldPos
             );
         float leaderToMouseCursorCos = cos(leaderToMouseCursorAngle);
@@ -740,8 +740,8 @@ void GameplayState::doGameplayLogic(float deltaT) {
             player.leaderMovement.getInfo(
                 &coords, &dummyAngle, &dummyMagnitude
             );
-            player.view.cam.targetPos =
-                player.view.cam.pos + (coords * 120.0f / player.view.cam.zoom);
+            player.view.cam.targetCenter =
+                player.view.cam.center + (coords * 120.0f / player.view.cam.zoom);
         }
         
         player.view.cam.tick(deltaT);
@@ -834,7 +834,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
             oldLeaders[p] = player->leaderPtr;
             oldLeaderWasWalking[p] = false;
             if(player->leaderPtr) {
-                oldLeaderPos[p] = player->leaderPtr->pos;
+                oldLeaderPos[p] = player->leaderPtr->center;
                 oldLeaderWasWalking[p] =
                     player->leaderPtr->player &&
                     !hasFlag(
@@ -900,7 +900,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
                 //grand scheme of things, and don't really matter
                 //for a fun stat.
                 game.statistics.distanceWalked +=
-                    Distance(oldLeaderPos[p], player->leaderPtr->pos).toFloat();
+                    Distance(oldLeaderPos[p], player->leaderPtr->center).toFloat();
             }
         }
         
@@ -1075,7 +1075,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
                 AreaRegion* rPtr = game.curArea->regions[r];
                 bool isInside;
                 getClosestPointInRotatedRectangle(
-                    lPtr->pos, Rect(rPtr->pose.pos, rPtr->pose.size),
+                    lPtr->center, Rect(rPtr->pose.pos, rPtr->pose.size),
                     rPtr->pose.angle, &isInside
                 );
                 if(isInside) {
@@ -1147,8 +1147,8 @@ void GameplayState::doMenuLogic() {
             );
         string coordsStr =
             resizeString(
-                resizeString(f2s(game.makerTools.infoLock->pos.x), 8) + " " +
-                resizeString(f2s(game.makerTools.infoLock->pos.y), 8) + " " +
+                resizeString(f2s(game.makerTools.infoLock->center.x), 8) + " " +
+                resizeString(f2s(game.makerTools.infoLock->center.y), 8) + " " +
                 resizeString(f2s(game.makerTools.infoLock->z), 8),
                 26
             );
@@ -1641,17 +1641,17 @@ void GameplayState::processLeaderCursor(Player* player, float deltaT) {
     
     //Make sure it doesn't go beyond the range limit.
     Distance leaderToCursorDist(
-        player->leaderPtr->pos, player->leaderCursorWorld
+        player->leaderPtr->center, player->leaderCursorWorld
     );
     
     if(leaderToCursorDist > game.config.rules.leaderCursorMaxDist) {
         float leaderCursorAngle =
-            getAngle(player->leaderPtr->pos, player->leaderCursorWorld);
+            getAngle(player->leaderPtr->center, player->leaderCursorWorld);
         player->leaderCursorWorld.x =
-            player->leaderPtr->pos.x +
+            player->leaderPtr->center.x +
             (cos(leaderCursorAngle) * game.config.rules.leaderCursorMaxDist);
         player->leaderCursorWorld.y =
-            player->leaderPtr->pos.y +
+            player->leaderPtr->center.y +
             (sin(leaderCursorAngle) * game.config.rules.leaderCursorMaxDist);
     }
     
@@ -1692,7 +1692,7 @@ void GameplayState::processMobInteractions(Mob* mPtr, size_t m) {
         if(m2Ptr->toDelete) continue;
         if(m2Ptr->isStoredInsideMob()) continue;
         
-        Distance d(mPtr->pos, m2Ptr->pos);
+        Distance d(mPtr->center, m2Ptr->center);
         Distance dBetween = mPtr->getDistanceBetween(m2Ptr, &d);
         
         if(dBetween > mPtr->interactionSpan + m2Ptr->physicalSpan) {
@@ -1908,7 +1908,7 @@ void GameplayState::processMobReaches(
     float angleDiff =
         getAngleSmallestDiff(
             mPtr->angle,
-            getAngle(mPtr->pos, m2Ptr->pos)
+            getAngle(mPtr->center, m2Ptr->center)
         );
         
     if(isMobInReach(rPtr, dBetween, angleDiff)) {
@@ -2005,13 +2005,13 @@ void GameplayState::processMobTouches(
                 Hitbox* hPtr = &s2Ptr->hitboxes[h];
                 if(hPtr->type == HITBOX_TYPE_DISABLED) continue;
                 Point hPos(
-                    m2Ptr->pos.x + (
-                        hPtr->pos.x * m2Ptr->angleCos -
-                        hPtr->pos.y * m2Ptr->angleSin
+                    m2Ptr->center.x + (
+                        hPtr->center.x * m2Ptr->angleCos -
+                        hPtr->center.y * m2Ptr->angleSin
                     ),
-                    m2Ptr->pos.y + (
-                        hPtr->pos.x * m2Ptr->angleSin +
-                        hPtr->pos.y * m2Ptr->angleCos
+                    m2Ptr->center.y + (
+                        hPtr->center.x * m2Ptr->angleSin +
+                        hPtr->center.y * m2Ptr->angleCos
                     )
                 );
                 //It's more optimized to get the hitbox position here
@@ -2019,7 +2019,7 @@ void GameplayState::processMobTouches(
                 //we already know the sine and cosine, so they don't
                 //need to be re-calculated.
                 
-                Distance hd(mPtr->pos, hPos);
+                Distance hd(mPtr->center, hPos);
                 if(hd < mPtr->radius + hPtr->radius) {
                     float p =
                         fabs(
@@ -2028,7 +2028,7 @@ void GameplayState::processMobTouches(
                         );
                     if(pushAmount == 0 || p > pushAmount) {
                         pushAmount = p;
-                        pushAngle = getAngle(hPos, mPtr->pos);
+                        pushAngle = getAngle(hPos, mPtr->center);
                     }
                 }
             }
@@ -2044,9 +2044,9 @@ void GameplayState::processMobTouches(
                 //Rectangle vs rectangle.
                 xyCollision =
                     rectanglesIntersect(
-                        Rect(mPtr->pos, mPtr->rectangularDim),
+                        Rect(mPtr->center, mPtr->rectangularDim),
                         mPtr->angle,
-                        Rect(m2Ptr->pos, m2Ptr->rectangularDim),
+                        Rect(m2Ptr->center, m2Ptr->rectangularDim),
                         m2Ptr->angle,
                         &tempPushAmount, &tempPushAngle
                     );
@@ -2054,8 +2054,8 @@ void GameplayState::processMobTouches(
                 //Rectangle vs circle.
                 xyCollision =
                     circleIntersectsRectangle(
-                        m2Ptr->pos, m2Ptr->radius,
-                        mPtr->pos, mPtr->rectangularDim,
+                        m2Ptr->center, m2Ptr->radius,
+                        mPtr->center, mPtr->rectangularDim,
                         mPtr->angle, &tempPushAmount, &tempPushAngle
                     );
                 tempPushAngle += TAU / 2.0f;
@@ -2063,8 +2063,8 @@ void GameplayState::processMobTouches(
                 //Circle vs rectangle.
                 xyCollision =
                     circleIntersectsRectangle(
-                        mPtr->pos, mPtr->radius,
-                        m2Ptr->pos, m2Ptr->rectangularDim,
+                        mPtr->center, mPtr->radius,
+                        m2Ptr->center, m2Ptr->rectangularDim,
                         m2Ptr->angle, &tempPushAmount, &tempPushAngle
                     );
             } else {
@@ -2078,7 +2078,7 @@ void GameplayState::processMobTouches(
                             d.toFloat() - mPtr->radius -
                             m2Ptr->radius
                         );
-                    tempPushAngle = getAngle(m2Ptr->pos, mPtr->pos);
+                    tempPushAngle = getAngle(m2Ptr->center, mPtr->center);
                 }
             }
             
@@ -2159,23 +2159,23 @@ void GameplayState::processMobTouches(
             //Rectangle vs rectangle.
             xyCollision =
                 rectanglesIntersect(
-                    Rect(mPtr->pos, mPtr->rectangularDim), mPtr->angle,
-                    Rect(m2Ptr->pos, m2Ptr->rectangularDim), m2Ptr->angle
+                    Rect(mPtr->center, mPtr->rectangularDim), mPtr->angle,
+                    Rect(m2Ptr->center, m2Ptr->rectangularDim), m2Ptr->angle
                 );
         } else if(mPtr->rectangularDim.x != 0) {
             //Rectangle vs circle.
             xyCollision =
                 circleIntersectsRectangle(
-                    m2Ptr->pos, m2Ptr->radius,
-                    mPtr->pos, mPtr->rectangularDim,
+                    m2Ptr->center, m2Ptr->radius,
+                    mPtr->center, mPtr->rectangularDim,
                     mPtr->angle
                 );
         } else if(m2Ptr->rectangularDim.x != 0) {
             //Circle vs rectangle.
             xyCollision =
                 circleIntersectsRectangle(
-                    mPtr->pos, mPtr->radius,
-                    m2Ptr->pos, m2Ptr->rectangularDim,
+                    mPtr->center, mPtr->radius,
+                    m2Ptr->center, m2Ptr->rectangularDim,
                     m2Ptr->angle
                 );
         } else {
@@ -2242,11 +2242,11 @@ void GameplayState::processMobTouches(
                 //Get the real hitbox locations.
                 Point m1HPos =
                     h1Ptr->getCurPos(
-                        mPtr->pos, mPtr->angleCos, mPtr->angleSin
+                        mPtr->center, mPtr->angleCos, mPtr->angleSin
                     );
                 Point m2HPos =
                     h2Ptr->getCurPos(
-                        m2Ptr->pos, m2Ptr->angleCos, m2Ptr->angleSin
+                        m2Ptr->center, m2Ptr->angleCos, m2Ptr->angleSin
                     );
                 float m1HZ = mPtr->z + h1Ptr->z;
                 float m2HZ = m2Ptr->z + h2Ptr->z;
@@ -2478,8 +2478,8 @@ void GameplayState::updateAreaActiveCells() {
     forIdx(p, mobs.pikmin) {
         markAreaCellsActive(
             RectCorners(
-                mobs.pikmin[p]->pos - GEOMETRY::AREA_CELL_SIZE,
-                mobs.pikmin[p]->pos + GEOMETRY::AREA_CELL_SIZE
+                mobs.pikmin[p]->center - GEOMETRY::AREA_CELL_SIZE,
+                mobs.pikmin[p]->center + GEOMETRY::AREA_CELL_SIZE
             )
         );
     }
@@ -2487,8 +2487,8 @@ void GameplayState::updateAreaActiveCells() {
     forIdx(l, mobs.leaders) {
         markAreaCellsActive(
             RectCorners(
-                mobs.leaders[l]->pos - GEOMETRY::AREA_CELL_SIZE,
-                mobs.leaders[l]->pos + GEOMETRY::AREA_CELL_SIZE
+                mobs.leaders[l]->center - GEOMETRY::AREA_CELL_SIZE,
+                mobs.leaders[l]->center + GEOMETRY::AREA_CELL_SIZE
             )
         );
     }
@@ -2510,10 +2510,10 @@ void GameplayState::updateMobIsActiveFlag() {
         Mob* mPtr = mobs.all[m];
         
         int cellX =
-            (mPtr->pos.x - game.curArea->bmap.topLeftCorner.x) /
+            (mPtr->center.x - game.curArea->bmap.topLeftCorner.x) /
             GEOMETRY::AREA_CELL_SIZE;
         int cellY =
-            (mPtr->pos.y - game.curArea->bmap.topLeftCorner.y) /
+            (mPtr->center.y - game.curArea->bmap.topLeftCorner.y) /
             GEOMETRY::AREA_CELL_SIZE;
         if(
             !isIdxValid(cellX, game.states.gameplay->areaActiveCells)

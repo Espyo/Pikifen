@@ -116,8 +116,8 @@ private:
     
         //--- Public members ---
         
-        //Position.
-        Point pos;
+        //Center coordinates.
+        Point center;
         
         //Current angle.
         float angle = 0.0f;

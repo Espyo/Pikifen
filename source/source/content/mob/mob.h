@@ -103,8 +103,8 @@ public:
     
     //-Position-
     
-    //Coordinates.
-    Point pos;
+    //Center coordinates.
+    Point center;
     
     //Z coordinate. This is height; the higher the value, the higher in the sky.
     float z = 0.0f;

@@ -194,13 +194,13 @@ void NoneCategory::clearTypes() { }
 /**
  * @brief Creates a mob.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Mob type.
  * @param angle Starting angle.
  * @return The mob.
  */
 Mob* NoneCategory::createMob(
-    const Point& pos, MobType* type, float angle
+    const Point& center, MobType* type, float angle
 ) { return nullptr; }
 
 

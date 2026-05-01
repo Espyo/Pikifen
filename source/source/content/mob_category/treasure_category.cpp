@@ -43,15 +43,15 @@ void TreasureCategory::clearTypes() {
 /**
  * @brief Creates a treasure and adds it to the list of treasures.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Mob type.
  * @param angle Starting angle.
  * @return The mob.
  */
 Mob* TreasureCategory::createMob(
-    const Point& pos, MobType* type, float angle
+    const Point& center, MobType* type, float angle
 ) {
-    Treasure* m = new Treasure(pos, (TreasureType*) type, angle);
+    Treasure* m = new Treasure(center, (TreasureType*) type, angle);
     game.states.gameplay->mobs.treasures.push_back(m);
     return m;
 }

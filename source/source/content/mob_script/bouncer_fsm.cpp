@@ -136,9 +136,9 @@ void BouncerFsm::handleMob(ScriptVM* scriptVM, void* info1, void* info2) {
     //mob needs to go, to make for a nice smooth arc.
     float maxH = std::max(128.0f, (targetMob->z - toucher->z) * 1.5f);
     calculateThrow(
-        toucher->pos,
+        toucher->center,
         toucher->z,
-        targetMob->pos,
+        targetMob->center,
         targetMob->z + targetMob->height,
         maxH, MOB::GRAVITY_ADDER,
         &toucher->speed,

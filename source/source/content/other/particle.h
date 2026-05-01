@@ -202,8 +202,8 @@ struct Particle {
     //Current time left to live. 0 means it's dead.
     float time = 0.0f;
     
-    //Current coordinates.
-    Point pos;
+    //Center coordinates.
+    Point center;
     
     //Current Z.
     float z = 0.0f;
@@ -309,7 +309,7 @@ struct ParticleManager {
     
     //--- Private function declarations ---
     
-    void deleteParticle(size_t pos);
+    void deleteParticle(size_t slot);
     
 };
 

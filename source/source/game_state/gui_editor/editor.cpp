@@ -645,9 +645,9 @@ void GuiEditor::openExternallyCmd(float inputValue) {
 void GuiEditor::panCam(const ALLEGRO_EVENT& ev) {
     game.editorsView.cam.setPos(
         Point(
-            game.editorsView.cam.pos.x -
+            game.editorsView.cam.center.x -
             ev.mouse.dx / game.editorsView.cam.zoom,
-            game.editorsView.cam.pos.y -
+            game.editorsView.cam.center.y -
             ev.mouse.dy / game.editorsView.cam.zoom
         )
     );
@@ -712,7 +712,7 @@ void GuiEditor::quickPlayCmd(float inputValue) {
     game.quickPlay.areaPath = game.options.guiEd.quickPlayAreaPath;
     game.quickPlay.content = manifest.path;
     game.quickPlay.editor = game.states.guiEd;
-    game.quickPlay.camPos = game.editorsView.cam.pos;
+    game.quickPlay.camPos = game.editorsView.cam.center;
     game.quickPlay.camZ = game.editorsView.cam.zoom;
     leave();
 }

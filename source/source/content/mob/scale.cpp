@@ -16,12 +16,12 @@
 /**
  * @brief Constructs a new scale object.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Scale type this mob belongs to.
  * @param angle Starting angle.
  */
-Scale::Scale(const Point& pos, ScaleType* type, float angle) :
-    Mob(pos, type, angle),
+Scale::Scale(const Point& center, ScaleType* type, float angle) :
+    Mob(center, type, angle),
     scaType(type),
     goalNumber(type->goalNumber) {
     

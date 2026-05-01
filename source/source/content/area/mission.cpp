@@ -1311,7 +1311,7 @@ bool MissionMetricTypeLeadersInRegion::getZoomData(
         Leader* lPtr :
         game.states.gameplay->areaRegions[idxParam].leadersInside
     ) {
-        if(lPtr) avgPos += lPtr->pos;
+        if(lPtr) avgPos += lPtr->center;
     }
     avgPos.x /=
         game.states.gameplay->areaRegions[idxParam].leadersInside.size();

@@ -106,14 +106,14 @@ void PileFsm::beAttacked(ScriptVM* scriptVM, void* info1, void* info2) {
             //If this was a Pikmin's attack, spawn the first resource nearby
             //so it can pick it up.
             spawnAngle =
-                getAngle(pilPtr->pos, pikminToStartCarrying->pos);
+                getAngle(pilPtr->center, pikminToStartCarrying->center);
             spawnPos =
-                pikminToStartCarrying->pos +
+                pikminToStartCarrying->center +
                 angleToCoordinates(
                     spawnAngle, game.config.pikmin.standardRadius * 1.5
                 );
         } else {
-            spawnPos = pilPtr->pos;
+            spawnPos = pilPtr->center;
             spawnZ = pilPtr->height + 32.0f;
             spawnAngle = game.rng.f(0, TAU);
             spawnHSpeed = pilPtr->radius * 3;

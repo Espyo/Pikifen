@@ -105,32 +105,32 @@ void Replay::addNewState(
     );
     forIdx(l, leaderList) {
         newStatePtr->elements.push_back(
-            ReplayElement(REPLAY_ELEMENT_LEADER, leaderList[l]->pos)
+            ReplayElement(REPLAY_ELEMENT_LEADER, leaderList[l]->center)
         );
     }
     forIdx(p, pikminList) {
         newStatePtr->elements.push_back(
-            ReplayElement(REPLAY_ELEMENT_PIKMIN, pikminList[p]->pos)
+            ReplayElement(REPLAY_ELEMENT_PIKMIN, pikminList[p]->center)
         );
     }
     forIdx(e, enemyList) {
         newStatePtr->elements.push_back(
-            ReplayElement(REPLAY_ELEMENT_ENEMY, enemyList[e]->pos)
+            ReplayElement(REPLAY_ELEMENT_ENEMY, enemyList[e]->center)
         );
     }
     forIdx(t, treasureList) {
         newStatePtr->elements.push_back(
-            ReplayElement(REPLAY_ELEMENT_TREASURE, treasureList[t]->pos)
+            ReplayElement(REPLAY_ELEMENT_TREASURE, treasureList[t]->center)
         );
     }
     forIdx(o, onionList) {
         newStatePtr->elements.push_back(
-            ReplayElement(REPLAY_ELEMENT_ONION, onionList[o]->pos)
+            ReplayElement(REPLAY_ELEMENT_ONION, onionList[o]->center)
         );
     }
     forIdx(o, obstacleList) {
         newStatePtr->elements.push_back(
-            ReplayElement(REPLAY_ELEMENT_OBSTACLE, obstacleList[o]->pos)
+            ReplayElement(REPLAY_ELEMENT_OBSTACLE, obstacleList[o]->center)
         );
     }
     

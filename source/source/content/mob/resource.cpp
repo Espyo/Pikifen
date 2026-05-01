@@ -18,12 +18,12 @@
 /**
  * @brief Constructs a new resource object.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Resource type this mob belongs to.
  * @param angle Starting angle.
  */
-Resource::Resource(const Point& pos, ResourceType* type, float angle) :
-    Mob(pos, type, angle),
+Resource::Resource(const Point& center, ResourceType* type, float angle) :
+    Mob(center, type, angle),
     resType(type),
     originPile(nullptr) {
     

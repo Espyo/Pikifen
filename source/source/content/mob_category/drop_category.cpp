@@ -43,15 +43,15 @@ void DropCategory::clearTypes() {
 /**
  * @brief Creates a drop and adds it to the list of drops.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Mob type.
  * @param angle Starting angle.
  * @return The mob.
  */
 Mob* DropCategory::createMob(
-    const Point& pos, MobType* type, float angle
+    const Point& center, MobType* type, float angle
 ) {
-    Drop* m = new Drop(pos, (DropType*) type, angle);
+    Drop* m = new Drop(center, (DropType*) type, angle);
     game.states.gameplay->mobs.drops.push_back(m);
     return m;
 }

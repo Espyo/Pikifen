@@ -286,7 +286,7 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
                 .tooltip = "Create the reminder.",
                 .onActivate = [this] (const Point&) {
                     AreaMakerReminder newReminder;
-                    newReminder.pos = toolStartCursor;
+                    newReminder.center = toolStartCursor;
                     newReminder.text = game.modal.textInput;
                     game.curArea->reminders.push_back(newReminder);
                     game.content.areas.saveAreaReminders(game.curArea);

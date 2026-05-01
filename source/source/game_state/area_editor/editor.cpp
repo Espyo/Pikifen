@@ -318,7 +318,7 @@ AreaEditor::AreaEditor() :
     
     mobSelection.onGetInfo =
     [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
-        *outCenter = game.curArea->mobGenerators[idx]->pos;
+        *outCenter = game.curArea->mobGenerators[idx]->center;
         *outSize = getMobGenRadius(game.curArea->mobGenerators[idx]) * 2.0f;
         *outAngle = 0.0f;
     };
@@ -327,7 +327,7 @@ AreaEditor::AreaEditor() :
             size_t idx, const Point & newCenter,
             const Point & newSize, float newAngle
     ) {
-        game.curArea->mobGenerators[idx]->pos = newCenter;
+        game.curArea->mobGenerators[idx]->center = newCenter;
     };
     mobSelection.onGetTotal =
     [this] () {
@@ -351,7 +351,7 @@ AreaEditor::AreaEditor() :
     
     pathStopSelection.onGetInfo =
     [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
-        *outCenter = game.curArea->pathStops[idx]->pos;
+        *outCenter = game.curArea->pathStops[idx]->center;
         *outSize = Point(game.curArea->pathStops[idx]->radius * 2.0f);
         *outAngle = 0.0f;
     };
@@ -360,7 +360,7 @@ AreaEditor::AreaEditor() :
             size_t idx, const Point & newCenter,
             const Point & newSize, float newAngle
     ) {
-        game.curArea->pathStops[idx]->pos = newCenter;
+        game.curArea->pathStops[idx]->center = newCenter;
         game.curArea->pathStops[idx]->radius = newSize.x / 2.0f;
     };
     pathStopSelection.onGetTotal =
@@ -388,8 +388,8 @@ AreaEditor::AreaEditor() :
         EditorPathLink* elPtr = &game.curArea->editorPathLinks[idx];
         PathStop* s1 = elPtr->link1->startPtr;
         PathStop* s2 = elPtr->link1->endPtr;
-        Point p1 = s1->pos;
-        Point p2 = s2->pos;
+        Point p1 = s1->center;
+        Point p2 = s2->center;
         *outAngle = getAngle(p1, p2);
         Point offset = p1;
         //Transform both points so that p1 is at the origin,
@@ -499,7 +499,7 @@ AreaEditor::AreaEditor() :
     
     reminderSelection.onGetInfo =
     [] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
-        *outCenter = game.curArea->reminders[idx].pos;
+        *outCenter = game.curArea->reminders[idx].center;
         *outSize = AREA_EDITOR::REMINDER_SIZE;
         *outAngle = 0.0f;
     };
@@ -508,7 +508,7 @@ AreaEditor::AreaEditor() :
             size_t idx, const Point & newCenter,
             const Point & newSize, float newAngle
     ) {
-        game.curArea->reminders[idx].pos = newCenter;
+        game.curArea->reminders[idx].center = newCenter;
     };
     reminderSelection.onGetTotal =
     [] () {
@@ -2527,8 +2527,8 @@ void AreaEditor::goToProblem() {
         mobSelection.setSingle(game.curArea->findMobGenIdx(problemMobPtr));
         centerCamera(
             RectCorners(
-                problemMobPtr->pos - 64.0f,
-                problemMobPtr->pos + 64.0f
+                problemMobPtr->center - 64.0f,
+                problemMobPtr->center + 64.0f
             )
         );
         
@@ -2551,8 +2551,8 @@ void AreaEditor::goToProblem() {
         );
         centerCamera(
             RectCorners(
-                problemPathStopPtr->pos - 64.0f,
-                problemPathStopPtr->pos + 64.0f
+                problemPathStopPtr->center - 64.0f,
+                problemPathStopPtr->center + 64.0f
             )
         );
         
@@ -2964,9 +2964,9 @@ void AreaEditor::openUserDataExternallyCmd(float inputValue) {
 void AreaEditor::panCam(const ALLEGRO_EVENT& ev) {
     game.editorsView.cam.setPos(
         Point(
-            game.editorsView.cam.pos.x -
+            game.editorsView.cam.center.x -
             ev.mouse.dx / game.editorsView.cam.zoom,
-            game.editorsView.cam.pos.y -
+            game.editorsView.cam.center.y -
             ev.mouse.dy / game.editorsView.cam.zoom
         )
     );
@@ -3112,7 +3112,7 @@ void AreaEditor::quickPlayCmd(float inputValue) {
     game.quickPlay.areaPath = manifest.path;
     game.quickPlay.content = manifest.path;
     game.quickPlay.editor = game.states.areaEd;
-    game.quickPlay.camPos = game.editorsView.cam.pos;
+    game.quickPlay.camPos = game.editorsView.cam.center;
     game.quickPlay.camZ = game.editorsView.cam.zoom;
     leave();
 }
@@ -3318,7 +3318,7 @@ void AreaEditor::removeThumbnail() {
  * @brief Resets the camera's X and Y coordinates.
  */
 void AreaEditor::resetCamXY() {
-    game.editorsView.cam.targetPos = Point();
+    game.editorsView.cam.targetCenter = Point();
 }
 
 
@@ -3789,7 +3789,7 @@ void AreaEditor::setupForNewAreaPre() {
     manifest.clear();
     
     game.editorsView.cam.zoom = 1.0f;
-    game.editorsView.cam.pos = Point();
+    game.editorsView.cam.center = Point();
     
     state = EDITOR_STATE_MAIN;
     
@@ -3904,7 +3904,7 @@ void AreaEditor::startPathStopMove() {
     for(size_t idx : selectedStops) {
         Distance d(
             game.editorsView.mouseCursorWorldPos,
-            game.curArea->pathStops[idx]->pos
+            game.curArea->pathStops[idx]->center
         );
         if(!preMovePivotStop || d < closestDist) {
             preMovePivotStop = game.curArea->pathStops[idx];
@@ -4371,7 +4371,7 @@ void AreaEditor::zoomAndPosResetCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
     if(game.editorsView.cam.targetZoom == 1.0f) {
-        game.editorsView.cam.targetPos = Point();
+        game.editorsView.cam.targetCenter = Point();
     } else {
         game.editorsView.cam.targetZoom = 1.0f;
     }
@@ -4408,34 +4408,34 @@ void AreaEditor::zoomEverythingCmd(float inputValue) {
     
     forIdx(m, game.curArea->mobGenerators) {
         MobGen* mPtr = game.curArea->mobGenerators[m];
-        if(mPtr->pos.x < camera.tl.x || !gotSomething) {
-            camera.tl.x = mPtr->pos.x;
+        if(mPtr->center.x < camera.tl.x || !gotSomething) {
+            camera.tl.x = mPtr->center.x;
         }
-        if(mPtr->pos.y < camera.tl.y || !gotSomething) {
-            camera.tl.y = mPtr->pos.y;
+        if(mPtr->center.y < camera.tl.y || !gotSomething) {
+            camera.tl.y = mPtr->center.y;
         }
-        if(mPtr->pos.x > camera.br.x || !gotSomething) {
-            camera.br.x = mPtr->pos.x;
+        if(mPtr->center.x > camera.br.x || !gotSomething) {
+            camera.br.x = mPtr->center.x;
         }
-        if(mPtr->pos.y > camera.br.y || !gotSomething) {
-            camera.br.y = mPtr->pos.y;
+        if(mPtr->center.y > camera.br.y || !gotSomething) {
+            camera.br.y = mPtr->center.y;
         }
         gotSomething = true;
     }
     
     forIdx(s, game.curArea->pathStops) {
         PathStop* sPtr = game.curArea->pathStops[s];
-        if(sPtr->pos.x < camera.tl.x || !gotSomething) {
-            camera.tl.x = sPtr->pos.x;
+        if(sPtr->center.x < camera.tl.x || !gotSomething) {
+            camera.tl.x = sPtr->center.x;
         }
-        if(sPtr->pos.y < camera.tl.y || !gotSomething) {
-            camera.tl.y = sPtr->pos.y;
+        if(sPtr->center.y < camera.tl.y || !gotSomething) {
+            camera.tl.y = sPtr->center.y;
         }
-        if(sPtr->pos.x > camera.br.x || !gotSomething) {
-            camera.br.x = sPtr->pos.x;
+        if(sPtr->center.x > camera.br.x || !gotSomething) {
+            camera.br.x = sPtr->center.x;
         }
-        if(sPtr->pos.y > camera.br.y || !gotSomething) {
-            camera.br.y = sPtr->pos.y;
+        if(sPtr->center.y > camera.br.y || !gotSomething) {
+            camera.br.y = sPtr->center.y;
         }
         gotSomething = true;
     }

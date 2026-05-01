@@ -19,14 +19,14 @@
 /**
  * @brief Constructs a new decoration object.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Decoration type this mob belongs to.
  * @param angle Starting angle.
  */
 Decoration::Decoration(
-    const Point& pos, DecorationType* type, float angle
+    const Point& center, DecorationType* type, float angle
 ) :
-    Mob(pos, type, angle),
+    Mob(center, type, angle),
     decType(type) {
     
     float tintInterpolRatio = game.rng.f(0.0f, 1.0f);

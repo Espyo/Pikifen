@@ -165,8 +165,8 @@ void InWorldFraction::draw() {
         if(m) {
             pos =
                 Point(
-                    m->pos.x,
-                    m->pos.y - m->radius - IN_WORLD_FRACTION::PADDING
+                    m->center.x,
+                    m->center.y - m->radius - IN_WORLD_FRACTION::PADDING
                 );
         }
         bmpPos =
@@ -182,8 +182,8 @@ void InWorldFraction::draw() {
         if(m) {
             pos =
                 Point(
-                    m->pos.x,
-                    m->pos.y - m->radius -
+                    m->center.x,
+                    m->center.y - m->radius -
                     al_get_font_line_height(game.sysContent.fntStandard) -
                     IN_WORLD_FRACTION::PADDING
                 );
@@ -356,7 +356,7 @@ void InWorldHealthWheel::draw() {
     
     //Draw the health wheel.
     drawHealth(
-        Point(m->pos.x, m->pos.y - curYOffset),
+        Point(m->center.x, m->center.y - curYOffset),
         visibleRatio,
         IN_WORLD_HEALTH_WHEEL::ALPHA * alphaMult,
         wheelRadius
@@ -373,7 +373,7 @@ void InWorldHealthWheel::draw() {
             IN_WORLD_STATUS_BUILDUP::PADDING + IN_WORLD_STATUS_BUILDUP::HEIGHT;
             
         drawFilledRoundedRatioRectangle(
-            Point(m->pos.x, m->pos.y - curYOffset),
+            Point(m->center.x, m->center.y - curYOffset),
             buildupBarSize,
             IN_WORLD_STATUS_BUILDUP::CORNER_RADIUS,
             changeAlpha(
@@ -384,9 +384,9 @@ void InWorldHealthWheel::draw() {
         float filledWidth = IN_WORLD_STATUS_BUILDUP::WIDTH * sPtr->buildup;
         drawFilledRoundedRatioRectangle(
             Point(
-                m->pos.x - IN_WORLD_STATUS_BUILDUP::WIDTH / 2.0f +
+                m->center.x - IN_WORLD_STATUS_BUILDUP::WIDTH / 2.0f +
                 filledWidth / 2.0f,
-                m->pos.y - curYOffset
+                m->center.y - curYOffset
             ),
             Point(
                 filledWidth, IN_WORLD_STATUS_BUILDUP::HEIGHT

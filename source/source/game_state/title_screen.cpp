@@ -49,7 +49,7 @@ void MainMenu::initGuiMainPage() {
     
     //Button icon positions.
     DataNode* iconsNode = guiFile->getChildByName("icons_to_the_left");
-
+    
     auto getIconLeft = [&iconsNode] (const string& name, const string& def) {
         return s2b(iconsNode->getChildByName(name)->getValueOrDefault(def));
     };
@@ -752,14 +752,14 @@ void TitleScreen::doDrawing() {
         LogoPikmin* pik = &logoPikmin[p];
         drawBitmapInBox(
             game.sysContent.bmpShadow,
-            pik->pos + pikSize * 0.30f, pikSize * 1.2f,
+            pik->center + pikSize * 0.30f, pikSize * 1.2f,
             true, 0.0f, COLOR_TRANSPARENT_WHITE
         );
     }
     forIdx(p, logoPikmin) {
         LogoPikmin* pik = &logoPikmin[p];
         drawBitmapInBox(
-            pik->top, pik->pos, pikSize, true, pik->angle
+            pik->top, pik->center, pikSize, true, pik->angle
         );
     }
     
@@ -805,26 +805,26 @@ void TitleScreen::doLogic() {
         LogoPikmin* pik = &logoPikmin[p];
         
         if(!pik->reachedDestination) {
-            float a = getAngle(pik->pos, pik->destination);
+            float a = getAngle(pik->center, pik->destination);
             float speed =
                 std::min(
                     pik->speed * largestWindowDim * (float) game.deltaT,
-                    Distance(pik->pos, pik->destination).toFloat() *
+                    Distance(pik->center, pik->destination).toFloat() *
                     logoPikminSpeedSmoothness
                 );
-            pik->pos.x += cos(a) * speed;
-            pik->pos.y += sin(a) * speed;
+            pik->center.x += cos(a) * speed;
+            pik->center.y += sin(a) * speed;
             if(
-                fabs(pik->pos.x - pik->destination.x) < 1.0 &&
-                fabs(pik->pos.y - pik->destination.y) < 1.0
+                fabs(pik->center.x - pik->destination.x) < 1.0 &&
+                fabs(pik->center.y - pik->destination.y) < 1.0
             ) {
-                pik->destination = pik->pos;
+                pik->destination = pik->center;
                 pik->reachedDestination = true;
             }
             
         } else {
             pik->swayVar += pik->swaySpeed * game.deltaT;
-            pik->pos.x =
+            pik->center.x =
                 pik->destination.x +
                 sin(pik->swayVar) * logoPikminSwayAmount;
         }
@@ -969,7 +969,7 @@ void TitleScreen::load() {
                     (r / (float) mapTotalRows)
                 );
                 
-            pik.pos =
+            pik.center =
                 Point(game.winW / 2.0f, game.winH / 2.0f) +
                 getRandomPointInRectangularRing(
                     Point(game.winW * 1.2, game.winH * 1.2),

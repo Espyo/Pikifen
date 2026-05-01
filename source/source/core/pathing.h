@@ -222,8 +222,8 @@ struct PathStop {
 
     //--- Public members ---
     
-    //Coordinates.
-    Point pos;
+    //Center coordinates.
+    Point center;
     
     //Radius.
     float radius = PATHS::MIN_STOP_RADIUS;

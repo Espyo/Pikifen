@@ -117,12 +117,12 @@ AnimationEditor::AnimationEditor() :
     hitboxSelection.onGetInfo =
     [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
         if(!sideView) {
-            *outCenter = curSprite->hitboxes[idx].pos;
+            *outCenter = curSprite->hitboxes[idx].center;
             *outSize = Point(curSprite->hitboxes[idx].radius * 2.0f);
         } else {
             *outCenter =
                 Point(
-                    curSprite->hitboxes[idx].pos.x,
+                    curSprite->hitboxes[idx].center.x,
                     (-(curSprite->hitboxes[idx].height / 2.0f)) -
                     curSprite->hitboxes[idx].z
                 );
@@ -140,10 +140,10 @@ AnimationEditor::AnimationEditor() :
             const Point & newSize, float newAngle
     ) {
         if(!sideView) {
-            curSprite->hitboxes[idx].pos = newCenter;
+            curSprite->hitboxes[idx].center = newCenter;
             curSprite->hitboxes[idx].radius = newSize.x / 2.0f;
         } else {
-            curSprite->hitboxes[idx].pos.x = newCenter.x;
+            curSprite->hitboxes[idx].center.x = newCenter.x;
             curSprite->hitboxes[idx].radius = newSize.x / 2.0f;
             curSprite->hitboxes[idx].z = -(newCenter.y + newSize.y / 2.0f);
             curSprite->hitboxes[idx].height = newSize.y;
@@ -222,11 +222,11 @@ void AnimationEditor::centerCameraOnSpriteBitmap(bool instant) {
         centerCamera(RectCorners(spriteSize / (-2.0f), spriteSize / 2.0f));
     } else {
         game.editorsView.cam.targetZoom = 1.0f;
-        game.editorsView.cam.targetPos = Point();
+        game.editorsView.cam.targetCenter = Point();
     }
     
     if(instant) {
-        game.editorsView.cam.pos = game.editorsView.cam.targetPos;
+        game.editorsView.cam.center = game.editorsView.cam.targetCenter;
         game.editorsView.cam.zoom = game.editorsView.cam.targetZoom;
     }
     game.editorsView.updateTransformations();
@@ -454,10 +454,10 @@ void AnimationEditor::flipHitbox(Hitbox* hitbox, bool horizontal) {
         angleToCoordinates(hitbox->knockbackAngle, 1.0f);
         
     if(horizontal) {
-        hitbox->pos.x = -hitbox->pos.x;
+        hitbox->center.x = -hitbox->center.x;
         knockbackCoords.x = -knockbackCoords.x;
     } else {
-        hitbox->pos.y = -hitbox->pos.y;
+        hitbox->center.y = -hitbox->center.y;
         knockbackCoords.y = -knockbackCoords.y;
     }
     
@@ -528,7 +528,7 @@ string AnimationEditor::getFileTooltip(const string& path) const {
 Hitbox* AnimationEditor::getMatchingSymmetricalHitbox(
     Hitbox* pivotPtr, bool horizontal
 ) {
-    Point mirrorPos = pivotPtr->pos;
+    Point mirrorPos = pivotPtr->center;
     if(horizontal) {
         mirrorPos.x = -mirrorPos.x;
     } else {
@@ -540,7 +540,7 @@ Hitbox* AnimationEditor::getMatchingSymmetricalHitbox(
     forIdx(h, curSprite->hitboxes) {
         Hitbox* hPtr = &curSprite->hitboxes[h];
         if(hPtr == pivotPtr) continue;
-        Distance dist(hPtr->pos, mirrorPos);
+        Distance dist(hPtr->center, mirrorPos);
         if(!bestHitbox || dist < bestDist) {
             bestHitbox = hPtr;
             bestDist = dist;
@@ -727,15 +727,15 @@ bool AnimationEditor::isHitboxOnSide(
     Hitbox* hPtr, bool horizontal, bool topLeft
 ) const {
     if(horizontal) {
-        if(topLeft && hPtr->pos.x < 0.0f) {
+        if(topLeft && hPtr->center.x < 0.0f) {
             return true;
-        } else if(!topLeft && hPtr->pos.x > 0.0f) {
+        } else if(!topLeft && hPtr->center.x > 0.0f) {
             return true;
         }
     } else {
-        if(topLeft && hPtr->pos.y < 0.0f) {
+        if(topLeft && hPtr->center.y < 0.0f) {
             return true;
-        } else if(!topLeft && hPtr->pos.y > 0.0f) {
+        } else if(!topLeft && hPtr->center.y > 0.0f) {
             return true;
         }
     }
@@ -938,7 +938,7 @@ void AnimationEditor::makeHitboxesSymmetrical(bool horizontal, bool topLeft) {
         matchPtr->knockbackType = hPtr->knockbackType;
         matchPtr->knockbackStrength = hPtr->knockbackStrength;
         matchPtr->knockbackAngle = hPtr->knockbackAngle;
-        matchPtr->pos = hPtr->pos;
+        matchPtr->center = hPtr->center;
         matchPtr->radius = hPtr->radius;
         matchPtr->type = hPtr->type;
         matchPtr->value = hPtr->value;
@@ -996,9 +996,9 @@ void AnimationEditor::openExternallyCmd(float inputValue) {
 void AnimationEditor::panCam(const ALLEGRO_EVENT& ev) {
     game.editorsView.cam.setPos(
         Point(
-            game.editorsView.cam.pos.x -
+            game.editorsView.cam.center.x -
             ev.mouse.dx / game.editorsView.cam.zoom,
-            game.editorsView.cam.pos.y -
+            game.editorsView.cam.center.y -
             ev.mouse.dy / game.editorsView.cam.zoom
         )
     );
@@ -1161,7 +1161,7 @@ void AnimationEditor::quickPlayCmd(float inputValue) {
     game.quickPlay.areaPath = game.options.animEd.quickPlayAreaPath;
     game.quickPlay.content = manifest.path;
     game.quickPlay.editor = game.states.animationEd;
-    game.quickPlay.camPos = game.editorsView.cam.pos;
+    game.quickPlay.camPos = game.editorsView.cam.center;
     game.quickPlay.camZ = game.editorsView.cam.zoom;
     leave();
 }
@@ -1393,7 +1393,7 @@ void AnimationEditor::renameSprite(
  * @brief Resets the camera's X and Y coordinates.
  */
 void AnimationEditor::resetCamXY() {
-    game.editorsView.cam.targetPos = Point();
+    game.editorsView.cam.targetCenter = Point();
 }
 
 
@@ -1456,7 +1456,7 @@ void AnimationEditor::resizeSprite(Sprite* s, float mult) {
         Hitbox* hPtr = &s->hitboxes[h];
         
         hPtr->radius = fabs(hPtr->radius * mult);
-        hPtr->pos *= mult;
+        hPtr->center *= mult;
     }
     
     changesMgr.markAsChanged();
@@ -2115,7 +2115,7 @@ void AnimationEditor::zoomAndPosResetCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
     if(game.editorsView.cam.targetZoom == 1.0f) {
-        game.editorsView.cam.targetPos = Point();
+        game.editorsView.cam.targetCenter = Point();
     } else {
         game.editorsView.cam.targetZoom = 1.0f;
     }
@@ -2155,8 +2155,8 @@ void AnimationEditor::zoomEverythingCmd(float inputValue) {
     
     forIdx(h, sPtr->hitboxes) {
         Hitbox* hPtr = &sPtr->hitboxes[h];
-        updateMinCoords(cameraCorners.tl, hPtr->pos - hPtr->radius);
-        updateMaxCoords(cameraCorners.br, hPtr->pos + hPtr->radius);
+        updateMinCoords(cameraCorners.tl, hPtr->center - hPtr->radius);
+        updateMaxCoords(cameraCorners.br, hPtr->center + hPtr->radius);
     }
     
     centerCamera(cameraCorners);

@@ -1066,7 +1066,7 @@ void drawMobShadow(const Mob* m, float deltaZ, float shadowStretch) {
     if(m->rectangularDim.x != 0) {
         drawBitmap(
             game.sysContent.bmpShadowSquare,
-            Point(m->pos.x + shadowX + shadowW / 2, m->pos.y),
+            Point(m->center.x + shadowX + shadowW / 2, m->center.y),
             shadowSize,
             m->angle,
             mapAlpha(255 * (1 - shadowStretch))
@@ -1074,7 +1074,7 @@ void drawMobShadow(const Mob* m, float deltaZ, float shadowStretch) {
     } else {
         drawBitmap(
             game.sysContent.bmpShadow,
-            Point(m->pos.x + shadowX + shadowW / 2, m->pos.y),
+            Point(m->center.x + shadowX + shadowW / 2, m->center.y),
             Point(shadowW, diameter),
             0,
             mapAlpha(255 * (1 - shadowStretch))
@@ -1511,7 +1511,7 @@ void drawStatusEffectBmp(const Mob* m, BitmapEffect& effects) {
     
     drawBitmap(
         statusBmp,
-        m->pos,
+        m->center,
         Point(m->radius * 2 * statusBmpScale, -1)
     );
 }

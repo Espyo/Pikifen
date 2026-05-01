@@ -51,8 +51,8 @@ Mob* Mob::getMobToWalkOn() const {
             //Rectangle vs rectangle.
             if(
                 !rectanglesIntersect(
-                    Rect(pos, rectangularDim), angle,
-                    Rect(mPtr->pos, mPtr->rectangularDim), mPtr->angle
+                    Rect(center, rectangularDim), angle,
+                    Rect(mPtr->center, mPtr->rectangularDim), mPtr->angle
                 )
             ) {
                 continue;
@@ -61,8 +61,8 @@ Mob* Mob::getMobToWalkOn() const {
             //Rectangle vs circle.
             if(
                 !circleIntersectsRectangle(
-                    mPtr->pos, mPtr->radius,
-                    pos, rectangularDim,
+                    mPtr->center, mPtr->radius,
+                    center, rectangularDim,
                     angle
                 )
             ) {
@@ -72,8 +72,8 @@ Mob* Mob::getMobToWalkOn() const {
             //Circle vs rectangle.
             if(
                 !circleIntersectsRectangle(
-                    pos, radius,
-                    mPtr->pos, mPtr->rectangularDim,
+                    center, radius,
+                    mPtr->center, mPtr->rectangularDim,
                     mPtr->angle
                 )
             ) {
@@ -82,7 +82,7 @@ Mob* Mob::getMobToWalkOn() const {
         } else {
             //Circle vs circle.
             if(
-                Distance(pos, mPtr->pos) >
+                Distance(center, mPtr->center) >
                 (radius + mPtr->radius)
             ) {
                 continue;
@@ -248,7 +248,7 @@ HORIZ_MOVE_RESULT Mob::getPhysicsHorizontalMovement(
             groundSector = sec;
             centerSector = sec;
             speed.x = speed.y = 0;
-            pos = finalTargetPos;
+            center = finalTargetPos;
             
             if(!hasFlag(chaseInfo.flags, CHASE_FLAG_TELEPORTS_CONSTANTLY)) {
                 chaseInfo.state = CHASE_STATE_FINISHED;
@@ -258,7 +258,7 @@ HORIZ_MOVE_RESULT Mob::getPhysicsHorizontalMovement(
         } else {
         
             //Make it go to the direction it wants.
-            float d = Distance(pos, finalTargetPos).toFloat();
+            float d = Distance(center, finalTargetPos).toFloat();
             
             chaseInfo.curSpeed +=
                 chaseInfo.acceleration * deltaT;
@@ -277,7 +277,7 @@ HORIZ_MOVE_RESULT Mob::getPhysicsHorizontalMovement(
                 
             float movementAngle =
                 canFreeMove ?
-                getAngle(pos, finalTargetPos) :
+                getAngle(center, finalTargetPos) :
                 angle;
                 
             moveSpeed->x = cos(movementAngle) * moveAmount;
@@ -397,7 +397,7 @@ void Mob::tickHorizontalMovementPhysics(
     bool finishedMoving = false;
     bool doingSlide = false;
     
-    Point newPos = pos;
+    Point newPos = center;
     Point moveSpeed = attemptedMoveSpeed;
     
     //Try placing it in the place it should be at, judging
@@ -412,8 +412,8 @@ void Mob::tickHorizontalMovementPhysics(
         //It's pretty naive...but it works!
         bool successfulMove = true;
         
-        newPos.x = pos.x + deltaT * moveSpeed.x;
-        newPos.y = pos.y + deltaT * moveSpeed.y;
+        newPos.x = center.x + deltaT * moveSpeed.x;
+        newPos.y = center.y + deltaT * moveSpeed.y;
         float newZ = z;
         
         //Get the sector the mob will be on.
@@ -552,7 +552,7 @@ void Mob::tickHorizontalMovementPhysics(
         //Reset its horizontal position, but keep calculations for
         //everything else.
         if(!successfulMove && slideAngleDiff > TAU / 4 - 0.05) {
-            newPos = pos;
+            newPos = center;
             successfulMove = true;
         }
         
@@ -563,7 +563,7 @@ void Mob::tickHorizontalMovementPhysics(
         
         if(successfulMove) {
             //Good news, the mob can be placed in this new spot freely.
-            pos = newPos;
+            center = newPos;
             z = newZ;
             groundSector = newGroundSector;
             centerSector = newCenterSector;
@@ -607,7 +607,7 @@ void Mob::tickPhysics(float deltaT) {
     //Initial setup.
     float moveSpeedMult = getSpeedMultiplier();
     
-    Point preMovePos = pos;
+    Point preMovePos = center;
     Point moveSpeed = speed;
     bool touchedWall = false;
     float preMoveGroundZ = groundSector->z;
@@ -649,7 +649,7 @@ void Mob::tickPhysics(float deltaT) {
     }
     
     if(type->walkable) {
-        walkableMoved = (pos - preMovePos) / deltaT;
+        walkableMoved = (center - preMovePos) / deltaT;
     }
 }
 
@@ -667,7 +667,7 @@ void Mob::tickRotationPhysics(
     if(angle > TAU / 2)  angle -= TAU;
     if(angle < -TAU / 2) angle += TAU;
     if(intendedTurnPos) {
-        intendedTurnAngle = getAngle(pos, *intendedTurnPos);
+        intendedTurnAngle = getAngle(center, *intendedTurnPos);
     }
     if(intendedTurnAngle > TAU / 2)  intendedTurnAngle -= TAU;
     if(intendedTurnAngle < -TAU / 2) intendedTurnAngle += TAU;
@@ -687,7 +687,7 @@ void Mob::tickRotationPhysics(
         case HOLD_ROTATION_METHOD_FACE_HOLDER: {
             float dummy;
             Point finalPos = holder.getFinalPos(&dummy);
-            angle = getAngle(finalPos, holder.m->pos);
+            angle = getAngle(finalPos, holder.m->center);
             stopTurning();
             break;
         } case HOLD_ROTATION_METHOD_COPY_HOLDER: {

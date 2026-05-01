@@ -193,8 +193,8 @@ void Editor::centerCamera(const RectCorners& corners, bool instantaneous) {
     }
     
     Point size = finalCorners.br - finalCorners.tl;
-    game.editorsView.cam.targetPos.x = floor(finalCorners.tl.x + size.x / 2.0f);
-    game.editorsView.cam.targetPos.y = floor(finalCorners.tl.y + size.y / 2.0f);
+    game.editorsView.cam.targetCenter.x = floor(finalCorners.tl.x + size.x / 2.0f);
+    game.editorsView.cam.targetCenter.y = floor(finalCorners.tl.y + size.y / 2.0f);
     
     float z;
     if(size.x > size.y) z = game.editorsView.windowRect.size.x / size.x;
@@ -204,7 +204,7 @@ void Editor::centerCamera(const RectCorners& corners, bool instantaneous) {
     game.editorsView.cam.targetZoom = z;
     
     if(instantaneous) {
-        game.editorsView.cam.pos = game.editorsView.cam.targetPos;
+        game.editorsView.cam.center = game.editorsView.cam.targetCenter;
         game.editorsView.cam.zoom = game.editorsView.cam.targetZoom;
     }
     
@@ -4229,9 +4229,9 @@ void Editor::zoomWithCursor(float newZoom) {
     //so that the mouse cursor ends up where it was before.
     game.editorsView.cam.setPos(
         Point(
-            game.editorsView.cam.pos.x +=
+            game.editorsView.cam.center.x +=
                 (oldMousePos.x - game.editorsView.mouseCursorWorldPos.x),
-            game.editorsView.cam.pos.y +=
+            game.editorsView.cam.center.y +=
                 (oldMousePos.y - game.editorsView.mouseCursorWorldPos.y)
         )
     );

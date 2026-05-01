@@ -154,7 +154,7 @@ void GameplayState::doPlayerActionSwitchMaturity(
         Pikmin* pPtr = (Pikmin*) mPtr;
         if(pPtr->maturity == heldPik->maturity) continue;
         
-        Distance d(player->leaderPtr->pos, pPtr->pos);
+        Distance d(player->leaderPtr->center, pPtr->center);
         if(
             !closestMembers[pPtr->maturity] ||
             d < closestDists[pPtr->maturity]

@@ -255,8 +255,8 @@ void BitmapManager::doUnload(ALLEGRO_BITMAP* asset) {
  * @param newPos Coordinates to place the camera at.
  */
 void Camera::setPos(const Point& newPos) {
-    pos = newPos;
-    targetPos = newPos;
+    center = newPos;
+    targetCenter = newPos;
 }
 
 
@@ -277,13 +277,13 @@ void Camera::setZoom(float newZoom) {
  * @param deltaT How long the frame's tick is, in seconds.
  */
 void Camera::tick(float deltaT) {
-    pos.x =
+    center.x =
         expSmoothing(
-            pos.x, targetPos.x, GAMEPLAY::CAMERA_SMOOTHNESS_FACTOR, deltaT
+            center.x, targetCenter.x, GAMEPLAY::CAMERA_SMOOTHNESS_FACTOR, deltaT
         );
-    pos.y =
+    center.y =
         expSmoothing(
-            pos.y, targetPos.y, GAMEPLAY::CAMERA_SMOOTHNESS_FACTOR, deltaT
+            center.y, targetCenter.y, GAMEPLAY::CAMERA_SMOOTHNESS_FACTOR, deltaT
         );
     zoom =
         expSmoothing(
@@ -1044,7 +1044,7 @@ void LeaderPrompt::draw(const Viewport& view) const {
     al_identity_transform(&tra);
     al_scale_transform(&tra, scale, scale);
     al_translate_transform(
-        &tra, pos.x * view.cam.zoom, pos.y * view.cam.zoom
+        &tra, focusPos.x * view.cam.zoom, focusPos.y * view.cam.zoom
     );
     al_scale_transform(
         &tra, 1.0f / view.cam.zoom, 1.0f / view.cam.zoom
@@ -1123,7 +1123,7 @@ void LeaderPrompt::reset() {
     enabled = true;
     actionType = PLAYER_ACTION_TYPE_NONE;
     text.clear();
-    pos = Point();
+    focusPos = Point();
     visibility = 0.0f;
 }
 
@@ -1133,14 +1133,14 @@ void LeaderPrompt::reset() {
  *
  * @param actionType Player action input source icon to show.
  * @param text Text to show.
- * @param pos Where to show it in the game world.
+ * @param focusPos Where to show it in the game world.
  */
 void LeaderPrompt::setContents(
-    PLAYER_ACTION_TYPE actionType, const string& text, const Point& pos
+    PLAYER_ACTION_TYPE actionType, const string& text, const Point& focusPos
 ) {
     this->actionType = actionType;
     this->text = text;
-    this->pos = pos;
+    this->focusPos = focusPos;
 }
 
 
@@ -2613,8 +2613,8 @@ void Viewport::updateTransformations() {
     worldToWindowTransform = game.identityTransform;
     al_translate_transform(
         &worldToWindowTransform,
-        -cam.pos.x + shakeOffset.x + windowRect.center.x / cam.zoom,
-        -cam.pos.y + shakeOffset.y + windowRect.center.y / cam.zoom
+        -cam.center.x + shakeOffset.x + windowRect.center.x / cam.zoom,
+        -cam.center.y + shakeOffset.y + windowRect.center.y / cam.zoom
     );
     al_scale_transform(
         &worldToWindowTransform, cam.zoom, cam.zoom

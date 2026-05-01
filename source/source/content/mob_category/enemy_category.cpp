@@ -43,15 +43,15 @@ void EnemyCategory::clearTypes() {
 /**
  * @brief Creates an enemy and adds it to the list of enemies.
  *
- * @param pos Starting coordinates.
+ * @param center Starting center coordinates.
  * @param type Mob type.
  * @param angle Starting angle.
  * @return The mob.
  */
 Mob* EnemyCategory::createMob(
-    const Point& pos, MobType* type, float angle
+    const Point& center, MobType* type, float angle
 ) {
-    Enemy* m = new Enemy(pos, (EnemyType*) type, angle);
+    Enemy* m = new Enemy(center, (EnemyType*) type, angle);
     game.states.gameplay->mobs.enemies.push_back(m);
     return m;
 }

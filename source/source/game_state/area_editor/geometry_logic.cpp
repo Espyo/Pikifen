@@ -127,9 +127,9 @@ float AreaEditor::calculatePreviewPath() {
  * @brief Checks if the line the user is trying to draw is okay.
  * Sets the line's status to drawingDineResult.
  *
- * @param pos Position the user is trying to finish the line on.
+ * @param point Point the user is trying to finish the line on.
  */
-void AreaEditor::checkDrawingLine(const Point& pos) {
+void AreaEditor::checkDrawingLine(const Point& point) {
     drawingLineResult = DRAWING_LINE_RESULT_OK;
     
     if(drawingNodes.empty()) {
@@ -137,7 +137,7 @@ void AreaEditor::checkDrawingLine(const Point& pos) {
     }
     
     LayoutDrawingNode* prevNode = &drawingNodes.back();
-    LayoutDrawingNode tentativeNode(this, pos);
+    LayoutDrawingNode tentativeNode(this, point);
     
     //Check if the user hits a vertex or an edge, but the drawing is
     //meant to be a new sector shape.
@@ -189,11 +189,11 @@ void AreaEditor::checkDrawingLine(const Point& pos) {
         Point ep2 = v2p(ePtr->vertexes[1]);
         
         if(
-            lineSegsAreCollinear(prevNode->snappedSpot, pos, ep1, ep2)
+            lineSegsAreCollinear(prevNode->snappedSpot, point, ep1, ep2)
         ) {
             if(
                 collinearLineSegsIntersect(
-                    prevNode->snappedSpot, pos, ep1, ep2
+                    prevNode->snappedSpot, point, ep1, ep2
                 )
             ) {
                 drawingLineResult = DRAWING_LINE_RESULT_ALONG_EDGE;
@@ -232,7 +232,7 @@ void AreaEditor::checkDrawingLine(const Point& pos) {
         
         if(
             lineSegsIntersect(
-                prevNode->snappedSpot, pos,
+                prevNode->snappedSpot, point,
                 v2p(ePtr->vertexes[0]), v2p(ePtr->vertexes[1]),
                 nullptr, nullptr
             )
@@ -250,7 +250,7 @@ void AreaEditor::checkDrawingLine(const Point& pos) {
             Point intersection;
             if(
                 lineSegsIntersect(
-                    prevNode->snappedSpot, pos,
+                    prevNode->snappedSpot, point,
                     n1Ptr->snappedSpot, n2Ptr->snappedSpot,
                     &intersection
                 )
@@ -268,7 +268,7 @@ void AreaEditor::checkDrawingLine(const Point& pos) {
         
         if(
             circleIntersectsLineSeg(
-                pos, 8.0 / game.editorsView.cam.zoom,
+                point, 8.0 / game.editorsView.cam.zoom,
                 prevNode->snappedSpot,
                 drawingNodes[drawingNodes.size() - 2].snappedSpot
             )
@@ -305,11 +305,11 @@ void AreaEditor::checkDrawingLine(const Point& pos) {
         Point latestSectorPoint(
             (
                 drawingNodes.back().snappedSpot.x +
-                pos.x
+                point.x
             ) / 2.0f,
             (
                 drawingNodes.back().snappedSpot.y +
-                pos.y
+                point.y
             ) / 2.0f
         );
         Sector* latestSector = getSectorUnderPoint(latestSectorPoint);
@@ -826,7 +826,7 @@ void AreaEditor::findProblemsBridgePath() {
                 PATH_FOLLOW_FLAG_AIRBORNE;
             vector<PathStop*> path;
             getPath(
-                mPtr->pos, mPtr->links[l]->pos,
+                mPtr->center, mPtr->links[l]->center,
                 settings, path,
                 nullptr, nullptr, nullptr
             );
@@ -834,10 +834,10 @@ void AreaEditor::findProblemsBridgePath() {
             for(size_t s = 1; s < path.size(); s++) {
                 if(
                     circleIntersectsLineSeg(
-                        mPtr->links[l]->pos,
+                        mPtr->links[l]->center,
                         getMobGenRadius(mPtr->links[l]),
-                        path[s - 1]->pos,
-                        path[s]->pos
+                        path[s - 1]->center,
+                        path[s]->center
                     )
                 ) {
                     problemMobPtr = mPtr->links[l];
@@ -1195,7 +1195,7 @@ void AreaEditor::findProblemsMobInsideWalls() {
             
             if(
                 circleIntersectsLineSeg(
-                    mPtr->pos,
+                    mPtr->center,
                     mPtr->type->radius,
                     v2p(ePtr->vertexes[0]), v2p(ePtr->vertexes[1]),
                     nullptr, nullptr
@@ -1209,7 +1209,7 @@ void AreaEditor::findProblemsMobInsideWalls() {
                     continue;
                 }
                 
-                Sector* mobSector = getSector(mPtr->pos, nullptr, false);
+                Sector* mobSector = getSector(mPtr->center, nullptr, false);
                 
                 bool inWall = false;
                 
@@ -1462,7 +1462,7 @@ void AreaEditor::findProblemsNonSimpleSector() {
 void AreaEditor::findProblemsOobMob() {
     forIdx(m, game.curArea->mobGenerators) {
         MobGen* mPtr = game.curArea->mobGenerators[m];
-        if(!getSector(mPtr->pos, nullptr, false)) {
+        if(!getSector(mPtr->center, nullptr, false)) {
             problemMobPtr = mPtr;
             problemType = EPT_MOB_OOB;
             problemTitle = "Mob out of bounds!";
@@ -1481,7 +1481,7 @@ void AreaEditor::findProblemsOobMob() {
 void AreaEditor::findProblemsOobPathStop() {
     forIdx(s, game.curArea->pathStops) {
         PathStop* sPtr = game.curArea->pathStops[s];
-        if(!getSector(sPtr->pos, nullptr, false)) {
+        if(!getSector(sPtr->center, nullptr, false)) {
             problemPathStopPtr = sPtr;
             problemType = EPT_PATH_STOP_OOB;
             problemTitle = "Path stop out of bounds!";
@@ -1537,8 +1537,8 @@ void AreaEditor::findProblemsPathStopOnLink() {
                 
                 if(
                     circleIntersectsLineSeg(
-                        sPtr->pos, sPtr->radius,
-                        linkStartPtr->pos, linkEndPtr->pos
+                        sPtr->center, sPtr->radius,
+                        linkStartPtr->center, linkEndPtr->center
                     )
                 ) {
                     problemPathStopPtr = sPtr;
@@ -1568,7 +1568,7 @@ void AreaEditor::findProblemsPathStopsIntersecting() {
             PathStop* s2Ptr = game.curArea->pathStops[s2];
             if(s2Ptr == sPtr) continue;
             
-            if(Distance(sPtr->pos, s2Ptr->pos) <= 3.0) {
+            if(Distance(sPtr->center, s2Ptr->center) <= 3.0) {
                 problemPathStopPtr = sPtr;
                 problemType = EPT_PATH_STOPS_TOGETHER;
                 problemTitle = "Two close path stops!";
@@ -2070,7 +2070,7 @@ bool AreaEditor::getMobLinkUnderPoint(
             MobGen* m2Ptr = mPtr->links[l];
             if(
                 circleIntersectsLineSeg(
-                    p, 8 / game.editorsView.cam.zoom, mPtr->pos, m2Ptr->pos
+                    p, 8 / game.editorsView.cam.zoom, mPtr->center, m2Ptr->center
                 )
             ) {
                 *data1 = std::make_pair(mPtr, m2Ptr);
@@ -2105,7 +2105,7 @@ MobGen* AreaEditor::getMobUnderPoint(const Point& p, size_t* outIdx) const {
         MobGen* mPtr = game.curArea->mobGenerators[m];
         
         if(
-            Distance(mPtr->pos, p) <= getMobGenRadius(mPtr)
+            Distance(mPtr->center, p) <= getMobGenRadius(mPtr)
         ) {
             if(outIdx) *outIdx = m;
             return mPtr;
@@ -2130,7 +2130,7 @@ EditorPathLink* AreaEditor::getEditorPathLinkUnderPoint(const Point& p) const {
         PathStop* s2Ptr = elPtr->link1->endPtr;
         if(
             circleIntersectsLineSeg(
-                p, 8.0f / game.editorsView.cam.zoom, s1Ptr->pos, s2Ptr->pos
+                p, 8.0f / game.editorsView.cam.zoom, s1Ptr->center, s2Ptr->center
             )
         ) {
             return elPtr;
@@ -2152,7 +2152,7 @@ PathStop* AreaEditor::getPathStopUnderPoint(const Point& p) const {
     forIdx(s, game.curArea->pathStops) {
         PathStop* sPtr = game.curArea->pathStops[s];
         
-        if(Distance(sPtr->pos, p) <= sPtr->radius) {
+        if(Distance(sPtr->center, p) <= sPtr->radius) {
             return sPtr;
         }
     }
@@ -2700,14 +2700,14 @@ void AreaEditor::resizeEverything(float mults[2]) {
     
     forIdx(m, game.curArea->mobGenerators) {
         MobGen* mPtr = game.curArea->mobGenerators[m];
-        mPtr->pos.x *= mults[0];
-        mPtr->pos.y *= mults[1];
+        mPtr->center.x *= mults[0];
+        mPtr->center.y *= mults[1];
     }
     
     forIdx(s, game.curArea->pathStops) {
         PathStop* sPtr = game.curArea->pathStops[s];
-        sPtr->pos.x *= mults[0];
-        sPtr->pos.y *= mults[1];
+        sPtr->center.x *= mults[0];
+        sPtr->center.y *= mults[1];
     }
     forIdx(s, game.curArea->pathStops) {
         game.curArea->pathStops[s]->calculateDists();
@@ -2737,9 +2737,9 @@ void AreaEditor::resizeEverything(float mults[2]) {
  * @brief Makes all currently selected mob generators (if any) rotate to
  * face where the the given point is.
  *
- * @param pos Point that the mobs must face.
+ * @param point Point that the mobs must face.
  */
-void AreaEditor::rotateMobGensToPoint(const Point& pos) {
+void AreaEditor::rotateMobGensToPoint(const Point& point) {
     if(!mobSelection.hasAny()) {
         setStatus(
             "To rotate objects, you must first select some objects!",
@@ -2752,9 +2752,9 @@ void AreaEditor::rotateMobGensToPoint(const Point& pos) {
     mobSelection.setHomogenized(false);
     for(size_t mobIdx : mobSelection.getItemIdxs()) {
         MobGen* mPtr = game.curArea->mobGenerators[mobIdx];
-        mPtr->angle = getAngle(mPtr->pos, pos);
+        mPtr->angle = getAngle(mPtr->center, point);
     }
-    setStatus("Rotated objects to face " + p2s(pos) + ".");
+    setStatus("Rotated objects to face " + p2s(point) + ".");
 }
 
 
@@ -2985,7 +2985,7 @@ PathStop* AreaEditor::splitPathLink(
     bool normalLink = (l2 != nullptr);
     Point newStopPos =
         getClosestPointInLineSeg(
-            l1->startPtr->pos, l1->endPtr->pos,
+            l1->startPtr->center, l1->endPtr->center,
             where
         );
         

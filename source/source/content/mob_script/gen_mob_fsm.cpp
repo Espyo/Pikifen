@@ -77,7 +77,7 @@ void GenMobFsm::carryBecomeStuck(ScriptVM* scriptVM, void* info1, void* info2) {
     );
     
     scriptVM->mob->circleAround(
-        nullptr, scriptVM->mob->pos, MOB::CARRY_STUCK_CIRCLING_RADIUS, true,
+        nullptr, scriptVM->mob->center, MOB::CARRY_STUCK_CIRCLING_RADIUS, true,
         scriptVM->mob->carryInfo->getSpeed() *
         MOB::CARRY_STUCK_SPEED_MULTIPLIER,
         true
@@ -95,12 +95,12 @@ void GenMobFsm::carryBecomeStuck(ScriptVM* scriptVM, void* info1, void* info2) {
  */
 void GenMobFsm::carryBeginMove(ScriptVM* scriptVM, void* info1, void* info2) {
     scriptVM->mob->carryInfo->isMoving = true;
-
+    
     bool canFly =
         hasFlag(
             scriptVM->mob->pathInfo->settings.flags, PATH_FOLLOW_FLAG_AIRBORNE
         );
-    
+        
     canFly ?
     enableFlag(scriptVM->mob->flags, MOB_FLAG_CAN_MOVE_MIDAIR) :
     disableFlag(scriptVM->mob->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
@@ -110,7 +110,7 @@ void GenMobFsm::carryBeginMove(ScriptVM* scriptVM, void* info1, void* info2) {
     }
     
     if(scriptVM->mob->pathInfo->result < 0) {
-            scriptVM->fsm.runEvent(FSM_EV_PATH_BLOCKED);
+        scriptVM->fsm.runEvent(FSM_EV_PATH_BLOCKED);
         return;
     }
 }
@@ -192,7 +192,7 @@ void GenMobFsm::carryGetPath(ScriptVM* scriptVM, void* info1, void* info2) {
     }
     if(scriptVM->mob->pathInfo->result < 0) {
         scriptVM->mob->pathInfo->blockReason = PATH_BLOCK_REASON_NO_PATH;
-            scriptVM->fsm.runEvent(FSM_EV_PATH_BLOCKED);
+        scriptVM->fsm.runEvent(FSM_EV_PATH_BLOCKED);
     }
 }
 
@@ -223,8 +223,8 @@ void GenMobFsm::carryReachDestination(
         scriptVM->mob->carryInfo->getPlayerTeamIdx();
     scriptVM->mob->deliveryInfo->finalPoint =
         scriptVM->mob->carryInfo->intendedPoint;
-    
-        scriptVM->fsm.runEvent(FSM_EV_CARRY_DELIVERED);
+        
+    scriptVM->fsm.runEvent(FSM_EV_CARRY_DELIVERED);
 }
 
 
@@ -318,7 +318,7 @@ void GenMobFsm::handleCarrierAdded(
     bool canMove =
         scriptVM->mob->carryInfo->curCarryingStrength >=
         scriptVM->mob->type->weight;
-    
+        
     if(!canMove) {
         return;
     }
@@ -373,7 +373,7 @@ void GenMobFsm::handleCarrierAdded(
     if(mustUpdate) {
         //Send a move begin event, so that the mob can calculate
         //a (new) path and start taking it.
-            scriptVM->fsm.runEvent(FSM_EV_CARRY_BEGIN_MOVE);
+        scriptVM->fsm.runEvent(FSM_EV_CARRY_BEGIN_MOVE);
     }
 }
 
@@ -410,12 +410,12 @@ void GenMobFsm::handleCarrierRemoved(
     bool canMove =
         scriptVM->mob->carryInfo->curCarryingStrength >=
         scriptVM->mob->type->weight;
-    
+        
     if(!canMove) {
         if(couldMove) {
             //If the mob can no longer move, send a move stop event,
             //so the mob, well, stops.
-                scriptVM->fsm.runEvent(FSM_EV_CARRY_STOP_MOVE);
+            scriptVM->fsm.runEvent(FSM_EV_CARRY_STOP_MOVE);
         }
         return;
     }
@@ -463,7 +463,7 @@ void GenMobFsm::handleCarrierRemoved(
     if(mustUpdate) {
         //Send a move begin event, so that the mob can calculate
         //a (new) path and start taking it.
-            scriptVM->fsm.runEvent(FSM_EV_CARRY_BEGIN_MOVE);
+        scriptVM->fsm.runEvent(FSM_EV_CARRY_BEGIN_MOVE);
     }
 }
 

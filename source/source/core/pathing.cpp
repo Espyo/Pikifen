@@ -61,7 +61,7 @@ PathLink::PathLink(PathStop* startPtr, PathStop* endPtr, size_t endIdx) :
  * @param startPtr The path stop at the start of this link.
  */
 void PathLink::calculateDist(const PathStop* startPtr) {
-    distance = Distance(startPtr->pos, endPtr->pos).toFloat();
+    distance = Distance(startPtr->center, endPtr->center).toFloat();
 }
 
 
@@ -153,8 +153,8 @@ void PathManager::handleObstacleAdd(Mob* m) {
             
             if(
                 circleIntersectsLineSeg(
-                    m->pos, m->radius,
-                    sPtr->pos, lPtr->endPtr->pos
+                    m->center, m->radius,
+                    sPtr->center, lPtr->endPtr->center
                 )
             ) {
                 obstructions[lPtr].insert(m);
@@ -260,11 +260,11 @@ void PathManager::handleSectorHazardChange(Sector* sectorPtr) {
 /**
  * @brief Constructs a new path stop object.
  *
- * @param pos Its coordinates.
+ * @param center Its coordinates.
  * @param links List of path links, linking it to other stops.
  */
-PathStop::PathStop(const Point& pos, const vector<PathLink*>& links) :
-    pos(pos),
+PathStop::PathStop(const Point& center, const vector<PathLink*>& links) :
+    center(center),
     links(links) {
     
 }
@@ -518,7 +518,7 @@ PATH_RESULT aStar(
                 data[neighbor].prev = curNode;
                 data[neighbor].estimated =
                     tentativeScore +
-                    Distance(neighbor->pos, endNode->pos).toFloat();
+                    Distance(neighbor->center, endNode->center).toFloat();
                 toVisit.insert(neighbor);
             }
         }
@@ -570,7 +570,7 @@ bool canTakePathStop(
         //We're probably in the area editor, where things change too often
         //for us to cache the sector pointer and access said cache.
         //Let's calculate now real quick.
-        sectorPtr = getSector(stopPtr->pos, nullptr, false);
+        sectorPtr = getSector(stopPtr->center, nullptr, false);
         if(!sectorPtr) {
             //It's really the void. Nothing that can be done here then.
             if(outReason) *outReason = PATH_BLOCK_REASON_STOP_IN_VOID;
@@ -689,7 +689,7 @@ bool canTraversePathLink(
         //We're probably in the area editor, where things change too often
         //for us to cache the sector pointer and access said cache.
         //Let's calculate now real quick.
-        startSector = getSector(linkPtr->startPtr->pos, nullptr, false);
+        startSector = getSector(linkPtr->startPtr->center, nullptr, false);
         if(!startSector) {
             //It's really the void. Nothing that can be done here then.
             if(outReason) *outReason = PATH_BLOCK_REASON_STOP_IN_VOID;
@@ -699,7 +699,7 @@ bool canTraversePathLink(
     Sector* endSector = linkPtr->endPtr->sectorPtr;
     if(!endSector) {
         //Same as above.
-        endSector = getSector(linkPtr->endPtr->pos, nullptr, false);
+        endSector = getSector(linkPtr->endPtr->center, nullptr, false);
         if(!endSector) {
             if(outReason) *outReason = PATH_BLOCK_REASON_STOP_IN_VOID;
             return false;
@@ -816,9 +816,9 @@ PATH_RESULT getPath(
         PathStop* sPtr = game.curArea->pathStops[s];
         
         float distToStart =
-            Distance(startToUse, sPtr->pos).toFloat() - sPtr->radius;
+            Distance(startToUse, sPtr->center).toFloat() - sPtr->radius;
         float distToEnd =
-            Distance(endToUse, sPtr->pos).toFloat() - sPtr->radius;
+            Distance(endToUse, sPtr->center).toFloat() - sPtr->radius;
         distToStart = std::max(0.0f, distToStart);
         distToEnd = std::max(0.0f, distToEnd);
         
@@ -894,9 +894,9 @@ PATH_RESULT getPath(
         
     if(outTotalDist && !fullPath.empty()) {
         *outTotalDist +=
-            Distance(startToUse, fullPath[0]->pos).toFloat();
+            Distance(startToUse, fullPath[0]->center).toFloat();
         *outTotalDist +=
-            Distance(fullPath[fullPath.size() - 1]->pos, endToUse).toFloat();
+            Distance(fullPath[fullPath.size() - 1]->center, endToUse).toFloat();
     }
     
     return result;

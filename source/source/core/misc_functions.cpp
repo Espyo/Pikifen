@@ -189,7 +189,7 @@ void crash(const string& reason, const string& info, int exitStatus) {
     ) {
         errorStr +=
             game.states.gameplay->players[0].leaderPtr->type->name + ", at " +
-            p2s(game.states.gameplay->players[0].leaderPtr->pos) +
+            p2s(game.states.gameplay->players[0].leaderPtr->center) +
             ", state history: " +
             game.states.gameplay->players[0].leaderPtr->
             scriptVM.fsm.getStateHistoryStr();
@@ -202,12 +202,12 @@ void crash(const string& reason, const string& info, int exitStatus) {
         [] (const Pikmin * p1, const Pikmin * p2) -> bool {
             return
             Distance(
-                game.states.gameplay->players[0].leaderPtr->pos,
-                p1->pos
+                game.states.gameplay->players[0].leaderPtr->center,
+                p1->center
             ).toFloat() <
             Distance(
-                game.states.gameplay->players[0].leaderPtr->pos,
-                p2->pos
+                game.states.gameplay->players[0].leaderPtr->center,
+                p2->center
             ).toFloat();
         }
         );
@@ -216,7 +216,7 @@ void crash(const string& reason, const string& info, int exitStatus) {
         for(size_t p = 0; p < closestPAmount; p++) {
             errorStr +=
                 "    " + closestPikmin[p]->type->name + ", at " +
-                p2s(closestPikmin[p]->pos) + ", history: " +
+                p2s(closestPikmin[p]->center) + ", history: " +
                 closestPikmin[p]->scriptVM.fsm.getStateHistoryStr();
             errorStr += "\n";
         }
@@ -398,7 +398,7 @@ Mob* getClosestMobToMouseCursor(const Viewport& view, bool mustHaveHealth) {
         if(mPtr->isStoredInsideMob()) continue;
         if(!mPtr->scriptVM.fsm.curState) continue;
         
-        Distance d = Distance(view.mouseCursorWorldPos, mPtr->pos);
+        Distance d = Distance(view.mouseCursorWorldPos, mPtr->center);
         if(!closestMobToCursor || d < closestMobToCursorDist) {
             closestMobToCursor = mPtr;
             closestMobToCursorDist = d;
@@ -534,7 +534,7 @@ Mob* getNextMobNearCursor(
         if(mPtr->isStoredInsideMob()) continue;
         if(!mPtr->scriptVM.fsm.curState) continue;
         
-        Distance d(view.mouseCursorWorldPos, mPtr->pos);
+        Distance d(view.mouseCursorWorldPos, mPtr->center);
         if(d < 8.0f) {
             mobsNearCursor.push_back(mPtr);
         }
