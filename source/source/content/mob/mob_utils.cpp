@@ -1452,11 +1452,6 @@ void deleteMob(Mob* mPtr, bool completeDestruction) {
                 m2Ptr->parent = nullptr;
                 m2Ptr->toDelete = true;
             }
-            forIdx(f, m2Ptr->focusedMobMemory) {
-                if(m2Ptr->focusedMobMemory[f] == mPtr) {
-                    m2Ptr->focusedMobMemory[f] = nullptr;
-                }
-            }
             forIdx(c, m2Ptr->chompingMobs) {
                 if(m2Ptr->chompingMobs[c] == mPtr) {
                     m2Ptr->chompingMobs[c] = nullptr;

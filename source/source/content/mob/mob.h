@@ -185,9 +185,6 @@ public:
     //Script virtual machine.
     ScriptVM scriptVM;
     
-    //Further memory of focused mobs.
-    map<size_t, Mob*> focusedMobMemory;
-    
     //Angle the mob wants to be facing.
     float intendedTurnAngle;
     

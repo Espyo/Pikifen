@@ -1377,13 +1377,15 @@ void ScriptActionRunners::loadFocusMemory(ScriptActionInstRunData& data) {
     const string& slotArg = data.args[0];
     
     //Main logic.
-    if(data.scriptVM->mob->focusedMobMemory.empty()) {
+    string varName = "_focus_memory_" + slotArg;
+    if(!isInMap(data.scriptVM->vars, varName)) {
         return;
     }
     
-    data.scriptVM->focusOnMob(
-        data.scriptVM->mob->focusedMobMemory[s2i(slotArg)]
-    );
+    size_t id = s2i(data.scriptVM->vars[varName]);
+    Mob* target = game.states.gameplay->getMobById(id);
+    if(!target) return;
+    data.scriptVM->focusOnMob(target);
 }
 
 
@@ -1796,8 +1798,8 @@ void ScriptActionRunners::saveFocusMemory(ScriptActionInstRunData& data) {
         return;
     }
     
-    data.scriptVM->mob->focusedMobMemory[s2i(slotArg)] =
-        data.scriptVM->focusedMob;
+    string varName = "_focus_memory_" + slotArg;
+    data.scriptVM->vars[varName] = i2s(data.scriptVM->focusedMob->id);
 }
 
 
