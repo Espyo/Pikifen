@@ -501,7 +501,7 @@
         <td><dl>
           <dt><code><b>get_area_info</b> &lt;destination_variable_name&gt; &lt;information&gt;</code></dt>
           <dd>
-            Sets the variable &lt;destination_variable_name&gt; to some special information about the area. The possible data are:
+            <b>Deprecated in 1.2.0!</b> Please use <code><a href="#get-misc-info">get_misc_info</a></code> instead. Sets the variable &lt;destination_variable_name&gt; to some special information about the area. The possible data are:
             <ul>
               <li><code><b>day_minutes</b></code>: What time of the in-game day it is, in minutes.</li>
               <li><code><b>field_pikmin</b></code>: How many Pikmin are currently on the field.</li>
@@ -534,7 +534,9 @@
           <dd>
             Sets the variable &lt;destination_variable_name&gt; to some special information about miscellaneous things. The possible data are:
             <ul>
+              <li><code><b>day_minutes</b></code>: What time of the in-game day it is, in minutes.</li>
               <li><code><b>delta_t</b></code>: The amount of time that passed between the previous frame and the current frame. Use this to keep track of time; see <a href="script.html#tips">script tips</a> for more information.</li>
+              <li><code><b>field_pikmin</b></code>: How many Pikmin are currently on the field.</li>
               <li><code><b>player_1_leader_id</b></code>: The ID number of the leader that player 1 is currently controlling. It will be 0 if player 1 is not controlling any leader.</li>
               <li><code><b>player_2_leader_id</b></code>: Same as <code>player_1_leader_id</code> but for player 2.</li>
               <li><code><b>player_3_leader_id</b></code>: Same as <code>player_1_leader_id</code> but for player 3.</li>

@@ -548,8 +548,14 @@ buildEnumNames(scriptActionGetEvInfoTypeINames, SCRIPT_ACTION_GET_EV_INFO_TYPE)(
 //Get misc. info action info types.
 enum SCRIPT_ACTION_GET_MISC_INFO_TYPE {
 
+    //Get time of day, in minutes.
+    SCRIPT_ACTION_GET_MISC_INFO_TYPE_DAY_MINUTES,
+    
     //Get the frame's delta T.
     SCRIPT_ACTION_GET_MISC_INFO_TYPE_DELTA_T,
+    
+    //Get number of Pikmin on the field.
+    SCRIPT_ACTION_GET_MISC_INFO_TYPE_FIELD_PIKMIN,
     
     //ID number of player 1's leader.
     SCRIPT_ACTION_GET_MISC_INFO_PLAYER_1_LEADER_ID,
@@ -568,7 +574,9 @@ enum SCRIPT_ACTION_GET_MISC_INFO_TYPE {
 
 //Script action get misc. info type enum naming (internal names).
 buildEnumNames(scriptActionGetMiscInfoTypeINames, SCRIPT_ACTION_GET_MISC_INFO_TYPE)({
+    { SCRIPT_ACTION_GET_MISC_INFO_TYPE_DAY_MINUTES, "day_minutes" },
     { SCRIPT_ACTION_GET_MISC_INFO_TYPE_DELTA_T, "delta_t" },
+    { SCRIPT_ACTION_GET_MISC_INFO_TYPE_FIELD_PIKMIN, "field_pikmin" },
     { SCRIPT_ACTION_GET_MISC_INFO_PLAYER_1_LEADER_ID, "player_1_leader_id" },
     { SCRIPT_ACTION_GET_MISC_INFO_PLAYER_2_LEADER_ID, "player_2_leader_id" },
     { SCRIPT_ACTION_GET_MISC_INFO_PLAYER_3_LEADER_ID, "player_3_leader_id" },

@@ -993,8 +993,16 @@ void ScriptActionRunners::getMiscInfo(ScriptActionInstRunData& data) {
     }
     
     switch (type) {
-    case SCRIPT_ACTION_GET_MISC_INFO_TYPE_DELTA_T: {
+    case SCRIPT_ACTION_GET_MISC_INFO_TYPE_DAY_MINUTES: {
+        result = i2s(game.states.gameplay->dayMinutes);
+        break;
+        
+    } case SCRIPT_ACTION_GET_MISC_INFO_TYPE_DELTA_T: {
         result = f2s(game.deltaT);
+        break;
+        
+    } case SCRIPT_ACTION_GET_MISC_INFO_TYPE_FIELD_PIKMIN: {
+        result = i2s(game.states.gameplay->mobs.pikmin.size());
         break;
         
     } case SCRIPT_ACTION_GET_MISC_INFO_PLAYER_1_LEADER_ID:

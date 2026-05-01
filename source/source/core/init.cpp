@@ -1686,6 +1686,7 @@ void initScriptActionTypes() {
         ScriptActionRunners::getAngleSmallestDiff
     );
     
+    //DEPRECATED in 1.2.0 by "get_misc_info".
     //Get area info.
     queueParam("destination var name", ptString, pfConst);
     queueParam("info", ptString, pfConst);
