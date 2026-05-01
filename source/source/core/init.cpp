@@ -1097,6 +1097,12 @@ void initFsmEventTypes() {
         "on_input_received"
     );
     
+    //Receive script message.
+    commitEvent(
+        FSM_EV_RECEIVE_SCRIPT_MESSAGE,
+        "on_receive_message"
+    );
+    
     //On tick.
     commitEvent(
         FSM_EV_ON_TICK,
@@ -1214,12 +1220,6 @@ void initFsmEventTypes() {
     commitEvent(
         FSM_EV_THROWN_PIKMIN_LANDED,
         "on_pikmin_land"
-    );
-    
-    //Receive script message.
-    commitEvent(
-        FSM_EV_RECEIVE_SCRIPT_MESSAGE,
-        "on_receive_message"
     );
     
     //Released.
@@ -1882,6 +1882,14 @@ void initScriptActionTypes() {
         SCRIPT_ACTION_ROUND_NUMBER,
         "round_number",
         ScriptActionRunners::roundNumber
+    );
+    
+    //Send script message to area.
+    queueParam("message", ptString);
+    commitAction(
+        SCRIPT_ACTION_SEND_MESSAGE_TO_AREA,
+        "send_message_to_area",
+        ScriptActionRunners::sendMessageToArea
     );
     
     //Send script message to focus.

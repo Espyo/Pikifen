@@ -493,6 +493,7 @@ public:
     void updateAvailableLeaders();
     void updateClosestGroupMembers(Player* player);
     void sendScriptMessage(Mob* sender, Mob* receiver, string& msg) const;
+    void sendScriptMessage(Mob* sender, ScriptVM* receiver, string& msg) const;
     void showInventoryUpdateDisplay(
         PlayerTeam* team, const string& itemIName, int change
     );

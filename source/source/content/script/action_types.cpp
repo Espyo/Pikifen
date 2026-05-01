@@ -1826,6 +1826,23 @@ void ScriptActionRunners::saveFocusMemory(ScriptActionInstRunData& data) {
 
 
 /**
+ * @brief Code for the area script message sending script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::sendMessageToArea(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& msgArg = data.args[0];
+    
+    //Main logic.
+    string msgStr = msgArg;
+    game.states.gameplay->sendScriptMessage(
+        data.scriptVM->mob, &game.states.gameplay->scriptVM, msgStr
+    );
+}
+
+
+/**
  * @brief Code for the focused mob script message sending script action type.
  *
  * @param data Data about the action call.

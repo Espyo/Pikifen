@@ -1658,10 +1658,25 @@ void GameplayState::loadGameContent() {
 void GameplayState::sendScriptMessage(
     Mob* sender, Mob* receiver, string& msg
 ) const {
+    sendScriptMessage(sender, &receiver->scriptVM, msg);
+}
+
+
+/**
+ * @brief Sends a script message to a script VM. This calls the script VM's
+ * "message received" event, with the message as data.
+ *
+ * @param sender Mob that sent the message, if any.
+ * @param receiver Script VM that will receive the message.
+ * @param msg The message.
+ */
+void GameplayState::sendScriptMessage(
+    Mob* sender, ScriptVM* receiver, string& msg
+) const {
     FsmEventDef* ev =
-        receiver->scriptVM.fsm.getEvent(FSM_EV_RECEIVE_SCRIPT_MESSAGE);
+        receiver->fsm.getEvent(FSM_EV_RECEIVE_SCRIPT_MESSAGE);
     if(!ev) return;
-    ev->run(&receiver->scriptVM, (void*) &msg, (void*) sender);
+    ev->run(receiver, (void*) &msg, (void*) sender);
 }
 
 
