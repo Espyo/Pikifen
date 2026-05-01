@@ -553,6 +553,7 @@
             Sets the variable &lt;destination_variable_name&gt; to some special information about <a href="#target-mob">a given object</a>. The possible data are:
             <ul>
               <li><code><b>angle</b></code>: Current angle (in degrees).</li>
+              <li><code><b>animation</b></code>: Name of the current animation.</li>
               <li><code><b>chomped_pikmin</b></code>: How many Pikmin it currently has chomped.</li>
               <li><code><b>focus_distance</b></code>: Distance between the object and the focused object.</li>
               <li><code><b>group_task_power</b></code>: For group task type objects, this is the "Pikmin power" currently being applied.</li>
@@ -561,6 +562,7 @@
               <li><code><b>id</b></code>: The object's numeric ID. The first object that spawns in the area has ID 1, the second has ID 2, etc.</li>
               <li><code><b>latched_pikmin</b></code>: How many Pikmin are currently latched on to it.</li>
               <li><code><b>latched_pikmin_weight</b></code>: Total weight of the Pikmin that are currently latched on to it.</li>
+              <li><code><b>link_ids</b></code>: List of numeric IDs of each of the linked mobs.</li>
               <li><code><b>mob_category</b></code>: Category of the mob. This is the category's internal name, which is basically the same name as the corresponding folder in <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/mob_types</code> but in singular.</li>
               <li><code><b>mob_type</b></code>: Type of the mob. This is the mob type's <a href="making.html#content">internal name</a>.</li>
               <li><code><b>state</b></code>: Name of the current script FSM state.</li>

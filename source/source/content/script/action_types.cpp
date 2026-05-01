@@ -1062,6 +1062,12 @@ void ScriptActionRunners::getMobInfo(ScriptActionInstRunData& data) {
         result = f2s(radToDeg(target->angle));
         break;
         
+    } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_ANIM: {
+        if(target->anim.curAnim) {
+            result = target->anim.curAnim->name;
+        }
+        break;
+        
     } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_CHOMPED_PIKMIN: {
         result = i2s(target->chompingMobs.size());
         break;
@@ -1107,6 +1113,14 @@ void ScriptActionRunners::getMobInfo(ScriptActionInstRunData& data) {
         
     } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_MOB_CATEGORY: {
         result = target->type->category->internalName;
+        break;
+        
+    } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_LINK_IDS: {
+        vector<string> linkIdsStrs;
+        forIdx(l, target->links) {
+            linkIdsStrs.push_back(i2s(target->links[l]->id));
+        }
+        result = join(linkIdsStrs, ",");
         break;
         
     } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_MOB_TYPE: {

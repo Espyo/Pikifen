@@ -590,6 +590,9 @@ enum SCRIPT_ACTION_GET_MOB_INFO_TYPE {
     //Get angle.
     SCRIPT_ACTION_GET_MOB_INFO_TYPE_ANGLE,
     
+    //Get name of current animation.
+    SCRIPT_ACTION_GET_MOB_INFO_TYPE_ANIM,
+    
     //Get amount of chomped Pikmin.
     SCRIPT_ACTION_GET_MOB_INFO_TYPE_CHOMPED_PIKMIN,
     
@@ -613,6 +616,9 @@ enum SCRIPT_ACTION_GET_MOB_INFO_TYPE {
     
     //Get total weight of latched Pikmin.
     SCRIPT_ACTION_GET_MOB_INFO_TYPE_LATCHED_PIKMIN_WEIGHT,
+    
+    //Get list of linked mob IDs.
+    SCRIPT_ACTION_GET_MOB_INFO_TYPE_LINK_IDS,
     
     //Get category of mob that triggered the event.
     SCRIPT_ACTION_GET_MOB_INFO_TYPE_MOB_CATEGORY,
@@ -641,6 +647,7 @@ enum SCRIPT_ACTION_GET_MOB_INFO_TYPE {
 //Script action get mob info type enum naming (internal names).
 buildEnumNames(scriptActionGetMobInfoTypeINames, SCRIPT_ACTION_GET_MOB_INFO_TYPE)({
     { SCRIPT_ACTION_GET_MOB_INFO_TYPE_ANGLE, "angle" },
+    { SCRIPT_ACTION_GET_MOB_INFO_TYPE_ANIM, "animation" },
     { SCRIPT_ACTION_GET_MOB_INFO_TYPE_CHOMPED_PIKMIN, "chomped_pikmin" },
     { SCRIPT_ACTION_GET_MOB_INFO_TYPE_FOCUS_DISTANCE, "focus_distance" },
     { SCRIPT_ACTION_GET_MOB_INFO_TYPE_GROUP_TASK_POWER, "group_task_power" },
@@ -652,6 +659,7 @@ buildEnumNames(scriptActionGetMobInfoTypeINames, SCRIPT_ACTION_GET_MOB_INFO_TYPE
         SCRIPT_ACTION_GET_MOB_INFO_TYPE_LATCHED_PIKMIN_WEIGHT,
         "latched_pikmin_weight"
     },
+    { SCRIPT_ACTION_GET_MOB_INFO_TYPE_LINK_IDS, "link_ids" },
     { SCRIPT_ACTION_GET_MOB_INFO_TYPE_MOB_CATEGORY, "mob_category" },
     { SCRIPT_ACTION_GET_MOB_INFO_TYPE_MOB_TYPE, "mob_type" },
     { SCRIPT_ACTION_GET_MOB_INFO_TYPE_STATE, "state" },
