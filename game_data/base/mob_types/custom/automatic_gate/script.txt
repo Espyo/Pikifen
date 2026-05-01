@@ -13,6 +13,10 @@ init {
 global {
     on_receive_message {
         get_event_info msg message
+        get_list_item temp $msg 1
+        if $temp = power
+            get_list_item input_power $msg 2
+        end_if
     }
 }
 
@@ -25,7 +29,7 @@ script {
             set_tangible true
         }
         on_receive_message {
-            if $msg > 0
+            if $input_power > 0
                 set_state opening
             end_if
         }
@@ -42,7 +46,7 @@ script {
             play_sound rock
         }
         on_receive_message {
-            if $msg = 0
+            if $input_power = 0
                 set_state closing
             end_if
         }
@@ -59,7 +63,7 @@ script {
             stop_particles
         }
         on_receive_message {
-            if $msg = 0
+            if $input_power = 0
                 set_state closing
             end_if
         }
@@ -75,7 +79,7 @@ script {
             play_sound rock
         }
         on_receive_message {
-            if $msg > 0
+            if $input_power > 0
                 set_state opening
             end_if
         }

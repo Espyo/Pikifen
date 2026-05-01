@@ -7,11 +7,18 @@ script {
         }
         on_receive_message {
             get_event_info msg message
-            
-            if $msg = 0
-                send_message_to_links 1
-            else
-                send_message_to_links 0
+            get_list_item temp $msg 1
+
+            if $temp = power
+                get_list_item temp $msg 2
+
+                set_var msg power
+                if $temp = 0
+                    add_list_item msg $msg 1
+                else
+                    add_list_item msg $msg 0
+                end_if
+                send_message_to_links $msg
             end_if
         }
     }

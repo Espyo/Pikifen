@@ -1,11 +1,11 @@
 script {
     idling {
         on_receive_message {
-            get_event_info m message
-            if $m = dropped_resource
+            get_event_info msg message
+            if $msg = dropped_resource
                 play_sound snap
                 start_particles spiderwort_sparkles 60 0 200
-            else_if $m = grown_resource
+            else_if $msg = grown_resource
                 play_sound grow
                 start_particles spiderwort_sparkles 60 0 200
             end_if

@@ -17,17 +17,27 @@ script{
             set_animation off
             set_var time $duration
             set_health 100
-            send_message_to_links 0
+            set_var msg power
+            add_list_item msg $msg 0
+            send_message_to_links $msg
         }
         on_receive_message {
             if $msg = interact
                 set_state flipping_on
-            else_if $msg > 0
-                set_state flipping_on
+            else_if $temp = power
+                get_list_item temp $msg 2
+                if $temp > 0
+                    set_state flipping_on
+                end_if
             end_if
         }
         on_pikmin_land {
             set_state flipping_on
+        }
+        on_ready {
+            set_var msg power
+            add_list_item msg $msg 0
+            send_message_to_links $msg
         }
     }
 
@@ -50,13 +60,18 @@ script{
             set_var time $duration
             set_health 100
             set_timer 0.1
-            send_message_to_links 1
+            set_var msg power
+            add_list_item msg $msg 1
+            send_message_to_links $msg
         }
         on_receive_message {
             if $msg = interact
                 set_state flipping_off
-            else_if $msg > 0
-                set_state flipping_off
+            else_if $temp = power
+                get_list_item temp $msg 2
+                if $temp > 0
+                    set_state flipping_off
+                end_if
             end_if
         }
         on_timer {

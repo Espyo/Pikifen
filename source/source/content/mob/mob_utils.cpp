@@ -1292,16 +1292,19 @@ Mob* createMob(
         ScriptVarReader svr(varsMap);
         
         mPtr->readScriptVars(svr);
-        
-        for(auto& v : varsMap) {
-            mPtr->scriptVM.vars[v.first] = v.second;
-        }
+    }
+    
+    if(firstStateOverride != INVALID) {
+        mPtr->scriptVM.fsm.firstStateOverride = firstStateOverride;
     }
     
     mPtr->scriptVM.init(&type->scriptDef, mPtr);
     
-    if(firstStateOverride != INVALID) {
-        mPtr->scriptVM.fsm.firstStateOverride = firstStateOverride;
+    if(!vars.empty()) {
+        map<string, string> varsMap = getVarMap(vars);
+        for(auto& v : varsMap) {
+            mPtr->scriptVM.vars[v.first] = v.second;
+        }
     }
     
     forIdx(c, type->children) {

@@ -47,7 +47,7 @@ script {
             set_animation destroyed
             stop_particles
             start_particles enemy_defeat 0 0 25
-            send_message_to_links destroyed
+            send_message_to_links destroy
             start_dying
         }
     }

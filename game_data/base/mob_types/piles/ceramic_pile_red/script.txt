@@ -4,11 +4,11 @@ script {
             play_sound ceramic_hit
         }
         on_receive_message {
-            get_event_info m message
-            if $m = dropped_resource
+            get_event_info msg message
+            if $msg = dropped_resource
                 play_sound snap
                 start_particles pile_sparkles_large 0 0 200
-            else_if $m = grown_resource
+            else_if $msg = grown_resource
                 start_particles pile_sparkles_large 0 0 200
             end_if
         }

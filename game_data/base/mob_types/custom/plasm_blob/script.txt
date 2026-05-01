@@ -22,8 +22,8 @@ global {
 		set_timer $temp
 	}
 	on_receive_message {
-		get_event_info temp message
-		if $temp = plasm_wraith_death
+		get_event_info msg message
+		if $msg = plasm_wraith_death
 			set_state destroying
 		end_if
 	}
@@ -70,7 +70,7 @@ script {
 			add_health -100
 		}
 		on_receive_message {
-			if $temp = plasm_absorb_start
+			if $msg = plasm_absorb_start
 				if $time_alive > 8
 					set_var temp true
 				end_if
@@ -109,12 +109,14 @@ script {
 		}
 		
 		on_reach_destination {
-			send_message_to_focus $value
+			set_var msg blob
+			add_list_item msg $msg $value
+			send_message_to_focus $msg
 			set_state destroying
 		}
 		
 		on_receive_message {
-			if $temp = plasm_absorb_end
+			if $msg = plasm_absorb_end
 				set_gravity 1
 				set_state idling
 			end_if

@@ -13,7 +13,9 @@ script {
             if $weight >= $goal_number
                 set_state down
             end_if
-            send_message_to_links 0
+            set_var msg power
+            add_list_item msg $msg 0
+            send_message_to_links $msg
         }
         on_weight_added {
             get_mob_info weight self weight
@@ -23,6 +25,11 @@ script {
         }
         on_weight_removed {
             get_mob_info weight self weight
+        }
+        on_ready {
+            set_var msg power
+            add_list_item msg $msg 0
+            send_message_to_links $msg
         }
     }
     
@@ -34,7 +41,9 @@ script {
                 start_particles dust_pressure_plate_click 0 0 16
                 set_state up
             end_if
-            send_message_to_links $weight
+            set_var msg power
+            add_list_item msg $msg $weight
+            send_message_to_links $msg
             start_particles dust_pressure_plate_click 0 0 16
         }
         on_weight_added {

@@ -43,8 +43,8 @@ global {
 		set_timer $temp
 	}
 	on_receive_message {
-		get_event_info temp message
-		if $temp = plasm_break
+		get_event_info msg message
+		if $msg = plasm_break
 			calculate alive_cores $alive_cores - 1
 		end_if
 	}
@@ -359,9 +359,10 @@ script {
 			end_if
         }
 		on_receive_message {
-			get_mob_info sender trigger mob_type
-            get_event_info temp message
-			if $sender = plasm_blob
+            get_event_info msg message
+			get_list_item temp $msg 1
+			if $temp = blob
+				get_list_item temp $msg 2
 				calculate last_health $last_health + $temp
 				add_health $temp	
                 //Extend the absorb timer.

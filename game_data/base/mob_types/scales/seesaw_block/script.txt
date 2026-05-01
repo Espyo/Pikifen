@@ -9,7 +9,11 @@ init {
 
 global {
     on_receive_message {
-        get_event_info pair_weight message
+        get_event_info msg message
+        get_list_item temp $msg 1
+        if $temp = seesaw_weight
+            get_list_item pair_weight $msg 2
+        end_if
     }
 }
 
@@ -30,18 +34,28 @@ script {
         }
         on_weight_added {
             get_mob_info weight self weight
-            send_message_to_links $weight
+            set_var msg seesaw_weight
+            add_list_item msg $msg $weight
+            send_message_to_links $msg
             if $weight > $pair_weight
                 set_state lowering
             end_if
         }
         on_weight_removed {
             get_mob_info weight self weight
-            send_message_to_links $weight
+            set_var msg seesaw_weight
+            add_list_item msg $msg $weight
+            send_message_to_links $msg
         }
         on_receive_message {
             if $weight > $pair_weight
                 set_state lowering
+            end_if
+        }
+        on_ready {
+            if $start_down = true
+                set_var start_down false
+                set_state down
             end_if
         }
     }
@@ -60,11 +74,15 @@ script {
         }
         on_weight_added {
             get_mob_info weight self weight
-            send_message_to_links $weight
+            set_var msg seesaw_weight
+            add_list_item msg $msg $weight
+            send_message_to_links $msg
         }
         on_weight_removed {
             get_mob_info weight self weight
-            send_message_to_links $weight
+            set_var msg seesaw_weight
+            add_list_item msg $msg $weight
+            send_message_to_links $msg
         }
     }
     
@@ -80,11 +98,15 @@ script {
         }
         on_weight_added {
             get_mob_info weight self weight
-            send_message_to_links $weight
+            set_var msg seesaw_weight
+            add_list_item msg $msg $weight
+            send_message_to_links $msg
         }
         on_weight_removed {
             get_mob_info weight self weight
-            send_message_to_links $weight
+            set_var msg seesaw_weight
+            add_list_item msg $msg $weight
+            send_message_to_links $msg
             if $weight < $pair_weight
                 set_state rising
             end_if
@@ -110,11 +132,15 @@ script {
         }
         on_weight_added {
             get_mob_info weight self weight
-            send_message_to_links $weight
+            set_var msg seesaw_weight
+            add_list_item msg $msg $weight
+            send_message_to_links $msg
         }
         on_weight_removed {
             get_mob_info weight self weight
-            send_message_to_links $weight
+            set_var msg seesaw_weight
+            add_list_item msg $msg $weight
+            send_message_to_links $msg
         }
     }
 }

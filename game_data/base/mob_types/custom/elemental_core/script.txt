@@ -15,8 +15,8 @@ global {
 		calculate time_alive $time_alive + $temp
 	}
 	on_receive_message {
-		get_event_info temp message
-		if $temp = plasm_wraith_death
+		get_event_info msg message
+		if $msg = plasm_wraith_death
 			set_state destroying
 		end_if
 	}
@@ -67,9 +67,9 @@ script {
 	}
 	idling {
 		on_receive_message {
-			if $temp = plasm_break
+			if $msg = plasm_break
 				set_state destroying
-			else_if $temp = plasm_absorb_start
+			else_if $msg = plasm_absorb_start
 				if $time_alive > 10
 					set_var to_absorb true
 					set_state destroying

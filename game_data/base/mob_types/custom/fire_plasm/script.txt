@@ -13,8 +13,8 @@ script {
 			set_state idling
 		}
 		on_receive_message {
-			get_event_info temp message
-			if $temp = plasm_break
+			get_event_info msg message
+			if $msg = plasm_break
 				set_state destroying
 			end_if
 		}
@@ -26,8 +26,8 @@ script {
 			start_particles plasm_fire 0 0 100
 		}
 		on_receive_message {
-			get_event_info temp message
-			if $temp = plasm_break
+			get_event_info msg message
+			if $msg = plasm_break
 				set_state destroying
 			end_if
 		}
