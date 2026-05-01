@@ -185,11 +185,8 @@ private:
     //Whether the player is dragging the mouse. False for just a (fuzzy) click.
     bool radarMouseDragging = false;
     
-    //Minimum coordinates the radar can pan to.
-    Point radarMinCoords;
-    
-    //Maximum coordinates the radar can pan to.
-    Point radarMaxCoords;
+    //Corner coordinates of where the radar can pan to.
+    RectCorners radarLimits;
     
     //Icon for the radar cursor.
     ALLEGRO_BITMAP* bmpRadarCursor = nullptr;

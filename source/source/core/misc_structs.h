@@ -193,11 +193,8 @@ struct Viewport {
 
     //--- Public members ---
     
-    //Center, in game window coordinates.
-    Point center;
-    
-    //Width and height, in game window coordinates.
-    Point size;
+    //Center and size, in game window coordinates.
+    Rect windowRect;
     
     //Allegro transformation for converting window to world coordinates.
     ALLEGRO_TRANSFORM windowToWorldTransform;
@@ -211,9 +208,9 @@ struct Viewport {
     //Camera shakiness manager.
     Shaker shaker;
     
-    //Top-left and bottom-right world coordinates that this camera can see.
+    //Corner world coordinates that this camera can see.
     //These also include the specified margin.
-    Point box[2];
+    RectCorners worldCorners;
     
     //Margin for the box coordinates.
     Point boxMargin;
@@ -225,9 +222,8 @@ struct Viewport {
     //--- Public function declarations ---
     
     Viewport();
-    Point getBottomRight();
-    Point getTopLeft();
-    void updateBox();
+    RectCorners getWindowCorners();
+    void updateWorldCorners();
     void updateMouseCursor(const Point& windowPos);
     void updateTransformations();
     

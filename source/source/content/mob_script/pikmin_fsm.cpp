@@ -2790,8 +2790,10 @@ void PikminFsm::doImpactBounce(ScriptVM* scriptVM, void* info1, void* info2) {
                 getAngle(
                     getClosestPointInRotatedRectangle(
                         pikPtr->pos,
-                        scriptVM->focusedMob->pos,
-                        scriptVM->focusedMob->rectangularDim,
+                        Rect(
+                            scriptVM->focusedMob->pos,
+                            scriptVM->focusedMob->rectangularDim
+                        ),
                         scriptVM->focusedMob->angle,
                         nullptr
                     ),
@@ -3422,8 +3424,10 @@ void PikminFsm::goToOpponent(ScriptVM* scriptVM, void* info1, void* info2) {
         offset =
             getClosestPointInRotatedRectangle(
                 pikPtr->pos,
-                scriptVM->focusedMob->pos,
-                scriptVM->focusedMob->rectangularDim,
+                Rect(
+                    scriptVM->focusedMob->pos,
+                    scriptVM->focusedMob->rectangularDim
+                ),
                 scriptVM->focusedMob->angle,
                 &isInside
             ) - scriptVM->focusedMob->pos;
@@ -3846,8 +3850,10 @@ void PikminFsm::prepareToAttack(ScriptVM* scriptVM, void* info1, void* info2) {
         Point target =
             getClosestPointInRotatedRectangle(
                 pikPtr->pos,
-                scriptVM->focusedMob->pos,
-                scriptVM->focusedMob->rectangularDim,
+                Rect(
+                    scriptVM->focusedMob->pos,
+                    scriptVM->focusedMob->rectangularDim
+                ),
                 scriptVM->focusedMob->angle,
                 &isInside
             );

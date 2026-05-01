@@ -424,7 +424,7 @@ public:
     void markMixTrackStatus(MIX_TRACK_TYPE trackType);
     bool rewindSong(const string& name);
     bool scheduleEmission(size_t sourceId, bool first);
-    void setCameraPos(const Point& camTL, const Point& camBR);
+    void setCameraPos(const RectCorners& camera);
     bool setCurrentSong(
         const string& name, bool fromStart = true, bool fadeIn = true,
         bool loop = true
@@ -482,11 +482,8 @@ private:
     //based on whether we're in an interlude, [0 - 1].
     float interludeVolume = 0.0f;
     
-    //Top-left camera coordinates.
-    Point camTL;
-    
-    //Bottom-right camera coordinates.
-    Point camBR;
+    //Camera corners.
+    RectCorners cameraBBox;
     
     
     //--- Private function declarations ---

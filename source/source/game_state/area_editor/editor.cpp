@@ -282,9 +282,9 @@ AreaEditor::AreaEditor() :
     [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
         Sector* sPtr = game.curArea->sectors[idx];
         sPtr->calculateBoundingBox();
-        cornersToCenterAndSize(
-            sPtr->bbox[0], sPtr->bbox[1], outCenter, outSize
-        );
+        Rect rect = rectCornersToRect(sPtr->bBox);
+        *outCenter = rect.center;
+        *outSize = rect.size;
         *outAngle = 0.0f;
     };
     sectorSelection.onSetInfo =
@@ -1729,15 +1729,15 @@ void AreaEditor::doSectorSplit() {
     } else {
         float workingSectorArea =
             (
-                sectorSplitInfo.workingSector->bbox[1].x -
-                sectorSplitInfo.workingSector->bbox[0].x
+                sectorSplitInfo.workingSector->bBox.br.x -
+                sectorSplitInfo.workingSector->bBox.tl.x
             ) * (
-                sectorSplitInfo.workingSector->bbox[1].y -
-                sectorSplitInfo.workingSector->bbox[0].y
+                sectorSplitInfo.workingSector->bBox.br.y -
+                sectorSplitInfo.workingSector->bBox.tl.y
             );
         float newSectorArea =
-            (newSector->bbox[1].x - newSector->bbox[0].x) *
-            (newSector->bbox[1].y - newSector->bbox[0].y);
+            (newSector->bBox.br.x - newSector->bBox.tl.x) *
+            (newSector->bBox.br.y - newSector->bBox.tl.y);
             
         if(workingSectorArea < newSectorArea) {
             sectorSelection.setSingle(
@@ -2399,20 +2399,19 @@ void AreaEditor::goToProblem() {
             return;
         }
         
-        Point minCoords = v2p(problemEdgeIntersection.e1->vertexes[0]);
-        Point maxCoords = minCoords;
+        RectCorners camera(
+            v2p(problemEdgeIntersection.e1->vertexes[0]),
+            v2p(problemEdgeIntersection.e1->vertexes[0])
+        );
         
         updateMinMaxCoords(
-            minCoords, maxCoords,
-            v2p(problemEdgeIntersection.e1->vertexes[1])
+            camera, v2p(problemEdgeIntersection.e1->vertexes[1])
         );
         updateMinMaxCoords(
-            minCoords, maxCoords,
-            v2p(problemEdgeIntersection.e2->vertexes[0])
+            camera, v2p(problemEdgeIntersection.e2->vertexes[0])
         );
         updateMinMaxCoords(
-            minCoords, maxCoords,
-            v2p(problemEdgeIntersection.e2->vertexes[1])
+            camera, v2p(problemEdgeIntersection.e2->vertexes[1])
         );
         
         changeState(EDITOR_STATE_LAYOUT);
@@ -2424,7 +2423,7 @@ void AreaEditor::goToProblem() {
             game.curArea->findEdgeIdx(problemEdgeIntersection.e2)
         );
         updateSelectionRequirements();
-        centerCamera(minCoords, maxCoords);
+        centerCamera(camera);
         
         break;
         
@@ -2440,7 +2439,7 @@ void AreaEditor::goToProblem() {
         Sector* sPtr = game.curArea->problems.nonSimples.begin()->first;
         sectorSelection.setSingle(game.curArea->findSectorIdx(sPtr));
         updateSelectionRequirements();
-        centerCamera(sPtr->bbox[0], sPtr->bbox[1]);
+        centerCamera(sPtr->bBox);
         
         break;
         
@@ -2453,16 +2452,16 @@ void AreaEditor::goToProblem() {
         }
         
         Edge* ePtr = *game.curArea->problems.loneEdges.begin();
-        Point minCoords = v2p(ePtr->vertexes[0]);
-        Point maxCoords = minCoords;
-        updateMinMaxCoords(
-            minCoords, maxCoords, v2p(ePtr->vertexes[1])
+        RectCorners camera(
+            v2p(ePtr->vertexes[0]),
+            v2p(ePtr->vertexes[0])
         );
+        updateMinMaxCoords(camera, v2p(ePtr->vertexes[1]));
         
         changeState(EDITOR_STATE_LAYOUT);
         edgeSelection.setSingle(game.curArea->findEdgeIdx(ePtr));
         updateSelectionRequirements();
-        centerCamera(minCoords, maxCoords);
+        centerCamera(camera);
         
         break;
         
@@ -2479,13 +2478,15 @@ void AreaEditor::goToProblem() {
             game.curArea->findVertexIdx(problemVertexPtr)
         );
         centerCamera(
-            Point(
-                problemVertexPtr->x - 64,
-                problemVertexPtr->y - 64
-            ),
-            Point(
-                problemVertexPtr->x + 64,
-                problemVertexPtr->y + 64
+            RectCorners(
+                Point(
+                    problemVertexPtr->x - 64.0f,
+                    problemVertexPtr->y - 64.0f
+                ),
+                Point(
+                    problemVertexPtr->x + 64.0f,
+                    problemVertexPtr->y + 64.0f
+                )
             )
         );
         
@@ -2504,7 +2505,7 @@ void AreaEditor::goToProblem() {
             game.curArea->findSectorIdx(problemSectorPtr)
         );
         updateSelectionRequirements();
-        centerCamera(problemSectorPtr->bbox[0], problemSectorPtr->bbox[1]);
+        centerCamera(problemSectorPtr->bBox);
         
         break;
         
@@ -2524,7 +2525,12 @@ void AreaEditor::goToProblem() {
         
         changeState(EDITOR_STATE_MOBS);
         mobSelection.setSingle(game.curArea->findMobGenIdx(problemMobPtr));
-        centerCamera(problemMobPtr->pos - 64, problemMobPtr->pos + 64);
+        centerCamera(
+            RectCorners(
+                problemMobPtr->pos - 64.0f,
+                problemMobPtr->pos + 64.0f
+            )
+        );
         
         break;
         
@@ -2544,25 +2550,27 @@ void AreaEditor::goToProblem() {
             game.curArea->findPathStopIdx(problemPathStopPtr)
         );
         centerCamera(
-            problemPathStopPtr->pos - 64,
-            problemPathStopPtr->pos + 64
+            RectCorners(
+                problemPathStopPtr->pos - 64.0f,
+                problemPathStopPtr->pos + 64.0f
+            )
         );
         
         break;
         
     } case EPT_UNKNOWN_SHADOW: {
 
-        Point minCoords, maxCoords;
-        getTransformedRectangleBBox(
-            problemShadowPtr->pose.pos, problemShadowPtr->pose.size,
-            problemShadowPtr->pose.angle, &minCoords, &maxCoords
-        );
-        
+        RectCorners camera =
+            getTransformedRectangleBBox(
+                Rect(problemShadowPtr->pose.pos, problemShadowPtr->pose.size),
+                problemShadowPtr->pose.angle
+            );
+            
         changeState(EDITOR_STATE_DETAILS);
         shadowSelection.setSingle(
             game.curArea->findTreeShadowIdx(problemShadowPtr)
         );
-        centerCamera(minCoords, maxCoords);
+        centerCamera(camera);
         
         break;
         
@@ -2899,15 +2907,15 @@ void AreaEditor::loadReference() {
         }
         
         rRS.set("file", referenceFilePath);
-        rRS.set("center", referenceCenter);
-        rRS.set("size", referenceSize);
+        rRS.set("center", referenceRect.center);
+        rRS.set("size", referenceRect.size);
         rRS.set("tint", referenceTint);
         rRS.set("visible", showReference);
         
     } else {
         referenceFilePath.clear();
-        referenceCenter = Point();
-        referenceSize = Point();
+        referenceRect.center = Point();
+        referenceRect.size = Point();
         referenceTint = COLOR_WHITE;
         showReference = true;
     }
@@ -3467,8 +3475,8 @@ void AreaEditor::saveReference() {
     GetterWriter rGW(&referenceFile);
     
     rGW.write("file", referenceFilePath);
-    rGW.write("center", referenceCenter);
-    rGW.write("size", referenceSize);
+    rGW.write("center", referenceRect.center);
+    rGW.write("size", referenceRect.size);
     rGW.write("tint", referenceTint);
     rGW.write("visible", showReference);
     
@@ -4241,16 +4249,16 @@ void AreaEditor::updateReference() {
             loadBmp(referenceFilePath, nullptr, false, true, true);
             
         if(
-            referenceSize.x == 0 ||
-            referenceSize.y == 0
+            referenceRect.size.x == 0 ||
+            referenceRect.size.y == 0
         ) {
             //Let's assume this is a new reference. Reset sizes and tint.
-            referenceSize = getBitmapDimensions(referenceBitmap);
+            referenceRect.size = getBitmapDimensions(referenceBitmap);
             referenceTint = AREA_EDITOR::DEF_REFERENCE_TINT;
         }
     } else {
-        referenceCenter = Point();
-        referenceSize = Point();
+        referenceRect.center = Point();
+        referenceRect.size = Point();
     }
 }
 
@@ -4379,62 +4387,62 @@ void AreaEditor::zoomEverythingCmd(float inputValue) {
     if(inputValue < 0.5f) return;
     
     bool gotSomething = false;
-    Point minCoords, maxCoords;
+    RectCorners camera;
     
     forIdx(v, game.curArea->vertexes) {
         Vertex* vPtr = game.curArea->vertexes[v];
-        if(vPtr->x < minCoords.x || !gotSomething) {
-            minCoords.x = vPtr->x;
+        if(vPtr->x < camera.tl.x || !gotSomething) {
+            camera.tl.x = vPtr->x;
         }
-        if(vPtr->y < minCoords.y || !gotSomething) {
-            minCoords.y = vPtr->y;
+        if(vPtr->y < camera.tl.y || !gotSomething) {
+            camera.tl.y = vPtr->y;
         }
-        if(vPtr->x > maxCoords.x || !gotSomething) {
-            maxCoords.x = vPtr->x;
+        if(vPtr->x > camera.br.x || !gotSomething) {
+            camera.br.x = vPtr->x;
         }
-        if(vPtr->y > maxCoords.y || !gotSomething) {
-            maxCoords.y = vPtr->y;
+        if(vPtr->y > camera.br.y || !gotSomething) {
+            camera.br.y = vPtr->y;
         }
         gotSomething = true;
     }
     
     forIdx(m, game.curArea->mobGenerators) {
         MobGen* mPtr = game.curArea->mobGenerators[m];
-        if(mPtr->pos.x < minCoords.x || !gotSomething) {
-            minCoords.x = mPtr->pos.x;
+        if(mPtr->pos.x < camera.tl.x || !gotSomething) {
+            camera.tl.x = mPtr->pos.x;
         }
-        if(mPtr->pos.y < minCoords.y || !gotSomething) {
-            minCoords.y = mPtr->pos.y;
+        if(mPtr->pos.y < camera.tl.y || !gotSomething) {
+            camera.tl.y = mPtr->pos.y;
         }
-        if(mPtr->pos.x > maxCoords.x || !gotSomething) {
-            maxCoords.x = mPtr->pos.x;
+        if(mPtr->pos.x > camera.br.x || !gotSomething) {
+            camera.br.x = mPtr->pos.x;
         }
-        if(mPtr->pos.y > maxCoords.y || !gotSomething) {
-            maxCoords.y = mPtr->pos.y;
+        if(mPtr->pos.y > camera.br.y || !gotSomething) {
+            camera.br.y = mPtr->pos.y;
         }
         gotSomething = true;
     }
     
     forIdx(s, game.curArea->pathStops) {
         PathStop* sPtr = game.curArea->pathStops[s];
-        if(sPtr->pos.x < minCoords.x || !gotSomething) {
-            minCoords.x = sPtr->pos.x;
+        if(sPtr->pos.x < camera.tl.x || !gotSomething) {
+            camera.tl.x = sPtr->pos.x;
         }
-        if(sPtr->pos.y < minCoords.y || !gotSomething) {
-            minCoords.y = sPtr->pos.y;
+        if(sPtr->pos.y < camera.tl.y || !gotSomething) {
+            camera.tl.y = sPtr->pos.y;
         }
-        if(sPtr->pos.x > maxCoords.x || !gotSomething) {
-            maxCoords.x = sPtr->pos.x;
+        if(sPtr->pos.x > camera.br.x || !gotSomething) {
+            camera.br.x = sPtr->pos.x;
         }
-        if(sPtr->pos.y > maxCoords.y || !gotSomething) {
-            maxCoords.y = sPtr->pos.y;
+        if(sPtr->pos.y > camera.br.y || !gotSomething) {
+            camera.br.y = sPtr->pos.y;
         }
         gotSomething = true;
     }
     
     if(!gotSomething) return;
     
-    centerCamera(minCoords, maxCoords);
+    centerCamera(camera);
 }
 
 

@@ -745,11 +745,8 @@ private:
     //Tint for the reference image.
     ALLEGRO_COLOR referenceTint = COLOR_WHITE;
     
-    //Reference image center.
-    Point referenceCenter;
-    
-    //Reference image dimensions.
-    Point referenceSize;
+    //Reference image rectangle.
+    Rect referenceRect;
     
     //Bitmap of the reference image.
     ALLEGRO_BITMAP* referenceBitmap = nullptr;

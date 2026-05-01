@@ -109,8 +109,7 @@ PauseMenu::PauseMenu(bool startOnRadar) {
     }
     
     bool foundValidEdge = false;
-    radarMinCoords = Point(FLT_MAX);
-    radarMaxCoords = Point(-FLT_MAX);
+    radarLimits = RectCorners::readyForSearch;
     
     forIdx(e, game.curArea->edges) {
         Edge* ePtr = game.curArea->edges[e];
@@ -122,22 +121,15 @@ PauseMenu::PauseMenu(bool startOnRadar) {
             continue;
         }
         foundValidEdge = true;
-        updateMinMaxCoords(
-            radarMinCoords, radarMaxCoords,
-            v2p(ePtr->vertexes[0])
-        );
-        updateMinMaxCoords(
-            radarMinCoords, radarMaxCoords,
-            v2p(ePtr->vertexes[1])
-        );
+        updateMinMaxCoords(radarLimits, v2p(ePtr->vertexes[0]));
+        updateMinMaxCoords(radarLimits, v2p(ePtr->vertexes[1]));
     }
     
     if(!foundValidEdge) {
-        radarMinCoords = Point();
-        radarMaxCoords = Point();
+        radarLimits = RectCorners();
     }
-    radarMinCoords = radarMinCoords - 16.0f;
-    radarMaxCoords = radarMaxCoords + 16.0f;
+    radarLimits.tl = radarLimits.tl - 16.0f;
+    radarLimits.br = radarLimits.br + 16.0f;
     
     radarSelectedLeader = game.states.gameplay->players[0].leaderPtr;
     
@@ -222,8 +214,8 @@ void PauseMenu::addNewBullet(
         new BulletGuiItem(
         text, game.sysContent.fntStandard, color
     );
-    bullet->ratioCenter = Point(0.50f, bulletCenterY);
-    bullet->ratioSize = Point(0.96f, BULLET_HEIGHT);
+    bullet->ratioRect.center = Point(0.50f, bulletCenterY);
+    bullet->ratioRect.size = Point(0.96f, BULLET_HEIGHT);
     list->addChild(bullet);
     missionGui.addItem(bullet);
 }
@@ -404,12 +396,12 @@ void PauseMenu::addNewPikminStatusLine(
                 pikType->bmpIcon, draw.center, draw.size, true, 0.0f, draw.tint
             );
         };
-        typeItem->ratioCenter =
+        typeItem->ratioRect.center =
             Point(
                 firstX + itemXInterval * 0,
                 itemY
             );
-        typeItem->ratioSize = Point(itemWidth, itemHeight);
+        typeItem->ratioRect.size = Point(itemWidth, itemHeight);
         list->addChild(typeItem);
         statusGui.addItem(typeItem);
         
@@ -418,12 +410,12 @@ void PauseMenu::addNewPikminStatusLine(
         //Totals header.
         TextGuiItem* totalsHeaderItem =
             new TextGuiItem("Total", game.sysContent.fntAreaName);
-        totalsHeaderItem->ratioCenter =
+        totalsHeaderItem->ratioRect.center =
             Point(
                 firstX + itemXInterval * 0,
                 itemY
             );
-        totalsHeaderItem->ratioSize = Point(itemWidth, itemHeight);
+        totalsHeaderItem->ratioRect.size = Point(itemWidth, itemHeight);
         list->addChild(totalsHeaderItem);
         statusGui.addItem(totalsHeaderItem);
         
@@ -433,12 +425,12 @@ void PauseMenu::addNewPikminStatusLine(
     TextGuiItem* groupTextItem =
         new TextGuiItem(groupText, font);
     groupTextItem->focusable = canFocus;
-    groupTextItem->ratioCenter =
+    groupTextItem->ratioRect.center =
         Point(
             firstX + itemXInterval * 1,
             itemY
         );
-    groupTextItem->ratioSize = Point(itemWidth, numberItemHeight);
+    groupTextItem->ratioRect.size = Point(itemWidth, numberItemHeight);
     if(canFocus) {
         groupTextItem->onGetTooltip =
         [tooltipStart] () {
@@ -455,12 +447,12 @@ void PauseMenu::addNewPikminStatusLine(
     TextGuiItem* idleTextItem =
         new TextGuiItem(idleText, font);
     idleTextItem->focusable = canFocus;
-    idleTextItem->ratioCenter =
+    idleTextItem->ratioRect.center =
         Point(
             firstX + itemXInterval * 2,
             itemY
         );
-    idleTextItem->ratioSize = Point(itemWidth, numberItemHeight);
+    idleTextItem->ratioRect.size = Point(itemWidth, numberItemHeight);
     if(canFocus) {
         idleTextItem->onGetTooltip =
         [tooltipStart] () {
@@ -477,12 +469,12 @@ void PauseMenu::addNewPikminStatusLine(
     TextGuiItem* fieldTextItem =
         new TextGuiItem(fieldText, font);
     fieldTextItem->focusable = canFocus;
-    fieldTextItem->ratioCenter =
+    fieldTextItem->ratioRect.center =
         Point(
             firstX + itemXInterval * 3,
             itemY
         );
-    fieldTextItem->ratioSize = Point(itemWidth, numberItemHeight);
+    fieldTextItem->ratioRect.size = Point(itemWidth, numberItemHeight);
     if(canFocus) {
         fieldTextItem->onGetTooltip =
         [tooltipStart] () {
@@ -499,12 +491,12 @@ void PauseMenu::addNewPikminStatusLine(
     TextGuiItem* onionTextItem =
         new TextGuiItem(onionText, font);
     onionTextItem->focusable = canFocus;
-    onionTextItem->ratioCenter =
+    onionTextItem->ratioRect.center =
         Point(
             firstX + itemXInterval * 4,
             itemY
         );
-    onionTextItem->ratioSize = Point(itemWidth, numberItemHeight);
+    onionTextItem->ratioRect.size = Point(itemWidth, numberItemHeight);
     if(canFocus) {
         onionTextItem->onGetTooltip =
         [tooltipStart] () {
@@ -521,12 +513,12 @@ void PauseMenu::addNewPikminStatusLine(
     TextGuiItem* totalTextItem =
         new TextGuiItem(totalText, font, game.config.guiColors.gold);
     totalTextItem->focusable = canFocus;
-    totalTextItem->ratioCenter =
+    totalTextItem->ratioRect.center =
         Point(
             firstX + itemXInterval * 5,
             itemY
         );
-    totalTextItem->ratioSize = Point(itemWidth, numberItemHeight);
+    totalTextItem->ratioRect.size = Point(itemWidth, numberItemHeight);
     if(canFocus) {
         totalTextItem->onGetTooltip =
         [tooltipStart] () {
@@ -541,9 +533,9 @@ void PauseMenu::addNewPikminStatusLine(
     
     //Separator.
     GuiItem* separatorItem = new GuiItem();
-    separatorItem->ratioCenter =
+    separatorItem->ratioRect.center =
         Point(firstX + itemXInterval * 5.5f, itemY);
-    separatorItem->ratioSize = Point(1.0f, itemHeight);
+    separatorItem->ratioRect.size = Point(1.0f, itemHeight);
     separatorItem->onDraw =
     [] (const DrawInfo & draw) {
         al_draw_line(
@@ -561,12 +553,12 @@ void PauseMenu::addNewPikminStatusLine(
         newText, font, game.config.guiColors.good
     );
     newTextItem->focusable = canFocus;
-    newTextItem->ratioCenter =
+    newTextItem->ratioRect.center =
         Point(
             firstX + itemXInterval * 6,
             itemY
         );
-    newTextItem->ratioSize = Point(itemWidth, numberItemHeight);
+    newTextItem->ratioRect.size = Point(itemWidth, numberItemHeight);
     if(canFocus) {
         newTextItem->onGetTooltip =
         [tooltipStart] () {
@@ -585,12 +577,12 @@ void PauseMenu::addNewPikminStatusLine(
         lostText, font, game.config.guiColors.bad
     );
     lostTextItem->focusable = canFocus;
-    lostTextItem->ratioCenter =
+    lostTextItem->ratioRect.center =
         Point(
             firstX + itemXInterval * 7,
             itemY
         );
-    lostTextItem->ratioSize = Point(itemWidth, numberItemHeight);
+    lostTextItem->ratioRect.size = Point(itemWidth, numberItemHeight);
     if(canFocus) {
         lostTextItem->onGetTooltip =
         [tooltipStart] () {
@@ -1439,7 +1431,7 @@ void PauseMenu::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
             radarGui.responsive &&
             isPointInRectangle(
                 game.mouseCursor.winPos,
-                radarDraw.center, radarDraw.size
+                Rect(radarDraw.center, radarDraw.size)
             );
             
         if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
@@ -2438,9 +2430,9 @@ void PauseMenu::panRadar(Point amount) {
     Point delta = amount / radarView.cam.zoom;
     radarView.cam.pos += delta;
     radarView.cam.pos.x =
-        std::clamp(radarView.cam.pos.x, radarMinCoords.x, radarMaxCoords.x);
+        std::clamp(radarView.cam.pos.x, radarLimits.tl.x, radarLimits.br.x);
     radarView.cam.pos.y =
-        std::clamp(radarView.cam.pos.y, radarMinCoords.y, radarMaxCoords.y);
+        std::clamp(radarView.cam.pos.y, radarLimits.tl.y, radarLimits.br.y);
 }
 
 
@@ -2605,8 +2597,8 @@ void PauseMenu::tick(float deltaT) {
     //Tick radar things.
     DrawInfo radarDraw;
     radarGui.getItemDrawInfo(radarItem, &radarDraw);
-    radarView.center = radarDraw.center;
-    radarView.size = radarDraw.size;
+    radarView.windowRect.center = radarDraw.center;
+    radarView.windowRect.size = radarDraw.size;
     radarView.updateTransformations();
     
     if(radarGui.responsive) {
@@ -2629,7 +2621,7 @@ void PauseMenu::tick(float deltaT) {
         bool mouseInRadar =
             isPointInRectangle(
                 game.mouseCursor.winPos,
-                radarDraw.center, radarDraw.size
+                Rect(radarDraw.center, radarDraw.size)
             );
             
         if(mouseInRadar) {

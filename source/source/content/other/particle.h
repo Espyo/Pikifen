@@ -281,8 +281,7 @@ struct ParticleManager {
     void addParticle(const Particle& p);
     void clear();
     void fillComponentList(
-        vector<WorldComponent>& list,
-        const Point& camTL = Point(), const Point& camBR = Point()
+        vector<WorldComponent>& list, const RectCorners& camera = RectCorners()
     );
     size_t getCount() const;
     void tickAll(float deltaT);

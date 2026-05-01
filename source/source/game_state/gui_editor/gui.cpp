@@ -671,7 +671,7 @@ void GuiEditor::processGuiPanelCustomItem() {
     CustomGuiItemDef* curItemPtr =
         (CustomGuiItemDef*) allItems[itemSelection.getSingleItemIdx()];
         
-    if(curItemPtr->size.x == 0.0f) return;
+    if(curItemPtr->rect.size.x == 0.0f) return;
     
     //Custom data header text.
     ImGui::Spacer();
@@ -981,7 +981,7 @@ void GuiEditor::processGuiPanelInfo() {
 void GuiEditor::processGuiPanelItem() {
     GuiItemDef* curItemPtr = allItems[itemSelection.getSingleItemIdx()];
     
-    if(curItemPtr->size.x == 0.0f) return;
+    if(curItemPtr->rect.size.x == 0.0f) return;
     
     //Item's name text.
     ImGui::Spacer();
@@ -989,7 +989,7 @@ void GuiEditor::processGuiPanelItem() {
     
     //Center values.
     if(
-        ImGui::DragFloat2("Center", (float*) &curItemPtr->center, 0.10f)
+        ImGui::DragFloat2("Center", (float*) &curItemPtr->rect.center, 0.10f)
     ) {
         changesMgr.markAsChanged();
     }
@@ -1003,7 +1003,7 @@ void GuiEditor::processGuiPanelItem() {
     //Size values.
     if(
         processGuiWidgetsSize(
-            "Size", curItemPtr->size, 0.10f, false, false, 0.10f
+            "Size", curItemPtr->rect.size, 0.10f, false, false, 0.10f
         )
     ) {
         changesMgr.markAsChanged();
@@ -1015,29 +1015,24 @@ void GuiEditor::processGuiPanelItem() {
         WIDGET_EXPLANATION_DRAG
     );
     
-    Point curItemTL, curItemBR;
-    centerAndSizeToCorners(
-        curItemPtr->center, curItemPtr->size, &curItemTL, &curItemBR
-    );
+    RectCorners curItemCorners = rectToRectCorners(curItemPtr->rect);
     bool updateFromCorners = false;
     
     //Top-left coordinates values.
     ImGui::Spacer();
-    if(ImGui::DragFloat2("Top-left", (float*) &curItemTL, 0.10f)) {
+    if(ImGui::DragFloat2("Top-left", (float*) &curItemCorners.tl, 0.10f)) {
         updateFromCorners = true;
     }
     
     //Bottom-right coordinates values.
-    if(ImGui::DragFloat2("Bottom-right", (float*) &curItemBR, 0.10f)) {
+    if(ImGui::DragFloat2("Bottom-right", (float*) &curItemCorners.br, 0.10f)) {
         updateFromCorners = true;
     }
     
     if(updateFromCorners) {
-        Point newCenter, newSize;
-        cornersToCenterAndSize(curItemTL, curItemBR, &newCenter, &newSize);
-        if(newSize.x > 0.0f && newSize.y > 0.0f) {
-            curItemPtr->center = newCenter;
-            curItemPtr->size = newSize;
+        Rect newRect = rectCornersToRect(curItemCorners);
+        if(newRect.size.x > 0.0f && newRect.size.y > 0.0f) {
+            curItemPtr->rect = newRect;
         }
         changesMgr.markAsChanged();
     }
@@ -1065,17 +1060,14 @@ void GuiEditor::processGuiPanelItems() {
             if(state == EDITOR_STATE_CUSTOM && !isCustom) continue;
             
             //Item checkbox.
-            bool visible = item->size.x != 0.0f;
+            bool visible = item->rect.size.x != 0.0f;
             if(
                 ImGui::Checkbox(("##v" + item->name).c_str(), &visible)
             ) {
                 if(visible) {
                     setToDefaults(item);
                 } else {
-                    item->center.x = 0.0f;
-                    item->center.y = 0.0f;
-                    item->size.x = 0.0f;
-                    item->size.y = 0.0f;
+                    item->rect = Rect();
                 }
                 changesMgr.markAsChanged();
             }

@@ -395,8 +395,8 @@ float GuiItem::getChildrenSpan(bool horizontal) const {
         GuiItem* cPtr = children[c];
         float cCoord =
             horizontal ?
-            cPtr->ratioCenter.x + (cPtr->ratioSize.x / 2.0f) :
-            cPtr->ratioCenter.y + (cPtr->ratioSize.y / 2.0f);
+            cPtr->ratioRect.center.x + (cPtr->ratioRect.size.x / 2.0f) :
+            cPtr->ratioRect.center.y + (cPtr->ratioRect.size.y / 2.0f);
         span = std::max(span, cCoord);
     }
     return span;
@@ -478,14 +478,14 @@ Point GuiItem::getReferenceCenter() const {
             parent->getReferenceSize() - (parent->padding * 2.0f);
         Point parentC =
             parent->getReferenceCenter();
-        Point result = ratioCenter * parentS;
+        Point result = ratioRect.center * parentS;
         result.x += parentC.x - parentS.x / 2.0f;
         result.x -= parentS.x * parent->offset.x;
         result.y += parentC.y - parentS.y / 2.0f;
         result.y -= parentS.y * parent->offset.y;
         return result;
     } else {
-        return Point(ratioCenter.x * game.winW, ratioCenter.y * game.winH);
+        return Point(ratioRect.center.x * game.winW, ratioRect.center.y * game.winH);
     }
 }
 
@@ -503,7 +503,7 @@ Point GuiItem::getReferenceSize() const {
         mult.x = game.winW;
         mult.y = game.winH;
     }
-    Point finalSize = ratioSize * mult;
+    Point finalSize = ratioRect.size * mult;
     if(forceSquare) {
         finalSize =
             Point(finalSize.x < finalSize.y ? finalSize.x : finalSize.y);
@@ -656,11 +656,11 @@ bool GuiManager::addItem(GuiItem* item, const string& id) {
     
     auto c = registeredCenters.find(id);
     if(c != registeredCenters.end()) {
-        item->ratioCenter = c->second;
+        item->ratioRect.center = c->second;
     }
     auto s = registeredSizes.find(id);
     if(s != registeredSizes.end()) {
-        item->ratioSize = s->second;
+        item->ratioRect.size = s->second;
     }
     
     items.push_back(item);
@@ -682,12 +682,11 @@ void GuiManager::createAndAddCustomItems(
 ) {
     for(size_t i = startingIdx; i < customItemDefs.size(); i++) {
         CustomGuiItemDef* infoPtr = &customItemDefs[i];
-        infoPtr->center /= 100.0f;
-        infoPtr->size /= 100.0f;
+        infoPtr->rect.center /= 100.0f;
+        infoPtr->rect.size /= 100.0f;
         
         GuiItem* guiItem = new GuiItem();
-        guiItem->ratioCenter = infoPtr->center;
-        guiItem->ratioSize = infoPtr->size;
+        guiItem->ratioRect = infoPtr->rect;
         guiItem->drawingLayer =
             infoPtr->drawBeforeHardcoded ?
             GUI::DRAWING_LAYER_CUSTOM_BEFORE :
@@ -891,7 +890,7 @@ bool GuiManager::draw() {
             GUI::FOCUS_CURSOR_BOB_OFFSET +
             GUI::FOCUS_CURSOR_FADE_GROW_OFFSET * (1.0f - focusCursor.alpha);
         drawTexturedBox(
-            focusCursor.curPos, focusCursor.curSize + sizeAddition,
+            focusCursor.curRect.center, focusCursor.curRect.size + sizeAddition,
             game.sysContent.bmpFocusBox,
             mapAlpha(255 * ease(focusCursor.alpha, EASE_METHOD_OUT))
         );
@@ -967,8 +966,8 @@ bool GuiManager::getItemDefsFromDataFile(
         
         ReaderSetter rs(itemNode);
         
-        rs.set("center", itemDef.center);
-        rs.set("size", itemDef.size);
+        rs.set("center", itemDef.rect.center);
+        rs.set("size", itemDef.rect.size);
         rs.set("description", itemDef.description);
         
         itemDef.name = itemNode->name;
@@ -991,9 +990,9 @@ bool GuiManager::getItemDefsFromDataFile(
         DataNode* fontNode;
         
         rs.set("type", typeStr, &typeNode);
-        rs.set("center", itemDef.center);
+        rs.set("center", itemDef.rect.center);
         rs.set("description", itemDef.description);
-        rs.set("size", itemDef.size);
+        rs.set("size", itemDef.rect.size);
         rs.set("color", itemDef.color);
         rs.set("draw_before_hardcoded", itemDef.drawBeforeHardcoded);
         rs.set("bitmap", itemDef.bitmapName, &bitmapNode);
@@ -1052,7 +1051,7 @@ bool GuiManager::getItemDefsFromDataFile(
  */
 bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
     if(!item->isVisible()) return false;
-    if(item->ratioSize.x == 0.0f) return false;
+    if(item->ratioRect.size.x == 0.0f) return false;
     
     Point finalCenter = item->getReferenceCenter();
     Point finalSize = item->getReferenceSize();
@@ -1439,10 +1438,10 @@ bool GuiManager::readDataFile(DataNode* node, GuiItem* customChildrenParent) {
     forIdx(i, hardcodedItemDefs) {
         registerCoords(
             hardcodedItemDefs[i].name,
-            hardcodedItemDefs[i].center.x,
-            hardcodedItemDefs[i].center.y,
-            hardcodedItemDefs[i].size.x,
-            hardcodedItemDefs[i].size.y
+            hardcodedItemDefs[i].rect.center.x,
+            hardcodedItemDefs[i].rect.center.y,
+            hardcodedItemDefs[i].rect.size.x,
+            hardcodedItemDefs[i].rect.size.y
         );
     }
     
@@ -1631,12 +1630,12 @@ bool GuiManager::tick(float deltaT) {
         focusedItem && mustDrawFocusedItem &&
         focusedItem->focusable
     ) {
-        focusCursor.intendedPos = focusedItemDraw.center;
-        focusCursor.intendedSize = focusedItemDraw.size;
+        focusCursor.intendedRect.center = focusedItemDraw.center;
+        focusCursor.intendedRect.size = focusedItemDraw.size;
         if(focusCursor.alpha == 0.0f) {
             //Teleport.
-            focusCursor.curPos = focusCursor.intendedPos;
-            focusCursor.curSize = focusCursor.intendedSize;
+            focusCursor.curRect.center = focusCursor.intendedRect.center;
+            focusCursor.curRect.size = focusCursor.intendedRect.size;
         }
         focusCursor.alpha =
             inchTowards(
@@ -1649,11 +1648,11 @@ bool GuiManager::tick(float deltaT) {
             );
     }
     
-    Point posDelta = focusCursor.intendedPos - focusCursor.curPos;
-    Point sizeDelta = focusCursor.intendedSize - focusCursor.curSize;
-    focusCursor.curPos +=
-        posDelta * (GUI::FOCUS_CURSOR_SMOOTHNESS_FACTOR * deltaT);
-    focusCursor.curSize +=
+    Point centerDelta = focusCursor.intendedRect.center - focusCursor.curRect.center;
+    Point sizeDelta = focusCursor.intendedRect.size - focusCursor.curRect.size;
+    focusCursor.curRect.center +=
+        centerDelta * (GUI::FOCUS_CURSOR_SMOOTHNESS_FACTOR * deltaT);
+    focusCursor.curRect.size +=
         sizeDelta * (GUI::FOCUS_CURSOR_SMOOTHNESS_FACTOR * deltaT);
         
     return true;
@@ -1685,8 +1684,8 @@ bool GuiManager::writeItemDefsToDataFile(
     const vector<CustomGuiItemDef>& customItemDefs
 ) {
     const auto writeCoordinates =
-    [] (const Point & center, const Point & size) {
-        return p2s(center) + " " + p2s(size);
+    [] (const Rect & rect) {
+        return p2s(rect.center) + " " + p2s(rect.size);
     };
     
     //Hardcoded items.
@@ -1696,11 +1695,11 @@ bool GuiManager::writeItemDefsToDataFile(
         const HardcodedGuiItemDef* itemPtr = &hardcodedItemDefs[i];
         DataNode* itemNode = hardcodedNode->addNew(itemPtr->name);
         
-        string coordsStr = writeCoordinates(itemPtr->center, itemPtr->size);
+        string coordsStr = writeCoordinates(itemPtr->rect);
         GetterWriter gw(itemNode);
         
-        gw.write("center", itemPtr->center);
-        gw.write("size", itemPtr->size);
+        gw.write("center", itemPtr->rect.center);
+        gw.write("size", itemPtr->rect.size);
         gw.write("description", itemPtr->description);
     }
     
@@ -1713,8 +1712,8 @@ bool GuiManager::writeItemDefsToDataFile(
         
         GetterWriter gw(itemNode);
         
-        gw.write("center", itemPtr->center);
-        gw.write("size", itemPtr->size);
+        gw.write("center", itemPtr->rect.center);
+        gw.write("size", itemPtr->rect.size);
         gw.write("description", itemPtr->description);
         gw.write("type", enumGetName(customGuiItemTypeINames, itemPtr->type));
         gw.write("color", itemPtr->color);
@@ -1780,7 +1779,7 @@ void ListGuiItem::defChildFocusedViaSNCode(const GuiItem* child) {
     //Try to center the child.
     float childrenSpan = getChildrenSpan(horizontal);
     float* offsetPtr = !horizontal ? &offset.y : &offset.x;
-    float coord = !horizontal ? child->ratioCenter.y : child->ratioCenter.x;
+    float coord = !horizontal ? child->ratioRect.center.y : child->ratioRect.center.x;
     
     if(childrenSpan <= 1.0f && *offsetPtr == 0.0f) return;
     targetOffset = std::clamp(coord - 0.5f, 0.0f, childrenSpan - 1.0f);

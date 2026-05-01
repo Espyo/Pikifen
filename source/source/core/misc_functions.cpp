@@ -52,17 +52,11 @@ bool areWallsBetween(
     const Point& p1, const Point& p2,
     float ignoreWallsBelowZ, bool* outImpassableWalls
 ) {
-    Point bbTL = p1;
-    Point bbBR = p1;
-    updateMinMaxCoords(bbTL, bbBR, p2);
+    RectCorners bBox(p1, p1);
+    updateMinMaxCoords(bBox, p2);
     
     set<Edge*> candidateEdges;
-    if(
-        !game.curArea->bmap.getEdgesInRect(
-            bbTL, bbBR,
-            candidateEdges
-        )
-    ) {
+    if(!game.curArea->bmap.getEdgesInRect(bBox, candidateEdges)) {
         //Somehow out of bounds.
         if(outImpassableWalls) *outImpassableWalls = true;
         return true;

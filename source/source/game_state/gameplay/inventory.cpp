@@ -273,8 +273,8 @@ void Inventory::populateInventoryListGui() {
             new ButtonGuiItem(
             "", game.sysContent.fntStandard
         );
-        button->ratioCenter = slotCenter;
-        button->ratioSize = Point(SLOT_WIDTH, SLOT_HEIGHT);
+        button->ratioRect.center = slotCenter;
+        button->ratioRect.size = Point(SLOT_WIDTH, SLOT_HEIGHT);
         button->forceSquare = true;
         button->onDraw =
         [this, button, iPtr] (const DrawInfo & draw) {
@@ -322,8 +322,8 @@ void Inventory::populateInventoryListGui() {
     for(int p = 0; p < placeholdersNeeded; p++) {
         //Item placeholder item.
         GuiItem* placeholder = new GuiItem();
-        placeholder->ratioCenter = slotCenter;
-        placeholder->ratioSize = Point(SLOT_WIDTH, SLOT_HEIGHT);
+        placeholder->ratioRect.center = slotCenter;
+        placeholder->ratioRect.size = Point(SLOT_WIDTH, SLOT_HEIGHT);
         placeholder->forceSquare = true;
         placeholder->onDraw =
         [this] (const DrawInfo & draw) {

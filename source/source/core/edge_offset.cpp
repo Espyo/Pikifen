@@ -636,16 +636,15 @@ void getNextOffsetEffectEdge(
  * onto a buffer image, so that sectors may then sample from it to draw
  * what effects they need.
  *
- * @param camTL Top-left corner of the camera boundaries.
- * The edges of any sector that is beyond these boundaries will be ignored.
- * @param camBR Same as camTL, but for the bottom-right boundaries.
+ * @param camTL Camera boundaries. The edges of any sector that is
+ * beyond these boundaries will be ignored.
  * @param caches List of caches to fetch edge info from.
  * @param buffer Buffer to draw to.
  * @param clearFirst If true, the bitmap is cleared before any drawing is done.
  * @param view Viewport to draw to.
  */
 void updateOffsetEffectBuffer(
-    const Point& camTL, const Point& camBR,
+    const RectCorners& camera,
     const vector<EdgeOffsetCache>& caches, ALLEGRO_BITMAP* buffer,
     bool clearFirst, const Viewport& view
 ) {
@@ -654,22 +653,17 @@ void updateOffsetEffectBuffer(
     forIdx(s, game.curArea->sectors) {
         Sector* sPtr = game.curArea->sectors[s];
         
-        if(
-            !rectanglesIntersect(
-                sPtr->bbox[0], sPtr->bbox[1],
-                camTL, camBR
-            )
-        ) {
+        if(!rectanglesIntersect(sPtr->bBox, camera)) {
             //Sector is off-camera.
             continue;
         }
         
         bool fullyOnCamera = false;
         if(
-            sPtr->bbox[0].x > camTL.x &&
-            sPtr->bbox[1].x < camBR.x &&
-            sPtr->bbox[0].y > camTL.y &&
-            sPtr->bbox[1].y < camBR.y
+            sPtr->bBox.tl.x > camera.tl.x &&
+            sPtr->bBox.br.x < camera.br.x &&
+            sPtr->bBox.tl.y > camera.tl.y &&
+            sPtr->bBox.br.y < camera.br.y
         ) {
             fullyOnCamera = true;
         }
@@ -678,14 +672,15 @@ void updateOffsetEffectBuffer(
             if(!fullyOnCamera) {
                 //If the sector's fully on-camera, it's faster to not bother
                 //with the edge-by-edge check.
-                Point edgeTL = v2p(sPtr->edges[e]->vertexes[0]);
-                Point edgeBR = edgeTL;
+                RectCorners edgeCorners(
+                    v2p(sPtr->edges[e]->vertexes[0]),
+                    v2p(sPtr->edges[e]->vertexes[0])
+                );
                 updateMinMaxCoords(
-                    edgeTL, edgeBR,
-                    v2p(sPtr->edges[e]->vertexes[1])
+                    edgeCorners, v2p(sPtr->edges[e]->vertexes[1])
                 );
                 
-                if(!rectanglesIntersect(edgeTL, edgeBR, camTL, camBR)) {
+                if(!rectanglesIntersect(edgeCorners, camera)) {
                     //Edge is off-camera.
                     continue;
                 }

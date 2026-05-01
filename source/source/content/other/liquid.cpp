@@ -134,17 +134,14 @@ void Liquid::changeSectorsHazard(Hazard* hPtr) {
  * @brief Returns the center point of the entire liquid.
  */
 Point Liquid::getCenter() const {
-    Point tl(FLT_MAX);
-    Point br(-FLT_MAX);
+    RectCorners corners = RectCorners::readyForSearch;
     
     forIdx(s, sectors) {
-        updateMinCoords(tl, sectors[s]->bbox[0]);
-        updateMaxCoords(br, sectors[s]->bbox[1]);
+        updateMinCoords(corners.tl, sectors[s]->bBox.tl);
+        updateMaxCoords(corners.br, sectors[s]->bBox.br);
     }
     
-    Point center;
-    cornersToCenterAndSize(tl, br, &center, nullptr);
-    return center;
+    return rectCornersToRect(corners).center;
 }
 
 

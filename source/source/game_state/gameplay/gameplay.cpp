@@ -585,10 +585,10 @@ void GameplayState::enter() {
     particles.viewports.clear();
     
     for(Player& player : players) {
-        player.view.size.x = game.winW;
-        player.view.size.y = game.winH;
-        player.view.center.x = game.winW / 2.0f;
-        player.view.center.y = game.winH / 2.0f;
+        player.view.windowRect.size.x = game.winW;
+        player.view.windowRect.size.y = game.winH;
+        player.view.windowRect.center.x = game.winW / 2.0f;
+        player.view.windowRect.center.y = game.winH / 2.0f;
         player.view.boxMargin.x = GAMEPLAY::CAMERA_BOX_MARGIN;
         player.view.boxMargin.y = GAMEPLAY::CAMERA_BOX_MARGIN;
         player.view.updateTransformations();
@@ -599,7 +599,7 @@ void GameplayState::enter() {
         game.options.advanced.zoomMediumReach,
         game.config.rules.zoomFarthestReach
     };
-    float viewportReach = sqrt(players[0].view.size.x * players[0].view.size.y);
+    float viewportReach = sqrt(players[0].view.windowRect.size.x * players[0].view.windowRect.size.y);
     for(int z = 0; z < 3; z++) {
         zoomLevels[z] = viewportReach / zoomReaches[z];
     }

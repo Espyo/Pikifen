@@ -131,7 +131,7 @@ OnionMenu::OnionMenu(
     [this] (const DrawInfo & draw) {
         const ALLEGRO_COLOR TEXT_COLOR = al_map_rgb(188, 230, 230);
         const ALLEGRO_COLOR ERROR_COLOR = al_map_rgb(224, 0, 0);
-
+        
         int totalDelta = 0;
         forIdx(t, this->types) {
             totalDelta += this->types[t].delta;
@@ -1055,11 +1055,11 @@ ONION_TRANSFER_RESULT OnionMenu::transfer(bool toGroup, size_t typeIdx) {
  */
 void OnionMenu::update() {
     //Calculate size and position things.
-    float columnWidth = onionButtonItems[0]->ratioSize.x;
-    columnWidth = std::max(columnWidth, onionAmountItems[0]->ratioSize.x);
-    columnWidth = std::max(columnWidth, groupButtonItems[0]->ratioSize.x);
-    columnWidth = std::max(columnWidth, groupAmountItems[0]->ratioSize.x);
-    columnWidth = std::max(columnWidth, fullTypeItems[0]->ratioSize.x);
+    float columnWidth = onionButtonItems[0]->ratioRect.size.x;
+    columnWidth = std::max(columnWidth, onionAmountItems[0]->ratioRect.size.x);
+    columnWidth = std::max(columnWidth, groupButtonItems[0]->ratioRect.size.x);
+    columnWidth = std::max(columnWidth, groupAmountItems[0]->ratioRect.size.x);
+    columnWidth = std::max(columnWidth, fullTypeItems[0]->ratioRect.size.x);
     float visibleColWidthSums = columnWidth * ONION_MENU::NR_TYPES_VISIBLE;
     float visibleColPaddingSums = 1.0f - visibleColWidthSums;
     float columnPadding =
@@ -1076,13 +1076,13 @@ void OnionMenu::update() {
     float curX = listStartX;
     forIdx(t, types) {
         curX += columnPadding + columnWidth / 2.0f;
-        onionIconItems[t]->ratioCenter.x = curX;
-        onionButtonItems[t]->ratioCenter.x = curX;
-        onionAmountItems[t]->ratioCenter.x = curX;
-        groupIconItems[t]->ratioCenter.x = curX;
-        groupButtonItems[t]->ratioCenter.x = curX;
-        groupAmountItems[t]->ratioCenter.x = curX;
-        fullTypeItems[t]->ratioCenter.x = curX;
+        onionIconItems[t]->ratioRect.center.x = curX;
+        onionButtonItems[t]->ratioRect.center.x = curX;
+        onionAmountItems[t]->ratioRect.center.x = curX;
+        groupIconItems[t]->ratioRect.center.x = curX;
+        groupButtonItems[t]->ratioRect.center.x = curX;
+        groupAmountItems[t]->ratioRect.center.x = curX;
+        fullTypeItems[t]->ratioRect.center.x = curX;
         curX += columnWidth / 2.0f;
     }
     
@@ -1110,49 +1110,49 @@ void OnionMenu::update() {
         onionAllButtonX1 =
             std::min(
                 onionAllButtonX1,
-                onionButtonItems[t]->ratioCenter.x -
-                onionButtonItems[t]->ratioSize.x / 2.0f
+                onionButtonItems[t]->ratioRect.center.x -
+                onionButtonItems[t]->ratioRect.size.x / 2.0f
             );
         onionAllButtonX2 =
             std::max(
                 onionAllButtonX2,
-                onionButtonItems[t]->ratioCenter.x +
-                onionButtonItems[t]->ratioSize.x / 2.0f
+                onionButtonItems[t]->ratioRect.center.x +
+                onionButtonItems[t]->ratioRect.size.x / 2.0f
             );
         groupAllButtonX1 =
             std::min(
                 groupAllButtonX1,
-                groupButtonItems[t]->ratioCenter.x -
-                groupButtonItems[t]->ratioSize.x / 2.0f
+                groupButtonItems[t]->ratioRect.center.x -
+                groupButtonItems[t]->ratioRect.size.x / 2.0f
             );
         groupAllButtonX2 =
             std::max(
                 groupAllButtonX2,
-                groupButtonItems[t]->ratioCenter.x +
-                groupButtonItems[t]->ratioSize.x / 2.0f
+                groupButtonItems[t]->ratioRect.center.x +
+                groupButtonItems[t]->ratioRect.size.x / 2.0f
             );
     }
     float fullTypeAllButtonX1 = std::min(onionAllButtonX1, groupAllButtonX1);
     float fullTypeAllButtonX2 = std::max(onionAllButtonX2, groupAllButtonX2);
-    onionAllButton->ratioCenter.x =
+    onionAllButton->ratioRect.center.x =
         (onionAllButtonX1 + onionAllButtonX2) / 2.0f;
-    onionAllButton->ratioSize.x =
+    onionAllButton->ratioRect.size.x =
         (onionAllButtonX2 - onionAllButtonX1);
-    groupAllButton->ratioCenter.x =
+    groupAllButton->ratioRect.center.x =
         (groupAllButtonX1 + groupAllButtonX2) / 2.0f;
-    groupAllButton->ratioSize.x =
+    groupAllButton->ratioRect.size.x =
         (groupAllButtonX2 - groupAllButtonX1);
-    fullTypeAllItem->ratioCenter.x =
+    fullTypeAllItem->ratioRect.center.x =
         (fullTypeAllButtonX1 + fullTypeAllButtonX2) / 2.0f;
-    fullTypeAllItem->ratioSize.x =
+    fullTypeAllItem->ratioRect.size.x =
         (fullTypeAllButtonX2 - fullTypeAllButtonX1);
         
     //If the list has more than ONION_MENU::NR_TYPES_VISIBLE type, the final
     //type won't have padding to the right since the scrollbar calculations
     //only take into account actually used space. Let's adjust the dummy
     //padding GUI item to fix that.
-    listPaddingDummyItem->ratioCenter.x = listStartX + listWidth / 2.0f;
-    listPaddingDummyItem->ratioSize.x = listWidth;
+    listPaddingDummyItem->ratioRect.center.x = listStartX + listWidth / 2.0f;
+    listPaddingDummyItem->ratioRect.size.x = listWidth;
 }
 
 

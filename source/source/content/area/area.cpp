@@ -338,8 +338,7 @@ void Area::clone(Area& other) {
                 )
             );
         }
-        osPtr->bbox[0] = sPtr->bbox[0];
-        osPtr->bbox[1] = sPtr->bbox[1];
+        osPtr->bBox = sPtr->bBox;
     }
     
     forIdx(m, mobGenerators) {
@@ -914,20 +913,19 @@ void Area::generateBlockmap() {
     if(vertexes.empty()) return;
     
     //First, get the starting point and size of the blockmap.
-    Point minCoords = v2p(vertexes[0]);
-    Point maxCoords = minCoords;
+    RectCorners corners(v2p(vertexes[0]), v2p(vertexes[0]));
     
     forIdx(v, vertexes) {
-        updateMinMaxCoords(minCoords, maxCoords, v2p(vertexes[v]));
+        updateMinMaxCoords(corners, v2p(vertexes[v]));
     }
     
-    bmap.topLeftCorner = minCoords;
+    bmap.topLeftCorner = corners.tl;
     //Add one more to the cols/rows because, suppose there's an edge at y = 256.
     //The row would be 2. In reality, the row should be 3.
     bmap.nCols =
-        ceil((maxCoords.x - minCoords.x) / GEOMETRY::BLOCKMAP_BLOCK_SIZE) + 1;
+        ceil((corners.br.x - corners.tl.x) / GEOMETRY::BLOCKMAP_BLOCK_SIZE) + 1;
     bmap.nRows =
-        ceil((maxCoords.y - minCoords.y) / GEOMETRY::BLOCKMAP_BLOCK_SIZE) + 1;
+        ceil((corners.br.y - corners.tl.y) / GEOMETRY::BLOCKMAP_BLOCK_SIZE) + 1;
         
     bmap.edges.assign(
         bmap.nCols, vector<vector<Edge*> >(bmap.nRows, vector<Edge*>())
@@ -1008,14 +1006,13 @@ void Area::generateEdgesBlockmap(const vector<Edge*>& edgeList) {
         //and only then thoroughly test which it is inside of.
         
         Edge* ePtr = edgeList[e];
-        Point minCoords = v2p(ePtr->vertexes[0]);
-        Point maxCoords = minCoords;
-        updateMinMaxCoords(minCoords, maxCoords, v2p(ePtr->vertexes[1]));
+        RectCorners corners(v2p(ePtr->vertexes[0]), v2p(ePtr->vertexes[0]));
+        updateMinMaxCoords(corners, v2p(ePtr->vertexes[1]));
         
-        size_t bMinX = bmap.getCol(minCoords.x);
-        size_t bMaxX = bmap.getCol(maxCoords.x);
-        size_t bMinY = bmap.getRow(minCoords.y);
-        size_t bMaxY = bmap.getRow(maxCoords.y);
+        size_t bMinX = bmap.getCol(corners.tl.x);
+        size_t bMaxX = bmap.getCol(corners.br.x);
+        size_t bMinY = bmap.getRow(corners.tl.y);
+        size_t bMaxY = bmap.getRow(corners.br.y);
         
         for(size_t bx = bMinX; bx <= bMaxX; bx++) {
             for(size_t by = bMinY; by <= bMaxY; by++) {
@@ -1823,8 +1820,7 @@ void Area::loadOldMissionSystem(DataNode* node) {
     unordered_set<size_t> goalMobIdxs;
     size_t goalAmount = 0;
     bool goalAllMobs = true;
-    Point goalExitCenter;
-    Point goalExitSize;
+    Rect goalExit;
     Bitmask8 failConditions = 0;
     size_t failTooFewPikAmount = 0;
     size_t failTooManyPikAmount = 0;
@@ -1850,8 +1846,8 @@ void Area::loadOldMissionSystem(DataNode* node) {
     mRS.set("mission_goal_amount", goalAmount);
     mRS.set("mission_goal_all_mobs", goalAllMobs);
     mRS.set("mission_required_mobs", requiredMobsStr);
-    mRS.set("mission_goal_exit_center", goalExitCenter);
-    mRS.set("mission_goal_exit_size", goalExitSize);
+    mRS.set("mission_goal_exit_center", goalExit.center);
+    mRS.set("mission_goal_exit_size", goalExit.size);
     mRS.set("mission_fail_conditions", failConditions);
     mRS.set("mission_fail_too_few_pik_amount", failTooFewPikAmount);
     mRS.set("mission_fail_too_many_pik_amount", failTooManyPikAmount);
@@ -2028,8 +2024,8 @@ void Area::loadOldMissionSystem(DataNode* node) {
             .type = AREA_REGION_TYPE_MISSION,
             .pose =
             Pose2d {
-                .pos = goalExitCenter,
-                .size = goalExitSize,
+                .pos = goalExit.center,
+                .size = goalExit.size,
                 .angle = 0.0f,
             }
         }
@@ -2987,19 +2983,17 @@ size_t Blockmap::getCol(float x) const {
  * @brief Obtains a list of edges that are within the specified
  * rectangle.
  *
- * @param tl Top-left coordinates of the rectangle.
- * @param br Bottom-right coordinates of the rectangle.
+ * @param corners Corners of the rectangle.
  * @param outEdges Set to fill the edges into.
  * @return Whether it succeeded.
  */
 bool Blockmap::getEdgesInRect(
-    const Point& tl, const Point& br, set<Edge*>& outEdges
+    const RectCorners& corners, set<Edge*>& outEdges
 ) const {
-
-    size_t bx1 = getCol(tl.x);
-    size_t bx2 = getCol(br.x);
-    size_t by1 = getRow(tl.y);
-    size_t by2 = getRow(br.y);
+    size_t bx1 = getCol(corners.tl.x);
+    size_t bx2 = getCol(corners.br.x);
+    size_t by1 = getRow(corners.tl.y);
+    size_t by2 = getRow(corners.br.y);
     
     if(
         bx1 == INVALID || bx2 == INVALID ||

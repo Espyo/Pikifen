@@ -38,21 +38,22 @@ void AnimationEditor::doDrawing() {
  */
 void AnimationEditor::drawCanvas() {
     const ALLEGRO_COLOR BG_COLOR = al_map_rgb(128, 144, 128);
-    Point canvasTL = game.editorsView.getTopLeft();
-    Point canvasBR = game.editorsView.getBottomRight();
+    RectCorners canvasCorners = game.editorsView.getWindowCorners();
     
     al_set_clipping_rectangle(
-        canvasTL.x, canvasTL.y, game.editorsView.size.x, game.editorsView.size.y
+        canvasCorners.tl.x, canvasCorners.tl.y,
+        game.editorsView.windowRect.size.x, game.editorsView.windowRect.size.y
     );
     
     if(useBg && bg) {
-        Point textureTL = canvasTL;
-        Point textureBR = canvasBR;
+        RectCorners textureCorners = canvasCorners;
         al_transform_coordinates(
-            &game.editorsView.windowToWorldTransform, &textureTL.x, &textureTL.y
+            &game.editorsView.windowToWorldTransform,
+            &textureCorners.tl.x, &textureCorners.tl.y
         );
         al_transform_coordinates(
-            &game.editorsView.windowToWorldTransform, &textureBR.x, &textureBR.y
+            &game.editorsView.windowToWorldTransform,
+            &textureCorners.br.x, &textureCorners.br.y
         );
         ALLEGRO_VERTEX bgVertexes[4];
         for(size_t v = 0; v < 4; v++) {
@@ -60,25 +61,25 @@ void AnimationEditor::drawCanvas() {
             bgVertexes[v].color = COLOR_WHITE;
         }
         //Top-left vertex.
-        bgVertexes[0].x = canvasTL.x;
-        bgVertexes[0].y = canvasTL.y;
-        bgVertexes[0].u = textureTL.x;
-        bgVertexes[0].v = textureTL.y;
+        bgVertexes[0].x = canvasCorners.tl.x;
+        bgVertexes[0].y = canvasCorners.tl.y;
+        bgVertexes[0].u = textureCorners.tl.x;
+        bgVertexes[0].v = textureCorners.tl.y;
         //Top-right vertex.
-        bgVertexes[1].x = canvasBR.x;
-        bgVertexes[1].y = canvasTL.y;
-        bgVertexes[1].u = textureBR.x;
-        bgVertexes[1].v = textureTL.y;
+        bgVertexes[1].x = canvasCorners.br.x;
+        bgVertexes[1].y = canvasCorners.tl.y;
+        bgVertexes[1].u = textureCorners.br.x;
+        bgVertexes[1].v = textureCorners.tl.y;
         //Bottom-right vertex.
-        bgVertexes[2].x = canvasBR.x;
-        bgVertexes[2].y = canvasBR.y;
-        bgVertexes[2].u = textureBR.x;
-        bgVertexes[2].v = textureBR.y;
+        bgVertexes[2].x = canvasCorners.br.x;
+        bgVertexes[2].y = canvasCorners.br.y;
+        bgVertexes[2].u = textureCorners.br.x;
+        bgVertexes[2].v = textureCorners.br.y;
         //Bottom-left vertex.
-        bgVertexes[3].x = canvasTL.x;
-        bgVertexes[3].y = canvasBR.y;
-        bgVertexes[3].u = textureTL.x;
-        bgVertexes[3].v = textureBR.y;
+        bgVertexes[3].x = canvasCorners.tl.x;
+        bgVertexes[3].y = canvasCorners.br.y;
+        bgVertexes[3].u = textureCorners.tl.x;
+        bgVertexes[3].v = textureCorners.br.y;
         
         al_draw_prim(
             bgVertexes, nullptr, bg,
@@ -127,30 +128,34 @@ void AnimationEditor::drawCanvas() {
             int bmpY = -bmpH / 2.0;
             al_draw_bitmap(s->parentBmp, bmpX, bmpY, 0);
             
-            Point sceneTL = Point(-1.0f);
-            Point sceneBR = Point(canvasBR.x + 1, canvasBR.y + 1);
-            al_transform_coordinates(
-                &game.editorsView.windowToWorldTransform, &sceneTL.x, &sceneTL.y
+            RectCorners sceneCorners(
+                Point(-1.0f),
+                Point(canvasCorners.br.x + 1, canvasCorners.br.y + 1)
             );
             al_transform_coordinates(
-                &game.editorsView.windowToWorldTransform, &sceneBR.x, &sceneBR.y
+                &game.editorsView.windowToWorldTransform,
+                &sceneCorners.tl.x, &sceneCorners.tl.y
+            );
+            al_transform_coordinates(
+                &game.editorsView.windowToWorldTransform,
+                &sceneCorners.br.x, &sceneCorners.br.y
             );
             
             //Draw the darkening effect.
             for(unsigned char x = 0; x < 3; x++) {
-                Point recTL, recBR;
+                RectCorners effCorners;
                 switch(x) {
                 case 0: {
-                    recTL.x = sceneTL.x;
-                    recBR.x = bmpX + s->bmpPos.x;
+                    effCorners.tl.x = sceneCorners.tl.x;
+                    effCorners.br.x = bmpX + s->bmpPos.x;
                     break;
                 } case 1: {
-                    recTL.x = bmpX + s->bmpPos.x;
-                    recBR.x = bmpX + s->bmpPos.x + s->bmpSize.x;
+                    effCorners.tl.x = bmpX + s->bmpPos.x;
+                    effCorners.br.x = bmpX + s->bmpPos.x + s->bmpSize.x;
                     break;
                 } default: {
-                    recTL.x = bmpX + s->bmpPos.x + s->bmpSize.x;
-                    recBR.x = sceneBR.x;
+                    effCorners.tl.x = bmpX + s->bmpPos.x + s->bmpSize.x;
+                    effCorners.br.x = sceneCorners.br.x;
                     break;
                 }
                 }
@@ -160,23 +165,23 @@ void AnimationEditor::drawCanvas() {
                     
                     switch(y) {
                     case 0: {
-                        recTL.y = sceneTL.y;
-                        recBR.y = bmpY + s->bmpPos.y;
+                        effCorners.tl.y = sceneCorners.tl.y;
+                        effCorners.br.y = bmpY + s->bmpPos.y;
                         break;
                     } case 1: {
-                        recTL.y = bmpY + s->bmpPos.y;
-                        recBR.y = bmpY + s->bmpPos.y + s->bmpSize.y;
+                        effCorners.tl.y = bmpY + s->bmpPos.y;
+                        effCorners.br.y = bmpY + s->bmpPos.y + s->bmpSize.y;
                         break;
                     } default: {
-                        recTL.y = bmpY + s->bmpPos.y + s->bmpSize.y;
-                        recBR.y = sceneBR.y;
+                        effCorners.tl.y = bmpY + s->bmpPos.y + s->bmpSize.y;
+                        effCorners.br.y = sceneCorners.br.y;
                         break;
                     }
                     }
                     
                     al_draw_filled_rectangle(
-                        recTL.x, recTL.y,
-                        recBR.x, recBR.y,
+                        effCorners.tl.x, effCorners.tl.y,
+                        effCorners.br.x, effCorners.br.y,
                         UNSELECTED_COLOR
                     );
                 }
@@ -291,23 +296,22 @@ void AnimationEditor::drawCanvas() {
             multAlpha(EDITOR::GRID_COLOR_MINOR, gridAlpha)
         );
         
-        Point camTLCorner(0, 0);
-        Point camBRCorner(canvasBR.x, canvasBR.y);
+        RectCorners camCorners(Point(0.0f), canvasCorners.br);
         al_transform_coordinates(
             &game.editorsView.windowToWorldTransform,
-            &camTLCorner.x, &camTLCorner.y
+            &camCorners.tl.x, &camCorners.tl.y
         );
         al_transform_coordinates(
             &game.editorsView.windowToWorldTransform,
-            &camBRCorner.x, &camBRCorner.y
+            &camCorners.br.x, &camCorners.br.y
         );
         
         al_draw_line(
-            0, camTLCorner.y, 0, camBRCorner.y,
+            0, camCorners.tl.y, 0, camCorners.br.y,
             EDITOR::GRID_COLOR_ORIGIN, 1.0f / game.editorsView.cam.zoom
         );
         al_draw_line(
-            camTLCorner.x, 0, camBRCorner.x, 0,
+            camCorners.tl.x, 0, camCorners.br.x, 0,
             EDITOR::GRID_COLOR_ORIGIN, 1.0f / game.editorsView.cam.zoom
         );
     }
@@ -446,26 +450,27 @@ void AnimationEditor::drawSideViewLeaderSilhouette(float xOffset) {
  */
 void AnimationEditor::drawSideViewSprite(const Sprite* s) {
     const ALLEGRO_COLOR DEF_COLOR = al_map_rgb(128, 32, 128);
-    Point min, max;
-    ALLEGRO_COLOR color = COLOR_EMPTY;
     
-    getTransformedRectangleBBox(
-        s->tf.trans, s->bmpSize * s->tf.scale, s->tf.rot,
-        &min, &max
-    );
-    max.y = 0; //Bottom aligns with the floor.
+    ALLEGRO_COLOR color = COLOR_EMPTY;
+    RectCorners corners =
+        getTransformedRectangleBBox(
+            Rect(s->tf.trans, s->bmpSize * s->tf.scale), s->tf.rot
+        );
+    corners.br.y = 0; //Bottom aligns with the floor.
     
     if(loadedMobType) {
         color = loadedMobType->mainColor;
-        min.y = loadedMobType->height;
+        corners.tl.y = loadedMobType->height;
     } else {
-        min.y = max.x - min.x;
+        corners.tl.y = corners.br.x - corners.tl.x;
     }
     if(color.a == 0) {
         color = DEF_COLOR;
     }
-    min.y = -min.y; //Up is negative Y.
-    al_draw_filled_rectangle(min.x, min.y, max.x, max.y, color);
+    corners.tl.y = -corners.tl.y; //Up is negative Y.
+    al_draw_filled_rectangle(
+        corners.tl.x, corners.tl.y, corners.br.x, corners.br.y, color
+    );
 }
 
 
@@ -503,10 +508,12 @@ void AnimationEditor::drawTimeline() {
     }
     if(animTotalDuration == 0.0f) return;
     
-    Point canvasTL = game.editorsView.getTopLeft();
-    Point canvasBR = game.editorsView.getBottomRight();
+    RectCorners canvasCorners = game.editorsView.getWindowCorners();
     float scale =
-        (canvasBR.x - canvasTL.x - ANIM_EDITOR::TIMELINE_PADDING * 2.0f) /
+        (
+            canvasCorners.br.x - canvasCorners.tl.x -
+            ANIM_EDITOR::TIMELINE_PADDING * 2.0f
+        ) /
         animTotalDuration;
     float milestoneInterval = 32.0f / scale;
     milestoneInterval = floor(milestoneInterval * 100.0f) / 100.0f;
@@ -514,17 +521,17 @@ void AnimationEditor::drawTimeline() {
     
     //Draw the entire timeline's rectangle.
     al_draw_filled_rectangle(
-        canvasTL.x, canvasBR.y - ANIM_EDITOR::TIMELINE_HEIGHT,
-        canvasBR.x, canvasBR.y, TIMELINE_COLOR
+        canvasCorners.tl.x, canvasCorners.br.y - ANIM_EDITOR::TIMELINE_HEIGHT,
+        canvasCorners.br.x, canvasCorners.br.y, TIMELINE_COLOR
     );
     
     //Draw every frame as a rectangle.
-    float frameRectanglesCurX = canvasTL.x + ANIM_EDITOR::TIMELINE_PADDING;
+    float frameRectanglesCurX = canvasCorners.tl.x + ANIM_EDITOR::TIMELINE_PADDING;
     float frameRectangleTop =
-        canvasBR.y -
+        canvasCorners.br.y -
         ANIM_EDITOR::TIMELINE_HEIGHT + ANIM_EDITOR::TIMELINE_HEADER_HEIGHT;
     float frameRectangleBottom =
-        canvasBR.y - ANIM_EDITOR::TIMELINE_PADDING;
+        canvasCorners.br.y - ANIM_EDITOR::TIMELINE_PADDING;
     forIdx(f, curAnimInst.curAnim->frames) {
         float endX =
             frameRectanglesCurX +
@@ -543,7 +550,7 @@ void AnimationEditor::drawTimeline() {
     //Draw a triangle for the start of the loop frame.
     if(animTotalDuration) {
         float loopX =
-            canvasTL.x + ANIM_EDITOR::TIMELINE_PADDING +
+            canvasCorners.tl.x + ANIM_EDITOR::TIMELINE_PADDING +
             animLoopTime * scale;
         al_draw_filled_triangle(
             loopX,
@@ -558,10 +565,10 @@ void AnimationEditor::drawTimeline() {
     
     //Draw a line indicating where we are in the animation.
     float curTimeLineX =
-        canvasTL.x + ANIM_EDITOR::TIMELINE_PADDING + animCurTime * scale;
+        canvasCorners.tl.x + ANIM_EDITOR::TIMELINE_PADDING + animCurTime * scale;
     al_draw_line(
-        curTimeLineX, canvasBR.y - ANIM_EDITOR::TIMELINE_HEIGHT,
-        curTimeLineX, canvasBR.y,
+        curTimeLineX, canvasCorners.br.y - ANIM_EDITOR::TIMELINE_HEIGHT,
+        curTimeLineX, canvasCorners.br.y,
         HEAD_COLOR, 2.0f
     );
     
@@ -571,10 +578,10 @@ void AnimationEditor::drawTimeline() {
     
     while(
         nextMarkerX <
-        canvasBR.x - canvasTL.x - ANIM_EDITOR::TIMELINE_PADDING * 2
+        canvasCorners.br.x - canvasCorners.tl.x - ANIM_EDITOR::TIMELINE_PADDING * 2
     ) {
         float xToUse =
-            nextMarkerX + canvasTL.x + ANIM_EDITOR::TIMELINE_PADDING;
+            nextMarkerX + canvasCorners.tl.x + ANIM_EDITOR::TIMELINE_PADDING;
         switch(nextMarkerType) {
         case 0: {
             string text = f2s(nextMarkerX / scale);
@@ -585,14 +592,14 @@ void AnimationEditor::drawTimeline() {
                 text, game.sysContent.fntBuiltin,
                 Point(
                     floor(xToUse) + 2,
-                    canvasBR.y - ANIM_EDITOR::TIMELINE_HEIGHT + 2
+                    canvasCorners.br.y - ANIM_EDITOR::TIMELINE_HEIGHT + 2
                 ),
                 Point(LARGE_FLOAT, 8.0f), MILESTONE_COLOR,
                 ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP
             );
             al_draw_line(
-                xToUse + 0.5, canvasBR.y - ANIM_EDITOR::TIMELINE_HEIGHT,
-                xToUse + 0.5, canvasBR.y - ANIM_EDITOR::TIMELINE_HEIGHT +
+                xToUse + 0.5, canvasCorners.br.y - ANIM_EDITOR::TIMELINE_HEIGHT,
+                xToUse + 0.5, canvasCorners.br.y - ANIM_EDITOR::TIMELINE_HEIGHT +
                 ANIM_EDITOR::TIMELINE_HEADER_HEIGHT,
                 MILESTONE_COLOR, 1.0f
             );
@@ -601,9 +608,9 @@ void AnimationEditor::drawTimeline() {
         } case 1:
         case 3: {
             al_draw_line(
-                xToUse + 0.5, canvasBR.y - ANIM_EDITOR::TIMELINE_HEIGHT,
+                xToUse + 0.5, canvasCorners.br.y - ANIM_EDITOR::TIMELINE_HEIGHT,
                 xToUse + 0.5,
-                canvasBR.y - ANIM_EDITOR::TIMELINE_HEIGHT +
+                canvasCorners.br.y - ANIM_EDITOR::TIMELINE_HEIGHT +
                 ANIM_EDITOR::TIMELINE_HEADER_HEIGHT * 0.66f,
                 MILESTONE_COLOR, 1.0f
             );
@@ -611,9 +618,9 @@ void AnimationEditor::drawTimeline() {
             
         } case 2: {
             al_draw_line(
-                xToUse + 0.5, canvasBR.y - ANIM_EDITOR::TIMELINE_HEIGHT,
+                xToUse + 0.5, canvasCorners.br.y - ANIM_EDITOR::TIMELINE_HEIGHT,
                 xToUse + 0.5,
-                canvasBR.y - ANIM_EDITOR::TIMELINE_HEIGHT +
+                canvasCorners.br.y - ANIM_EDITOR::TIMELINE_HEIGHT +
                 ANIM_EDITOR::TIMELINE_HEADER_HEIGHT * 0.33f,
                 MILESTONE_COLOR, 1.0f
             );

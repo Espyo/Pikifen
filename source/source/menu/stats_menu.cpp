@@ -41,9 +41,9 @@ void StatsMenu::addNewHeaderItem(const string& label) {
         new TextGuiItem(
         label, game.sysContent.fntAreaName, game.config.guiColors.smallHeader
     );
-    labelText->ratioCenter =
+    labelText->ratioRect.center =
         Point(0.50f, statCenterY);
-    labelText->ratioSize =
+    labelText->ratioRect.size =
         Point(0.96f, HEADER_HEIGHT);
     statsList->addChild(labelText);
     gui.addItem(labelText);
@@ -73,9 +73,9 @@ TextGuiItem* StatsMenu::addNewStatItem(
         new BulletGuiItem(
         label, game.sysContent.fntStandard
     );
-    labelBullet->ratioCenter =
+    labelBullet->ratioRect.center =
         Point(0.50f, statCenterY);
-    labelBullet->ratioSize =
+    labelBullet->ratioRect.size =
         Point(0.96f, STAT_HEIGHT);
     labelBullet->onGetTooltip = [description] () { return description; };
     statsList->addChild(labelBullet);
@@ -85,9 +85,9 @@ TextGuiItem* StatsMenu::addNewStatItem(
         new TextGuiItem(
         value, game.sysContent.fntCounter, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
     );
-    valueText->ratioCenter =
+    valueText->ratioRect.center =
         Point(0.75f, statCenterY);
-    valueText->ratioSize =
+    valueText->ratioRect.size =
         Point(0.44f, STAT_HEIGHT);
     statsList->addChild(valueText);
     gui.addItem(valueText);

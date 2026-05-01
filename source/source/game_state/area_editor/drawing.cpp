@@ -101,10 +101,11 @@ void AreaEditor::drawArrow(
  */
 void AreaEditor::drawCanvas() {
     //Setup.
-    Point canvasTL = game.editorsView.getTopLeft();
+    RectCorners canvasCorners = game.editorsView.getWindowCorners();
     
     al_set_clipping_rectangle(
-        canvasTL.x, canvasTL.y, game.editorsView.size.x, game.editorsView.size.y
+        canvasCorners.tl.x, canvasCorners.tl.y,
+        game.editorsView.windowRect.size.x, game.editorsView.windowRect.size.y
     );
     
     al_clear_to_color(COLOR_BLACK);
@@ -297,14 +298,14 @@ void AreaEditor::drawCanvas() {
     ) {
         drawBitmap(
             referenceBitmap,
-            referenceCenter, referenceSize,
+            referenceRect.center, referenceRect.size,
             0, referenceTint
         );
         
         if(state == EDITOR_STATE_TOOLS) {
             curTransformationWidget.draw(
                 game.editorsView.mouseCursorWorldPos,
-                &referenceCenter, &referenceSize,
+                &referenceRect.center, &referenceRect.size,
                 nullptr, 1.0f / game.editorsView.cam.zoom
             );
         }
@@ -1718,19 +1719,19 @@ void AreaEditor::drawSectors(const AreaEdCanvasStyle& style) {
     //Edge offset effect updates.
     if(style.wallShadowAlpha > 0.0f) {
         updateOffsetEffectBuffer(
-            game.editorsView.box[0], game.editorsView.box[1],
+            game.editorsView.worldCorners,
             game.liquidLimitEffectCaches,
             game.liquidLimitEffectBuffer,
             true, game.editorsView
         );
         updateOffsetEffectBuffer(
-            game.editorsView.box[0], game.editorsView.box[1],
+            game.editorsView.worldCorners,
             game.wallSmoothingEffectCaches,
             game.wallOffsetEffectBuffer,
             true, game.editorsView
         );
         updateOffsetEffectBuffer(
-            game.editorsView.box[0], game.editorsView.box[1],
+            game.editorsView.worldCorners,
             game.wallShadowEffectCaches,
             game.wallOffsetEffectBuffer,
             false, game.editorsView

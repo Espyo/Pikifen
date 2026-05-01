@@ -106,13 +106,13 @@ struct Sector {
     
     //Is only floor hazardous, or the air as well?
     bool hazardFloor = true;
-
+    
     //Liquid information, if any.
     Liquid* liquid = nullptr;
     
     //Scrolling speed, if any.
     Point scroll;
-
+    
     //Total surface area.
     float surfaceArea = 0.0f;
     
@@ -126,7 +126,7 @@ struct Sector {
     vector<Triangle> triangles;
     
     //Bounding box.
-    Point bbox[2];
+    RectCorners bBox;
     
     
     //--- Public function declarations ---

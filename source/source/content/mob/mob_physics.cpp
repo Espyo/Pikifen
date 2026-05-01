@@ -51,8 +51,8 @@ Mob* Mob::getMobToWalkOn() const {
             //Rectangle vs rectangle.
             if(
                 !rectanglesIntersect(
-                    pos, rectangularDim, angle,
-                    mPtr->pos, mPtr->rectangularDim, mPtr->angle
+                    Rect(pos, rectangularDim), angle,
+                    Rect(mPtr->pos, mPtr->rectangularDim), mPtr->angle
                 )
             ) {
                 continue;
@@ -120,8 +120,10 @@ HORIZ_MOVE_RESULT Mob::getMovementEdgeIntersections(
         
     if(
         !game.curArea->bmap.getEdgesInRect(
-            newPos - radiusToUse,
-            newPos + radiusToUse,
+            RectCorners(
+                newPos - radiusToUse,
+                newPos + radiusToUse
+            ),
             candidateEdges
         )
     ) {

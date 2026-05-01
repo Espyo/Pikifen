@@ -575,6 +575,37 @@ const Point operator /(float n, const Point& p) {
 
 
 #pragma endregion
+#pragma region Rectangles
+
+
+/**
+ * @brief Constructs a new rectangle object.
+ *
+ * @param center Its center.
+ * @param size Its size.
+ */
+Rect::Rect(const Point& center, const Point& size) :
+    center(center),
+    size(size) {
+}
+
+
+/**
+ * @brief Constructs a new rectangle corners object.
+ *
+ * @param tl Top-left corner coordinates.
+ * @param br Bottom-right corner coordinates.
+ */
+RectCorners::RectCorners(const Point& tl, const Point& br) :
+    tl(tl),
+    br(br) {
+}
+
+
+const RectCorners RectCorners::readyForSearch(Point(FLT_MAX), Point(-FLT_MAX));
+
+
+#pragma endregion
 #pragma region Global functions
 
 
@@ -609,10 +640,10 @@ float angularDistToLinear(float angularDist, float radius) {
 
 
 /**
- * @brief Checks if two spheres are colliding via a bounding-box check.
+ * @brief Checks if two circles are colliding via a bounding-box check.
  *
- * @param center1 Coordinates of the first sphere.
- * @param center2 Coordinates of the second sphere.
+ * @param center1 Center coordinates of the first circle.
+ * @param center2 Center coordinates of the second circle.
  * @param r Range of the bounding box.
  * @return Whether they are colliding.
  */
@@ -626,23 +657,18 @@ bool bBoxCheck(const Point& center1, const Point& center2, float r) {
 
 
 /**
- * @brief Checks if a rectangle and a sphere are colliding via a
+ * @brief Checks if a rectangle and a circle are colliding via a
  * bounding-box check.
  *
- * @param tl1 Top-left coordinates of the rectangle.
- * @param br1 Bottom-right coordinates of the rectangle.
- * @param center2 Coordinates of the sphere.
- * @param r Radius of the sphere.
+ * @param rect Corners of the rectangle.
+ * @param circleCenter Center coordinates of the circle.
+ * @param r Radius of the circle.
  * @return Whether they are colliding.
  */
-bool bBoxCheck(
-    const Point& tl1, const Point& br1,
-    const Point& center2, float r
-) {
+bool bBoxCheck(const RectCorners& rect, const Point& circleCenter, float r) {
     return
         rectanglesIntersect(
-            tl1, br1,
-            center2 - r, center2 + r
+            rect, RectCorners(circleCenter - r, circleCenter + r)
         );
 }
 
@@ -728,76 +754,28 @@ void calculateThrow(
 
 
 /**
- * @brief Converts coordinates of a rectangle's center and size into
- * coordinates of its top-left and bottom-right corners.
- *
- * @param Center Center coordinates.
- * @param size Size.
- * @param outTopLeftCorner If not nullptr, the top-left corner's coordinates
- * are returned here.
- * @param outBottomRightCorner If not nullptr, the bottom-right corner's
- * coordinates are returned here.
- */
-void centerAndSizeToCorners(
-    const Point& center, const Point& size,
-    Point* outTopLeftCorner, Point* outBottomRightCorner
-) {
-    if(outTopLeftCorner) *outTopLeftCorner = center - size / 2.0f;
-    if(outBottomRightCorner) *outBottomRightCorner = center + size / 2.0f;
-}
-
-
-/**
  * @brief Combines two bounding boxes (or rectangles in general),
  * such that the result encompasses both.
  *
- * @param bBox1Center First bounding box's center.
- * @param bBox1Size First bounding box's size.
- * @param bBox2Center Second bounding box's center.
- * @param bBox2Size Second bounding box's size.
- * @param outResultCenter The center of the resulting combined bounding box
- * is returned here.
- * @param outResultSize The size of the resulting combined bounding box
- * is returned here.
+ * @param bBox1 First bounding box.
+ * @param bBox2 Second bounding box.
+ * @return The resulting combined bounding box.
  */
-void combineBBoxes(
-    const Point& bBox1Center, const Point& bBox1Size,
-    const Point& bBox2Center, const Point& bBox2Size,
-    Point* outResultCenter, Point* outResultSize
-) {
-    Point bBox1TL, bBox1BR;
-    centerAndSizeToCorners(bBox1Center, bBox1Size, &bBox1TL, &bBox1BR);
-    Point bBox2TL, bBox2BR;
-    centerAndSizeToCorners(bBox2Center, bBox2Size, &bBox2TL, &bBox2BR);
-    
-    Point resultTL(
-        std::min(bBox1TL.x, bBox2TL.x),
-        std::min(bBox1TL.y, bBox2TL.y)
-    );
-    Point resultBR(
-        std::max(bBox1BR.x, bBox2BR.x),
-        std::max(bBox1BR.y, bBox2BR.y)
+Rect combineBBoxes(const Rect& bBox1, const Rect& bBox2) {
+    RectCorners bBox1Corners = rectToRectCorners(bBox1);
+    RectCorners bBox2Corners = rectToRectCorners(bBox2);
+    RectCorners resultCorners(
+        Point(
+            std::min(bBox1Corners.tl.x, bBox2Corners.tl.x),
+            std::min(bBox1Corners.tl.y, bBox2Corners.tl.y)
+        ),
+        Point(
+            std::max(bBox1Corners.br.x, bBox2Corners.br.x),
+            std::max(bBox1Corners.br.y, bBox2Corners.br.y)
+        )
     );
     
-    cornersToCenterAndSize(resultTL, resultBR, outResultCenter, outResultSize);
-}
-
-
-/**
- * @brief Converts coordinates of a rectangle's top-left and bottom-right
- * corners into coordinates of its center and size.
- *
- * @param topLeftCorner Top-left corner's coordinates.
- * @param bottomRightCorner Bottom-right corner's coordinates.
- * @param outCenter If not nullptr, the center is returned here.
- * @param outSize If not nullptr, the size is returned here.
- */
-void cornersToCenterAndSize(
-    const Point& topLeftCorner, const Point& bottomRightCorner,
-    Point* outCenter, Point* outSize
-) {
-    if(outCenter) *outCenter = (topLeftCorner + bottomRightCorner) / 2.0f;
-    if(outSize) *outSize = bottomRightCorner - topLeftCorner;
+    return rectCornersToRect(resultCorners);
 }
 
 
@@ -957,32 +935,37 @@ bool circleIntersectsRectangle(
  * @param b Ending point of the first line segment.
  * @param c Starting point of the second line segment.
  * @param d Ending point of the second line segment.
- * @param outIntersectionTL If not nullptr, and if there is an intersection,
- * return the top-left corner of the intersection here.
- * @param outIntersectionBR If not nullptr, and if there is an intersection,
- * return the bottom-right corner of the intersection here.
+ * @param outIntersection If not nullptr, and if there is an intersection,
+ * the corners of the intersection are returned here.
  * @return Whether they intersect.
  */
 bool collinearLineSegsIntersect(
     const Point& a, const Point& b, const Point& c, const Point& d,
-    Point* outIntersectionTL, Point* outIntersectionBR
+    RectCorners* outIntersection
 ) {
     Point min1(std::min(a.x, b.x), std::min(a.y, b.y));
     Point max1(std::max(a.x, b.x), std::max(a.y, b.y));
     Point min2(std::min(c.x, d.x), std::min(c.y, d.y));
     Point max2(std::max(c.x, d.x), std::max(c.y, d.y));
     
-    Point iTL(std::max(min1.x, min2.x), std::max(min1.y, min2.y));
-    Point iBR(std::min(max1.x, max2.x), std::min(max1.y, max2.y));
+    RectCorners intersection(
+        Point(std::max(min1.x, min2.x), std::max(min1.y, min2.y)),
+        Point(std::min(max1.x, max2.x), std::min(max1.y, max2.y))
+    );
     
-    if(iTL.x == iBR.x && iTL.y == iBR.y) {
+    if(
+        intersection.tl.x == intersection.br.x &&
+        intersection.tl.y == intersection.br.y
+    ) {
         //Special case -- they share just one point. Let it slide.
         return false;
     }
     
-    if(iTL.x <= iBR.x && iTL.y <= iBR.y) {
-        if(outIntersectionTL) *outIntersectionTL = iTL;
-        if(outIntersectionBR) *outIntersectionBR = iBR;
+    if(
+        intersection.tl.x <= intersection.br.x &&
+        intersection.tl.y <= intersection.br.y
+    ) {
+        if(outIntersection) *outIntersection = intersection;
         return true;
     }
     
@@ -1153,26 +1136,24 @@ Point getClosestPointInLineSeg(
  * to the specified point. This only happens if the point is outside the
  * rectangle, otherwise the reference point's coordinates are returned instead.
  *
- * @param p Reference point.
- * @param rectCenter Center of the rectangle.
- * @param rectDim Width and height of the rectangle.
+ * @param point Reference point.
+ * @param rect Rectangle coordinates.
  * @param rectAngle Angle of the rectangle.
  * @param outIsInside If not nullptr, whether or not the reference point
  * is inside the rectangle is returned here.
  * @return The closest point.
  */
 Point getClosestPointInRotatedRectangle(
-    const Point& p,
-    const Point& rectCenter, const Point& rectDim, float rectAngle,
+    const Point& point, const Rect& rect, float rectAngle,
     bool* outIsInside
 ) {
     Point closestPoint;
-    Point perimeter = rectDim / 2.0f;
+    Point perimeter = rect.size / 2.0f;
     if(outIsInside) *outIsInside = false;
     
     //First, transform the coordinates so the rectangle is axis-aligned, and
     //the rectangle's center is at the origin.
-    Point deltaP = p - rectCenter;
+    Point deltaP = point - rect.center;
     deltaP = rotatePoint(deltaP, -rectAngle);
     
     //Check the closest point.
@@ -1212,7 +1193,7 @@ Point getClosestPointInRotatedRectangle(
     
     //Now, transform back.
     closestPoint = rotatePoint(closestPoint, rectAngle);
-    return closestPoint + rectCenter;
+    return closestPoint + rect.center;
 }
 
 
@@ -1273,17 +1254,14 @@ void getMiterPoints(
  * 0.5,0.5 means the center, etc. Values below 0 and above 1 will be
  * returned if the point is outside the rectangle.
  *
- * @param p The point.
- * @param rCenter The rectangle's center.
- * @param rSize The rectangle's size.
- * @return
+ * @param point The point.
+ * @param rect The rectangle.
+ * @return The position.
  */
-Point getPointPosRatioInRectangle(
-    const Point& p, const Point& rCenter, const Point& rSize
-) {
-    Point localP = p - rCenter;
-    localP += rSize / 2.0f;
-    return localP / rSize;
+Point getPointPosRatioInRectangle(const Point& point, const Rect& rect) {
+    Point localP = point - rect.center;
+    localP += rect.size / 2.0f;
+    return localP / rect.size;
 }
 
 
@@ -1296,8 +1274,12 @@ Point getPointPosRatioInRectangle(
  * @param lp2 Ending point of the line segment.
  * @return The sign.
  */
-float getPointSign(const Point& p, const Point& lp1, const Point& lp2) {
-    return (p.x - lp2.x) * (lp1.y - lp2.y) - (lp1.x - lp2.x) * (p.y - lp2.y);
+float getPointSign(
+    const Point& point, const Point& lineSegPoint1, const Point& lineSegPoint2
+) {
+    return
+        (point.x - lineSegPoint2.x) * (lineSegPoint1.y - lineSegPoint2.y) -
+        (lineSegPoint1.x - lineSegPoint2.x) * (point.y - lineSegPoint2.y);
 }
 
 
@@ -1457,52 +1439,54 @@ Point getRatioPointInRing(
  * translation, scale, and/or rotation transformations, and places it
  * in the specified point structs.
  *
- * @param center Center point of the rectangle.
- * @param dimensions The rectangle's width and height.
- * @param angle Angle of rotation.
- * @param minCoords The top-left coordinates are returned here.
- * @param maxCoords The bottom-right coordinates are returned here.
+ * @param rect The rectangle.
+ * @param angle Angle of the rectangle's rotation.
+ * @return The corners' coordinates.
  */
-void getTransformedRectangleBBox(
-    const Point& center, const Point& dimensions, float angle,
-    Point* minCoords, Point* maxCoords
-) {
-
-    if(!minCoords || !maxCoords) return;
+RectCorners getTransformedRectangleBBox(const Rect& rect, float angle) {
     bool gotMinX = false;
     bool gotMaxX = false;
     bool gotMinY = false;
     bool gotMaxY = false;
+    RectCorners result;
     
     for(unsigned char p = 0; p < 4; p++) {
         Point corner, finalCorner;
         
-        if(p == 0 || p == 1) corner.x = center.x - (dimensions.x * 0.5f);
-        else                 corner.x = center.x + (dimensions.x * 0.5f);
-        if(p == 0 || p == 2) corner.y = center.y - (dimensions.y * 0.5f);
-        else                 corner.y = center.y + (dimensions.y * 0.5f);
+        if(p == 0 || p == 1) {
+            corner.x = rect.center.x - (rect.size.x * 0.5f);
+        } else {
+            corner.x = rect.center.x + (rect.size.x * 0.5f);
+        }
+        if(p == 0 || p == 2) {
+            corner.y = rect.center.y - (rect.size.y * 0.5f);
+        } else {
+            corner.y = rect.center.y + (rect.size.y * 0.5f);
+        }
         
-        corner -= center;
+        corner -= rect.center;
         finalCorner = rotatePoint(corner, angle);
-        finalCorner += center;
+        finalCorner += rect.center;
         
-        if(finalCorner.x < minCoords->x || !gotMinX) {
-            minCoords->x = finalCorner.x;
+        if(finalCorner.x < result.tl.x || !gotMinX) {
+            result.tl.x = finalCorner.x;
             gotMinX = true;
         }
-        if(finalCorner.y < minCoords->y || !gotMinY) {
-            minCoords->y = finalCorner.y;
+        if(finalCorner.y < result.tl.y || !gotMinY) {
+            result.tl.y = finalCorner.y;
             gotMinY = true;
         }
-        if(finalCorner.x > maxCoords->x || !gotMaxX) {
-            maxCoords->x = finalCorner.x;
+        if(finalCorner.x > result.br.x || !gotMaxX) {
+            result.br.x = finalCorner.x;
             gotMaxX = true;
         }
-        if(finalCorner.y > maxCoords->y || !gotMaxY) {
-            maxCoords->y = finalCorner.y;
+        if(finalCorner.y > result.br.y || !gotMaxY) {
+            result.br.y = finalCorner.y;
             gotMaxY = true;
         }
     }
+    
+    return result;
 }
 
 
@@ -1606,20 +1590,17 @@ Point interpolatePoint(
 
 
 /**
- * @brief Returns whether a point is inside a triangle or not.
+ * @brief Returns whether a point is inside a rectangle or not.
  *
  * @param p The point to check.
- * @param rectCenter Center coordinates of the rectangle.
- * @param rectSize Width and height of the rectangle.
+ * @param rect The rectangle.
  * @return Whether it is inside.
  */
-bool isPointInRectangle(
-    const Point& p, const Point& rectCenter, const Point& rectSize
-) {
-    if(p.x < rectCenter.x - rectSize.x / 2.0f) return false;
-    if(p.x > rectCenter.x + rectSize.x / 2.0f) return false;
-    if(p.y < rectCenter.y - rectSize.y / 2.0f) return false;
-    if(p.y > rectCenter.y + rectSize.y / 2.0f) return false;
+bool isPointInRectangle(const Point& point, const Rect& rect) {
+    if(point.x < rect.center.x - rect.size.x / 2.0f) return false;
+    if(point.x > rect.center.x + rect.size.x / 2.0f) return false;
+    if(point.y < rect.center.y - rect.size.y / 2.0f) return false;
+    if(point.y > rect.center.y + rect.size.y / 2.0f) return false;
     return true;
 }
 
@@ -1627,31 +1608,30 @@ bool isPointInRectangle(
 /**
  * @brief Returns whether a point is inside a triangle or not.
  *
- * @param p The point to check.
- * @param tp1 First point of the triangle.
- * @param tp2 Second point of the triangle.
- * @param tp3 Third point of the triangle.
- * @param loq If true, use a "less or equal" comparison.
+ * @param point The point to check.
+ * @param triPoint1 First point of the triangle.
+ * @param triPoint2 Second point of the triangle.
+ * @param triPoint3 Third point of the triangle.
+ * @param lessOrEqualComp If true, use a "less or equal" comparison.
  * Different code requires different precision for on-line cases.
  * Just...don't overthink this, I added this based on what worked and didn't.
  * @return Whether it is inside.
  */
 bool isPointInTriangle(
-    const Point& p, const Point& tp1, const Point& tp2, const Point& tp3,
-    bool loq
+    const Point& point,
+    const Point& triPoint1, const Point& triPoint2, const Point& triPoint3,
+    bool lessOrEqualComp
 ) {
-
     //https://stackoverflow.com/q/2049582
     
     bool b1, b2, b3;
-    
     float f1, f2, f3;
     
-    f1 = getPointSign(p, tp1, tp2);
-    f2 = getPointSign(p, tp2, tp3);
-    f3 = getPointSign(p, tp3, tp1);
+    f1 = getPointSign(point, triPoint1, triPoint2);
+    f2 = getPointSign(point, triPoint2, triPoint3);
+    f3 = getPointSign(point, triPoint3, triPoint1);
     
-    if(loq) {
+    if(lessOrEqualComp) {
         b1 = f1 <= 0.0f;
         b2 = f2 <= 0.0f;
         b3 = f3 <= 0.0f;
@@ -1745,31 +1725,29 @@ bool lineSegIntersectsRectangle(
  *
  * @param lp1 First point of the line segment.
  * @param lp2 Second point of the line segment.
- * @param rectCenter Center point of the rectangle.
- * @param rectDim Width and height of the rectangle.
+ * @param rect Base coordinates of the rectangle.
  * @param rectAngle Angle of the rectangle.
  * @return Whether they intersect.
  */
 bool lineSegIntersectsRotatedRectangle(
-    const Point& lp1, const Point& lp2,
-    const Point& rectCenter, const Point& rectDim, float rectAngle
+    const Point& lineSegPoint1, const Point& lineSegPoint2,
+    const Rect& rect, float rectAngle
 ) {
     //First, transform the coordinates so the rectangle is axis-aligned, and
     //the rectangle's center is at the origin.
-    Point deltaP1 = lp1 - rectCenter;
+    Point deltaP1 = lineSegPoint1 - rect.center;
     deltaP1 = rotatePoint(deltaP1, -rectAngle);
-    Point deltaP2 = lp2 - rectCenter;
+    Point deltaP2 = lineSegPoint2 - rect.center;
     deltaP2 = rotatePoint(deltaP2, -rectAngle);
     
     //Now, check if the line intersects the rectangle.
-    Point halfDim = rectDim / 2.0f;
+    const Point halfSize = rect.size / 2.0f;
+    
     //Right side.
     if(
         lineSegsIntersect(
-            deltaP1,
-            deltaP2,
-            Point(halfDim.x, -halfDim.y),
-            Point(halfDim.x, halfDim.y),
+            deltaP1, deltaP2,
+            Point(halfSize.x, -halfSize.y), Point(halfSize.x, halfSize.y),
             nullptr
         )
     ) {
@@ -1779,10 +1757,8 @@ bool lineSegIntersectsRotatedRectangle(
     //Top side.
     if(
         lineSegsIntersect(
-            deltaP1,
-            deltaP2,
-            Point(-halfDim.x, -halfDim.y),
-            Point(halfDim.x, -halfDim.y),
+            deltaP1, deltaP2,
+            Point(-halfSize.x, -halfSize.y), Point(halfSize.x, -halfSize.y),
             nullptr
         )
     ) {
@@ -1792,10 +1768,8 @@ bool lineSegIntersectsRotatedRectangle(
     //Left side.
     if(
         lineSegsIntersect(
-            deltaP1,
-            deltaP2,
-            Point(-halfDim.x, -halfDim.y),
-            Point(-halfDim.x, halfDim.y),
+            deltaP1, deltaP2,
+            Point(-halfSize.x, -halfSize.y), Point(-halfSize.x, halfSize.y),
             nullptr
         )
     ) {
@@ -1805,10 +1779,8 @@ bool lineSegIntersectsRotatedRectangle(
     //Bottom side.
     if(
         lineSegsIntersect(
-            deltaP1,
-            deltaP2,
-            Point(-halfDim.x, halfDim.y),
-            Point(halfDim.x, halfDim.y),
+            deltaP1, deltaP2,
+            Point(-halfSize.x, halfSize.y), Point(halfSize.x, halfSize.y),
             nullptr
         )
     ) {
@@ -2128,20 +2100,17 @@ float radToDeg(float rad) {
 /**
  * @brief Checks if two rectangles are colliding.
  *
- * @param tl1 Coordinates of the first box's top-left.
- * @param br1 Coordinates of the first box's bottom-right.
- * @param tl2 Coordinates of the second box's top-left.
- * @param br2 Coordinates of the second box's bottom-right.
+ * @param corners1 Corners of the first box.
+ * @param corners2 Corners of the second box.
  * @return Whether they intersect.
  */
 bool rectanglesIntersect(
-    const Point& tl1, const Point& br1,
-    const Point& tl2, const Point& br2
+    const RectCorners& corners1, const RectCorners& corners2
 ) {
-    if(tl1.x > br2.x) return false;
-    if(br1.x < tl2.x) return false;
-    if(tl1.y > br2.y) return false;
-    if(br1.y < tl2.y) return false;
+    if(corners1.tl.x > corners2.br.x) return false;
+    if(corners1.br.x < corners2.tl.x) return false;
+    if(corners1.tl.y > corners2.br.y) return false;
+    if(corners1.br.y < corners2.tl.y) return false;
     return true;
 }
 
@@ -2150,11 +2119,9 @@ bool rectanglesIntersect(
  * @brief Returns whether a rotated rectangle is touching another rotated
  * rectangle or not. This includes being completely inside the rectangle.
  *
- * @param rect1 Center coordinates of the first rectangle.
- * @param rectDim1 Dimensions of the first rectangle.
+ * @param rect1 Coordinates of the first rectangle.
  * @param rectAngle1 Angle the first rectangle is facing.
- * @param rect2 Center coordinates of the second rectangle.
- * @param rectDim2 Dimensions of the second rectangle.
+ * @param rect2 Coordinates of the second rectangle.
  * @param rectAngle2 Angle the second rectangle is facing.
  * @param outOverlapDist If not nullptr, the amount of overlap is
  * returned here.
@@ -2163,26 +2130,29 @@ bool rectanglesIntersect(
  * @return Whether they intersect.
  */
 bool rectanglesIntersect(
-    const Point& rect1, const Point& rectDim1, float rectAngle1,
-    const Point& rect2, const Point& rectDim2, float rectAngle2,
+    const Rect& rect1, float rect1Angle,
+    const Rect& rect2, float rect2Angle,
     float* outOverlapDist, float* outOverlapAngle
 ) {
     //Start by getting the vertexes of the rectangles.
-    Point tl, br;
-    centerAndSizeToCorners(Point(), rectDim1, &tl, &br);
+    RectCorners corners = rectToRectCorners(Rect(Point(), rect1.size));
     vector<Point> rect1Vertexes {
-        rotatePoint(tl, rectAngle1) + rect1,
-        rotatePoint(Point(tl.x, br.y), rectAngle1) + rect1,
-        rotatePoint(br, rectAngle1) + rect1,
-        rotatePoint(Point(br.x, tl.y), rectAngle1) + rect1
+        rotatePoint(corners.tl, rect1Angle) + rect1.center,
+        rotatePoint(Point(corners.tl.x, corners.br.y), rect1Angle) +
+        rect1.center,
+        rotatePoint(corners.br, rect1Angle) + rect1.center,
+        rotatePoint(Point(corners.br.x, corners.tl.y), rect1Angle) +
+        rect1.center
     };
     
-    centerAndSizeToCorners(Point(), rectDim2, &tl, &br);
+    corners = rectToRectCorners(Rect(Point(), rect2.size));
     vector<Point> rect2Vertexes {
-        rotatePoint(tl, rectAngle2) + rect2,
-        rotatePoint(Point(tl.x, br.y), rectAngle2) + rect2,
-        rotatePoint(br, rectAngle2) + rect2,
-        rotatePoint(Point(br.x, tl.y), rectAngle2) + rect2
+        rotatePoint(corners.tl, rect2Angle) + rect2.center,
+        rotatePoint(Point(corners.tl.x, corners.br.y), rect2Angle) +
+        rect2.center,
+        rotatePoint(corners.br, rect2Angle) + rect2.center,
+        rotatePoint(Point(corners.br.x, corners.tl.y), rect2Angle) +
+        rect2.center
     };
     
     //Code from https://www.youtube.com/watch?v=SUyG3aV
@@ -2236,7 +2206,7 @@ bool rectanglesIntersect(
     minOverlap /= Distance(Point(0.0f), normal).toFloat();
     
     //Ensure the normal is facing outwards.
-    Point dir = rect2 - rect1;
+    Point dir = rect2.center - rect1.center;
     if(dotProduct(dir, normal) > 0) {
         normal *= -1;
     }
@@ -2249,6 +2219,38 @@ bool rectanglesIntersect(
     }
     
     return true;
+}
+
+
+/**
+ * @brief Converts coordinates of a rectangle's top-left and bottom-right
+ * corners into coordinates of its center and size.
+ *
+ * @param corners The corners' coordinates.
+ * @return The center and size coordinates.
+ */
+Rect rectCornersToRect(const RectCorners& corners) {
+    return
+        Rect(
+            (corners.tl + corners.br) / 2.0f,
+            corners.br - corners.tl
+        );
+}
+
+
+/**
+ * @brief Converts coordinates of a rectangle's center and size into
+ * coordinates of its top-left and bottom-right corners.
+ *
+ * @param rect Center and size coordinates.
+ * @return The corners' coordinates.
+ */
+RectCorners rectToRectCorners(const Rect& rect) {
+    return
+        RectCorners(
+            rect.center - rect.size / 2.0f,
+            rect.center + rect.size / 2.0f
+        );
 }
 
 
@@ -2424,6 +2426,22 @@ void updateMinMaxCoords(
 ) {
     updateMinCoords(minCoords, newCoords);
     updateMaxCoords(maxCoords, newCoords);
+}
+
+
+/**
+ * @brief Given new coordinates, updates the minimum coordinates record
+ * and maximum coordinates record, if the new coordinates are a new
+ * minimum or maximum in either axis. Each axis is processed separately.
+ *
+ * @param cornerCoords Minimum and maximum coordinates so far.
+ * @param newCoords New coordinates to process and, if necessary, update with.
+ */
+void updateMinMaxCoords(
+    RectCorners& cornerCoords, const Point& newCoords
+) {
+    updateMinCoords(cornerCoords.tl, newCoords);
+    updateMaxCoords(cornerCoords.br, newCoords);
 }
 
 

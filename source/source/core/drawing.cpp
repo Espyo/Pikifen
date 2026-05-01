@@ -173,7 +173,6 @@ void drawBackgroundLogos(
 void drawBitmapWithEffects(
     ALLEGRO_BITMAP* bmp, const BitmapEffect& effects
 ) {
-
     Point bmpSize = getBitmapDimensions(bmp);
     float scaleX =
         (effects.tf.scale.x == LARGE_FLOAT) ?

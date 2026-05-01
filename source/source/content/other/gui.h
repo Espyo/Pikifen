@@ -178,11 +178,8 @@ struct GuiItemDef {
     //Its internal name.
     string name;
     
-    //Center coordinates.
-    Point center;
-    
-    //Width and height.
-    Point size;
+    //Coordinates.
+    Rect rect;
     
     //Optional description. Shows up in the GUI editor.
     string description;
@@ -312,11 +309,8 @@ public:
     //What GUI manager it belongs to, if any.
     GuiManager* manager = nullptr;
     
-    //Its raw on-window position, in window ratio (or parent ratio).
-    Point ratioCenter;
-    
-    //Its raw width and height, in window ratio (or parent ratio).
-    Point ratioSize;
+    //Its raw coordinate data, in window ratio (or parent ratio).
+    Rect ratioRect;
     
     //Is it currently visible?
     bool visible = true;
@@ -840,17 +834,11 @@ protected:
     //Focus cursor.
     struct FocusCursor {
     
-        //Current center coordinates.
-        Point curPos;
+        //Current center coordinates, and base width and height.
+        Rect curRect;
         
-        //Current base width and height.
-        Point curSize;
-        
-        //Intended center coordinates.
-        Point intendedPos;
-        
-        //Intended base width and height.
-        Point intendedSize;
+        //Intended center coordinates, and base width and height.
+        Rect intendedRect;
         
         //Current base alpha [0 - 1].
         float alpha = 0.0f;

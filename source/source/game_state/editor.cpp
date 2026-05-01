@@ -181,31 +181,24 @@ void Editor::angleVisualizer(float angle) {
  * point isn't exactly on the top-left of the window,
  * where it's hard to see.
  *
- * @param minCoords Top-left coordinates of the content to focus on.
- * @param maxCoords Bottom-right coordinates of the content to focus on.
+ * @param corners Corner coordinates of the content to focus on.
  * @param instantaneous If true, the camera moves there instantaneously.
  * If false, it smoothly gets there over time.
  */
-void Editor::centerCamera(
-    const Point& minCoords, const Point& maxCoords,
-    bool instantaneous
-) {
-    Point minC = minCoords;
-    Point maxC = maxCoords;
-    if(minC == maxC) {
-        minC = minC - 2.0;
-        maxC = maxC + 2.0;
+void Editor::centerCamera(const RectCorners& corners, bool instantaneous) {
+    RectCorners finalCorners = corners;
+    if(finalCorners.tl == finalCorners.br) {
+        finalCorners.tl -= 2.0f;
+        finalCorners.br += 2.0f;
     }
     
-    float width = maxC.x - minC.x;
-    float height = maxC.y - minC.y;
-    
-    game.editorsView.cam.targetPos.x = floor(minC.x + width  / 2);
-    game.editorsView.cam.targetPos.y = floor(minC.y + height / 2);
+    Point size = finalCorners.br - finalCorners.tl;
+    game.editorsView.cam.targetPos.x = floor(finalCorners.tl.x + size.x / 2.0f);
+    game.editorsView.cam.targetPos.y = floor(finalCorners.tl.y + size.y / 2.0f);
     
     float z;
-    if(width > height) z = game.editorsView.size.x / width;
-    else z = game.editorsView.size.y / height;
+    if(size.x > size.y) z = game.editorsView.windowRect.size.x / size.x;
+    else z = game.editorsView.windowRect.size.y / size.y;
     z -= z * 0.1;
     
     game.editorsView.cam.targetZoom = z;
@@ -286,7 +279,7 @@ void Editor::doLogicPre() {
     }
     
     game.editorsView.cam.tick(game.deltaT);
-    game.editorsView.updateBox();
+    game.editorsView.updateWorldCorners();
     
     opErrorFlashTimer.tick(game.deltaT);
     
@@ -307,22 +300,19 @@ void Editor::drawGrid(
     float interval,
     const ALLEGRO_COLOR& majorColor, const ALLEGRO_COLOR& minorColor
 ) {
-    Point canvasTL = game.editorsView.getTopLeft();
-    Point canvasBR = game.editorsView.getBottomRight();
-    
-    Point camTLCorner = canvasTL;
-    Point camBRCorner = canvasBR;
+    RectCorners canvasCorners = game.editorsView.getWindowCorners();
+    RectCorners cameraCorners = canvasCorners;
     al_transform_coordinates(
         &game.editorsView.windowToWorldTransform,
-        &camTLCorner.x, &camTLCorner.y
+        &cameraCorners.tl.x, &cameraCorners.tl.y
     );
     al_transform_coordinates(
         &game.editorsView.windowToWorldTransform,
-        &camBRCorner.x, &camBRCorner.y
+        &cameraCorners.br.x, &cameraCorners.br.y
     );
     
-    float x = floor(camTLCorner.x / interval) * interval;
-    while(x < camBRCorner.x + interval) {
+    float x = floor(cameraCorners.tl.x / interval) * interval;
+    while(x < cameraCorners.br.x + interval) {
         ALLEGRO_COLOR c = minorColor;
         bool drawLine = true;
         
@@ -339,16 +329,16 @@ void Editor::drawGrid(
         
         if(drawLine) {
             al_draw_line(
-                x, camTLCorner.y,
-                x, camBRCorner.y + interval,
+                x, cameraCorners.tl.y,
+                x, cameraCorners.br.y + interval,
                 c, 1.0f / game.editorsView.cam.zoom
             );
         }
         x += interval;
     }
     
-    float y = floor(camTLCorner.y / interval) * interval;
-    while(y < camBRCorner.y + interval) {
+    float y = floor(cameraCorners.tl.y / interval) * interval;
+    while(y < cameraCorners.br.y + interval) {
         ALLEGRO_COLOR c = minorColor;
         bool drawLine = true;
         
@@ -365,8 +355,8 @@ void Editor::drawGrid(
         
         if(drawLine) {
             al_draw_line(
-                camTLCorner.x, y,
-                camBRCorner.x + interval, y,
+                cameraCorners.tl.x, y,
+                cameraCorners.br.x + interval, y,
                 c, 1.0f / game.editorsView.cam.zoom
             );
         }
@@ -738,7 +728,10 @@ bool Editor::getSelectionTransformationWidgetParams(
         canChangeAngle = true;
     } else {
         //Shared transformation method.
-        selCtrl.getTotalBBox(&selectionCenter, &selectionSize);
+        Rect r;
+        selCtrl.getTotalBBox(&r);
+        selectionCenter = r.center;
+        selectionSize = r.size;
         canChangeAngle = selCtrl.allowSelectionRotation;
     }
     
@@ -1339,7 +1332,7 @@ bool Editor::handleSelectionAndTransformationLmbDrag(
             if(twHandled) {
                 if(onPreTransform) onPreTransform();
                 selCtrl.applyTransformation(
-                    selectionCenter, selectionSize, selectionAngle
+                    Rect(selectionCenter, selectionSize), selectionAngle
                 );
                 return true;
             }
@@ -2456,14 +2449,16 @@ void Editor::processGuiCanvas() {
     ImVec2 itemTL = ImGui::GetItemRectMin();
     
     Point curTL(itemTL.x, itemTL.y);
-    Point curSize(itemSize.x, itemSize.y);
-    Point curCenter = curTL + curSize / 2.0f;
+    Rect curRect(
+        curTL + Point(itemSize.x, itemSize.y) / 2.0f,
+        Point(itemSize.x, itemSize.y)
+    );
     if(
-        curCenter != game.editorsView.center ||
-        curSize != game.editorsView.size
+        curRect.center != game.editorsView.windowRect.center ||
+        curRect.size != game.editorsView.windowRect.size
     ) {
-        game.editorsView.center = curCenter;
-        game.editorsView.size = curSize;
+        game.editorsView.windowRect.center = curRect.center;
+        game.editorsView.windowRect.size = curRect.size;
         game.editorsView.updateTransformations();
     }
 }
@@ -4494,35 +4489,33 @@ void Editor::Command::run(float inputValue) {
 void Editor::Dialog::process() {
     if(!isOpen) return;
     
-    Point size = customSize;
+    Rect rect(customPos, customSize);
     if(customSize.x == -1.0f && customSize.y == -1.0f) {
-        size.x = game.winW * 0.8;
-        size.y = game.winH * 0.8;
+        rect.size.x = game.winW * 0.8;
+        rect.size.y = game.winH * 0.8;
     }
-    Point pos = customPos;
     if(customPos.x == -1.0f && customPos.y == -1.0f) {
-        pos.x = game.winW / 2.0f;
-        pos.y = game.winH / 2.0f;
+        rect.center.x = game.winW / 2.0f;
+        rect.center.y = game.winH / 2.0f;
     }
-    Point tl, br;
-    centerAndSizeToCorners(pos, size, &tl, &br);
-    if(tl.x < 0.0f) {
-        pos.x -= tl.x;
+    RectCorners corners = rectToRectCorners(rect);
+    if(corners.tl.x < 0.0f) {
+        rect.center.x -= corners.tl.x;
     }
-    if(br.x > game.winW) {
-        pos.x -= br.x - game.winW;
+    if(corners.br.x > game.winW) {
+        rect.center.x -= corners.br.x - game.winW;
     }
-    if(tl.y < 0.0f) {
-        pos.y -= tl.y;
+    if(corners.tl.y < 0.0f) {
+        rect.center.y -= corners.tl.y;
     }
-    if(br.y > game.winH) {
-        pos.y -= br.y - game.winH;
+    if(corners.br.y > game.winH) {
+        rect.center.y -= corners.br.y - game.winH;
     }
     ImGui::SetNextWindowPos(
-        ImVec2(pos.x, pos.y),
+        ImVec2(rect.center.x, rect.center.y),
         ImGuiCond_Always, ImVec2(0.5f, 0.5f)
     );
-    ImGui::SetNextWindowSize(ImVec2(size.x, size.y), ImGuiCond_Once);
+    ImGui::SetNextWindowSize(ImVec2(rect.size.x, rect.size.y), ImGuiCond_Once);
     ImGui::OpenPopup((title + "##dialog").c_str());
     
     if(
@@ -5071,39 +5064,33 @@ bool Editor::SelectionManager::applyDragMove(const Point& offset) {
  * @brief Applies a transformation the user performed on the geometry of
  * the selected items.
  *
- * @param newCenter The new selection center.
- * @param newSize The new selection size.
+ * @param newBorderRect The new selection rectangle.
  * @param newAngle The new selection angle, if applicable.
  * @return Whether it was able to apply.
  */
 bool Editor::SelectionController::applyTransformation(
-    const Point& newCenter, const Point& newSize, float newAngle
+    const Rect& newBorderRect, float newAngle
 ) {
     if(!enabled) return false;
     if(state != STATE_TW_TRANSFORMING) return false;
-    
-    Point preTransTL;
-    centerAndSizeToCorners(preOpSelCenter, preOpSelSize, &preTransTL, nullptr);
     
     if(shouldDoSingleRotatingItem()) {
         //Single rotating item method.
         forIdx(m, managers) {
             if(managers[m]->getCount() != 1) continue;
             managers[m]->applyDirectTransformation(
-                newCenter, newSize, newAngle
+                newBorderRect, newAngle
             );
         }
     } else {
         //Shared transformation method.
         forIdx(m, managers) {
-            Point mNewCenter, mNewSize;
-            managers[m]->calculateSelectionPortion(
-                preOpSelCenter, preOpSelSize,
-                newCenter, newSize,
-                &mNewCenter, &mNewSize
-            );
+            Rect mgrNewBorderRect =
+                managers[m]->calculateSelectionPortion(
+                    preOpBorderSel, newBorderRect
+                );
             managers[m]->applySharedTransformation(
-                mNewCenter, mNewSize, newAngle
+                mgrNewBorderRect, newAngle
             );
         }
     }
@@ -5245,24 +5232,27 @@ void Editor::SelectionController::draw(
     if(!enabled) return;
     if(state == STATE_RUBBER_BAND) {
         //Setup.
-        Point rBTL(
-            std::min(preOpCursorPos.x, cursorPos.x),
-            std::min(preOpCursorPos.y, cursorPos.y)
-        );
-        Point rBBR(
-            std::max(preOpCursorPos.x, cursorPos.x),
-            std::max(preOpCursorPos.y, cursorPos.y)
+        RectCorners corners(
+            Point(
+                std::min(preOpCursorPos.x, cursorPos.x),
+                std::min(preOpCursorPos.y, cursorPos.y)
+            ),
+            Point(
+                std::max(preOpCursorPos.x, cursorPos.x),
+                std::max(preOpCursorPos.y, cursorPos.y)
+            )
         );
         
         //Interior.
         al_draw_filled_rectangle(
-            rBTL.x, rBTL.y, rBBR.x, rBBR.y,
+            corners.tl.x, corners.tl.y, corners.br.x, corners.br.y,
             multAlpha(EDITOR::SELECTION_EFFECT_BASE_COLOR, 0.20f)
         );
         
         //Marching ants outline.
         ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[4];
-        const float smallestRSide = std::min(rBBR.x - rBTL.x, rBBR.y - rBTL.y);
+        const float smallestRSide =
+            std::min(corners.br.x - corners.tl.x, corners.br.y - corners.tl.y);
         const float thickness =
             std::min(
                 smallestRSide,
@@ -5340,29 +5330,29 @@ void Editor::SelectionController::draw(
         
         //Top line (shifted left).
         drawRBLine(
-            Point(rBTL.x, rBTL.y + thickness / 2.0f),
-            Point(rBBR.x - thickness, rBTL.y + thickness / 2.0f),
+            Point(corners.tl.x, corners.tl.y + thickness / 2.0f),
+            Point(corners.br.x - thickness, corners.tl.y + thickness / 2.0f),
             DIR_RIGHT
         );
         
         //Right line (shifted up).
         drawRBLine(
-            Point(rBBR.x - thickness / 2.0f, rBTL.y),
-            Point(rBBR.x - thickness / 2.0f, rBBR.y - thickness),
+            Point(corners.br.x - thickness / 2.0f, corners.tl.y),
+            Point(corners.br.x - thickness / 2.0f, corners.br.y - thickness),
             DIR_DOWN
         );
         
         //Bottom line (shifted right).
         drawRBLine(
-            Point(rBBR.x, rBBR.y - thickness / 2.0f),
-            Point(rBTL.x + thickness, rBBR.y - thickness / 2.0f),
+            Point(corners.br.x, corners.br.y - thickness / 2.0f),
+            Point(corners.tl.x + thickness, corners.br.y - thickness / 2.0f),
             DIR_LEFT
         );
         
         //Left line (shifted down).
         drawRBLine(
-            Point(rBTL.x + thickness / 2.0f, rBBR.y),
-            Point(rBTL.x + thickness / 2.0f, rBTL.y + thickness),
+            Point(corners.tl.x + thickness / 2.0f, corners.br.y),
+            Point(corners.tl.x + thickness / 2.0f, corners.tl.y + thickness),
             DIR_UP
         );
     }
@@ -5401,53 +5391,36 @@ Point Editor::SelectionController::getPreOpPivotItemPos() const {
 /**
  * @brief Returns the total bounding box of every manager's selected items.
  *
- * @param outCenter The center is returned here.
- * @param outSize The size is returned here.
- * @param outCentersOnlyCenter If not nullptr, the center of the box that
+ * @param outBorderRect The box that delimits everything
+ * is returned here.
+ * @param outCoreRect If not nullptr, the box that
  * delimits the centers only is returned here.
- * @param outCentersOnlySize If not nullptr, the size of the box that delimits
- * the centers only is returned here.
  * @return Whether there are any selected items.
  */
 bool Editor::SelectionController::getTotalBBox(
-    Point* outCenter, Point* outSize,
-    Point* outCentersOnlyCenter, Point* outCentersOnlySize
+    Rect* outBorderRect, Rect* outCoreRect
 ) const {
-    Point totalCenter, totalSize;
-    Point centersOnlyTotalCenter, centersOnlyTotalSize;
+    Rect totalBorderRect, totalCoreRect;
     bool hasFirst = false;
     
     forIdx(m, managers) {
-        Point mCenter, mSize;
-        Point mCOCenter, mCOSize;
+        Rect mgrBorderRect, mgrCoreRect;
         bool hasItems =
-            managers[m]->getBBox(&mCenter, &mSize, &mCOCenter, &mCOSize);
+            managers[m]->getBBox(&mgrBorderRect, &mgrCoreRect);
         if(!hasItems) continue;
         
         if(!hasFirst) {
-            totalCenter = mCenter;
-            totalSize = mSize;
-            centersOnlyTotalCenter = mCOCenter;
-            centersOnlyTotalSize = mCOSize;
+            totalBorderRect = mgrBorderRect;
+            totalCoreRect = mgrCoreRect;
             hasFirst = true;
         } else {
-            combineBBoxes(
-                totalCenter, totalSize,
-                mCenter, mSize,
-                &totalCenter, &totalSize
-            );
-            combineBBoxes(
-                centersOnlyTotalCenter, centersOnlyTotalSize,
-                mCOCenter, mCOSize,
-                &centersOnlyTotalCenter, &centersOnlyTotalSize
-            );
+            totalBorderRect = combineBBoxes(totalBorderRect, mgrBorderRect);
+            totalCoreRect = combineBBoxes(totalCoreRect, mgrCoreRect);
         }
     }
     
-    *outCenter = totalCenter;
-    *outSize = totalSize;
-    if(outCentersOnlyCenter) *outCentersOnlyCenter = centersOnlyTotalCenter;
-    if(outCentersOnlySize) *outCentersOnlySize = centersOnlyTotalSize;
+    *outBorderRect = totalBorderRect;
+    if(outCoreRect) *outCoreRect = totalCoreRect;
     
     return false;
 }
@@ -5681,10 +5654,7 @@ bool Editor::SelectionController::startTransforming() {
     bool wasIdle = state == STATE_IDLING;
     state = STATE_TW_TRANSFORMING;
     
-    getTotalBBox(
-        &preOpSelCenter, &preOpSelSize,
-        &preOpCentersOnlySelCenter, &preOpCentersOnlySelSize
-    );
+    getTotalBBox(&preOpBorderSel, &preOpCoreSel);
     
     forIdx(m, managers) {
         managers[m]->startOperation();
@@ -5771,17 +5741,17 @@ bool Editor::SelectionController::updateRubberBand(
     if(!enabled) return false;
     if(state != STATE_RUBBER_BAND) return false;
     
-    Point rubberBandTL =
+    RectCorners rubberBandCorners(
         Point(
             std::min(preOpCursorPos.x, cursorPos.x),
             std::min(preOpCursorPos.y, cursorPos.y)
-        );
-    Point rubberBandBR =
+        ),
         Point(
             std::max(preOpCursorPos.x, cursorPos.x),
             std::max(preOpCursorPos.y, cursorPos.y)
-        );
-        
+        )
+    );
+    
     forIdx(m, managers) {
         set<size_t> newSelectedItems;
         
@@ -5791,24 +5761,25 @@ bool Editor::SelectionController::updateRubberBand(
             Point iCenter, iSize;
             float iAngle;
             managers[m]->getItemInfo(i, &iCenter, &iSize, &iAngle);
-            Point iTL, iBR;
+            RectCorners iCorners;
             
             if(
                 managers[m]->itemsCanRotate &&
                 managers[m]->itemsAreRectangular
             ) {
-                getTransformedRectangleBBox(
-                    iCenter, iSize, iAngle, &iTL, &iBR
-                );
+                iCorners =
+                    getTransformedRectangleBBox(
+                        Rect(iCenter, iSize), iAngle
+                    );
             } else {
-                centerAndSizeToCorners(iCenter, iSize, &iTL, &iBR);
+                iCorners = rectToRectCorners(Rect(iCenter, iSize));
             }
             
             if(
-                iTL.x >= rubberBandTL.x &&
-                iTL.y >= rubberBandTL.y &&
-                iBR.x <= rubberBandBR.x &&
-                iBR.y <= rubberBandBR.y
+                iCorners.tl.x >= rubberBandCorners.tl.x &&
+                iCorners.tl.y >= rubberBandCorners.tl.y &&
+                iCorners.br.x <= rubberBandCorners.br.x &&
+                iCorners.br.y <= rubberBandCorners.br.y
             ) {
                 newSelectedItems.insert(i);
             }
@@ -5863,21 +5834,21 @@ bool Editor::SelectionManager::addAll(size_t totalAmount) {
  * @brief Applies a transformation the user performed on the geometry of
  * the selected item directly.
  *
- * @param newCenter The new selection center.
- * @param newSize The new selection size.
+ * @param newBorderRect The new selection rectangle.
  * @param newAngle The new selection angle.
  * @return Whether it was able to apply.
  */
 bool Editor::SelectionManager::applyDirectTransformation(
-    const Point& newCenter, const Point& newSize, float newAngle
+    const Rect& newBorderRect, float newAngle
 ) {
     if(!enabled) return false;
-    if(preOpSelSize.x <= 0.0f || preOpSelSize.y <= 0.0f) return false;
+    if(preOpBorderSel.size.x <= 0.0f) return false;
+    if(preOpBorderSel.size.y <= 0.0f) return false;
     if(!onGetInfo || !onSetInfo) return false;
     
     const set<size_t>& list = selectedItems.getItemIdxs();
     for(size_t i : list) {
-        onSetInfo(i, newCenter, newSize, newAngle);
+        onSetInfo(i, newBorderRect.center, newBorderRect.size, newAngle);
     }
     
     return true;
@@ -5892,29 +5863,30 @@ bool Editor::SelectionManager::applyDirectTransformation(
  * the selection in the same transformation, or rotating items with a non-zero
  * size.
  *
- * @param newCenter The new selection center.
- * @param newSize The new selection size.
+ * @param newBorderRect The new selection rectangle.
  * @param newAngle The new selection angle, if applicable.
  * @return Whether it was able to apply.
  */
 bool Editor::SelectionManager::applySharedTransformation(
-    const Point& newCenter, const Point& newSize, float newAngle
+    const Rect& newBorderRect, float newAngle
 ) {
+    //Setup.
     if(!enabled) return false;
-    if(preOpSelSize.x <= 0.0f || preOpSelSize.y <= 0.0f) return false;
+    if(preOpBorderSel.size.x <= 0.0f) return false;
+    if(preOpBorderSel.size.y <= 0.0f) return false;
     if(!onGetInfo || !onSetInfo) return false;
     
-    Point preTransTL = preOpSelCenter - preOpSelSize / 2.0f;
-    Point preTransCentersOnlyTL =
-        preOpCentersOnlySelCenter - preOpCentersOnlySelSize / 2.0f;
-        
-    Point centersOnlyOffset = preTransCentersOnlyTL - preTransTL;
-    Point newTL = newCenter - newSize / 2.0f;
-    Point newCentersOnlyTL = newTL + centersOnlyOffset;
-    Point newCentersOnlySize =
-        newSize - (preOpSelSize - preOpCentersOnlySelSize);
-    newCentersOnlySize.x = std::max(0.0f, newCentersOnlySize.x);
-    newCentersOnlySize.y = std::max(0.0f, newCentersOnlySize.y);
+    RectCorners preOpBorderCorners = rectToRectCorners(preOpBorderSel);
+    RectCorners newBorderCorners = rectToRectCorners(newBorderRect);
+    
+    //Calculate the centers-only box's data.
+    RectCorners preOpCoreCorners = rectToRectCorners(preOpCoreSel);
+    Point coreOffset = preOpCoreCorners.tl - preOpBorderCorners.tl;
+    Point newCoreTL = newBorderCorners.tl + coreOffset;
+    Point newCoreSize =
+        newBorderRect.size - (preOpBorderSel.size - preOpCoreSel.size);
+    newCoreSize.x = std::max(0.0f, newCoreSize.x);
+    newCoreSize.y = std::max(0.0f, newCoreSize.y);
     
     const set<size_t>& list = selectedItems.getItemIdxs();
     for(size_t i : list) {
@@ -5924,50 +5896,52 @@ bool Editor::SelectionManager::applySharedTransformation(
         
         if(newAngle != 0.0f) {
             //Rotate the item about the center.
-            Point oldRelCoords = preOpItemCenters[i] - preOpSelCenter;
+            Point oldRelCoords = preOpItemCenters[i] - preOpBorderSel.center;
             float oldAngle, oldMagnitude;
             coordinatesToAngle(oldRelCoords, &oldAngle, &oldMagnitude);
             iCenter =
                 angleToCoordinates(oldAngle + newAngle, oldMagnitude);
-            iCenter += preOpSelCenter;
+            iCenter += preOpBorderSel.center;
             
         } else if(itemsCanResize) {
             //Position and resize the item according to the new shape.
             Point preTransCenterRatio =
-                (preOpItemCenters[i] - preTransTL) / preOpSelSize;
+                (preOpItemCenters[i] - preOpBorderCorners.tl) /
+                preOpBorderSel.size;
             Point preTransSizeRatio =
-                preOpItemSizes[i] / preOpSelSize;
-            iCenter = newTL + preTransCenterRatio * newSize;
-            iSize = preTransSizeRatio * newSize;
+                preOpItemSizes[i] / preOpBorderSel.size;
+            iCenter =
+                newBorderCorners.tl + preTransCenterRatio * newBorderRect.size;
+            iSize = preTransSizeRatio * newBorderRect.size;
             
         } else {
             if(list.size() == 1) {
                 //If there's only one item and it can't be resized, just move
                 //it. Pretty simple scenario.
-                iCenter = newCenter;
+                iCenter = newBorderRect.center;
                 
             } else {
                 //Position the item based on the "centers-only" bounding
                 //box. Keep its size.
-                if(preOpCentersOnlySelSize.x > 0.0f) {
+                if(preOpCoreSel.size.x > 0.0f) {
                     float preTransCenterRatioX =
-                        (preOpItemCenters[i].x - preTransCentersOnlyTL.x) /
-                        preOpCentersOnlySelSize.x;
+                        (preOpItemCenters[i].x - preOpCoreCorners.tl.x) /
+                        preOpCoreSel.size.x;
                     iCenter.x =
-                        newCentersOnlyTL.x +
-                        preTransCenterRatioX * newCentersOnlySize.x;
+                        newCoreTL.x +
+                        preTransCenterRatioX * newCoreSize.x;
                 } else {
-                    iCenter.x = newCenter.x;
+                    iCenter.x = newBorderRect.center.x;
                 }
-                if(preOpCentersOnlySelSize.y > 0.0f) {
+                if(preOpCoreSel.size.y > 0.0f) {
                     float preTransCenterRatioY =
-                        (preOpItemCenters[i].y - preTransCentersOnlyTL.y) /
-                        preOpCentersOnlySelSize.y;
+                        (preOpItemCenters[i].y - preOpCoreCorners.tl.y) /
+                        preOpCoreSel.size.y;
                     iCenter.y =
-                        newCentersOnlyTL.y +
-                        preTransCenterRatioY * newCentersOnlySize.y;
+                        newCoreTL.y +
+                        preTransCenterRatioY * newCoreSize.y;
                 } else {
-                    iCenter.y = newCenter.y;
+                    iCenter.y = newBorderRect.center.y;
                 }
                 
             }
@@ -6032,57 +6006,45 @@ bool Editor::SelectionManager::enable() {
 
 
 /**
- * @brief Returns the center point and size of the bounding box of the
- * selected items.
+ * @brief Returns the bounding box of the selected items.
  *
- * @param outCenter The center of the box is returned here.
- * @param outSize The dimensions of the box are returned here.
- * @param outCentersOnlyCenter If not nullptr, the center of the box that
+ * @param outBorderRect The rectangle that delimits everything is returned here.
+ * @param outCoreRect If not nullptr, the rectangle that
  * delimits the centers only is returned here.
- * @param outCentersOnlySize If not nullptr, the size of the box that delimits
- * the centers only is returned here.
  * @return Whether there are any selected items.
  */
 bool Editor::SelectionManager::getBBox(
-    Point* outCenter, Point* outSize,
-    Point* outCentersOnlyCenter, Point* outCentersOnlySize
+    Rect* outBorderRect, Rect* outCoreRect
 ) const {
-    *outCenter = Point();
-    *outSize = Point();
+    *outBorderRect = Rect();
     if(!selectedItems.hasAny()) return false;
     
-    Point minCoords(FLT_MAX);
-    Point maxCoords(-FLT_MAX);
-    Point centersOnlyMinCoords(FLT_MAX);
-    Point centersOnlyMaxCoords(-FLT_MAX);
+    RectCorners borderCorners = RectCorners::readyForSearch;
+    RectCorners coreCorners = RectCorners::readyForSearch;
     const set<size_t>& list = selectedItems.getItemIdxs();
     
     for(size_t i : list) {
         Point iCenter, iSize;
         float iAngle;
         getItemInfo(i, &iCenter, &iSize, &iAngle);
-        Point iTL, iBR;
+        RectCorners iCorners;
         
         if(itemsCanRotate && itemsAreRectangular) {
-            getTransformedRectangleBBox(
-                iCenter, iSize, iAngle, &iTL, &iBR
-            );
+            iCorners =
+                getTransformedRectangleBBox(
+                    Rect(iCenter, iSize), iAngle
+                );
         } else {
-            centerAndSizeToCorners(iCenter, iSize, &iTL, &iBR);
+            iCorners = rectToRectCorners(Rect(iCenter, iSize));
         }
         
-        updateMinCoords(minCoords, iTL);
-        updateMaxCoords(maxCoords, iBR);
-        updateMinMaxCoords(
-            centersOnlyMinCoords, centersOnlyMaxCoords, iCenter
-        );
+        updateMinCoords(borderCorners.tl, iCorners.tl);
+        updateMaxCoords(borderCorners.br, iCorners.br);
+        updateMinMaxCoords(coreCorners, iCenter);
     }
     
-    cornersToCenterAndSize(minCoords, maxCoords, outCenter, outSize);
-    cornersToCenterAndSize(
-        centersOnlyMinCoords, centersOnlyMaxCoords,
-        outCentersOnlyCenter, outCentersOnlySize
-    );
+    *outBorderRect = rectCornersToRect(borderCorners);
+    *outCoreRect = rectCornersToRect(coreCorners);
     
     return true;
 }
@@ -6104,34 +6066,27 @@ size_t Editor::SelectionManager::getCount() const {
  * which portion of the larger box's new dimensions apply to this manager,
  * such that proportions are kept.
  *
- * @param largerPreTransCenter The larger bounding box's pre-transformation
- * center.
- * @param largerPreTransSize The larger bounding box's pre-transformation
- * size.
- * @param largerNewCenter The larger bounding box's new center.
- * @param largerNewSize The larger bounding box's new size.
- * @param outPortionedNewCenter The manager's portion's new center.
- * @param outPortionedNewSize The manager's portion's new size.
+ * @param largerPreTransRect The larger bounding box's pre-transformation
+ * rectangle.
+ * @param largerNewRect The larger bounding box's new rectangle.
+ * @return The manager's portion's new rectangle.
  */
-void Editor::SelectionManager::calculateSelectionPortion(
-    const Point& largerPreTransCenter, const Point& largerPreTransSize,
-    const Point& largerNewCenter, const Point& largerNewSize,
-    Point* outPortionedNewCenter, Point* outPortionedNewSize
+Rect Editor::SelectionManager::calculateSelectionPortion(
+    const Rect& largerPreTransRect, const Rect& largerNewRect
 ) const {
+    Rect portion;
+    
     //The size is pretty easy.
-    Point sizeRatio = preOpSelSize / largerPreTransSize;
-    *outPortionedNewSize = largerNewSize * sizeRatio;
+    Point sizeRatio = preOpBorderSel.size / largerPreTransRect.size;
+    portion.size = largerNewRect.size * sizeRatio;
     
     //For the center, let's use corners instead.
     Point posRatio =
-        getPointPosRatioInRectangle(
-            preOpSelCenter, largerPreTransCenter, largerPreTransSize
-        );
-    Point largerNewTL;
-    centerAndSizeToCorners(
-        largerNewCenter, largerNewSize, &largerNewTL, nullptr
-    );
-    *outPortionedNewCenter = largerNewTL + largerNewSize * posRatio;
+        getPointPosRatioInRectangle(preOpBorderSel.center, largerPreTransRect);
+    RectCorners largerNewCorners = rectToRectCorners(largerNewRect);
+    portion.center = largerNewCorners.tl + largerNewRect.size * posRatio;
+    
+    return portion;
 }
 
 
@@ -6161,10 +6116,13 @@ vector<size_t> Editor::SelectionManager::getItemsUnderCursor(
             if(itemsAreRectangular) {
                 if(itemsCanRotate) {
                     getClosestPointInRotatedRectangle(
-                        cursorPos, iCenter, iSize, iAngle, &isInside
+                        cursorPos, Rect(iCenter, iSize), iAngle, &isInside
                     );
                 } else {
-                    isInside = isPointInRectangle(cursorPos, iCenter, iSize);
+                    isInside =
+                        isPointInRectangle(
+                            cursorPos, Rect(iCenter, iSize)
+                        );
                 }
             } else {
                 isInside = (Distance(cursorPos, iCenter) <= iSize.x / 2.0f);
@@ -6378,10 +6336,7 @@ bool Editor::SelectionManager::startOperation() {
         preOpItemSizes[i] = iSize;
     }
     
-    getBBox(
-        &preOpSelCenter, &preOpSelSize,
-        &preOpCentersOnlySelCenter, &preOpCentersOnlySelSize
-    );
+    getBBox(&preOpBorderSel, &preOpCoreSel);
     
     return true;
 }

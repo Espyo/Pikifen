@@ -5248,8 +5248,8 @@ void AreaEditor::processGuiPanelReview() {
         //Show cross-section checkbox.
         if(ImGui::Checkbox("Show cross-section", &showCrossSection)) {
             if(showCrossSection) {
-                crossSectionWindowStart = game.editorsView.getTopLeft();
-                crossSectionWindowEnd = game.editorsView.size / 2.0f;
+                crossSectionWindowStart = game.editorsView.getWindowCorners().tl;
+                crossSectionWindowEnd = game.editorsView.windowRect.size / 2.0f;
                 crossSectionZWindowStart =
                     Point(
                         crossSectionWindowEnd.x,
@@ -5894,7 +5894,7 @@ void AreaEditor::processGuiPanelTools() {
         setTooltip("Full path:\n" + referenceFilePath);
         
         //Reference center value.
-        ImGui::DragFloat2("Center", (float*) &referenceCenter);
+        ImGui::DragFloat2("Center", (float*) &referenceRect.center);
         setTooltip(
             "Center coordinates.",
             "", WIDGET_EXPLANATION_DRAG
@@ -5902,7 +5902,7 @@ void AreaEditor::processGuiPanelTools() {
         
         //Reference size value.
         processGuiWidgetsSize(
-            "Size", referenceSize, 1.0f,
+            "Size", referenceRect.size, 1.0f,
             referenceKeepAspectRatio, false,
             AREA_EDITOR::REFERENCE_MIN_SIZE
         );

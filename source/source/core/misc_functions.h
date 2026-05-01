@@ -215,7 +215,7 @@ void transitionGuis(
 );
 string unescapeString(const string& s);
 void updateOffsetEffectBuffer(
-    const Point& camTL, const Point& camBR,
+    const RectCorners& camera,
     const vector<EdgeOffsetCache>& caches, ALLEGRO_BITMAP* buffer,
     bool clearFirst, const Viewport& view
 );

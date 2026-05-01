@@ -61,8 +61,8 @@ void AreaMenu::addNewBullet(ListGuiItem* list, const string& text) {
         new BulletGuiItem(
         text, game.sysContent.fntStandard, COLOR_WHITE
     );
-    bullet->ratioCenter = Point(0.50f, bulletCenterY);
-    bullet->ratioSize = Point(0.96f, BULLET_HEIGHT);
+    bullet->ratioRect.center = Point(0.50f, bulletCenterY);
+    bullet->ratioRect.size = Point(0.96f, BULLET_HEIGHT);
     list->addChild(bullet);
     gui.addItem(bullet);
 }
@@ -318,7 +318,7 @@ void AreaMenu::initGuiBriefingPage() {
  */
 void AreaMenu::initGuiInfoPage() {
     const ALLEGRO_COLOR RECORD_DATE_COLOR = al_map_rgb(128, 128, 128);
-
+    
     DataNode* guiFile =
         &game.content.guiDefs.list[AREA_MENU::INFO_GUI_FILE_NAME];
     gui.registerCoords("name",         36,  6, 68,  8);
@@ -537,12 +537,12 @@ void AreaMenu::initGuiMain() {
             //Area button.
             ButtonGuiItem* areaButton =
                 new ButtonGuiItem(areaPtr->name, game.sysContent.fntStandard);
-            areaButton->ratioCenter =
+            areaButton->ratioRect.center =
                 Point(
                     areaType == AREA_TYPE_MISSION ? 0.40f : 0.50f,
                     centerY
                 );
-            areaButton->ratioSize =
+            areaButton->ratioRect.size =
                 Point(
                     areaType == AREA_TYPE_MISSION ? 0.80f : 1.00f,
                     BUTTON_HEIGHT
@@ -569,9 +569,9 @@ void AreaMenu::initGuiMain() {
             if(areaType == AREA_TYPE_MISSION) {
                 //Medal item.
                 GuiItem* medalItem = new GuiItem();
-                medalItem->ratioCenter =
+                medalItem->ratioRect.center =
                     Point(0.92f, centerY);
-                medalItem->ratioSize =
+                medalItem->ratioRect.size =
                     Point(0.15f, BUTTON_HEIGHT * 0.80f);
                 medalItem->onDraw =
                 [this, areaPtr, a] (const DrawInfo & draw) {
@@ -741,7 +741,7 @@ void AreaMenu::load() {
             MissionRecord record;
             bool ported;
             loadAreaMissionRecord(&missionRecords, areaPtr, record, &ported);
-
+            
             if(ported) {
                 string missionRecordEntryName =
                     getMissionRecordEntryName(areaPtr);

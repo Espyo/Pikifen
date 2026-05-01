@@ -2110,7 +2110,7 @@ Distance Mob::getDistanceBetween(
         Point hotspot =
             getClosestPointInRotatedRectangle(
                 pos,
-                m2Ptr->pos, m2Ptr->rectangularDim,
+                Rect(m2Ptr->pos, m2Ptr->rectangularDim),
                 m2Ptr->angle,
                 &isInside
             );
@@ -2868,9 +2868,8 @@ void Mob::handleStatusEffectLoss(StatusType* staType) {
 bool Mob::hasClearLine(const Mob* targetMob) const {
     //First, get a bounding box of the line to check.
     //This will help with performance later.
-    Point bbTL = pos;
-    Point bbBR = pos;
-    updateMinMaxCoords(bbTL, bbBR, targetMob->pos);
+    RectCorners bBox(pos, pos);
+    updateMinMaxCoords(bBox, targetMob->pos);
     
     const float selfMaxZ = z + height;
     const float targetMobMaxZ = targetMob->z + targetMob->height;
@@ -2902,9 +2901,11 @@ bool Mob::hasClearLine(const Mob* targetMob) const {
         }
         if(
             !rectanglesIntersect(
-                bbTL, bbBR,
-                mPtr->pos - mPtr->physicalSpan,
-                mPtr->pos + mPtr->physicalSpan
+                bBox,
+                RectCorners(
+                    mPtr->pos - mPtr->physicalSpan,
+                    mPtr->pos + mPtr->physicalSpan
+                )
             )
         ) {
             continue;
@@ -2914,7 +2915,7 @@ bool Mob::hasClearLine(const Mob* targetMob) const {
             if(
                 lineSegIntersectsRotatedRectangle(
                     pos, targetMob->pos,
-                    mPtr->pos, mPtr->rectangularDim, mPtr->angle
+                    Rect(mPtr->pos, mPtr->rectangularDim), mPtr->angle
                 )
             ) {
                 return false;
@@ -3036,7 +3037,7 @@ bool Mob::isOffCamera(const Viewport& viewport) const {
     }
     
     float radiusToUse = std::max(spriteBound, collisionBound);
-    return !bBoxCheck(viewport.box[0], viewport.box[1], pos, radiusToUse);
+    return !bBoxCheck(viewport.worldCorners, pos, radiusToUse);
 }
 
 

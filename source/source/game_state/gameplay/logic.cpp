@@ -296,15 +296,18 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         
         Point groupCenter = player->leaderPtr->pos;
         if(!player->leaderPtr->group->members.empty()) {
-            Point tl = player->leaderPtr->group->members[0]->pos;
-            Point br = tl;
+            RectCorners groupBBox(
+                player->leaderPtr->group->members[0]->pos,
+                player->leaderPtr->group->members[0]->pos
+            );
             for(
                 size_t m = 1; m < player->leaderPtr->group->members.size(); m++
             ) {
                 Mob* member = player->leaderPtr->group->members[m];
-                updateMinMaxCoords(tl, br, member->pos);
+                updateMinMaxCoords(groupBBox, member->pos);
             }
-            cornersToCenterAndSize(tl, br, &groupCenter, nullptr);
+            Rect groupRect = rectCornersToRect(groupBBox);
+            groupCenter = groupRect.center;
             groupWeight = 0.1f;
             
             Distance groupDist(player->leaderPtr->pos, groupCenter);
@@ -743,10 +746,12 @@ void GameplayState::doGameplayLogic(float deltaT) {
         
         player.view.cam.tick(deltaT);
         player.view.updateTransformations();
-        player.view.updateBox();
+        player.view.updateWorldCorners();
         game.audio.setCameraPos(
-            player.view.box[0] + player.view.boxMargin,
-            player.view.box[1] - player.view.boxMargin
+            RectCorners(
+                player.view.worldCorners.tl + player.view.boxMargin,
+                player.view.worldCorners.br - player.view.boxMargin
+            )
         );
     }
     
@@ -1070,7 +1075,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
                 AreaRegion* rPtr = game.curArea->regions[r];
                 bool isInside;
                 getClosestPointInRotatedRectangle(
-                    lPtr->pos, rPtr->pose.pos, rPtr->pose.size,
+                    lPtr->pos, Rect(rPtr->pose.pos, rPtr->pose.size),
                     rPtr->pose.angle, &isInside
                 );
                 if(isInside) {
@@ -1566,25 +1571,20 @@ bool GameplayState::isPaused() const {
 /**
  * @brief Marks all area cells in a given region as active.
  *
- * @param topLeft Top-left coordinates (in world coordinates)
- * of the region.
- * @param bottomRight Bottom-right coordinates (in world coordinates)
- * of the region.
+ * @param corners Corners (in world coordinates) of the region.
  */
-void GameplayState::markAreaCellsActive(
-    const Point& topLeft, const Point& bottomRight
-) {
+void GameplayState::markAreaCellsActive(const RectCorners& corners) {
     int fromX =
-        (topLeft.x - game.curArea->bmap.topLeftCorner.x) /
+        (corners.tl.x - game.curArea->bmap.topLeftCorner.x) /
         GEOMETRY::AREA_CELL_SIZE;
     int toX =
-        (bottomRight.x - game.curArea->bmap.topLeftCorner.x) /
+        (corners.br.x - game.curArea->bmap.topLeftCorner.x) /
         GEOMETRY::AREA_CELL_SIZE;
     int fromY =
-        (topLeft.y - game.curArea->bmap.topLeftCorner.y) /
+        (corners.tl.y - game.curArea->bmap.topLeftCorner.y) /
         GEOMETRY::AREA_CELL_SIZE;
     int toY =
-        (bottomRight.y - game.curArea->bmap.topLeftCorner.y) /
+        (corners.br.y - game.curArea->bmap.topLeftCorner.y) /
         GEOMETRY::AREA_CELL_SIZE;
         
     markAreaCellsActive(fromX, toX, fromY, toY);
@@ -2044,8 +2044,10 @@ void GameplayState::processMobTouches(
                 //Rectangle vs rectangle.
                 xyCollision =
                     rectanglesIntersect(
-                        mPtr->pos, mPtr->rectangularDim, mPtr->angle,
-                        m2Ptr->pos, m2Ptr->rectangularDim, m2Ptr->angle,
+                        Rect(mPtr->pos, mPtr->rectangularDim),
+                        mPtr->angle,
+                        Rect(m2Ptr->pos, m2Ptr->rectangularDim),
+                        m2Ptr->angle,
                         &tempPushAmount, &tempPushAngle
                     );
             } else if(mPtr->rectangularDim.x != 0) {
@@ -2157,8 +2159,8 @@ void GameplayState::processMobTouches(
             //Rectangle vs rectangle.
             xyCollision =
                 rectanglesIntersect(
-                    mPtr->pos, mPtr->rectangularDim, mPtr->angle,
-                    m2Ptr->pos, m2Ptr->rectangularDim, m2Ptr->angle
+                    Rect(mPtr->pos, mPtr->rectangularDim), mPtr->angle,
+                    Rect(m2Ptr->pos, m2Ptr->rectangularDim), m2Ptr->angle
                 );
         } else if(mPtr->rectangularDim.x != 0) {
             //Rectangle vs circle.
@@ -2475,21 +2477,25 @@ void GameplayState::updateAreaActiveCells() {
     //Mark the 3x3 region around Pikmin and leaders as active.
     forIdx(p, mobs.pikmin) {
         markAreaCellsActive(
-            mobs.pikmin[p]->pos - GEOMETRY::AREA_CELL_SIZE,
-            mobs.pikmin[p]->pos + GEOMETRY::AREA_CELL_SIZE
+            RectCorners(
+                mobs.pikmin[p]->pos - GEOMETRY::AREA_CELL_SIZE,
+                mobs.pikmin[p]->pos + GEOMETRY::AREA_CELL_SIZE
+            )
         );
     }
     
     forIdx(l, mobs.leaders) {
         markAreaCellsActive(
-            mobs.leaders[l]->pos - GEOMETRY::AREA_CELL_SIZE,
-            mobs.leaders[l]->pos + GEOMETRY::AREA_CELL_SIZE
+            RectCorners(
+                mobs.leaders[l]->pos - GEOMETRY::AREA_CELL_SIZE,
+                mobs.leaders[l]->pos + GEOMETRY::AREA_CELL_SIZE
+            )
         );
     }
     
     //Mark the region in-camera (plus padding) as active.
     for(Player& player : players) {
-        markAreaCellsActive(player.view.box[0], player.view.box[1]);
+        markAreaCellsActive(player.view.worldCorners);
     }
 }
 

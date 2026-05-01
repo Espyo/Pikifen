@@ -412,23 +412,22 @@ void Leader::dismissLogic() {
         baseAngle = player->swarmAngle;
     } else {
         //Leftmost member coordinate, rightmost, etc.
-        Point minCoords, maxCoords;
+        RectCorners groupBBox;
         
         forIdx(m, group->members) {
             Mob* memberPtr = group->members[m];
             
-            if(memberPtr->pos.x < minCoords.x || m == 0)
-                minCoords.x = memberPtr->pos.x;
-            if(memberPtr->pos.x > maxCoords.x || m == 0)
-                maxCoords.x = memberPtr->pos.x;
-            if(memberPtr->pos.y < minCoords.y || m == 0)
-                minCoords.y = memberPtr->pos.y;
-            if(memberPtr->pos.y > maxCoords.y || m == 0)
-                maxCoords.y = memberPtr->pos.y;
+            if(memberPtr->pos.x < groupBBox.tl.x || m == 0)
+                groupBBox.tl.x = memberPtr->pos.x;
+            if(memberPtr->pos.x > groupBBox.br.x || m == 0)
+                groupBBox.br.x = memberPtr->pos.x;
+            if(memberPtr->pos.y < groupBBox.tl.y || m == 0)
+                groupBBox.tl.y = memberPtr->pos.y;
+            if(memberPtr->pos.y > groupBBox.br.y || m == 0)
+                groupBBox.br.y = memberPtr->pos.y;
         }
         
-        Point groupCenter;
-        cornersToCenterAndSize(minCoords, maxCoords, &groupCenter, nullptr);
+        Point groupCenter = rectCornersToRect(groupBBox).center;
         baseAngle = getAngle(pos, groupCenter);
     }
     
@@ -923,7 +922,7 @@ void Leader::getGroupSpotInfo(
 
 /**
  * @brief Returns whether the leader has any opponent Pikmin latched onto them.
- * 
+ *
  * @return Whether it has any.
  */
 bool Leader::hasOpponentPikminLatched() const {
@@ -1203,7 +1202,7 @@ void Leader::swapHeldPikmin(Mob* newPik) {
         oldPik->scriptVM.fsm.getEvent(FSM_EV_RELEASED);
     FsmEventDef* newPikEv =
         newPik->scriptVM.fsm.getEvent(FSM_EV_GRABBED_BY_FRIEND);
-    
+        
     group->sort(newPik->subgroupTypePtr);
     
     if(!oldPikEv || !newPikEv) return;

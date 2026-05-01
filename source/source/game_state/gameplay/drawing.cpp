@@ -228,8 +228,8 @@ void GameplayState::drawBackground(
     //Not gonna lie, this uses some fancy-shmancy numbers.
     //I mostly got here via trial and error.
     //I apologize if you're trying to understand what it means.
-    int bmpW = bmpOutput ? al_get_bitmap_width(bmpOutput) : view.size.x;
-    int bmpH = bmpOutput ? al_get_bitmap_height(bmpOutput) : view.size.y;
+    int bmpW = bmpOutput ? al_get_bitmap_width(bmpOutput) : view.windowRect.size.x;
+    int bmpH = bmpOutput ? al_get_bitmap_height(bmpOutput) : view.windowRect.size.y;
     float zoomToUse = bmpOutput ? 0.5 : view.cam.zoom;
     Point finalZoom(
         bmpW * 0.5 * game.curArea->bgDist / zoomToUse,
@@ -975,18 +975,16 @@ void GameplayState::drawInGameText(Player* player) {
                     }
                 }
             } else if(mobPtr->rectangularDim.x != 0) {
-                Point tl, br;
-                centerAndSizeToCorners(
-                    Point(), mobPtr->rectangularDim, &tl, &br
-                );
+                RectCorners mobCorners =
+                    rectToRectCorners(Rect(Point(), mobPtr->rectangularDim));
                 vector<Point> rectVertices {
-                    rotatePoint(tl, mobPtr->angle) +
+                    rotatePoint(mobCorners.tl, mobPtr->angle) +
                     mobPtr->pos,
-                    rotatePoint(Point(tl.x, br.y),  mobPtr->angle) +
+                    rotatePoint(Point(mobCorners.tl.x, mobCorners.br.y),  mobPtr->angle) +
                     mobPtr->pos,
-                    rotatePoint(br, mobPtr->angle) +
+                    rotatePoint(mobCorners.br, mobPtr->angle) +
                     mobPtr->pos,
-                    rotatePoint(Point(br.x, tl.y), mobPtr->angle) +
+                    rotatePoint(Point(mobCorners.br.x, mobCorners.tl.y), mobPtr->angle) +
                     mobPtr->pos
                 };
                 float vertices[] {
@@ -1404,41 +1402,39 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
     ALLEGRO_COLOR fogC = game.curArea->weatherCondition.getFogColor();
     if(fogC.a > 0) {
         //Start by drawing the central fog fade out effect.
-        Point fogTL =
-            view.cam.pos -
-            Point(game.curArea->weatherCondition.fogFar);
-        Point fogBR =
-            view.cam.pos +
-            Point(game.curArea->weatherCondition.fogFar);
-        Point fogCenter, fogSize;
-        al_transform_coordinates(
-            &view.worldToWindowTransform, &fogTL.x, &fogTL.y
+        RectCorners fogCorners(
+            view.cam.pos - Point(game.curArea->weatherCondition.fogFar),
+            view.cam.pos + Point(game.curArea->weatherCondition.fogFar)
         );
         al_transform_coordinates(
-            &view.worldToWindowTransform, &fogBR.x, &fogBR.y
+            &view.worldToWindowTransform, &fogCorners.tl.x, &fogCorners.tl.y
         );
-        cornersToCenterAndSize(fogTL, fogBR, &fogCenter, &fogSize);
+        al_transform_coordinates(
+            &view.worldToWindowTransform, &fogCorners.br.x, &fogCorners.br.y
+        );
+        Rect fogRect = rectCornersToRect(fogCorners);
         
         if(bmpFog) {
-            drawBitmap(bmpFog, fogCenter, fogSize, 0, fogC);
+            drawBitmap(bmpFog, fogRect.center, fogRect.size, 0, fogC);
         }
         
         //Now draw the fully opaque fog around the central fade.
         //Top-left and top-center.
         al_draw_filled_rectangle(
-            0, 0, fogBR.x, fogTL.y, fogC
+            0, 0, fogCorners.br.x, fogCorners.tl.y, fogC
         );
         //Top-right and center-right.
         al_draw_filled_rectangle(
-            fogBR.x, 0, view.size.x, fogBR.y, fogC
+            fogCorners.br.x, 0, view.windowRect.size.x, fogCorners.br.y, fogC
         );
         //Bottom-right and bottom-center.
         al_draw_filled_rectangle(
-            fogTL.x, fogBR.y, view.size.x, view.size.y, fogC
+            fogCorners.tl.x, fogCorners.br.y,
+            view.windowRect.size.x, view.windowRect.size.y, fogC
         );
         //Bottom-left and center-left.
         al_draw_filled_rectangle(
-            0, fogTL.y, fogTL.x, view.size.y, fogC
+            0, fogCorners.tl.y, fogCorners.tl.x, view.windowRect.size.y, fogC
         );
         
     }
@@ -1447,7 +1443,7 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
     ALLEGRO_COLOR daylightC =
         game.curArea->weatherCondition.getDaylightColor();
     if(daylightC.a > 0) {
-        al_draw_filled_rectangle(0, 0, view.size.x, view.size.y, daylightC);
+        al_draw_filled_rectangle(0, 0, view.windowRect.size.x, view.windowRect.size.y, daylightC);
     }
     
     //Draw the blackout effect.
@@ -1667,13 +1663,15 @@ void GameplayState::drawThrowPreview(Player* player) {
     set<Edge*> candidateEdges;
     
     game.curArea->bmap.getEdgesInRect(
-        Point(
-            std::min(player->leaderPtr->pos.x, player->throwDest.x),
-            std::min(player->leaderPtr->pos.y, player->throwDest.y)
-        ),
-        Point(
-            std::max(player->leaderPtr->pos.x, player->throwDest.x),
-            std::max(player->leaderPtr->pos.y, player->throwDest.y)
+        RectCorners(
+            Point(
+                std::min(player->leaderPtr->pos.x, player->throwDest.x),
+                std::min(player->leaderPtr->pos.y, player->throwDest.y)
+            ),
+            Point(
+                std::max(player->leaderPtr->pos.x, player->throwDest.x),
+                std::max(player->leaderPtr->pos.y, player->throwDest.y)
+            )
         ),
         candidateEdges
     );
@@ -1899,19 +1897,16 @@ ALLEGRO_BITMAP* GameplayState::drawToBitmap(
     const MakerTools::AreaImageSettings& settings
 ) {
     //First, get the full dimensions of the map.
-    Point minCoords(FLT_MAX, FLT_MAX);
-    Point maxCoords(-FLT_MAX, -FLT_MAX);
+    RectCorners corners = RectCorners::readyForSearch;
     
     forIdx(v, game.curArea->vertexes) {
         Vertex* vPtr = game.curArea->vertexes[v];
-        updateMinMaxCoords(
-            minCoords, maxCoords, v2p(vPtr)
-        );
+        updateMinMaxCoords(corners, v2p(vPtr));
     }
     
     //Figure out the scale that will fit on the image.
-    float areaW = maxCoords.x - minCoords.x + settings.padding;
-    float areaH = maxCoords.y - minCoords.y + settings.padding;
+    float areaW = corners.br.x - corners.tl.x + settings.padding;
+    float areaH = corners.br.y - corners.tl.y + settings.padding;
     float finalBmpW = settings.size;
     float finalBmpH = settings.size;
     float scale;
@@ -1931,8 +1926,8 @@ ALLEGRO_BITMAP* GameplayState::drawToBitmap(
     al_identity_transform(&t);
     al_translate_transform(
         &t,
-        -minCoords.x + settings.padding / 2.0f,
-        -minCoords.y + settings.padding / 2.0f
+        -corners.tl.x + settings.padding / 2.0f,
+        -corners.tl.y + settings.padding / 2.0f
     );
     al_scale_transform(&t, scale, scale);
     
@@ -1981,19 +1976,19 @@ void GameplayState::drawWorldComponents(
     ALLEGRO_BITMAP* customLiquidLimitEffectBuffer = nullptr;
     if(!bmpOutput) {
         updateOffsetEffectBuffer(
-            view.box[0], view.box[1],
+            view.worldCorners,
             game.liquidLimitEffectCaches,
             game.liquidLimitEffectBuffer,
             true, view
         );
         updateOffsetEffectBuffer(
-            view.box[0], view.box[1],
+            view.worldCorners,
             game.wallSmoothingEffectCaches,
             game.wallOffsetEffectBuffer,
             true, view
         );
         updateOffsetEffectBuffer(
-            view.box[0], view.box[1],
+            view.worldCorners,
             game.wallShadowEffectCaches,
             game.wallOffsetEffectBuffer,
             false, view
@@ -2011,19 +2006,19 @@ void GameplayState::drawWorldComponents(
                 al_get_bitmap_height(bmpOutput)
             );
         updateOffsetEffectBuffer(
-            Point(-FLT_MAX), Point(FLT_MAX),
+            RectCorners(Point(-FLT_MAX), Point(FLT_MAX)),
             game.liquidLimitEffectCaches,
             customLiquidLimitEffectBuffer,
             true, view
         );
         updateOffsetEffectBuffer(
-            Point(-FLT_MAX), Point(FLT_MAX),
+            RectCorners(Point(-FLT_MAX), Point(FLT_MAX)),
             game.wallSmoothingEffectCaches,
             customWallOffsetEffectBuffer,
             true, view
         );
         updateOffsetEffectBuffer(
-            Point(-FLT_MAX), Point(FLT_MAX),
+            RectCorners(Point(-FLT_MAX), Point(FLT_MAX)),
             game.wallShadowEffectCaches,
             customWallOffsetEffectBuffer,
             false, view
@@ -2047,10 +2042,7 @@ void GameplayState::drawWorldComponents(
         
         if(
             !bmpOutput &&
-            !rectanglesIntersect(
-                sPtr->bbox[0], sPtr->bbox[1],
-                view.box[0], view.box[1]
-            )
+            !rectanglesIntersect(sPtr->bBox, view.worldCorners)
         ) {
             //Off-camera.
             continue;
@@ -2063,7 +2055,7 @@ void GameplayState::drawWorldComponents(
     }
     
     //Particles.
-    particles.fillComponentList(components, view.box[0], view.box[1]);
+    particles.fillComponentList(components, view.worldCorners);
     
     //Mobs.
     forIdx(m, mobs.all) {

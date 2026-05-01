@@ -87,9 +87,9 @@ void Results::addNewBulletPoint(
         new BulletGuiItem(
         label, game.sysContent.fntStandard, color
     );
-    labelBullet->ratioCenter =
+    labelBullet->ratioRect.center =
         Point(0.50f, centerY);
-    labelBullet->ratioSize =
+    labelBullet->ratioRect.size =
         Point(0.96f, BP_HEIGHT);
     list->addChild(labelBullet);
     gui.addItem(labelBullet);
@@ -99,9 +99,9 @@ void Results::addNewBulletPoint(
         new TextGuiItem(
         value, game.sysContent.fntCounter, color, ALLEGRO_ALIGN_RIGHT
     );
-    valueText->ratioCenter =
+    valueText->ratioRect.center =
         Point(0.75f, centerY);
-    valueText->ratioSize =
+    valueText->ratioRect.size =
         Point(0.44f, BP_HEIGHT);
     list->addChild(valueText);
     gui.addItem(valueText);
@@ -251,9 +251,9 @@ void Results::addNewScoreMarkerBulletPoint(
         new BulletGuiItem(
         label, game.sysContent.fntStandard, color
     );
-    labelBullet->ratioCenter =
+    labelBullet->ratioRect.center =
         Point(0.50f, bPCenterY);
-    labelBullet->ratioSize =
+    labelBullet->ratioRect.size =
         Point(0.96f, bPHeight);
     scoreChartList->addChild(labelBullet);
     gui.addItem(labelBullet);
@@ -263,9 +263,9 @@ void Results::addNewScoreMarkerBulletPoint(
         new TextGuiItem(
         value, game.sysContent.fntCounter, color, ALLEGRO_ALIGN_RIGHT
     );
-    valueText->ratioCenter =
+    valueText->ratioRect.center =
         Point(0.75f, bPCenterY);
-    valueText->ratioSize =
+    valueText->ratioRect.size =
         Point(0.44f, bPHeight);
     scoreChartList->addChild(valueText);
     gui.addItem(valueText);

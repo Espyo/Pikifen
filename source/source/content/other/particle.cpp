@@ -278,10 +278,10 @@ void ParticleGenerator::emit(ParticleManager& manager) {
     bool visible = false;
     forIdx(v, manager.viewports) {
         if(
-            basePPos.x >= manager.viewports[v]->box[0].x &&
-            basePPos.x <= manager.viewports[v]->box[1].x &&
-            basePPos.y >= manager.viewports[v]->box[0].y &&
-            basePPos.y <= manager.viewports[v]->box[1].y
+            basePPos.x >= manager.viewports[v]->worldCorners.tl.x &&
+            basePPos.x <= manager.viewports[v]->worldCorners.br.x &&
+            basePPos.y >= manager.viewports[v]->worldCorners.tl.y &&
+            basePPos.y <= manager.viewports[v]->worldCorners.br.y
         ) {
             visible = true;
             break;
@@ -791,24 +791,20 @@ void ParticleManager::deleteParticle(size_t pos) {
  * so that the particles can be drawn, after being Z-sorted.
  *
  * @param list The list to populate.
- * @param camTL Only draw particles below and to the right of this coordinate.
- * @param camBR Only draw particles above and to the left of this coordinate.
+ * @param camera Only draw particles inside this region, usually the camera.
  */
 void ParticleManager::fillComponentList(
-    vector<WorldComponent>& list,
-    const Point& camTL, const Point& camBR
+    vector<WorldComponent>& list, const RectCorners& camera
 ) {
     for(size_t c = 0; c < count; c++) {
     
         Particle* pPtr = &particles[c];
         float pSize =
             pPtr->size.get((pPtr->duration - pPtr->time) / pPtr->duration);
+        RectCorners pCorners(pPtr->pos - pSize, pPtr->pos + pSize);
         if(
-            camTL != camBR &&
-            !rectanglesIntersect(
-                pPtr->pos - pSize, pPtr->pos + pSize,
-                camTL, camBR
-            )
+            camera.tl != camera.br &&
+            !rectanglesIntersect(pCorners, camera)
         ) {
             //Off-camera.
             continue;

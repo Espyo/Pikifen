@@ -36,23 +36,23 @@ void ParticleEditor::drawCanvas() {
     const ALLEGRO_COLOR BG_COLOR = al_map_rgb(128, 144, 128);
     const ALLEGRO_COLOR OUTER_EMISSION_COLOR = al_map_rgb(100, 240, 100);
     const ALLEGRO_COLOR INNER_EMISSION_COLOR = al_map_rgb(240, 100, 100);
-
-    Point canvasTL = game.editorsView.getTopLeft();
-    Point canvasBR = game.editorsView.getBottomRight();
     
+    RectCorners canvasCorners = game.editorsView.getWindowCorners();
     al_set_clipping_rectangle(
-        canvasTL.x, canvasTL.y, game.editorsView.size.x, game.editorsView.size.y
+        canvasCorners.tl.x, canvasCorners.tl.y,
+        game.editorsView.windowRect.size.x, game.editorsView.windowRect.size.y
     );
     
     //Background.
     if(useBg && bg) {
-        Point textureTL = canvasTL;
-        Point textureBR = canvasBR;
+        RectCorners textureCorners = canvasCorners;
         al_transform_coordinates(
-            &game.editorsView.windowToWorldTransform, &textureTL.x, &textureTL.y
+            &game.editorsView.windowToWorldTransform,
+            &textureCorners.tl.x, &textureCorners.tl.y
         );
         al_transform_coordinates(
-            &game.editorsView.windowToWorldTransform, &textureBR.x, &textureBR.y
+            &game.editorsView.windowToWorldTransform,
+            &textureCorners.br.x, &textureCorners.br.y
         );
         ALLEGRO_VERTEX bgVertexes[4];
         for(size_t v = 0; v < 4; v++) {
@@ -60,25 +60,25 @@ void ParticleEditor::drawCanvas() {
             bgVertexes[v].color = COLOR_WHITE;
         }
         //Top-left vertex.
-        bgVertexes[0].x = canvasTL.x;
-        bgVertexes[0].y = canvasTL.y;
-        bgVertexes[0].u = textureTL.x;
-        bgVertexes[0].v = textureTL.y;
+        bgVertexes[0].x = canvasCorners.tl.x;
+        bgVertexes[0].y = canvasCorners.tl.y;
+        bgVertexes[0].u = textureCorners.tl.x;
+        bgVertexes[0].v = textureCorners.tl.y;
         //Top-right vertex.
-        bgVertexes[1].x = canvasBR.x;
-        bgVertexes[1].y = canvasTL.y;
-        bgVertexes[1].u = textureBR.x;
-        bgVertexes[1].v = textureTL.y;
+        bgVertexes[1].x = canvasCorners.br.x;
+        bgVertexes[1].y = canvasCorners.tl.y;
+        bgVertexes[1].u = textureCorners.br.x;
+        bgVertexes[1].v = textureCorners.tl.y;
         //Bottom-right vertex.
-        bgVertexes[2].x = canvasBR.x;
-        bgVertexes[2].y = canvasBR.y;
-        bgVertexes[2].u = textureBR.x;
-        bgVertexes[2].v = textureBR.y;
+        bgVertexes[2].x = canvasCorners.br.x;
+        bgVertexes[2].y = canvasCorners.br.y;
+        bgVertexes[2].u = textureCorners.br.x;
+        bgVertexes[2].v = textureCorners.br.y;
         //Bottom-left vertex.
-        bgVertexes[3].x = canvasTL.x;
-        bgVertexes[3].y = canvasBR.y;
-        bgVertexes[3].u = textureTL.x;
-        bgVertexes[3].v = textureBR.y;
+        bgVertexes[3].x = canvasCorners.tl.x;
+        bgVertexes[3].y = canvasCorners.br.y;
+        bgVertexes[3].u = textureCorners.tl.x;
+        bgVertexes[3].v = textureCorners.br.y;
         
         al_draw_prim(
             bgVertexes, nullptr, bg,
@@ -93,9 +93,7 @@ void ParticleEditor::drawCanvas() {
     //Particles.
     vector<WorldComponent> components;
     components.reserve(partMgr.getCount());
-    partMgr.fillComponentList(
-        components, game.editorsView.box[0], game.editorsView.box[1]
-    );
+    partMgr.fillComponentList(components, game.editorsView.worldCorners);
     
     forIdx(c, components) {
         components[c].idx = c;
@@ -119,23 +117,22 @@ void ParticleEditor::drawCanvas() {
     
     //Grid.
     if(gridVisible) {
-        Point camTLCorner(0, 0);
-        Point camBRCorner(canvasBR.x, canvasBR.y);
+        RectCorners camCorners(Point(0.0f), canvasCorners.br);
         al_transform_coordinates(
             &game.editorsView.windowToWorldTransform,
-            &camTLCorner.x, &camTLCorner.y
+            &camCorners.tl.x, &camCorners.tl.y
         );
         al_transform_coordinates(
             &game.editorsView.windowToWorldTransform,
-            &camBRCorner.x, &camBRCorner.y
+            &camCorners.br.x, &camCorners.br.y
         );
         
         al_draw_line(
-            0, camTLCorner.y, 0, camBRCorner.y,
+            0, camCorners.tl.y, 0, camCorners.br.y,
             EDITOR::GRID_COLOR_ORIGIN, 1.0f / game.editorsView.cam.zoom
         );
         al_draw_line(
-            camTLCorner.x, 0, camBRCorner.x, 0,
+            camCorners.tl.x, 0, camCorners.br.x, 0,
             EDITOR::GRID_COLOR_ORIGIN, 1.0f / game.editorsView.cam.zoom
         );
     }

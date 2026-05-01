@@ -2186,15 +2186,19 @@ Vertex* AreaEditor::getVertexUnderPoint(const Point& p) const {
         
         if(
             rectanglesIntersect(
-                p - (4 / game.editorsView.cam.zoom),
-                p + (4 / game.editorsView.cam.zoom),
-                Point(
-                    vPtr->x - (4 / game.editorsView.cam.zoom),
-                    vPtr->y - (4 / game.editorsView.cam.zoom)
+                RectCorners(
+                    p - (4.0f / game.editorsView.cam.zoom),
+                    p + (4.0f / game.editorsView.cam.zoom)
                 ),
-                Point(
-                    vPtr->x + (4 / game.editorsView.cam.zoom),
-                    vPtr->y + (4 / game.editorsView.cam.zoom)
+                RectCorners(
+                    Point(
+                        vPtr->x - (4.0f / game.editorsView.cam.zoom),
+                        vPtr->y - (4.0f / game.editorsView.cam.zoom)
+                    ),
+                    Point(
+                        vPtr->x + (4.0f / game.editorsView.cam.zoom),
+                        vPtr->y + (4.0f / game.editorsView.cam.zoom)
+                    )
                 )
             )
         ) {
@@ -2311,11 +2315,11 @@ bool AreaEditor::mergeSectors(Sector* s1, Sector* s2) {
         smallSector = s1;
     } else if(s1) {
         float s1Area =
-            (s1->bbox[1].x - s1->bbox[0].x) *
-            (s1->bbox[1].y - s1->bbox[0].y);
+            (s1->bBox.br.x - s1->bBox.tl.x) *
+            (s1->bBox.br.y - s1->bBox.tl.y);
         float s2Area =
-            (s2->bbox[1].x - s2->bbox[0].x) *
-            (s2->bbox[1].y - s2->bbox[0].y);
+            (s2->bBox.br.x - s2->bBox.tl.x) *
+            (s2->bBox.br.y - s2->bBox.tl.y);
         if(s1Area < s2Area) {
             mainSector = s2;
             smallSector = s1;

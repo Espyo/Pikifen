@@ -590,9 +590,7 @@ private:
     Mob* getPointMobOnLeaderCursor(Player* player) const;
     void handlePlayerAction(const Inpution::Action& action);
     void loadGameContent();
-    void markAreaCellsActive(
-        const Point& top_left, const Point& bottomRight
-    );
+    void markAreaCellsActive(const RectCorners& corners);
     void markAreaCellsActive(
         int fromX, int toX, int fromY, int toY
     );

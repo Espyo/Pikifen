@@ -2553,22 +2553,12 @@ Viewport::Viewport() :
 
 
 /**
- * @brief Returns the bottom-right corner's coordinates, in window coordinates.
+ * @brief Returns the corners' coordinates, in window coordinates.
  *
- * @return The coordinates.
+ * @return The corners.
  */
-Point Viewport::getBottomRight() {
-    return center + size / 2.0f;
-}
-
-
-/**
- * @brief Returns the top-left corner's coordinates, in window coordinates.
- *
- * @return The coordinates.
- */
-Point Viewport::getTopLeft() {
-    return center - size / 2.0f;
+RectCorners Viewport::getWindowCorners() {
+    return rectToRectCorners(windowRect);
 }
 
 
@@ -2576,22 +2566,21 @@ Point Viewport::getTopLeft() {
  * @brief Updates the viewport's visibility box,
  * based on the windowToWorldTransform transformation.
  */
-void Viewport::updateBox() {
-    box[0] = center - size / 2.0f;
-    box[1] = center + size / 2.0f;
+void Viewport::updateWorldCorners() {
+    worldCorners = getWindowCorners();
     al_transform_coordinates(
         &windowToWorldTransform,
-        &box[0].x, &box[0].y
+        &worldCorners.tl.x, &worldCorners.tl.y
     );
     al_transform_coordinates(
         &windowToWorldTransform,
-        &box[1].x, &box[1].y
+        &worldCorners.br.x, &worldCorners.br.y
     );
     
-    box[0].x -= boxMargin.x;
-    box[0].y -= boxMargin.y;
-    box[1].x += boxMargin.x;
-    box[1].y += boxMargin.y;
+    worldCorners.tl.x -= boxMargin.x;
+    worldCorners.tl.y -= boxMargin.y;
+    worldCorners.br.x += boxMargin.x;
+    worldCorners.br.y += boxMargin.y;
 }
 
 
@@ -2624,8 +2613,8 @@ void Viewport::updateTransformations() {
     worldToWindowTransform = game.identityTransform;
     al_translate_transform(
         &worldToWindowTransform,
-        -cam.pos.x + shakeOffset.x +  center.x / cam.zoom,
-        -cam.pos.y + shakeOffset.y + center.y / cam.zoom
+        -cam.pos.x + shakeOffset.x + windowRect.center.x / cam.zoom,
+        -cam.pos.y + shakeOffset.y + windowRect.center.y / cam.zoom
     );
     al_scale_transform(
         &worldToWindowTransform, cam.zoom, cam.zoom

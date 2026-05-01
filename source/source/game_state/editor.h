@@ -366,23 +366,19 @@ protected:
         bool startOperation();
         bool applyDragMove(const Point& cursorPos);
         bool applyDirectTransformation(
-            const Point& newCenter, const Point& newSize, float newAngle
+            const Rect& newBorderRect, float newAngle
         );
         bool applySharedTransformation(
-            const Point& newCenter, const Point& newSize, float newAngle
+            const Rect& newBorderRect, float newAngle
         );
         bool setHomogenized(bool homogenized);
         bool isHomogenized() const;
         
-        void calculateSelectionPortion(
-            const Point& largerPreTransCenter, const Point& largerPreTransSize,
-            const Point& largerNewCenter, const Point& largerNewSize,
-            Point* outPortionedNewCenter, Point* outPortionedNewSize
+        Rect calculateSelectionPortion(
+            const Rect& largerPreTransRect, const Rect& largerNewRect
         ) const;
         bool getBBox(
-            Point* outCenter, Point* outSize,
-            Point* outCentersOnlyCenter = nullptr,
-            Point* outCentersOnlySize = nullptr
+            Rect* outBorderRect, Rect* outCoreRect = nullptr
         ) const;
         vector<size_t> getItemsUnderCursor(const Point& cursorPos) const;
         void getItemInfo(
@@ -411,21 +407,15 @@ protected:
         //Size of each selected item before the latest operation began.
         map<size_t, Point> preOpItemSizes;
         
-        //Center of the entire selection before the latest operation began.
+        //Rectangle of the entire selection before the latest operation began.
         //Cache for performance.
-        Point preOpSelCenter;
+        Rect preOpBorderSel;
         
-        //Size of the entire selection before the latest operation began.
+        //If the operation should apply to centers only (i.e. items
+        //can't resize), this is the rectangle of that selection before
+        //the latest operation began.
         //Cache for performance.
-        Point preOpSelSize;
-        
-        //If the transformation should apply to centers only (i.e. items
-        //can't resize), use this selection center.
-        Point preOpCentersOnlySelCenter;
-        
-        //If the transformation should apply to centers only (i.e. items
-        //can't resize), use this selection size.
-        Point preOpCentersOnlySelSize;
+        Rect preOpCoreSel;
         
     };
     
@@ -493,7 +483,7 @@ protected:
         bool startTransforming();
         bool isTransforming() const;
         bool applyTransformation(
-            const Point& newCenter, const Point& newSize, float newAngle
+            const Rect& newRect, float newAngle
         );
         bool stopTransforming();
         
@@ -510,9 +500,7 @@ protected:
         bool stopDragMove();
         
         bool getTotalBBox(
-            Point* outCenter, Point* outSize,
-            Point* outCentersOnlyCenter = nullptr,
-            Point* outCentersOnlySize = nullptr
+            Rect* outBorderRect, Rect* outCoreRect = nullptr
         ) const;
         void getSingleRotatingItemInfo(
             Point* outCenter, Point* outSize, float* outAngle
@@ -567,21 +555,15 @@ protected:
         //Cursor position when the current operation started.
         Point preOpCursorPos;
         
-        //Center of the entire selection before the latest operation began.
+        //Rectangle of the entire selection before the latest operation began.
         //Cache for performance.
-        Point preOpSelCenter;
-        
-        //Size of the entire selection before the latest operation began.
-        //Cache for performance.
-        Point preOpSelSize;
+        Rect preOpBorderSel;
         
         //If the operation should apply to centers only (i.e. items
-        //can't resize), use this selection center.
-        Point preOpCentersOnlySelCenter;
-        
-        //If the operation should apply to centers only (i.e. items
-        //can't resize), use this selection size.
-        Point preOpCentersOnlySelSize;
+        //can't resize), this is the rectangle of that selection before
+        //the latest operation began.
+        //Cache for performance.
+        Rect preOpCoreSel;
         
         //Position of the pivot item before an operation.
         //i.e. the item closest to the cursor.
@@ -1104,10 +1086,7 @@ protected:
     
     //--- Private function declarations ---
     
-    void centerCamera(
-        const Point& minCoords, const Point& maxCoords,
-        bool instantaneous = false
-    );
+    void centerCamera(const RectCorners& corners, bool instantaneous = false);
     bool clearSelections();
     void closeTopDialog();
     void doLogicPost();

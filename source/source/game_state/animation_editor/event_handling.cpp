@@ -151,7 +151,11 @@ void AnimationEditor::handleKeyDownCanvas(const ALLEGRO_EVENT& ev) {
         restartAnimCmd(1.0f);
         
     } else if(keyCheck(ev.keyboard.keycode, ALLEGRO_KEY_HOME)) {
-        zoomEverythingCmd(1.0f);
+        if(state == EDITOR_STATE_SPRITE_BITMAP) {
+            centerCameraOnSpriteBitmap(false);
+        } else {
+            zoomEverythingCmd(1.0f);
+        }
         
     }
 }
@@ -218,21 +222,20 @@ void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
             if(bmpClickPos.x < 0 || bmpClickPos.y < 0) return;
             if(bmpClickPos.x > bmpSize.x || bmpClickPos.y > bmpSize.y) return;
             
-            Point selectionTL;
-            Point selectionBR;
+            RectCorners selectionCorners;
             if(
                 (
                     curSprite->bmpSize.x == 0 ||
                     curSprite->bmpSize.y == 0
                 ) || !spriteBmpAddMode
             ) {
-                selectionTL = bmpClickPos;
-                selectionBR = bmpClickPos;
+                selectionCorners.tl = bmpClickPos;
+                selectionCorners.br = bmpClickPos;
             } else {
-                selectionTL = curSprite->bmpPos;
-                selectionBR.x =
+                selectionCorners.tl = curSprite->bmpPos;
+                selectionCorners.br.x =
                     curSprite->bmpPos.x + curSprite->bmpSize.x - 1;
-                selectionBR.y =
+                selectionCorners.br.y =
                     curSprite->bmpPos.y + curSprite->bmpSize.y - 1;
             }
             
@@ -260,15 +263,15 @@ void AnimationEditor::handleLmbDown(const ALLEGRO_EVENT& ev) {
                     p = y * bmpSize.x + x;
                     if(!selectionPixels[p]) continue;
                     updateMinMaxCoords(
-                        selectionTL, selectionBR, Point(x, y)
+                        selectionCorners, Point(x, y)
                     );
                 }
             }
             
             delete[] selectionPixels;
             
-            curSprite->bmpPos = selectionTL;
-            curSprite->bmpSize = selectionBR - selectionTL + 1;
+            curSprite->bmpPos = selectionCorners.tl;
+            curSprite->bmpSize = selectionCorners.br - selectionCorners.tl + 1;
             curSprite->setBitmap(
                 curSprite->bmpName, curSprite->bmpPos, curSprite->bmpSize
             );

@@ -38,10 +38,11 @@ void GuiEditor::drawCanvas() {
     const ALLEGRO_COLOR CUSTOM_ITEM_COLOR = al_map_rgb(160, 224, 160);
     const ALLEGRO_COLOR ITEM_NAME_COLOR = al_map_rgb(40, 40, 96);
     
-    Point canvasTL = game.editorsView.getTopLeft();
+    RectCorners canvasCorners = game.editorsView.getWindowCorners();
     
     al_set_clipping_rectangle(
-        canvasTL.x, canvasTL.y, game.editorsView.size.x, game.editorsView.size.y
+        canvasCorners.tl.x, canvasCorners.tl.y,
+        game.editorsView.windowRect.size.x, game.editorsView.windowRect.size.y
     );
     
     //Background.
@@ -107,7 +108,7 @@ void GuiEditor::drawCanvas() {
         //Setup.
         size_t itemIdx = itemIdxMap[drawingSortedItems[i].first];
         GuiItemDef* item = drawingSortedItems[i].first;
-        if(item->size.x == 0.0f) continue;
+        if(item->rect.size.x == 0.0f) continue;
         bool isCustom =
             drawingSortedItems[i].second != GUI::DRAWING_LAYER_NORMAL;
         bool isSelected = itemSelection.contains(itemIdx);
@@ -125,18 +126,18 @@ void GuiEditor::drawCanvas() {
         
         //Draw the item's background.
         drawFilledRoundedRectangle(
-            item->center, item->size,
+            item->rect.center, item->rect.size,
             8.0f / game.editorsView.cam.zoom, changeAlpha(color, 64)
         );
         
         //Draw the item's text.
-        float clipX = item->center.x - item->size.x / 2.0f;
-        float clipY = item->center.y - item->size.y / 2.0f;
+        float clipX = item->rect.center.x - item->rect.size.x / 2.0f;
+        float clipY = item->rect.center.y - item->rect.size.y / 2.0f;
         al_transform_coordinates(
             &game.editorsView.worldToWindowTransform, &clipX, &clipY
         );
-        float clipW = item->size.x * game.editorsView.cam.zoom;
-        float clipH = item->size.y * game.editorsView.cam.zoom;
+        float clipW = item->rect.size.x * game.editorsView.cam.zoom;
+        float clipH = item->rect.size.y * game.editorsView.cam.zoom;
         setCombinedClippingRectangles(
             origClipX, origClipY, origClipW, origClipH,
             clipX, clipY, clipW, clipH
@@ -144,9 +145,9 @@ void GuiEditor::drawCanvas() {
         drawText(
             item->name, game.sysContent.fntBuiltin,
             Point(
-                (item->center.x - item->size.x / 2.0f) +
+                (item->rect.center.x - item->rect.size.x / 2.0f) +
                 (4.0f / game.editorsView.cam.zoom),
-                (item->center.y - item->size.y / 2.0f) +
+                (item->rect.center.y - item->rect.size.y / 2.0f) +
                 (4.0f / game.editorsView.cam.zoom)
             ),
             Point(LARGE_FLOAT, 8.0 / game.editorsView.cam.zoom),
@@ -158,8 +159,7 @@ void GuiEditor::drawCanvas() {
         
         //Draw the item's outline.
         drawRoundedRectangle(
-            item->center,
-            item->size,
+            item->rect.center, item->rect.size,
             8.0f / game.editorsView.cam.zoom,
             color, 2.0f / game.editorsView.cam.zoom
         );

@@ -51,23 +51,22 @@ void Sector::addEdge(Edge* ePtr, size_t eIdx) {
 
 /**
  * @brief Calculates the bounding box coordinates and saves them
- * in the object's bbox variables.
+ * in the object's bBox variables.
  */
 void Sector::calculateBoundingBox() {
     if(edges.empty()) {
         //Unused sector... This shouldn't exist.
-        bbox[0] = Point();
-        bbox[1] = Point();
+        bBox = RectCorners();
         return;
     }
     
-    bbox[0] = v2p(edges[0]->vertexes[0]);
-    bbox[1] = bbox[0];
+    bBox.tl = v2p(edges[0]->vertexes[0]);
+    bBox.br = v2p(edges[0]->vertexes[0]);
     
     forIdx(e, edges) {
         for(unsigned char v = 0; v < 2; v++) {
             Point p = v2p(edges[e]->vertexes[v]);
-            updateMinMaxCoords(bbox[0], bbox[1], p);
+            updateMinMaxCoords(bBox, p);
         }
     }
 }
@@ -331,10 +330,10 @@ Sector* getSector(
             Sector* sPtr = game.curArea->sectors[s];
             
             if(
-                p.x < sPtr->bbox[0].x ||
-                p.x > sPtr->bbox[1].x ||
-                p.y < sPtr->bbox[0].y ||
-                p.y > sPtr->bbox[1].y
+                p.x < sPtr->bBox.tl.x ||
+                p.x > sPtr->bBox.br.x ||
+                p.y < sPtr->bBox.tl.y ||
+                p.y > sPtr->bBox.br.y
             ) {
                 continue;
             }

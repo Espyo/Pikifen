@@ -795,9 +795,9 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
         registerChange("object duplication");
         subState = EDITOR_SUB_STATE_NONE;
         Point hotspot = snapPoint(game.editorsView.mouseCursorWorldPos);
-        Point selectionCenter, selectionSize;
-        mobSelection.getBBox(&selectionCenter, &selectionSize);
-        Point newSelectionCenter = selectionCenter;
+        Rect selectionRect;
+        mobSelection.getBBox(&selectionRect);
+        Point newSelectionCenter = selectionRect.center;
         set<size_t> origSelection = mobSelection.getItemIdxs();
         mobSelection.clear();
         
@@ -1181,8 +1181,8 @@ void AreaEditor::handleLmbDownTools(const ALLEGRO_EVENT& ev) {
     if(referenceBitmap) {
         curTransformationWidget.handleMouseDown(
             game.editorsView.mouseCursorWorldPos,
-            &referenceCenter,
-            &referenceSize,
+            &referenceRect.center,
+            &referenceRect.size,
             nullptr,
             1.0f / game.editorsView.cam.zoom
         );
@@ -1327,8 +1327,8 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
         }
         curTransformationWidget.handleMouseMove(
             game.editorsView.mouseCursorWorldPos,
-            &referenceCenter,
-            &referenceSize,
+            &referenceRect.center,
+            &referenceRect.size,
             nullptr,
             1.0f / game.editorsView.cam.zoom, flags, 0.0f, 5.0f,
         [this] (const Point & p) { return snapPoint(p); }

@@ -71,8 +71,8 @@ GuiEditor::GuiEditor() :
     //Setup the selection manager and controller.
     itemSelection.onGetInfo =
     [this] (size_t idx, Point * outCenter, Point * outSize, float * outAngle) {
-        *outCenter = allItems[idx]->center;
-        *outSize = allItems[idx]->size;
+        *outCenter = allItems[idx]->rect.center;
+        *outSize = allItems[idx]->rect.size;
         *outAngle = 0.0f;
     };
     itemSelection.onSetInfo =
@@ -80,8 +80,8 @@ GuiEditor::GuiEditor() :
             size_t idx, const Point & newCenter,
             const Point & newSize, float newAngle
     ) {
-        allItems[idx]->center = newCenter;
-        allItems[idx]->size = newSize;
+        allItems[idx]->rect.center = newCenter;
+        allItems[idx]->rect.size = newSize;
     };
     itemSelection.onGetTotal =
     [this] () {
@@ -829,7 +829,7 @@ void GuiEditor::renameItem(GuiItemDef* item, const string& newName) {
  * or not.
  */
 void GuiEditor::resetCam(bool instantaneous) {
-    centerCamera(Point(0.0f), Point(100.0f), instantaneous);
+    centerCamera(RectCorners(Point(0.0f), Point(100.0f)), instantaneous);
 }
 
 
@@ -909,10 +909,10 @@ void GuiEditor::selectAllCmd(float inputValue) {
  * @param item Item to change.
  */
 void GuiEditor::setToDefaults(GuiItemDef* item) {
-    item->center.x = 50.0f;
-    item->center.y = 50.0f;
-    item->size.x = 10.0f;
-    item->size.y = 10.0f;
+    item->rect.center.x = 50.0f;
+    item->rect.center.y = 50.0f;
+    item->rect.size.x = 10.0f;
+    item->rect.size.y = 10.0f;
 }
 
 

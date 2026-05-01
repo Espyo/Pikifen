@@ -218,10 +218,8 @@ void AnimationEditor::applyChangesToAllMatchingSprites(
  */
 void AnimationEditor::centerCameraOnSpriteBitmap(bool instant) {
     if(curSprite && curSprite->parentBmp) {
-        Point bmpSize = getBitmapDimensions(curSprite->parentBmp);
-        Point bmpPos = 0.0f - bmpSize / 2.0f;
-        
-        centerCamera(bmpPos, bmpPos + bmpSize);
+        Point spriteSize = getBitmapDimensions(curSprite->parentBmp);
+        centerCamera(RectCorners(spriteSize / (-2.0f), spriteSize / 2.0f));
     } else {
         game.editorsView.cam.targetZoom = 1.0f;
         game.editorsView.cam.targetPos = Point();
@@ -478,10 +476,9 @@ float AnimationEditor::getCursorTimelineTime() {
         return 0.0f;
     }
     
-    Point canvasTL = game.editorsView.getTopLeft();
-    Point canvasBR = game.editorsView.getBottomRight();
-    float animX1 = canvasTL.x + ANIM_EDITOR::TIMELINE_PADDING;
-    float animW = (canvasBR.x - ANIM_EDITOR::TIMELINE_PADDING) - animX1;
+    RectCorners canvasCorners = game.editorsView.getWindowCorners();
+    float animX1 = canvasCorners.tl.x + ANIM_EDITOR::TIMELINE_PADDING;
+    float animW = (canvasCorners.br.x - ANIM_EDITOR::TIMELINE_PADDING) - animX1;
     float mouseX = game.mouseCursor.winPos.x - animX1;
     mouseX = std::clamp(mouseX, 0.0f, animW);
     return curAnimInst.curAnim->getDuration() * (mouseX / animW);
@@ -706,15 +703,14 @@ void AnimationEditor::importSpriteTransformationData(const string& name) {
  * @return Whether the cursor is inside.
  */
 bool AnimationEditor::isCursorInTimeline() {
-    Point canvasTL = game.editorsView.getTopLeft();
-    Point canvasBR = game.editorsView.getBottomRight();
+    RectCorners canvasCorners = game.editorsView.getWindowCorners();
     return
         state == EDITOR_STATE_ANIMATION &&
-        game.mouseCursor.winPos.x >= canvasTL.x &&
-        game.mouseCursor.winPos.x <= canvasBR.x &&
-        game.mouseCursor.winPos.y >= canvasBR.y -
+        game.mouseCursor.winPos.x >= canvasCorners.tl.x &&
+        game.mouseCursor.winPos.x <= canvasCorners.br.x &&
+        game.mouseCursor.winPos.y >= canvasCorners.br.y -
         ANIM_EDITOR::TIMELINE_HEIGHT &&
-        game.mouseCursor.winPos.y <= canvasBR.y;
+        game.mouseCursor.winPos.y <= canvasCorners.br.y;
 }
 
 
@@ -2143,30 +2139,27 @@ void AnimationEditor::zoomEverythingCmd(float inputValue) {
     }
     if(!sPtr || !sPtr->bitmap) return;
     
-    Point cmin, cmax;
-    getTransformedRectangleBBox(
-        sPtr->tf.trans, sPtr->bmpSize * sPtr->tf.scale,
-        sPtr->tf.rot, &cmin, &cmax
-    );
-    
-    if(sPtr->topVisible) {
-        Point topMin, topMax;
+    RectCorners cameraCorners =
         getTransformedRectangleBBox(
-            sPtr->topPose.pos, sPtr->topPose.size,
-            sPtr->topPose.angle,
-            &topMin, &topMax
+            Rect(sPtr->tf.trans, sPtr->bmpSize * sPtr->tf.scale), sPtr->tf.rot
         );
-        updateMinCoords(cmin, topMin);
-        updateMaxCoords(cmax, topMax);
+        
+    if(sPtr->topVisible) {
+        RectCorners topCorners =
+            getTransformedRectangleBBox(
+                Rect(sPtr->topPose.pos, sPtr->topPose.size), sPtr->topPose.angle
+            );
+        updateMinCoords(cameraCorners.tl, topCorners.tl);
+        updateMaxCoords(cameraCorners.br, topCorners.br);
     }
     
     forIdx(h, sPtr->hitboxes) {
         Hitbox* hPtr = &sPtr->hitboxes[h];
-        updateMinCoords(cmin, hPtr->pos - hPtr->radius);
-        updateMaxCoords(cmax, hPtr->pos + hPtr->radius);
+        updateMinCoords(cameraCorners.tl, hPtr->pos - hPtr->radius);
+        updateMaxCoords(cameraCorners.br, hPtr->pos + hPtr->radius);
     }
     
-    centerCamera(cmin, cmax);
+    centerCamera(cameraCorners);
 }
 
 

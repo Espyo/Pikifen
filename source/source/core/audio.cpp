@@ -713,12 +713,10 @@ bool AudioManager::scheduleEmission(size_t sourceId, bool first) {
 /**
  * @brief Sets the camera's position.
  *
- * @param camTL Current coordinates of the camera's top-left corner.
- * @param camBR Current coordinates of the camera's bottom-right corner.
+ * @param camera The camera's corners.
  */
-void AudioManager::setCameraPos(const Point& camTL, const Point& camBR) {
-    this->camTL = camTL;
-    this->camBR = camBR;
+void AudioManager::setCameraPos(const RectCorners& camera) {
+    cameraBBox = camera;
 }
 
 
@@ -1227,12 +1225,10 @@ void AudioManager::updatePlaybackTargetVolAndPan(size_t playbackIdx) {
     if(!isPositional) return;
     
     //Calculate camera things.
-    Point camSize = camBR - camTL;
-    if(camSize.x == 0.0f || camSize.y == 0.0f) return;
-    
-    Point camCenter = (camTL + camBR) / 2.0f;
-    float d = Distance(camCenter, sourcePtr->pos).toFloat();
-    Point delta = sourcePtr->pos - camCenter;
+    Rect cameraRect = rectCornersToRect(cameraBBox);
+    if(cameraRect.size.x == 0.0f || cameraRect.size.y == 0.0f) return;
+    float d = Distance(cameraRect.center, sourcePtr->pos).toFloat();
+    Point delta = sourcePtr->pos - cameraRect.center;
     
     //Set the volume.
     float volume =

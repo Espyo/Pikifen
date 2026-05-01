@@ -129,12 +129,12 @@ void OptionsMenu::addNewBindEntryItems(
             sectionName, game.sysContent.fntAreaName,
             game.config.guiColors.smallHeader
         );
-        sectionText->ratioCenter =
+        sectionText->ratioRect.center =
             Point(
                 0.50f,
                 actionY + OPTIONS_MENU::BIND_BUTTON_HEIGHT / 2.0f
             );
-        sectionText->ratioSize =
+        sectionText->ratioRect.size =
             Point(0.50f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
         bindsListBox->addChild(sectionText);
         bindsGui.addItem(sectionText);
@@ -149,9 +149,9 @@ void OptionsMenu::addNewBindEntryItems(
     //Action type name bullet.
     BulletGuiItem* nameBullet =
         new BulletGuiItem(actionType.name, game.sysContent.fntStandard);
-    nameBullet->ratioCenter =
+    nameBullet->ratioRect.center =
         Point(0.22f, curY);
-    nameBullet->ratioSize =
+    nameBullet->ratioRect.size =
         Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
     nameBullet->onGetTooltip =
     [actionType] () { return actionType.description; };
@@ -162,9 +162,9 @@ void OptionsMenu::addNewBindEntryItems(
     if(!overrideNote.empty()) {
         TextGuiItem* overrideNoteText =
             new TextGuiItem(overrideNote, game.sysContent.fntSlim);
-        overrideNoteText->ratioCenter =
+        overrideNoteText->ratioRect.center =
             Point(0.63f, curY);
-        overrideNoteText->ratioSize =
+        overrideNoteText->ratioRect.size =
             Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
         bindsListBox->addChild(overrideNoteText);
         bindsGui.addItem(overrideNoteText);
@@ -184,9 +184,9 @@ void OptionsMenu::addNewBindEntryItems(
             }
             mustPopulateBinds = true;
         };
-        moreButton->ratioCenter =
+        moreButton->ratioRect.center =
             Point(0.92f, curY);
-        moreButton->ratioSize =
+        moreButton->ratioRect.size =
             Point(0.05f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
         string tooltip =
             (showingBindsMore && actionType.id == curActionType) ?
@@ -225,9 +225,9 @@ void OptionsMenu::addNewBindEntryItems(
                     bindButton->getJuiceValue(), draw.tint
                 );
             };
-            bindButton->ratioCenter =
+            bindButton->ratioRect.center =
                 Point(0.63f, curY);
-            bindButton->ratioSize =
+            bindButton->ratioRect.size =
                 Point(
                     b == 0 ? 0.34f : 0.32f,
                     OPTIONS_MENU::BIND_BUTTON_HEIGHT
@@ -255,9 +255,9 @@ void OptionsMenu::addNewBindEntryItems(
                         deleteBindButton->getJuiceValue(), draw.tint
                     );
                 };
-                deleteBindButton->ratioCenter =
+                deleteBindButton->ratioRect.center =
                     Point(0.85f, curY);
-                deleteBindButton->ratioSize =
+                deleteBindButton->ratioRect.size =
                     Point(0.05f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
                 deleteBindButton->onGetTooltip =
                 [] () { return "Deletes this input bind from this action."; };
@@ -299,9 +299,9 @@ void OptionsMenu::addNewBindEntryItems(
                     bindButton->getJuiceValue(), draw.tint
                 );
             };
-            bindButton->ratioCenter =
+            bindButton->ratioRect.center =
                 Point(0.63f, curY);
-            bindButton->ratioSize =
+            bindButton->ratioRect.size =
                 Point(0.34f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
             bindButton->onGetTooltip =
             [] () { return "Choose a new input to bind to this action."; };
@@ -320,9 +320,9 @@ void OptionsMenu::addNewBindEntryItems(
             //Create new bind button.
             ButtonGuiItem* createButton =
                 new ButtonGuiItem("New...", game.sysContent.fntStandard);
-            createButton->ratioCenter =
+            createButton->ratioRect.center =
                 Point(0.63f, curY);
-            createButton->ratioSize =
+            createButton->ratioRect.size =
                 Point(0.32f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
             createButton->onActivate =
             [this, actionType, aBinds] (const Point&) {
@@ -349,9 +349,9 @@ void OptionsMenu::addNewBindEntryItems(
                 new ButtonGuiItem(
                 "Restore defaults", game.sysContent.fntStandard
             );
-            restoreButton->ratioCenter =
+            restoreButton->ratioRect.center =
                 Point(0.63f, curY);
-            restoreButton->ratioSize =
+            restoreButton->ratioRect.size =
                 Point(0.32f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
             restoreButton->onActivate =
             [this, actionType] (const Point&) {
@@ -375,9 +375,9 @@ void OptionsMenu::addNewBindEntryItems(
                 "Default:", game.sysContent.fntStandard,
                 COLOR_WHITE, ALLEGRO_ALIGN_LEFT
             );
-            defaultLabelText->ratioCenter =
+            defaultLabelText->ratioRect.center =
                 Point(0.63f, curY);
-            defaultLabelText->ratioSize =
+            defaultLabelText->ratioRect.size =
                 Point(0.30f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
             bindsListBox->addChild(defaultLabelText);
             bindsGui.addItem(defaultLabelText);
@@ -389,9 +389,9 @@ void OptionsMenu::addNewBindEntryItems(
             Inpution::InputSource defInputSource =
                 game.controls.strToInputSource(actionType.defaultBindStr);
             GuiItem* defaultIcon = new GuiItem();
-            defaultIcon->ratioCenter =
+            defaultIcon->ratioRect.center =
                 Point(0.68f, curY);
-            defaultIcon->ratioSize =
+            defaultIcon->ratioRect.size =
                 Point(0.17f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
             defaultIcon->onDraw =
             [defInputSource] (const DrawInfo & draw) {
@@ -408,11 +408,11 @@ void OptionsMenu::addNewBindEntryItems(
     
     //Spacer line.
     GuiItem* line = new GuiItem();
-    line->ratioCenter =
+    line->ratioRect.center =
         Point(
             0.50f, bindsListBox->getChildrenSpan() + 0.02f
         );
-    line->ratioSize = Point(0.90f, 0.02f);
+    line->ratioRect.size = Point(0.90f, 0.02f);
     line->onDraw =
     [] (const DrawInfo & draw) {
         al_draw_line(
@@ -472,9 +472,9 @@ void OptionsMenu::addNewShortcutItemItems(
     //Item button.
     ButtonGuiItem* shortcutButton =
         new ButtonGuiItem(name, game.sysContent.fntStandard, textColor);
-    shortcutButton->ratioCenter =
+    shortcutButton->ratioRect.center =
         Point(0.50f, curY);
-    shortcutButton->ratioSize =
+    shortcutButton->ratioRect.size =
         Point(0.95f, OPTIONS_MENU::BIND_BUTTON_HEIGHT);
     shortcutButton->onActivate =
     [this, internalName] (const Point&) {
