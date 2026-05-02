@@ -1400,11 +1400,6 @@ Mob* createMob(MobGen* gen) {
             gen->angle, gen->vars
         );
         
-    if(mPtr->type->category->id == MOB_CATEGORY_ENEMIES) {
-        Enemy* ePtr = (Enemy*)mPtr;
-        ePtr->isBoss = gen->isBoss;
-    }
-    
     return mPtr;
 }
 

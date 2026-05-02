@@ -13170,7 +13170,7 @@ mobs{
 	enemy{
 		type=beady_long_legs
 		p=-1280.0000 -1824.0000
-		boss=true
+		vars=boss=true
 	}
 	bouncer{
 		type=geyser
@@ -15023,7 +15023,7 @@ mobs{
 	enemy{
 		type=plasm_wraith
 		p=-1984.0000 -1824.0000
-		boss=true
+		vars=boss=true
 	}
 	pikmin{
 		type=ice_pikmin

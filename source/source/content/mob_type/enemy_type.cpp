@@ -31,6 +31,16 @@ EnemyType::EnemyType() :
         MOB_TARGET_FLAG_FRAGILE;
     startingTeam = MOB_TEAM_ENEMY_1;
     useDamageSquashAndStretch = true;
+    
+    AreaEditorProp aepBoss;
+    aepBoss.name = "Boss";
+    aepBoss.var = "boss";
+    aepBoss.type = AEMP_TYPE_BOOL;
+    aepBoss.defValue = "false";
+    aepBoss.tooltip =
+        "If this enemy should be considered a boss.\n"
+        "Boss enemies will trigger boss music when nearby.";
+    areaEditorProps.push_back(aepBoss);
 }
 
 

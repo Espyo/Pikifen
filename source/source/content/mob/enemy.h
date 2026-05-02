@@ -47,6 +47,7 @@ public:
     void drawMob() override;
     int getMissionPoints(bool* applicableInThisMission) const override;
     void revive();
+    void readScriptVars(const ScriptVarReader& svr) override;
     void finishDyingClassSpecifics() override;
     void startDyingClassSpecifics() override;
     void tickClassSpecifics(float deltaT) override;

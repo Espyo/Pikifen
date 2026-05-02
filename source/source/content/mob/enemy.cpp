@@ -195,6 +195,22 @@ int Enemy::getMissionPoints(bool* applicableInThisMission) const {
 
 
 /**
+ * @brief Reads the provided script variables, if any, and does stuff with them.
+ *
+ * @param svr Script var reader to use.
+ */
+void Enemy::readScriptVars(const ScriptVarReader& svr) {
+    Mob::readScriptVars(svr);
+    
+    bool bossVar;
+    
+    if(svr.get("boss", bossVar)) {
+        isBoss = bossVar;
+    }
+}
+
+
+/**
  * @brief Brings the enemy back to life by taking it out of its death states.
  */
 void Enemy::revive() {

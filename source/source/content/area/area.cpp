@@ -1330,10 +1330,13 @@ void Area::loadGeometryFromDataNode(
         
         string typeStr;
         string linksStr;
+        bool isBossBool = false;
+        
+        //DEPRECATED in 1.2.0 by "boss" as a script var.
+        mRS.set("boss", isBossBool);
         
         mRS.set("p", newMob->center);
         mRS.set("angle", newMob->angle);
-        mRS.set("boss", newMob->isBoss);
         mRS.set("vars", newMob->vars);
         mRS.set("type", typeStr);
         mRS.set("links", linksStr);
@@ -1350,6 +1353,12 @@ void Area::loadGeometryFromDataNode(
         vector<string> linkStrs = split(linksStr);
         forIdx(l, linkStrs) {
             mobLinksBuffer.push_back(std::make_pair(m, s2i(linkStrs[l])));
+        }
+        
+        if(isBossBool) {
+            vector<string> vars = semicolonListToVector(newMob->vars);
+            vars.push_back("boss=true");
+            newMob->vars = join(vars, ";");
         }
         
         bool valid =
@@ -2648,9 +2657,6 @@ void Area::saveGeometryToDataNode(DataNode* node) {
         if(!mPtr->vars.empty()) {
             mGW.write("vars", mPtr->vars);
         }
-        if(mPtr->isBoss) {
-            mGW.write("boss", mPtr->isBoss);
-        }
         
         string linksStr;
         forIdx(l, mPtr->linkIdxs) {
@@ -3059,16 +3065,13 @@ Point Blockmap::getTopLeftCorner(size_t col, size_t row) const {
  * @param type The mob type.
  * @param angle Angle it is facing.
  * @param vars String representation of the script vars.
- * @param boss Whether it is a boss encounter.
  */
 MobGen::MobGen(
-    const Point& center, MobType* type, float angle, const string& vars,
-    bool boss
+    const Point& center, MobType* type, float angle, const string& vars
 ) :
     type(type),
     center(center),
     angle(angle),
-    isBoss(boss),
     vars(vars) {
     
 }
@@ -3085,7 +3088,6 @@ void MobGen::clone(MobGen* destination, bool includePosition) const {
     destination->angle = angle;
     if(includePosition) destination->center = center;
     destination->type = type;
-    destination->isBoss = isBoss;
     destination->vars = vars;
     destination->linkIdxs = linkIdxs;
     destination->storedInside = storedInside;

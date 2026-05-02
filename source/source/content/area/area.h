@@ -121,9 +121,6 @@ struct MobGen {
     //Angle.
     float angle = 0.0f;
     
-    //Is it a boss encounter?
-    bool isBoss = false;
-    
     //Script vars.
     string vars;
     
@@ -141,8 +138,7 @@ struct MobGen {
     
     explicit MobGen(
         const Point& center = Point(),
-        MobType* type = nullptr, float angle = 0, const string& vars = "",
-        bool boss = false
+        MobType* type = nullptr, float angle = 0, const string& vars = ""
     );
     void clone(MobGen* destination, bool includePosition = true) const;
     
