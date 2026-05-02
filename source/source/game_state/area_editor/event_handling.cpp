@@ -644,13 +644,19 @@ void AreaEditor::handleLmbDownLayout(const ALLEGRO_EVENT& ev) {
         
     } case EDITOR_SUB_STATE_NONE: {
 
+        bool wasDragMoving = layoutSelCtrl.isDragMoving();
         if(
             handleSelectionAndTransformationLmbDown(
                 layoutSelCtrl, curTransformationWidget,
                 !game.options.areaEd.selTrans
             )
         ) {
-            updateSelectionRequirements();
+            if(!wasDragMoving && layoutSelCtrl.isDragMoving()) {
+                updateSelectionRequirements();
+                layoutSelCtrl.startDragMove(
+                    game.editorsView.mouseCursorWorldPos
+                );
+            }
         }
         
         vertexSelection.setHomogenized(false);
