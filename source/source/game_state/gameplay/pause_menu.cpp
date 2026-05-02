@@ -98,8 +98,8 @@ PauseMenu::PauseMenu(bool startOnRadar) {
     forIdx(s, game.curArea->sectors) {
         Sector* sPtr = game.curArea->sectors[s];
         if(sPtr->type == SECTOR_TYPE_BLOCKING) continue;
-        lowestSectorZ = std::min(lowestSectorZ, sPtr->z);
-        highestSectorZ = std::max(highestSectorZ, sPtr->z);
+        lowestSectorZ = std::min(lowestSectorZ, sPtr->floorZ);
+        highestSectorZ = std::max(highestSectorZ, sPtr->floorZ);
         foundValidSector = true;
     }
     
@@ -884,7 +884,7 @@ void PauseMenu::drawRadar(
         if(sPtr->type == SECTOR_TYPE_BLOCKING) continue;
         ALLEGRO_COLOR color =
             interpolateColor(
-                sPtr->z, lowestSectorZ, highestSectorZ,
+                sPtr->floorZ, lowestSectorZ, highestSectorZ,
                 game.config.aestheticRadar.lowestColor,
                 game.config.aestheticRadar.highestColor
             );
@@ -925,7 +925,7 @@ void PauseMenu::drawRadar(
         }
         
         if(
-            fabs(ePtr->sectors[0]->z - ePtr->sectors[1]->z) <=
+            fabs(ePtr->sectors[0]->floorZ - ePtr->sectors[1]->floorZ) <=
             GEOMETRY::STEP_HEIGHT
         ) {
             //Step.

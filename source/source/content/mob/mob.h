@@ -106,8 +106,8 @@ public:
     //Center coordinates.
     Point center;
     
-    //Z coordinate. This is height; the higher the value, the higher in the sky.
-    float z = 0.0f;
+    //Z coordinate of its bottom. The higher the value, the higher in the sky.
+    float bottomZ = 0.0f;
     
     //Current facing angle. 0 = right, PI / 2 = up, etc.
     float angle = 0.0f;

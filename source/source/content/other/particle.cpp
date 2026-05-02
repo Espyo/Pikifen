@@ -620,7 +620,7 @@ void ParticleGenerator::saveToDataNode(DataNode* node) {
 void ParticleGenerator::tick(float deltaT, ParticleManager& manager) {
     if(followMob) {
         baseParticle.center = followMob->center;
-        baseParticle.z = followMob->z;
+        baseParticle.z = followMob->bottomZ;
     }
     emissionTimer -= deltaT;
     if(emissionTimer <= 0.0f) {

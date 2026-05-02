@@ -72,7 +72,7 @@ Onion::Onion(const Point& center, OnionType* type, float angle) :
     //Increase its Z by one so that mobs that walk at
     //ground level next to it will appear under it.
     gravityMult = 0.0f;
-    z++;
+    bottomZ++;
     
     generationDelayTimer.onEnd =
     [this] () { startGenerating(); };
@@ -209,7 +209,7 @@ void Onion::spitPikminSeed(size_t typeIdx) {
         return;
     }
     ::spitPikminSeed(
-        center, z + ONION::NEW_SEED_Z_OFFSET, oniType->nest->pikTypes[typeIdx],
+        center, bottomZ + ONION::NEW_SEED_Z_OFFSET, oniType->nest->pikTypes[typeIdx],
         nSpits, ONION::SPIT_H_SPEED, ONION::SPIT_H_SPEED_DEVIATION,
         ONION::SPIT_V_SPEED
     );

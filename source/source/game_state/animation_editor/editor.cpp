@@ -124,7 +124,7 @@ AnimationEditor::AnimationEditor() :
                 Point(
                     curSprite->hitboxes[idx].center.x,
                     (-(curSprite->hitboxes[idx].height / 2.0f)) -
-                    curSprite->hitboxes[idx].z
+                    curSprite->hitboxes[idx].bottomZ
                 );
             *outSize =
                 Point(
@@ -145,7 +145,7 @@ AnimationEditor::AnimationEditor() :
         } else {
             curSprite->hitboxes[idx].center.x = newCenter.x;
             curSprite->hitboxes[idx].radius = newSize.x / 2.0f;
-            curSprite->hitboxes[idx].z = -(newCenter.y + newSize.y / 2.0f);
+            curSprite->hitboxes[idx].bottomZ = -(newCenter.y + newSize.y / 2.0f);
             curSprite->hitboxes[idx].height = newSize.y;
         }
     };
@@ -943,7 +943,7 @@ void AnimationEditor::makeHitboxesSymmetrical(bool horizontal, bool topLeft) {
         matchPtr->type = hPtr->type;
         matchPtr->value = hPtr->value;
         matchPtr->witherChance = hPtr->witherChance;
-        matchPtr->z = hPtr->z;
+        matchPtr->bottomZ = hPtr->bottomZ;
         
         flipHitbox(matchPtr, horizontal);
         

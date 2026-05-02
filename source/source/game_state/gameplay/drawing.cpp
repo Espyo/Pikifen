@@ -1732,13 +1732,13 @@ void GameplayState::drawThrowPreview(Player* player) {
         
         //Otherwise, let's check for walls.
         
-        if(e->sectors[0]->z == e->sectors[1]->z) {
+        if(e->sectors[0]->floorZ == e->sectors[1]->floorZ) {
             //Edges where both sectors have the same height have no wall.
             continue;
         }
         
         //Calculate the throwee's vertical position at that point.
-        float edgeZ = std::max(e->sectors[0]->z, e->sectors[1]->z);
+        float edgeZ = std::max(e->sectors[0]->floorZ, e->sectors[1]->floorZ);
         float xAtEdge =
             leaderToDestDist.toFloat() * r;
         float yAtEdge =
@@ -1750,7 +1750,7 @@ void GameplayState::drawThrowPreview(Player* player) {
                     cos(throwVAngle) * cos(throwVAngle)
                 )
             ) * xAtEdge * xAtEdge;
-        yAtEdge += player->leaderPtr->z;
+        yAtEdge += player->leaderPtr->bottomZ;
         
         //If the throwee would hit the wall at these coordinates, collision.
         if(edgeZ >= yAtEdge && r < wallCollisionR) {
@@ -2050,7 +2050,7 @@ void GameplayState::drawWorldComponents(
         
         WorldComponent c;
         c.sectorPtr = sPtr;
-        c.z = sPtr->z;
+        c.z = sPtr->floorZ;
         components.push_back(c);
     }
     
@@ -2078,10 +2078,10 @@ void GameplayState::drawWorldComponents(
             c.mobShadowPtr = mobPtr;
             if(mobPtr->standingOnMob) {
                 c.z =
-                    mobPtr->standingOnMob->z +
+                    mobPtr->standingOnMob->bottomZ +
                     mobPtr->standingOnMob->getDrawingHeight();
             } else {
-                c.z = mobPtr->groundSector->z;
+                c.z = mobPtr->groundSector->floorZ;
             }
             c.z += mobPtr->getDrawingHeight() - 1;
             components.push_back(c);
@@ -2095,30 +2095,30 @@ void GameplayState::drawWorldComponents(
             
             switch(method) {
             case LIMB_DRAW_METHOD_BELOW_BOTH: {
-                c.z = std::min(mobPtr->z, mobPtr->parent->m->z);
+                c.z = std::min(mobPtr->bottomZ, mobPtr->parent->m->bottomZ);
                 break;
             } case LIMB_DRAW_METHOD_BELOW_CHILD: {
-                c.z = mobPtr->z;
+                c.z = mobPtr->bottomZ;
                 break;
             } case LIMB_DRAW_METHOD_BELOW_PARENT: {
-                c.z = mobPtr->parent->m->z;
+                c.z = mobPtr->parent->m->bottomZ;
                 break;
             } case LIMB_DRAW_METHOD_ABOVE_PARENT: {
                 c.z =
-                    mobPtr->parent->m->z +
+                    mobPtr->parent->m->bottomZ +
                     mobPtr->parent->m->getDrawingHeight() +
                     0.001;
                 break;
             } case LIMB_DRAW_METHOD_ABOVE_CHILD: {
-                c.z = mobPtr->z + mobPtr->getDrawingHeight() + 0.001;
+                c.z = mobPtr->bottomZ + mobPtr->getDrawingHeight() + 0.001;
                 break;
             } case LIMB_DRAW_METHOD_ABOVE_BOTH: {
                 c.z =
                     std::max(
-                        mobPtr->parent->m->z +
+                        mobPtr->parent->m->bottomZ +
                         mobPtr->parent->m->getDrawingHeight() +
                         0.001,
-                        mobPtr->z + mobPtr->getDrawingHeight() +
+                        mobPtr->bottomZ + mobPtr->getDrawingHeight() +
                         0.001
                     );
                 break;
@@ -2131,7 +2131,7 @@ void GameplayState::drawWorldComponents(
         //The mob proper.
         WorldComponent c;
         c.mobPtr = mobPtr;
-        c.z = mobPtr->z + mobPtr->getDrawingHeight();
+        c.z = mobPtr->bottomZ + mobPtr->getDrawingHeight();
         if(mobPtr->holder.m && mobPtr->holder.forceAboveHolder) {
             c.z += mobPtr->holder.m->getDrawingHeight() + 1;
         }
@@ -2252,8 +2252,8 @@ void GameplayState::drawWorldComponents(
             float deltaZ = 0;
             if(!cPtr->mobShadowPtr->standingOnMob) {
                 deltaZ =
-                    cPtr->mobShadowPtr->z -
-                    cPtr->mobShadowPtr->groundSector->z;
+                    cPtr->mobShadowPtr->bottomZ -
+                    cPtr->mobShadowPtr->groundSector->floorZ;
             }
             drawMobShadow(
                 cPtr->mobShadowPtr,

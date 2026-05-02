@@ -2105,7 +2105,7 @@ void PikminFsm::becomeIdle(ScriptVM* scriptVM, void* info1, void* info2) {
         enableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
         pikPtr->chase(
             pikPtr->center,
-            pikPtr->groundSector->z + PIKMIN::FLIER_ABOVE_FLOOR_HEIGHT
+            pikPtr->groundSector->floorZ + PIKMIN::FLIER_ABOVE_FLOOR_HEIGHT
         );
     }
     
@@ -2153,7 +2153,7 @@ void PikminFsm::beCrushed(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
     PikminFsm::startDying(scriptVM, info1, info2);
-    pikPtr->z = pikPtr->groundSector->z;
+    pikPtr->bottomZ = pikPtr->groundSector->floorZ;
     pikPtr->setAnimation(PIKMIN_ANIM_CRUSHED);
 }
 
@@ -2174,7 +2174,7 @@ void PikminFsm::beDismissed(ScriptVM* scriptVM, void* info1, void* info2) {
         enableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
-    pikPtr->chase(*((Point*) info1), pikPtr->z);
+    pikPtr->chase(*((Point*) info1), pikPtr->bottomZ);
     
     pikPtr->playSound(pikPtr->pikType->soundDataIdxs[PIKMIN_SOUND_IDLE]);
 }
@@ -2702,14 +2702,14 @@ void PikminFsm::decideAttack(ScriptVM* scriptVM, void* info1, void* info2) {
         float hZ = 0;
         
         if(closestH) {
-            hZ = closestH->z + scriptVM->focusedMob->z;
+            hZ = closestH->bottomZ + scriptVM->focusedMob->bottomZ;
         }
         
         if(
             !closestH ||
             closestH->surfaceType != HITBOX_SURFACE_TYPE_LATCHABLE ||
-            hZ > pikPtr->z + pikPtr->height ||
-            hZ + closestH->height < pikPtr->z ||
+            hZ > pikPtr->bottomZ + pikPtr->height ||
+            hZ + closestH->height < pikPtr->bottomZ ||
             d >= closestH->radius + pikPtr->radius
         ) {
             //Can't latch to the closest hitbox.
@@ -3078,7 +3078,7 @@ void PikminFsm::flailToLeader(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     Mob* caller = (Mob*) info1;
     
-    pikPtr->chase(caller->center, caller->z);
+    pikPtr->chase(caller->center, caller->bottomZ);
 }
 
 
@@ -3273,7 +3273,7 @@ void PikminFsm::goToCarriableObject(
     closestSpotPtr->pikPtr = pikPtr;
     
     pikPtr->chase(
-        &carriableMob->center, &carriableMob->z,
+        &carriableMob->center, &carriableMob->bottomZ,
         closestSpotOffset, 0.0f
     );
     scriptVM->setTimer(PIKMIN::GOTO_TIMEOUT);
@@ -3325,7 +3325,7 @@ void PikminFsm::goToGroupTask(ScriptVM* scriptVM, void* info1, void* info2) {
     scriptVM->focusOnMob(tasPtr);
     
     pikPtr->chase(
-        &(freeSpot->absolutePos), &tasPtr->z,
+        &(freeSpot->absolutePos), &tasPtr->bottomZ,
         Point(), tasPtr->tasType->spotsZ
     );
     scriptVM->setTimer(PIKMIN::GOTO_TIMEOUT);
@@ -3376,7 +3376,7 @@ void PikminFsm::goToOnion(ScriptVM* scriptVM, void* info1, void* info2) {
     
     scriptVM->focusOnMob(nestPtr->mPtr);
     pikPtr->stopChasing();
-    pikPtr->chase(coords, nestPtr->mPtr->z);
+    pikPtr->chase(coords, nestPtr->mPtr->bottomZ);
     pikPtr->leaveGroup();
     
     pikPtr->setAnimation(
@@ -3404,7 +3404,7 @@ void PikminFsm::goToOpponent(ScriptVM* scriptVM, void* info1, void* info2) {
         if(otherPtr->type->category->id == MOB_CATEGORY_ENEMIES) {
             Enemy* enePtr = (Enemy*) info1;
             if(!enePtr->eneType->allowGroundAttacks) return;
-            if(enePtr->z > pikPtr->z + pikPtr->height) return;
+            if(enePtr->bottomZ > pikPtr->bottomZ + pikPtr->height) return;
         }
     } else {
         //Airborne Pikmin.
@@ -3435,7 +3435,7 @@ void PikminFsm::goToOpponent(ScriptVM* scriptVM, void* info1, void* info2) {
     }
     
     pikPtr->chase(
-        &scriptVM->focusedMob->center, &scriptVM->focusedMob->z,
+        &scriptVM->focusedMob->center, &scriptVM->focusedMob->bottomZ,
         offset, 0.0f, 0,
         targetDist
     );
@@ -3488,7 +3488,7 @@ void PikminFsm::goToTool(ScriptVM* scriptVM, void* info1, void* info2) {
     scriptVM->focusOnMob(tooPtr);
     
     pikPtr->chase(
-        &tooPtr->center, &tooPtr->z,
+        &tooPtr->center, &tooPtr->bottomZ,
         Point(), 0.0f, 0,
         pikPtr->radius + tooPtr->radius
     );
@@ -3825,7 +3825,7 @@ void PikminFsm::panicNewChase(ScriptVM* scriptVM, void* info1, void* info2) {
             pikPtr->center.x + game.rng.f(-1000, 1000),
             pikPtr->center.y + game.rng.f(-1000, 1000)
         ),
-        pikPtr->z
+        pikPtr->bottomZ
     );
     scriptVM->setTimer(PIKMIN::PANIC_CHASE_INTERVAL);
 }
@@ -3890,7 +3890,7 @@ void PikminFsm::reachCarriableObject(
     Point finalPos = carriableMob->center + spotOffset;
     
     pikPtr->chase(
-        &carriableMob->center, &carriableMob->z,
+        &carriableMob->center, &carriableMob->bottomZ,
         spotOffset, 0.0f,
         CHASE_FLAG_TELEPORT |
         CHASE_FLAG_TELEPORTS_CONSTANTLY
@@ -4319,7 +4319,7 @@ void PikminFsm::startImpactLunge(ScriptVM* scriptVM, void* info1, void* info2) {
         scriptVM->focusedMob != nullptr, scriptVM->fsm.getStateHistoryStr()
     );
     
-    pikPtr->chase(&scriptVM->focusedMob->center, &scriptVM->focusedMob->z);
+    pikPtr->chase(&scriptVM->focusedMob->center, &scriptVM->focusedMob->bottomZ);
     pikPtr->setAnimation(PIKMIN_ANIM_ATTACKING);
 }
 
@@ -4675,7 +4675,7 @@ void PikminFsm::tickGroupTaskWork(
     
     GroupTask* tasPtr = (GroupTask*) (scriptVM->focusedMob);
     Point curSpotPos = tasPtr->getSpotPos(pikPtr);
-    float curSpotZ = tasPtr->z + tasPtr->tasType->spotsZ;
+    float curSpotZ = tasPtr->bottomZ + tasPtr->tasType->spotsZ;
     
     pikPtr->chase(
         curSpotPos, curSpotZ,
@@ -4927,7 +4927,7 @@ void PikminFsm::updateInGroupChasing(
         targetPos = *((Point*) info1);
     }
     
-    float targetZ = pikPtr->followingGroup->z;
+    float targetZ = pikPtr->followingGroup->bottomZ;
     if(pikPtr->pikType->canFly) {
         targetZ += PIKMIN::FLIER_ABOVE_FLOOR_HEIGHT;
     }

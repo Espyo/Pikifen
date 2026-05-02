@@ -1204,7 +1204,7 @@ void AreaEditor::findProblemsMobInsideWalls() {
             
                 if(
                     ePtr->sectors[0] && ePtr->sectors[1] &&
-                    ePtr->sectors[0]->z == ePtr->sectors[1]->z
+                    ePtr->sectors[0]->floorZ == ePtr->sectors[1]->floorZ
                 ) {
                     continue;
                 }
@@ -1236,13 +1236,13 @@ void AreaEditor::findProblemsMobInsideWalls() {
                     
                 } else if(
                     ePtr->sectors[0] == mobSector &&
-                    ePtr->sectors[1]->z > mobSector->z + GEOMETRY::STEP_HEIGHT
+                    ePtr->sectors[1]->floorZ > mobSector->floorZ + GEOMETRY::STEP_HEIGHT
                 ) {
                     inWall = true;
                     
                 } else if(
                     ePtr->sectors[1] == mobSector &&
-                    ePtr->sectors[0]->z > mobSector->z + GEOMETRY::STEP_HEIGHT
+                    ePtr->sectors[0]->floorZ > mobSector->floorZ + GEOMETRY::STEP_HEIGHT
                 ) {
                     inWall = true;
                     

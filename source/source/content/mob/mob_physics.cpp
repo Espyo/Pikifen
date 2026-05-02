@@ -36,10 +36,10 @@ Mob* Mob::getMobToWalkOn() const {
         if(mPtr == this) {
             continue;
         }
-        if(fabs(z - (mPtr->z + mPtr->height)) > GEOMETRY::STEP_HEIGHT) {
+        if(fabs(bottomZ - (mPtr->bottomZ + mPtr->height)) > GEOMETRY::STEP_HEIGHT) {
             continue;
         }
-        if(bestCandidate && mPtr->z <= bestCandidate->z) {
+        if(bestCandidate && mPtr->bottomZ <= bestCandidate->bottomZ) {
             continue;
         }
         
@@ -161,14 +161,14 @@ HORIZ_MOVE_RESULT Mob::getMovementEdgeIntersections(
         }
         
         if(!isEdgeBlocking) {
-            if(ePtr->sectors[0]->z == ePtr->sectors[1]->z) {
+            if(ePtr->sectors[0]->floorZ == ePtr->sectors[1]->floorZ) {
                 //No difference in floor height = no wall.
                 //Ignore this.
                 continue;
             }
             if(
-                ePtr->sectors[0]->z < z &&
-                ePtr->sectors[1]->z < z
+                ePtr->sectors[0]->floorZ < bottomZ &&
+                ePtr->sectors[1]->floorZ < bottomZ
             ) {
                 //An edge whose sectors are below the mob?
                 //No collision here.
@@ -177,8 +177,8 @@ HORIZ_MOVE_RESULT Mob::getMovementEdgeIntersections(
         }
         
         if(
-            ePtr->sectors[0]->z > z &&
-            ePtr->sectors[1]->z > z
+            ePtr->sectors[0]->floorZ > bottomZ &&
+            ePtr->sectors[1]->floorZ > bottomZ
         ) {
             //If both floors of this edge are above the mob...
             //then what does that mean? That the mob is under the ground?
@@ -221,9 +221,9 @@ HORIZ_MOVE_RESULT Mob::getPhysicsHorizontalMovement(
 ) {
     //Held by another mob.
     if(holder.m) {
-        Point finalPos = holder.getFinalPos(&z);
+        Point finalPos = holder.getFinalPos(&bottomZ);
         speedZ = 0;
-        chase(finalPos, z, CHASE_FLAG_TELEPORT);
+        chase(finalPos, bottomZ, CHASE_FLAG_TELEPORT);
     }
     
     //Chasing.
@@ -240,9 +240,9 @@ HORIZ_MOVE_RESULT Mob::getPhysicsHorizontalMovement(
                 return HORIZ_MOVE_RESULT_FAIL;
             }
             
-            z = chaseInfo.offsetZ;
+            bottomZ = chaseInfo.offsetZ;
             if(chaseInfo.origZ) {
-                z += *chaseInfo.origZ;
+                bottomZ += *chaseInfo.origZ;
             }
             
             groundSector = sec;
@@ -307,7 +307,7 @@ HORIZ_MOVE_RESULT Mob::getPhysicsHorizontalMovement(
     //Scrolling floors.
     if(
         (groundSector->scroll.x != 0 || groundSector->scroll.y != 0) &&
-        z <= groundSector->z
+        bottomZ <= groundSector->floorZ
     ) {
         (*moveSpeed) += groundSector->scroll;
     }
@@ -414,7 +414,7 @@ void Mob::tickHorizontalMovementPhysics(
         
         newPos.x = center.x + deltaT * moveSpeed.x;
         newPos.y = center.y + deltaT * moveSpeed.y;
-        float newZ = z;
+        float newZ = bottomZ;
         
         //Get the sector the mob will be on.
         Sector* newCenterSector = getSector(newPos, nullptr, true);
@@ -425,7 +425,7 @@ void Mob::tickHorizontalMovementPhysics(
             //Out of bounds. No movement.
             return;
         }
-        if(z + GEOMETRY::STEP_HEIGHT < newCenterSector->z) {
+        if(bottomZ + GEOMETRY::STEP_HEIGHT < newCenterSector->floorZ) {
             //We can't walk onto this sector. Refuse the move.
             return;
         }
@@ -447,7 +447,7 @@ void Mob::tickHorizontalMovementPhysics(
                 ePtr->sectors[0]->type != SECTOR_TYPE_BLOCKING &&
                 ePtr->sectors[1]->type != SECTOR_TYPE_BLOCKING
             ) {
-                if(ePtr->sectors[0]->z > ePtr->sectors[1]->z) {
+                if(ePtr->sectors[0]->floorZ > ePtr->sectors[1]->floorZ) {
                     tallestSector = ePtr->sectors[0];
                 } else {
                     tallestSector = ePtr->sectors[1];
@@ -455,8 +455,8 @@ void Mob::tickHorizontalMovementPhysics(
             }
             
             if(
-                tallestSector->z > newGroundSector->z &&
-                tallestSector->z <= z
+                tallestSector->floorZ > newGroundSector->floorZ &&
+                tallestSector->floorZ <= bottomZ
             ) {
                 newGroundSector = tallestSector;
             }
@@ -468,18 +468,18 @@ void Mob::tickHorizontalMovementPhysics(
             //encountered of all edges crossed.
             if(
                 !hasFlag(flags, MOB_FLAG_WAS_THROWN) &&
-                tallestSector->z <= z + GEOMETRY::STEP_HEIGHT &&
-                tallestSector->z > stepSector->z
+                tallestSector->floorZ <= bottomZ + GEOMETRY::STEP_HEIGHT &&
+                tallestSector->floorZ > stepSector->floorZ
             ) {
                 stepSector = tallestSector;
             }
         }
         
         //Mosey on up to the step sector, if any.
-        if(stepSector->z > newGroundSector->z) {
+        if(stepSector->floorZ > newGroundSector->floorZ) {
             newGroundSector = stepSector;
         }
-        if(z < stepSector->z) newZ = stepSector->z;
+        if(bottomZ < stepSector->floorZ) newZ = stepSector->floorZ;
         
         //Figure out sliding logic now, if needed.
         float moveAngle;
@@ -509,7 +509,7 @@ void Mob::tickHorizontalMovementPhysics(
             
             if(!isEdgeWall) {
                 for(unsigned char s = 0; s < 2; s++) {
-                    if(ePtr->sectors[s]->z > newZ) {
+                    if(ePtr->sectors[s]->floorZ > newZ) {
                         isEdgeWall = true;
                         wallSector = s;
                     }
@@ -564,7 +564,7 @@ void Mob::tickHorizontalMovementPhysics(
         if(successfulMove) {
             //Good news, the mob can be placed in this new spot freely.
             center = newPos;
-            z = newZ;
+            bottomZ = newZ;
             groundSector = newGroundSector;
             centerSector = newCenterSector;
             finishedMoving = true;
@@ -610,7 +610,7 @@ void Mob::tickPhysics(float deltaT) {
     Point preMovePos = center;
     Point moveSpeed = speed;
     bool touchedWall = false;
-    float preMoveGroundZ = groundSector->z;
+    float preMoveGroundZ = groundSector->floorZ;
     
     //Rotation logic.
     tickRotationPhysics(deltaT, moveSpeedMult);
@@ -723,10 +723,10 @@ void Mob::tickVerticalMovementPhysics(
         //If the current ground is one step (or less) below
         //the previous ground, just instantly go down the step.
         if(
-            preMoveGroundZ - groundSector->z <= GEOMETRY::STEP_HEIGHT &&
-            z == preMoveGroundZ
+            preMoveGroundZ - groundSector->floorZ <= GEOMETRY::STEP_HEIGHT &&
+            bottomZ == preMoveGroundZ
         ) {
-            z = groundSector->z;
+            bottomZ = groundSector->floorZ;
         }
     }
     
@@ -740,18 +740,18 @@ void Mob::tickVerticalMovementPhysics(
         
         float targetZ = chaseInfo.offsetZ;
         if(chaseInfo.origZ) targetZ += *chaseInfo.origZ;
-        float diffZ = fabs(targetZ - z);
+        float diffZ = fabs(targetZ - bottomZ);
         
         speedZ =
             std::min(
                 (float) (diffZ / deltaT),
                 chaseInfo.curSpeed * chaseInfo.verticalSpeedMult
             );
-        if(targetZ < z) {
+        if(targetZ < bottomZ) {
             speedZ = -speedZ;
         }
         
-        z += speedZ * deltaT;
+        bottomZ += speedZ * deltaT;
     }
     
     //Gravity.
@@ -761,7 +761,7 @@ void Mob::tickVerticalMovementPhysics(
     ) {
         //Use Velocity Verlet for better results.
         //https://youtu.be/hG9SzQxaCm8
-        z +=
+        bottomZ +=
             (speedZ * deltaT) +
             ((MOB::GRAVITY_ADDER * gravityMult / 2.0f) * deltaT * deltaT);
         speedZ += MOB::GRAVITY_ADDER * deltaT * gravityMult;
@@ -771,15 +771,15 @@ void Mob::tickVerticalMovementPhysics(
     Hazard* newOnHazard = nullptr;
     if(speedZ <= 0) {
         if(standingOnMob) {
-            z = standingOnMob->z + standingOnMob->height;
+            bottomZ = standingOnMob->bottomZ + standingOnMob->height;
             speedZ = 0;
             disableFlag(flags, MOB_FLAG_WAS_THROWN);
             scriptVM.fsm.runEvent(FSM_EV_LANDED);
             stopHeightEffect();
             highestMidairZ = FLT_MAX;
             
-        } else if(z <= groundSector->z) {
-            z = groundSector->z;
+        } else if(bottomZ <= groundSector->floorZ) {
+            bottomZ = groundSector->floorZ;
             speedZ = 0;
             disableFlag(flags, MOB_FLAG_WAS_THROWN);
             scriptVM.fsm.runEvent(FSM_EV_LANDED);
@@ -800,15 +800,15 @@ void Mob::tickVerticalMovementPhysics(
         }
     }
     
-    if(z > groundSector->z) {
-        if(highestMidairZ == FLT_MAX) highestMidairZ = z;
-        else highestMidairZ = std::max(z, highestMidairZ);
+    if(bottomZ > groundSector->floorZ) {
+        if(highestMidairZ == FLT_MAX) highestMidairZ = bottomZ;
+        else highestMidairZ = std::max(bottomZ, highestMidairZ);
     }
     
     //Held Pikmin are also touching the same hazards as the leader.
     if(holder.m && holder.m->type->category->id == MOB_CATEGORY_LEADERS) {
         Sector* leaderGround = holder.m->groundSector;
-        if(leaderGround && holder.m->z <= leaderGround->z) {
+        if(leaderGround && holder.m->bottomZ <= leaderGround->floorZ) {
             if(leaderGround->hazard) {
                 scriptVM.fsm.runEvent(
                     FSM_EV_TOUCHED_HAZARD,
@@ -824,14 +824,14 @@ void Mob::tickVerticalMovementPhysics(
     if(speedZ <= 0) {
         zCap = FLT_MAX;
     } else if(zCap < FLT_MAX) {
-        z = std::min(z, zCap);
+        bottomZ = std::min(bottomZ, zCap);
     }
     
     //On a sector that has a hazard that is not on the floor.
     if(
         groundSector->hazard &&
         !groundSector->hazardFloor &&
-        z > groundSector->z
+        bottomZ > groundSector->floorZ
     ) {
         scriptVM.fsm.runEvent(
             FSM_EV_TOUCHED_HAZARD,
@@ -858,7 +858,7 @@ void Mob::tickVerticalMovementPhysics(
     onHazard = newOnHazard;
     
     //Quick panic check: if it's somehow inside the ground, pop it out.
-    z = std::max(z, groundSector->z);
+    bottomZ = std::max(bottomZ, groundSector->floorZ);
 }
 
 
@@ -874,7 +874,7 @@ void Mob::tickWalkableRidingPhysics(float deltaT) {
     
     //Check which mob it is on top of, if any.
     if(newStandingOnMob) {
-        z = newStandingOnMob->z + newStandingOnMob->height;
+        bottomZ = newStandingOnMob->bottomZ + newStandingOnMob->height;
     }
     
     if(newStandingOnMob != standingOnMob) {

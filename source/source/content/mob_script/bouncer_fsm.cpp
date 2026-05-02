@@ -134,12 +134,12 @@ void BouncerFsm::handleMob(ScriptVM* scriptVM, void* info1, void* info2) {
     //The maximum height has a guaranteed minimum (useful if the destination
     //is below the bouncer), and scales up with how much higher the thrown
     //mob needs to go, to make for a nice smooth arc.
-    float maxH = std::max(128.0f, (targetMob->z - toucher->z) * 1.5f);
+    float maxH = std::max(128.0f, (targetMob->bottomZ - toucher->bottomZ) * 1.5f);
     calculateThrow(
         toucher->center,
-        toucher->z,
+        toucher->bottomZ,
         targetMob->center,
-        targetMob->z + targetMob->height,
+        targetMob->bottomZ + targetMob->height,
         maxH, MOB::GRAVITY_ADDER,
         &toucher->speed,
         &toucher->speedZ,

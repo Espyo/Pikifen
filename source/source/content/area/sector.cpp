@@ -82,7 +82,7 @@ void Sector::calculateBoundingBox() {
 void Sector::clone(Sector* destination) const {
     destination->type = type;
     destination->isBottomlessPit = isBottomlessPit;
-    destination->z = z;
+    destination->floorZ = floorZ;
     destination->vars = vars;
     destination->hazard = hazard;
     destination->hazardFloor = hazardFloor;

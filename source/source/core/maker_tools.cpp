@@ -347,7 +347,7 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
         if(mouseSector && mobToTeleport) {
             mobToTeleport->chase(
                 game.states.gameplay->players[0].view.mouseCursorWorldPos,
-                mouseSector->z, CHASE_FLAG_TELEPORT
+                mouseSector->floorZ, CHASE_FLAG_TELEPORT
             );
             if(mobToTeleport == game.states.gameplay->players[0].leaderPtr) {
                 game.states.gameplay->players[0].view.cam.setPos(
@@ -358,7 +358,7 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
                         mobToTeleport->group->members[p]->chase(
                             game.states.gameplay->
                             players[0].view.mouseCursorWorldPos,
-                            mouseSector->z, CHASE_FLAG_TELEPORT
+                            mouseSector->floorZ, CHASE_FLAG_TELEPORT
                         );
                     }
                 }

@@ -760,7 +760,7 @@ Point HoldInfo::getFinalPos(float* outZ) const {
                 offsetAngle + m->angle,
                 offsetDist * hPtr->radius
             );
-        *outZ = m->z + hPtr->z + (hPtr->height * verticalDist);
+        *outZ = m->bottomZ + hPtr->bottomZ + (hPtr->height * verticalDist);
     } else {
         //Body center.
         finalPos = m->center;
@@ -770,7 +770,7 @@ Point HoldInfo::getFinalPos(float* outZ) const {
                 offsetAngle + m->angle,
                 offsetDist * m->radius
             );
-        *outZ = m->z + (m->height * verticalDist);
+        *outZ = m->bottomZ + (m->height * verticalDist);
     }
     
     return finalPos;

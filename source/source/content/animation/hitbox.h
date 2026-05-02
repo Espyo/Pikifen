@@ -121,7 +121,7 @@ public:
     Point center;
     
     //Bottom of the hitbox (relative coordinates).
-    float z = 0.0f;
+    float bottomZ = 0.0f;
     
     //Total hitbox height.
     float height = 128.0f;
@@ -159,7 +159,7 @@ public:
     
     explicit Hitbox(
         const string& bpn = "", size_t bpi = INVALID, BodyPart* bpp = nullptr,
-        const Point& pos = Point(), float z = 0,
+        const Point& pos = Point(), float bottomZ = 0,
         float height = 128, float radius = 32
     );
     Point getCurPos(

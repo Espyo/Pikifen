@@ -1034,7 +1034,7 @@ void Area::generateEdgesBlockmap(const vector<Edge*>& edgeList) {
                     if(ePtr->sectors[0] && ePtr->sectors[1]) {
                         //If there's no change in height, why bother?
                         if(
-                            (ePtr->sectors[0]->z == ePtr->sectors[1]->z) &&
+                            (ePtr->sectors[0]->floorZ == ePtr->sectors[1]->floorZ) &&
                             ePtr->sectors[0]->type != SECTOR_TYPE_BLOCKING &&
                             ePtr->sectors[1]->type != SECTOR_TYPE_BLOCKING
                         ) {
@@ -1282,7 +1282,7 @@ void Area::loadGeometryFromDataNode(
         sRS.set("texture", newSector->textureInfo.bmpName);
         sRS.set("type", typeStr);
         sRS.set("vars", newSector->vars);
-        sRS.set("z", newSector->z);
+        sRS.set("z", newSector->floorZ);
         
         bool sectorTypeFound;
         newSector->type =
@@ -2580,7 +2580,7 @@ void Area::saveGeometryToDataNode(DataNode* node) {
         if(sPtr->isBottomlessPit) {
             sGW.write("is_bottomless_pit", true);
         }
-        sGW.write("z", sPtr->z);
+        sGW.write("z", sPtr->floorZ);
         if(sPtr->brightness != GEOMETRY::DEF_SECTOR_BRIGHTNESS) {
             sGW.write("brightness", sPtr->brightness);
         }

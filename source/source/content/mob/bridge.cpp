@@ -45,7 +45,7 @@ Bridge::Bridge(const Point& center, BridgeType* type, float angle) :
     
     team = MOB_TEAM_OBSTACLE;
     
-    startZ = z;
+    startZ = bottomZ;
 }
 
 
@@ -134,7 +134,7 @@ bool Bridge::checkHealth() {
                 //the void or something? Abort!
                 break;
             }
-            floorComponent->z = startZ + zOffset;
+            floorComponent->bottomZ = startZ + zOffset;
             floorComponent->setRectangularDim(
                 Point(chunkWidth, BRIDGE::FLOOR_WIDTH)
             );
@@ -158,7 +158,7 @@ bool Bridge::checkHealth() {
                 //the void or something? Abort!
                 break;
             }
-            leftRailComponent->z = startZ + zOffset;
+            leftRailComponent->bottomZ = startZ + zOffset;
             leftRailComponent->setRectangularDim(
                 Point(
                     floorComponent->rectangularDim.x,
@@ -185,7 +185,7 @@ bool Bridge::checkHealth() {
                 //the void or something? Abort!
                 break;
             }
-            rightRailComponent->z = startZ + zOffset;
+            rightRailComponent->bottomZ = startZ + zOffset;
             rightRailComponent->setRectangularDim(
                 leftRailComponent->rectangularDim
             );
@@ -220,7 +220,7 @@ bool Bridge::checkHealth() {
     Point offset(chunkWidth * chunks - mobRadius, 0);
     offset = rotatePoint(offset, angle);
     center = startPos + offset;
-    z = startZ + prevChunkComponents[0]->z;
+    bottomZ = startZ + prevChunkComponents[0]->bottomZ;
     groundSector = prevChunkComponents[0]->groundSector;
     
     return true;
@@ -350,7 +350,7 @@ void Bridge::setup() {
     if(!links.empty() && links[0]) {
         totalLength = Distance(center, links[0]->center).toFloat();
         face(getAngle(center, links[0]->center), nullptr, true);
-        deltaZ = links[0]->z - z;
+        deltaZ = links[0]->bottomZ - bottomZ;
         totalChunksNeeded =
             std::max(
                 totalChunksNeeded,

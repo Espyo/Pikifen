@@ -5442,17 +5442,17 @@ void AreaEditor::processGuiPanelSector() {
     if(saveableTreeNode("layout", "Behavior")) {
     
         //Sector height value.
-        float sectorZ = sPtr->z;
+        float sectorZ = sPtr->floorZ;
         if(ImGui::DragFloat("Height", &sectorZ)) {
             registerChange("sector height change");
-            sPtr->z = sectorZ;
+            sPtr->floorZ = sectorZ;
             updateAllEdgeOffsetCaches();
         }
         if(ImGui::BeginPopupContextItem()) {
             //-50 height selectable.
             if(ImGui::Selectable("-50")) {
                 registerChange("sector height change");
-                sPtr->z -= 50.0f;
+                sPtr->floorZ -= 50.0f;
                 updateAllEdgeOffsetCaches();
                 ImGui::CloseCurrentPopup();
             }
@@ -5460,7 +5460,7 @@ void AreaEditor::processGuiPanelSector() {
             //+50 height selectable.
             if(ImGui::Selectable("+50")) {
                 registerChange("sector height change");
-                sPtr->z += 50.0f;
+                sPtr->floorZ += 50.0f;
                 updateAllEdgeOffsetCaches();
                 ImGui::CloseCurrentPopup();
             }
@@ -5468,7 +5468,7 @@ void AreaEditor::processGuiPanelSector() {
             //Set to zero selectable.
             if(ImGui::Selectable("Set to 0")) {
                 registerChange("sector height change");
-                sPtr->z = 0.0f;
+                sPtr->floorZ = 0.0f;
                 updateAllEdgeOffsetCaches();
                 ImGui::CloseCurrentPopup();
             }

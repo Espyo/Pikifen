@@ -205,7 +205,7 @@ Leader::Leader(const Point& center, LeaderType* type, float angle) :
                 rotatePoint(Point(pSpeed, 0.0f), pAngle)
             );
         p.time = p.duration;
-        p.z = this->z + this->height / 2.0f;
+        p.z = this->bottomZ + this->height / 2.0f;
         game.states.gameplay->particles.addParticle(p);
     };
     swarmNextArrowTimer.start();
@@ -270,8 +270,8 @@ bool Leader::canGrabGroupMember(Mob* m) const {
     //Check if the mob isn't too far under the leader
     //when on the same height sector.
     if(
-        z - m->z > GEOMETRY::STEP_HEIGHT &&
-        centerSector->z == m->centerSector->z &&
+        bottomZ - m->bottomZ > GEOMETRY::STEP_HEIGHT &&
+        centerSector->floorZ == m->centerSector->floorZ &&
         standingOnMob == m->standingOnMob
     ) {
         return false;
@@ -388,7 +388,7 @@ void Leader::dismissDetails() {
                 rotatePoint(Point(parSpeed, 0.0f), parAngle)
             );
         par.time = par.duration;
-        par.z = z + height / 2.0f;
+        par.z = bottomZ + height / 2.0f;
         game.states.gameplay->particles.addParticle(par);
     }
 }
@@ -801,7 +801,7 @@ void Leader::drawMob() {
         //This is the best place to position the light particles, so do that.
         antennaPG->baseParticle.center = lightEff.tf.trans;
         antennaPG->baseParticle.bmpAngle = lightEff.tf.rot;
-        antennaPG->baseParticle.z = z + height + 1.0f;
+        antennaPG->baseParticle.z = bottomZ + height + 1.0f;
         adjustKeyframeInterpolatorValues<float>(
             antennaPG->baseParticle.size,
         [ = ] (float s) {
@@ -1307,11 +1307,11 @@ void Leader::updateThrowVariables() {
     
     float targetZ;
     if(player->throwDestMob) {
-        targetZ = player->throwDestMob->z + player->throwDestMob->height;
+        targetZ = player->throwDestMob->bottomZ + player->throwDestMob->height;
     } else if(player->throwDestSector) {
-        targetZ = player->throwDestSector->z;
+        targetZ = player->throwDestSector->floorZ;
     } else {
-        targetZ = z;
+        targetZ = bottomZ;
     }
     
     float maxHeight;
@@ -1323,7 +1323,7 @@ void Leader::updateThrowVariables() {
         maxHeight = ((Leader*) throwee)->leaType->maxThrowHeight;
         break;
     } default: {
-        maxHeight = std::max(128.0f, (targetZ - z) * 1.2f);
+        maxHeight = std::max(128.0f, (targetZ - bottomZ) * 1.2f);
         break;
     }
     }
@@ -1332,22 +1332,22 @@ void Leader::updateThrowVariables() {
     //reach the intended value. Let's bump it up just a smidge.
     maxHeight += 0.5f;
     
-    if(maxHeight >= (targetZ - z)) {
+    if(maxHeight >= (targetZ - bottomZ)) {
         //Can reach.
         throweeCanReach = true;
     } else {
         //Can't reach! Just do a convincing throw that is sure to fail.
         //Limiting the "target" Z makes it so the horizontal velocity isn't
         //so wild.
-        targetZ = z + maxHeight * 0.75;
+        targetZ = bottomZ + maxHeight * 0.75;
         throweeCanReach = false;
     }
     
-    throweeMaxZ = z + maxHeight;
+    throweeMaxZ = bottomZ + maxHeight;
     
     calculateThrow(
         center,
-        z,
+        bottomZ,
         player->throwDest,
         targetZ,
         maxHeight,

@@ -146,8 +146,8 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
         }
         if(
             player->throwDestMob &&
-            mPtr->z + mPtr->height <
-            player->throwDestMob->z + player->throwDestMob->height
+            mPtr->bottomZ + mPtr->height <
+            player->throwDestMob->bottomZ + player->throwDestMob->height
         ) {
             //If this mob is lower than the previous known "under cursor" mob,
             //then forget it.
@@ -169,7 +169,7 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
         
     if(player->leaderCursorSector) {
         player->leaderCursorHeightDiffLight =
-            (player->leaderCursorSector->z - player->leaderPtr->z) * 0.001;
+            (player->leaderCursorSector->floorZ - player->leaderPtr->bottomZ) * 0.001;
         player->leaderCursorHeightDiffLight =
             std::clamp(player->leaderCursorHeightDiffLight, -0.1f, 0.1f);
     }
@@ -1149,7 +1149,7 @@ void GameplayState::doMenuLogic() {
             resizeString(
                 resizeString(f2s(game.makerTools.infoLock->center.x), 8) + " " +
                 resizeString(f2s(game.makerTools.infoLock->center.y), 8) + " " +
-                resizeString(f2s(game.makerTools.infoLock->z), 8),
+                resizeString(f2s(game.makerTools.infoLock->bottomZ), 8),
                 26
             );
         string angleStr =
@@ -1369,7 +1369,7 @@ void GameplayState::doMenuLogic() {
             sectorIdxStr =
                 resizeString(i2s(mouseSectorIdx), 5);
             sectorZStr =
-                resizeString(f2s(mouseSector->z), 8);
+                resizeString(f2s(mouseSector->floorZ), 8);
             sectorLightStr =
                 resizeString(i2s(mouseSector->brightness), 3);
             sectorHazardStr =
@@ -1976,8 +1976,8 @@ void GameplayState::processMobTouches(
         okToPush &&
         (m2Ptr->type->pushes || bothIdlePikmin) && (
             (
-                m2Ptr->z < mPtr->z + mPtr->height &&
-                m2Ptr->z + m2Ptr->height > mPtr->z
+                m2Ptr->bottomZ < mPtr->bottomZ + mPtr->height &&
+                m2Ptr->bottomZ + m2Ptr->height > mPtr->bottomZ
             ) || (
                 mPtr->height == 0
             ) || (
@@ -2146,8 +2146,8 @@ void GameplayState::processMobTouches(
         } else {
             zTouch =
                 !(
-                    (m2Ptr->z > mPtr->z + mPtr->height) ||
-                    (m2Ptr->z + m2Ptr->height < mPtr->z)
+                    (m2Ptr->bottomZ > mPtr->bottomZ + mPtr->height) ||
+                    (m2Ptr->bottomZ + m2Ptr->height < mPtr->bottomZ)
                 );
         }
         
@@ -2248,8 +2248,8 @@ void GameplayState::processMobTouches(
                     h2Ptr->getCurPos(
                         m2Ptr->center, m2Ptr->angleCos, m2Ptr->angleSin
                     );
-                float m1HZ = mPtr->z + h1Ptr->z;
-                float m2HZ = m2Ptr->z + h2Ptr->z;
+                float m1HZ = mPtr->bottomZ + h1Ptr->bottomZ;
+                float m2HZ = m2Ptr->bottomZ + h2Ptr->bottomZ;
                 
                 bool collided = false;
                 

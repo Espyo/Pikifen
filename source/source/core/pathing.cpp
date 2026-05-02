@@ -713,7 +713,7 @@ bool canTraversePathLink(
     } case PATH_LINK_TYPE_LEDGE: {
         if(
             !hasFlag(settings.flags, PATH_FOLLOW_FLAG_AIRBORNE) &&
-            (endSector->z - startSector->z) > GEOMETRY::STEP_HEIGHT
+            (endSector->floorZ - startSector->floorZ) > GEOMETRY::STEP_HEIGHT
         ) {
             if(outReason) *outReason = PATH_BLOCK_REASON_UP_LEDGE;
             return false;

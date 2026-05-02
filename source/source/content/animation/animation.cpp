@@ -515,7 +515,7 @@ void AnimationDatabase::loadFromDataNode(DataNode* node) {
             hRS.set("hazard", hazardStr, &hazardNode);
             
             newHitbox.bodyPartName = hitboxNode->name;
-            newHitbox.center = s2p(coordsStr, &newHitbox.z);
+            newHitbox.center = s2p(coordsStr, &newHitbox.bottomZ);
             newHitbox.type = (HITBOX_TYPE) hitboxTypeInt;
             newHitbox.knockbackType = (KNOCKBACK_TYPE) knockbackTypeInt;
             newHitbox.surfaceType = (HITBOX_SURFACE_TYPE) surfaceTypeInt;
@@ -686,7 +686,7 @@ void AnimationDatabase::saveToDataNode(
                     hitboxesNode->addNew(hitboxPtr->bodyPartName);
                 GetterWriter hGW(hitboxNode);
                 
-                hGW.write("coords", p2s(hitboxPtr->center, &hitboxPtr->z));
+                hGW.write("coords", p2s(hitboxPtr->center, &hitboxPtr->bottomZ));
                 hGW.write("height", hitboxPtr->height);
                 hGW.write("radius", hitboxPtr->radius);
                 hGW.write("type", hitboxPtr->type);

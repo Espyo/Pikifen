@@ -85,14 +85,14 @@ bool areWallsBetween(
             }
         }
         if(
-            ePtr->sectors[0]->z < ignoreWallsBelowZ &&
-            ePtr->sectors[1]->z < ignoreWallsBelowZ
+            ePtr->sectors[0]->floorZ < ignoreWallsBelowZ &&
+            ePtr->sectors[1]->floorZ < ignoreWallsBelowZ
         ) {
             //This wall was chosen to be ignored.
             continue;
         }
         if(
-            fabs(ePtr->sectors[0]->z - ePtr->sectors[1]->z) >
+            fabs(ePtr->sectors[0]->floorZ - ePtr->sectors[1]->floorZ) >
             GEOMETRY::STEP_HEIGHT
         ) {
             //The walls are more than stepping height in difference.
@@ -276,11 +276,11 @@ bool doesEdgeHaveLedgeSmoothing(
         
     } else {
         //Return whichever one is the tallest.
-        if(ePtr->sectors[0]->z > ePtr->sectors[1]->z) {
+        if(ePtr->sectors[0]->floorZ > ePtr->sectors[1]->floorZ) {
             *outAffectedSector = ePtr->sectors[0];
             *outUnaffectedSector = ePtr->sectors[1];
             return true;
-        } else if(ePtr->sectors[1]->z > ePtr->sectors[0]->z) {
+        } else if(ePtr->sectors[1]->floorZ > ePtr->sectors[0]->floorZ) {
             *outAffectedSector = ePtr->sectors[1];
             *outUnaffectedSector = ePtr->sectors[0];
             return true;
@@ -355,10 +355,10 @@ bool doesEdgeHaveWallShadow(
     if(ePtr->sectors[1]->isBottomlessPit) return false;
     
     //Same-height sectors can't cast.
-    if(ePtr->sectors[0]->z == ePtr->sectors[1]->z) return false;
+    if(ePtr->sectors[0]->floorZ == ePtr->sectors[1]->floorZ) return false;
     
     //We can already save which one is highest.
-    if(ePtr->sectors[0]->z > ePtr->sectors[1]->z) {
+    if(ePtr->sectors[0]->floorZ > ePtr->sectors[1]->floorZ) {
         *outUnaffectedSector = ePtr->sectors[0];
         *outAffectedSector = ePtr->sectors[1];
     } else {
@@ -372,8 +372,8 @@ bool doesEdgeHaveWallShadow(
     } else {
         //Auto shadow length.
         return
-            (*outUnaffectedSector)->z >
-            (*outAffectedSector)->z + GEOMETRY::STEP_HEIGHT;
+            (*outUnaffectedSector)->floorZ >
+            (*outAffectedSector)->floorZ + GEOMETRY::STEP_HEIGHT;
     }
 }
 
@@ -726,7 +726,7 @@ float getWallShadowLength(Edge* ePtr) {
     }
     
     float heightDifference =
-        fabs(ePtr->sectors[0]->z - ePtr->sectors[1]->z);
+        fabs(ePtr->sectors[0]->floorZ - ePtr->sectors[1]->floorZ);
     return
         std::clamp(
             heightDifference * GEOMETRY::SHADOW_AUTO_LENGTH_MULT,
@@ -1431,7 +1431,7 @@ void spitPikminSeed(
                 pos, pikType, angle, "", nullptr, PIKMIN_STATE_SEED
             )
         );
-    newPikmin->z = z;
+    newPikmin->bottomZ = z;
     newPikmin->speed.x = cos(angle) * horizontalSpeed;
     newPikmin->speed.y = sin(angle) * horizontalSpeed;
     newPikmin->speedZ = verticalSpeed;

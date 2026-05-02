@@ -112,7 +112,7 @@ void Converter::spit() {
         }
         
         spitPikminSeed(
-            center, z + CONVERTER::NEW_SEED_Z_OFFSET, currentType,
+            center, bottomZ + CONVERTER::NEW_SEED_Z_OFFSET, currentType,
             nSpits, CONVERTER::SPIT_H_SPEED, CONVERTER::SPIT_H_SPEED_DEVIATION,
             CONVERTER::SPIT_V_SPEED
         );

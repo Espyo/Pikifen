@@ -829,7 +829,7 @@ void ScriptActionRunners::getFloorZ(ScriptActionInstRunData& data) {
     //Main logic.
     Point p(s2f(xArg), s2f(yArg));
     Sector* s = getSector(p, nullptr, true);
-    float result = s ? s->z : 0.0f;
+    float result = s ? s->floorZ : 0.0f;
     
     //Store the result.
     data.scriptVM->vars[destVarArg] = f2s(result);
@@ -1194,7 +1194,7 @@ void ScriptActionRunners::getMobInfo(ScriptActionInstRunData& data) {
         break;
         
     } case SCRIPT_ACTION_GET_MOB_INFO_TYPE_Z: {
-        result = f2s(target->z);
+        result = f2s(target->bottomZ);
         break;
     }
     }
@@ -1468,7 +1468,7 @@ void ScriptActionRunners::moveToAbsolute(ScriptActionInstRunData& data) {
     //Main logic.
     float x = s2f(xArg);
     float y = s2f(yArg);
-    float z = zArg.empty() ? data.scriptVM->mob->z : s2f(zArg);
+    float z = zArg.empty() ? data.scriptVM->mob->bottomZ : s2f(zArg);
     data.scriptVM->mob->chase(
         Point(x, y), z,
         CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED
@@ -1493,7 +1493,7 @@ void ScriptActionRunners::moveToRelative(ScriptActionInstRunData& data) {
     float z = zArg.empty() ? 0.0f : s2f(zArg);
     Point p = rotatePoint(Point(x, y), data.scriptVM->mob->angle);
     data.scriptVM->mob->chase(
-        data.scriptVM->mob->center + p, data.scriptVM->mob->z + z,
+        data.scriptVM->mob->center + p, data.scriptVM->mob->bottomZ + z,
         CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED
     );
 }
@@ -1532,7 +1532,7 @@ void ScriptActionRunners::moveToTarget(ScriptActionInstRunData& data) {
             offset = rotatePoint(offset, a + TAU / 2.0);
             data.scriptVM->mob->chase(
                 data.scriptVM->mob->center + offset,
-                data.scriptVM->mob->z,
+                data.scriptVM->mob->bottomZ,
                 CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED
             );
         } else {
@@ -1544,7 +1544,7 @@ void ScriptActionRunners::moveToTarget(ScriptActionInstRunData& data) {
         if(data.scriptVM->focusedMob) {
             data.scriptVM->mob->chase(
                 &data.scriptVM->focusedMob->center,
-                &data.scriptVM->focusedMob->z,
+                &data.scriptVM->focusedMob->bottomZ,
                 Point(), 0.0f,
                 CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED
             );
@@ -1557,7 +1557,7 @@ void ScriptActionRunners::moveToTarget(ScriptActionInstRunData& data) {
         if(data.scriptVM->focusedMob) {
             data.scriptVM->mob->chase(
                 data.scriptVM->focusedMob->center,
-                data.scriptVM->focusedMob->z,
+                data.scriptVM->focusedMob->bottomZ,
                 CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED
             );
         } else {
@@ -1568,7 +1568,7 @@ void ScriptActionRunners::moveToTarget(ScriptActionInstRunData& data) {
     } case SCRIPT_ACTION_MOVE_TYPE_HOME: {
         data.scriptVM->mob->chase(
             data.scriptVM->mob->home,
-            data.scriptVM->mob->z,
+            data.scriptVM->mob->bottomZ,
             CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED
         );
         break;
@@ -1591,7 +1591,7 @@ void ScriptActionRunners::moveToTarget(ScriptActionInstRunData& data) {
         
         data.scriptVM->mob->chase(
             des,
-            data.scriptVM->mob->z,
+            data.scriptVM->mob->bottomZ,
             CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED
         );
         break;
@@ -2124,7 +2124,7 @@ void ScriptActionRunners::setHeight(ScriptActionInstRunData& data) {
         forIdx(m, game.states.gameplay->mobs.all) {
             Mob* m2Ptr = game.states.gameplay->mobs.all[m];
             if(m2Ptr->standingOnMob == data.scriptVM->mob) {
-                m2Ptr->z = data.scriptVM->mob->z + data.scriptVM->mob->height;
+                m2Ptr->bottomZ = data.scriptVM->mob->bottomZ + data.scriptVM->mob->height;
             }
         }
     }
@@ -2570,7 +2570,7 @@ void ScriptActionRunners::stabilizeZ(ScriptActionInstRunData& data) {
         return;
     }
     
-    float bestMatchZ = data.scriptVM->mob->links[0]->z;
+    float bestMatchZ = data.scriptVM->mob->links[0]->bottomZ;
     bool typeFound;
     SCRIPT_ACTION_STABILIZE_Z_TYPE type =
         enumGetValue(scriptActionStabilizeZTypeINames, typeArg, &typeFound);
@@ -2588,14 +2588,14 @@ void ScriptActionRunners::stabilizeZ(ScriptActionInstRunData& data) {
         
         switch(type) {
         case SCRIPT_ACTION_STABILIZE_Z_TYPE_HIGHEST: {
-            if(data.scriptVM->mob->links[l]->z > bestMatchZ) {
-                bestMatchZ = data.scriptVM->mob->links[l]->z;
+            if(data.scriptVM->mob->links[l]->bottomZ > bestMatchZ) {
+                bestMatchZ = data.scriptVM->mob->links[l]->bottomZ;
             }
             break;
             
         } case SCRIPT_ACTION_STABILIZE_Z_TYPE_LOWEST: {
-            if(data.scriptVM->mob->links[l]->z < bestMatchZ) {
-                bestMatchZ = data.scriptVM->mob->links[l]->z;
+            if(data.scriptVM->mob->links[l]->bottomZ < bestMatchZ) {
+                bestMatchZ = data.scriptVM->mob->links[l]->bottomZ;
             }
             break;
             
@@ -2604,7 +2604,7 @@ void ScriptActionRunners::stabilizeZ(ScriptActionInstRunData& data) {
         
     }
     
-    data.scriptVM->mob->z = bestMatchZ + s2f(offsetArg);
+    data.scriptVM->mob->bottomZ = bestMatchZ + s2f(offsetArg);
 }
 
 
@@ -2851,7 +2851,7 @@ void ScriptActionRunners::teleportToRelative(ScriptActionInstRunData& data) {
         );
     data.scriptVM->mob->chase(
         data.scriptVM->mob->center + p,
-        data.scriptVM->mob->z + s2f(zArg),
+        data.scriptVM->mob->bottomZ + s2f(zArg),
         CHASE_FLAG_TELEPORT
     );
 }
@@ -2886,7 +2886,7 @@ void ScriptActionRunners::throwFocus(ScriptActionInstRunData& data) {
     
     data.scriptVM->mob->startHeightEffect();
     calculateThrow(
-        data.scriptVM->focusedMob->center, data.scriptVM->focusedMob->z,
+        data.scriptVM->focusedMob->center, data.scriptVM->focusedMob->bottomZ,
         Point(s2f(xArg), s2f(yArg)), s2f(zArg),
         maxHeight, MOB::GRAVITY_ADDER,
         &data.scriptVM->focusedMob->speed,

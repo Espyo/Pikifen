@@ -289,7 +289,7 @@ void AreaEditor::handleKeyDownCanvas(const ALLEGRO_EVENT& ev) {
                 quickHeightSetStartPos = game.mouseCursor.winPos;
                 for(size_t sIdx : sectorSelection.getItemIdxs()) {
                     Sector* sPtr = game.curArea->sectors[sIdx];
-                    quickHeightSetStartHeights[sPtr] = sPtr->z;
+                    quickHeightSetStartHeights[sPtr] = sPtr->floorZ;
                 }
                 setStatus(
                     "Move the cursor up or down to change the sector's height."
@@ -1493,7 +1493,7 @@ void AreaEditor::handleMouseUpdate(const ALLEGRO_EVENT& ev) {
         registerChange("quick sector height set");
         for(size_t sIdx : sectorSelection.getItemIdxs()) {
             Sector* sPtr = game.curArea->sectors[sIdx];
-            sPtr->z = quickHeightSetStartHeights[sPtr] + offset;
+            sPtr->floorZ = quickHeightSetStartHeights[sPtr] + offset;
         }
         updateAllEdgeOffsetCaches();
     }

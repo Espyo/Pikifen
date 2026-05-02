@@ -1723,7 +1723,7 @@ void LeaderFsm::doThrow(ScriptVM* scriptVM, void* info1, void* info2) {
     
     heldPtr->stopChasing();
     heldPtr->center = leaPtr->center;
-    heldPtr->z = leaPtr->z;
+    heldPtr->bottomZ = leaPtr->bottomZ;
     
     heldPtr->zCap = leaPtr->throweeMaxZ;
     
@@ -2053,7 +2053,7 @@ void LeaderFsm::goPluck(ScriptVM* scriptVM, void* info1, void* info2) {
     leaPtr->autoPlucking = true;
     leaPtr->pluckTarget = pikPtr;
     leaPtr->chase(
-        &pikPtr->center, &pikPtr->z,
+        &pikPtr->center, &pikPtr->bottomZ,
         Point(), 0.0f,
         CHASE_FLAG_ANY_ANGLE,
         pikPtr->radius + leaPtr->radius
@@ -2222,7 +2222,7 @@ void LeaderFsm::move(ScriptVM* scriptVM, void* info1, void* info2) {
     finalCoords *= leaPtr->type->moveSpeed;
     finalCoords += leaPtr->center;
     leaPtr->chase(
-        finalCoords, leaPtr->z, CHASE_FLAG_ANY_ANGLE,
+        finalCoords, leaPtr->bottomZ, CHASE_FLAG_ANY_ANGLE,
         PATHS::DEF_CHASE_TARGET_DISTANCE,
         leaPtr->getBaseSpeed() * leaPtr->player->leaderSpeedMult
     );
@@ -2310,7 +2310,7 @@ void LeaderFsm::release(ScriptVM* scriptVM, void* info1, void* info2) {
     //Reset the Pikmin's position to match the leader's,
     //so that the leader doesn't release the Pikmin inside a wall behind them.
     heldPtr->center = leaPtr->center;
-    heldPtr->z = leaPtr->z;
+    heldPtr->bottomZ = leaPtr->bottomZ;
     heldPtr->face(leaPtr->angle + TAU / 2.0f, nullptr, true);
     leaPtr->release(heldPtr);
 }
@@ -3101,7 +3101,7 @@ void LeaderFsm::updateInGroupChasing(
     leaPtr->getGroupSpotInfo(&targetPos, &targetDist);
     
     leaPtr->chase(
-        targetPos, leaPtr->followingGroup->z,
+        targetPos, leaPtr->followingGroup->bottomZ,
         CHASE_FLAG_ANY_ANGLE, targetDist
     );
     

@@ -215,7 +215,7 @@ vector<Mob*> Liquid::getMobsOn() const {
         forIdx(s, sectors) {
             if(
                 mPtr->groundSector == sectors[s] &&
-                mPtr->z <= mPtr->groundSector->z
+                mPtr->bottomZ <= mPtr->groundSector->floorZ
             ) {
                 result.push_back(mPtr);
                 break;

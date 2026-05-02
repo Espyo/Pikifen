@@ -87,7 +87,7 @@ struct Sector {
     bool isBottomlessPit = false;
     
     //Z coordinate of the floor.
-    float z = 0.0f;
+    float floorZ = 0.0f;
     
     //Extra information, if any.
     string vars;

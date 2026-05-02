@@ -29,20 +29,20 @@ BodyPart::BodyPart(const string& name) :
  * @param bpi Index of the body part in the animation database.
  * @param bpp Pointer to the body part.
  * @param center Hitbox's coordinates, from the center of the mob.
- * @param z Z coordinate of the bottom point of the hitbox.
+ * @param bottomZ Z coordinate of the bottom point of the hitbox.
  * @param height The hitbox's total height.
  * 0 means it spans indefinitely across the Z axis.
  * @param radius Hitbox radius.
  */
 Hitbox::Hitbox(
-    const string& bpn, size_t bpi, BodyPart* bpp, const Point& pos,
-    float z, float height, float radius
+    const string& bpn, size_t bpi, BodyPart* bpp, const Point& center,
+    float bottomZ, float height, float radius
 ) :
     bodyPartName(bpn),
     bodyPartIdx(bpi),
     bodyPartPtr(bpp),
-    center(pos),
-    z(z),
+    center(center),
+    bottomZ(bottomZ),
     height(height),
     radius(radius) {
     

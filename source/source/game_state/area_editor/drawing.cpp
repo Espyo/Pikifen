@@ -128,14 +128,14 @@ void AreaEditor::drawCanvas() {
         game.options.areaEd.viewMode == VIEW_MODE_HEIGHTMAP &&
         !game.curArea->sectors.empty()
     ) {
-        style.lowestSectorZ = game.curArea->sectors[0]->z;
+        style.lowestSectorZ = game.curArea->sectors[0]->floorZ;
         style.highestSectorZ = style.lowestSectorZ;
         
         for(size_t s = 1; s < game.curArea->sectors.size(); s++) {
             style.lowestSectorZ =
-                std::min(style.lowestSectorZ, game.curArea->sectors[s]->z);
+                std::min(style.lowestSectorZ, game.curArea->sectors[s]->floorZ);
             style.highestSectorZ =
-                std::max(style.highestSectorZ, game.curArea->sectors[s]->z);
+                std::max(style.highestSectorZ, game.curArea->sectors[s]->floorZ);
         }
     }
     
@@ -429,7 +429,7 @@ void AreaEditor::drawCanvas() {
             TEXT_COLOR, nrCoords,
             "Height " +
             string(offset < 0 ? "" : "+") + i2s(offset) + "" +
-            (singleSector ? " (" + f2s(singleSector->z) + ")" : "")
+            (singleSector ? " (" + f2s(singleSector->floorZ) + ")" : "")
         );
     }
     
@@ -644,11 +644,11 @@ void AreaEditor::drawCrossSectionGraph() {
                     if(
                         splits[sp].sectorPtrs[se] &&
                         (
-                            splits[sp].sectorPtrs[se]->z < lowestZ ||
+                            splits[sp].sectorPtrs[se]->floorZ < lowestZ ||
                             !gotLowestZ
                         )
                     ) {
-                        lowestZ = splits[sp].sectorPtrs[se]->z;
+                        lowestZ = splits[sp].sectorPtrs[se]->floorZ;
                         gotLowestZ = true;
                     }
                 }
@@ -690,7 +690,7 @@ void AreaEditor::drawCrossSectionGraph() {
                     ) / 2.0;
                 float leaderSilhouettePivotY =
                     crossSectionWindowEnd.y - 8 -
-                    ((centralSector->z - lowestZ) * proportion);
+                    ((centralSector->floorZ - lowestZ) * proportion);
                 al_draw_tinted_scaled_bitmap(
                     game.sysContent.bmpLeaderSilhouetteSide,
                     COLOR_TRANSPARENT_WHITE,
@@ -822,7 +822,7 @@ void AreaEditor::drawCrossSectionSector(
         endRatio;
     float rectangleY =
         crossSectionWindowEnd.y - 8 -
-        ((sectorPtr->z - lowestZ) * proportion);
+        ((sectorPtr->floorZ - lowestZ) * proportion);
         
     ALLEGRO_COLOR color =
         game.options.editors.useCustomStyle ?
@@ -993,7 +993,7 @@ void AreaEditor::drawEdges(const AreaEdCanvasStyle& style) {
         
         if(
             !isOneSided &&
-            ePtr->sectors[0]->z == ePtr->sectors[1]->z &&
+            ePtr->sectors[0]->floorZ == ePtr->sectors[1]->floorZ &&
             ePtr->sectors[0]->type == ePtr->sectors[1]->type
         ) {
             isSameZ = true;
@@ -1830,7 +1830,7 @@ void AreaEditor::drawSectors(const AreaEdCanvasStyle& style) {
         } else if(viewHeightmap) {
             float h =
                 interpolateNumber(
-                    sPtr->z,
+                    sPtr->floorZ,
                     style.lowestSectorZ, style.highestSectorZ,
                     0, 1.0f
                 );

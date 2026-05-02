@@ -180,7 +180,7 @@ Mob::Mob(const Point& center, MobType* type, float angle) :
     
     Sector* sec = getSector(center, nullptr, true);
     if(sec) {
-        z = sec->z;
+        bottomZ = sec->floorZ;
     } else {
         toDelete = true;
     }
@@ -622,7 +622,7 @@ void Mob::arachnorbFootMoveLogic() {
     
     finalPos += offset;
     
-    chase(finalPos, z, CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED);
+    chase(finalPos, bottomZ, CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED);
 }
 
 
@@ -1369,9 +1369,9 @@ void Mob::chase(
 void Mob::chaseNextPathStop(float speed, float acceleration) {
     PathStop* nextStop = pathInfo->path[pathInfo->curPathStopIdx];
     
-    float nextStopZ = z;
+    float nextStopZ = bottomZ;
     if(nextStop->sectorPtr) {
-        nextStopZ = nextStop->sectorPtr->z;
+        nextStopZ = nextStop->sectorPtr->floorZ;
     }
     if(hasFlag(pathInfo->settings.flags, PATH_FOLLOW_FLAG_AIRBORNE)) {
         nextStopZ += PIKMIN::FLIER_ABOVE_FLOOR_HEIGHT;
@@ -1726,8 +1726,8 @@ void Mob::doAttackEffects(
         Point(cos(aToVAngle) * offset, sin(aToVAngle) * offset);
     float particleZ =
         std::max(
-            z + getDrawingHeight() + 1.0f,
-            attacker->z + attacker->getDrawingHeight() + 1.0f
+            bottomZ + getDrawingHeight() + 1.0f,
+            attacker->bottomZ + attacker->getDrawingHeight() + 1.0f
         );
         
     bool useless = (damage <= 0 && knockbackStrength == 0.0f);
@@ -2264,7 +2264,7 @@ void Mob::getHitboxHoldPoint(
     float* offsetDist, float* offsetAngle, float* verticalDist
 ) const {
     Point actualHPos = hPtr->getCurPos(center, angleCos, angleSin);
-    float actualHZ = z + hPtr->z;
+    float actualHZ = bottomZ + hPtr->bottomZ;
     
     Point posDif = mobToHold->center - actualHPos;
     coordinatesToAngle(posDif, offsetAngle, offsetDist);
@@ -2277,7 +2277,7 @@ void Mob::getHitboxHoldPoint(
     if(hPtr->height <= 0.0f) {
         *verticalDist = 0.0f;
     } else {
-        *verticalDist = mobToHold->z - actualHZ;
+        *verticalDist = mobToHold->bottomZ - actualHZ;
         *verticalDist /= hPtr->height;
     }
 }
@@ -2567,7 +2567,7 @@ void Mob::getSpriteBitmapEffects(
             float heightEffectScale = 1.0;
             //First, check for the mob being in the air.
             heightEffectScale +=
-                (z - heightEffectPivot) * MOB::HEIGHT_EFFECT_FACTOR;
+                (bottomZ - heightEffectPivot) * MOB::HEIGHT_EFFECT_FACTOR;
             heightEffectScale = std::max(heightEffectScale, 1.0f);
             if(
                 groundSector->isBottomlessPit &&
@@ -2576,8 +2576,8 @@ void Mob::getSpriteBitmapEffects(
                 //When atop a pit, heightEffectPivot holds what height
                 //the mob fell from.
                 heightEffectScale =
-                    (z - groundSector->z) /
-                    (heightEffectPivot - groundSector->z);
+                    (bottomZ - groundSector->floorZ) /
+                    (heightEffectPivot - groundSector->floorZ);
             }
             info->tf.scale *= heightEffectScale;
         }
@@ -2871,8 +2871,8 @@ bool Mob::hasClearLine(const Mob* targetMob) const {
     RectCorners bBox(center, center);
     updateMinMaxCoords(bBox, targetMob->center);
     
-    const float selfMaxZ = z + height;
-    const float targetMobMaxZ = targetMob->z + targetMob->height;
+    const float selfMaxZ = bottomZ + height;
+    const float targetMobMaxZ = targetMob->bottomZ + targetMob->height;
     
     //Check against other mobs.
     forIdx(m, game.states.gameplay->mobs.all) {
@@ -2885,17 +2885,17 @@ bool Mob::hasClearLine(const Mob* targetMob) const {
         const float mPtrMaxZ =
             mPtr->height == 0.0f ?
             FLT_MAX :
-            (mPtr->z + mPtr->height);
+            (mPtr->bottomZ + mPtr->height);
         if(mPtrMaxZ < selfMaxZ || mPtrMaxZ < targetMobMaxZ) continue;
         if(
-            mPtr->z > z + height &&
-            mPtr->z > targetMob->z + targetMob->height
+            mPtr->bottomZ > bottomZ + height &&
+            mPtr->bottomZ > targetMob->bottomZ + targetMob->height
         ) {
             continue;
         }
         if(
             targetMob->standingOnMob == mPtr &&
-            fabs(z - targetMob->z) <= GEOMETRY::STEP_HEIGHT
+            fabs(bottomZ - targetMob->bottomZ) <= GEOMETRY::STEP_HEIGHT
         ) {
             continue;
         }
@@ -2939,7 +2939,7 @@ bool Mob::hasClearLine(const Mob* targetMob) const {
     if(
         areWallsBetween(
             center, targetMob->center,
-            std::min(z + height, targetMob->z + targetMob->height) +
+            std::min(bottomZ + height, targetMob->bottomZ + targetMob->height) +
             GEOMETRY::STEP_HEIGHT
         )
     ) {
@@ -3155,7 +3155,7 @@ void Mob::moveToPathEnd(float speed, float acceleration) {
     ) {
         chase(
             &(pathInfo->settings.targetMob->center),
-            &(pathInfo->settings.targetMob->z),
+            &(pathInfo->settings.targetMob->bottomZ),
             Point(), 0.0f,
             CHASE_FLAG_ANY_ANGLE,
             pathInfo->settings.finalTargetDistance,
@@ -3164,7 +3164,7 @@ void Mob::moveToPathEnd(float speed, float acceleration) {
     } else {
         chase(
             pathInfo->settings.targetPoint,
-            getSector(pathInfo->settings.targetPoint, nullptr, true)->z,
+            getSector(pathInfo->settings.targetPoint, nullptr, true)->floorZ,
             CHASE_FLAG_ANY_ANGLE,
             pathInfo->settings.finalTargetDistance,
             speed, acceleration
@@ -3330,7 +3330,7 @@ void Mob::respawn() {
     center = home;
     centerSector = getSector(center, nullptr, true);
     groundSector = centerSector;
-    z = centerSector->z + 100;
+    bottomZ = centerSector->floorZ + 100;
 }
 
 
@@ -3560,7 +3560,7 @@ Mob* Mob::spawn(const MobType::SpawnInfo* info, MobType* typePtr) {
     
     if(info->relative) {
         newXY = center + rotatePoint(info->coordsXY, angle);
-        newZ = z + info->coordsZ;
+        newZ = bottomZ + info->coordsZ;
         newAngle = angle + info->angle;
     } else {
         newXY = info->coordsXY;
@@ -3582,7 +3582,7 @@ Mob* Mob::spawn(const MobType::SpawnInfo* info, MobType* typePtr) {
             info->vars
         );
         
-    newMob->z = newZ;
+    newMob->bottomZ = newZ;
     
     if(typePtr->category->id == MOB_CATEGORY_TREASURES) {
         //This way, treasures that fall into the abyss respawn at the
@@ -3673,7 +3673,7 @@ void Mob::startDyingClassSpecifics() {
  * effect.
  */
 void Mob::startHeightEffect() {
-    heightEffectPivot = z;
+    heightEffectPivot = bottomZ;
 }
 
 
@@ -3725,7 +3725,7 @@ void Mob::stopHeightEffect() {
         type->category->id == MOB_CATEGORY_LEADERS &&
         highestMidairZ != FLT_MAX
     ) {
-        float distanceFallen = highestMidairZ - z;
+        float distanceFallen = highestMidairZ - bottomZ;
         if(distanceFallen > 0.0f) {
             ParticleGenerator pg =
                 standardParticleGenSetup(
@@ -4007,8 +4007,8 @@ void Mob::tickBrain(float deltaT) {
             circlingInfo->circlingPoint;
         float circlingZ =
             circlingInfo->circlingMob ?
-            circlingInfo->circlingMob->z :
-            z;
+            circlingInfo->circlingMob->bottomZ :
+            bottomZ;
             
         circlingInfo->curAngle +=
             linearDistToAngular(
@@ -4052,7 +4052,7 @@ void Mob::tickBrain(float deltaT) {
         Distance horizDist = Distance(center, finalTargetPos);
         float finalTargetZ = chaseInfo.offsetZ;
         if(chaseInfo.origZ) finalTargetZ += *chaseInfo.origZ;
-        float vertDist = fabs(z - finalTargetZ);
+        float vertDist = fabs(bottomZ - finalTargetZ);
         float maxVertDistDiff = 0.0f;
         
         if(hasFlag(flags, MOB_FLAG_CAN_MOVE_MIDAIR)) {
@@ -4061,7 +4061,7 @@ void Mob::tickBrain(float deltaT) {
         } else {
             if(
                 hasFlag(chaseInfo.flags, CHASE_FLAG_ACCEPT_LOWER_Z_GROUNDED) &&
-                z >= finalTargetZ
+                bottomZ >= finalTargetZ
             ) {
                 //Accept the Z difference! This is useful for a pathing
                 //workaround, since the mob may have reached the stop
@@ -4223,7 +4223,7 @@ void Mob::tickMiscLogic(float deltaT) {
     
     if(groundSector->isBottomlessPit) {
         if(heightEffectPivot == LARGE_FLOAT) {
-            heightEffectPivot = z;
+            heightEffectPivot = bottomZ;
         }
     }
     
@@ -4623,8 +4623,8 @@ bool Mob::tickTrackRide() {
     float destZ =
         interpolateNumber(
             trackInfo->curCpProgress, 0.0f, 1.0f,
-            trackInfo->m->z + curCp->z,
-            trackInfo->m->z + nextCp->z
+            trackInfo->m->bottomZ + curCp->bottomZ,
+            trackInfo->m->bottomZ + nextCp->bottomZ
         );
         
     float destAngle = getAngle(curCpPos, nextCpPos);

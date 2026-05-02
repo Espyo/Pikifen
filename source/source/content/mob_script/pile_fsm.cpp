@@ -131,7 +131,7 @@ void PileFsm::beAttacked(ScriptVM* scriptVM, void* info1, void* info2) {
                 )
             );
             
-        newResource->z = spawnZ;
+        newResource->bottomZ = spawnZ;
         newResource->speed.x = cos(spawnAngle) * spawnHSpeed;
         newResource->speed.y = sin(spawnAngle) * spawnHSpeed;
         newResource->speedZ = spawnVSpeed;

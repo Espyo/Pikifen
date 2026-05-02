@@ -2612,7 +2612,7 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
             std::max(ANIM_EDITOR::HITBOX_MIN_RADIUS, curHitbox->radius);
             
         //Hitbox Z value.
-        if(ImGui::DragFloat("Z", &curHitbox->z, 0.1f)) {
+        if(ImGui::DragFloat("Z", &curHitbox->bottomZ, 0.1f)) {
             changesMgr.markAsChanged();
         }
         setTooltip(
