@@ -506,11 +506,11 @@ protected:
             Point* outCenter, Point* outSize, float* outAngle
         ) const;
         size_t getSelectionTotalCount(
-            bool* outCanChange = nullptr, float* outPadding = nullptr
+            bool* outCanChange = nullptr, RectCorners* outPadding = nullptr
         ) const;
         Point getPreOpPivotItemPos() const;
         bool isTransformationWidgetAvailable(
-            bool* outCanChange, float* outPadding
+            bool* outCanChange, RectCorners* outPadding
         ) const;
         bool isOpRuleRespected(OP_RULE rule) const;
         bool shouldDoSingleRotatingItem() const;
@@ -614,17 +614,20 @@ protected:
         void draw(
             const Point& mouseCoords, const Point* const center,
             const Point* const size, const float* const angle,
-            float zoom = 1.0f, Bitmask8 flags = 0, float padding = 0.0f
+            float zoom = 1.0f, Bitmask8 flags = 0,
+            const RectCorners& padding = RectCorners()
         ) const;
         bool handleMouseDown(
             const Point& mouseCoords, const Point* const center,
             const Point* const size, const float* const angle,
-            float zoom = 1.0f, Bitmask8 flags = 0, float padding = 0.0f
+            float zoom = 1.0f, Bitmask8 flags = 0,
+            const RectCorners& padding = RectCorners()
         );
         bool handleMouseMove(
             const Point& mouseCoords, Point* center, Point* size, float* angle,
             float zoom = 1.0f, Bitmask8 flags = 0,
-            float padding = 0.0f, float minSize = -FLT_MAX,
+            const RectCorners& padding = RectCorners(),
+            float minSize = -FLT_MAX,
             const std::function<Point(const Point&)> snapFunc = nullptr
         );
         bool handleMouseUp();
@@ -657,7 +660,7 @@ protected:
         
         void getLocations(
             const Point* const center, const Point* const size,
-            const float* const angle, float padding,
+            const float* const angle, const RectCorners& padding,
             Point* outHandles, float* outRadius,
             ALLEGRO_TRANSFORM* outTransform
         ) const;
@@ -1118,7 +1121,7 @@ protected:
         const SelectionController& selCtrl,
         Point* outSelectionCenter, Point* outSelectionSize,
         float* outSelectionAngle, bool* outUseAngle,
-        Bitmask8* outFlags, float* outPadding
+        Bitmask8* outFlags, RectCorners* outPadding
     ) const;
     bool guiFocusedText();
     bool keyCheck(

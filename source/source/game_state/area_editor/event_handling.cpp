@@ -1330,7 +1330,7 @@ void AreaEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
             &referenceRect.center,
             &referenceRect.size,
             nullptr,
-            1.0f / game.editorsView.cam.zoom, flags, 0.0f, 5.0f,
+            1.0f / game.editorsView.cam.zoom, flags, RectCorners(), 5.0f,
         [this] (const Point & p) { return snapPoint(p); }
         );
         

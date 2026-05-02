@@ -326,7 +326,8 @@ void AnimationEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                 &curSprite->tf.trans,
                 &curSpriteSize,
                 &curSprite->tf.rot,
-                1.0f / game.editorsView.cam.zoom, flags, 0.0f, -FLT_MAX,
+                1.0f / game.editorsView.cam.zoom, flags,
+                RectCorners(), -FLT_MAX,
         [this] (const Point & p) { return snapPoint(p); }
             )
         ) {
@@ -364,7 +365,7 @@ void AnimationEditor::handleLmbDrag(const ALLEGRO_EVENT& ev) {
                     &curSprite->topPose.size,
                     &curSprite->topPose.angle,
                     1.0f / game.editorsView.cam.zoom, flags,
-                    0.0f, ANIM_EDITOR::TOP_MIN_SIZE,
+                    RectCorners(), ANIM_EDITOR::TOP_MIN_SIZE,
             [this] (const Point & p) { return snapPoint(p); }
                 )
             ) {

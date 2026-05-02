@@ -429,7 +429,7 @@ void Editor::drawSelectionAndTransformationThings(
         float selectionAngle;
         bool useSelectionAngle;
         Bitmask8 twFlags;
-        float twPadding;
+        RectCorners twPadding;
         if(
             getSelectionTransformationWidgetParams(
                 selCtrl, &selectionCenter, &selectionSize, &selectionAngle,
@@ -708,10 +708,10 @@ bool Editor::getSelectionTransformationWidgetParams(
     const SelectionController& selCtrl,
     Point* outSelectionCenter, Point* outSelectionSize,
     float* outSelectionAngle, bool* outUseAngle,
-    Bitmask8* outFlags, float* outPadding
+    Bitmask8* outFlags, RectCorners* outPadding
 ) const {
     bool canChange = true;
-    float padding = 0.0f;
+    RectCorners padding;
     if(!selCtrl.isTransformationWidgetAvailable(&canChange, &padding)) {
         return false;
     }
@@ -1245,7 +1245,7 @@ bool Editor::handleSelectionAndTransformationLmbDown(
         float selectionAngle;
         bool useSelectionAngle;
         Bitmask8 twFlags;
-        float twPadding;
+        RectCorners twPadding;
         if(
             getSelectionTransformationWidgetParams(
                 selCtrl, &selectionCenter, &selectionSize, &selectionAngle,
@@ -1314,7 +1314,7 @@ bool Editor::handleSelectionAndTransformationLmbDrag(
         float selectionAngle;
         bool useSelectionAngle;
         Bitmask8 twFlags;
-        float twPadding;
+        RectCorners twPadding;
         if(
             getSelectionTransformationWidgetParams(
                 selCtrl, &selectionCenter, &selectionSize, &selectionAngle,
@@ -5458,10 +5458,10 @@ void Editor::SelectionController::getSingleRotatingItemInfo(
  * @return The total.
  */
 size_t Editor::SelectionController::getSelectionTotalCount(
-    bool* outCanChange, float* outPadding
+    bool* outCanChange, RectCorners* outPadding
 ) const {
     bool canChange = false;
-    float padding = 0.0f;
+    RectCorners padding;
     size_t total = 0;
     
     forIdx(m, managers) {
@@ -5469,7 +5469,10 @@ size_t Editor::SelectionController::getSelectionTotalCount(
         total += count;
         if(count > 0) {
             canChange |= (!managers[m]->disableChanges);
-            padding = std::max(padding, managers[m]->itemPadding);
+            padding.tl.x = std::max(padding.tl.x, managers[m]->itemPadding);
+            padding.tl.y = std::max(padding.tl.y, managers[m]->itemPadding);
+            padding.br.x = std::max(padding.br.x, managers[m]->itemPadding);
+            padding.br.y = std::max(padding.br.y, managers[m]->itemPadding);
         }
     }
     
@@ -5539,10 +5542,10 @@ bool Editor::SelectionController::isOpRuleRespected(OP_RULE rule) const {
  * @return Whether it is available.
  */
 bool Editor::SelectionController::isTransformationWidgetAvailable(
-    bool* outCanChange, float* outPadding
+    bool* outCanChange, RectCorners* outPadding
 ) const {
     *outCanChange = false;
-    *outPadding = 0.0f;
+    *outPadding = RectCorners();
     if(!isOpRuleRespected(twTransformRule)) return false;
     size_t selected = getSelectionTotalCount(outCanChange, outPadding);
     return selected > 0;
@@ -6449,13 +6452,16 @@ void Editor::TransformationWidget::draw(
  */
 void Editor::TransformationWidget::getLocations(
     const Point* const center, const Point* const size,
-    const float* const angle,  float padding,
+    const float* const angle, const RectCorners& padding,
     Point* outHandles, float* outRadius,
     ALLEGRO_TRANSFORM* outTransform
 ) const {
     Point sizeToUse(EDITOR::TW_DEF_SIZE, EDITOR::TW_DEF_SIZE);
     if(size) sizeToUse = *size;
-    sizeToUse += padding;
+    RectCorners corners(
+        (sizeToUse / (-2.0f)) - padding.tl,
+        (sizeToUse / 2.0f) + padding.br
+    );
     
     //First, the Allegro transformation.
     ALLEGRO_TRANSFORM transformToUse;
@@ -6466,15 +6472,15 @@ void Editor::TransformationWidget::getLocations(
     al_translate_transform(&transformToUse, center->x, center->y);
     
     //Get the coordinates of all translation and scale handles.
-    outHandles[0] = { -sizeToUse.x / 2.0f, -sizeToUse.y / 2.0f };
-    outHandles[1] = { 0.0f, -sizeToUse.y / 2.0f };
-    outHandles[2] = { sizeToUse.x / 2.0f, -sizeToUse.y / 2.0f };
-    outHandles[3] = { -sizeToUse.x / 2.0f, 0.0f };
+    outHandles[0] = { corners.tl.x, corners.tl.y };
+    outHandles[1] = { 0.0f, corners.tl.y };
+    outHandles[2] = { corners.br.x, corners.tl.y };
+    outHandles[3] = { corners.tl.x, 0.0f };
     outHandles[4] = { 0.0f, 0.0f };
-    outHandles[5] = { sizeToUse.x / 2.0f, 0.0f };
-    outHandles[6] = { -sizeToUse.x / 2.0f, sizeToUse.y / 2.0f };
-    outHandles[7] = { 0.0f, sizeToUse.y / 2.0f };
-    outHandles[8] = { sizeToUse.x / 2.0f, sizeToUse.y / 2.0f };
+    outHandles[5] = { corners.br.x, 0.0f };
+    outHandles[6] = { corners.tl.x, corners.br.y };
+    outHandles[7] = { 0.0f, corners.br.y };
+    outHandles[8] = { corners.br.x, corners.br.y };
     
     for(unsigned char h = 0; h < 9; h++) {
         al_transform_coordinates(
@@ -6482,12 +6488,28 @@ void Editor::TransformationWidget::getLocations(
         );
     }
     
-    float diameter = Distance(Point(), sizeToUse).toFloat();
-    if(diameter == 0.0f) {
-        *outRadius = 0.0f;
-    } else {
-        *outRadius = diameter / 2.0f;
-    }
+    float radius = 0.0f;
+    radius =
+        std::max(
+            radius,
+            Distance(Point(), Point(corners.tl.x, corners.tl.y)).toFloat()
+        );
+    radius =
+        std::max(
+            radius,
+            Distance(Point(), Point(corners.tl.x, corners.br.y)).toFloat()
+        );
+    radius =
+        std::max(
+            radius,
+            Distance(Point(), Point(corners.br.x, corners.tl.y)).toFloat()
+        );
+    radius =
+        std::max(
+            radius,
+            Distance(Point(), Point(corners.br.x, corners.br.y)).toFloat()
+        );
+    *outRadius = radius;
     
     if(outTransform) *outTransform = transformToUse;
 }
@@ -6564,7 +6586,7 @@ Point Editor::TransformationWidget::getOldCenter() const {
 bool Editor::TransformationWidget::handleMouseDown(
     const Point& mouseCoords, const Point* const center,
     const Point* const size, const float* const angle, float zoom,
-    Bitmask8 flags, float padding
+    Bitmask8 flags, const RectCorners& padding
 ) {
     if(!center) return false;
     
@@ -6607,7 +6629,7 @@ bool Editor::TransformationWidget::handleMouseDown(
  */
 bool Editor::TransformationWidget::handleMouseMove(
     const Point& mouseCoords, Point* center, Point* size, float* angle,
-    float zoom, Bitmask8 flags, float padding, float minSize,
+    float zoom, Bitmask8 flags, const RectCorners& padding, float minSize,
     const std::function<Point(const Point&)> snapFunc
 ) {
     if(!center) return false;
@@ -6631,13 +6653,13 @@ bool Editor::TransformationWidget::handleMouseMove(
         &oldCenter,
         size ? &oldSize : nullptr,
         angle ? &oldAngle : nullptr,
-        0.0f, oldHandlesSansPadding, &oldRadiusSansPadding, nullptr
+        RectCorners(), oldHandlesSansPadding, &oldRadiusSansPadding, nullptr
     );
     
     ALLEGRO_TRANSFORM t;
     Point handles[9];
     float radius;
-    getLocations(center, size, angle, 0.0f, handles, &radius, &t);
+    getLocations(center, size, angle, RectCorners(), handles, &radius, &t);
     
     Point handleCenterClickOffset =
         oldMouseCoords - oldHandles[movingHandle];
