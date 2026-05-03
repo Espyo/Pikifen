@@ -409,13 +409,13 @@ protected:
         
         //Rectangle of the entire selection before the latest operation began.
         //Cache for performance.
-        Rect preOpBorderSel;
+        Rect preOpBorderRect;
         
         //If the operation should apply to centers only (i.e. items
         //can't resize), this is the rectangle of that selection before
         //the latest operation began.
         //Cache for performance.
-        Rect preOpCoreSel;
+        Rect preOpCoreRect;
         
     };
     
@@ -557,13 +557,13 @@ protected:
         
         //Rectangle of the entire selection before the latest operation began.
         //Cache for performance.
-        Rect preOpBorderSel;
+        Rect preOpBorderRect;
         
         //If the operation should apply to centers only (i.e. items
         //can't resize), this is the rectangle of that selection before
         //the latest operation began.
         //Cache for performance.
-        Rect preOpCoreSel;
+        Rect preOpCoreRect;
         
         //Position of the pivot item before an operation.
         //i.e. the item closest to the cursor.

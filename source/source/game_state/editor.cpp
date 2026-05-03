@@ -5087,7 +5087,7 @@ bool Editor::SelectionController::applyTransformation(
         forIdx(m, managers) {
             Rect mgrNewBorderRect =
                 managers[m]->calculateSelectionPortion(
-                    preOpBorderSel, newBorderRect
+                    preOpBorderRect, newBorderRect
                 );
             managers[m]->applySharedTransformation(
                 mgrNewBorderRect, newAngle
@@ -5657,7 +5657,7 @@ bool Editor::SelectionController::startTransforming() {
     bool wasIdle = state == STATE_IDLING;
     state = STATE_TW_TRANSFORMING;
     
-    getTotalBBox(&preOpBorderSel, &preOpCoreSel);
+    getTotalBBox(&preOpBorderRect, &preOpCoreRect);
     
     forIdx(m, managers) {
         managers[m]->startOperation();
@@ -5845,8 +5845,8 @@ bool Editor::SelectionManager::applyDirectTransformation(
     const Rect& newBorderRect, float newAngle
 ) {
     if(!enabled) return false;
-    if(preOpBorderSel.size.x <= 0.0f) return false;
-    if(preOpBorderSel.size.y <= 0.0f) return false;
+    if(preOpBorderRect.size.x <= 0.0f) return false;
+    if(preOpBorderRect.size.y <= 0.0f) return false;
     if(!onGetInfo || !onSetInfo) return false;
     
     const set<size_t>& list = selectedItems.getItemIdxs();
@@ -5875,21 +5875,25 @@ bool Editor::SelectionManager::applySharedTransformation(
 ) {
     //Setup.
     if(!enabled) return false;
-    if(preOpBorderSel.size.x <= 0.0f) return false;
-    if(preOpBorderSel.size.y <= 0.0f) return false;
+    if(preOpBorderRect.size.x <= 0.0f) return false;
+    if(preOpBorderRect.size.y <= 0.0f) return false;
     if(!onGetInfo || !onSetInfo) return false;
     
-    RectCorners preOpBorderCorners = rectToRectCorners(preOpBorderSel);
+    RectCorners preOpBorderCorners = rectToRectCorners(preOpBorderRect);
     RectCorners newBorderCorners = rectToRectCorners(newBorderRect);
     
     //Calculate the centers-only box's data.
-    RectCorners preOpCoreCorners = rectToRectCorners(preOpCoreSel);
-    Point coreOffset = preOpCoreCorners.tl - preOpBorderCorners.tl;
-    Point newCoreTL = newBorderCorners.tl + coreOffset;
-    Point newCoreSize =
-        newBorderRect.size - (preOpBorderSel.size - preOpCoreSel.size);
+    RectCorners preOpCoreCorners = rectToRectCorners(preOpCoreRect);
+    Point coreSizeDiff = preOpBorderRect.size - preOpCoreRect.size;
+    Point corePosDiff = preOpCoreCorners.tl - preOpBorderCorners.tl;
+    Point newCoreTL = newBorderCorners.tl + corePosDiff;
+    Point newCoreSize = newBorderRect.size - coreSizeDiff;
     newCoreSize.x = std::max(0.0f, newCoreSize.x);
     newCoreSize.y = std::max(0.0f, newCoreSize.y);
+    Rect newCoreRect(
+        newCoreTL + newCoreSize / 2.0f,
+        newCoreSize
+    );
     
     const set<size_t>& list = selectedItems.getItemIdxs();
     for(size_t i : list) {
@@ -5899,23 +5903,23 @@ bool Editor::SelectionManager::applySharedTransformation(
         
         if(newAngle != 0.0f) {
             //Rotate the item about the center.
-            Point oldRelCoords = preOpItemCenters[i] - preOpBorderSel.center;
+            Point oldRelCoords = preOpItemCenters[i] - preOpBorderRect.center;
             float oldAngle, oldMagnitude;
             coordinatesToAngle(oldRelCoords, &oldAngle, &oldMagnitude);
             iCenter =
                 angleToCoordinates(oldAngle + newAngle, oldMagnitude);
-            iCenter += preOpBorderSel.center;
+            iCenter += preOpBorderRect.center;
             
         } else if(itemsCanResize) {
             //Position and resize the item according to the new shape.
-            Point preTransCenterRatio =
+            Point preOpCenterRatio =
                 (preOpItemCenters[i] - preOpBorderCorners.tl) /
-                preOpBorderSel.size;
-            Point preTransSizeRatio =
-                preOpItemSizes[i] / preOpBorderSel.size;
+                preOpBorderRect.size;
+            Point preOpSizeRatio =
+                preOpItemSizes[i] / preOpBorderRect.size;
             iCenter =
-                newBorderCorners.tl + preTransCenterRatio * newBorderRect.size;
-            iSize = preTransSizeRatio * newBorderRect.size;
+                newBorderCorners.tl + preOpCenterRatio * newBorderRect.size;
+            iSize = preOpSizeRatio * newBorderRect.size;
             
         } else {
             if(list.size() == 1) {
@@ -5924,25 +5928,41 @@ bool Editor::SelectionManager::applySharedTransformation(
                 iCenter = newBorderRect.center;
                 
             } else {
-                //Position the item based on the "centers-only" bounding
-                //box. Keep its size.
-                if(preOpCoreSel.size.x > 0.0f) {
-                    float preTransCenterRatioX =
-                        (preOpItemCenters[i].x - preOpCoreCorners.tl.x) /
-                        preOpCoreSel.size.x;
+                //Imagine a box inside the total selection box that's
+                //inset by the object's size. This is the box in which the
+                //item's center can exist without going over the total
+                //selection. Then, pretend we scale the box in the same
+                //way we scaled the whole selection. Finally, apply
+                //the center transformation that way.
+                RectCorners preOpItemSpaceCorners = preOpBorderCorners;
+                preOpItemSpaceCorners.tl =
+                    preOpItemSpaceCorners.tl + iSize / 2.0f;
+                preOpItemSpaceCorners.br =
+                    preOpItemSpaceCorners.br - iSize / 2.0f;
+                Rect preOpItemSpace = rectCornersToRect(preOpItemSpaceCorners);
+                RectCorners newItemSpaceCorners(
+                    newBorderCorners.tl + iSize / 2.0f,
+                    newBorderCorners.br - iSize / 2.0f
+                );
+                Rect newItemSpace = rectCornersToRect(newItemSpaceCorners);
+                
+                if(preOpItemSpace.size.x > 0.0f) {
+                    float preOpRatioX =
+                        (preOpItemCenters[i].x - preOpItemSpaceCorners.tl.x) /
+                        preOpItemSpace.size.x;
                     iCenter.x =
-                        newCoreTL.x +
-                        preTransCenterRatioX * newCoreSize.x;
+                        newItemSpaceCorners.tl.x +
+                        preOpRatioX * newItemSpace.size.x;
                 } else {
                     iCenter.x = newBorderRect.center.x;
                 }
-                if(preOpCoreSel.size.y > 0.0f) {
-                    float preTransCenterRatioY =
-                        (preOpItemCenters[i].y - preOpCoreCorners.tl.y) /
-                        preOpCoreSel.size.y;
+                if(preOpItemSpace.size.y > 0.0f) {
+                    float preOpRatioY =
+                        (preOpItemCenters[i].y - preOpItemSpaceCorners.tl.y) /
+                        preOpItemSpace.size.y;
                     iCenter.y =
-                        newCoreTL.y +
-                        preTransCenterRatioY * newCoreSize.y;
+                        newItemSpaceCorners.tl.y +
+                        preOpRatioY * newItemSpace.size.y;
                 } else {
                     iCenter.y = newBorderRect.center.y;
                 }
@@ -6069,23 +6089,23 @@ size_t Editor::SelectionManager::getCount() const {
  * which portion of the larger box's new dimensions apply to this manager,
  * such that proportions are kept.
  *
- * @param largerPreTransRect The larger bounding box's pre-transformation
+ * @param largerPreOpRect The larger bounding box's pre-transformation
  * rectangle.
  * @param largerNewRect The larger bounding box's new rectangle.
  * @return The manager's portion's new rectangle.
  */
 Rect Editor::SelectionManager::calculateSelectionPortion(
-    const Rect& largerPreTransRect, const Rect& largerNewRect
+    const Rect& largerPreOpRect, const Rect& largerNewRect
 ) const {
     Rect portion;
     
     //The size is pretty easy.
-    Point sizeRatio = preOpBorderSel.size / largerPreTransRect.size;
+    Point sizeRatio = preOpBorderRect.size / largerPreOpRect.size;
     portion.size = largerNewRect.size * sizeRatio;
     
     //For the center, let's use corners instead.
     Point posRatio =
-        getPointPosRatioInRectangle(preOpBorderSel.center, largerPreTransRect);
+        getPointPosRatioInRectangle(preOpBorderRect.center, largerPreOpRect);
     RectCorners largerNewCorners = rectToRectCorners(largerNewRect);
     portion.center = largerNewCorners.tl + largerNewRect.size * posRatio;
     
@@ -6339,7 +6359,7 @@ bool Editor::SelectionManager::startOperation() {
         preOpItemSizes[i] = iSize;
     }
     
-    getBBox(&preOpBorderSel, &preOpCoreSel);
+    getBBox(&preOpBorderRect, &preOpCoreRect);
     
     return true;
 }
@@ -6360,7 +6380,7 @@ bool Editor::SelectionManager::startOperation() {
 void Editor::TransformationWidget::draw(
     const Point& mouseCoords, const Point* const center,
     const Point* const size, const float* const angle,
-    float zoom, Bitmask8 flags, float padding
+    float zoom, Bitmask8 flags, const RectCorners& padding
 ) const {
     const ALLEGRO_COLOR ROT_HANDLE_COLOR = al_map_rgb(64, 64, 192);
     const ALLEGRO_COLOR ROT_HANDLE_HI_COLOR = al_map_rgb(80, 80, 204);
@@ -6691,10 +6711,8 @@ bool Editor::TransformationWidget::handleMouseMove(
     al_invert_transform(&t);
     
     Point transformedMouse = calculatedMouseCoords;
-    Point transformedCenter = *center;
     Point newSize = oldSize;
     al_transform_coordinates(&t, &transformedMouse.x, &transformedMouse.y);
-    al_transform_coordinates(&t, &transformedCenter.x, &transformedCenter.y);
     bool scalingX = false;
     bool scalingY = false;
     
@@ -6787,6 +6805,7 @@ bool Editor::TransformationWidget::handleMouseMove(
         }
     }
     
+    Point transformedCenter;
     switch(movingHandle) {
     case 0:
     case 3:
