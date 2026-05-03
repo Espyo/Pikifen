@@ -526,6 +526,7 @@ void AreaEditor::deleteSelectedMobs() {
         //Update links.
         forIdx(m2, game.curArea->mobGenerators) {
             MobGen* m2Ptr = game.curArea->mobGenerators[m2];
+            if(!m2Ptr) continue;
             forIdx(l, m2Ptr->links) {
                 if(m2Ptr->linkIdxs[l] == mIdx) {
                     m2Ptr->links.erase(m2Ptr->links.begin() + l);
@@ -559,6 +560,7 @@ void AreaEditor::deleteSelectedMobs() {
         
         //Delete it.
         delete game.curArea->mobGenerators[mIdx];
+        game.curArea->mobGenerators[mIdx] = nullptr;
     }
     
     //Finally, erase them from the vector.
