@@ -366,10 +366,10 @@ protected:
         bool startOperation();
         bool applyDragMove(const Point& cursorPos);
         bool applyDirectTransformation(
-            const Rect& newBorderRect, float newAngle
+            const Rect& newRect, float newAngle
         );
         bool applySharedTransformation(
-            const Rect& newBorderRect, float newAngle
+            const Rect& newRect, float newAngle
         );
         bool setHomogenized(bool homogenized);
         bool isHomogenized() const;
@@ -377,9 +377,7 @@ protected:
         Rect calculateSelectionPortion(
             const Rect& largerPreTransRect, const Rect& largerNewRect
         ) const;
-        bool getBBox(
-            Rect* outBorderRect, Rect* outCoreRect = nullptr
-        ) const;
+        bool getBBox(Rect* outRect) const;
         vector<size_t> getItemsUnderCursor(const Point& cursorPos) const;
         void getItemInfo(
             size_t idx, Point* outCenter, Point* outSize, float* outAngle
@@ -409,13 +407,7 @@ protected:
         
         //Rectangle of the entire selection before the latest operation began.
         //Cache for performance.
-        Rect preOpBorderRect;
-        
-        //If the operation should apply to centers only (i.e. items
-        //can't resize), this is the rectangle of that selection before
-        //the latest operation began.
-        //Cache for performance.
-        Rect preOpCoreRect;
+        Rect preOpRect;
         
     };
     
@@ -499,9 +491,7 @@ protected:
         bool updateDragMove(const Point& cursorPos);
         bool stopDragMove();
         
-        bool getTotalBBox(
-            Rect* outBorderRect, Rect* outCoreRect = nullptr
-        ) const;
+        bool getTotalBBox(Rect* outRect) const;
         void getSingleRotatingItemInfo(
             Point* outCenter, Point* outSize, float* outAngle
         ) const;
@@ -557,13 +547,7 @@ protected:
         
         //Rectangle of the entire selection before the latest operation began.
         //Cache for performance.
-        Rect preOpBorderRect;
-        
-        //If the operation should apply to centers only (i.e. items
-        //can't resize), this is the rectangle of that selection before
-        //the latest operation began.
-        //Cache for performance.
-        Rect preOpCoreRect;
+        Rect preOpRect;
         
         //Position of the pivot item before an operation.
         //i.e. the item closest to the cursor.

@@ -5064,12 +5064,12 @@ bool Editor::SelectionManager::applyDragMove(const Point& offset) {
  * @brief Applies a transformation the user performed on the geometry of
  * the selected items.
  *
- * @param newBorderRect The new selection rectangle.
+ * @param newRect The new selection rectangle.
  * @param newAngle The new selection angle, if applicable.
  * @return Whether it was able to apply.
  */
 bool Editor::SelectionController::applyTransformation(
-    const Rect& newBorderRect, float newAngle
+    const Rect& newRect, float newAngle
 ) {
     if(!enabled) return false;
     if(state != STATE_TW_TRANSFORMING) return false;
@@ -5079,18 +5079,18 @@ bool Editor::SelectionController::applyTransformation(
         forIdx(m, managers) {
             if(managers[m]->getCount() != 1) continue;
             managers[m]->applyDirectTransformation(
-                newBorderRect, newAngle
+                newRect, newAngle
             );
         }
     } else {
         //Shared transformation method.
         forIdx(m, managers) {
-            Rect mgrNewBorderRect =
+            Rect mgrNewRect =
                 managers[m]->calculateSelectionPortion(
-                    preOpBorderRect, newBorderRect
+                    preOpRect, newRect
                 );
             managers[m]->applySharedTransformation(
-                mgrNewBorderRect, newAngle
+                mgrNewRect, newAngle
             );
         }
     }
@@ -5391,36 +5391,28 @@ Point Editor::SelectionController::getPreOpPivotItemPos() const {
 /**
  * @brief Returns the total bounding box of every manager's selected items.
  *
- * @param outBorderRect The box that delimits everything
+ * @param outRect The box that delimits everything
  * is returned here.
- * @param outCoreRect If not nullptr, the box that
- * delimits the centers only is returned here.
  * @return Whether there are any selected items.
  */
-bool Editor::SelectionController::getTotalBBox(
-    Rect* outBorderRect, Rect* outCoreRect
-) const {
-    Rect totalBorderRect, totalCoreRect;
+bool Editor::SelectionController::getTotalBBox(Rect* outRect) const {
+    Rect totalRect;
     bool hasFirst = false;
     
     forIdx(m, managers) {
-        Rect mgrBorderRect, mgrCoreRect;
-        bool hasItems =
-            managers[m]->getBBox(&mgrBorderRect, &mgrCoreRect);
+        Rect mgrRect;
+        bool hasItems = managers[m]->getBBox(&mgrRect);
         if(!hasItems) continue;
         
         if(!hasFirst) {
-            totalBorderRect = mgrBorderRect;
-            totalCoreRect = mgrCoreRect;
+            totalRect = mgrRect;
             hasFirst = true;
         } else {
-            totalBorderRect = combineBBoxes(totalBorderRect, mgrBorderRect);
-            totalCoreRect = combineBBoxes(totalCoreRect, mgrCoreRect);
+            totalRect = combineBBoxes(totalRect, mgrRect);
         }
     }
     
-    *outBorderRect = totalBorderRect;
-    if(outCoreRect) *outCoreRect = totalCoreRect;
+    *outRect = totalRect;
     
     return false;
 }
@@ -5450,7 +5442,7 @@ void Editor::SelectionController::getSingleRotatingItemInfo(
 
 
 /**
- * @brief Returns the total number of selected items.
+ * @brief Returns the total number of selected items and some other information.
  *
  * @param outCanChange Whether the selected items can have their properties
  * changed is returned here.
@@ -5657,7 +5649,7 @@ bool Editor::SelectionController::startTransforming() {
     bool wasIdle = state == STATE_IDLING;
     state = STATE_TW_TRANSFORMING;
     
-    getTotalBBox(&preOpBorderRect, &preOpCoreRect);
+    getTotalBBox(&preOpRect);
     
     forIdx(m, managers) {
         managers[m]->startOperation();
@@ -5837,21 +5829,21 @@ bool Editor::SelectionManager::addAll(size_t totalAmount) {
  * @brief Applies a transformation the user performed on the geometry of
  * the selected item directly.
  *
- * @param newBorderRect The new selection rectangle.
+ * @param newRect The new selection rectangle.
  * @param newAngle The new selection angle.
  * @return Whether it was able to apply.
  */
 bool Editor::SelectionManager::applyDirectTransformation(
-    const Rect& newBorderRect, float newAngle
+    const Rect& newRect, float newAngle
 ) {
     if(!enabled) return false;
-    if(preOpBorderRect.size.x <= 0.0f) return false;
-    if(preOpBorderRect.size.y <= 0.0f) return false;
+    if(preOpRect.size.x <= 0.0f) return false;
+    if(preOpRect.size.y <= 0.0f) return false;
     if(!onGetInfo || !onSetInfo) return false;
     
     const set<size_t>& list = selectedItems.getItemIdxs();
     for(size_t i : list) {
-        onSetInfo(i, newBorderRect.center, newBorderRect.size, newAngle);
+        onSetInfo(i, newRect.center, newRect.size, newAngle);
     }
     
     return true;
@@ -5866,34 +5858,21 @@ bool Editor::SelectionManager::applyDirectTransformation(
  * the selection in the same transformation, or rotating items with a non-zero
  * size.
  *
- * @param newBorderRect The new selection rectangle.
+ * @param newRect The new selection rectangle.
  * @param newAngle The new selection angle, if applicable.
  * @return Whether it was able to apply.
  */
 bool Editor::SelectionManager::applySharedTransformation(
-    const Rect& newBorderRect, float newAngle
+    const Rect& newRect, float newAngle
 ) {
     //Setup.
     if(!enabled) return false;
-    if(preOpBorderRect.size.x <= 0.0f) return false;
-    if(preOpBorderRect.size.y <= 0.0f) return false;
+    if(preOpRect.size.x <= 0.0f) return false;
+    if(preOpRect.size.y <= 0.0f) return false;
     if(!onGetInfo || !onSetInfo) return false;
     
-    RectCorners preOpBorderCorners = rectToRectCorners(preOpBorderRect);
-    RectCorners newBorderCorners = rectToRectCorners(newBorderRect);
-    
-    //Calculate the centers-only box's data.
-    RectCorners preOpCoreCorners = rectToRectCorners(preOpCoreRect);
-    Point coreSizeDiff = preOpBorderRect.size - preOpCoreRect.size;
-    Point corePosDiff = preOpCoreCorners.tl - preOpBorderCorners.tl;
-    Point newCoreTL = newBorderCorners.tl + corePosDiff;
-    Point newCoreSize = newBorderRect.size - coreSizeDiff;
-    newCoreSize.x = std::max(0.0f, newCoreSize.x);
-    newCoreSize.y = std::max(0.0f, newCoreSize.y);
-    Rect newCoreRect(
-        newCoreTL + newCoreSize / 2.0f,
-        newCoreSize
-    );
+    RectCorners preOpRectCorners = rectToRectCorners(preOpRect);
+    RectCorners newRectCorners = rectToRectCorners(newRect);
     
     const set<size_t>& list = selectedItems.getItemIdxs();
     for(size_t i : list) {
@@ -5903,29 +5882,29 @@ bool Editor::SelectionManager::applySharedTransformation(
         
         if(newAngle != 0.0f) {
             //Rotate the item about the center.
-            Point oldRelCoords = preOpItemCenters[i] - preOpBorderRect.center;
+            Point oldRelCoords = preOpItemCenters[i] - preOpRect.center;
             float oldAngle, oldMagnitude;
             coordinatesToAngle(oldRelCoords, &oldAngle, &oldMagnitude);
             iCenter =
                 angleToCoordinates(oldAngle + newAngle, oldMagnitude);
-            iCenter += preOpBorderRect.center;
+            iCenter += preOpRect.center;
             
         } else if(itemsCanResize) {
             //Position and resize the item according to the new shape.
             Point preOpCenterRatio =
-                (preOpItemCenters[i] - preOpBorderCorners.tl) /
-                preOpBorderRect.size;
+                (preOpItemCenters[i] - preOpRectCorners.tl) /
+                preOpRect.size;
             Point preOpSizeRatio =
-                preOpItemSizes[i] / preOpBorderRect.size;
+                preOpItemSizes[i] / preOpRect.size;
             iCenter =
-                newBorderCorners.tl + preOpCenterRatio * newBorderRect.size;
-            iSize = preOpSizeRatio * newBorderRect.size;
+                newRectCorners.tl + preOpCenterRatio * newRect.size;
+            iSize = preOpSizeRatio * newRect.size;
             
         } else {
             if(list.size() == 1) {
                 //If there's only one item and it can't be resized, just move
                 //it. Pretty simple scenario.
-                iCenter = newBorderRect.center;
+                iCenter = newRect.center;
                 
             } else {
                 //Imagine a box inside the total selection box that's
@@ -5934,15 +5913,15 @@ bool Editor::SelectionManager::applySharedTransformation(
                 //selection. Then, pretend we scale the box in the same
                 //way we scaled the whole selection. Finally, apply
                 //the center transformation that way.
-                RectCorners preOpItemSpaceCorners = preOpBorderCorners;
+                RectCorners preOpItemSpaceCorners = preOpRectCorners;
                 preOpItemSpaceCorners.tl =
                     preOpItemSpaceCorners.tl + iSize / 2.0f;
                 preOpItemSpaceCorners.br =
                     preOpItemSpaceCorners.br - iSize / 2.0f;
                 Rect preOpItemSpace = rectCornersToRect(preOpItemSpaceCorners);
                 RectCorners newItemSpaceCorners(
-                    newBorderCorners.tl + iSize / 2.0f,
-                    newBorderCorners.br - iSize / 2.0f
+                    newRectCorners.tl + iSize / 2.0f,
+                    newRectCorners.br - iSize / 2.0f
                 );
                 Rect newItemSpace = rectCornersToRect(newItemSpaceCorners);
                 
@@ -5954,7 +5933,7 @@ bool Editor::SelectionManager::applySharedTransformation(
                         newItemSpaceCorners.tl.x +
                         preOpRatioX * newItemSpace.size.x;
                 } else {
-                    iCenter.x = newBorderRect.center.x;
+                    iCenter.x = newRect.center.x;
                 }
                 if(preOpItemSpace.size.y > 0.0f) {
                     float preOpRatioY =
@@ -5964,7 +5943,7 @@ bool Editor::SelectionManager::applySharedTransformation(
                         newItemSpaceCorners.tl.y +
                         preOpRatioY * newItemSpace.size.y;
                 } else {
-                    iCenter.y = newBorderRect.center.y;
+                    iCenter.y = newRect.center.y;
                 }
                 
             }
@@ -6031,19 +6010,14 @@ bool Editor::SelectionManager::enable() {
 /**
  * @brief Returns the bounding box of the selected items.
  *
- * @param outBorderRect The rectangle that delimits everything is returned here.
- * @param outCoreRect If not nullptr, the rectangle that
- * delimits the centers only is returned here.
+ * @param outRect The rectangle that delimits everything is returned here.
  * @return Whether there are any selected items.
  */
-bool Editor::SelectionManager::getBBox(
-    Rect* outBorderRect, Rect* outCoreRect
-) const {
-    *outBorderRect = Rect();
+bool Editor::SelectionManager::getBBox(Rect* outRect) const {
+    *outRect = Rect();
     if(!selectedItems.hasAny()) return false;
     
-    RectCorners borderCorners = RectCorners::readyForSearch;
-    RectCorners coreCorners = RectCorners::readyForSearch;
+    RectCorners corners = RectCorners::readyForSearch;
     const set<size_t>& list = selectedItems.getItemIdxs();
     
     for(size_t i : list) {
@@ -6061,13 +6035,11 @@ bool Editor::SelectionManager::getBBox(
             iCorners = rectToRectCorners(Rect(iCenter, iSize));
         }
         
-        updateMinCoords(borderCorners.tl, iCorners.tl);
-        updateMaxCoords(borderCorners.br, iCorners.br);
-        updateMinMaxCoords(coreCorners, iCenter);
+        updateMinCoords(corners.tl, iCorners.tl);
+        updateMaxCoords(corners.br, iCorners.br);
     }
     
-    *outBorderRect = rectCornersToRect(borderCorners);
-    *outCoreRect = rectCornersToRect(coreCorners);
+    *outRect = rectCornersToRect(corners);
     
     return true;
 }
@@ -6100,12 +6072,12 @@ Rect Editor::SelectionManager::calculateSelectionPortion(
     Rect portion;
     
     //The size is pretty easy.
-    Point sizeRatio = preOpBorderRect.size / largerPreOpRect.size;
+    Point sizeRatio = preOpRect.size / largerPreOpRect.size;
     portion.size = largerNewRect.size * sizeRatio;
     
     //For the center, let's use corners instead.
     Point posRatio =
-        getPointPosRatioInRectangle(preOpBorderRect.center, largerPreOpRect);
+        getPointPosRatioInRectangle(preOpRect.center, largerPreOpRect);
     RectCorners largerNewCorners = rectToRectCorners(largerNewRect);
     portion.center = largerNewCorners.tl + largerNewRect.size * posRatio;
     
@@ -6359,7 +6331,7 @@ bool Editor::SelectionManager::startOperation() {
         preOpItemSizes[i] = iSize;
     }
     
-    getBBox(&preOpBorderRect, &preOpCoreRect);
+    getBBox(&preOpRect);
     
     return true;
 }
