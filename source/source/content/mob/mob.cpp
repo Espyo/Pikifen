@@ -3277,9 +3277,10 @@ void Mob::moveToPathEnd(float speed, float acceleration) {
             speed, acceleration
         );
     } else {
+        Sector* targetSector = getSector(pathInfo->settings.targetPoint, nullptr, true);
         chase(
             pathInfo->settings.targetPoint,
-            getSector(pathInfo->settings.targetPoint, nullptr, true)->floorZ,
+            targetSector ? targetSector->floorZ : 0,
             CHASE_FLAG_ANY_ANGLE,
             pathInfo->settings.finalTargetDistance,
             speed, acceleration
