@@ -388,14 +388,15 @@ bool ControlsMediator::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
         //one for each axis. We're assuming axis 0 is horizontal and 1 vertical.
         auto& rawStick =
             rawSticks[input.source.deviceNr][input.source.stickNr];
-        float stickCoords[2] = { rawStick[0], rawStick[1] };
         
         rawStick[input.source.axisNr] =
             input.source.type ==
             Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS ?
             input.value :
             -input.value;
-            
+        
+        float stickCoords[2] = { rawStick[0], rawStick[1] };
+        
         EasyAnalogCleaner::Settings cleanupSettings;
         cleanupSettings.deadzones.radial.inner =
             game.options.advanced.joystickMinDeadzone;
