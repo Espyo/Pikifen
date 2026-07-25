@@ -112,6 +112,7 @@ script {
         }
         on_damage {
             play_sound squeak
+            set_timer 5
         }
         on_timer {
             set_state picking_next_color
