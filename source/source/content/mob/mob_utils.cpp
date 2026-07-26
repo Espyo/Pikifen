@@ -1313,6 +1313,7 @@ float calculateMobPhysicalSpan(
  * @param codeAfterCreation Code to run right after the mob is created,
  * if any. This is run before any scripting takes place.
  * @param firstStateOverride If this is INVALID, use the first state
+ * @param z If this is INVALID, use the default z
  * index defined in the mob's FSM struct, or the standard first state index.
  * Otherwise, use this.
  * @return The new mob.
@@ -1321,11 +1322,16 @@ Mob* createMob(
     MobCategory* category, const Point& center, MobType* type,
     float angle, const string& varsStr,
     std::function<void(Mob*)> codeAfterCreation,
-    size_t firstStateOverride
+    size_t firstStateOverride, const float z
 ) {
     //Create the mob from the category.
     Mob* mPtr = category->createMob(center, type, angle);
     
+    //Set the z position if necessary.
+    if(z != INVALID) {
+        mPtr->bottomZ = z;
+    }
+
     //Immediate post-creation logic, if any.
     if(codeAfterCreation) {
         codeAfterCreation(mPtr);
