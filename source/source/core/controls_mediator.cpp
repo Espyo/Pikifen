@@ -388,13 +388,13 @@ bool ControlsMediator::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
         //one for each axis. We're assuming axis 0 is horizontal and 1 vertical.
         auto& rawStick =
             rawSticks[input.source.deviceNr][input.source.stickNr];
-        
+            
         rawStick[input.source.axisNr] =
             input.source.type ==
             Inpution::INPUT_SOURCE_TYPE_CONTROLLER_AXIS_POS ?
             input.value :
             -input.value;
-        
+            
         float stickCoords[2] = { rawStick[0], rawStick[1] };
         
         EasyAnalogCleaner::Settings cleanupSettings;
@@ -444,18 +444,27 @@ bool ControlsMediator::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
 
 
 /**
+ * @brief Ignores actions for one frame. Stops ignoring at the end of the frame.
+ */
+void ControlsMediator::ignoreActionsForOneFrame() {
+    mgr.ignoringActions = true;
+    stopIgnoringActionsAfterFrame = true;
+}
+
+
+/**
  * @brief Ignores actions that can close menus. This stops them from bleeding
  * from the closed menu into gameplay.
  */
 void ControlsMediator::ignoreMenuCloseActions() {
     //Ignore the actions that directly close menus, if any.
-    game.controls.startIgnoringActionInputSources(
+    startIgnoringActionInputSources(
         PLAYER_ACTION_TYPE_PAUSE, true
     );
-    game.controls.startIgnoringActionInputSources(
+    startIgnoringActionInputSources(
         PLAYER_ACTION_TYPE_MENU_OK, true
     );
-    game.controls.startIgnoringActionInputSources(
+    startIgnoringActionInputSources(
         PLAYER_ACTION_TYPE_MENU_BACK, true
     );
     
@@ -463,7 +472,7 @@ void ControlsMediator::ignoreMenuCloseActions() {
     Inpution::InputSource lmb;
     lmb.type = Inpution::INPUT_SOURCE_TYPE_MOUSE_BUTTON;
     lmb.buttonNr = 1;
-    game.controls.startIgnoringInputSource(lmb, true);
+    startIgnoringInputSource(lmb, true);
 }
 
 
@@ -553,6 +562,11 @@ void ControlsMediator::loadBindsFromDataNode(
  */
 void ControlsMediator::newFrame(float deltaT) {
     actionQueue = mgr.newFrame(deltaT);
+    if(stopIgnoringActionsAfterFrame) {
+        mgr.ignoringActions = false;
+        stopIgnoringActionsAfterFrame = false;
+        actionQueue.clear();
+    }
 }
 
 

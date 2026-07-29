@@ -46,6 +46,7 @@ const size_t TEXT_INPUT_MAX_SIZE = 50;
  * @brief Constructs a new modal GUI manager object.
  */
 ModalGuiManager::ModalGuiManager() {
+    textInput.maxSize = MODAL::TEXT_INPUT_MAX_SIZE;
     reset();
     hideItems();
     responsive = false;
@@ -95,16 +96,12 @@ void ModalGuiManager::draw() {
  * @return Whether it got handled.
  */
 bool ModalGuiManager::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
+    if(!shouldHandleEvents()) return false;
+    
     bool handled = false;
     
     if(useTextInput && ev.type == ALLEGRO_EVENT_KEY_CHAR) {
-        if(ev.keyboard.keycode == ALLEGRO_KEY_BACKSPACE) {
-            if(!textInput.empty()) {
-                textInput.pop_back();
-            }
-            handled = true;
-            
-        } else if(
+        if(
             ev.keyboard.keycode == ALLEGRO_KEY_ENTER ||
             ev.keyboard.keycode == ALLEGRO_KEY_PAD_ENTER
         ) {
@@ -117,12 +114,19 @@ bool ModalGuiManager::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
         ) {
             //Do nothing.
             
-        } else if(ev.keyboard.unichar != 0) {
-            if(textInput.size() < MODAL::TEXT_INPUT_MAX_SIZE) {
-                textInput.push_back(ev.keyboard.unichar);
+        }
+        
+        if(textInput.handleAllegroEvent(ev)) {
+            game.audio.addNewUiSoundSource(
+            game.sysContent.sndCutsceneMsgChar, {
+                .stackMinPos = 0.05f,
+                .volume = 0.5f,
+                .volumeDeviation = 0.1f,
+                .speedDeviation = 0.1f,
             }
+            );
             handled = true;
-            
+            game.controls.ignoreActionsForOneFrame();
         }
     }
     
@@ -164,7 +168,7 @@ void ModalGuiManager::reset() {
     defaultFocusButtonIdx = 0;
     textInputEnterButtonIdx = 0;
     useTextInput = false;
-    textInput.clear();
+    textInput.reset();
     setFocusedItem(nullptr);
     focusCursor.alpha = 0.0f;
 }
@@ -210,21 +214,33 @@ void ModalGuiManager::updateItems() {
         );
         textInputItem->onDraw =
         [textInputItem, this] (const DrawInfo & draw) {
-            textInputItem->text = textInput;
+            textInputItem->text = textInput.getString();
             textInputItem->defDrawCode(draw);
             float t = fmod(game.timePassed, MODAL::CARET_BLINK_INTERVAL);
+            
             if(t < MODAL::CARET_BLINK_INTERVAL / 2.0f) {
                 int textWidth =
                     al_get_text_width(
-                        game.sysContent.fntStandard, textInput.c_str()
+                        game.sysContent.fntStandard, textInputItem->text.c_str()
                     );
                 int textHeight =
                     al_get_font_line_height(game.sysContent.fntStandard);
-                textWidth = std::min((float) textWidth, draw.size.x);
+                int textX1 =
+                    draw.center.x - textWidth / 2.0f;
+                    
+                string preCaretText =
+                    textInputItem->text.substr(0, textInput.getCaretPos());
+                int preCaretTextWidth =
+                    al_get_text_width(
+                        game.sysContent.fntStandard, preCaretText.c_str()
+                    );
+                preCaretTextWidth =
+                    std::min((float) preCaretTextWidth, draw.size.x);
+                    
                 al_draw_line(
-                    draw.center.x + textWidth / 2.0f,
+                    textX1 + preCaretTextWidth,
                     draw.center.y - textHeight / 2.0f,
-                    draw.center.x + textWidth / 2.0f,
+                    textX1 + preCaretTextWidth,
                     draw.center.y + textHeight / 2.0f,
                     game.config.guiColors.gold, 2.0f
                 );

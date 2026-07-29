@@ -1702,6 +1702,41 @@ struct SystemNotificationManager {
 };
 
 
+/**
+ * @brief Information about any sort of GUI text input field,
+ * with support for Allegro events.
+ */
+struct TextInput {
+
+    public:
+    
+    //--- Public members ---
+    
+    //Maximum size.
+    size_t maxSize = 256;
+    
+    
+    //--- Public function declarations ---
+    
+    void reset();
+    string getString() const;
+    size_t getCaretPos() const;
+    bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
+    
+    
+    private:
+    
+    //--- Private members ---
+    
+    //Current text.
+    string text;
+    
+    //Position of the caret.
+    size_t caretPos = 0;
+    
+};
+
+
 
 /**
  * @brief Info about the currently visible prompt that appears above a

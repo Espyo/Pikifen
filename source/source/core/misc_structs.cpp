@@ -3457,6 +3457,125 @@ void SystemNotificationManager::tick(float deltaT) {
 
 
 #pragma endregion
+#pragma region Text input
+
+
+/**
+ * @brief Returns the current caret position.
+ *
+ * @return The position.
+ */
+size_t TextInput::getCaretPos() const {
+    return caretPos;
+}
+
+
+/**
+ * @brief Returns the current string.
+ *
+ * @return The string.
+ */
+string TextInput::getString() const {
+    return text;
+}
+
+
+/**
+ * @brief Handles an Allegro event.
+ *
+ * @param ev The event.
+ * @return Whether the event got handled.
+ */
+bool TextInput::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
+    bool handled = false;
+    
+    const auto eraseChars = [this] (size_t idx1, size_t idx2) {
+        if(idx2 < idx1) std::swap(idx1, idx2);
+        size_t amount = idx2 - idx1;
+        text.erase(idx1, amount);
+        caretPos -= amount;
+    };
+    
+    if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {
+        if(ev.keyboard.keycode == ALLEGRO_KEY_BACKSPACE) {
+            if(!text.empty() && caretPos > 0) {
+                size_t start = caretPos - 1;
+                size_t end = string::npos;
+                if(hasFlag(ev.keyboard.modifiers, ALLEGRO_KEYMOD_CTRL)) {
+                    end = getNextWordLimitPos(text, false, caretPos);
+                } else {
+                    end = caretPos;
+                }
+                eraseChars(start, end);
+            }
+            handled = true;
+            
+        } else if(ev.keyboard.keycode == ALLEGRO_KEY_DELETE) {
+            if(!text.empty() && caretPos != text.size()) {
+                size_t start = caretPos;
+                size_t end = string::npos;
+                if(hasFlag(ev.keyboard.modifiers, ALLEGRO_KEYMOD_CTRL)) {
+                    end = getNextWordLimitPos(text, true, caretPos);
+                } else {
+                    end = caretPos + 1;
+                }
+                eraseChars(start, end);
+            }
+            handled = true;
+            
+        } else if(ev.keyboard.keycode == ALLEGRO_KEY_LEFT) {
+            if(!text.empty()) {
+                if(hasFlag(ev.keyboard.modifiers, ALLEGRO_KEYMOD_CTRL)) {
+                    caretPos = getNextWordLimitPos(text, false, caretPos);
+                } else if(caretPos > 0) {
+                    caretPos--;
+                }
+            }
+            handled = true;
+            
+        } else if(ev.keyboard.keycode == ALLEGRO_KEY_RIGHT) {
+            if(!text.empty()) {
+                if(hasFlag(ev.keyboard.modifiers, ALLEGRO_KEYMOD_CTRL)) {
+                    caretPos = getNextWordLimitPos(text, true, caretPos);
+                } else {
+                    caretPos++;
+                }
+                caretPos = std::min(caretPos, text.size());
+            }
+            handled = true;
+            
+        } else if(ev.keyboard.keycode == ALLEGRO_KEY_HOME) {
+            caretPos = 0;
+            handled = true;
+            
+        } else if(ev.keyboard.keycode == ALLEGRO_KEY_END) {
+            caretPos = text.size();
+            handled = true;
+            
+        } else if(std::isprint(ev.keyboard.unichar)) {
+            if(text.size() < maxSize) {
+                text.insert(caretPos, 1, (char) ev.keyboard.unichar);
+                caretPos++;
+            }
+            handled = true;
+            
+        }
+    }
+    
+    return handled;
+}
+
+
+/**
+ * @brief Resets all information.
+ */
+void TextInput::reset() {
+    text.clear();
+    caretPos = 0;
+}
+
+
+#pragma endregion
 #pragma region Viewport
 
 

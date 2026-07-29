@@ -412,6 +412,7 @@ struct ControlsMediator {
     
     bool actionQueueContains(PLAYER_ACTION_TYPE actionTypeId) const;
     bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
+    void ignoreActionsForOneFrame();
     void ignoreMenuCloseActions();
     void newFrame(float deltaT);
     void reinsertAction(const Inpution::Action& action);
@@ -450,6 +451,9 @@ struct ControlsMediator {
     
     //Inpution manager.
     Inpution::Manager mgr;
+    
+    //Whether we should stop ignoring actions when this frame is over.
+    bool stopIgnoringActionsAfterFrame = false;
     
 };
 

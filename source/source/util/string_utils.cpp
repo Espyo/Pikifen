@@ -186,6 +186,59 @@ size_t getSplitCount(
 
 
 /**
+ * @brief Returns the character index of the next word limit in a string.
+ * This mirrors what happens in most text editors when Ctrl + Right or
+ * Ctrl + Left is pressed.
+ * 
+ * @param text Text to scan.
+ * @param forward Whether we're moving forward or backward.
+ * @param startIdx Starting index to scan from.
+ * @return The character index, or string::npos if nothing was found.
+ */
+size_t getNextWordLimitPos(
+    const string& text, bool forward, size_t startIdx
+) {
+    const auto isCharWord = [] (char c) {
+        if(c >= 'a' && c <= 'z') return true;
+        if(c >= 'A' && c <= 'Z') return true;
+        if(c >= '0' && c <= '9') return true;
+        if(c == '-') return true;
+        if(c == '_') return true;
+        if(c == '\'') return true;
+        return false;
+    };
+    const auto isRelevantCharWord =
+    [&forward, &text, &isCharWord] (size_t idx) {
+        if(forward) {
+            return isCharWord(text[idx]);
+        } else {
+            return idx > 0 ? isCharWord(text[idx - 1]) : isCharWord(text[idx]);
+        }
+    };
+
+    if(text.empty()) return 0;
+
+    size_t idx = startIdx > text.size() ? text.size() - 1 : startIdx;
+    bool hadWord = isRelevantCharWord(idx);
+
+    while(true) {
+        if(forward) {
+            if(idx >= text.size()) return text.size();
+            idx++;
+        } else {
+            if(idx == 0) return 0;
+            idx--;
+        }
+        bool hasWord = isRelevantCharWord(idx);
+        if(hadWord && !hasWord) return idx;
+        hadWord = hasWord;
+    }
+
+    return idx;
+}
+
+
+/**
  * @brief Checks if the contents of a string are a number or not.
  *
  * @param s String to check.

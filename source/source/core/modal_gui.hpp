@@ -75,7 +75,7 @@ public:
     string prompt;
     
     //Current text in the text input.
-    string textInput;
+    TextInput textInput;
     
     //Back button's text.
     string back;

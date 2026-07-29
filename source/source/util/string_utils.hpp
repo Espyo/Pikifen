@@ -53,6 +53,9 @@ size_t getSplitCount(
     const string& text, const string& del = " ", bool incEmpty = false,
     bool incDelimiters = false
 );
+size_t getNextWordLimitPos(
+    const string& text, bool forward = true, size_t startIdx = 0
+);
 bool isNumber(const string& s);
 bool isVowel(char c);
 string padString(const string& s, size_t size, char padding);

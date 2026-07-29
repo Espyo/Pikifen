@@ -418,7 +418,7 @@ bool MakerToolRunners::newReminder(
         .onActivate = [mgr] (const Point&) {
             AreaMakerReminder newReminder;
             newReminder.center = mgr.toolStartCursor;
-            newReminder.text = game.modal.textInput;
+            newReminder.text = game.modal.textInput.getString();
             game.curArea->reminders.push_back(newReminder);
             game.content.areas.saveAreaReminders(game.curArea);
             game.modal.close();
