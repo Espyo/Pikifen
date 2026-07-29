@@ -348,6 +348,20 @@ struct CommandParam {
     //If this is optional, specify its default value here.
     string defValue;
     
+    //If it's a number, this is the minimum value, inclusive.
+    //-FLT_MAX for no limit.
+    float minValue = -FLT_MAX;
+    
+    //If it's a number, this is the maximum value, inclusive.
+    //FLT_MAX for no limit.
+    float maxValue = FLT_MAX;
+    
+    //If it's an enum, this contains the list.
+    vector<string> enumValues;
+    
+    //Description, if any.
+    string description;
+    
     
     //--- Public function declarations ---
     

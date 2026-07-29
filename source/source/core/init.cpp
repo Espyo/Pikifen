@@ -1376,7 +1376,8 @@ void initMakerToolTypes() {
     auto commitTool =
         [&params, &contexts] (
             MAKER_TOOL_TYPE toolType, const string& toolName,
-            bool helpful, MakerToolTypeCode * toolRunCode
+            bool helpful, MakerToolTypeCode * toolRunCode,
+            const string& description
     ) {
         validateCommandParams(
             params, "Maker tool type \"" + toolName + "\""
@@ -1390,12 +1391,15 @@ void initMakerToolTypes() {
         toolTypePtr->parameters = params;
         toolTypePtr->contexts = contexts;
         toolTypePtr->helpful = helpful;
+        toolTypePtr->description = description;
         params.clear();
     };
     
     const COMMAND_PARAM_TYPE ptInt = COMMAND_PARAM_TYPE_INT;
     const COMMAND_PARAM_TYPE ptFloat = COMMAND_PARAM_TYPE_FLOAT;
     const COMMAND_PARAM_TYPE ptBool = COMMAND_PARAM_TYPE_BOOL;
+    const COMMAND_PARAM_TYPE ptString = COMMAND_PARAM_TYPE_STRING;
+    const COMMAND_PARAM_TYPE ptEnum = COMMAND_PARAM_TYPE_ENUM;
     const COMMAND_PARAM_FLAG pfOpt = COMMAND_PARAM_FLAG_OPTIONAL;
     
     
@@ -1408,14 +1412,16 @@ void initMakerToolTypes() {
     commitTool(
         MAKER_TOOL_TYPE_NONE,
         "none", false,
-        nullptr
+        nullptr, ""
     );
     
     //Set auto-start data.
     commitTool(
         MAKER_TOOL_TYPE_SET_AUTO_START,
         "set_auto_start", false,
-        MakerToolRunners::setAutoStart
+        MakerToolRunners::setAutoStart,
+        "Sets Pikifen to auto-start on the state and content you're "
+        "currently on."
     );
     
     
@@ -1425,143 +1431,218 @@ void initMakerToolTypes() {
         
     //Area image.
     queueParam("size", ptInt, pfOpt, "2048");
+    params.back().minValue = 1.0f;
+    params.back().description =
+        "Maximum image width or height, in pixels. "
+        "2048 is a good size for medium or large areas, "
+        "otherwise 1024 works fine.";
     queueParam("padding", ptInt, pfOpt, "32");
-    queueParam("mobs", ptBool, pfOpt, "true");
+    params.back().minValue = 0.0f;
+    params.back().description =
+        "Padding around the actual area. "
+        "This is measured in area pixels, and is the total for "
+        "either dimension. e.g. 32 means 16 area pixels above "
+        "the area and 16 area pixels below the area will be "
+        "included; same for 16 pixels to the left and 16 to the right.";
     queueParam("shadows", ptBool, pfOpt, "true");
+    params.back().description =
+        "Whether you want to see tree shadows.";
     commitTool(
         MAKER_TOOL_TYPE_AREA_IMAGE,
         "area_image", true,
-        MakerToolRunners::areaImage
+        MakerToolRunners::areaImage,
+        "Creates an image of the entire area."
     );
     
     //Area inspector.
     commitTool(
         MAKER_TOOL_TYPE_AREA_INSPECTOR,
         "area_inspector", true,
-        MakerToolRunners::areaInspector
+        MakerToolRunners::areaInspector,
+        "Toggles showing information about the current area and its script."
     );
     
     //Change speed.
     queueParam("multiplier", ptFloat, pfOpt, "2");
+    params.back().minValue = 0.001f;
+    params.back().description =
+        "Game speed multiplier. "
+        "1 is normal speed, 0.5 is half speed, 2.0 is double speed, etc.";
     commitTool(
         MAKER_TOOL_TYPE_CHANGE_SPEED,
         "change_speed", true,
-        MakerToolRunners::changeSpeed
+        MakerToolRunners::changeSpeed,
+        "Changes the gameplay speed."
     );
     
     //Delete mob.
     commitTool(
         MAKER_TOOL_TYPE_DELETE_MOB,
         "delete_mob", true,
-        MakerToolRunners::deleteMob
+        MakerToolRunners::deleteMob,
+        "Deletes the inspected mob."
     );
     
     //Fill inventory.
     queueParam("amount", ptInt, pfOpt, "99");
+    params.back().minValue = 0.0f;
+    params.back().description =
+        "Amount to set all inventory items to.";
     commitTool(
         MAKER_TOOL_TYPE_FILL_INVENTORY,
         "fill_inventory", true,
-        MakerToolRunners::fillInventory
+        MakerToolRunners::fillInventory,
+        "Changes the amount of all inventory items to a given amount."
     );
     
     //Frame advance.
-    queueParam("disable tool", ptBool, pfOpt, "false");
+    queueParam("action", ptEnum, pfOpt, "advance");
+    params.back().enumValues = enumGetNames(makerToolFrameAdvanceActionINames);
+    params.back().description =
+        "Action to perform. \"advance\" pauses gameplay if unpaused, otherwise "
+        "advances one frame. \"resume\" resumes normal gameplay.";
     commitTool(
         MAKER_TOOL_TYPE_FRAME_ADVANCE,
         "frame_advance", true,
-        MakerToolRunners::frameAdvance
+        MakerToolRunners::frameAdvance,
+        "Pauses gameplay and advances only one frame at a time."
     );
     
     //Free cam.
-    queueParam("toggle camera freeze", ptBool, pfOpt, "false");
+    queueParam("action", ptEnum, pfOpt, "control");
+    params.back().enumValues = enumGetNames(makerToolFreeCamActionINames);
+    params.back().description =
+        "Action to perform. \"mode\" toggles free cam mode. "
+        "\"freeze\" toggles whether the free camera is frozen "
+        "(player controls the leader) or mobile "
+        "(player controls the camera).";
     commitTool(
         MAKER_TOOL_TYPE_FREE_CAM,
         "free_cam", true,
-        MakerToolRunners::freeCam
+        MakerToolRunners::freeCam,
+        "Allows control of the camera. Includes freezing it in place as "
+        "the player controls the leader."
     );
     
     //Geometry info.
     commitTool(
         MAKER_TOOL_TYPE_GEOMETRY_INFO,
         "geometry_info", true,
-        MakerToolRunners::geometryInfo
+        MakerToolRunners::geometryInfo,
+        "Toggles showing information about the area layout data under "
+        "the mouse cursor, as well as information about the cursor proper."
     );
     
     //Hide HUD.
     commitTool(
         MAKER_TOOL_TYPE_HIDE_HUD,
         "hide_hud", false,
-        MakerToolRunners::hideHud
+        MakerToolRunners::hideHud,
+        "Toggles visibility of the HUD."
     );
     
     //Hurt mob.
-    queueParam("percentage", ptFloat, pfOpt, "50");
+    queueParam("percentage", ptFloat, pfOpt, "0.5");
+    params.back().description =
+        "Ratio of damage. 0.5 means it loses 50% of its max health. "
+        "1.0 means it loses all its health, -0.2 means it regains 20% of its "
+        "max health, etc.";
     commitTool(
         MAKER_TOOL_TYPE_HURT_MOB,
         "hurt_mob", true,
-        MakerToolRunners::hurtMob
+        MakerToolRunners::hurtMob,
+        "Hurts or heals the mob closest to the mouse cursor."
     );
     
     //Mob inspector.
-    queueParam("scan", ptBool, pfOpt, "false");
-    queueParam("disable tool", ptBool, pfOpt, "false");
+    queueParam("action", ptEnum, pfOpt, "closest");
+    params.back().enumValues = enumGetNames(makerToolMobInspectorActionINames);
+    params.back().description =
+        "Action to perform. \"closest\" makes it detect the mob closest "
+        "to the mouse cursor. \"iterate\" makes it detect mobs near the "
+        "mouse cursor or swap to the next one in that list. \"stop\" makes "
+        "it stop inspecting.";
     commitTool(
         MAKER_TOOL_TYPE_MOB_INSPECTOR,
         "mob_inspector", true,
-        MakerToolRunners::mobInspector
+        MakerToolRunners::mobInspector,
+        "Inspects a mob, showing information about itself and its script."
     );
     
     //New Pikmin.
-    queueParam("same type as before", ptBool, pfOpt, "false");
-    queueParam("maturity", ptInt, pfOpt, "2");
+    queueParam("type", ptString, pfOpt, "next");
+    params.back().description =
+        "Type of Pikmin to spawn. This can be a proper type's internal name, "
+        "or \"next\" to spawn one of the next type from the last spawned one, "
+        "or \"same\" to spawn one of the same type as the last spawned one.";
+    queueParam("maturity", ptEnum, pfOpt, "flower");
+    params.back().enumValues = enumGetNames(maturityINames);
     commitTool(
         MAKER_TOOL_TYPE_NEW_PIKMIN,
         "new_pikmin", true,
-        MakerToolRunners::newPikmin
+        MakerToolRunners::newPikmin,
+        "Spawns a new idle Pikmin under the mouse cursor."
     );
     
     //New reminder.
     commitTool(
         MAKER_TOOL_TYPE_NEW_REMINDER,
         "new_reminder", false,
-        MakerToolRunners::newReminder
+        MakerToolRunners::newReminder,
+        "Creates a new reminder for the area maker, using the mouse "
+        "cursor's position as its position. You are then asked to "
+        "fill in the reminder's data."
     );
     
     //Path info.
     commitTool(
         MAKER_TOOL_TYPE_PATH_INFO,
         "path_info", true,
-        MakerToolRunners::pathInfo
+        MakerToolRunners::pathInfo,
+        "Toggles showing information about the path that the inspected mob "
+        "is taking, if any."
     );
     
     //Show collision.
     commitTool(
         MAKER_TOOL_TYPE_SHOW_COLLISION,
         "show_collision", true,
-        MakerToolRunners::showCollision
+        MakerToolRunners::showCollision,
+        "Toggles visibility of mob collision boxes and bubbles."
     );
     
     //Show hitboxes.
     commitTool(
         MAKER_TOOL_TYPE_SHOW_HITBOXES,
         "show_hitboxes", true,
-        MakerToolRunners::showHitboxes
+        MakerToolRunners::showHitboxes,
+        "Toggles visibility of mob hitboxes."
     );
     
     //Show reaches.
     commitTool(
         MAKER_TOOL_TYPE_SHOW_REACHES,
         "show_reaches", true,
-        MakerToolRunners::showReaches
+        MakerToolRunners::showReaches,
+        "Toggles visibility of mob reach circles and pie-slices for the "
+        "inspected mob."
     );
     
     //Teleport.
     queueParam("use inspected mob", ptBool, pfOpt, "false");
+    params.back().description =
+        "Whether to teleport the current leader, or to instead teleport "
+        "the inspected mob.";
     queueParam("leave group members behind", ptBool, pfOpt, "false");
+    params.back().description =
+        "Whether to teleport the target mob and its group, or to "
+        "instead leave the group members behind.";
     commitTool(
         MAKER_TOOL_TYPE_TELEPORT,
         "teleport", true,
-        MakerToolRunners::teleport
+        MakerToolRunners::teleport,
+        "Teleports the current leader or inspected mob to where the mouse "
+        "cursor is."
     );
 }
 

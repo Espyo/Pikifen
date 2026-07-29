@@ -291,6 +291,29 @@ buildEnumNames(limbDrawMethodINames, LIMB_DRAW_METHOD)({
 });
 
 
+//Pikmin maturities.
+enum MATURITY {
+
+    //Leaf.
+    MATURITY_LEAF,
+
+    //Bud.
+    MATURITY_BUD,
+
+    //Flower.
+    MATURITY_FLOWER,
+
+};
+
+
+//Pikmin maturity enum naming (internal names).
+buildEnumNames(maturityINames, MATURITY)({
+    { MATURITY_LEAF, "leaf" },
+    { MATURITY_BUD, "bud" },
+    { MATURITY_FLOWER, "flower" },
+});
+
+
 //Flags that affect something about a mob.
 enum MOB_FLAG {
 

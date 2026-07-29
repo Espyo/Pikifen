@@ -6,10 +6,10 @@ Current tasks (tasks being worked on, but not yet committed)
 Next tasks (roughly sorted most important first)
     --- To fix ---
     Area image is coming up all washed up and transparent on Playful Yard
-    Freezing the free cam makes it still keep some momentum if it was moving
     If you heal and hurt a mob repeatedly, the health wheel will start to vanish while filling up and it'll look weird
 
     --- 1.2.0 ---
+    Gold nuggets are worth too much (100 -> 3) (thanks Piksol)
     Create an area that's good for people to pick up and play
         It should be easy to play in, and showcase a lot of action right off the bat
             You start with 30 or so Pikmin, and there are many nearby harmless and easy enemies
@@ -51,8 +51,10 @@ Next tasks (roughly sorted most important first)
     
     --- 2.0.0 ---
     Freezecake
-    Update Dear ImGui to 1.92.8
+    Update Dear ImGui to 1.92.9
         > Made AddCallback() user data default to Null for convenience.
+        > DragXXX, SliderXXX, InputScalar: with ImGuiItemFlags_LiveEditOnInputScalar now defaulting to being disabled: inputting a value with the keyboard doesn't write intermediate values to the backing variable.
+        > Windows/Tables settings entries can now record the last used date in YYYYMMDD format, allowing tools to run to e.g. delete entries that haven't been used in X months. (#9460) / Added bool io.ConfigIniSettingsSaveLastUsedDate to disable saving that info
     Increase the size of all gates to 256? A lot of the larger enemies and treasures have a hard time squeezing through the 192-length gaps
     https://github.com/Espyo/Pikifen/compare/master...Helodity:Pikifen:pack-loading-restart
     https://github.com/Helodity/Pikifen/commit/e2a5e3b982142474ff55ca60cc36fab21605115d
@@ -82,14 +84,17 @@ Next tasks (roughly sorted most important first)
                 It should come pre-packed with a few schemes: "Keyboard+Mouse" (default), "Switch Pro Controller", "Steam Deck", "Single Joy-Con", etc.
                     Confirm that these work both on Linux and on Windows
                 Some of the misc. control options, like using the mouse cursor, should be a part of the control scheme, while others are just personal preference
+                How is the "placeholder controller" thing going to work with system controls, like the maker tools or taking a screenshot?
             Player setup menu
                 The menu should be split into four columns, each one for a player. Each column should have:
                     A button to toggle that player on or off
                     Their name (which can be changed by the player; defaults to Player 1, Player 2, etc.)
                     What control scheme they're using (and a button to change it), and what controllers, if any, they are using
                         If the selected control scheme uses controllers, the player can choose which controllers fill in the controller placeholders of that scheme
+                        If there is only one controller, assume it's that one, otherwise have an exclamation mark on this player's controller settings informing that one have been chosen. A button should show a full-screen pop-up asking the player to press a button on the controller to be used for this control scheme. If the control scheme uses multiple controllers, it should ask multiple times in a row
                         Write the controller's names, given by Allegro
                     Their favorite leader, including "none" and "random"
+                Maybe have the current player's column expanded with all of the information and all of the widgets to allow editing it, while the other three are thin and just show the basic info
             Pause menu
                 The general system menu becomes its own menu. It is full-screen, pauses everything, and every player should get their pause menu input, so that if one player is busy mashing, they don't start picking options because somebody else paused
                 The radar, status, and mission pages should be their own "leader monitor"-like menu. It only affects that player's screen and does not pause gameplay (unless it's single-player)

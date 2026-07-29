@@ -114,6 +114,73 @@ enum MAKER_TOOL_CONTEXT {
 };
 
 
+//Possible actions to take when activating the frame advance maker tool command.
+enum MAKER_TOOL_FRAME_ADVANCE_ACTION {
+
+    //Pause gameplay or advance one frame.
+    MAKER_TOOL_FRAME_ADVANCE_ACTION_ADVANCE,
+    
+    //Resume normal gameplay.
+    MAKER_TOOL_FRAME_ADVANCE_ACTION_RESUME,
+    
+};
+
+
+//Frame advance maker tool command action enum naming (internal names).
+buildEnumNames(
+    makerToolFrameAdvanceActionINames, MAKER_TOOL_FRAME_ADVANCE_ACTION
+)({
+    { MAKER_TOOL_FRAME_ADVANCE_ACTION_ADVANCE, "advance" },
+    { MAKER_TOOL_FRAME_ADVANCE_ACTION_RESUME, "resume" },
+});
+
+
+//Possible actions to take when activating the free cam maker tool command.
+enum MAKER_TOOL_FREE_CAM_ACTION {
+
+    //Toggle free cam mode.
+    MAKER_TOOL_FREE_CAM_ACTION_MODE,
+    
+    //Toggle freezing the camera's position.
+    MAKER_TOOL_FREE_CAM_ACTION_FREEZE,
+    
+};
+
+
+//Frame advance maker tool command action enum naming (internal names).
+buildEnumNames(
+    makerToolFreeCamActionINames, MAKER_TOOL_FREE_CAM_ACTION
+)({
+    { MAKER_TOOL_FREE_CAM_ACTION_MODE, "mode" },
+    { MAKER_TOOL_FREE_CAM_ACTION_FREEZE, "freeze" },
+});
+
+
+//Possible actions to take when activating the mob inspector maker tool command.
+enum MAKER_TOOL_MOB_INSPECTOR_ACTION {
+
+    //Detect the closest to the mouse cursor.
+    MAKER_TOOL_MOB_INSPECTOR_ACTION_GET_CLOSEST,
+    
+    //Detect all around the mouse cursor and iterate between that list.
+    MAKER_TOOL_MOB_INSPECTOR_ACTION_ITERATE,
+    
+    //Act as if no mob was detected.
+    MAKER_TOOL_MOB_INSPECTOR_ACTION_STOP,
+    
+};
+
+
+//Frame advance maker tool command action enum naming (internal names).
+buildEnumNames(
+    makerToolMobInspectorActionINames, MAKER_TOOL_MOB_INSPECTOR_ACTION
+)({
+    { MAKER_TOOL_MOB_INSPECTOR_ACTION_GET_CLOSEST, "get_closest" },
+    { MAKER_TOOL_MOB_INSPECTOR_ACTION_ITERATE, "iterate" },
+    { MAKER_TOOL_MOB_INSPECTOR_ACTION_STOP, "stop" },
+});
+
+
 namespace MAKER_TOOLS {
 extern const float PLAY_CONFIRMATION_TIMER;
 }
@@ -156,6 +223,9 @@ struct MakerToolType {
     
     //Whether using this tool helps the player in any way.
     bool helpful = false;
+    
+    //Description.
+    string description;
     
 };
 
@@ -211,11 +281,12 @@ struct MakerTools {
     //Are we currently paused for frame advance?
     bool frameAdvanceMode = false;
     
-    //Allow the player to control the free camera.
-    bool freeCamControl = false;
+    //Whether the free camera is frozen (player controls leader)
+    //or mobile (player controls camera).
+    bool freeCamFrozen = false;
     
-    //Make the camera follow the free camera data.
-    bool freeCamView = false;
+    //Whether free camera mode is active.
+    bool freeCamMode = false;
     
     //Do we have to advance one game frame on the next processing frame?
     bool mustAdvanceOneFrame = false;

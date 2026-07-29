@@ -167,17 +167,22 @@ bool MakerToolRunners::fillInventory(
 bool MakerToolRunners::frameAdvance(
     MakerTools& mgr, const vector<string>& args
 ) {
-    bool disableTool = s2b(args[0]);
-    
-    if(disableTool) {
-        mgr.frameAdvanceMode = false;
-        mgr.mustAdvanceOneFrame = false;
-    } else {
+    MAKER_TOOL_FRAME_ADVANCE_ACTION action =
+        enumGetValue(makerToolFrameAdvanceActionINames, args[0]);
+        
+    switch(action) {
+    case MAKER_TOOL_FRAME_ADVANCE_ACTION_ADVANCE: {
         if(!mgr.frameAdvanceMode) {
             mgr.frameAdvanceMode = true;
         } else {
             mgr.mustAdvanceOneFrame = true;
         }
+        break;
+    } case MAKER_TOOL_FRAME_ADVANCE_ACTION_RESUME: {
+        mgr.frameAdvanceMode = false;
+        mgr.mustAdvanceOneFrame = false;
+        break;
+    }
     }
     
     return true;
@@ -193,30 +198,31 @@ bool MakerToolRunners::frameAdvance(
 bool MakerToolRunners::freeCam(
     MakerTools& mgr, const vector<string>& args
 ) {
-    bool toggleCameraFreeze = s2b(args[0]);
+    MAKER_TOOL_FREE_CAM_ACTION action =
+        enumGetValue(makerToolFreeCamActionINames, args[0]);
+        
+    bool wasControllingLeader = !mgr.freeCamMode || mgr.freeCamFrozen;
     
-    bool freeCamControlWasOn = mgr.freeCamControl;
-    
-    if(toggleCameraFreeze) {
-        if(mgr.freeCamView) {
-            mgr.freeCamControl = !mgr.freeCamControl;
-        } else {
-            mgr.freeCamView = true;
-            mgr.freeCamControl = false;
-        }
-    } else {
-        if(mgr.freeCamView) {
-            mgr.freeCamView = false;
-            mgr.freeCamControl = false;
-        } else {
-            mgr.freeCamView = true;
-            mgr.freeCamControl = true;
-        }
+    switch(action) {
+    case MAKER_TOOL_FREE_CAM_ACTION_MODE: {
+        mgr.freeCamMode = !mgr.freeCamMode;
+        mgr.freeCamFrozen = false;
+        break;
+    } case MAKER_TOOL_FREE_CAM_ACTION_FREEZE: {
+        if(!mgr.freeCamMode) mgr.freeCamMode = true;
+        mgr.freeCamFrozen = !mgr.freeCamFrozen;
+        break;
+    }
     }
     
-    if(!freeCamControlWasOn && mgr.freeCamControl) {
+    bool isControllingLeader = !mgr.freeCamMode || mgr.freeCamFrozen;
+    
+    if(wasControllingLeader && !isControllingLeader) {
         //Stop the leaders, otherwise they'll keep moving out of control.
         game.states.gameplay->stopAllLeaders();
+    } else if(!wasControllingLeader && isControllingLeader) {
+        //Stop the camera, otherwise it'll keep moving out of control.
+        game.states.gameplay->players[0].view.cam.centerSpeed = Point(0.0f);
     }
     
     return true;
@@ -290,21 +296,29 @@ bool MakerToolRunners::hurtMob(
 bool MakerToolRunners::mobInspector(
     MakerTools& mgr, const vector<string>& args
 ) {
+    MAKER_TOOL_MOB_INSPECTOR_ACTION action =
+        enumGetValue(makerToolMobInspectorActionINames, args[0]);
+        
     Mob* prevInspectedMob = mgr.inspectedMob;
-    Mob* m;
-    if(mgr.mod1) {
+    Mob* m = nullptr;
+    
+    switch(action) {
+    case MAKER_TOOL_MOB_INSPECTOR_ACTION_GET_CLOSEST: {
+        m =
+            getClosestMobToMouseCursor(
+                game.states.gameplay->players[0].view, false
+            );
+        break;
+    } case MAKER_TOOL_MOB_INSPECTOR_ACTION_ITERATE: {
         m =
             getNextMobNearCursor(
                 game.states.gameplay->players[0].view,
                 prevInspectedMob, false
             );
-    } else if(mgr.mod2) {
-        m = nullptr;
-    } else {
-        m =
-            getClosestMobToMouseCursor(
-                game.states.gameplay->players[0].view, false
-            );
+        break;
+    } case MAKER_TOOL_MOB_INSPECTOR_ACTION_STOP: {
+        break;
+    }
     }
     
     mgr.inspectedMob = prevInspectedMob == m ? nullptr : m;
@@ -328,8 +342,8 @@ bool MakerToolRunners::mobInspector(
 bool MakerToolRunners::newPikmin(
     MakerTools& mgr, const vector<string>& args
 ) {
-    bool sameTypeAsBefore = s2b(args[0]);
-    unsigned char maturity = s2i(args[1]);
+    string type = args[0];
+    MATURITY maturity = enumGetValue(maturityINames, args[1]);
     
     if(
         game.states.gameplay->mobs.pikmin.size() >=
@@ -339,14 +353,10 @@ bool MakerToolRunners::newPikmin(
     }
     
     PikminType* newPikminType = nullptr;
-    maturity =
-        std::clamp(
-            maturity, (unsigned char) 0, (unsigned char) N_MATURITIES
-        );
-        
-    if(sameTypeAsBefore && mgr.lastPikminType) {
+    
+    if(type == "same" && mgr.lastPikminType) {
         newPikminType = mgr.lastPikminType;
-    } else {
+    } else if(type == "next") {
         newPikminType =
             game.content.mobTypes.list.pikmin.begin()->second;
             
@@ -719,11 +729,31 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
         break;
     } case PLAYER_ACTION_TYPE_MT_FRAME_ADVANCE: {
         toolToRun = MAKER_TOOL_TYPE_FRAME_ADVANCE;
-        args.push_back(b2s(mod1));
+        args.push_back(
+            mod1 ?
+            enumGetName(
+                makerToolFrameAdvanceActionINames,
+                MAKER_TOOL_FRAME_ADVANCE_ACTION_RESUME
+            ) :
+            enumGetName(
+                makerToolFrameAdvanceActionINames,
+                MAKER_TOOL_FRAME_ADVANCE_ACTION_ADVANCE
+            )
+        );
         break;
     } case PLAYER_ACTION_TYPE_MT_FREE_CAM: {
         toolToRun = MAKER_TOOL_TYPE_FREE_CAM;
-        args.push_back(b2s(mod1));
+        args.push_back(
+            mod1 ?
+            enumGetName(
+                makerToolFreeCamActionINames,
+                MAKER_TOOL_FREE_CAM_ACTION_FREEZE
+            ) :
+            enumGetName(
+                makerToolFreeCamActionINames,
+                MAKER_TOOL_FREE_CAM_ACTION_MODE
+            )
+        );
         break;
     } case PLAYER_ACTION_TYPE_MT_GEOMETRY_INFO: {
         toolToRun = MAKER_TOOL_TYPE_GEOMETRY_INFO;
@@ -738,11 +768,31 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
         break;
     } case PLAYER_ACTION_TYPE_MT_MOB_INSPECTOR: {
         toolToRun = MAKER_TOOL_TYPE_MOB_INSPECTOR;
+        args.push_back(
+            mod1 ?
+            enumGetName(
+                makerToolMobInspectorActionINames,
+                MAKER_TOOL_MOB_INSPECTOR_ACTION_ITERATE
+            ) :
+            mod2 ?
+            enumGetName(
+                makerToolMobInspectorActionINames,
+                MAKER_TOOL_MOB_INSPECTOR_ACTION_STOP
+            ) :
+            enumGetName(
+                makerToolMobInspectorActionINames,
+                MAKER_TOOL_MOB_INSPECTOR_ACTION_GET_CLOSEST
+            )
+        );
         break;
     } case PLAYER_ACTION_TYPE_MT_NEW_PIKMIN: {
         toolToRun = MAKER_TOOL_TYPE_NEW_PIKMIN;
-        args.push_back(b2s(mod1));
-        args.push_back(mod2 ? "0" : "2");
+        args.push_back(mod1 ? "same" : "next");
+        args.push_back(
+            mod2 ?
+            enumGetName(maturityINames, MATURITY_LEAF) :
+            enumGetName(maturityINames, MATURITY_FLOWER)
+        );
         break;
     } case PLAYER_ACTION_TYPE_MT_NEW_REMINDER: {
         toolToRun = MAKER_TOOL_TYPE_NEW_REMINDER;

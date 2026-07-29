@@ -763,19 +763,19 @@ void GameplayState::doGameplayLogic(float deltaT) {
         Player& player = players[p];
         
         //Free camera movement.
-        bool freeCamControl =
-            !player.leaderPtr || game.makerTools.freeCamControl;
-        bool freeCamView =
-            !player.leaderPtr || game.makerTools.freeCamView;
+        bool freeCamMode =
+            !player.leaderPtr || game.makerTools.freeCamMode;
+        bool freeCamControllable =
+            freeCamMode && !game.makerTools.freeCamFrozen;
             
-        if(freeCamView) {
+        if(freeCamMode) {
             player.view.cam.centerSpeedMode = CAMERA_SPEED_MODE_LINEAR;
         } else {
             player.view.cam.centerSpeedMode = CAMERA_SPEED_MODE_EXP_SMOOTH;
             player.view.cam.centerSpeed = Point(0.0f);
         }
         
-        if(freeCamControl) {
+        if(freeCamControllable) {
             //Get movement info.
             MovementInfo mov;
             mov.right =
@@ -1742,7 +1742,7 @@ void GameplayState::markAreaCellsActive(
  * @param deltaT How long the frame's tick is, in seconds.
  */
 void GameplayState::processLeaderCursor(Player* player, float deltaT) {
-    if(game.makerTools.freeCamControl) return;
+    if(game.makerTools.freeCamMode && !game.makerTools.freeCamFrozen) return;
     
     //Move the leader cursor freely, using the current control scheme.
     if(game.options.controls.mouseMovesLeaderCursor[player->playerNr - 1]) {
