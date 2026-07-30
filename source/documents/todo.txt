@@ -9,7 +9,6 @@ Next tasks (roughly sorted most important first)
     If you heal and hurt a mob repeatedly, the health wheel will start to vanish while filling up and it'll look weird
 
     --- 1.2.0 ---
-    Gold nuggets are worth too much (100 -> 3) (thanks Piksol)
     Create an area that's good for people to pick up and play
         It should be easy to play in, and showcase a lot of action right off the bat
             You start with 30 or so Pikmin, and there are many nearby harmless and easy enemies
