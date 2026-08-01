@@ -1763,7 +1763,7 @@ void AnimationEditor::setupForNewAnimDbPost() {
     ) {
         topBmp[0] = ((LeaderType*) loadedMobType)->bmpLight;
         topTint = ((LeaderType*) loadedMobType)->lightBmpTint;
-        curMaturity = 0;
+        curMaturity = MATURITY_LEAF;
     }
     
     if(loadedMobType && db.name == "animations") {

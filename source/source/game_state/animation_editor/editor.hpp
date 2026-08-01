@@ -139,7 +139,7 @@ private:
     SelectionController hitboxSelCtrl;
     
     //Current maturity to display on the Pikmin's top.
-    unsigned char curMaturity = 0;
+    MATURITY curMaturity = MATURITY_LEAF;
     
     //Current sprite, for when the user is editing sprites.
     Sprite* curSprite = nullptr;

@@ -2950,7 +2950,8 @@ void AnimationEditor::processGuiPanelSpriteTop() {
             //Toggle maturity button.
             ImGui::Spacer();
             if(ImGui::Button("Toggle maturity")) {
-                curMaturity = sumAndWrap(curMaturity, 1, N_MATURITIES);
+                curMaturity =
+                    (MATURITY) sumAndWrap(curMaturity, 1, N_MATURITIES);
             }
             setTooltip(
                 "View a different maturity top."

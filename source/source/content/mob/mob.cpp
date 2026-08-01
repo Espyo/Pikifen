@@ -889,7 +889,8 @@ bool Mob::calculateAttackDamage(
         //It's easier to calculate the maturity attack boost here.
         Pikmin* pikPtr = (Pikmin*) this;
         attackStrength *=
-            1 + (game.config.pikmin.maturityPowerMult * pikPtr->maturity);
+            1 +
+            (game.config.pikmin.maturityPowerMult * (float) pikPtr->maturity);
     }
     
     *outDamage =

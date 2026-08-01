@@ -279,7 +279,8 @@ void Pikmin::forceCarry(Mob* m) {
 float Pikmin::getBaseSpeed() const {
     float base = Mob::getBaseSpeed();
     return
-        base + (base * this->maturity * game.config.pikmin.maturitySpeedMult);
+        base +
+        (base * (float) this->maturity * game.config.pikmin.maturitySpeedMult);
 }
 
 
@@ -493,7 +494,7 @@ bool Pikmin::increaseMaturity(int amount) {
         particleGenerators.push_back(pg);
     }
     
-    maturity = newMaturity;
+    maturity = (MATURITY) newMaturity;
     return newMaturity != oldMaturity;
 }
 
@@ -592,7 +593,8 @@ void Pikmin::readScriptVars(const ScriptVarManager& varsMgr) {
     bool followLinkVar;
     
     if(varsMgr.getValue("maturity", maturityVar)) {
-        maturity = std::clamp(maturityVar, 0, (int) (N_MATURITIES - 1));
+        maturity =
+            (MATURITY) std::clamp(maturityVar, 0, (int) (N_MATURITIES - 1));
     }
     if(varsMgr.getValue("sprout", sproutVar)) {
         if(sproutVar) {

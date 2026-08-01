@@ -1407,7 +1407,7 @@ void spitPikminSeed(
     newPikmin->bottomZ = z;
     newPikmin->speed = horizontalSpeed;
     newPikmin->speedZ = verticalSpeed;
-    newPikmin->maturity = 0;
+    newPikmin->maturity = MATURITY_LEAF;
 }
 
 

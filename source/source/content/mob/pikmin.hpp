@@ -66,8 +66,8 @@ public:
     //How many hits in a row have done no damage.
     unsigned char consecutiveDings = 0;
     
-    //Maturity. 0: leaf. 1: bud. 2: flower.
-    unsigned char maturity = 2;
+    //Maturity.
+    MATURITY maturity = MATURITY_FLOWER;
     
     //Is this Pikmin currently a seed or a sprout?
     bool isSeedOrSprout = false;

@@ -9,6 +9,9 @@ Next tasks (roughly sorted most important first)
     If you heal and hurt a mob repeatedly, the health wheel will start to vanish while filling up and it'll look weird
 
     --- 1.2.0 ---
+    Pikmin sorted in the group should also be sorted so that flowers are at the front
+            
+    --- 1.3.0 ---
     Create an area that's good for people to pick up and play
         It should be easy to play in, and showcase a lot of action right off the bat
             You start with 30 or so Pikmin, and there are many nearby harmless and easy enemies
@@ -46,15 +49,11 @@ Next tasks (roughly sorted most important first)
             Have a bomb rock tucked in the corner?
             Have a climbing stick somewhere?
             Enemies: Crumbugs, Dwarf Reds, loads of Female Sheargrubs, Puffy Blowhog?, White Spectralids
-            
-    
-    --- 2.0.0 ---
     Freezecake
     Update Dear ImGui to 1.92.9
         > Made AddCallback() user data default to Null for convenience.
         > DragXXX, SliderXXX, InputScalar: with ImGuiItemFlags_LiveEditOnInputScalar now defaulting to being disabled: inputting a value with the keyboard doesn't write intermediate values to the backing variable.
         > Windows/Tables settings entries can now record the last used date in YYYYMMDD format, allowing tools to run to e.g. delete entries that haven't been used in X months. (#9460) / Added bool io.ConfigIniSettingsSaveLastUsedDate to disable saving that info
-    Increase the size of all gates to 256? A lot of the larger enemies and treasures have a hard time squeezing through the 192-length gaps
     https://github.com/Espyo/Pikifen/compare/master...Helodity:Pikifen:pack-loading-restart
     https://github.com/Helodity/Pikifen/commit/e2a5e3b982142474ff55ca60cc36fab21605115d
     Add a proper maker console
@@ -70,20 +69,33 @@ Next tasks (roughly sorted most important first)
         Move somewhere the logic that is common between this system and the existing script action parsing/running system
         Maybe the button-based maker tool activations could be made into commands sent to the console, and the player could add custom binds so they could customize calling the maker tools to be however they want
     The camera (at least for editors) should control where it wants to go based on the specified rectangle corners. Then, every frame, it interpolates between the currently-visible corners and the intended corners and change the X, Y, and zoom to match. This should allow smoothly zooming in and out in editors while keeping the point under the mouse fixed
+    Controls should support multiple players, including a "none" player for things like maker tools, screenshot, etc.
+    Controls menus
+        Split into sub-menus by types of actions: leader control, cursor control, Pikmin management, menu basics, gameplay advanced, menu advanced
+            Something like the cursor control sub-menu could contain the "controlled with mouse" checkbox. If the checkbox is on, the binds are invisible or disabled. Maybe also do the same for the cursor speed picker?
+            Some binds, like the radar pan, should be preceded by a "same as leader movement" checkbox, which if it is on, should make them invisible
+        The player only edits and creates control schemes, like the list of saved rulesets in Smash Ultimate
+            Each one should be saved to the same folder as different files. That way players can share the data file of a scheme they've created
+        When assigning an input to an action, if it's a controller, also save a controller placeholder number, which can be changed in this menu
+        A button or text or something explaining that this is just a control scheme, and if you want to assign it to player 1, go to the player setup menu
+        It should come pre-packed with a few schemes: "Keyboard+Mouse" (default), "Switch Pro Controller", "Steam Deck", "Single Joy-Con", etc.
+            Confirm that these work both on Linux and on Windows
+        Some of the misc. control options, like using the mouse cursor, should be a part of the control scheme, while others are just personal preference
+        How is the "placeholder controller" thing going to work with system controls, like the maker tools or taking a screenshot?
+    Editor controls
+        Customizable controls overall, including double-clicking any of the mouse buttons
+        Allow the GUI to be navigable via keyboard or joystick (this is a setting in Dear ImGui), and make it so the canvas can also be somewhat controlled, like the radar. Plus a button to switch which one is in focus
+    [NEEDS BRAINSTORMING] Look into the "Next maturity" controls -- does the way they work make sense? Why can't you switch without holding a Pikmin?
+    Use al_clear_keyboard_state instead of game.controls.releaseAll()
+    Every code that checks for which mouse button is being pressed should compare with ALLEGRO_MOUSE_BUTTON_* instead of a magic number
+    An option to add specific/all/unbound actions to the inventory, like dismiss, next leader, etc.
+    If the player has the same input bound to different actions, there should be a warning... Except a lot of them are okay to have, like movement + leader cursor movement, menu movement + radar panning, etc.
+
+    --- 2.0.0 ---
     Multiplayer co-op
-        Controls should support multiple players, including a "none" player for things like maker tools, screenshot, etc.
         Menus
             Options menu
                 Links to the control binds menu and the player setup menu
-            Control binds menu
-                The player only edits and creates control schemes, like the list of saved rulesets in Smash Ultimate
-                    Each one should be saved to the same folder as different files. That way players can share the data file of a scheme they've created
-                When assigning an input to an action, if it's a controller, also save a controller placeholder number, which can be changed in this menu
-                A button or text or something explaining that this is just a control scheme, and if you want to assign it to player 1, go to the player setup menu
-                It should come pre-packed with a few schemes: "Keyboard+Mouse" (default), "Switch Pro Controller", "Steam Deck", "Single Joy-Con", etc.
-                    Confirm that these work both on Linux and on Windows
-                Some of the misc. control options, like using the mouse cursor, should be a part of the control scheme, while others are just personal preference
-                How is the "placeholder controller" thing going to work with system controls, like the maker tools or taking a screenshot?
             Player setup menu
                 The menu should be split into four columns, each one for a player. Each column should have:
                     A button to toggle that player on or off
@@ -146,6 +158,8 @@ Next tasks (roughly sorted most important first)
         Game statistics for how much time was spent in multiplayer play
         Make some areas about multiplayer puzzles? Hopefully ones that can also be completed by a single player so long as they swap leaders
         An option that makes it so the audio of players on the left side of the screen plays louder on the left speaker and vice-versa, or if all players' sounds play normally across both speakers
+    
+    --- Later ---
     Multiplayer competitive
         Menus
             Player setup menu
@@ -312,6 +326,7 @@ Next tasks (roughly sorted most important first)
             Take ideas from the Today's Report section of this file
             Competitive level results screen should feature a graph showing how different things changed over time -- Pikmin counts, progress towards an objective, etc., along with key moments
         Game statistics for how much time was spent in multiplayer should be changed to co-op time, and a new statistic for competitive play time should be added
+    Increase the size of all gates to 256? A lot of the larger enemies and treasures have a hard time squeezing through the 192-length gaps
     Floors-over-floors; mostly for bridges
         New thoughts
             Since bridges are now more powerful, FOFs only have a purpose for overhangs. Which is such a rare thing that I'm thinking the effort isn't worth it at all
@@ -617,7 +632,6 @@ Misc things (so I don't forget)
         Add more items to the inventory, like Pikmin 4's lightning, pikpik carrots, Glow Seeds, etc.
         Hiding spots
             A "huddle" group mode, where all the Pikmin in the group are huddled very close to the leader. This will be useful for hiding spots and for lily pad stations. Dismissing in this state should dismiss on-spot instead of into separated groups
-        An option to add specific/all/unbound actions to the inventory, like dismiss, next leader, etc.
     Audio
         Weird limitations
             If Pikmin are already carrying something elsewhere in the area, far away, the Pikmin told to carry something here will rarely play their sound, because the others are already doing it. Likewise, I think only a few geysers in DEV Lab actually play a sound. I can't make 0-volume sounds not play, otherwise stuff like geysers that are far away at spawn will never play sounds...
@@ -735,8 +749,6 @@ Misc things (so I don't forget)
         Resizable text inputs? https://github.com/ocornut/imgui/issues/7081#issuecomment-2081167909
         An option to toggle the grid visibility
         Smooth scrolling in Dear ImGui https://github.com/ocornut/imgui/issues/2462 (thanks Nataly171)
-        Customizable controls overall, including double-clicking any of the mouse buttons
-        Allow the GUI to be navigable via keyboard or joystick (this is a setting in Dear ImGui), and make it so the canvas can also be somewhat controlled, like the radar. Plus a button to switch which one is in focus
         Maybe the color scheme editor can just make use of some dark tones, some light tones, and one accent color, like how MuseScore does it
         Aesthetic
             Have SOMETHING moving... If the player doesn't touch anything, the screen shouldn't be mistakable with a frozen game
@@ -865,7 +877,6 @@ Misc things (so I don't forget)
         Mobs could specify their drawing method from an enum. This way, something like an Onion could be drawn the standard mob way, or with some logic that turns all magic pink pixels to the color of the Onion. Same with Candypop Buds, pellets, and so on
     [NEEDS BRAINSTORMING] Should I auto-fade textures on stepping height?
     The spray effect that buries Pikmin should probably only affect opponent Pikmin
-    [NEEDS BRAINSTORMING] Look into the "Next maturity" controls -- does the way they work make sense? Why can't you switch without holding a Pikmin?
     Story mode
         The ability for Onions to store but not produce Pikmin whose Onion hasn't been collected yet [PIKMIN 4]
         Some treasures should weigh as much as the current army, after a boss battle
@@ -991,14 +1002,10 @@ Tasks for later on (I might never implement these)
             https://github.com/MikeLankamp/fpm
         Should it send the events, or "controller" state? If the former, be careful with the player mashing the keyboard and sending many events in one frame. If the latter, there'll be a lot of duplicated info
         Either prepare for or disallow changing options mid-game
-    If Allegro gets updated...
-        When al_clear_keyboard_state is available, use that instead of game.controls.releaseAll()
-        Every code that checks for which mouse button is being pressed should compare with ALLEGRO_MOUSE_BUTTON_* instead of a magic number
     Weird known issues
         An enemy that's already petrified can't be petrified again. Unless it's got the "petrified_cracking" or "petrified_cracked" statuses instead
         Whenever a sound effect fades out or in, you can hear crackling in the discrete steps that the engine changes its volume (once per frame). Unless I move each sound to its own mixer and apply post-processing, I don't think this has a solution...
     Stuff I don't know how to tackle yet
-        If the player has the same input bound to different actions, there should be a warning... Except a lot of them are okay to have, like movement + leader cursor movement, menu movement + radar panning, etc.
         If a hazard vulnerability is set to 0 but has a replacement, it should apply the replacement anyway... Except the hazard/damage/status/replacement logic is a bit intertwined and it's not so simple. For now, makers can just make the damage multiplier be like 0.001 or something
     Possible cleanup
         Timers

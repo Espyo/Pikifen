@@ -2119,7 +2119,7 @@ void PikminFsm::beAttacked(ScriptVM* scriptVM, void* info1, void* info2) {
         }
         
         //Withering.
-        if(info->h2->witherChance > 0 && pikPtr->maturity > 0) {
+        if(info->h2->witherChance > 0 && pikPtr->maturity > MATURITY_LEAF) {
             unsigned char witherRoll = game.rng.i(0, 100);
             if(witherRoll < info->h2->witherChance) {
                 pikPtr->increaseMaturity(-1);
@@ -4196,7 +4196,7 @@ void PikminFsm::sigh(ScriptVM* scriptVM, void* info1, void* info2) {
 void PikminFsm::sproutEvolve(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
-    if(pikPtr->maturity == 0 || pikPtr->maturity == 1) {
+    if(pikPtr->maturity == MATURITY_LEAF || pikPtr->maturity == MATURITY_BUD) {
         //Leaf to bud, or bud to flower.
         pikPtr->increaseMaturity(1);
     } else {

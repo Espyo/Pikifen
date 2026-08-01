@@ -981,7 +981,7 @@ Mob* GameplayState::getClosestGroupMember(
             continue;
         }
         
-        unsigned char maturity = 0;
+        MATURITY maturity = MATURITY_LEAF;
         if(memberPtr->type->category->id == MOB_CATEGORY_PIKMIN) {
             maturity = ((Pikmin*) memberPtr)->maturity;
         }
