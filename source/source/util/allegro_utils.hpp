@@ -63,6 +63,49 @@ enum FS_DELETE_RESULT {
 #define mapGray(g) al_map_rgb((g), (g), (g))
 
 
+/**
+ * @brief State of the Allegro blender.
+ */
+struct AllegroBlenderState {
+
+    //--- Public members ---
+    
+    //Whether any data has been saved to this object yet.
+    bool hasData = false;
+    
+    
+    //--- Public function declarations ---
+    
+    void save();
+    void load() const;
+    void loadIfHasData() const;
+    
+    
+    private:
+    
+    //--- Private members ---
+    
+    //Operation mode.
+    int op = 0;
+    
+    //Source.
+    int src = 0;
+    
+    //Destination.
+    int dst = 0;
+    
+    //Alpha operation.
+    int aOp = 0;
+    
+    //Alpha source.
+    int aSrc = 0;
+    
+    //Alpha destination.
+    int aDst = 0;
+    
+};
+
+
 bool operator==(const ALLEGRO_COLOR& c1, const ALLEGRO_COLOR& c2);
 bool operator!=(const ALLEGRO_COLOR& c1, const ALLEGRO_COLOR& c2);
 void al_fwrite(ALLEGRO_FILE* f, const string& s);

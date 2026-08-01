@@ -123,6 +123,8 @@ struct ParticleEmission {
 
     public:
     
+    //--- Public members ---
+    
     //Shape for particles to emit from.
     PARTICLE_EMISSION_SHAPE shape = PARTICLE_EMISSION_SHAPE_RECTANGLE;
     

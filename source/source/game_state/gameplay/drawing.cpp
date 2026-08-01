@@ -45,18 +45,14 @@ void GameplayState::doGameDrawing(
       ***  \/                             \/  ***
         ***************************************/
     
-    ALLEGRO_TRANSFORM oldWorldToWindowTransform;
-    int blendOldOp, blendOldSrc, blendOldDst,
-        blendOldAOp, blendOldASrc, blendOldADst;
-        
+    ALLEGRO_TRANSFORM prevWorldToWindowTransform;
+    AllegroBlenderState prevBlender;
+    
     if(bmpOutput) {
-        oldWorldToWindowTransform = players[0].view.worldToWindowTransform;
+        prevWorldToWindowTransform = players[0].view.worldToWindowTransform;
         players[0].view.worldToWindowTransform = *bmpTransform;
         al_set_target_bitmap(bmpOutput);
-        al_get_separate_blender(
-            &blendOldOp, &blendOldSrc, &blendOldDst,
-            &blendOldAOp, &blendOldASrc, &blendOldADst
-        );
+        prevBlender.save();
         al_set_separate_blender(
             ALLEGRO_ADD, ALLEGRO_ALPHA,
             ALLEGRO_INVERSE_ALPHA, ALLEGRO_ADD,
@@ -122,11 +118,8 @@ void GameplayState::doGameDrawing(
         
         //Finish dumping to a bitmap image here.
         if(bmpOutput) {
-            al_set_separate_blender(
-                blendOldOp, blendOldSrc, blendOldDst,
-                blendOldAOp, blendOldASrc, blendOldADst
-            );
-            players[0].view.worldToWindowTransform = oldWorldToWindowTransform;
+            prevBlender.load();
+            players[0].view.worldToWindowTransform = prevWorldToWindowTransform;
             al_set_target_backbuffer(game.display);
             return;
         }
@@ -1470,10 +1463,8 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
         //For starters, the whole window is dark (white in the map).
         al_clear_to_color(mapGray(blackoutS));
         
-        int oldOp, oldSrc, oldDst, oldAOp, oldASrc, oldADst;
-        al_get_separate_blender(
-            &oldOp, &oldSrc, &oldDst, &oldAOp, &oldASrc, &oldADst
-        );
+        AllegroBlenderState prevBlender;
+        prevBlender.save();
         al_set_separate_blender(
             ALLEGRO_DEST_MINUS_SRC, ALLEGRO_ONE, ALLEGRO_ONE,
             ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ONE
@@ -1518,9 +1509,7 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
         
         al_draw_bitmap(lightmapBmp, 0, 0, 0);
         
-        al_set_separate_blender(
-            oldOp, oldSrc, oldDst, oldAOp, oldASrc, oldADst
-        );
+        prevBlender.load();
         
     }
     

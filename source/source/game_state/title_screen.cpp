@@ -739,7 +739,8 @@ void TitleScreen::doDrawing() {
     pikSize.y *= game.winH / 100.0f;
     
     //To export the wordmark into its own bitmap, set this to true.
-    //One good trick is to set it to true if game.timePassed > 10.
+    //One good trick is to set it to true only if
+    //passedBy(game.timePassed, game.timePassed + game.deltaT, 10)
     const bool justWordmark = false;
     
     ALLEGRO_BITMAP* bmpJustWordmark = nullptr;
@@ -754,11 +755,11 @@ void TitleScreen::doDrawing() {
     if(game.debug.showDearImGuiDemo) return;
     
     //Fill the wordmark Pikmin's shadow buffer.
-    ALLEGRO_BITMAP* oldTargetBmp = al_get_target_bitmap();
+    ALLEGRO_BITMAP* prevTargetBmp = al_get_target_bitmap();
     al_set_target_bitmap(bmpWordmarkShadows);
     al_clear_to_color(COLOR_EMPTY);
-    int oldOp = 0, oldSource = 0, oldDest = 0;
-    al_get_blender(&oldOp, &oldSource, &oldDest);
+    AllegroBlenderState prevBlender;
+    prevBlender.save();
     al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_ONE); {
         forIdx(p, wordmarkPikmin) {
             WordmarkPikmin* pik = &wordmarkPikmin[p];
@@ -767,8 +768,8 @@ void TitleScreen::doDrawing() {
                 pik->center + pikSize * 0.30f, pikSize * 1.2f, true
             );
         }
-    } al_set_blender(oldOp, oldSource, oldDest);
-    al_set_target_bitmap(oldTargetBmp);
+    } prevBlender.load();
+    al_set_target_bitmap(prevTargetBmp);
     
     //Draw the background.
     if(!justWordmark) {

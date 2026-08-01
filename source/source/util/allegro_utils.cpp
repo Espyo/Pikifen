@@ -27,6 +27,33 @@ using std::vector;
 
 
 /**
+ * @brief Loads from this state object into Allegro's blender.
+ */
+void AllegroBlenderState::load() const {
+    al_set_separate_blender(op, src, dst, aOp, aSrc, aDst);
+}
+
+
+/**
+ * @brief Loads from this state object into Allegro's blender, if any
+ * data was saved previously.
+ */
+void AllegroBlenderState::loadIfHasData() const {
+    if(!hasData) return;
+    load();
+}
+
+
+/**
+ * @brief Saves Allegro's blender into this state object.
+ */
+void AllegroBlenderState::save() {
+    al_get_separate_blender(&op, &src, &dst, &aOp, &aSrc, &aDst);
+    hasData = true;
+}
+
+
+/**
  * @brief Checks if two colors are the same.
  *
  * @param c1 First color.

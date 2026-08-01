@@ -691,11 +691,9 @@ void updateOffsetEffectBuffer(
     }
     
     //Save the current state of some things.
-    ALLEGRO_BITMAP* targetBmp = al_get_target_bitmap();
-    int oldOp, oldSrc, oldDst, oldAop, oldAsrc, oldAdst;
-    al_get_separate_blender(
-        &oldOp, &oldSrc, &oldDst, &oldAop, &oldAsrc, &oldAdst
-    );
+    ALLEGRO_BITMAP* prevTargetBmp = al_get_target_bitmap();
+    AllegroBlenderState prevBlender;
+    prevBlender.save();
     
     //Set the new operation modes.
     al_set_target_bitmap(buffer);
@@ -716,10 +714,8 @@ void updateOffsetEffectBuffer(
     
     //Return to the old state of things.
     al_hold_bitmap_drawing(false);
-    al_set_separate_blender(
-        oldOp, oldSrc, oldDst, oldAop, oldAsrc, oldAdst
-    );
-    al_set_target_bitmap(targetBmp);
+    prevBlender.load();
+    al_set_target_bitmap(prevTargetBmp);
 }
 
 

@@ -59,14 +59,12 @@ void Particle::draw() {
     float finalSize = size.get(t);
     if(finalSize <= 0.0f) return;
     
-    bool usedCustomBlend = false;
-    int oldOp = 0, oldSource = 0, oldDest = 0;
+    AllegroBlenderState prevBlender;
     
     switch(blendType) {
     case PARTICLE_BLEND_TYPE_ADDITIVE: {
-        al_get_blender(&oldOp, &oldSource, &oldDest);
+        prevBlender.save();
         al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_ONE);
-        usedCustomBlend = true;
         break;
     } default: {
         break;
@@ -86,9 +84,7 @@ void Particle::draw() {
         );
     }
     
-    if(usedCustomBlend) {
-        al_set_blender(oldOp, oldSource, oldDest);
-    }
+    prevBlender.loadIfHasData();
 }
 
 

@@ -794,10 +794,8 @@ void drawLoadingScreen(
         0, 0, game.winW, game.winH, al_map_rgba(0, 0, 0, blacknessAlpha * 255)
     );
     
-    int oldOp, oldSrc, oldDst, oldAop, oldAsrc, oldAdst;
-    al_get_separate_blender(
-        &oldOp, &oldSrc, &oldDst, &oldAop, &oldAsrc, &oldAdst
-    );
+    AllegroBlenderState prevBlender;
+    prevBlender.save();
     al_set_blender(ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ONE);
     
     //Set up the bitmap that will hold the text if it doesn't exist.
@@ -835,9 +833,7 @@ void drawLoadingScreen(
         
     }
     
-    al_set_separate_blender(
-        oldOp, oldSrc, oldDst, oldAop, oldAsrc, oldAdst
-    );
+    prevBlender.load();
     
     //Draw the text bitmap in its place.
     const float textX = game.winW * 0.5 - textW * 0.5;
