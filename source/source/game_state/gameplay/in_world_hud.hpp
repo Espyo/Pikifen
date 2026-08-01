@@ -97,7 +97,7 @@ public:
     InWorldHudItem(Mob* m);
     virtual ~InWorldHudItem() = default;
     virtual void draw() = 0;
-    virtual void startFading() = 0;
+    virtual void startFadingOut() = 0;
     virtual void tick(float deltaT);
     
 };
@@ -124,7 +124,7 @@ public:
     void setNoMobPos(const Point& pos);
     void setRequirementNumber(float newReqNr);
     void setValueNumber(float newValueNr);
-    void startFading() override;
+    void startFadingOut() override;
     void tick(float deltaT) override;
     
     
@@ -171,7 +171,8 @@ public:
     
     explicit InWorldHealthWheel(Mob* m);
     void draw() override;
-    void startFading() override;
+    void startFadingOut() override;
     void tick(float deltaT) override;
+    void abortFadeOut();
     
 };

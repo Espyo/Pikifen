@@ -324,7 +324,8 @@ void drawHealth(
         );
     }
     al_draw_filled_pieslice(
-        center.x, center.y, radius, -TAU / 4, -ratio * TAU, color
+        center.x, center.y, radius, -TAU / 4, -ratio * TAU,
+        multAlpha(color, alpha)
     );
     if(!justChart) {
         al_draw_circle(

@@ -5,7 +5,6 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    If you heal and hurt a mob repeatedly, the health wheel will start to vanish while filling up and it'll look weird
 
     --- 1.2.0 ---
     Pikmin sorted in the group should also be sorted so that flowers are at the front

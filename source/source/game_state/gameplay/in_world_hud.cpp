@@ -280,7 +280,7 @@ void InWorldFraction::setValueNumber(float newValueNr) {
 /**
  * @brief Starts fading away.
  */
-void InWorldFraction::startFading() {
+void InWorldFraction::startFadingOut() {
     if(transition == IN_WORLD_HUD_TRANSITION_OUT) {
         return;
     }
@@ -317,6 +317,21 @@ InWorldHealthWheel::InWorldHealthWheel(Mob* m) :
         visibleRatio = m->health / m->maxHealth;
     }
     transitionTimer = IN_WORLD_HEALTH_WHEEL::TRANSITION_IN_DURATION;
+}
+
+
+/**
+ * @brief Aborts the fading away process.
+ */
+void InWorldHealthWheel::abortFadeOut() {
+    if(transition != IN_WORLD_HUD_TRANSITION_OUT) {
+        return;
+    }
+    float remainingRatio =
+        transitionTimer / IN_WORLD_HEALTH_WHEEL::TRANSITION_OUT_DURATION;
+    transition = IN_WORLD_HUD_TRANSITION_IN;
+    transitionTimer =
+        remainingRatio * IN_WORLD_HEALTH_WHEEL::TRANSITION_IN_DURATION;
 }
 
 
@@ -405,7 +420,7 @@ void InWorldHealthWheel::draw() {
 /**
  * @brief Starts fading away.
  */
-void InWorldHealthWheel::startFading() {
+void InWorldHealthWheel::startFadingOut() {
     if(transition == IN_WORLD_HUD_TRANSITION_OUT) {
         return;
     }

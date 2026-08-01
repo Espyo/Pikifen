@@ -4373,12 +4373,22 @@ void Mob::tickMiscLogic(float deltaT) {
         !healthWheel &&
         hasHealthWheel && (shouldShowHealth || shouldShowStatusBuildups)
     ) {
+        //No health wheel before, must show a new one.
         healthWheel = new InWorldHealthWheel(this);
+        
+    } else if(
+        healthWheel && healthWheel->transition == IN_WORLD_HUD_TRANSITION_OUT &&
+        hasHealthWheel && (shouldShowHealth || shouldShowStatusBuildups)
+    ) {
+        //Health wheel is trying to vanish, but we need it back! Abort.
+        healthWheel->abortFadeOut();
+        
     } else if(
         healthWheel &&
         (!hasHealthWheel || (!shouldShowHealth && !shouldShowStatusBuildups))
     ) {
-        healthWheel->startFading();
+        //We have a wheel, and it needs to go away.
+        healthWheel->startFadingOut();
     }
     
     if(healthWheel) {
@@ -4414,7 +4424,7 @@ void Mob::tickMiscLogic(float deltaT) {
     if(!fraction && showFraction) {
         fraction = new InWorldFraction(this);
     } else if(fraction && !showFraction) {
-        fraction->startFading();
+        fraction->startFadingOut();
     }
     
     if(fraction) {

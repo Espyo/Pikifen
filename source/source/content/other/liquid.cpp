@@ -405,7 +405,7 @@ void Liquid::tick(float deltaT) {
             chillFraction = new InWorldFraction();
             chillFraction->bmpIcon = game.sysContent.bmpChill;
         } else if(!mustShowFraction && chillFraction) {
-            chillFraction->startFading();
+            chillFraction->startFadingOut();
         }
         
         if(chillFraction) {
