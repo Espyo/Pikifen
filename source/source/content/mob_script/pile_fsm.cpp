@@ -148,6 +148,15 @@ void PileFsm::beAttacked(ScriptVM* scriptVM, void* info1, void* info2) {
             ((Resource*) newMob)->originPile = pilPtr;
         }
         
+        if(newMob->carryInfo) {
+            newMob->carryInfo->mustReturn = true;
+            newMob->carryInfo->returnPoint = pilPtr->center;
+            newMob->carryInfo->returnDist =
+                pilPtr->radius +
+                game.config.pikmin.standardRadius +
+                game.config.pikmin.idleTaskRange / 2.0f;
+        }
+        
         if(r == 0 && newMob->carryInfo) {
             mobToPickUp = newMob;
         }

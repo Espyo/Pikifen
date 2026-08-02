@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
    width="1031"
-   height="643"
-   viewBox="0 0 1031 643.00001"
+   height="1001"
+   viewBox="0 0 1031 1001"
    version="1.1"
    id="svg1063"
    inkscape:version="1.4 (e7c3feb, 2024-10-09)"
    sodipodi:docname="pellets.svg"
+   xml:space="preserve"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -14,194 +15,135 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:dc="http://purl.org/dc/elements/1.1/">
-  <title
-     id="title905">Pellets spritesheet</title>
-  <defs
-     id="defs1057">
-    <linearGradient
-       id="winged-pellet">
-      <stop
+   xmlns:dc="http://purl.org/dc/elements/1.1/"><title
+     id="title905">Pellets spritesheet</title><defs
+     id="defs1057"><linearGradient
+       id="winged-pellet"><stop
          style="stop-color:#f0a0e0;stop-opacity:1"
          offset="0"
-         id="stop24" />
-      <stop
+         id="stop24" /><stop
          id="stop25"
          offset="0.25"
-         style="stop-color:#f0a0e0;stop-opacity:1" />
-      <stop
+         style="stop-color:#f0a0e0;stop-opacity:1" /><stop
          id="stop26"
          offset="0.75"
-         style="stop-color:#f4bbe9;stop-opacity:1" />
-      <stop
+         style="stop-color:#f4bbe9;stop-opacity:1" /><stop
          style="stop-color:#f0a0e0;stop-opacity:1"
          offset="1"
-         id="stop27" />
-    </linearGradient>
-    <linearGradient
-       id="rock-pellet">
-      <stop
+         id="stop27" /></linearGradient><linearGradient
+       id="rock-pellet"><stop
          style="stop-color:#969696;stop-opacity:1;"
          offset="0"
-         id="stop20" />
-      <stop
+         id="stop20" /><stop
          id="stop21"
          offset="0.25"
-         style="stop-color:#969696;stop-opacity:1;" />
-      <stop
+         style="stop-color:#969696;stop-opacity:1;" /><stop
          id="stop22"
          offset="0.75"
-         style="stop-color:#bababa;stop-opacity:1;" />
-      <stop
+         style="stop-color:#bababa;stop-opacity:1;" /><stop
          style="stop-color:#969696;stop-opacity:1;"
          offset="1"
-         id="stop23" />
-    </linearGradient>
-    <linearGradient
+         id="stop23" /></linearGradient><linearGradient
        id="winged-pellet-2"
-       inkscape:label="white-pellet">
-      <stop
+       inkscape:label="white-pellet"><stop
          style="stop-color:#cfcfcf;stop-opacity:1;"
          offset="0"
-         id="stop5" />
-      <stop
+         id="stop5" /><stop
          id="stop6"
          offset="0.25"
-         style="stop-color:#cfcfcf;stop-opacity:1;" />
-      <stop
+         style="stop-color:#cfcfcf;stop-opacity:1;" /><stop
          id="stop7"
          offset="0.75"
-         style="stop-color:#ebebeb;stop-opacity:1;" />
-      <stop
+         style="stop-color:#ebebeb;stop-opacity:1;" /><stop
          style="stop-color:#cfcfcf;stop-opacity:1;"
          offset="1"
-         id="stop8" />
-    </linearGradient>
-    <linearGradient
+         id="stop8" /></linearGradient><linearGradient
        id="rock-pellet-1"
-       inkscape:label="purple-pellet">
-      <stop
+       inkscape:label="purple-pellet"><stop
          style="stop-color:#9041c9;stop-opacity:1;"
          offset="0"
-         id="stop961" />
-      <stop
+         id="stop961" /><stop
          id="stop963"
          offset="0.25"
-         style="stop-color:#9041c9;stop-opacity:1;" />
-      <stop
+         style="stop-color:#9041c9;stop-opacity:1;" /><stop
          id="stop965"
          offset="0.75"
-         style="stop-color:#9d5ad2;stop-opacity:1;" />
-      <stop
+         style="stop-color:#9d5ad2;stop-opacity:1;" /><stop
          style="stop-color:#9040c9;stop-opacity:1;"
          offset="1"
-         id="stop967" />
-    </linearGradient>
-    <linearGradient
+         id="stop967" /></linearGradient><linearGradient
        id="winged-pellet-1"
-       inkscape:label="ice-pellet">
-      <stop
+       inkscape:label="ice-pellet"><stop
          style="stop-color:#55e6ed;stop-opacity:1;"
          offset="0"
-         id="stop936" />
-      <stop
+         id="stop936" /><stop
          id="stop938"
          offset="0.25"
-         style="stop-color:#55e5ed;stop-opacity:1;" />
-      <stop
+         style="stop-color:#55e5ed;stop-opacity:1;" /><stop
          id="stop940"
          offset="0.75"
-         style="stop-color:#81eff3;stop-opacity:1;" />
-      <stop
+         style="stop-color:#81eff3;stop-opacity:1;" /><stop
          style="stop-color:#55e5ed;stop-opacity:1;"
          offset="1"
-         id="stop942" />
-    </linearGradient>
-    <linearGradient
-       id="pellet-shine-inner">
-      <stop
+         id="stop942" /></linearGradient><linearGradient
+       id="pellet-shine-inner"><stop
          id="stop2203"
          offset="0"
-         style="stop-color:#ffffff;stop-opacity:0;" />
-      <stop
+         style="stop-color:#ffffff;stop-opacity:0;" /><stop
          style="stop-color:#ffffff;stop-opacity:0;"
          offset="0.6250869"
-         id="stop2205" />
-      <stop
+         id="stop2205" /><stop
          style="stop-color:#ffffff;stop-opacity:1"
          offset="0.81256855"
-         id="stop2207" />
-      <stop
+         id="stop2207" /><stop
          id="stop1755"
          offset="0.87499237"
-         style="stop-color:#ffffff;stop-opacity:0" />
-      <stop
+         style="stop-color:#ffffff;stop-opacity:0" /><stop
          id="stop2209"
          offset="1"
-         style="stop-color:#ffffff;stop-opacity:0;" />
-    </linearGradient>
-    <linearGradient
-       id="blue-pellet">
-      <stop
+         style="stop-color:#ffffff;stop-opacity:0;" /></linearGradient><linearGradient
+       id="blue-pellet"><stop
          style="stop-color:#2828e6;stop-opacity:1;"
          offset="0"
-         id="stop1980" />
-      <stop
+         id="stop1980" /><stop
          id="stop1982"
          offset="0.25"
-         style="stop-color:#2828e6;stop-opacity:1;" />
-      <stop
+         style="stop-color:#2828e6;stop-opacity:1;" /><stop
          id="stop1984"
          offset="0.75"
-         style="stop-color:#3535f1;stop-opacity:1;" />
-      <stop
+         style="stop-color:#3535f1;stop-opacity:1;" /><stop
          style="stop-color:#2828e6;stop-opacity:1;"
          offset="1"
-         id="stop1986" />
-    </linearGradient>
-    <linearGradient
-       id="yellow-pellet">
-      <stop
+         id="stop1986" /></linearGradient><linearGradient
+       id="yellow-pellet"><stop
          id="stop1877"
          offset="0"
-         style="stop-color:#d8ce08;stop-opacity:1;" />
-      <stop
+         style="stop-color:#d8ce08;stop-opacity:1;" /><stop
          style="stop-color:#d8ce08;stop-opacity:1;"
          offset="0.25"
-         id="stop1879" />
-      <stop
+         id="stop1879" /><stop
          style="stop-color:#f6f61d;stop-opacity:1;"
          offset="0.75"
-         id="stop1881" />
-      <stop
+         id="stop1881" /><stop
          id="stop1883"
          offset="1"
-         style="stop-color:#d8ce08;stop-opacity:1;" />
-    </linearGradient>
-    <linearGradient
-       id="pellet-shine-outer">
-      <stop
+         style="stop-color:#d8ce08;stop-opacity:1;" /></linearGradient><linearGradient
+       id="pellet-shine-outer"><stop
          style="stop-color:#ffffff;stop-opacity:0;"
          offset="0"
-         id="stop5495" />
-      <stop
+         id="stop5495" /><stop
          id="stop5503"
          offset="0.6250869"
-         style="stop-color:#ffffff;stop-opacity:0;" />
-      <stop
+         style="stop-color:#ffffff;stop-opacity:0;" /><stop
          style="stop-color:#ffffff;stop-opacity:0"
          offset="0.74999237"
-         id="stop1757" />
-      <stop
+         id="stop1757" /><stop
          id="stop5501"
          offset="0.81256855"
-         style="stop-color:#ffffff;stop-opacity:1" />
-      <stop
+         style="stop-color:#ffffff;stop-opacity:1" /><stop
          style="stop-color:#ffffff;stop-opacity:0;"
          offset="1"
-         id="stop5497" />
-    </linearGradient>
-    <radialGradient
+         id="stop5497" /></linearGradient><radialGradient
        r="7.5"
        fy="1043.6122"
        fx="587.5"
@@ -211,27 +153,20 @@
        gradientUnits="userSpaceOnUse"
        id="radialGradient3327"
        xlink:href="#red-pellet"
-       inkscape:collect="always" />
-    <linearGradient
-       id="red-pellet">
-      <stop
+       inkscape:collect="always" /><linearGradient
+       id="red-pellet"><stop
          style="stop-color:#d01010;stop-opacity:1;"
          offset="0"
-         id="stop8452" />
-      <stop
+         id="stop8452" /><stop
          id="stop8460"
          offset="0.25"
-         style="stop-color:#d01010;stop-opacity:1;" />
-      <stop
+         style="stop-color:#d01010;stop-opacity:1;" /><stop
          id="stop8458"
          offset="0.75"
-         style="stop-color:#f03333;stop-opacity:1;" />
-      <stop
+         style="stop-color:#f03333;stop-opacity:1;" /><stop
          style="stop-color:#d01010;stop-opacity:1;"
          offset="1"
-         id="stop8454" />
-    </linearGradient>
-    <radialGradient
+         id="stop8454" /></linearGradient><radialGradient
        inkscape:collect="always"
        xlink:href="#yellow-pellet"
        id="radialGradient1886"
@@ -241,8 +176,7 @@
        cy="1043.6122"
        fx="587.5"
        fy="1043.6122"
-       r="7.5" />
-    <radialGradient
+       r="7.5" /><radialGradient
        inkscape:collect="always"
        xlink:href="#blue-pellet"
        id="radialGradient1989"
@@ -252,8 +186,7 @@
        cy="1043.6122"
        fx="587.5"
        fy="1043.6122"
-       r="7.5" />
-    <radialGradient
+       r="7.5" /><radialGradient
        inkscape:collect="always"
        xlink:href="#rock-pellet-1"
        id="radialGradient934"
@@ -263,8 +196,7 @@
        cy="1043.6122"
        fx="587.5"
        fy="1043.6122"
-       r="7.5" />
-    <radialGradient
+       r="7.5" /><radialGradient
        inkscape:collect="always"
        xlink:href="#winged-pellet-2"
        id="radialGradient957"
@@ -274,8 +206,7 @@
        cy="1043.6122"
        fx="587.5"
        fy="1043.6122"
-       r="7.5" />
-    <radialGradient
+       r="7.5" /><radialGradient
        inkscape:collect="always"
        xlink:href="#winged-pellet-1"
        id="radialGradient14"
@@ -285,8 +216,7 @@
        cy="1043.6122"
        fx="587.5"
        fy="1043.6122"
-       r="7.5" />
-    <radialGradient
+       r="7.5" /><radialGradient
        inkscape:collect="always"
        xlink:href="#winged-pellet"
        id="radialGradient17"
@@ -296,8 +226,7 @@
        cy="1043.6122"
        fx="587.5"
        fy="1043.6122"
-       r="7.5" />
-    <radialGradient
+       r="7.5" /><radialGradient
        inkscape:collect="always"
        xlink:href="#rock-pellet"
        id="radialGradient20"
@@ -307,30 +236,23 @@
        cy="1043.6122"
        fx="587.5"
        fy="1043.6122"
-       r="7.5" />
-    <filter
+       r="7.5" /><filter
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter40"
        x="-0.2769612"
        y="-0.2769612"
        width="1.5539224"
-       height="1.5539224">
-      <feGaussianBlur
+       height="1.5539224"><feGaussianBlur
          inkscape:collect="always"
          stdDeviation="7.3856318"
-         id="feGaussianBlur40" />
-    </filter>
-    <clipPath
+         id="feGaussianBlur40" /></filter><clipPath
        clipPathUnits="userSpaceOnUse"
-       id="clipPath40">
-      <use
+       id="clipPath40"><use
          x="0"
          y="0"
          xlink:href="#rect38"
-         id="use41" />
-    </clipPath>
-    <radialGradient
+         id="use41" /></clipPath><radialGradient
        r="7.5"
        fy="1043.6122"
        fx="587.5"
@@ -340,18 +262,14 @@
        gradientUnits="userSpaceOnUse"
        id="radialGradient3327-3-56"
        xlink:href="#pellet-shine-outer"
-       inkscape:collect="always" />
-    <mask
+       inkscape:collect="always" /><mask
        maskUnits="userSpaceOnUse"
-       id="mask43">
-      <use
+       id="mask43"><use
          x="0"
          y="0"
          xlink:href="#g39"
          id="use44"
-         transform="translate(-200)" />
-    </mask>
-    <radialGradient
+         transform="translate(-200)" /></mask><radialGradient
        r="7.5"
        fy="1043.6122"
        fx="587.5"
@@ -361,98 +279,69 @@
        gradientUnits="userSpaceOnUse"
        id="radialGradient3327-3-6-6"
        xlink:href="#pellet-shine-inner"
-       inkscape:collect="always" />
-    <mask
+       inkscape:collect="always" /><mask
        maskUnits="userSpaceOnUse"
-       id="mask47">
-      <use
+       id="mask47"><use
          x="0"
          y="0"
          xlink:href="#g46"
          id="use48"
-         transform="translate(-136)" />
-    </mask>
-    <linearGradient
+         transform="translate(-136)" /></mask><linearGradient
        id="linearGradient1"
-       inkscape:label="glow-pellet-cyan">
-      <stop
+       inkscape:label="glow-pellet-cyan"><stop
          style="stop-color:#17d6f0;stop-opacity:1;"
          offset="0"
-         id="stop10" />
-      <stop
+         id="stop10" /><stop
          style="stop-color:#1ed0e9;stop-opacity:1;"
          offset="0.42857143"
-         id="stop11" />
-      <stop
+         id="stop11" /><stop
          style="stop-color:#ffffff;stop-opacity:1;"
          offset="1"
-         id="stop12" />
-    </linearGradient>
-    <linearGradient
+         id="stop12" /></linearGradient><linearGradient
        id="linearGradient1-1"
-       inkscape:label="glow-pellet-yellow">
-      <stop
+       inkscape:label="glow-pellet-yellow"><stop
          style="stop-color:#9f9b28;stop-opacity:1;"
          offset="0"
-         id="stop77633" />
-      <stop
+         id="stop77633" /><stop
          style="stop-color:#f0eb21;stop-opacity:1;"
          offset="0.42857143"
-         id="stop77635" />
-      <stop
+         id="stop77635" /><stop
          style="stop-color:#ffffff;stop-opacity:1;"
          offset="1"
-         id="stop77637" />
-    </linearGradient>
-    <linearGradient
+         id="stop77637" /></linearGradient><linearGradient
        id="linearGradient1-2"
-       inkscape:label="glow-pellet-violet">
-      <stop
+       inkscape:label="glow-pellet-violet"><stop
          style="stop-color:#eb57ff;stop-opacity:1;"
          offset="0"
-         id="stop4" />
-      <stop
+         id="stop4" /><stop
          style="stop-color:#e076ff;stop-opacity:1;"
          offset="0.42857143"
-         id="stop5-3" />
-      <stop
+         id="stop5-3" /><stop
          style="stop-color:#ffffff;stop-opacity:1;"
          offset="1"
-         id="stop6-6" />
-    </linearGradient>
-    <linearGradient
+         id="stop6-6" /></linearGradient><linearGradient
        id="linearGradient1-3"
-       inkscape:label="glow-pellet-pink">
-      <stop
+       inkscape:label="glow-pellet-pink"><stop
          style="stop-color:#ff7d7d;stop-opacity:1;"
          offset="0"
-         id="stop7-7" />
-      <stop
+         id="stop7-7" /><stop
          style="stop-color:#ff9494;stop-opacity:1;"
          offset="0.42857143"
-         id="stop8-5" />
-      <stop
+         id="stop8-5" /><stop
          style="stop-color:#ffffff;stop-opacity:1;"
          offset="1"
-         id="stop9" />
-    </linearGradient>
-    <linearGradient
+         id="stop9" /></linearGradient><linearGradient
        id="linearGradient1-4"
-       inkscape:label="glow-pellet-green">
-      <stop
+       inkscape:label="glow-pellet-green"><stop
          style="stop-color:#4ef451;stop-opacity:1;"
          offset="0"
-         id="stop1" />
-      <stop
+         id="stop1" /><stop
          style="stop-color:#1db510;stop-opacity:1;"
          offset="0.42857143"
-         id="stop3" />
-      <stop
+         id="stop3" /><stop
          style="stop-color:#ffffff;stop-opacity:1;"
          offset="1"
-         id="stop2" />
-    </linearGradient>
-    <radialGradient
+         id="stop2" /></linearGradient><radialGradient
        xlink:href="#linearGradient1-4"
        id="radialGradient102731-3"
        gradientUnits="userSpaceOnUse"
@@ -461,18 +350,14 @@
        cy="-25.418037"
        fx="122.39777"
        fy="-25.418037"
-       r="8.2038841" />
-    <clipPath
+       r="8.2038841" /><clipPath
        clipPathUnits="userSpaceOnUse"
-       id="clipPath32-9">
-      <use
+       id="clipPath32-9"><use
          x="0"
          y="0"
          xlink:href="#path24"
          id="use33-1"
-         transform="matrix(0.44404824,0.25637136,-0.25637136,0.44404824,316.74245,-280.69474)" />
-    </clipPath>
-    <filter
+         transform="matrix(0.44404824,0.25637136,-0.25637136,0.44404824,316.74245,-280.69474)" /></clipPath><filter
        inkscape:label="Yellow Bit"
        inkscape:menu="Textures"
        inkscape:menu-tooltip="Under a cracked glass"
@@ -481,49 +366,40 @@
        x="-0.14858846"
        y="-0.14858846"
        width="1.3094251"
-       height="1.3277975">
-      <feTurbulence
+       height="1.3277975"><feTurbulence
          baseFrequency="0.1"
          seed="50"
          numOctaves="5"
          result="result1"
          type="fractalNoise"
-         id="feTurbulence15102-7" />
-      <feGaussianBlur
+         id="feTurbulence15102-7" /><feGaussianBlur
          stdDeviation="0.010952395"
          result="result7"
-         id="feGaussianBlur15104-0" />
-      <feDisplacementMap
+         id="feGaussianBlur15104-0" /><feDisplacementMap
          result="result5"
          in="SourceGraphic"
          scale="0"
          xChannelSelector="G"
          in2="result7"
          id="feDisplacementMap15106-9"
-         yChannelSelector="A" />
-      <feComposite
+         yChannelSelector="A" /><feComposite
          result="result2"
          operator="in"
          in2="result1"
          in="result5"
-         id="feComposite15108-3" />
-      <feGaussianBlur
+         id="feComposite15108-3" /><feGaussianBlur
          stdDeviation="0.5"
          result="result6"
-         id="feGaussianBlur15110-6" />
-      <feSpecularLighting
+         id="feGaussianBlur15110-6" /><feSpecularLighting
          surfaceScale="2"
          result="result4"
          specularConstant="3"
          specularExponent="35"
          in="result6"
-         id="feSpecularLighting15114-0">
-        <feDistantLight
+         id="feSpecularLighting15114-0"><feDistantLight
            elevation="45"
            azimuth="225"
-           id="feDistantLight15112-6" />
-      </feSpecularLighting>
-      <feComposite
+           id="feDistantLight15112-6" /></feSpecularLighting><feComposite
          k1="1.7"
          k3="0.7"
          in2="result2"
@@ -532,13 +408,11 @@
          result="result91"
          id="feComposite15116-2"
          k2="0"
-         k4="0" />
-      <feBlend
+         k4="0" /><feBlend
          result="fbSourceGraphic"
          mode="multiply"
          in2="result91"
-         id="feBlend15118-6" />
-      <feComposite
+         id="feBlend15118-6" /><feComposite
          in2="fbSourceGraphic"
          in="fbSourceGraphic"
          result="result2"
@@ -547,8 +421,7 @@
          k1="0"
          k2="0"
          k3="0"
-         k4="0" />
-      <feComposite
+         k4="0" /><feComposite
          in="result2"
          result="result4"
          operator="arithmetic"
@@ -557,48 +430,39 @@
          in2="fbSourceGraphic"
          id="feComposite15122-8"
          k1="0"
-         k4="0" />
-      <feBlend
+         k4="0" /><feBlend
          mode="screen"
          in="result4"
          in2="result4"
          id="feBlend15124-7"
-         result="fbSourceGraphic" />
-      <feColorMatrix
+         result="fbSourceGraphic" /><feColorMatrix
          result="fbSourceGraphicAlpha"
          in="fbSourceGraphic"
          values="0 0 0 -1 0 0 0 0 -1 0 0 0 0 -1 0 0 0 0 1 0"
-         id="feColorMatrix15126-9" />
-      <feFlood
+         id="feColorMatrix15126-9" /><feFlood
          id="feFlood15128-2"
          flood-opacity="0.498039"
          flood-color="rgb(0,0,0)"
          result="flood"
-         in="fbSourceGraphic" />
-      <feComposite
+         in="fbSourceGraphic" /><feComposite
          in2="fbSourceGraphic"
          id="feComposite15130-0"
          in="flood"
          operator="in"
-         result="composite1" />
-      <feGaussianBlur
+         result="composite1" /><feGaussianBlur
          id="feGaussianBlur15132-2"
          in="composite1"
          stdDeviation="0.5"
-         result="blur" />
-      <feOffset
+         result="blur" /><feOffset
          id="feOffset15134-3"
          dx="0.2"
          dy="0.5"
-         result="offset" />
-      <feComposite
+         result="offset" /><feComposite
          in2="offset"
          id="feComposite15136-7"
          in="fbSourceGraphic"
          operator="over"
-         result="composite2" />
-    </filter>
-    <radialGradient
+         result="composite2" /></filter><radialGradient
        inkscape:collect="always"
        xlink:href="#linearGradient1-2"
        id="radialGradient2-0"
@@ -608,18 +472,14 @@
        fy="-25.418037"
        r="8.2038841"
        gradientTransform="matrix(1,0,0,1.0006712,0,0.01705966)"
-       gradientUnits="userSpaceOnUse" />
-    <clipPath
+       gradientUnits="userSpaceOnUse" /><clipPath
        clipPathUnits="userSpaceOnUse"
-       id="clipPath30-2">
-      <use
+       id="clipPath30-2"><use
          x="0"
          y="0"
          xlink:href="#path24"
          id="use31-8"
-         transform="matrix(0.44404824,0.25637136,-0.25637136,0.44404824,316.74245,-280.69474)" />
-    </clipPath>
-    <filter
+         transform="matrix(0.44404824,0.25637136,-0.25637136,0.44404824,316.74245,-280.69474)" /></clipPath><filter
        inkscape:label="Bit Shine"
        inkscape:menu="Textures"
        inkscape:menu-tooltip="Under a cracked glass"
@@ -628,49 +488,40 @@
        x="-0.14697869"
        y="-0.14697869"
        width="1.3062056"
-       height="1.3245779">
-      <feTurbulence
+       height="1.3245779"><feTurbulence
          baseFrequency="0.1"
          seed="50"
          numOctaves="5"
          result="result1"
          type="fractalNoise"
-         id="feTurbulence2050-7" />
-      <feGaussianBlur
+         id="feTurbulence2050-7" /><feGaussianBlur
          stdDeviation="0"
          result="result7"
-         id="feGaussianBlur2052-3" />
-      <feDisplacementMap
+         id="feGaussianBlur2052-3" /><feDisplacementMap
          result="result5"
          in="SourceGraphic"
          scale="0"
          xChannelSelector="G"
          in2="result7"
          id="feDisplacementMap2054-6"
-         yChannelSelector="A" />
-      <feComposite
+         yChannelSelector="A" /><feComposite
          result="result2"
          operator="in"
          in2="result1"
          in="result5"
-         id="feComposite2056-1" />
-      <feGaussianBlur
+         id="feComposite2056-1" /><feGaussianBlur
          stdDeviation="0.5"
          result="result6"
-         id="feGaussianBlur2058-2" />
-      <feSpecularLighting
+         id="feGaussianBlur2058-2" /><feSpecularLighting
          surfaceScale="1.5"
          result="result4"
          specularConstant="1"
          specularExponent="35"
          in="result6"
-         id="feSpecularLighting2062-9">
-        <feDistantLight
+         id="feSpecularLighting2062-9"><feDistantLight
            elevation="45"
            azimuth="225"
-           id="feDistantLight2060-3" />
-      </feSpecularLighting>
-      <feComposite
+           id="feDistantLight2060-3" /></feSpecularLighting><feComposite
          k1="2"
          k3="0.7"
          in2="result2"
@@ -679,13 +530,11 @@
          result="result91"
          id="feComposite2064-1"
          k2="0"
-         k4="0" />
-      <feBlend
+         k4="0" /><feBlend
          result="fbSourceGraphic"
          mode="multiply"
          in2="result91"
-         id="feBlend2066-9" />
-      <feComposite
+         id="feBlend2066-9" /><feComposite
          in2="fbSourceGraphic"
          in="fbSourceGraphic"
          result="result2"
@@ -694,8 +543,7 @@
          k1="0"
          k2="0"
          k3="0"
-         k4="0" />
-      <feComposite
+         k4="0" /><feComposite
          in="result2"
          result="result4"
          operator="arithmetic"
@@ -704,48 +552,39 @@
          in2="fbSourceGraphic"
          id="feComposite2070-7"
          k1="0"
-         k4="0" />
-      <feBlend
+         k4="0" /><feBlend
          mode="screen"
          in="result4"
          in2="result4"
          id="feBlend2072-8"
-         result="fbSourceGraphic" />
-      <feColorMatrix
+         result="fbSourceGraphic" /><feColorMatrix
          result="fbSourceGraphicAlpha"
          in="fbSourceGraphic"
          values="0 0 0 -1 0 0 0 0 -1 0 0 0 0 -1 0 0 0 0 1 0"
-         id="feColorMatrix14727-4" />
-      <feFlood
+         id="feColorMatrix14727-4" /><feFlood
          id="feFlood14729-5"
          flood-opacity="0.498039"
          flood-color="rgb(0,0,0)"
          result="flood"
-         in="fbSourceGraphic" />
-      <feComposite
+         in="fbSourceGraphic" /><feComposite
          in2="fbSourceGraphic"
          id="feComposite14731-0"
          in="flood"
          operator="in"
-         result="composite1" />
-      <feGaussianBlur
+         result="composite1" /><feGaussianBlur
          id="feGaussianBlur14733-3"
          in="composite1"
          stdDeviation="0.5"
-         result="blur" />
-      <feOffset
+         result="blur" /><feOffset
          id="feOffset14735-6"
          dx="0.2"
          dy="0.5"
-         result="offset" />
-      <feComposite
+         result="offset" /><feComposite
          in2="offset"
          id="feComposite14737-1"
          in="fbSourceGraphic"
          operator="over"
-         result="composite2" />
-    </filter>
-    <radialGradient
+         result="composite2" /></filter><radialGradient
        inkscape:collect="always"
        xlink:href="#linearGradient1-3"
        id="radialGradient2-5"
@@ -755,18 +594,14 @@
        fy="-25.418037"
        r="8.2038841"
        gradientTransform="matrix(1,0,0,1.0006712,0,0.01705966)"
-       gradientUnits="userSpaceOnUse" />
-    <clipPath
+       gradientUnits="userSpaceOnUse" /><clipPath
        clipPathUnits="userSpaceOnUse"
-       id="clipPath28-2">
-      <use
+       id="clipPath28-2"><use
          x="0"
          y="0"
          xlink:href="#path24"
          id="use29-0"
-         transform="matrix(0.44404824,0.25637136,-0.25637136,0.44404824,316.74245,-280.69474)" />
-    </clipPath>
-    <radialGradient
+         transform="matrix(0.44404824,0.25637136,-0.25637136,0.44404824,316.74245,-280.69474)" /></clipPath><radialGradient
        inkscape:collect="always"
        xlink:href="#linearGradient1"
        id="radialGradient2"
@@ -776,18 +611,14 @@
        fy="-25.418037"
        r="8.2038841"
        gradientTransform="matrix(1,0,0,1.0006712,0,0.01705966)"
-       gradientUnits="userSpaceOnUse" />
-    <clipPath
+       gradientUnits="userSpaceOnUse" /><clipPath
        clipPathUnits="userSpaceOnUse"
-       id="clipPath26-7">
-      <use
+       id="clipPath26-7"><use
          x="0"
          y="0"
          xlink:href="#path24"
          id="use27-8"
-         transform="matrix(0.44404824,0.25637136,-0.25637136,0.44404824,316.74245,-280.69474)" />
-    </clipPath>
-    <radialGradient
+         transform="matrix(0.44404824,0.25637136,-0.25637136,0.44404824,316.74245,-280.69474)" /></clipPath><radialGradient
        inkscape:collect="always"
        xlink:href="#linearGradient1-1"
        id="radialGradient2-7"
@@ -797,18 +628,14 @@
        fy="-25.418037"
        r="8.2038841"
        gradientTransform="matrix(1,0,0,1.0006712,0,0.01705966)"
-       gradientUnits="userSpaceOnUse" />
-    <clipPath
+       gradientUnits="userSpaceOnUse" /><clipPath
        clipPathUnits="userSpaceOnUse"
-       id="clipPath25-7">
-      <use
+       id="clipPath25-7"><use
          x="0"
          y="0"
          xlink:href="#path24"
          id="use25-1"
-         transform="matrix(0.44404824,0.25637136,-0.25637136,0.44404824,316.74245,-280.69474)" />
-    </clipPath>
-    <filter
+         transform="matrix(0.44404824,0.25637136,-0.25637136,0.44404824,316.74245,-280.69474)" /></clipPath><filter
        inkscape:label="Yellow Bit"
        inkscape:menu="Textures"
        inkscape:menu-tooltip="Under a cracked glass"
@@ -817,49 +644,40 @@
        x="-0.14698573"
        y="-0.14698573"
        width="1.3062197"
-       height="1.324592">
-      <feTurbulence
+       height="1.324592"><feTurbulence
          baseFrequency="0.1"
          seed="50"
          numOctaves="5"
          result="result1"
          type="fractalNoise"
-         id="feTurbulence2-2" />
-      <feGaussianBlur
+         id="feTurbulence2-2" /><feGaussianBlur
          stdDeviation="4.7878976e-05"
          result="result7"
-         id="feGaussianBlur3-7" />
-      <feDisplacementMap
+         id="feGaussianBlur3-7" /><feDisplacementMap
          result="result5"
          in="SourceGraphic"
          scale="0"
          xChannelSelector="G"
          in2="result7"
          id="feDisplacementMap3-2"
-         yChannelSelector="A" />
-      <feComposite
+         yChannelSelector="A" /><feComposite
          result="result2"
          operator="in"
          in2="result1"
          in="result5"
-         id="feComposite19-2" />
-      <feGaussianBlur
+         id="feComposite19-2" /><feGaussianBlur
          stdDeviation="0.5"
          result="result6"
-         id="feGaussianBlur19-6" />
-      <feSpecularLighting
+         id="feGaussianBlur19-6" /><feSpecularLighting
          surfaceScale="2"
          result="result4"
          specularConstant="3"
          specularExponent="35"
          in="result6"
-         id="feSpecularLighting19-1">
-        <feDistantLight
+         id="feSpecularLighting19-1"><feDistantLight
            elevation="45"
            azimuth="225"
-           id="feDistantLight19-0" />
-      </feSpecularLighting>
-      <feComposite
+           id="feDistantLight19-0" /></feSpecularLighting><feComposite
          k1="1.7"
          k3="0.7"
          in2="result2"
@@ -868,13 +686,11 @@
          result="result91"
          id="feComposite20-6"
          k2="0"
-         k4="0" />
-      <feBlend
+         k4="0" /><feBlend
          result="fbSourceGraphic"
          mode="multiply"
          in2="result91"
-         id="feBlend20-1" />
-      <feComposite
+         id="feBlend20-1" /><feComposite
          in2="fbSourceGraphic"
          in="fbSourceGraphic"
          result="result2"
@@ -883,8 +699,7 @@
          k1="0"
          k2="0"
          k3="0"
-         k4="0" />
-      <feComposite
+         k4="0" /><feComposite
          in="result2"
          result="result4"
          operator="arithmetic"
@@ -893,58 +708,68 @@
          in2="fbSourceGraphic"
          id="feComposite22-9"
          k1="0"
-         k4="0" />
-      <feBlend
+         k4="0" /><feBlend
          mode="screen"
          in="result4"
          in2="result4"
          id="feBlend22-4"
-         result="fbSourceGraphic" />
-      <feColorMatrix
+         result="fbSourceGraphic" /><feColorMatrix
          result="fbSourceGraphicAlpha"
          in="fbSourceGraphic"
          values="0 0 0 -1 0 0 0 0 -1 0 0 0 0 -1 0 0 0 0 1 0"
-         id="feColorMatrix22-9" />
-      <feFlood
+         id="feColorMatrix22-9" /><feFlood
          id="feFlood22-0"
          flood-opacity="0.498039"
          flood-color="rgb(0,0,0)"
          result="flood"
-         in="fbSourceGraphic" />
-      <feComposite
+         in="fbSourceGraphic" /><feComposite
          in2="fbSourceGraphic"
          id="feComposite23-9"
          in="flood"
          operator="in"
-         result="composite1" />
-      <feGaussianBlur
+         result="composite1" /><feGaussianBlur
          id="feGaussianBlur23-1"
          in="composite1"
          stdDeviation="0.5"
-         result="blur" />
-      <feOffset
+         result="blur" /><feOffset
          id="feOffset23-7"
          dx="0.2"
          dy="0.5"
-         result="offset" />
-      <feComposite
+         result="offset" /><feComposite
          in2="offset"
          id="feComposite24-7"
          in="fbSourceGraphic"
          operator="over"
-         result="composite2" />
-    </filter>
-  </defs>
-  <sodipodi:namedview
+         result="composite2" /></filter><filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter38"
+       x="-0.04665733"
+       y="-0.046284118"
+       width="1.0933147"
+       height="1.0925682"><feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1.7457446"
+         id="feGaussianBlur38" /></filter><filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter59"
+       x="-0.051077675"
+       y="-0.055998908"
+       width="1.1021554"
+       height="1.1119978"><feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1.7457446"
+         id="feGaussianBlur59" /></filter></defs><sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.1901067"
-     inkscape:cx="515.5"
-     inkscape:cy="321.81989"
+     inkscape:zoom="0.87312687"
+     inkscape:cx="515.96167"
+     inkscape:cy="500.5"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="true"
@@ -958,49 +783,35 @@
      inkscape:document-rotation="0"
      inkscape:showpageshadow="0"
      inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1">
-    <inkscape:grid
+     inkscape:deskcolor="#d1d1d1"><inkscape:grid
        type="xygrid"
        id="grid1709"
        originx="0"
-       originy="-1.5565874e-13"
+       originy="-2.6556587e-12"
        spacingy="1"
        spacingx="1"
        units="px"
-       visible="true" />
-  </sodipodi:namedview>
-  <metadata
-     id="metadata1060">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>Pellets spritesheet</dc:title>
-        <cc:license
-           rdf:resource="https://opensource.org/licenses/MIT" />
-        <dc:creator>
-          <cc:Agent>
-            <dc:title>André &quot;Espyo&quot; Silva</dc:title>
-          </cc:Agent>
-        </dc:creator>
-        <dc:description>Spritesheet for the pellets in the base content of Pikifen. See https://www.pikminfanon.com/wiki/Pikifen</dc:description>
-        <dc:subject>
-          <rdf:Bag>
-            <rdf:li>Pikifen spritesheet</rdf:li>
-          </rdf:Bag>
-        </dc:subject>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <g
+       visible="true" /></sodipodi:namedview><metadata
+     id="metadata1060"><rdf:RDF><cc:Work
+         rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title>Pellets spritesheet</dc:title><cc:license
+           rdf:resource="https://opensource.org/licenses/MIT" /><dc:creator><cc:Agent><dc:title>André &quot;Espyo&quot; Silva</dc:title></cc:Agent></dc:creator><dc:description>Spritesheet for the pellets in the base content of Pikifen. See https://www.pikminfanon.com/wiki/Pikifen</dc:description><dc:subject><rdf:Bag><rdf:li>Pikifen spritesheet</rdf:li></rdf:Bag></dc:subject></cc:Work></rdf:RDF></metadata><g
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Background"
      style="display:inline"
-     transform="translate(0,-1.2207031e-4)">
-    <rect
+     transform="translate(0,-1.2207031e-4)"><rect
+       style="color:#000000;font-variation-settings:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#40c040;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:20.485;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
+       id="rect59"
+       width="303"
+       height="100.99998"
+       x="0"
+       y="900.00012"
+       rx="0"
+       ry="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/game_data/base/graphics/other_mobs/glow_pellet_pile.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" /><rect
        style="color:#000000;font-variation-settings:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#40c040;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:11.2592;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
        id="rect39"
        width="215"
@@ -1011,8 +822,7 @@
        ry="0"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/game_data/base/graphics/pellets/glow_pellet.png"
        inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <rect
+       inkscape:export-ydpi="96" /><rect
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264567;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        id="rect1641"
        width="128"
@@ -1021,8 +831,7 @@
        y="0.00018310547"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/game_data/base/graphics/pellets/red.png"
        inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <rect
+       inkscape:export-ydpi="96" /><rect
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264567;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        id="rect1641-6"
        width="128"
@@ -1031,8 +840,7 @@
        y="0.00012207031"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/game_data/base/graphics/pellets/yellow.png"
        inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <rect
+       inkscape:export-ydpi="96" /><rect
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264567;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        id="rect1641-6-9"
        width="128"
@@ -1041,8 +849,7 @@
        y="0.00018310547"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/game_data/base/graphics/pellets/blue.png"
        inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <rect
+       inkscape:export-ydpi="96" /><rect
        style="color:#000000;font-variation-settings:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.173622;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
        id="rect4484"
        width="42"
@@ -1053,8 +860,7 @@
        ry="0"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/game_data/base/graphics/pellets/glow_pellet_1.png"
        inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <rect
+       inkscape:export-ydpi="96" /><rect
        style="color:#000000;font-variation-settings:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264567;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
        id="rect4484-2"
        width="64"
@@ -1065,8 +871,7 @@
        ry="0"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Pellet_5.png"
        inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <rect
+       inkscape:export-ydpi="96" /><rect
        style="color:#000000;font-variation-settings:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264567;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
        id="rect4484-2-1"
        width="64"
@@ -1077,8 +882,7 @@
        ry="0"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Pellet_10.png"
        inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <rect
+       inkscape:export-ydpi="96" /><rect
        style="color:#000000;font-variation-settings:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264567;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
        id="rect4484-2-1-9"
        width="64"
@@ -1089,8 +893,7 @@
        ry="0"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Pellet_20.png"
        inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <rect
+       inkscape:export-ydpi="96" /><rect
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264567;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        id="rect922"
        width="128"
@@ -1099,8 +902,7 @@
        y="0.00018310547"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/game_data/base/graphics/pellets/purple.png"
        inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <rect
+       inkscape:export-ydpi="96" /><rect
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264567;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        id="rect945"
        width="128"
@@ -1109,12 +911,10 @@
        y="0.00018310547"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/game_data/base/graphics/pellets/white.png"
        inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <g
+       inkscape:export-ydpi="96" /><g
        id="g4760"
        style="display:inline"
-       transform="translate(0,-1052.3621)">
-      <ellipse
+       transform="translate(0,-1052.3621)"><ellipse
          style="display:inline;fill:#c99379;fill-opacity:0.999921;stroke:none"
          id="path3782"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
@@ -1123,8 +923,7 @@
          cx="-6.7031322"
          cy="1036.3622"
          rx="3.203124"
-         ry="3.5000007" />
-      <circle
+         ry="3.5000007" /><circle
          style="display:inline;fill:none;stroke:#00ffff;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          id="path3770-7"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
@@ -1132,8 +931,7 @@
          inkscape:export-ydpi="96"
          cx="-16"
          cy="1036.3622"
-         r="15" />
-      <circle
+         r="15" /><circle
          style="display:inline;fill:#d5b284;fill-opacity:1;stroke:none"
          id="path3780"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
@@ -1141,25 +939,21 @@
          inkscape:export-ydpi="96"
          cx="-18"
          cy="1036.3622"
-         r="9.5" />
-      <path
+         r="9.5" /><path
          style="display:inline;fill:#000000;fill-opacity:1;stroke:none"
          d="m -12,1034.8622 v -6 h 2 v 6 z"
          id="path3824"
          inkscape:connector-curvature="0"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
          inkscape:export-xdpi="96"
-         inkscape:export-ydpi="96" />
-      <path
+         inkscape:export-ydpi="96" /><path
          style="display:inline;fill:#000000;fill-opacity:1;stroke:none"
          d="m -12,1043.8622 v -6 h 2 v 6 z"
          id="path3824-4"
          inkscape:connector-curvature="0"
          inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Documents\Olimar.png"
          inkscape:export-xdpi="96"
-         inkscape:export-ydpi="96" />
-    </g>
-    <rect
+         inkscape:export-ydpi="96" /></g><rect
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264567;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        id="rect2"
        width="128"
@@ -1168,8 +962,7 @@
        y="0.00012207031"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/game_data/base/graphics/pellets/rock.png"
        inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <rect
+       inkscape:export-ydpi="96" /><rect
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264567;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        id="rect3"
        width="128"
@@ -1178,8 +971,7 @@
        y="0.00012207031"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/game_data/base/graphics/pellets/winged.png"
        inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <rect
+       inkscape:export-ydpi="96" /><rect
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264567;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        id="rect4"
        width="128"
@@ -1188,8 +980,7 @@
        y="0.00012207031"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/game_data/base/graphics/pellets/ice.png"
        inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <rect
+       inkscape:export-ydpi="96" /><rect
        style="color:#000000;font-variation-settings:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.173622;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
        id="rect33"
        width="42"
@@ -1200,8 +991,7 @@
        ry="0"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/game_data/base/graphics/pellets/glow_pellet_2.png"
        inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <rect
+       inkscape:export-ydpi="96" /><rect
        style="color:#000000;font-variation-settings:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.173622;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
        id="rect34"
        width="42"
@@ -1212,8 +1002,7 @@
        ry="0"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/game_data/base/graphics/pellets/glow_pellet_3.png"
        inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <rect
+       inkscape:export-ydpi="96" /><rect
        style="color:#000000;font-variation-settings:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.173622;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
        id="rect35"
        width="42"
@@ -1224,8 +1013,7 @@
        ry="0"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/game_data/base/graphics/pellets/glow_pellet_4.png"
        inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <rect
+       inkscape:export-ydpi="96" /><rect
        style="color:#000000;font-variation-settings:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.173622;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
        id="rect36"
        width="42"
@@ -1236,8 +1024,7 @@
        ry="0"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/game_data/base/graphics/pellets/glow_pellet_5.png"
        inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <rect
+       inkscape:export-ydpi="96" /><rect
        style="color:#000000;font-variation-settings:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.264567;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
        id="rect37"
        width="64"
@@ -1248,63 +1035,133 @@
        ry="0"
        inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Pellet_5.png"
        inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-  </g>
-  <g
+       inkscape:export-ydpi="96" /><rect
+       style="color:#000000;font-variation-settings:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.413387;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
+       id="rect1"
+       width="100"
+       height="100"
+       x="3.1190857e-06"
+       y="900.00012"
+       rx="0"
+       ry="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/game_data/base/graphics/pellets/glow_pellet_1.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" /><rect
+       style="color:#000000;font-variation-settings:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.413387;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
+       id="rect17"
+       width="100"
+       height="100"
+       x="202"
+       y="900.00012"
+       rx="0"
+       ry="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/game_data/base/graphics/pellets/glow_pellet_1.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" /><rect
+       style="color:#000000;font-variation-settings:normal;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#008000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.413387;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
+       id="rect40"
+       width="100"
+       height="100"
+       x="101"
+       y="900.00012"
+       rx="0"
+       ry="0"
+       inkscape:export-filename="/home/andre/Programming/C++/Pikifen/game_data/base/graphics/pellets/glow_pellet_1.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" /></g><g
      inkscape:label="Sprites"
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(0,-1.2207031e-4)"
-     style="display:inline">
-    <g
-       id="g30">
-      <circle
+     style="display:inline"><g
+       id="g17"
+       transform="translate(1.0000031)"><use
+         x="0"
+         y="0"
+         xlink:href="#path1-8"
+         id="use1"
+         transform="rotate(29.937492,-553.49078,784.81299)" /><use
+         x="0"
+         y="0"
+         xlink:href="#path1-87"
+         id="use4"
+         transform="rotate(46.110476,-346.73202,695.48532)" /><use
+         x="0"
+         y="0"
+         xlink:href="#path102729"
+         id="use6"
+         transform="rotate(-31.83163,749.64999,1052.7568)" /><use
+         x="0"
+         y="0"
+         xlink:href="#path1-8"
+         id="use7"
+         transform="rotate(60.063407,-217.38382,813.53349)" /><use
+         x="0"
+         y="0"
+         xlink:href="#path1-6"
+         id="use8"
+         transform="rotate(-19.302765,1038.8683,741.03232)" /><use
+         x="0"
+         y="0"
+         xlink:href="#path1"
+         id="use9"
+         transform="rotate(-42.145668,511.90186,954.22193)" /><use
+         x="0"
+         y="0"
+         xlink:href="#path102729"
+         id="use10"
+         transform="rotate(-63.601877,362.07365,886.59745)" /><use
+         x="0"
+         y="0"
+         xlink:href="#path1-87"
+         id="use11"
+         transform="rotate(66.698136,-177.95451,773.68783)" /><use
+         x="0"
+         y="0"
+         xlink:href="#path102729"
+         id="use15"
+         transform="rotate(-81.006935,312.43583,878.37012)" /><use
+         x="0"
+         y="0"
+         xlink:href="#path1-6"
+         id="use16"
+         transform="rotate(-40.449579,488.62364,782.83947)" /></g><g
+       id="g30"><circle
          r="64"
          cy="64.000122"
          cx="64"
          style="opacity:1;fill:url(#radialGradient3327);fill-opacity:1;stroke:none;stroke-width:12.068"
-         id="path4721-8-4" />
-      <use
+         id="path4721-8-4" /><use
          x="0"
          y="0"
          xlink:href="#g1"
          id="use2"
          style="display:inline"
-         transform="translate(150)" />
-    </g>
-    <g
-       id="g31">
-      <circle
+         transform="translate(150)" /></g><g
+       id="g31"><circle
          r="64"
          cy="64"
          cx="193"
          style="opacity:1;fill:url(#radialGradient1886);fill-opacity:1;stroke:none;stroke-width:12.068"
-         id="path4721-8-4-0" />
-      <use
+         id="path4721-8-4-0" /><use
          x="0"
          y="0"
          xlink:href="#g1"
          id="use2-4"
          style="display:inline"
-         transform="translate(279,-6.1035157e-5)" />
-    </g>
-    <g
-       id="g32">
-      <circle
+         transform="translate(279,-6.1035157e-5)" /></g><g
+       id="g32"><circle
          cy="64"
          cx="322"
          style="opacity:1;fill:url(#radialGradient1989);fill-opacity:1;stroke:none;stroke-width:12.068"
          id="path4721-8-4-0-4"
-         r="64" />
-      <use
+         r="64" /><use
          x="0"
          y="0"
          xlink:href="#g1"
          id="use2-48"
          style="display:inline"
-         transform="translate(408.02984)" />
-    </g>
-    <path
+         transform="translate(408.02984)" /></g><path
        sodipodi:type="star"
        style="display:inline;fill:url(#radialGradient102731-3);fill-opacity:1;stroke-width:2.64583;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill;filter:url(#filter15138-2)"
        id="path102729"
@@ -1320,8 +1177,7 @@
        inkscape:randomized="0"
        d="m 126.57526,-32.752053 c 0.70952,0.409642 -0.004,3.04107 0.49442,3.691052 0.49875,0.649982 3.22527,0.641518 3.43732,1.432885 0.21204,0.791368 -2.15343,2.1473 -2.26037,2.959575 -0.10693,0.812275 1.82699,2.734233 1.41735,3.443753 -0.40964,0.709521 -3.04107,-0.0043 -3.69105,0.494418 -0.64998,0.498749 -0.64152,3.225272 -1.43289,3.437318 -0.79136,0.212047 -2.1473,-2.153424 -2.95957,-2.260362 -0.81228,-0.106938 -2.73423,1.826991 -3.44375,1.417349 -0.70953,-0.409643 0.004,-3.041071 -0.49442,-3.691053 -0.49875,-0.649982 -3.22527,-0.641517 -3.43732,-1.432885 -0.21205,-0.791368 2.15342,-2.147299 2.26036,-2.959575 0.10694,-0.812275 -1.82699,-2.734232 -1.41735,-3.443753 0.40965,-0.709521 3.04107,0.0043 3.69106,-0.494418 0.64998,-0.498749 0.64151,-3.225272 1.43288,-3.437318 0.79137,-0.212046 2.1473,2.153424 2.95958,2.260362 0.81227,0.106938 2.73423,-1.82699 3.44375,-1.417348 z"
        transform="matrix(1.6890057,-0.97514787,0.97514787,1.6890057,10.739079,782.96574)"
-       clip-path="url(#clipPath32-9)" />
-    <path
+       clip-path="url(#clipPath32-9)" /><path
        sodipodi:type="star"
        style="display:inline;fill:url(#radialGradient2-0);stroke-width:2.64583;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill;filter:url(#filter2074-9)"
        id="path1-87"
@@ -1337,8 +1193,7 @@
        inkscape:randomized="0"
        d="m 126.57526,-32.752053 c 0.70952,0.409642 -0.004,3.04107 0.49442,3.691052 0.49875,0.649982 3.22527,0.641518 3.43732,1.432885 0.21204,0.791368 -2.15343,2.1473 -2.26037,2.959575 -0.10693,0.812275 1.82699,2.734233 1.41735,3.443753 -0.40964,0.709521 -3.04107,-0.0043 -3.69105,0.494418 -0.64998,0.498749 -0.64152,3.225272 -1.43289,3.437318 -0.79136,0.212047 -2.1473,-2.153424 -2.95957,-2.260362 -0.81228,-0.106938 -2.73423,1.826991 -3.44375,1.417349 -0.70953,-0.409643 0.004,-3.041071 -0.49442,-3.691053 -0.49875,-0.649982 -3.22527,-0.641517 -3.43732,-1.432885 -0.21205,-0.791368 2.15342,-2.147299 2.26036,-2.959575 0.10694,-0.812275 -1.82699,-2.734232 -1.41735,-3.443753 0.40965,-0.709521 3.04107,0.0043 3.69106,-0.494418 0.64998,-0.498749 0.64151,-3.225272 1.43288,-3.437318 0.79137,-0.212046 2.1473,2.153424 2.95958,2.260362 0.81227,0.106938 2.73423,-1.82699 3.44375,-1.417348 z"
        transform="matrix(1.6890057,-0.97514787,0.97514787,1.6890057,-75.260921,782.96574)"
-       clip-path="url(#clipPath30-2)" />
-    <path
+       clip-path="url(#clipPath30-2)" /><path
        sodipodi:type="star"
        style="display:inline;fill:url(#radialGradient2-5);stroke-width:2.64583;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill;filter:url(#filter2074-9)"
        id="path1-6"
@@ -1354,8 +1209,7 @@
        inkscape:randomized="0"
        d="m 126.57526,-32.752053 c 0.70952,0.409642 -0.004,3.04107 0.49442,3.691052 0.49875,0.649982 3.22527,0.641518 3.43732,1.432885 0.21204,0.791368 -2.15343,2.1473 -2.26037,2.959575 -0.10693,0.812275 1.82699,2.734233 1.41735,3.443753 -0.40964,0.709521 -3.04107,-0.0043 -3.69105,0.494418 -0.64998,0.498749 -0.64152,3.225272 -1.43289,3.437318 -0.79136,0.212047 -2.1473,-2.153424 -2.95957,-2.260362 -0.81228,-0.106938 -2.73423,1.826991 -3.44375,1.417349 -0.70953,-0.409643 0.004,-3.041071 -0.49442,-3.691053 -0.49875,-0.649982 -3.22527,-0.641517 -3.43732,-1.432885 -0.21205,-0.791368 2.15342,-2.147299 2.26036,-2.959575 0.10694,-0.812275 -1.82699,-2.734232 -1.41735,-3.443753 0.40965,-0.709521 3.04107,0.0043 3.69106,-0.494418 0.64998,-0.498749 0.64151,-3.225272 1.43288,-3.437318 0.79137,-0.212046 2.1473,2.153424 2.95958,2.260362 0.81227,0.106938 2.73423,-1.82699 3.44375,-1.417348 z"
        transform="matrix(1.6890057,-0.97514787,0.97514787,1.6890057,-118.26092,782.96574)"
-       clip-path="url(#clipPath28-2)" />
-    <path
+       clip-path="url(#clipPath28-2)" /><path
        sodipodi:type="star"
        style="display:inline;fill:url(#radialGradient2);stroke-width:2.64583;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill;filter:url(#filter2074-9)"
        id="path1"
@@ -1374,8 +1228,7 @@
        inkscape:export-filename="..\..\..\..\Vector Graphics\Neo\Piles\Glow Pellets\glow_pellet.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       clip-path="url(#clipPath26-7)" />
-    <path
+       clip-path="url(#clipPath26-7)" /><path
        sodipodi:type="star"
        style="display:inline;mix-blend-mode:normal;fill:url(#radialGradient2-7);stroke-width:2.64583;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill;filter:url(#filter24-7)"
        id="path1-8"
@@ -1394,8 +1247,7 @@
        inkscape:export-filename="/home/andre/Desktop/path1-8.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       clip-path="url(#clipPath25-7)" />
-    <path
+       clip-path="url(#clipPath25-7)" /><path
        sodipodi:type="star"
        style="display:inline;mix-blend-mode:normal;fill:#ffffff;fill-opacity:1;stroke-width:2.64583;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill"
        id="path24"
@@ -1413,11 +1265,9 @@
        transform="matrix(2.1551745,-1.2442906,1.2442906,2.1551744,-311.0387,828.08291)"
        inkscape:export-filename="/home/andre/Desktop/path1-8.png"
        inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <g
+       inkscape:export-ydpi="96" /><g
        id="g1175"
-       transform="translate(0,-558.51959)">
-      <path
+       transform="translate(0,-558.51959)"><path
          inkscape:export-ydpi="96"
          inkscape:export-xdpi="96"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Pellet_1.png"
@@ -1425,8 +1275,7 @@
          d="m 24,874.51964 c 5,0 8,-3 12,-5 v 42"
          id="path1117"
          inkscape:connector-curvature="0"
-         sodipodi:nodetypes="ccc" />
-      <path
+         sodipodi:nodetypes="ccc" /><path
          inkscape:export-ydpi="96"
          inkscape:export-xdpi="96"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Pellet_1.png"
@@ -1434,12 +1283,9 @@
          inkscape:connector-curvature="0"
          id="path4487"
          d="m 24,874.51964 c 5,0 8,-3 12,-5 v 42"
-         style="display:inline;opacity:1;fill:none;fill-rule:evenodd;stroke:#f0f0f0;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-    </g>
-    <g
+         style="display:inline;opacity:1;fill:none;fill-rule:evenodd;stroke:#f0f0f0;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" /></g><g
        id="g1179"
-       transform="translate(0,-558.51959)">
-      <path
+       transform="translate(0,-558.51959)"><path
          inkscape:export-ydpi="96"
          inkscape:export-xdpi="96"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Pellet_5.png"
@@ -1447,8 +1293,7 @@
          d="M 110,869.51961 H 84 v 17 h 11 c 8,0 15,2 15,12 0,10 -7,13 -15,13 H 84"
          id="path1119"
          inkscape:connector-curvature="0"
-         sodipodi:nodetypes="cccszsc" />
-      <path
+         sodipodi:nodetypes="cccszsc" /><path
          inkscape:export-ydpi="96"
          inkscape:export-xdpi="96"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Pellet_5.png"
@@ -1456,12 +1301,9 @@
          inkscape:connector-curvature="0"
          id="path4504"
          d="M 110,869.51961 H 84 v 17 h 11 c 8,0 15,2 15,12 0,10 -7,13 -15,13 H 84"
-         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#f0f0f0;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
-    </g>
-    <g
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#f0f0f0;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" /></g><g
        id="g1185"
-       transform="translate(0,-558.51959)">
-      <path
+       transform="translate(0,-558.51959)"><path
          inkscape:export-ydpi="96"
          inkscape:export-xdpi="96"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Pellet_10.png"
@@ -1469,8 +1311,7 @@
          d="m 142,874.51961 c 5,0 8,-3 12,-5 v 42"
          id="path1165"
          inkscape:connector-curvature="0"
-         sodipodi:nodetypes="ccc" />
-      <rect
+         sodipodi:nodetypes="ccc" /><rect
          inkscape:export-ydpi="96"
          inkscape:export-xdpi="96"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Pellet_10.png"
@@ -1481,8 +1322,7 @@
          x="167"
          y="869.51971"
          ry="8"
-         rx="7.4558058" />
-      <path
+         rx="7.4558058" /><path
          inkscape:export-ydpi="96"
          inkscape:export-xdpi="96"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Pellet_10.png"
@@ -1490,8 +1330,7 @@
          inkscape:connector-curvature="0"
          id="path4487-0"
          d="m 142,874.51961 c 5,0 8,-3 12,-5 v 42"
-         style="display:inline;opacity:1;vector-effect:none;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#f0f0f0;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
-      <rect
+         style="display:inline;opacity:1;vector-effect:none;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#f0f0f0;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" /><rect
          inkscape:export-ydpi="96"
          inkscape:export-xdpi="96"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Pellet_10.png"
@@ -1502,12 +1341,9 @@
          height="42"
          width="15"
          id="rect4591"
-         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#f0f0f0;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
-    </g>
-    <g
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#f0f0f0;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" /></g><g
        id="g1191"
-       transform="translate(0,-558.51959)">
-      <rect
+       transform="translate(0,-558.51959)"><rect
          inkscape:export-ydpi="96"
          inkscape:export-xdpi="96"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Pellet_20.png"
@@ -1518,8 +1354,7 @@
          x="233"
          y="869.51971"
          ry="8"
-         rx="7.5" />
-      <path
+         rx="7.5" /><path
          inkscape:export-ydpi="96"
          inkscape:export-xdpi="96"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Pellet_20.png"
@@ -1527,8 +1362,7 @@
          d="m 206,876.51961 c 0,-6 5,-7 7,-7 2,0 7,1 7,7 0,6 -13,35 -13,35 h 14"
          id="path1171"
          inkscape:connector-curvature="0"
-         sodipodi:nodetypes="czzcc" />
-      <rect
+         sodipodi:nodetypes="czzcc" /><rect
          inkscape:export-ydpi="96"
          inkscape:export-xdpi="96"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Pellet_20.png"
@@ -1539,8 +1373,7 @@
          height="42"
          width="15"
          id="rect4591-3"
-         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#f0f0f0;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
-      <path
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#f0f0f0;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" /><path
          inkscape:export-ydpi="96"
          inkscape:export-xdpi="96"
          inkscape:export-filename="/home/andre/Programming/C++/Pikifen/Game_data/Graphics/Pellet_20.png"
@@ -1548,174 +1381,265 @@
          inkscape:connector-curvature="0"
          id="path4611"
          d="m 206,876.51961 c 0,-6 5,-7 7,-7 2,0 7,1 7,7 0,6 -13,35 -13,35 h 14"
-         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#f0f0f0;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" />
-    </g>
-    <g
-       id="g33">
-      <circle
+         style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#f0f0f0;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" /></g><g
+       id="g33"><circle
          r="64"
          cy="64.000122"
          cx="451"
          style="opacity:1;fill:url(#radialGradient934);fill-opacity:1;stroke:none;stroke-width:12.068"
-         id="circle924" />
-      <use
+         id="circle924" /><use
          x="0"
          y="0"
          xlink:href="#g1"
          id="use2-5"
          style="display:inline"
-         transform="translate(537)" />
-    </g>
-    <g
-       id="g34">
-      <circle
+         transform="translate(537)" /></g><g
+       id="g34"><circle
          r="64"
          cy="64.000122"
          cx="580"
          style="opacity:1;fill:url(#radialGradient957);fill-opacity:1;stroke:none;stroke-width:12.068"
-         id="circle947" />
-      <use
+         id="circle947" /><use
          x="0"
          y="0"
          xlink:href="#g1"
          id="use2-3"
          style="display:inline"
-         transform="translate(666,-6.1035155e-5)" />
-    </g>
-    <g
-       id="g35">
-      <circle
+         transform="translate(666,-6.1035155e-5)" /></g><g
+       id="g35"><circle
          r="64"
          cy="64.000061"
          cx="709"
          style="opacity:1;fill:url(#radialGradient20);fill-opacity:1;stroke:none;stroke-width:12.068"
-         id="circle4" />
-      <use
+         id="circle4" /><use
          x="0"
          y="0"
          xlink:href="#g1"
          id="use2-30"
          style="display:inline"
-         transform="translate(795)" />
-    </g>
-    <g
-       id="g36">
-      <circle
+         transform="translate(795)" /></g><g
+       id="g36"><circle
          r="64"
          cy="64.000061"
          cx="838"
          style="opacity:1;fill:url(#radialGradient17);fill-opacity:1;stroke:none;stroke-width:12.068"
-         id="circle7" />
-      <use
+         id="circle7" /><use
          x="0"
          y="0"
          xlink:href="#g1"
          id="use2-6"
          style="display:inline"
-         transform="translate(924,-6.1035156e-5)" />
-    </g>
-    <g
-       id="g37">
-      <circle
+         transform="translate(924,-6.1035156e-5)" /></g><g
+       id="g37"><circle
          r="64"
          cy="64.000061"
          cx="967"
          style="opacity:1;fill:url(#radialGradient14);stroke:none;stroke-width:12.068"
-         id="circle10" />
-      <use
+         id="circle10" /><use
          x="0"
          y="0"
          xlink:href="#g1"
          id="use2-6-1"
          style="display:inline"
-         transform="translate(1053,-6.1035157e-5)" />
-    </g>
-    <circle
+         transform="translate(1053,-6.1035157e-5)" /></g><circle
        r="64"
        cy="64.000122"
        cx="-536"
        style="display:inline;opacity:0.75;fill:url(#radialGradient3327-3-56);fill-opacity:1;stroke:none;stroke-width:12.068"
        id="path4721-8-4-5-2"
-       mask="none" />
-    <g
+       mask="none" /><g
        id="g39"
        clip-path="none"
        transform="translate(-125)"
        inkscape:transform-center-x="32"
-       inkscape:transform-center-y="-32">
-      <rect
+       inkscape:transform-center-y="-32"><rect
          style="color:#000000;font-variation-settings:normal;overflow:visible;opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264567;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill"
          id="rect38"
          width="64"
          height="64"
          x="-275"
-         y="0.00012207031" />
-      <path
+         y="0.00012207031" /><path
          style="color:#000000;font-variation-settings:normal;overflow:visible;opacity:1;mix-blend-mode:normal;vector-effect:none;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264567;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;filter:url(#filter40)"
          d="M -211,64.000122 -243,1.2207031e-4 -275,32.000121 Z"
          id="path40"
          sodipodi:nodetypes="cccc"
-         clip-path="url(#clipPath40)" />
-    </g>
-    <use
+         clip-path="url(#clipPath40)" /></g><use
        x="0"
        y="0"
        xlink:href="#path4721-8-4-5-2"
        id="use42"
        transform="translate(300)"
-       mask="url(#mask43)" />
-    <circle
+       mask="url(#mask43)" /><circle
        r="64"
        cy="264.00018"
        cx="-536"
        style="display:inline;opacity:0.75;fill:url(#radialGradient3327-3-6-6);fill-opacity:1;stroke:none;stroke-width:12.068"
        id="path4721-8-4-5-0-7"
-       mask="none" />
-    <g
+       mask="none" /><g
        id="g46"
        clip-path="none"
        transform="rotate(180,-305.5,164.00012)"
        inkscape:transform-center-x="-32"
-       inkscape:transform-center-y="31.999999">
-      <rect
+       inkscape:transform-center-y="31.999999"><rect
          style="color:#000000;font-variation-settings:normal;overflow:visible;opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264567;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill"
          id="rect46"
          width="64"
          height="64"
          x="-275"
-         y="0.00012207031" />
-      <path
+         y="0.00012207031" /><path
          style="color:#000000;font-variation-settings:normal;overflow:visible;opacity:1;mix-blend-mode:normal;vector-effect:none;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264567;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:50;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;filter:url(#filter40)"
          d="M -211,64.000122 -243,1.2207031e-4 -275,32.000121 Z"
          id="path46"
          sodipodi:nodetypes="cccc"
-         clip-path="url(#clipPath40)" />
-    </g>
-    <use
+         clip-path="url(#clipPath40)" /></g><use
        x="0"
        y="0"
        xlink:href="#path4721-8-4-5-0-7"
        id="use46"
        transform="translate(300)"
-       mask="url(#mask47)" />
-    <g
+       mask="url(#mask47)" /><g
        id="g1"
        style="display:inline"
-       transform="translate(-150)">
-      <use
+       transform="translate(-150)"><use
          x="0"
          y="0"
          xlink:href="#use42"
          id="use45"
          style="display:inline"
-         transform="translate(300,6.1035157e-5)" />
-      <use
+         transform="translate(300,6.1035157e-5)" /><use
          x="0"
          y="0"
          xlink:href="#use46"
          id="use49"
          style="display:inline"
-         transform="translate(300,-200)" />
-    </g>
-  </g>
-</svg>
+         transform="translate(300,-200)" /></g><use
+       x="0"
+       y="0"
+       xlink:href="#g17"
+       id="use26"
+       transform="translate(202)" /><path
+       style="color:#000000;overflow:visible;opacity:0.311531;mix-blend-mode:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:5.66929;paint-order:markers stroke fill;filter:url(#filter38)"
+       d="m 50,905.0001 c -7.719019,1.7845 -13.701877,8.0621 -19.897436,13 -7.023364,5.5977 -14.637541,11.0839 -19.397436,18.7 -3.2685316,5.2298 -6.6832602,11.5109 -5.705128,17.6 1.2253048,7.6279 8.065955,13.4057 13.692308,18.7 4.938992,4.6475 11.430348,7.3023 17.115384,11 5.082216,3.3057 9.379085,8.2788 15.192308,10 4.991048,1.4778 10.926463,2.1602 15.615385,-0.1 7.639018,-3.6822 11.336531,-12.7004 15.974359,-19.8 4.517947,-6.916 9.850162,-13.8877 11.410256,-22 1.461232,-7.5982 0.243035,-15.7861 -2.282051,-23.1 -2.578252,-7.4678 -6.080052,-15.7158 -12.717949,-20 -5.941097,-3.8345 -13.991498,-2.0614 -21,-3 -2.66364,-0.3567 -5.381636,-1.6053 -8,-1 z"
+       id="path38"
+       sodipodi:nodetypes="aaaaaaaaaaaaaa" /><g
+       id="g38"><use
+         x="0"
+         y="0"
+         xlink:href="#path1-87"
+         id="use27"
+         transform="rotate(5.1916969,-3344.7961,23.858639)" /><use
+         x="0"
+         y="0"
+         xlink:href="#path1-87"
+         id="use28"
+         transform="rotate(-21.457525,971.89364,976.23299)" /><use
+         x="0"
+         y="0"
+         xlink:href="#path1-6"
+         id="use29"
+         transform="rotate(-10.229987,2052.575,834.29522)" /><use
+         x="0"
+         y="0"
+         xlink:href="#path1-6"
+         id="use30"
+         transform="rotate(-19.574017,981.8836,898.94973)" /><use
+         x="0"
+         y="0"
+         xlink:href="#path1-8"
+         id="use31"
+         transform="rotate(-10.310169,1952.6289,487.41819)" /><use
+         x="0"
+         y="0"
+         xlink:href="#path1-8"
+         id="use32"
+         transform="rotate(23.333764,-743.72162,871.85614)" /><use
+         x="0"
+         y="0"
+         xlink:href="#path1"
+         id="use33"
+         transform="translate(-71.914905,322.30366)" /><use
+         x="0"
+         y="0"
+         xlink:href="#path1"
+         id="use34"
+         transform="rotate(11.665941,-1370.9396,261.85699)" /><use
+         x="0"
+         y="0"
+         xlink:href="#path102729"
+         id="use35"
+         transform="rotate(13.338879,-1155.8502,247.83893)" /><use
+         x="0"
+         y="0"
+         xlink:href="#path102729"
+         id="use36"
+         transform="rotate(13.338879,-1329.6516,180.63741)" /></g><use
+       x="0"
+       y="0"
+       xlink:href="#g17"
+       id="use40"
+       transform="translate(101)" /><use
+       x="0"
+       y="0"
+       xlink:href="#path38"
+       id="use43"
+       transform="translate(101)" /><use
+       x="0"
+       y="0"
+       xlink:href="#g38"
+       id="use47"
+       transform="translate(101)" /><path
+       style="color:#000000;font-variation-settings:normal;overflow:visible;opacity:0.311531;vector-effect:none;fill:#000000;fill-opacity:1;stroke:none;stroke-width:5.66929;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;-inkscape-stroke:none;paint-order:markers stroke fill;filter:url(#filter59);stop-color:#000000;stop-opacity:1"
+       d="m 43,913.00011 c -7.182273,1.18952 -15.697613,1.01154 -21,6 -4.376772,4.11764 -5.505936,11.01109 -6,17 -0.473097,5.73474 4.011495,11.33537 3,17 -0.814019,4.55871 -6.73234,7.37692 -7,12 -0.336477,5.81168 2.449015,12.36992 7,16 5.570749,4.44348 13.925736,3.14409 21,3.99999 6.296185,0.76176 12.811703,2.38824 19,1 4.802254,-1.0773 8.633656,-4.72904 13,-7 4.968414,-2.5841 10.965627,-3.66915 15.014865,-7.53779 3.443223,-3.28965 6.935334,-7.70036 6.985135,-12.4622 0.05926,-5.66636 -7.652332,-9.34401 -8,-15 -0.28485,-4.63405 5.352449,-8.3706 5,-13 -0.40802,-5.35933 -3.715701,-10.75444 -8,-14 -5.477565,-4.14952 -13.160801,-4.33099 -20,-5 -6.643286,-0.64985 -13.41471,-0.0906 -20,1 z"
+       id="path59"
+       sodipodi:nodetypes="aaaaaaaaaaaaaaaa" /><g
+       id="g59"><use
+         x="0"
+         y="0"
+         xlink:href="#path1-8"
+         id="use50"
+         transform="rotate(14.158294,-1211.0915,872.12854)" /><use
+         x="0"
+         y="0"
+         xlink:href="#path1-8"
+         id="use51"
+         transform="rotate(14.158294,-1361.0947,946.51963)" /><use
+         x="0"
+         y="0"
+         xlink:href="#path1-6"
+         id="use52"
+         transform="rotate(18.373991,-956.51535,757.01306)" /><use
+         x="0"
+         y="0"
+         xlink:href="#path1-6"
+         id="use53"
+         transform="rotate(60.431031,-236.4442,758.85023)" /><use
+         x="0"
+         y="0"
+         xlink:href="#path1-87"
+         id="use54"
+         transform="translate(-32.882794,310.42428)" /><use
+         x="0"
+         y="0"
+         xlink:href="#path1-87"
+         id="use55"
+         transform="rotate(7.8147845,-2480.9715,344.82197)" /><use
+         x="0"
+         y="0"
+         xlink:href="#path1"
+         id="use56"
+         transform="translate(-74.000002,338.99999)" /><use
+         x="0"
+         y="0"
+         xlink:href="#path1"
+         id="use57"
+         transform="rotate(20.795996,-758.64445,458.19593)" /><use
+         x="0"
+         y="0"
+         xlink:href="#path102729"
+         id="use58"
+         transform="rotate(-13.515743,1462.4449,1327.1581)" /><use
+         x="0"
+         y="0"
+         xlink:href="#path102729"
+         id="use59"
+         transform="rotate(21.51326,-803.33655,363.15446)" /></g></g></svg>

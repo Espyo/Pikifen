@@ -1,5 +1,5 @@
-name=Nugget pile animations
-description=Animations for the Nugget pile.
+name=Glow Pellet pile animations
+description=Animations for the Glow Pellet pile.
 maker=Espyo
 version=1.0.0
 engine_version=1.2.0
@@ -35,7 +35,7 @@ animations{
 }
 sprites{
 	idling_empty{
-		file=treasures/nugget_pile
+		file=other_mobs/glow_pellet_pile
 		file_pos=0.0000 0.0000
 		file_size=0.0000 0.0000
 		hitboxes{
@@ -49,7 +49,7 @@ sprites{
 		}
 	}
 	idling_high{
-		file=treasures/nugget_pile
+		file=other_mobs/glow_pellet_pile
 		file_pos=0.0000 0.0000
 		file_size=100.0000 100.0000
 		hitboxes{
@@ -64,7 +64,7 @@ sprites{
 		}
 	}
 	idling_low{
-		file=treasures/nugget_pile
+		file=other_mobs/glow_pellet_pile
 		file_pos=202.0000 0.0000
 		file_size=100.0000 100.0000
 		hitboxes{
@@ -79,7 +79,7 @@ sprites{
 		}
 	}
 	idling_mid{
-		file=treasures/nugget_pile
+		file=other_mobs/glow_pellet_pile
 		file_pos=101.0000 0.0000
 		file_size=100.0000 100.0000
 		hitboxes{
