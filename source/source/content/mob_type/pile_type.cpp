@@ -62,11 +62,13 @@ void PileType::loadCatProperties(DataNode* file) {
     
     string contentsStr;
     string sizeAnimSuffixesStr;
+    bool contentsFromSpawnData = false;
     DataNode* contentsNode = nullptr;
     
     pRS.set("auto_shrink_smallest_radius", autoShrinkSmallestRadius);
     pRS.set("can_drop_multiple", canDropMultiple);
     pRS.set("contents", contentsStr, &contentsNode);
+    pRS.set("contents_from_spawn_data", contentsFromSpawnData);
     pRS.set("delete_when_finished", deleteWhenFinished);
     pRS.set("health_per_resource", healthPerResource);
     pRS.set("hide_when_empty", hideWhenEmpty);
@@ -76,13 +78,31 @@ void PileType::loadCatProperties(DataNode* file) {
     pRS.set("show_amount", showAmount);
     pRS.set("size_animation_suffixes", sizeAnimSuffixesStr);
     
-    auto resType = game.content.mobTypes.list.resource.find(contentsStr);
-    if(resType != game.content.mobTypes.list.resource.end()) {
-        contents = resType->second;
+    if(contentsFromSpawnData) {
+        forIdx(s, spawns) {
+            if(spawns[s].name == "contents") {
+                contentsSpawnIdx = s;
+                break;
+            }
+        }
+        
+        if(contentsSpawnIdx == INVALID) {
+            game.errors.report(
+                "The contents to spawn should come from a \"contents\" spawn "
+                "block, but no such block exists!", file
+            );
+        }
+        
     } else {
-        game.errors.report(
-            "Unknown resource type \"" + contentsStr + "\"!", contentsNode
-        );
+        auto resType = game.content.mobTypes.list.resource.find(contentsStr);
+        if(resType != game.content.mobTypes.list.resource.end()) {
+            contentsResource = resType->second;
+        } else {
+            game.errors.report(
+                "Unknown resource type \"" + contentsStr + "\"!", contentsNode
+            );
+        }
+        
     }
     
     animationGroupSuffixes =

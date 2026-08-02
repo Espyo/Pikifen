@@ -52,8 +52,12 @@ public:
 
     //--- Public members ---
     
-    //Contents of the pile.
-    ResourceType* contents = nullptr;
+    //Contents of the pile, in the case they're resource mobs.
+    ResourceType* contentsResource = nullptr;
+    
+    //If the contents of the pile come from a spawn data block,
+    //this is its index.
+    size_t contentsSpawnIdx = INVALID;
     
     //How often the pile recharges its contents, if it at all does.
     float rechargeInterval = 0.0f;

@@ -127,10 +127,11 @@ int Pile::getMissionPoints(bool* applicableInThisMission) const {
     }
     
     if(
-        pilType->contents->deliveryResult ==
+        pilType->contentsResource &&
+        pilType->contentsResource->deliveryResult ==
         RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
     ) {
-        return pilType->contents->pointAmount * amount;
+        return pilType->contentsResource->pointAmount * amount;
     }
     return 0;
 }

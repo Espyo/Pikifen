@@ -1084,9 +1084,9 @@ void PauseMenu::drawRadar(
     forIdx(p, game.states.gameplay->mobs.piles) {
         Pile* pPtr = game.states.gameplay->mobs.piles[p];
         if(
-            !pPtr->pilType->contents ||
+            !pPtr->pilType->contentsResource ||
             pPtr->amount == 0 ||
-            pPtr->pilType->contents->deliveryResult !=
+            pPtr->pilType->contentsResource->deliveryResult !=
             RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
         ) {
             continue;
@@ -1203,7 +1203,7 @@ void PauseMenu::drawRadar(
             
         } default: {
             break;
-
+            
         }
         }
     }
@@ -1259,7 +1259,7 @@ void PauseMenu::drawRadar(
         
     } default: {
         break;
-
+        
     }
     }
     

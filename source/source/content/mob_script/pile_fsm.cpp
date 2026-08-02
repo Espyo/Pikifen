@@ -91,7 +91,7 @@ void PileFsm::beAttacked(ScriptVM* scriptVM, void* info1, void* info2) {
             pilPtr->pilType->healthPerResource * intendedAmount;
     }
     
-    Resource* resourceToPickUp = nullptr;
+    Mob* mobToPickUp = nullptr;
     Pikmin* pikminToStartCarrying = nullptr;
     
     for(size_t r = 0; r < (size_t) amountToSpawn; r++) {
@@ -120,25 +120,36 @@ void PileFsm::beAttacked(ScriptVM* scriptVM, void* info1, void* info2) {
             spawnVSpeed = 600.0f;
         }
         
-        Resource* newResource =
-            (
-                (Resource*)
-                createMob(
-                    game.mobCategories.get(MOB_CATEGORY_RESOURCES),
-                    spawnPos, pilPtr->pilType->contents,
-                    spawnAngle, "",
-        [pilPtr] (Mob * m) { ((Resource*) m)->originPile = pilPtr; }
-                )
-            );
-            
-        newResource->bottomZ = spawnZ;
-        newResource->speed.x = cos(spawnAngle) * spawnHSpeed;
-        newResource->speed.y = sin(spawnAngle) * spawnHSpeed;
-        newResource->speedZ = spawnVSpeed;
-        newResource->links = pilPtr->links;
+        Mob* newMob = nullptr;
         
-        if(r == 0) {
-            resourceToPickUp = newResource;
+        if(pilPtr->pilType->contentsResource) {
+            newMob =
+                createMob(
+                    pilPtr->pilType->contentsResource->category, spawnPos,
+                    pilPtr->pilType->contentsResource, spawnAngle, ""
+                );
+                
+        } else {
+            newMob =
+                pilPtr->spawn(
+                    &pilPtr->type->spawns[pilPtr->pilType->contentsSpawnIdx]
+                );
+            newMob->center = spawnPos;
+            newMob->face(spawnAngle, nullptr, true);
+        }
+        
+        newMob->bottomZ = spawnZ;
+        newMob->speed.x = cos(spawnAngle) * spawnHSpeed;
+        newMob->speed.y = sin(spawnAngle) * spawnHSpeed;
+        newMob->speedZ = spawnVSpeed;
+        newMob->links = pilPtr->links;
+        
+        if(newMob->type->category->id == MOB_CATEGORY_RESOURCES) {
+            ((Resource*) newMob)->originPile = pilPtr;
+        }
+        
+        if(r == 0 && newMob->carryInfo) {
+            mobToPickUp = newMob;
         }
         
         string droppedResourceMsg = "dropped_resource";
@@ -147,8 +158,8 @@ void PileFsm::beAttacked(ScriptVM* scriptVM, void* info1, void* info2) {
         );
     }
     
-    if(pikminToStartCarrying) {
-        pikminToStartCarrying->forceCarry(resourceToPickUp);
+    if(pikminToStartCarrying && mobToPickUp) {
+        pikminToStartCarrying->forceCarry(mobToPickUp);
     }
     
     pilPtr->amount = intendedAmount;

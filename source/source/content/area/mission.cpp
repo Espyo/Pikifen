@@ -1908,7 +1908,8 @@ vector<size_t> MissionMobGroup::calculateList() const {
             } else if(gPtr->type->category->id == MOB_CATEGORY_PILES) {
                 PileType* pilType = (PileType*) gPtr->type;
                 if(
-                    pilType->contents->deliveryResult ==
+                    pilType->contentsResource &&
+                    pilType->contentsResource->deliveryResult ==
                     RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
                 ) {
                     return true;

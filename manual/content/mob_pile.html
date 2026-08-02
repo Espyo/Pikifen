@@ -15,7 +15,7 @@
 <body onload="setup('Pile object category', ['Making content', 'Object types'], ['making.html', 'mob_type.html']);">
   <div id="page-content">
     
-    <b>Piles</b> are objects that contain several <a href="mob_resource.html">resources</a> in them, that can be harvested by the Pikmin.
+    <b>Piles</b> are objects that contain several objects (typically <a href="mob_resource.html">resources</a>) in them, that can be harvested by the Pikmin.
 
     <p>Examples of pile types include piles of bridge fragments, or Burgeoning Spiderworts, which have a bundle of berries.</p>
 
@@ -23,9 +23,9 @@
 
     <h2 id="overview">Overview</h2>
 
-    <p>Pile objects just sit there, and can be attacked by the Pikmin. Once they suffer enough damage, they give the Pikmin one of their resources. They can recharge with time, and change their look as the number of resources they have left changes.</p>
+    <p>Pile objects just sit there, and can be attacked by the Pikmin. Once they suffer enough damage, they give the Pikmin one object from their contents. They can recharge with time, and change their look as the number of objects they have left changes.</p>
 
-    <p>Pile type objects are hardcoded in the engine to sit there and have their health depleted, give out resources when they suffer enough damage, show how many resources they have, changed their look based on how many resources they have, and optionally disappear when they're empty.</p>
+    <p>Pile type objects are hardcoded in the engine to sit there and have their health depleted, give out other objects when they suffer enough damage, show how many contents they still have, changed their look based on that count, and optionally disappear when they're empty.</p>
 
     <h2 id="props">Properties</h2>
 
@@ -35,22 +35,18 @@
       <li>All of the <a href="mob_type.html#creating">common object type properties</a>.</li>
     </ul>
 
-    <h3 id="props-mandatory">Mandatory</h3>
-
-    <table class="props-t props-t-m">
-      <tr>
-        <td>contents</td>
-        <td>What resource object type they contain.</td>
-        <td>Internal name</td>
-      </tr>
-    </table>
-
     <h3 id="props-recommended">Recommended</h3>
 
     <table class="props-t props-t-o">
       <tr>
+        <td>contents</td>
+        <td>What resource object type they contain. This must be the internal name of a resource object type. If you want the pile to spawn objects other than resources, leave this empty and use <code>contents_from_spawn_data</code>.</td>
+        <td>Internal name</td>
+        <td></td>
+      </tr>
+      <tr>
         <td>health_per_resource</td>
-        <td>The pile must suffer this much damage to give out the next resource.</td>
+        <td>The pile must suffer this much damage to give out the next object.</td>
         <td>Number</td>
         <td>1</td>
       </tr>
@@ -61,37 +57,43 @@
     <table class="props-t props-t-o">
       <tr>
         <td>auto_shrink_smallest_radius</td>
-        <td>If not 0, the pile's radius will start shrinking automatically as its amount decreases. This property specifies what the final radius should be, i.e. the radius when there's only one resource.</td>
+        <td>If not 0, the pile's radius will start shrinking automatically as its amount decreases. This property specifies what the final radius should be, i.e. the radius when there's only one object left.</td>
         <td>Number</td>
         <td>0</td>
       </tr>
       <tr>
         <td>can_drop_multiple</td>
-        <td>If <code>true</code>, the pile can drop multiple resources at once in a single attack, if the damage requirements are met. This is useful if you want the pile to drop resources when struck with a bomb rock, for instance. Excess resources will not be delivered to a Pikmin, but will instead be thrown to the ground next to the pile.</td>
+        <td>If <code>true</code>, the pile can drop multiple objects at once in a single attack, if the damage requirements are met. This is useful if you want the pile to drop objects when struck with a bomb rock, for instance. Excess objects will not be delivered to a Pikmin, but will instead be thrown to the ground next to the pile.</td>
+        <td>Boolean</td>
+        <td>false</td>
+      </tr>
+      <tr>
+        <td>contents_from_spawn_data</td>
+        <td>If <code>true</code>, the pile will spawn an object from whatever <a href="mob_type.html#spawning">spawn data block</a> has the name <code>contents</code>. This allows you to spawn any type of object, instead of solely resources from the <code>contents</code> property. It also allows you to spawn resources or other objects with more control, like what script vars they should start with. Note that only resource objects know what a "pile" is, so only they are able to, for instance, return to the pile when they vanish. Also note that when the engine needs to check a pile's resource contents to, for instance, tally up how many treasure points are in a <a href="mission.html">mission</a>, it can only do that from standard resources via the <code>contents</code> property, and won't be able to do so from objects specified in this spawn block.</td>
         <td>Boolean</td>
         <td>false</td>
       </tr>
       <tr>
         <td>delete_when_finished</td>
-        <td>If <code>true</code>, the pile object is deleted when the harvesting has been done. The harvesting won't be considered finished until the last resource it had is successfully delivered.</td>
+        <td>If <code>true</code>, the pile object is deleted when the harvesting has been done. The harvesting won't be considered finished until the last object it had is successfully delivered.</td>
         <td>Boolean</td>
         <td>true</td>
       </tr>
       <tr>
         <td>hide_when_empty</td>
-        <td>If <code>true</code>, the pile object will hide and become intangible when it has no resources at the moment.</td>
+        <td>If <code>true</code>, the pile object will hide and become intangible when it has no contents at the moment.</td>
         <td>Boolean</td>
         <td>true</td>
       </tr>
       <tr>
         <td>max_amount</td>
-        <td>Maximum number of resources it can have.</td>
+        <td>Maximum number of content objects it can have.</td>
         <td>Number</td>
         <td>1</td>
       </tr>
       <tr>
         <td>recharge_amount</td>
-        <td>If this pile can recharge, this specifies how many resources get added per recharge.</td>
+        <td>If this pile can recharge, this specifies how many content objects get added per recharge.</td>
         <td>Number</td>
         <td>0</td>
       </tr>
@@ -103,13 +105,13 @@
       </tr>
       <tr>
         <td>show_amount</td>
-        <td>If <code>true</code>, the number of resources left in the pile will be shown above the object.</td>
+        <td>If <code>true</code>, the number of content objects left in the pile will be shown above the object.</td>
         <td>Boolean</td>
         <td>true</td>
       </tr>
       <tr>
         <td>size_animation_suffixes</td>
-        <td>If you want the pile to change animations as it changes amount, this will indicate the suffix of the animations for every given phase. This list must be filled in order from empty to fullest. For example, in a pile of 10 resources max, if you want it to have an idling animation for when it's empty, and three more idling animations for the different amounts of resources it's holding, you'd set this to something like <code>_empty; _low; _mid; _high</code>. This would mean the <code>idling_empty</code> animation would be used when empty, <code>idling_mid</code> for when it's got 5, etc. The first will always correspond to the pile being empty, while the others are divided equally. So a pile with 20 max, split into 5 animations + empty, would change animation every 4 resources.</td>
+        <td>If you want the pile to change animations as it changes amount, this will indicate the suffix of the animations for every given phase. This list must be filled in order from empty to fullest. For example, in a pile of 10 objects max, if you want it to have an idling animation for when it's empty, and three more idling animations for the different amounts of objects it's holding, you'd set this to something like <code>_empty; _low; _mid; _high</code>. This would mean the <code>idling_empty</code> animation would be used when empty, <code>idling_mid</code> for when it's got 5, etc. The first will always correspond to the pile being empty, while the others are divided equally. So a pile with 20 max, split into 5 animations + empty, would change animation every 4 objects.</td>
         <td>Text list</td>
         <td></td>
       </tr>
@@ -125,7 +127,7 @@
 
     <h2 id="script">Script</h2>
 
-    <p>Pile types have hardcoded <a href="script.html">scripts</a>, so the only thing you can do is enhance them. You can handle the <code><a href="events_and_actions.html#on-receive-message">on_receive_message</a></code> event and check for the <code>grown_resource</code> or <code>dropped_resource</code> messages, if you need to know when a resource is grown or dropped.</p>
+    <p>Pile types have hardcoded <a href="script.html">scripts</a>, so the only thing you can do is enhance them. You can handle the <code><a href="events_and_actions.html#on-receive-message">on_receive_message</a></code> event and check for the <code>grown_resource</code> or <code>dropped_resource</code> messages, if you need to know when a content object is grown or dropped.</p>
 
     <p>Some <a href="script.html#vars">script variables</a> control special behavior, like the pile's starting amount. To know which ones exist, you can go to the area editor, select a pile, and read the tooltip of each variable.</p>
 

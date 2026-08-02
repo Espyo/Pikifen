@@ -1159,8 +1159,9 @@ void Area::getTotalTreasureInfo(size_t* outAmount, size_t* outPoints) const {
             
         } case MOB_CATEGORY_PILES: {
             PileType* pilType = (PileType*) mPtr->type;
+            if(!pilType->contentsResource) continue;
             if(
-                pilType->contents->deliveryResult !=
+                pilType->contentsResource->deliveryResult !=
                 RESOURCE_DELIVERY_RESULT_ADD_TREASURE_POINTS
             ) {
                 continue;
@@ -1171,7 +1172,7 @@ void Area::getTotalTreasureInfo(size_t* outAmount, size_t* outPoints) const {
             amountInPile =
                 std::clamp(amountInPile, (size_t) 0, pilType->maxAmount);
             amount += amountInPile;
-            points += amountInPile * pilType->contents->pointAmount;
+            points += amountInPile * pilType->contentsResource->pointAmount;
             break;
             
         } case MOB_CATEGORY_RESOURCES: {

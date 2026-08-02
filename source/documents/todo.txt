@@ -5,6 +5,9 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
+    Hidden objects on water still cause ripples (thanks Helodity)
+    Objects on water only spawn ripples when they change state at least once (thanks Helodity)
+    Picking up a playing card isn't making it stand up smoothly
 
     --- 1.2.0 ---
     Pikmin sorted in the group should also be sorted so that flowers are at the front
@@ -544,6 +547,7 @@ Small tasks (for when I'm feeling lazy)
         Prettier switch cases -- contiguous cases should still have the opening and closing braces for consistency, and the break;s of each case should be outside their braces
         Organize named enums better. Maybe using some smart macros. Some use EnumNameDatabase, some use readEnumProp, some do things their own way by themselves
             Largely fixed in Feb 06, but ideally there'd be a function or macro or something for custom enums, like those needed when iterating through a mob type's sounds to match string names, or the custom inactive logic property enum in MobType::loadFromDataNode. Basically, search the project for '== "' and see what could be improved
+    Add GDB pretty printers, mostly for mobs
     
     
 Misc things (so I don't forget)
@@ -870,6 +874,7 @@ Misc things (so I don't forget)
     Change some things to an entity component system
         Bouncers, interactables, scales, and more could just be normal mobs but with the corresponding components
         A defeated enemy becoming a carriable corpse, as well as any mob becoming carriable, could also be a component
+        Glow Pellets needed a pellet component and a pile resource component
         Any mob should be able to receive a carried mob
         Search for any places that compare "category->id" with something else, as those maybe should not exist
         Mobs could specify their drawing method from an enum. This way, something like an Onion could be drawn the standard mob way, or with some logic that turns all magic pink pixels to the color of the Onion. Same with Candypop Buds, pellets, and so on
