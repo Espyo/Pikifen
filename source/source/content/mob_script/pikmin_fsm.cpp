@@ -21,6 +21,7 @@
 #include "../mob/drop.hpp"
 #include "../mob/group_task.hpp"
 #include "../mob/pikmin.hpp"
+#include "../mob/pile.hpp"
 #include "../mob/tool.hpp"
 #include "../mob/track.hpp"
 #include "../other/hazard.hpp"
@@ -3014,10 +3015,22 @@ void PikminFsm::finishCarrying(ScriptVM* scriptVM, void* info1, void* info2) {
         pikPtr->carryingMob != nullptr, scriptVM->fsm.getStateHistoryStr()
     );
     
-    if(pikPtr->carryingMob->carryInfo->mustReturn) {
+    Mob* returnMob =
+        game.states.gameplay->getMobById(
+            pikPtr->carryingMob->carryInfo->returnPointMobId
+        );
+    if(returnMob->type->category->id == MOB_CATEGORY_PILES) {
+        Pile* returnPile = (Pile*) returnMob;
+        if(returnPile->amount == 0) {
+            returnMob = nullptr;
+        }
+    }
+    
+    if(returnMob) {
         //The Pikmin should return somewhere (like a pile).
         scriptVM->fsm.setState(
-            PIKMIN_STATE_RETURNING, (void*) pikPtr->carryingMob
+            PIKMIN_STATE_RETURNING,
+            (void*) pikPtr->carryingMob, (void*) returnMob
         );
         
     } else {
@@ -4485,20 +4498,22 @@ void PikminFsm::startPickingUp(ScriptVM* scriptVM, void* info1, void* info2) {
  *
  * @param scriptVM The script VM responsible.
  * @param info1 Pointer to the mob that used to be carried.
- * @param info2 Unused.
+ * @param info2 Pointer to the mob to return to.
  */
 void PikminFsm::startReturning(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     Mob* carriedMob = (Mob*) info1;
+    Mob* returnMob = (Mob*) info2;
     
-    engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
+    engineAssert(carriedMob != nullptr, scriptVM->fsm.getStateHistoryStr());
+    engineAssert(returnMob != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     if(pikPtr->pikType->canFly) {
         enableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
     PathFollowSettings settings;
-    settings.targetPoint = carriedMob->carryInfo->returnPoint;
+    settings.targetPoint = returnMob->center;
     settings.finalTargetDistance = carriedMob->carryInfo->returnDist;
     
     if(carriedMob->carryInfo->destination == CARRY_DESTINATION_LINKED_MOB) {

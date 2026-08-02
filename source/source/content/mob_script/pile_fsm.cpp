@@ -149,8 +149,7 @@ void PileFsm::beAttacked(ScriptVM* scriptVM, void* info1, void* info2) {
         }
         
         if(newMob->carryInfo) {
-            newMob->carryInfo->mustReturn = true;
-            newMob->carryInfo->returnPoint = pilPtr->center;
+            newMob->carryInfo->returnPointMobId = pilPtr->id;
             newMob->carryInfo->returnDist =
                 pilPtr->radius +
                 game.config.pikmin.standardRadius +

@@ -109,14 +109,11 @@ struct CarryInfo {
     //True if a destination does exist, false otherwise.
     bool destinationExists = false;
     
-    //Is the Pikmin meant to return somewhere after carrying?
-    bool mustReturn = false;
-    
     //Does a new target need to be calculated?
     bool mustRecalculate = false;
     
-    //Location to return to once they finish carrying.
-    Point returnPoint;
+    //ID of the mob to return to once it finishes carrying. 0 for none.
+    size_t returnPointMobId = 0;
     
     //Distance from the return point to stop at.
     float returnDist = 0.0f;
