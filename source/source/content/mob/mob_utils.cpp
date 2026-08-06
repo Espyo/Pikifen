@@ -674,6 +674,7 @@ void Group::sort(SubgroupType* leadingType) {
     }
     
     SubgroupType* curType = leadingType;
+    MATURITY curMaturity = MATURITY_FLOWER;
     size_t curSpot = 0;
     
     while(curSpot != spots.size()) {
@@ -684,6 +685,9 @@ void Group::sort(SubgroupType* leadingType) {
         Distance closestDist;
         forIdx(m, members) {
             Mob* mPtr = members[m];
+            if(mPtr->type->category->id == MOB_CATEGORY_PIKMIN) {
+                if(((Pikmin*) mPtr)->maturity != curMaturity) continue;
+            }
             if(mPtr->subgroupTypePtr != curType) continue;
             if(mPtr->groupSpotIdx != INVALID) continue;
             
@@ -697,10 +701,15 @@ void Group::sort(SubgroupType* leadingType) {
         }
         
         if(!closestMember) {
-            //There are no more members of the current type left!
-            //Next type.
-            curType =
-                game.states.gameplay->subgroupTypes.getNextType(curType);
+            //There are no more members of the current maturity or type left.
+            //Try the next maturity or type.
+            if(curMaturity == MATURITY_LEAF) {
+                curMaturity = MATURITY_FLOWER;
+                curType =
+                    game.states.gameplay->subgroupTypes.getNextType(curType);
+            } else {
+                curMaturity = (MATURITY) (((int) curMaturity) - 1);
+            }
         } else {
             spots[curSpot].mobPtr = closestMember;
             closestMember->groupSpotIdx = curSpot;

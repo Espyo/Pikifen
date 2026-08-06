@@ -9,7 +9,6 @@ Next tasks (roughly sorted most important first)
     Objects on water only spawn ripples when they change state at least once (thanks Helodity)
 
     --- 1.2.0 ---
-    Pikmin sorted in the group should also be sorted so that flowers are at the front
             
     --- 1.3.0 ---
     Create an area that's good for people to pick up and play
