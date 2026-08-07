@@ -5,7 +5,6 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- To fix ---
-    Hidden objects on water still cause ripples (thanks Helodity)
     Objects on water only spawn ripples when they change state at least once (thanks Helodity)
 
     --- 1.2.0 ---
@@ -67,6 +66,7 @@ Next tasks (roughly sorted most important first)
         Printing something to the console should receive an argument that specifies whether that gets shown in the "console preview" and added to the console's output for later viewing (errors, script prints) or if it is just shown in the preview (mob inspector, area inspector)
         Move somewhere the logic that is common between this system and the existing script action parsing/running system
         Maybe the button-based maker tool activations could be made into commands sent to the console, and the player could add custom binds so they could customize calling the maker tools to be however they want
+    GUI items and GUI manager need to be split into a generic usage library, where the Pikifen variants inherit from them
     New Pikmin maker tool should probably spawn them in Pikmin order, not alphabetical
     The camera (at least for editors) should control where it wants to go based on the specified rectangle corners. Then, every frame, it interpolates between the currently-visible corners and the intended corners and change the X, Y, and zoom to match. This should allow smoothly zooming in and out in editors while keeping the point under the mouse fixed
     Controls should support multiple players, including a "none" player for things like maker tools, screenshot, etc.
@@ -219,8 +219,8 @@ Next tasks (roughly sorted most important first)
             Have some sort of manager that determines what the rolled item should be. It probably try to avoid giving the same item twice in a row, and should try to benefit players who are behind
             The cherries should probably have some outline (maybe with a shader), so the players can tell they're special and not your average collectible
         End conditions
-            Pikmin extinction
-                When a team loses all their Pikmin, they finish with a loss
+            Pikmin losses
+                When a team loses a certain amount of Pikmin, or when they get an extinction, they finish with a loss
                 Compatibility data: None; all areas are compatible
             Leader KO
                 When a team loses some or all leaders, they finish with a loss

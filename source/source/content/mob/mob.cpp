@@ -4569,6 +4569,14 @@ void Mob::tickMiscLogic(float deltaT) {
     ) {
         deliveryInfo->animTimeRatioLeft = scriptVM.timer.getRatioLeft();
     }
+
+    //Wave ring particles.
+    forIdx(p, particleGenerators) {
+        ParticleGenerator* pPtr = &particleGenerators[p];
+        if(pPtr->id == MOB_PARTICLE_GENERATOR_ID_WAVE_RING) {
+            pPtr->canEmit = isGenerallyVisible();
+        }
+    }
 }
 
 
