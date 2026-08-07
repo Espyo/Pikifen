@@ -546,7 +546,7 @@ Small tasks (for when I'm feeling lazy)
         Prettier switch cases -- contiguous cases should still have the opening and closing braces for consistency, and the break;s of each case should be outside their braces
         Organize named enums better. Maybe using some smart macros. Some use EnumNameDatabase, some use readEnumProp, some do things their own way by themselves
             Largely fixed in Feb 06, but ideally there'd be a function or macro or something for custom enums, like those needed when iterating through a mob type's sounds to match string names, or the custom inactive logic property enum in MobType::loadFromDataNode. Basically, search the project for '== "' and see what could be improved
-    Add GDB pretty printers, mostly for mobs
+    Add GDB pretty printers for things other than mobs?
     
     
 Misc things (so I don't forget)

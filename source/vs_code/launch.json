@@ -20,6 +20,11 @@
                     "description": "Enable GDB pretty-printing.",
                     "text": "-enable-pretty-printing",
                     "ignoreFailures": true
+                },
+                {
+                    "description": "Enable pretty-printing of the Mob class.",
+                    "text": "source ${workspaceFolder}/source/gnu_make/gdb/mob_pretty_printer.py",
+                    "ignoreFailures": true
                 }
             ],
             "preLaunchTask": "Build Pikifen - Debug"
