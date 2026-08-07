@@ -3685,10 +3685,12 @@ Mob* Mob::spawn(const MobType::SpawnInfo* info, MobType* typePtr) {
             newXY,
             typePtr,
             newAngle,
-            info->varsStr
+            info->varsStr,
+            nullptr, 
+            INVALID, 
+            newZ
         );
         
-    newMob->bottomZ = newZ;
     
     if(typePtr->category->id == MOB_CATEGORY_TREASURES) {
         //This way, treasures that fall into the abyss respawn at the
