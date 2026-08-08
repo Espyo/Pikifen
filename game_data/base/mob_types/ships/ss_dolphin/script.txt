@@ -1,0 +1,22 @@
+init {
+    set_var green_light_tick false
+}
+
+script {
+    idling {
+        on_enter {
+            set_timer 0.01
+        }
+        on_timer {
+            start_particles dolphin_blue_light 40 -51 250
+            start_particles dolphin_blue_light 40 51 250
+            if $green_light_tick = true
+                start_particles dolphin_green_light 0 0 250
+                set_var green_light_tick false
+            else
+                set_var green_light_tick true
+            end_if
+            set_timer 0.75
+        }
+    }
+}

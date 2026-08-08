@@ -1,0 +1,32 @@
+name = S.S. Dolphin
+description = Olimar's original ship. He prefers it over the Hocotate ship.
+
+can_heal = true
+control_point_offset = 140 0
+control_point_radius = 45
+height = 200
+pushable = false
+pushes = true
+pushes_softly = true
+radius = 70
+receptacle_offset = 70 0
+
+sounds {
+    beam {
+        sound = effects/beam
+        volume = 30
+        speed = 95
+        speed_deviation = 5
+        loop = true
+    }
+    reception {
+        sound = effects/poof
+        volume = 40
+        speed = 95
+        speed_deviation = 15
+    }
+}
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.2.0
