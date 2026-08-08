@@ -768,7 +768,9 @@ void Leader::drawMob() {
             break;
         }
     }
-    antennaPG->canEmit = false;
+    if(antennaPG) {
+        antennaPG->canEmit = false;
+    }
     
     if(curSPtr->topVisible && leaType->bmpLight && isGenerallyVisible()) {
         Point lightCoords;
@@ -805,17 +807,19 @@ void Leader::drawMob() {
         
         drawBitmapWithEffects(lightBmp, lightEff);
         
-        //This is the best place to position the light particles, so do that.
-        antennaPG->baseParticle.center = lightEff.tf.trans;
-        antennaPG->baseParticle.bmpAngle = lightEff.tf.rot;
-        antennaPG->baseParticle.z = bottomZ + height + 1.0f;
-        adjustKeyframeInterpolatorValues<float>(
-            antennaPG->baseParticle.size,
-        [ = ] (float s) {
-            return std::max(lightSize.x, lightSize.y);
+        if(antennaPG) {
+            //This is the best place to position the light particles, so do that.
+            antennaPG->baseParticle.center = lightEff.tf.trans;
+            antennaPG->baseParticle.bmpAngle = lightEff.tf.rot;
+            antennaPG->baseParticle.z = bottomZ + height + 1.0f;
+            adjustKeyframeInterpolatorValues<float>(
+                antennaPG->baseParticle.size,
+            [ = ] (float s) {
+                return std::max(lightSize.x, lightSize.y);
+            }
+            );
+            antennaPG->canEmit = true;
         }
-        );
-        antennaPG->canEmit = true;
     }
     
     //Invulnerability sparks.
