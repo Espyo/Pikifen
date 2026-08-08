@@ -55,6 +55,9 @@ public:
     //Can a leader heal at this ship?
     bool canHeal = false;
     
+    //Whether it can turn see-through.
+    bool canTurnSeeThrough = false;
+    
     //The ship's control point is offset this much from the mob's center.
     Point controlPointOffset;
     

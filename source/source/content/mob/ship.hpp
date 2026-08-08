@@ -49,6 +49,9 @@ public:
     //How long each beam ring has existed for.
     vector<float> beamRings;
     
+    //The ship's alpha [0 - 1].
+    float seeThrough = 1.0f;
+    
     //How many objects are currently being beamed?
     size_t mobsBeingBeamed = 0;
     

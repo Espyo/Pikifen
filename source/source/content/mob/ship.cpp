@@ -200,7 +200,27 @@ void Ship::drawMob() {
         );
     }
     
-    Mob::drawMob();
+    Sprite* curSPtr;
+    Sprite* nextSPtr;
+    float interpolationFactor;
+    getSpriteData(&curSPtr, &nextSPtr, &interpolationFactor);
+    if(!curSPtr) return;
+    
+    BitmapEffect eff;
+    getSpriteBitmapEffects(
+        curSPtr, nextSPtr, interpolationFactor,
+        &eff,
+        SPRITE_BMP_EFFECT_FLAG_STANDARD |
+        SPRITE_BMP_EFFECT_FLAG_STATUS |
+        SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS |
+        SPRITE_BMP_EFFECT_FLAG_HEIGHT |
+        SPRITE_BMP_EFFECT_DELIVERY |
+        (type->useDamageSquashAndStretch ? SPRITE_BMP_EFFECT_DAMAGE : 0)
+    );
+    
+    eff.tintColor.a *= seeThrough;
+    
+    drawBitmapWithEffects(curSPtr->bitmap, eff);
 }
 
 
@@ -273,4 +293,44 @@ void Ship::tickClassSpecifics(float deltaT) {
         }
     }
     
+    //See-through effect.
+    if(shiType->canTurnSeeThrough) {
+        float finalAlpha = 1.0f;
+        
+        forIdx(p, game.states.gameplay->players) {
+            Player& player = game.states.gameplay->players[p];
+            if(!player.leaderPtr) continue;
+            if(
+                bBoxCheck(
+                    player.leaderPtr->center, center,
+                    player.leaderPtr->radius + radius
+                )
+            ) {
+                finalAlpha = ONION::SEE_THROUGH_ALPHA;
+            }
+            
+            if(
+                bBoxCheck(
+                    player.leaderCursorWorld, center,
+                    player.leaderPtr->radius + radius
+                )
+            ) {
+                finalAlpha = ONION::SEE_THROUGH_ALPHA;
+            }
+        }
+        
+        if(seeThrough != finalAlpha) {
+            if(finalAlpha < seeThrough) {
+                seeThrough =
+                    std::max(
+                        finalAlpha, seeThrough - ONION::FADE_SPEED * deltaT
+                    );
+            } else {
+                seeThrough =
+                    std::min(
+                        finalAlpha, seeThrough + ONION::FADE_SPEED * deltaT
+                    );
+            }
+        }
+    }
 }
