@@ -3019,7 +3019,7 @@ void PikminFsm::finishCarrying(ScriptVM* scriptVM, void* info1, void* info2) {
         game.states.gameplay->getMobById(
             pikPtr->carryingMob->carryInfo->returnPointMobId
         );
-    if(returnMob->type->category->id == MOB_CATEGORY_PILES) {
+    if(returnMob && returnMob->type->category->id == MOB_CATEGORY_PILES) {
         Pile* returnPile = (Pile*) returnMob;
         if(returnPile->amount == 0) {
             returnMob = nullptr;

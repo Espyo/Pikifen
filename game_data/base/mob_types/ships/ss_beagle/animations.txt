@@ -1,0 +1,36 @@
+name=S.S. Beagle animations
+description=Animations for the S.S. Beagle.
+maker=Espyo
+version=1.0.0
+engine_version=1.2.0
+animations{
+	idling{
+		frames{
+			idling_01{
+				duration=0.8000
+				interpolate=true
+			}
+			idling_02{
+				duration=0.8000
+				interpolate=true
+			}
+		}
+	}
+}
+sprites{
+	idling_01{
+		file=other_mobs/beagle
+		file_pos=0.0000 0.0000
+		file_size=152.0000 156.0000
+		offset=0.0000 1.0000
+		scale=0.5000 0.5000
+	}
+	idling_02{
+		file=other_mobs/beagle
+		file_pos=0.0000 0.0000
+		file_size=152.0000 156.0000
+		offset=0.0000 1.0000
+		scale=0.5200 0.5200
+	}
+}
+body_parts
