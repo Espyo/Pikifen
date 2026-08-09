@@ -582,15 +582,13 @@ float noise(vec3 v) {
                                     dot(p2,x2), dot(p3,x3) ) );
 }
 
-float color(vec2 xy, float time_scale) { return noise(vec3(1.5*xy, time_scale * area_time)); }
+float color(vec2 xy, float time_scale) { return noise(vec3(xy, time_scale * area_time)); }
 
 float simplex_noise(vec2 xy, float noise_scale, vec2 step, float time_scale) {
     float x = 0;
-    x += 0.5 * color(xy * 2.0 * noise_scale - step, time_scale);
-    x += 0.25 * color(xy * 4.0 * noise_scale - 2.0 * step, time_scale);
-    x += 0.125 * color(xy * 8.0 * noise_scale - 4.0 * step, time_scale);
-    x += 0.0625 * color(xy * 16.0 * noise_scale - 6.0 * step, time_scale);
-    x += 0.03125 * color(xy * 32.0 * noise_scale - 8.0 * step, time_scale);
+    x += 0.5 * color(xy * 3.0 * noise_scale - step, time_scale);
+    x += 0.25 * color(xy * 6.0 * noise_scale - 2.0 * step, time_scale);
+    x += 0.125 * color(xy * 12.0 * noise_scale - 4.0 * step, time_scale);
     return x;
 }
 
@@ -611,7 +609,9 @@ void main() {
     //Calculate simplex noise effects.
     float raw_noise_value = simplex_noise(varying_texcoord, noise_func_scale, noise_func_step, 0.02);
     raw_noise_value = simplex_noise(varying_texcoord + raw_noise_value, noise_func_scale, noise_func_step, 0.02);
-    vec4 final_pixel = texture(colormap, vec2((raw_noise_value + 0.2) * 2.5, 0));
+    
+    //I have no idea what the range for simplex_noise is, so instead use some magic numbers that look good, and loop the colormap.
+    vec4 final_pixel = texture(colormap, vec2(fract((raw_noise_value + 0.2) * 2.5), 0));
     final_pixel.a = alpha;
     final_pixel.r *= brightness;
     final_pixel.g *= brightness;
