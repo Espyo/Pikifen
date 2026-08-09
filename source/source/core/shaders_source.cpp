@@ -489,7 +489,8 @@ vec4 permute(vec4 i) {
 }
 
 //Output is [-1, 1]
-float psrdnoise(vec3 x, vec3 period, float alpha)
+//Alpha and period parameters cut from the source, as they are unused by the shader.
+float psrdnoise(vec3 x)
 {
   const mat3 M = mat3(0.0, 1.0, 1.0, 1.0, 0.0, 1.0,  1.0, 1.0, 0.0);
   const mat3 Mi = mat3(-0.5, 0.5, 0.5, 0.5,-0.5, 0.5, 0.5, 0.5,-0.5);
@@ -501,18 +502,6 @@ float psrdnoise(vec3 x, vec3 period, float alpha)
   vec3 i1 = i0 + o1, i2 = i0 + o2, i3 = i0 + vec3(1.0);
   vec3 v0 = Mi * i0, v1 = Mi * i1, v2 = Mi * i2, v3 = Mi * i3;
   vec3 x0 = x - v0, x1 = x - v1, x2 = x - v2, x3 = x - v3;
-  if(any(greaterThan(period, vec3(0.0)))) {
-    vec4 vx = vec4(v0.x, v1.x, v2.x, v3.x);
-    vec4 vy = vec4(v0.y, v1.y, v2.y, v3.y);
-    vec4 vz = vec4(v0.z, v1.z, v2.z, v3.z);
-	if(period.x > 0.0) vx = mod(vx, period.x);
-	if(period.y > 0.0) vy = mod(vy, period.y);
-	if(period.z > 0.0) vz = mod(vz, period.z);
-	i0 = floor(M * vec3(vx.x, vy.x, vz.x) + 0.5);
-	i1 = floor(M * vec3(vx.y, vy.y, vz.y) + 0.5);
-	i2 = floor(M * vec3(vx.z, vy.z, vz.z) + 0.5);
-	i3 = floor(M * vec3(vx.w, vy.w, vz.w) + 0.5);
-  }
   vec4 hash = permute( permute( permute( 
               vec4(i0.z, i1.z, i2.z, i3.z ))
             + vec4(i0.y, i1.y, i2.y, i3.y ))
@@ -522,18 +511,9 @@ float psrdnoise(vec3 x, vec3 period, float alpha)
   vec4 psi = hash * 0.108705628;
   vec4 Ct = cos(theta), St = sin(theta);
   vec4 sz_prime = sqrt( 1.0 - sz*sz );
-  vec4 gx, gy, gz;
-  if(alpha != 0.0) {
-    vec4 px = Ct * sz_prime, py = St * sz_prime, pz = sz;
-    vec4 Sp = sin(psi), Cp = cos(psi), Ctp = St*Sp - Ct*Cp;
-    vec4 qx = mix( Ctp*St, Sp, sz), qy = mix(-Ctp*Ct, Cp, sz);
-    vec4 qz = -(py*Cp + px*Sp);
-    vec4 Sa = vec4(sin(alpha)), Ca = vec4(cos(alpha));
-    gx = Ca*px + Sa*qx; gy = Ca*py + Sa*qy; gz = Ca*pz + Sa*qz;
-  }
-  else {
-    gx = Ct * sz_prime; gy = St * sz_prime; gz = sz;  
-  }
+  vec4 gx = Ct * sz_prime; 
+  vec4 gy = St * sz_prime; 
+  vec4 gz = sz;  
   vec3 g0 = vec3(gx.x, gy.x, gz.x), g1 = vec3(gx.y, gy.y, gz.y);
   vec3 g2 = vec3(gx.z, gy.z, gz.z), g3 = vec3(gx.w, gy.w, gz.w);
   vec4 w = 0.5-vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3));
@@ -543,7 +523,7 @@ float psrdnoise(vec3 x, vec3 period, float alpha)
   return 39.5 * n;
 }
 
-float color(vec2 xy, float time_scale) { return psrdnoise(vec3(xy, time_scale * area_time), vec3(0,0,0), alpha * 0.3); }
+float color(vec2 xy, float time_scale) { return psrdnoise(vec3(xy, time_scale * area_time)); }
 
 float simplex_noise(vec2 xy, float noise_scale, vec2 step, float time_scale) {
     float x = 0;
