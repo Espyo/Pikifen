@@ -13,6 +13,7 @@
 
 namespace SHADER_SOURCES {
 
+
 #pragma region Default vertex shader
 
 
