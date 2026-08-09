@@ -7714,8 +7714,8 @@ mobs{
 		vars=goal_number=6
 	}
 	ship{
-		type=hocotate_ship
-		p=-544.0000 -576.0000
+		type=ss_dolphin
+		p=-544.0000 -608.0000
 		angle=1.5708
 	}
 	pikmin{

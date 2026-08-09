@@ -5730,7 +5730,7 @@ mobs{
 		vars=text=Welcome!\nThis tutorial area will teach you the basics of how\nthings work on PNF-404. To test your abilities,\nyour mission here is to recover a missing treasure!\nPay attention, since you'll learn many valuable tips\nas you make your way to your objective!\n(At any point during gameplay, you can pause with\n\k pause \k, and open the help page to get reminded on the\nbasics, as well as to learn some tips.)\nWhy don't you start by going to the right (\k move_right \k)\nand over to that other sign?
 	}
 	ship{
-		type=hocotate_ship
+		type=ss_dolphin
 		p=128.0000 -288.0000
 		angle=1.5708
 	}
