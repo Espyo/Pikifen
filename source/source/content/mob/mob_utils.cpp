@@ -1167,18 +1167,22 @@ void PikminNestType::createColormap() {
     KeyframeInterpolator<ALLEGRO_COLOR> ki(pikTypes[0]->mainColor);
     float span = 1;
     if(pikTypes.size() > 1) {
-        span = 1.0f / (pikTypes.size() - 1);
+        span = 1.0f / pikTypes.size();
     }
     for(size_t i = 1; i < pikTypes.size(); i++) {
         ki.addNew(span * i, pikTypes[i]->mainColor, EASE_METHOD_IN_OUT);
     }
     
-    //Add a darker variant for single-type Onions.
     if(pikTypes.size() == 1) {
+        //Add a darker variant for single-type Onions.
         ALLEGRO_COLOR c =
             tintColor(pikTypes[0]->mainColor, mapGray(0.40f * 255));
-        ki.addNew(1.0, c, EASE_METHOD_IN_OUT);
-    }
+        ki.addNew(0.5, c, EASE_METHOD_IN_OUT);
+    } 
+    //Readd the first color at the end to allow smooth looping
+    ALLEGRO_COLOR c =
+        pikTypes[0]->mainColor;
+    ki.addNew(1.0, c, EASE_METHOD_IN_OUT);
     
     //Create the texture.
     ALLEGRO_BITMAP* oldTargetBmp = al_get_target_bitmap();
