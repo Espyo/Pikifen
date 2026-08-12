@@ -2502,6 +2502,49 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
             ImGui::CloseCurrentPopup();
         }
         
+        //Import menu.
+        if(
+            ImGui::BeginMenu(
+                "Import from another hitbox",
+                curSprite->hitboxes.size() >= 2
+            )
+        ) {
+        
+            forIdx(h, curSprite->hitboxes) {
+                if(h == curHitboxIdx) continue;
+                
+                //Hitbox selectable.
+                if(
+                    monoSelectable(curSprite->hitboxes[h].bodyPartName.c_str())
+                ) {
+                    string origBPName =
+                        curSprite->hitboxes[curHitboxIdx].bodyPartName;
+                    size_t origBPIdx =
+                        curSprite->hitboxes[curHitboxIdx].bodyPartIdx;
+                    BodyPart* origBPPTr =
+                        curSprite->hitboxes[curHitboxIdx].bodyPartPtr;
+                    curSprite->hitboxes[curHitboxIdx] = curSprite->hitboxes[h];
+                    curSprite->hitboxes[curHitboxIdx].bodyPartName =
+                        origBPName;
+                    curSprite->hitboxes[curHitboxIdx].bodyPartIdx =
+                        origBPIdx;
+                    curSprite->hitboxes[curHitboxIdx].bodyPartPtr =
+                        origBPPTr;
+                        
+                    changesMgr.markAsChanged();
+                    setStatus(
+                        "Imported data from the \"" +
+                        curSprite->hitboxes[h].bodyPartName + "\" hitbox."
+                    );
+                }
+                setTooltip(
+                    "Imports the data from another hitbox in this sprite."
+                );
+            }
+            
+            ImGui::EndMenu();
+        }
+        
         //Flip menu.
         if(ImGui::BeginMenu("Flip")) {
         
@@ -2514,7 +2557,8 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
                 setStatus("Flipped all hitboxes vertically.");
             }
             setTooltip(
-                "Flip all hitboxes vertically along the origin."
+                "Flip the Y coordinate of all hitboxes, "
+                "along the origin's west-east axis."
             );
             
             //Horizontally selectable.
@@ -2526,7 +2570,8 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
                 setStatus("Flipped all hitboxes horizontally.");
             }
             setTooltip(
-                "Flip all hitboxes horizontally along the origin."
+                "Flip the X coordinate of all hitboxes, "
+                "along the origin's north-south axis."
             );
             
             ImGui::EndMenu();
