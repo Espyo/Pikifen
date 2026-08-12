@@ -519,6 +519,8 @@ void Pikmin::latch(Mob* m, const Hitbox* h) {
     m->getHitboxHoldPoint(
         this, h, &hOffsetDist, &hOffsetAngle, &vOffsetDist
     );
+    hOffsetDist = std::clamp(hOffsetDist, 0.0f, 1.0f);
+    vOffsetDist = std::clamp(vOffsetDist, 0.0f, 1.0f);
     m->hold(
         this, HOLD_TYPE_LATCH, h->bodyPartIdx,
         hOffsetDist, hOffsetAngle, vOffsetDist, true,

@@ -1499,6 +1499,8 @@ void Mob::chomp(Mob* m, const Hitbox* hitboxInfo) {
     getHitboxHoldPoint(
         m, hitboxInfo, &hOffsetDist, &hOffsetAngle, &vOffsetDist
     );
+    hOffsetDist = std::clamp(hOffsetDist, 0.0f, 1.0f);
+    vOffsetDist = std::clamp(vOffsetDist, 0.0f, 1.0f);
     hold(
         m, HOLD_TYPE_PURPOSE_GENERAL, hitboxInfo->bodyPartIdx,
         hOffsetDist, hOffsetAngle, vOffsetDist,
@@ -4569,7 +4571,7 @@ void Mob::tickMiscLogic(float deltaT) {
     ) {
         deliveryInfo->animTimeRatioLeft = scriptVM.timer.getRatioLeft();
     }
-
+    
     //Wave ring particles.
     forIdx(p, particleGenerators) {
         ParticleGenerator* pPtr = &particleGenerators[p];

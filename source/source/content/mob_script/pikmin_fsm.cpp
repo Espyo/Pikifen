@@ -3775,6 +3775,8 @@ void PikminFsm::landOnMobWhileHolding(
                 tooPtr, info->h2,
                 &hOffsetDist, &hOffsetAngle, &vOffsetDist
             );
+            hOffsetDist = std::clamp(hOffsetDist, 0.0f, 1.0f);
+            vOffsetDist = std::clamp(vOffsetDist, 0.0f, 1.0f);
             m2Ptr->hold(
                 tooPtr, HOLD_TYPE_LATCH, info->h2->bodyPartIdx,
                 hOffsetDist, hOffsetAngle, vOffsetDist,
