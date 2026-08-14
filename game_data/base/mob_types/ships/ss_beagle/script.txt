@@ -1,0 +1,4 @@
+ready {
+    set_gravity 0
+    teleport_to_relative 0 0 150
+}

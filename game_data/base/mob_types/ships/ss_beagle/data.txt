@@ -5,9 +5,9 @@ can_heal = true
 can_turn_see_through = true
 control_point_offset = 0 0
 control_point_radius = 60
-height = 200
+height = 90
 pushable = false
-pushes = false
+pushes = true
 radius = 38
 receptacle_offset = 0 0
 
