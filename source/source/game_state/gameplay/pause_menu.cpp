@@ -871,6 +871,16 @@ void PauseMenu::drawRadar(
         size.y
     );
     
+    RectCorners limits(center - size / 2.0f, center + size / 2.0f);
+    al_transform_coordinates(
+        &radarView.windowToWorldTransform,
+        &limits.tl.x, &limits.tl.y
+    );
+    al_transform_coordinates(
+        &radarView.windowToWorldTransform,
+        &limits.br.x, &limits.br.y
+    );
+    
     //Background fill.
     al_clear_to_color(game.config.aestheticRadar.backgroundColor);
     
@@ -1022,36 +1032,81 @@ void PauseMenu::drawRadar(
     }
     
     //Leader icons.
+    vector<size_t> orderedLeaderIdxs;
+    size_t radarSelectedLeaderIdx = INVALID;
     forIdx(l, game.states.gameplay->mobs.leaders) {
-        Leader* lPtr = game.states.gameplay->mobs.leaders[l];
+        //Keep the same order as normal, but place the currently
+        //selected leader last, so it's drawn above others.
+        //Useful in cases where multiple leaders are on the edges of the radar.
+        if(game.states.gameplay->mobs.leaders[l] == radarSelectedLeader) {
+            radarSelectedLeaderIdx = l;
+            continue;
+        }
+        orderedLeaderIdxs.push_back(l);
+    }
+    if(radarSelectedLeaderIdx != INVALID) {
+        orderedLeaderIdxs.push_back(radarSelectedLeaderIdx);
+    }
+    
+    forIdx(l, orderedLeaderIdxs) {
+        const float iconRadius = 20.0f / radarView.cam.zoom;
+        const float bubbleRadius = 24.0f / radarView.cam.zoom;
+        const float arrowRingRadius = 24.5f / radarView.cam.zoom;
+        
+        Leader* lPtr = game.states.gameplay->mobs.leaders[orderedLeaderIdxs[l]];
+        bool offCam = false;
+        Point iconPos = lPtr->center;
+        if(iconPos.x < limits.tl.x + bubbleRadius) {
+            offCam = true;
+            iconPos.x = limits.tl.x + bubbleRadius;
+        }
+        if(iconPos.x > limits.br.x - bubbleRadius) {
+            offCam = true;
+            iconPos.x = limits.br.x - bubbleRadius;
+        }
+        if(iconPos.y < limits.tl.y + bubbleRadius) {
+            offCam = true;
+            iconPos.y = limits.tl.y + bubbleRadius;
+        }
+        if(iconPos.y > limits.br.y - bubbleRadius) {
+            offCam = true;
+            iconPos.y = limits.br.y - bubbleRadius;
+        }
         
         drawBitmap(
-            lPtr->leaType->bmpIcon, lPtr->center,
-            Point(40.0f / radarView.cam.zoom)
+            lPtr->leaType->bmpIcon, iconPos,
+            Point(iconRadius * 2.0f) * (offCam ? 0.6f : 1.0f),
+            0.0f, multAlpha(COLOR_WHITE, offCam ? 0.8f : 1.0f)
         );
         drawBitmap(
-            bmpRadarLeaderBubble, lPtr->center,
-            Point(48.0f / radarView.cam.zoom),
+            bmpRadarLeaderBubble, iconPos,
+            Point(bubbleRadius * 2.0f) * (offCam ? 0.6f : 1.0f),
             0.0f,
-            radarSelectedLeader == lPtr ?
-            SEL_LEADER_COLOR :
-            INACTIVE_LEADER_COLOR
+            multAlpha(
+                radarSelectedLeader == lPtr ?
+                SEL_LEADER_COLOR :
+                INACTIVE_LEADER_COLOR,
+                offCam ? 0.8f : 1.0f
+            )
         );
-        drawFilledEquilateralTriangle(
-            lPtr->center +
-            rotatePoint(Point(24.5f / radarView.cam.zoom, 0.0f), lPtr->angle),
-            6.0f / radarView.cam.zoom,
-            lPtr->angle,
-            radarSelectedLeader == lPtr ?
-            SEL_LEADER_COLOR :
-            lPtr->health > 0 ?
-            INACTIVE_LEADER_COLOR :
-            KO_LEADER_COLOR
-        );
+        
+        if(!offCam) {
+            drawFilledEquilateralTriangle(
+                iconPos +
+                rotatePoint(Point(arrowRingRadius, 0.0f), lPtr->angle),
+                6.0f / radarView.cam.zoom,
+                lPtr->angle,
+                radarSelectedLeader == lPtr ?
+                SEL_LEADER_COLOR :
+                lPtr->health > 0 ?
+                INACTIVE_LEADER_COLOR :
+                KO_LEADER_COLOR
+            );
+        }
         if(lPtr->health <= 0) {
             drawBitmap(
-                bmpRadarLeaderX, lPtr->center,
-                Point(36.0f / radarView.cam.zoom)
+                bmpRadarLeaderX, iconPos,
+                Point(bubbleRadius * 1.5f)
             );
         }
     }
