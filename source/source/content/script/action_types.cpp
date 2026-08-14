@@ -1552,6 +1552,7 @@ void ScriptActionRunners::holdFocus(ScriptActionInstRunData& data) {
     //Get the arguments.
     const string& bodyPartArg = data.args[0];
     const string& aboveArg = data.args[1];
+    const string& rotationArg = data.args[2];
     
     //Main logic.
     if(!data.scriptVM->getRunnerScriptVM()->focusedMob) {
@@ -1567,12 +1568,24 @@ void ScriptActionRunners::holdFocus(ScriptActionInstRunData& data) {
         );
         return;
     }
+
+    bool rotationFound;
+    HOLD_ROTATION_METHOD rotationMethod =
+        enumGetValue(holdRotationMethodINames, rotationArg, &rotationFound);
+        
+    if(!rotationFound) {
+        ScriptActionUtils::reportActionError(
+            data,
+            "Unknown rotation method \"" + rotationArg + "\"!"
+        );
+        return;
+    }
     
     data.scriptVM->getRunnerMob()->hold(
         data.scriptVM->getRunnerScriptVM()->focusedMob,
         HOLD_TYPE_PURPOSE_GENERAL,
         partIdx, 0.0f, 0.0f, 0.5f, s2b(aboveArg),
-        HOLD_ROTATION_METHOD_COPY_HOLDER
+        rotationMethod
     );
 }
 

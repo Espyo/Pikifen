@@ -2570,6 +2570,7 @@ void initScriptActionTypes() {
     //Hold focused mob.
     queueParam("body part name", ptEnum);
     queueParam("hold above", ptBool, pfOpt, "false");
+    queueParam("rotation method", ptEnum, pfOpt, "copy_holder");
     commitAction(
         SCRIPT_ACTION_HOLD_FOCUS,
         "hold_focused_mob",

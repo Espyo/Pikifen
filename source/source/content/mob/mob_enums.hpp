@@ -221,6 +221,22 @@ enum HOLD_ROTATION_METHOD {
 };
 
 
+//Hold rotation method enum naming (internal names, for other uses only).
+buildEnumNames(holdRotationMethodINames, HOLD_ROTATION_METHOD)({
+    { HOLD_ROTATION_METHOD_NEVER, "never" },
+    { HOLD_ROTATION_METHOD_FACE_HOLDER, "face_holder" },
+    { HOLD_ROTATION_METHOD_COPY_HOLDER, "copy_holder" },
+});
+
+
+//Hold rotation method enum naming (internal names, for child-parent use only).
+buildEnumNames(holdRotationMethodParentINames, HOLD_ROTATION_METHOD)({
+    { HOLD_ROTATION_METHOD_NEVER, "never" },
+    { HOLD_ROTATION_METHOD_FACE_HOLDER, "face_parent" },
+    { HOLD_ROTATION_METHOD_COPY_HOLDER, "copy_parent" },
+});
+
+
 //Possible results for a horizontal movement operation.
 enum HORIZ_MOVE_RESULT {
 
@@ -234,14 +250,6 @@ enum HORIZ_MOVE_RESULT {
     HORIZ_MOVE_RESULT_FAIL,
     
 };
-
-
-//Hold rotation method enum naming (internal names, for child-parent use only).
-buildEnumNames(holdRotationMethodParentINames, HOLD_ROTATION_METHOD)({
-    { HOLD_ROTATION_METHOD_NEVER, "never" },
-    { HOLD_ROTATION_METHOD_FACE_HOLDER, "face_parent" },
-    { HOLD_ROTATION_METHOD_COPY_HOLDER, "copy_parent" },
-});
 
 
 //Flags that control how a mob works while inactive.

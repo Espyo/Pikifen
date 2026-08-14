@@ -1093,8 +1093,8 @@
       <tr id="hold-focused-mob">
         <th><code>hold_focused_mob</code></th>
         <td><dl>
-          <dt><code><b>hold_focused_mob</b> &lt;body_part_name&gt;</code></dt>
-          <dd>Makes the mob hold the focused mob in its grasp. The focused mob will follow wherever the specified body part is.</dd>
+          <dt><code><b>hold_focused_mob</b> &lt;body_part_name&gt; [&lt;hold_above&gt;] [&lt;rotation_method&gt;]</code></dt>
+          <dd>Makes the mob hold the focused mob in its grasp. The focused mob will follow wherever the specified body part is. If &lt;hold_above&gt; is <code>true</code> (default is false), the held object will be forcefully drawn above the holder object. &lt;rotation_method&gt; controls how the grabbed object rotates, and can be one of the following: <code>never</code> means it never rotates (besides the starting angle). <code>face_holder</code> means it always rotates to face the center of the holder object. <code>copy_holder</code> means it's always the same angle as the holder object.</dd>
         </dl></td>
       </tr>
       <tr id="order-release">
