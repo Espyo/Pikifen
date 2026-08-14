@@ -148,6 +148,7 @@ vector<std::pair<int, string> > getWeatherTable(DataNode* node);
 void guiCreateBackInputIcon(
     GuiManager* gui, const string& itemName = "back_input"
 );
+bool isPlayerWritingText();
 bool monoCombo(
     const string& label, int* currentItem, const vector<string>& items,
     int popupMaxHeightInItems = -1

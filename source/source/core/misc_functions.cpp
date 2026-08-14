@@ -804,6 +804,19 @@ void guiCreateBackInputIcon(GuiManager* gui, const string& itemName) {
 
 
 /**
+ * @brief Returns whether the player currently wants to write some sort
+ * of text in some sort of text input.
+ *
+ * @return Whether the player is writing text.
+ */
+bool isPlayerWritingText() {
+    if(ImGui::GetIO().WantTextInput) return true;
+    if(game.modal.isActive() && game.modal.useTextInput) return true;
+    return false;
+}
+
+
+/**
  * @brief Processes a Dear ImGui button widget, but sets the button font
  * to be monospaced.
  *

@@ -842,6 +842,7 @@ bool MakerTools::handleGeneralPlayerAction(const Inpution::Action& action) {
         ).category ==
         PLAYER_ACTION_CAT_GENERAL_MAKER_TOOLS;
     if(!isGeneralToolAction) return false;
+    if(isPlayerWritingText()) return false;
     if(!checkMakerToolsAllowed(action.value)) return true;
     
     switch(action.actionTypeId) {
