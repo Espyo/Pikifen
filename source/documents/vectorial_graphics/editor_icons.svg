@@ -102,8 +102,8 @@
      inkscape:cx="599.5"
      inkscape:cy="11.772659"
      inkscape:document-units="px"
-     inkscape:current-layer="layer2"
-     showgrid="true"
+     inkscape:current-layer="layer1"
+     showgrid="false"
      inkscape:snap-bbox="true"
      inkscape:bbox-paths="true"
      inkscape:bbox-nodes="true"
@@ -140,7 +140,7 @@
        spacingy="1"
        spacingx="1"
        units="px"
-       visible="true" />
+       visible="false" />
   </sodipodi:namedview>
   <metadata
      id="metadata7">
@@ -564,6 +564,19 @@
        xlink:href="#use988"
        y="0"
        x="0" />
+    <g
+       id="use627"
+       inkscape:label="olimar_top"
+       transform="translate(841.00001,1264.5194)"
+       inkscape:transform-center-x="-4.999993"
+       inkscape:transform-center-y="5e-06"
+       style="display:inline">
+      <g
+         id="use6"
+         style="display:inline"
+         transform="matrix(1,0,0,-1,-9.03963,-67.97653)"
+         inkscape:label="olimar_ear_top" />
+    </g>
   </g>
   <g
      inkscape:label="icons"
@@ -653,24 +666,6 @@
        id="path4445"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc" />
-    <path
-       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-       d="m 106,1110.5194 h 12"
-       id="path4474"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc" />
-    <circle
-       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-       id="path4481"
-       cx="116.99998"
-       cy="1110.5194"
-       r="5.0000219" />
-    <circle
-       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-       id="path4481-9"
-       cx="107"
-       cy="1110.5194"
-       r="5.0000219" />
     <path
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        d="m 133,1121.5194 h 15 v -16.0009 l -15,9e-4 z m 6.83594,-15.452 c 0.2543,0.01 0.50515,0.032 0.75195,0.072 1.97446,0.3187 3.6969,1.4627 4.63477,1.9317 1.605,0.8025 2.24039,2.332 1.97461,3.8261 -0.26579,1.4942 -1.32472,2.9737 -2.91993,4.0371 -2.41002,1.6067 -3.55215,2.618 -4.7832,3.6437 -0.61553,0.5129 -1.23096,0.9178 -1.96485,1.1036 -0.73388,0.1857 -1.55455,0.1376 -2.52929,-0.1622 -0.54064,-0.1662 -0.97312,-0.3645 -1.26758,-0.7246 -0.29446,-0.3601 -0.3305,-0.9071 -0.12696,-1.3437 0.27607,-0.5922 0.72863,-0.6854 1.63477,-1.3449 -0.64473,-1.5772 -0.27954,-3.1008 0.20313,-4.4883 -0.18488,-0.1661 -0.3684,-0.3189 -0.54492,-0.5058 -0.31334,-0.3318 -0.59867,-0.7264 -0.69727,-1.2266 -0.0986,-0.5002 0.0206,-1.0648 0.375,-1.6308 1.31913,-2.107 2.9318,-2.9855 4.48828,-3.1582 0.25942,-0.029 0.51718,-0.037 0.77149,-0.029 z m -0.0391,0.9902 c -1.4808,-0.075 -2.97397,0.4918 -4.37305,2.7266 -0.0581,0.093 -0.0688,0.1552 -0.10547,0.2343 0.93084,0.021 1.90571,-0.3774 2.88086,-1.0117 0.8316,-0.5409 1.632,-1.2111 2.40039,-1.8437 -0.057,-0.011 -0.11276,-0.028 -0.16992,-0.037 -0.21076,-0.034 -0.42127,-0.058 -0.63281,-0.068 z m 1.97656,0.4394 c -0.89023,0.7135 -1.91147,1.6206 -3.0293,2.3477 -1.04951,0.6827 -2.20227,1.2126 -3.42187,1.1914 0.075,0.1253 0.17492,0.2533 0.30273,0.3887 0.49442,0.5235 1.33863,1.0262 1.80859,1.8457 0.29968,0.5225 0.67421,1.0824 0.79297,1.7422 0.001,0.01 6.8e-4,0.016 0.002,0.023 1.21555,-0.7399 2.33111,-1.1182 3.29882,-1.1855 1.10789,-0.077 2.04672,0.2858 2.60157,0.955 1.16617,-0.9028 1.90074,-2.0538 2.08398,-3.0839 0.20386,-1.1461 -0.16198,-2.1191 -1.43555,-2.7559 -0.77347,-0.3868 -1.83458,-1.0363 -3.0039,-1.4688 z m -5.52539,5.877 c -0.34662,1.0753 -0.52964,2.0892 -0.15821,3.1465 0.21114,-0.1391 0.39966,-0.2704 0.63672,-0.4199 h 0.006 0.006 c 0.274,-0.1741 0.40143,-0.3315 0.46289,-0.4628 0.0619,-0.1326 0.0735,-0.2591 0.041,-0.4395 -0.0649,-0.3607 -0.36276,-0.876 -0.67578,-1.4219 -0.073,-0.1273 -0.18585,-0.2587 -0.31836,-0.3945 z m 5.34961,1.4746 c -1.07708,0.075 -2.57177,0.6617 -4.28125,2.0586 h -0.002 c -0.0176,0.012 -0.0288,0.026 -0.0469,0.037 -1.76871,1.1152 -2.56507,1.5215 -2.75587,1.9308 -0.0955,0.205 -0.0804,0.195 -0.004,0.289 0.0765,0.094 0.33648,0.2644 0.78515,0.4024 0.85655,0.2634 1.46205,0.2821 1.99024,0.1484 0.52819,-0.1337 1.01065,-0.4344 1.57226,-0.9023 1.05639,-0.8802 2.22953,-1.854 4.46681,-3.4152 -0.3242,-0.376 -0.8761,-0.606 -1.72461,-0.5469 z"
@@ -1097,19 +1092,11 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc" />
     <circle
-       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
+       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        id="path1043"
        cx="912"
        cy="1110.5194"
-       r="9.9999695" />
-    <path
-       style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-       inkscape:transform-center-y="-0.534018"
-       d="m 911.9999,1102.3377 c 4.10753,0 2.32326,4.8702 2.32326,4.8702 0,0 3.91308,-3.3013 5.19517,0.7809 1.282,4.0821 -3.75926,3.791 -3.75926,3.791 0,0 4.08262,2.9513 0.88736,5.3528 -3.19499,2.4014 -4.64653,-2.5273 -4.64653,-2.5273 0,0 -1.49363,4.8971 -4.64671,2.5273 -3.15299,-2.3698 0.88745,-5.3528 0.88745,-5.3528 0,0 -5.04126,0.2911 -3.75917,-3.791 1.28208,-4.0822 5.19498,-0.7809 5.19498,-0.7809 0,0 -1.78418,-4.8702 2.32345,-4.8702 z"
-       id="path6911"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="zczczczczcz"
-       inkscape:transform-center-x="9.077217e-05" />
+       r="11.000017" />
     <path
        style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
        id="path4443-9"
@@ -1718,5 +1705,73 @@
        inkscape:transform-center-x="0.080291846"
        inkscape:transform-center-y="0.1058364"
        transform="rotate(-90,1187,1112.5194)" />
+    <path
+       id="path25"
+       style="color:#000000;font-variation-settings:normal;display:inline;overflow:visible;opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.605997;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
+       d="m 113.79451,1099.6023 c -5.02026,0 -9.08999,4.0697 -9.08996,9.09 0.007,0.5852 0.0707,1.1683 0.18982,1.7412 l 2.44731,-1.438 c -0.13079,-2.0138 0.49984,-4.9222 1.13599,-5.627 0.92929,-1.0296 2.35485,-1.5247 3.52233,-1.8491 0.81357,-0.2261 2.27945,0.5201 2.47493,0.8304 0.2203,0.3498 0.50256,1.1004 0.47494,1.3153 1.17839,-0.5576 2.23838,-0.6651 2.55945,-0.103 0.39632,0.6948 -0.10979,1.65 -2.2071,2.9068 2.38436,-1.1606 3.30833,-1.4193 3.70525,-0.6918 0.39688,0.7276 -0.2885,2.2315 -2.46521,3.4669 2.75828,-1.5739 3.41188,-1.3933 3.8186,-0.6631 0.40671,0.7302 -0.0861,1.3032 -2.52531,2.9888 2.05994,-1.4555 3.17553,-1.0891 3.44987,-0.6139 0.27436,0.4752 -0.25063,1.2593 -2.32865,2.4589 -2.07801,1.1998 -2.88079,1.6269 -4.50537,2.233 -0.859,0.3204 -2.04449,0.1208 -3.24349,-0.6037 l -1.84639,1.5583 c 1.35249,0.7658 2.87875,1.1721 4.43299,1.1799 5.02023,0 9.08993,-4.0697 9.08996,-9.0899 3e-5,-5.0203 -4.0697,-9.09 -9.08996,-9.09 z m -0.51239,4.909 c -0.53639,-0.6586 -1.16867,-0.4485 -0.85744,0.413 z"
+       sodipodi:nodetypes="scccssccccccscscccccssccc" />
+    <path
+       id="use141"
+       style="color:#000000;display:inline;overflow:visible;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:4.62005;stroke-linecap:round;paint-order:fill markers stroke"
+       inkscape:label="olimar_hand_2"
+       inkscape:transform-center-x="-0.36748334"
+       inkscape:transform-center-y="0.16764816"
+       d="M 104.89453,1110.4335 101,1112.8421 v 8.6773 c 4.55683,-1.8751 7.44071,-4.3842 8.36133,-4.918 -2.31991,-1.3031 -3.95237,-3.5573 -4.4668,-6.1679 z"
+       sodipodi:nodetypes="ccccc" />
+    <g
+       id="g26"
+       transform="matrix(0.55874983,0,0,0.55874983,402.71516,465.43187)">
+      <path
+         style="display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 913.5,1154.5194 c 3,0.5 5.2541,1.1271 8,2.5 -2.8333,-0.9056 -5.6667,-1.7337 -8.5,-2 v 0.5 h -8.5 c 0,0 -1.5,0 -1.5,-1 0,-1 1.5,-1 1.5,-1 h 8.5 v 0.5 c 2.8686,-0.2787 5.6898,-1.0792 8.5,-2 -2.5918,1.7032 -5,2 -8,2.5 z"
+         id="path4181"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccczccccc"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\White_Spectralid.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
+      <path
+         style="display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 924,1166.5194 c 0,2 -1,4 -4,4 -3,0 -7.5,-1.5 -10,-4 -2,-2.5 -1,-8 -0.5,-12 7.5,0 14.3313,7.0206 14.5,12 z"
+         id="path4173"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="csccc"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\White_Spectralid.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
+      <path
+         style="display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="m 909.5,1154.5194 c 0,0 -1,7 -1.5,8 -0.5,1 -2.5,3 -5.5581,3 -3.058,0 -3.4419,-3.25 -3.4419,-4.5 0,-1.25 2.6026,-6.603 10.5,-6.5 z"
+         id="path4175"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="czzzc"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\White_Spectralid.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path4173"
+         id="use4177"
+         transform="matrix(1,0,0,-1,0,2309.0388)"
+         width="100%"
+         height="100%"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\White_Spectralid.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
+         style="display:inline" />
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path4175"
+         id="use4179"
+         transform="matrix(1,0,0,-1,0,2309.0373)"
+         width="100%"
+         height="100%"
+         inkscape:export-filename="C:\Users\Andre\Dropbox\Programacao\C++\Pikmin_fangame_engine\Game_data\Graphics\White_Spectralid.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
+         style="display:inline" />
+    </g>
   </g>
 </svg>
