@@ -1,0 +1,25 @@
+name = Ice splatter
+description = A splatter of ice on the floor, created by a Freezecake.
+
+appears_in_area_editor = false
+can_hurt = player
+casts_shadow = false
+custom_category_name = Misc
+height = 8
+move_speed = 0
+pushable = false
+pushes = false
+radius = 95
+
+sounds {
+    ice {
+        sound = nature/wind_icy
+        volume = 10
+        speed_deviation = 10
+        loop = true
+    }
+}
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.2.0

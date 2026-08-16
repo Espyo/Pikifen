@@ -1,0 +1,88 @@
+name=Ice splatter animations
+description=Animations for an ice splatter.
+maker=Espyo
+version=1.0.0
+engine_version=1.2.0
+animations{
+	appearing{
+		loop_frame=1
+		frames{
+			small_safe{
+				duration=0.1500
+				interpolate=true
+			}
+			full_hazard{
+				duration=0.1000
+				interpolate=true
+			}
+		}
+	}
+	disappearing{
+		loop_frame=1
+		frames{
+			full_safe{
+				duration=1.5000
+				interpolate=true
+			}
+			small_safe{
+				duration=0.0100
+				interpolate=true
+			}
+		}
+	}
+}
+sprites{
+	full_hazard{
+		file=other_mobs/ice_splatter
+		file_pos=0.0000 0.0000
+		file_size=190.0000 190.0000
+		hitboxes{
+			hazard{
+				coords=0.0000 0.0000 0.0000
+				height=8.0000
+				radius=95.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=100
+			}
+		}
+	}
+	full_safe{
+		file=other_mobs/ice_splatter
+		file_pos=0.0000 0.0000
+		file_size=190.0000 190.0000
+		hitboxes{
+			hazard{
+				coords=0.0000 0.0000 0.0000
+				height=8.0000
+				radius=95.0000
+				type=2
+				value=2.0000
+				hazard=ice
+			}
+		}
+	}
+	small_safe{
+		file=other_mobs/ice_splatter
+		file_pos=0.0000 0.0000
+		file_size=190.0000 190.0000
+		scale=0.0100 0.0100
+		hitboxes{
+			hazard{
+				coords=0.0000 0.0000 0.0000
+				height=8.0000
+				radius=1.0000
+				type=1
+				value=2.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=100
+			}
+		}
+	}
+}
+body_parts{
+	hazard
+}

@@ -1,0 +1,239 @@
+first_state = idling
+death_state = dying
+states_ignoring_death = flipping_up; upright; slamming_down; landing
+
+init {
+    set_var top_side normal
+    set_var sound_id 0
+    set_near_reach search
+    set_far_reach search
+}
+
+script {
+    idling {
+        on_enter {
+            stop
+            get_random_float temp 0.5 1
+            set_timer $temp
+            stop_particles
+            if $top_side = normal
+                set_animation idling_n
+            else
+                start_particles freezecake_circle 0 0 70
+                set_animation idling_h
+            end_if
+        }
+        on_itch {
+            set_state flipping_up
+        }
+        on_timer {
+            set_state eyes_out
+        }
+        on_opponent_in_reach {
+            focus trigger
+            set_state turning
+        }
+    }
+
+    eyes_out {
+        on_enter {
+            stop
+            if $top_side = normal
+                set_animation eyes_out_n
+            else
+                set_animation eyes_out_h
+            end_if
+            set_near_reach search
+            get_random_float temp 0.5 3
+            set_timer $temp
+        }
+        on_timer {
+            set_state eyes_in
+        }
+        on_opponent_in_reach {
+            set_state eyes_in
+        }
+    }
+
+    eyes_in {
+        on_enter {
+            if $top_side = normal
+                set_animation eyes_in_n
+            else
+                set_animation eyes_in_h
+            end_if
+        }
+        on_animation_end {
+            set_state idling
+        }
+    }
+
+    turning {
+        on_enter {
+            if $top_side = normal
+                set_animation turning_n
+            else
+                set_animation turning_h
+            end_if
+            play_sound turning sound_id
+        }
+        on_leave {
+            stop_sound $sound_id
+        }
+        on_itch {
+            set_state flipping_up
+        }
+        on_tick {
+            get_mob_info focus_x focus x
+            get_mob_info focus_y focus y
+            get_mob_info self_x self x
+            get_mob_info self_y self y
+            get_mob_info self_a self angle
+
+            get_angle target_angle $self_x $self_y $focus_x $focus_y
+            if $top_side = hazard
+                calculate target_angle $target_angle + 180
+            end_if
+
+            get_angle_smallest_difference angle_diff $self_a $target_angle
+            if $angle_diff < 5
+                set_state flipping_up
+            else
+                turn_to_absolute $target_angle
+            end_if
+        }
+        on_focus_off_reach {
+            set_state idling
+        }
+    }
+
+    flipping_up {
+        on_enter {
+            stop
+            set_radius 66
+            if $top_side = normal
+                move_to_relative 9999 0
+                set_animation flipping_up_n
+            else
+                move_to_relative -9999 0
+                set_animation flipping_up_h
+            end_if
+            stop_particles
+            start_particles freezecake_rectangle -25 0 70
+            play_sound flipping_up sound_id
+        }
+        on_frame_signal {
+            get_event_info temp frame_signal
+            if $temp = 0
+                set_radius 56
+                stop_sound $sound_id
+            else_if $temp = 1
+                set_radius 38
+            end_if
+        }
+        on_leave {
+            set_radius 70
+            stop_sound $sound_id
+        }
+        on_animation_end {
+            set_state upright
+        }
+    }
+
+    upright {
+        on_enter {
+            stop
+            set_radius 20
+            set_animation upright
+        }
+        on_leave {
+            set_radius 70
+        }
+        on_animation_end {
+            set_state slamming_down
+        }
+    }
+
+    slamming_down {
+        on_enter {
+            if $top_side = normal
+                move_to_relative 9999 0
+                set_var top_side hazard
+                set_animation slamming_down_n
+            else
+                move_to_relative -9999 0
+                set_var top_side normal
+                set_animation slamming_down_h
+            end_if
+            set_radius 38
+            stop_particles
+            if $top_side = hazard
+                start_particles freezecake_circle 0 0 70
+            end_if
+            play_sound falling sound_id
+        }
+        on_frame_signal {
+            get_event_info temp frame_signal
+            if $temp = 0
+                set_radius 56
+            else_if $temp = 1
+                set_radius 66
+            end_if
+        }
+        on_leave {
+            set_radius 70
+            stop_sound $sound_id
+        }
+        on_animation_end {
+            set_state landing
+        }
+    }
+
+    landing {
+        on_enter {
+            stop
+            get_mob_info temp self health
+            if $top_side = normal
+                if $temp > 0
+                    spawn splatter
+                end_if
+            end_if
+            set_animation landing
+            play_sound landing
+        }
+        on_animation_end {
+            set_state recovering
+        }
+    }
+
+    recovering {
+        on_enter {
+            if $top_side = normal
+                set_animation recovering_n
+            else
+                set_animation recovering_h
+            end_if
+        }
+        on_animation_end {
+            set_state idling
+        }
+    }
+
+    dying {
+        on_enter {
+            stop
+            stop_particles
+            start_dying
+            if $top_side = normal
+                set_animation dying_n
+            else
+                set_animation dying_h
+            end_if
+            play_sound dying
+        }
+        on_animation_end {
+            finish_dying
+        }
+    }
+    
+}

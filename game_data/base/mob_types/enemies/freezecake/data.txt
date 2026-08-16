@@ -1,0 +1,71 @@
+name = Freezecake
+description = A disc-shaped creature. It's got an icy surface on one side, and can use either side to slam down on any unsuspecting Pikmin.
+
+acceleration = 9999
+can_free_move = true
+can_hunt = player; enemy
+can_hurt = player; enemy; fragile
+can_walk_on_others = true
+custom_category_name = Enemy, small and aggressive
+height = 64
+itch_damage = 40
+itch_time = 6
+max_carriers = 14
+max_health = 500
+move_speed = 80
+pikmin_seeds = 10
+points = 40
+pushable = true
+pushes = true
+radius = 70
+rotation_speed = 60
+target_type = enemy
+terrain_radius = 70
+territory_radius = 300
+weight = 7
+
+reaches {
+    search = 80 360
+}
+
+sounds {
+    falling {
+        sound = effects/falling
+        volume = 20
+        speed = 85
+        speed_deviation = 5
+    }
+    landing {
+        sound = misc/stomp_mid
+        speed_deviation = 10
+        volume = 70
+    }
+    turning {
+        sound = nature/rock_scrape_dry
+        speed_deviation = 10
+        volume = 20
+        loop = true
+    }
+    flipping_up {
+        sound = nature/rock_scrape_dry
+        speed = 80
+        speed_deviation = 5
+        volume = 20
+    }
+    dying {
+        sound = nature/rock_scrape_dry
+        speed = 140
+        speed_deviation = 10
+        volume = 30
+    }
+}
+
+spawns {
+    splatter {
+        object = ice_splatter
+    }
+}
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.2.0

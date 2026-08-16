@@ -1,0 +1,3023 @@
+name=Freezecake animations
+description=Animations for the Freezecake.
+maker=Espyo
+version=1.0.0
+engine_version=1.2.0
+animations{
+	dying_h{
+		loop_frame=5
+		frames{
+			dying_h_01{
+				duration=0.1500
+				interpolate=true
+			}
+			dying_h_02{
+				duration=0.4000
+				interpolate=true
+			}
+			dying_h_01{
+				duration=0.3000
+			}
+			dying_h_03{
+				duration=0.3000
+			}
+			dying_h_04{
+				duration=0.5000
+			}
+			dying_h_04{
+				duration=0.1500
+			}
+		}
+	}
+	dying_n{
+		loop_frame=5
+		frames{
+			dying_n_01{
+				duration=0.1500
+				interpolate=true
+			}
+			dying_n_02{
+				duration=0.4000
+				interpolate=true
+			}
+			dying_n_01{
+				duration=0.3000
+			}
+			dying_n_03{
+				duration=0.3000
+			}
+			dying_n_04{
+				duration=0.5000
+			}
+			dying_n_04{
+				duration=0.1500
+			}
+		}
+	}
+	eyes_in_h{
+		frames{
+			peeking_h_02{
+				duration=0.3000
+			}
+			peeking_h_01{
+				duration=0.3000
+			}
+		}
+	}
+	eyes_in_n{
+		frames{
+			peeking_n_02{
+				duration=0.3000
+			}
+			peeking_n_01{
+				duration=0.3000
+			}
+		}
+	}
+	eyes_out_h{
+		loop_frame=1
+		frames{
+			peeking_h_01{
+				duration=0.3000
+			}
+			peeking_h_02{
+				duration=0.3000
+			}
+		}
+	}
+	eyes_out_n{
+		loop_frame=1
+		frames{
+			peeking_n_01{
+				duration=0.3000
+			}
+			peeking_n_02{
+				duration=0.3000
+			}
+		}
+	}
+	flipping_up_h{
+		frames{
+			flipping_up_h_01{
+				duration=0.2500
+			}
+			flipping_up_h_02{
+				duration=0.3000
+				signal=0
+			}
+			flipping_up_h_03{
+				duration=0.3500
+				signal=1
+			}
+		}
+	}
+	flipping_up_n{
+		frames{
+			flipping_up_n_01{
+				duration=0.2500
+			}
+			flipping_up_n_02{
+				duration=0.3000
+				signal=0
+			}
+			flipping_up_n_03{
+				duration=0.3500
+				signal=1
+			}
+		}
+	}
+	idling_h{
+		frames{
+			idling_h{
+				duration=0.3000
+			}
+		}
+	}
+	idling_n{
+		frames{
+			idling_n{
+				duration=0.3000
+			}
+		}
+	}
+	landing{
+		frames{
+			landing{
+				duration=0.1000
+				interpolate=true
+			}
+			idling_n{
+				duration=0.1000
+			}
+		}
+	}
+	recovering_h{
+		frames{
+			idling_h{
+				duration=1.4000
+			}
+		}
+	}
+	recovering_n{
+		frames{
+			idling_n{
+				duration=1.4000
+			}
+		}
+	}
+	slamming_down_h{
+		frames{
+			slamming_down_h_01{
+				duration=0.5000
+			}
+			slamming_down_h_02{
+				duration=0.1500
+				signal=0
+			}
+			slamming_down_h_03{
+				duration=0.1000
+				signal=1
+			}
+		}
+	}
+	slamming_down_n{
+		frames{
+			slamming_down_n_01{
+				duration=0.5000
+			}
+			slamming_down_n_02{
+				duration=0.1500
+				signal=0
+			}
+			slamming_down_n_03{
+				duration=0.1000
+				signal=1
+			}
+		}
+	}
+	turning_h{
+		frames{
+			turning_h_01{
+				duration=0.2000
+				interpolate=true
+			}
+			idling_h{
+				duration=0.2000
+				interpolate=true
+			}
+			turning_h_02{
+				duration=0.2000
+				interpolate=true
+			}
+			idling_h{
+				duration=0.2000
+				interpolate=true
+			}
+		}
+	}
+	turning_n{
+		frames{
+			turning_n_01{
+				duration=0.2000
+				interpolate=true
+			}
+			idling_n{
+				duration=0.2000
+				interpolate=true
+			}
+			turning_n_02{
+				duration=0.2000
+				interpolate=true
+			}
+			idling_n{
+				duration=0.2000
+				interpolate=true
+			}
+		}
+	}
+	upright{
+		frames{
+			upright_01{
+				duration=0.3000
+				interpolate=true
+			}
+			upright_02{
+				duration=0.3000
+				interpolate=true
+			}
+			upright_01{
+				duration=0.3000
+				interpolate=true
+			}
+			upright_03{
+				duration=0.3000
+				interpolate=true
+			}
+			upright_01{
+				duration=0.3000
+				interpolate=true
+			}
+			upright_02{
+				duration=0.3000
+				interpolate=true
+			}
+		}
+	}
+}
+sprites{
+	dying_h_01{
+		file=enemies/freezecake
+		file_pos=189.0000 564.0000
+		file_size=188.0000 140.0000
+		offset=-24.0000 0.0000
+		hitboxes{
+			body_normal_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_normal_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_normal_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_h_02{
+		file=enemies/freezecake
+		file_pos=189.0000 564.0000
+		file_size=188.0000 140.0000
+		offset=-27.0000 0.0000
+		scale=1.1000 1.1000
+		hitboxes{
+			body_normal_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_normal_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_normal_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_h_03{
+		file=enemies/freezecake
+		file_pos=150.0000 423.0000
+		file_size=158.0000 140.0000
+		offset=-9.0000 -0.0000
+		hitboxes{
+			body_normal_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_normal_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_normal_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_h_04{
+		file=enemies/freezecake
+		file_pos=154.0000 705.0000
+		file_size=153.0000 140.0000
+		offset=-6.5000 0.0000
+		hitboxes{
+			body_normal_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_normal_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_normal_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_n_01{
+		file=enemies/freezecake
+		file_pos=0.0000 564.0000
+		file_size=188.0000 140.0000
+		offset=24.0000 0.0000
+		hitboxes{
+			body_normal_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_normal_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_normal_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_n_02{
+		file=enemies/freezecake
+		file_pos=0.0000 564.0000
+		file_size=188.0000 140.0000
+		offset=27.0000 0.0000
+		scale=1.1000 1.1000
+		hitboxes{
+			body_normal_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_normal_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_normal_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_n_03{
+		file=enemies/freezecake
+		file_pos=291.0000 0.0000
+		file_size=158.0000 140.0000
+		offset=9.0000 -0.0000
+		hitboxes{
+			body_normal_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_normal_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_normal_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	dying_n_04{
+		file=enemies/freezecake
+		file_pos=0.0000 705.0000
+		file_size=153.0000 140.0000
+		offset=6.5000 0.0000
+		hitboxes{
+			body_normal_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_normal_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_normal_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	flipping_up_h_01{
+		file=enemies/freezecake
+		file_pos=190.0000 282.0000
+		file_size=132.0000 140.0000
+		hitboxes{
+			body_normal_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			body_normal_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			body_normal_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			body_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			attack_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+			attack_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+			attack_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+		}
+	}
+	flipping_up_h_02{
+		file=enemies/freezecake
+		file_pos=77.0000 282.0000
+		file_size=112.0000 140.0000
+		hitboxes{
+			body_normal_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			body_normal_02{
+				coords=0.0000 -18.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			body_normal_03{
+				coords=0.0000 18.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			body_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_02{
+				coords=0.0000 -18.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_03{
+				coords=0.0000 18.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			attack_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+			attack_hazard_02{
+				coords=0.0000 -18.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+			attack_hazard_03{
+				coords=0.0000 18.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+		}
+	}
+	flipping_up_h_03{
+		file=enemies/freezecake
+		file_pos=0.0000 282.0000
+		file_size=76.0000 140.0000
+		hitboxes{
+			body_normal_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=40.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			body_normal_02{
+				coords=0.0000 -40.0000 0.0000
+				height=64.0000
+				radius=34.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			body_normal_03{
+				coords=0.0000 40.0000 0.0000
+				height=64.0000
+				radius=34.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			body_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=40.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_02{
+				coords=0.0000 -40.0000 0.0000
+				height=64.0000
+				radius=34.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_03{
+				coords=0.0000 40.0000 0.0000
+				height=64.0000
+				radius=34.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			attack_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=40.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+			attack_hazard_02{
+				coords=0.0000 -40.0000 0.0000
+				height=64.0000
+				radius=34.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+			attack_hazard_03{
+				coords=0.0000 40.0000 0.0000
+				height=64.0000
+				radius=34.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+		}
+	}
+	flipping_up_n_01{
+		file=enemies/freezecake
+		file_pos=0.0000 141.0000
+		file_size=132.0000 140.0000
+		hitboxes{
+			body_normal_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_normal_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_normal_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			body_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			body_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			attack_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			attack_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			attack_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+		}
+	}
+	flipping_up_n_02{
+		file=enemies/freezecake
+		file_pos=133.0000 141.0000
+		file_size=112.0000 140.0000
+		hitboxes{
+			body_normal_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_normal_02{
+				coords=0.0000 -18.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_normal_03{
+				coords=0.0000 18.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			body_hazard_02{
+				coords=0.0000 -18.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			body_hazard_03{
+				coords=0.0000 18.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			attack_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			attack_hazard_02{
+				coords=0.0000 -18.0000 0.0000
+				height=64.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			attack_hazard_03{
+				coords=0.0000 18.0000 0.0000
+				height=64.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+		}
+	}
+	flipping_up_n_03{
+		file=enemies/freezecake
+		file_pos=246.0000 141.0000
+		file_size=76.0000 140.0000
+		hitboxes{
+			body_normal_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=40.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_normal_02{
+				coords=0.0000 -40.0000 0.0000
+				height=64.0000
+				radius=34.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_normal_03{
+				coords=0.0000 40.0000 0.0000
+				height=64.0000
+				radius=34.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=40.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			body_hazard_02{
+				coords=0.0000 -40.0000 0.0000
+				height=64.0000
+				radius=34.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			body_hazard_03{
+				coords=0.0000 40.0000 0.0000
+				height=64.0000
+				radius=34.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			attack_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=40.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			attack_hazard_02{
+				coords=0.0000 -40.0000 0.0000
+				height=64.0000
+				radius=34.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			attack_hazard_03{
+				coords=0.0000 40.0000 0.0000
+				height=64.0000
+				radius=34.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+		}
+	}
+	idling_h{
+		file=enemies/freezecake
+		file_pos=0.0000 0.0000
+		file_size=140.0000 140.0000
+		hitboxes{
+			body_normal_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_normal_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_normal_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			attack_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+			attack_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+			attack_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+		}
+	}
+	idling_n{
+		file=enemies/freezecake
+		file_pos=0.0000 0.0000
+		file_size=140.0000 140.0000
+		hitboxes{
+			body_normal_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			body_normal_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			body_normal_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			body_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	landing{
+		file=enemies/freezecake
+		file_pos=323.0000 282.0000
+		file_size=166.0000 166.0000
+		scale=1.1000 1.1000
+		hitboxes{
+			body_normal_01{
+				coords=0.0000 0.0000 -8.0000
+				height=16.0000
+				radius=82.0000
+				type=1
+				value=35.0000
+				hazard=crush
+				knockback_type=2
+				wither_chance=30
+			}
+			body_normal_02{
+				coords=0.0000 0.0000 8.0000
+				height=56.0000
+				radius=70.0000
+				type=1
+				value=1.0000
+				knockback_type=2
+				knockback=1.0000
+				wither_chance=33
+			}
+			body_normal_03{
+				coords=0.0000 0.0000 48.0000
+				height=16.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_01{
+				coords=0.0000 0.0000 48.0000
+				height=16.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_02{
+				coords=0.0000 0.0000 48.0000
+				height=16.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_03{
+				coords=0.0000 0.0000 48.0000
+				height=16.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_01{
+				coords=0.0000 0.0000 48.0000
+				height=16.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_02{
+				coords=0.0000 0.0000 48.0000
+				height=16.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_03{
+				coords=0.0000 0.0000 48.0000
+				height=16.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	peeking_h_01{
+		file=enemies/freezecake
+		file_pos=0.0000 423.0000
+		file_size=149.0000 140.0000
+		offset=-4.5000 -0.0000
+		hitboxes{
+			body_normal_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_normal_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_normal_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			attack_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+			attack_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+			attack_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+		}
+	}
+	peeking_h_02{
+		file=enemies/freezecake
+		file_pos=150.0000 423.0000
+		file_size=158.0000 140.0000
+		offset=-9.0000 -0.0000
+		hitboxes{
+			body_normal_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_normal_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_normal_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			attack_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+			attack_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+			attack_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+		}
+	}
+	peeking_n_01{
+		file=enemies/freezecake
+		file_pos=141.0000 0.0000
+		file_size=149.0000 140.0000
+		offset=4.5000 -0.0000
+		hitboxes{
+			body_normal_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			body_normal_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			body_normal_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			body_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	peeking_n_02{
+		file=enemies/freezecake
+		file_pos=291.0000 0.0000
+		file_size=158.0000 140.0000
+		offset=9.0000 -0.0000
+		hitboxes{
+			body_normal_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			body_normal_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			body_normal_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			body_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	slamming_down_h_01{
+		file=enemies/freezecake
+		file_pos=246.0000 141.0000
+		file_size=76.0000 140.0000
+		hitboxes{
+			body_normal_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=40.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			body_normal_02{
+				coords=0.0000 -40.0000 0.0000
+				height=64.0000
+				radius=34.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			body_normal_03{
+				coords=0.0000 40.0000 0.0000
+				height=64.0000
+				radius=34.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			body_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=40.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_02{
+				coords=0.0000 -40.0000 0.0000
+				height=64.0000
+				radius=34.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_03{
+				coords=0.0000 40.0000 0.0000
+				height=64.0000
+				radius=34.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			attack_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=40.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+			attack_hazard_02{
+				coords=0.0000 -40.0000 0.0000
+				height=64.0000
+				radius=34.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+			attack_hazard_03{
+				coords=0.0000 40.0000 0.0000
+				height=64.0000
+				radius=34.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+		}
+	}
+	slamming_down_h_02{
+		file=enemies/freezecake
+		file_pos=133.0000 141.0000
+		file_size=112.0000 140.0000
+		hitboxes{
+			body_normal_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			body_normal_02{
+				coords=0.0000 -18.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			body_normal_03{
+				coords=0.0000 18.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			body_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_02{
+				coords=0.0000 -18.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_03{
+				coords=0.0000 18.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			attack_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+			attack_hazard_02{
+				coords=0.0000 -18.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+			attack_hazard_03{
+				coords=0.0000 18.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+		}
+	}
+	slamming_down_h_03{
+		file=enemies/freezecake
+		file_pos=0.0000 141.0000
+		file_size=132.0000 140.0000
+		hitboxes{
+			body_normal_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			body_normal_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			body_normal_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			body_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			attack_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+			attack_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+			attack_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+		}
+	}
+	slamming_down_n_01{
+		file=enemies/freezecake
+		file_pos=0.0000 282.0000
+		file_size=76.0000 140.0000
+		hitboxes{
+			body_normal_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=40.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_normal_02{
+				coords=0.0000 -40.0000 0.0000
+				height=64.0000
+				radius=34.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_normal_03{
+				coords=0.0000 40.0000 0.0000
+				height=64.0000
+				radius=34.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=40.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			body_hazard_02{
+				coords=0.0000 -40.0000 0.0000
+				height=64.0000
+				radius=34.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			body_hazard_03{
+				coords=0.0000 40.0000 0.0000
+				height=64.0000
+				radius=34.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			attack_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=40.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			attack_hazard_02{
+				coords=0.0000 -40.0000 0.0000
+				height=64.0000
+				radius=34.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			attack_hazard_03{
+				coords=0.0000 40.0000 0.0000
+				height=64.0000
+				radius=34.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+		}
+	}
+	slamming_down_n_02{
+		file=enemies/freezecake
+		file_pos=77.0000 282.0000
+		file_size=112.0000 140.0000
+		hitboxes{
+			body_normal_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_normal_02{
+				coords=0.0000 -18.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_normal_03{
+				coords=0.0000 18.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			body_hazard_02{
+				coords=0.0000 -18.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			body_hazard_03{
+				coords=0.0000 18.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			attack_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			attack_hazard_02{
+				coords=0.0000 -18.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			attack_hazard_03{
+				coords=0.0000 18.0000 0.0000
+				height=64.0000
+				radius=56.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+		}
+	}
+	slamming_down_n_03{
+		file=enemies/freezecake
+		file_pos=190.0000 282.0000
+		file_size=132.0000 140.0000
+		hitboxes{
+			body_normal_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_normal_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_normal_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			body_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			body_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			attack_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			attack_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+			attack_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=66.0000
+				type=2
+				value=1.0000
+				hazard=ice
+			}
+		}
+	}
+	turning_h_01{
+		file=enemies/freezecake
+		file_pos=0.0000 0.0000
+		file_size=140.0000 140.0000
+		offset=0.0000 -2.0000
+		scale=1.0000 0.9500
+		hitboxes{
+			body_normal_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_normal_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_normal_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			attack_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+			attack_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+			attack_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+		}
+	}
+	turning_h_02{
+		file=enemies/freezecake
+		file_pos=0.0000 0.0000
+		file_size=140.0000 140.0000
+		offset=0.0000 2.0000
+		scale=1.0000 0.9500
+		hitboxes{
+			body_normal_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_normal_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_normal_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			attack_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+			attack_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+			attack_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				wither_chance=33
+			}
+		}
+	}
+	turning_n_01{
+		file=enemies/freezecake
+		file_pos=0.0000 0.0000
+		file_size=140.0000 140.0000
+		offset=0.0000 -2.0000
+		scale=1.0000 0.9500
+		hitboxes{
+			body_normal_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			body_normal_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			body_normal_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			body_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	turning_n_02{
+		file=enemies/freezecake
+		file_pos=0.0000 0.0000
+		file_size=140.0000 140.0000
+		offset=0.0000 2.0000
+		scale=1.0000 0.9500
+		hitboxes{
+			body_normal_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			body_normal_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			body_normal_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			body_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			body_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_01{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_02{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+			attack_hazard_03{
+				coords=0.0000 0.0000 0.0000
+				height=64.0000
+				radius=70.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	upright_01{
+		file=enemies/freezecake
+		file_pos=323.0000 141.0000
+		file_size=41.0000 140.0000
+		hitboxes{
+			body_normal_01{
+				coords=20.0000 0.0000 0.0000
+				height=64.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			body_normal_02{
+				coords=20.0000 -36.5000 0.0000
+				height=64.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			body_normal_03{
+				coords=20.0000 36.5000 0.0000
+				height=64.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			body_hazard_01{
+				coords=-20.0000 0.0000 0.0000
+				height=64.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_02{
+				coords=-20.0000 -36.5000 0.0000
+				height=64.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_03{
+				coords=-20.0000 36.5000 0.0000
+				height=64.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			attack_hazard_01{
+				coords=-20.0000 0.0000 0.0000
+				height=64.0000
+				radius=16.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				knockback_angle=3.1416
+				wither_chance=33
+			}
+			attack_hazard_02{
+				coords=-20.0000 -36.5000 0.0000
+				height=64.0000
+				radius=16.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				knockback_angle=3.1416
+				wither_chance=33
+			}
+			attack_hazard_03{
+				coords=-20.0000 36.5000 0.0000
+				height=64.0000
+				radius=16.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				knockback_angle=3.1416
+				wither_chance=33
+			}
+		}
+	}
+	upright_02{
+		file=enemies/freezecake
+		file_pos=323.0000 141.0000
+		file_size=41.0000 140.0000
+		offset=-3.0000 -0.0000
+		hitboxes{
+			body_normal_01{
+				coords=20.0000 0.0000 0.0000
+				height=64.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			body_normal_02{
+				coords=20.0000 -36.5000 0.0000
+				height=64.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			body_normal_03{
+				coords=20.0000 36.5000 0.0000
+				height=64.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			body_hazard_01{
+				coords=-20.0000 0.0000 0.0000
+				height=64.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_02{
+				coords=-20.0000 -36.5000 0.0000
+				height=64.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_03{
+				coords=-20.0000 36.5000 0.0000
+				height=64.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			attack_hazard_01{
+				coords=-20.0000 0.0000 0.0000
+				height=64.0000
+				radius=16.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				knockback_angle=3.1416
+				wither_chance=33
+			}
+			attack_hazard_02{
+				coords=-20.0000 -36.5000 0.0000
+				height=64.0000
+				radius=16.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				knockback_angle=3.1416
+				wither_chance=33
+			}
+			attack_hazard_03{
+				coords=-20.0000 36.5000 0.0000
+				height=64.0000
+				radius=16.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				knockback_angle=3.1416
+				wither_chance=33
+			}
+		}
+	}
+	upright_03{
+		file=enemies/freezecake
+		file_pos=323.0000 141.0000
+		file_size=41.0000 140.0000
+		offset=3.0000 -0.0000
+		hitboxes{
+			body_normal_01{
+				coords=20.0000 0.0000 0.0000
+				height=64.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			body_normal_02{
+				coords=20.0000 -36.5000 0.0000
+				height=64.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			body_normal_03{
+				coords=20.0000 36.5000 0.0000
+				height=64.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+			body_hazard_01{
+				coords=-20.0000 0.0000 0.0000
+				height=64.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_02{
+				coords=-20.0000 -36.5000 0.0000
+				height=64.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			body_hazard_03{
+				coords=-20.0000 36.5000 0.0000
+				height=64.0000
+				radius=16.0000
+				type=0
+				value=1.0000
+				surface_type=1
+				hazard=ice
+			}
+			attack_hazard_01{
+				coords=-20.0000 0.0000 0.0000
+				height=64.0000
+				radius=16.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				knockback_angle=3.1416
+				wither_chance=33
+			}
+			attack_hazard_02{
+				coords=-20.0000 -36.5000 0.0000
+				height=64.0000
+				radius=16.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				knockback_angle=3.1416
+				wither_chance=33
+			}
+			attack_hazard_03{
+				coords=-20.0000 36.5000 0.0000
+				height=64.0000
+				radius=16.0000
+				type=1
+				value=1.0000
+				hazard=ice
+				knockback_type=1
+				knockback_angle=3.1416
+				wither_chance=33
+			}
+		}
+	}
+}
+body_parts{
+	body_normal_01
+	body_normal_02
+	body_normal_03
+	body_hazard_01
+	body_hazard_02
+	body_hazard_03
+	attack_hazard_01
+	attack_hazard_02
+	attack_hazard_03
+}
