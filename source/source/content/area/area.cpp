@@ -1924,13 +1924,17 @@ void Area::loadOldMissionSystem(DataNode* node) {
     
     //Goal.
     goal = enumGetValue(missionGoalNames, goalStr);
-    vector<string> missionRequiredMobsStr =
-        semicolonListToVector(requiredMobsStr);
-    goalMobIdxs.reserve(missionRequiredMobsStr.size());
-    forIdx(m, missionRequiredMobsStr) {
-        goalMobIdxs.insert(
-            s2i(missionRequiredMobsStr[m])
-        );
+    
+    if(!requiredMobsStr.empty()) {
+        vector<string> missionRequiredMobsStr =
+            semicolonListToVector(requiredMobsStr);
+        goalMobIdxs.reserve(missionRequiredMobsStr.size());
+        forIdx(m, missionRequiredMobsStr) {
+            goalMobIdxs.insert(
+                s2i(missionRequiredMobsStr[m])
+            );
+        }
+        if(goalAmount == 0) goalAmount = goalMobIdxs.size();
     }
     
     //Automatically turn the pause menu fail condition on/off for convenience.
@@ -1977,7 +1981,10 @@ void Area::loadOldMissionSystem(DataNode* node) {
             "Collect treasures!";
         mission.mobGroups.push_back(
         MissionMobGroup {
-            .type = MISSION_MOB_GROUP_TREASURES,
+            .type =
+            goalMobIdxs.empty() ?
+            MISSION_MOB_GROUP_TREASURES :
+            MISSION_MOB_GROUP_CUSTOM,
             .highlightOnRadar = true,
             .mobIdxs =
             vector<size_t>(goalMobIdxs.begin(), goalMobIdxs.end()),
@@ -2011,7 +2018,10 @@ void Area::loadOldMissionSystem(DataNode* node) {
             "Battle enemies!";
         mission.mobGroups.push_back(
         MissionMobGroup {
-            .type = MISSION_MOB_GROUP_ENEMIES,
+            .type =
+            goalMobIdxs.empty() ?
+            MISSION_MOB_GROUP_ENEMIES :
+            MISSION_MOB_GROUP_CUSTOM,
             .enemiesNeedCollection = enemyPointsOnCollection,
             .highlightOnRadar = true,
             .mobIdxs =
