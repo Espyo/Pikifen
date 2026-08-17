@@ -3493,7 +3493,7 @@ bool TextInput::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
         if(idx2 < idx1) std::swap(idx1, idx2);
         size_t amount = idx2 - idx1;
         text.erase(idx1, amount);
-        caretPos -= amount;
+        return amount;
     };
     
     if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {
@@ -3506,7 +3506,7 @@ bool TextInput::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
                 } else {
                     end = caretPos;
                 }
-                eraseChars(start, end);
+                caretPos -= eraseChars(start, end);
             }
             handled = true;
             

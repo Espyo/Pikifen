@@ -37,7 +37,7 @@ const float FADE_DURATION = 0.3f;
 const string GUI_FILE_NAME = "modal";
 
 //Maximum number of characters for the text input.
-const size_t TEXT_INPUT_MAX_SIZE = 50;
+const size_t TEXT_INPUT_MAX_SIZE = 80;
 
 };
 
@@ -223,10 +223,17 @@ void ModalGuiManager::updateItems() {
                     al_get_text_width(
                         game.sysContent.fntStandard, textInputItem->text.c_str()
                     );
+                float textScale = 1.0f;
+                if(textWidth > draw.size.x) {
+                    textScale = draw.size.x / (float) textWidth;
+                }
                 int textHeight =
                     al_get_font_line_height(game.sysContent.fntStandard);
-                int textX1 =
-                    draw.center.x - textWidth / 2.0f;
+                int textX1 = draw.center.x - textWidth / 2.0f;
+                textX1 =
+                    std::max(
+                        textX1, (int) (draw.center.x - draw.size.x / 2.0f)
+                    );
                     
                 string preCaretText =
                     textInputItem->text.substr(0, textInput.getCaretPos());
@@ -234,14 +241,11 @@ void ModalGuiManager::updateItems() {
                     al_get_text_width(
                         game.sysContent.fntStandard, preCaretText.c_str()
                     );
-                preCaretTextWidth =
-                    std::min((float) preCaretTextWidth, draw.size.x);
                     
+                int caretX = textX1 + preCaretTextWidth * textScale;
                 al_draw_line(
-                    textX1 + preCaretTextWidth,
-                    draw.center.y - textHeight / 2.0f,
-                    textX1 + preCaretTextWidth,
-                    draw.center.y + textHeight / 2.0f,
+                    caretX, draw.center.y - textHeight / 2.0f,
+                    caretX, draw.center.y + textHeight / 2.0f,
                     game.config.guiColors.gold, 2.0f
                 );
             }
