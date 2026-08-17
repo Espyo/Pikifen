@@ -1391,7 +1391,7 @@ void Song::loadFromDataNode(DataNode* node) {
             game.content.songTracks.list.get(mixTrackNode->value, mixTrackNode);
     }
     
-    if(loopEnd == 0.0f) {
+    if(loopEnd == 0.0f && mainTrack) {
         loopEnd = al_get_audio_stream_length_secs(mainTrack);
     }
     if(loopEnd < loopStart) {

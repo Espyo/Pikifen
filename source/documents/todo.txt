@@ -8,9 +8,20 @@ Next tasks (roughly sorted most important first)
     Objects on water only spawn ripples when they change state at least once (thanks Helodity)
         The first frame should have detected they're now in a hazard they weren't before, right?
     Using the transformation widget to resize hitboxes still doesn't work
+    Long error messages, like leaders switching to unknown animations, cuts off
+    Empty nugget piles still show up as a mission critical mob on the radar. Even when the nuggets have been delivered it'll still be marked until it's back on-camera
+    Free cam can't change zoom distance, pressing the button doesn't do anything
+    In free cam, the leader cursor Pikmin amount follows the camera
 
     --- 1.2.0 ---
+    New leader animations should default to idling, for compatibility's sake
+    Pressing Delete on a reminder in the area editor should delete it
+    Add a button to move camera to current reminder in area editor
+    All death animations need to have disabled hitboxes; I was able to throw Pikmin at a dying Beady Long Legs and have them latch on
+    Wave ring particles should be more hardcoded, and there should just be a for loop that checks every mob, and if it's on a liquid, it's moving, the current time spent in the area is a multiple of whatever, and that mob and that liquid are allowed to emit wave ring particles, then emit one and move on, no generators or events involved
     Action documentation on the manual should have a table for each argument in an action, with types and default values and such
+    Add the Hocotate ship pod as a ship
+    Add the S.S. Dolphin 2 and its pod as ships
     
     --- 1.3.0 ---
     Create an area that's good for people to pick up and play
@@ -681,6 +692,7 @@ Misc. things (to be implemented whenever)
         Resources should be able to specify what happens when they fall in the pit; carriable rocks need to respawn
     Pikmin behaviors
         When Pikmin destroy something that drops something (Pellet Posy, Flukeweed, enemy corpse, enemy spoils, etc.), they should focus on retrieving that ASAP instead of just idling and leaving it up to chance whether they pick it up or not. This is especially important for Rock Pikmin, which usually bounce far away after attacking and killing an enemy
+            Same for Red Pikmin fighting a Fiery Blowhog and when shaken off, landing too far away to care from there on
         Winged Pikmin that fall in the water should fly up when whistled
         Pikmin should want to go to nectar by themselves when idling. Particularly important because Winged Pikmin don't drink nectar on their own
         A way for a Pikmin type to control what its resistance to being shaken off is
@@ -776,6 +788,7 @@ Misc. things (to be implemented whenever)
         Maybe merge the duplicate states for controlled/not controlled, and not holding/holding. The logic inside checks an if and figures out what to do depending on if that binary state. This would also help in those edge cases where a leader is controlled but in one of the uncontrolled states or vice-versa, because that'd be controlled in every relevant FSM function instead of being up to the whims of the flow of the state machine
     Automatically choose Pikmin maturity in some contexts, like throwing Pikmin at nectar or Candypop Buds should automatically pick leaf Pikmin [PIKMIN 4]
     A way to start a timer after a random amount of time, based on the coordinates; this allows stuff like a group of fire geysers to start spitting fire at different times
+    Stuff like size random deviation in particles should be a percentage of the full size. That way a particle generator can scale the particles based on the mob's size, and the random deviation will make sense no matter the size
     Treasure collection should probably count when the ship retrieval starts (thanks Helodity)
     The area selection menu should have a way to search with text, and to sort by default/completion/difficulty (thanks Helodity)
     The ability for areas to have multiple bases, and for the player to move the ship and Onion between them [PIKMIN 4]

@@ -683,7 +683,11 @@ void Leader::dismissLogic(bool forceDismissAll) {
     }
     
     //Now, dismiss!
-    if(tidySingleDismissTime > 0.0f && subgroupsInfo.size() == 1) {
+    if(
+        tidySingleDismissTime > 0.0f &&
+        subgroupsInfo.size() == 1 &&
+        player->swarmMagnitude == 0.0f
+    ) {
         //We recently dismissed all other subgroups except this one.
         //Let's dismiss this single one towards where it would go if it got
         //dismissed alongside. That way all the Pikmin are organized tidily.

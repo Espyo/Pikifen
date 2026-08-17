@@ -1868,14 +1868,7 @@ void GameplayState::processMobInteractions(Mob* mPtr, size_t m) {
     sort(
         pendingInterMobEvents.begin(), pendingInterMobEvents.end(),
     [mPtr] (PendingInterMobEvent e1, PendingInterMobEvent e2) -> bool {
-        return
-        (
-            e1.d.toFloat() -
-            (mPtr->radius + e1.mobPtr->radius)
-        ) < (
-            e2.d.toFloat() -
-            (mPtr->radius + e2.mobPtr->radius)
-        );
+        return e1.d < e2.d;
     }
     );
     

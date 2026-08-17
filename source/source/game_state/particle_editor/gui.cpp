@@ -998,7 +998,8 @@ void ParticleEditor::processGuiPanelGenerator() {
                     changesMgr.markAsChanged();
                 }
                 setTooltip(
-                    "Maximum emission distance for particle creation.",
+                    "Maximum emission distance, from the center, "
+                    "for particle creation.",
                     "", WIDGET_EXPLANATION_DRAG
                 );
                 
@@ -1089,8 +1090,8 @@ void ParticleEditor::processGuiPanelGenerator() {
                     changesMgr.markAsChanged();
                 }
                 setTooltip(
-                    "Maximum emission distance (X and Y) for particle "
-                    "creation.",
+                    "Maximum emission distance (X and Y), from the center, "
+                    " for particle creation.",
                     "", WIDGET_EXPLANATION_DRAG
                 );
                 
