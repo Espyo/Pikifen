@@ -5,8 +5,6 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- Problems to fix ---
-    Objects on water only spawn ripples when they change state at least once (thanks Helodity)
-        The first frame should have detected they're now in a hazard they weren't before, right?
     Using the transformation widget to resize hitboxes still doesn't work
     Long error messages, like leaders switching to unknown animations, cuts off
     Empty nugget piles still show up as a mission critical mob on the radar. Even when the nuggets have been delivered it'll still be marked until it's back on-camera

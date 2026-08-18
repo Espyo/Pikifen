@@ -199,6 +199,19 @@ Mob::Mob(const Point& center, MobType* type, float angle) :
     }
     
     updateInteractionSpan();
+    
+    ParticleGenerator waveRingPG =
+        standardParticleGenSetup(
+            game.sysContentNames.parWaveRing, this
+        );
+    adjustKeyframeInterpolatorValues<float>(
+        waveRingPG.baseParticle.size,
+    [ this ] (const float & f) { return f * radius; }
+    );
+    waveRingPG.baseParticle.priority = PARTICLE_PRIORITY_LOW;
+    waveRingPG.followZOffset = 1.0f;
+    waveRingPG.id = MOB_PARTICLE_GENERATOR_ID_WAVE_RING;
+    particleGenerators.push_back(waveRingPG);
 }
 
 
@@ -215,6 +228,8 @@ Mob::~Mob() {
     if(fraction) delete fraction;
     if(group) delete group;
     if(parent) delete parent;
+    
+    deleteParticleGenerator(MOB_PARTICLE_GENERATOR_ID_WAVE_RING);
 }
 
 
@@ -4335,6 +4350,30 @@ void Mob::tickMiscLogic(float deltaT) {
         }
     }
     deleteOldStatusEffects();
+    
+    //Wave ring liquid particles.
+    forIdx(p, particleGenerators) {
+        if(particleGenerators[p].id == MOB_PARTICLE_GENERATOR_ID_WAVE_RING) {
+            particleGenerators[p].canEmit = false;
+            break;
+        }
+    }
+    if(
+        groundSector &&
+        bottomZ <= groundSector->floorZ &&
+        groundSector->hazard &&
+        groundSector->hazard->associatedLiquid &&
+        chaseInfo.state == CHASE_STATE_CHASING
+    ) {
+        forIdx(p, particleGenerators) {
+            if(
+                particleGenerators[p].id == MOB_PARTICLE_GENERATOR_ID_WAVE_RING
+            ) {
+                particleGenerators[p].canEmit = true;
+                break;
+            }
+        }
+    }
     
     for(size_t g = 0; g < particleGenerators.size();) {
         particleGenerators[g].tick(

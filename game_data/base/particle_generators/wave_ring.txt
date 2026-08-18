@@ -1,13 +1,13 @@
 name=Wave ring
 description=Ripples of water around an object.
 maker=Espyo
-version=1.0.0
-engine_version=1.0.0
+version=1.1.0
+engine_version=1.2.0
 emission{
 	number=1
 	number_deviation=0
-	interval=0.3000
-	interval_deviation=0.0500
+	interval=0.1000
+	interval_deviation=0.0000
 	shape=1
 	rect_outer_dist=0.0000 0.0000
 	rect_inner_dist=0.0000 0.0000

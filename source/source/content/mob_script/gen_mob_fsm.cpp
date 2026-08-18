@@ -494,14 +494,6 @@ void GenMobFsm::handleDelivery(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info2 Unused.
  */
 void GenMobFsm::leaveHazard(ScriptVM* scriptVM, void* info1, void* info2) {
-    Mob* mPtr = scriptVM->mob;
-    Hazard* h = (Hazard*) info1;
-    
-    engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
-    
-    if(h->associatedLiquid) {
-        mPtr->deleteParticleGenerator(MOB_PARTICLE_GENERATOR_ID_WAVE_RING);
-    }
 }
 
 
@@ -581,36 +573,9 @@ void GenMobFsm::touchHazard(ScriptVM* scriptVM, void* info1, void* info2) {
     Mob* hitboxMob = nullptr;
     if(hitboxInfo) hitboxMob = hitboxInfo->mob2;
     
-    if(hazPtr->associatedLiquid) {
-        bool alreadyGenerating = false;
-        forIdx(g, mPtr->particleGenerators) {
-            if(
-                mPtr->particleGenerators[g].id ==
-                MOB_PARTICLE_GENERATOR_ID_WAVE_RING
-            ) {
-                alreadyGenerating = true;
-                break;
-            }
-        }
-        
-        if(!alreadyGenerating) {
-            ParticleGenerator pg =
-                standardParticleGenSetup(
-                    game.sysContentNames.parWaveRing, mPtr
-                );
-            pg.followZOffset = 1.0f;
-            adjustKeyframeInterpolatorValues<float>(
-                pg.baseParticle.size,
-            [ = ] (const float & f) { return f * mPtr->radius; }
-            );
-            pg.id = MOB_PARTICLE_GENERATOR_ID_WAVE_RING;
-            mPtr->particleGenerators.push_back(pg);
-        }
-    }
-
     if(mPtr->invulnPeriod.timeLeft > 0) return;
     if(vuln.effectMult == 0.0f) return;
-
+    
     if(!vuln.statusToApply || !vuln.statusOverrides) {
         forIdx(e, hazPtr->effects) {
             mPtr->applyStatus(hazPtr->effects[e], false, true, hitboxMob);
