@@ -15,8 +15,6 @@ Next tasks (roughly sorted most important first)
     New leader animations should default to idling, for compatibility's sake
     Pressing Delete on a reminder in the area editor should delete it
     Add a button to move camera to current reminder in area editor
-    All death animations need to have disabled hitboxes; I was able to throw Pikmin at a dying Beady Long Legs and have them latch on
-    Wave ring particles should be more hardcoded, and there should just be a for loop that checks every mob, and if it's on a liquid, it's moving, the current time spent in the area is a multiple of whatever, and that mob and that liquid are allowed to emit wave ring particles, then emit one and move on, no generators or events involved
     Action documentation on the manual should have a table for each argument in an action, with types and default values and such
     Add the Hocotate ship pod as a ship
     Add the S.S. Dolphin 2 and its pod as ships

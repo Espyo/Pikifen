@@ -1,7 +1,7 @@
 name=Female Sheargrub animations
 description=Animations for the Female Sheargrub.
 maker=Espyo
-version=1.0.0
+version=1.1.0
 engine_version=1.2.0
 animations{
 	burying{
@@ -234,10 +234,9 @@ sprites{
 			body{
 				coords=0.0000 0.0000 0.0000
 				height=128.0000
-				radius=24.0000
-				type=0
+				radius=12.0000
+				type=2
 				value=1.0000
-				surface_type=0
 			}
 		}
 	}
