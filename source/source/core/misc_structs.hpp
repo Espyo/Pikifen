@@ -47,6 +47,8 @@ using std::vector;
 
 namespace CONSOLE {
 extern const ALLEGRO_COLOR COLOR_BG;
+extern const ALLEGRO_COLOR COLOR_DECOR_DARK;
+extern const ALLEGRO_COLOR COLOR_DECOR_LIGHT;
 extern const ALLEGRO_COLOR COLOR_ERROR;
 extern const ALLEGRO_COLOR COLOR_MAIN;
 extern const ALLEGRO_COLOR COLOR_MUTED;

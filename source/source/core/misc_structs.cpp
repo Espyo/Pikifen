@@ -37,6 +37,12 @@ namespace CONSOLE {
 //Background color of the console, alpha included.
 const ALLEGRO_COLOR COLOR_BG = al_map_rgba(0, 0, 0, 160);
 
+//Highlight color of the console decor details, alpha included.
+const ALLEGRO_COLOR COLOR_DECOR_DARK = al_map_rgba(64, 64, 64, 192);
+
+//Shade color of the console decor details, alpha included.
+const ALLEGRO_COLOR COLOR_DECOR_LIGHT = al_map_rgba(128, 128, 128, 192);
+
 //Error text color, alpha included.
 const ALLEGRO_COLOR COLOR_ERROR = al_map_rgba(255, 128, 128, 192);
 
@@ -1367,7 +1373,7 @@ int MakerConsoleNotifier::draw(int y) const {
         multAlpha(CONSOLE::COLOR_BG, alpha)
     );
     
-    //Lines.
+    //Text lines.
     forIdx(l, lines) {
         int lineY = getLineY(l);
         
@@ -1393,6 +1399,18 @@ int MakerConsoleNotifier::draw(int y) const {
         ),
         Point(CONSOLE::INPUT_SIZE),
         true, game.sysContent.fntSlim, mapAlpha(alpha * 255)
+    );
+    
+    //Decor.
+    al_draw_line(
+        boxX + boxW * 0.00f, boxY - 1.0f,
+        boxX + boxW * 1.00f, boxY - 1.0f,
+        multAlpha(CONSOLE::COLOR_DECOR_LIGHT, alpha), 2.0f
+    );
+    al_draw_line(
+        boxX + boxW * 0.00f, boxY + 1.0f,
+        boxX + boxW * 1.00f, boxY + 1.0f,
+        multAlpha(CONSOLE::COLOR_DECOR_DARK, alpha), 2.0f
     );
     
     return boxH;
@@ -1610,6 +1628,18 @@ int MakerConsoleTerminal::draw(int y) const {
     );
     */
     
+    //Decor.
+    al_draw_line(
+        0.0f, yOffset + boxH - 1.0f,
+        game.winW, yOffset + boxH - 1.0f,
+        CONSOLE::COLOR_DECOR_LIGHT, 2.0f
+    );
+    al_draw_line(
+        0.0f, yOffset + boxH + 1.0f,
+        game.winW, yOffset + boxH + 1.0f,
+        CONSOLE::COLOR_DECOR_DARK, 2.0f
+    );
+    
     return boxH + yOffset;
 }
 
@@ -1796,7 +1826,7 @@ int MakerDisplay::draw(int y) const {
         multAlpha(CONSOLE::COLOR_BG, alpha)
     );
     
-    //Lines.
+    //Text lines.
     forIdx(l, lines) {
         int lineY = getLineY(l);
         
@@ -1809,6 +1839,91 @@ int MakerDisplay::draw(int y) const {
             TEXT_SETTING_FLAG_CANT_GROW | TEXT_SETTING_FLAG_CANT_SHRINK
         );
     }
+    
+    //Decor.
+    al_draw_line(
+        boxX + 0.0f, boxY - 1.0f,
+        boxX + 40.0f, boxY - 1.0f,
+        multAlpha(CONSOLE::COLOR_DECOR_LIGHT, alpha), 2.0f
+    );
+    al_draw_line(
+        boxX + 0.0f, boxY + 1.0f,
+        boxX + 40.0f, boxY + 1.0f,
+        multAlpha(CONSOLE::COLOR_DECOR_DARK, alpha), 2.0f
+    );
+    al_draw_line(
+        boxX + 0.0f - 1.0f, boxY + 0.0f,
+        boxX + 0.0f - 1.0f, boxY + 40.0f,
+        multAlpha(CONSOLE::COLOR_DECOR_LIGHT, alpha), 2.0f
+    );
+    al_draw_line(
+        boxX + 0.0f + 1.0f, boxY + 0.0f,
+        boxX + 0.0f + 1.0f, boxY + 40.0f,
+        multAlpha(CONSOLE::COLOR_DECOR_DARK, alpha), 2.0f
+    );
+    
+    al_draw_line(
+        boxX + boxW - 0.0f, boxY - 1.0f,
+        boxX + boxW - 40.0f, boxY - 1.0f,
+        multAlpha(CONSOLE::COLOR_DECOR_LIGHT, alpha), 2.0f
+    );
+    al_draw_line(
+        boxX + boxW - 0.0f, boxY + 1.0f,
+        boxX + boxW - 40.0f, boxY + 1.0f,
+        multAlpha(CONSOLE::COLOR_DECOR_DARK, alpha), 2.0f
+    );
+    al_draw_line(
+        boxX + boxW - 1.0f, boxY + 0.0f,
+        boxX + boxW - 1.0f, boxY + 40.0f,
+        multAlpha(CONSOLE::COLOR_DECOR_LIGHT, alpha), 2.0f
+    );
+    al_draw_line(
+        boxX + boxW + 1.0f, boxY + 0.0f,
+        boxX + boxW + 1.0f, boxY + 40.0f,
+        multAlpha(CONSOLE::COLOR_DECOR_DARK, alpha), 2.0f
+    );
+    
+    al_draw_line(
+        boxX + 0.0f, boxY + boxH - 1.0f,
+        boxX + 40.0f, boxY + boxH - 1.0f,
+        multAlpha(CONSOLE::COLOR_DECOR_LIGHT, alpha), 2.0f
+    );
+    al_draw_line(
+        boxX + 0.0f, boxY + boxH + 1.0f,
+        boxX + 40.0f, boxY + boxH + 1.0f,
+        multAlpha(CONSOLE::COLOR_DECOR_DARK, alpha), 2.0f
+    );
+    al_draw_line(
+        boxX + 0.0f - 1.0f, boxY + boxH - 0.0f,
+        boxX + 0.0f - 1.0f, boxY + boxH - 40.0f,
+        multAlpha(CONSOLE::COLOR_DECOR_LIGHT, alpha), 2.0f
+    );
+    al_draw_line(
+        boxX + 0.0f + 1.0f, boxY + boxH - 0.0f,
+        boxX + 0.0f + 1.0f, boxY + boxH - 40.0f,
+        multAlpha(CONSOLE::COLOR_DECOR_DARK, alpha), 2.0f
+    );
+    
+    al_draw_line(
+        boxX + boxW - 0.0f, boxY + boxH - 1.0f,
+        boxX + boxW - 40.0f, boxY + boxH - 1.0f,
+        multAlpha(CONSOLE::COLOR_DECOR_LIGHT, alpha), 2.0f
+    );
+    al_draw_line(
+        boxX + boxW - 0.0f, boxY + boxH + 1.0f,
+        boxX + boxW - 40.0f, boxY + boxH + 1.0f,
+        multAlpha(CONSOLE::COLOR_DECOR_DARK, alpha), 2.0f
+    );
+    al_draw_line(
+        boxX + boxW - 1.0f, boxY + boxH - 0.0f,
+        boxX + boxW - 1.0f, boxY + boxH - 40.0f,
+        multAlpha(CONSOLE::COLOR_DECOR_LIGHT, alpha), 2.0f
+    );
+    al_draw_line(
+        boxX + boxW + 1.0f, boxY + boxH - 0.0f,
+        boxX + boxW + 1.0f, boxY + boxH - 40.0f,
+        multAlpha(CONSOLE::COLOR_DECOR_DARK, alpha), 2.0f
+    );
     
     return boxH;
 }
