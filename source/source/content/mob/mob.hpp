@@ -41,19 +41,19 @@ namespace MOB {
 extern const float CARRIED_MOB_ACCELERATION;
 extern const float CARRY_STUCK_CIRCLING_RADIUS;
 extern const float CARRY_STUCK_SPEED_MULTIPLIER;
+extern const float CARRY_SWAY_ROTATION_AMOUNT;
 extern const float CARRY_SWAY_TIME_MULT;
 extern const float CARRY_SWAY_X_TRANSLATION_AMOUNT;
 extern const float CARRY_SWAY_Y_TRANSLATION_AMOUNT;
-extern const float CARRY_SWAY_ROTATION_AMOUNT;
-extern const float DELIVERY_SUCK_SHAKING_TIME_MULT;
+extern const float DAMAGE_SQUASH_AMOUNT;
+extern const float DAMAGE_SQUASH_DURATION;
 extern const float DELIVERY_SUCK_SHAKING_MULT;
+extern const float DELIVERY_SUCK_SHAKING_TIME_MULT;
 extern const float DELIVERY_SUCK_TIME;
 extern const float DELIVERY_TOSS_MULT;
 extern const float DELIVERY_TOSS_TIME;
 extern const float DELIVERY_TOSS_WINDUP_MULT;
 extern const float DELIVERY_TOSS_X_OFFSET;
-extern const float DAMAGE_SQUASH_DURATION;
-extern const float DAMAGE_SQUASH_AMOUNT;
 extern const float FREE_MOVE_THRESHOLD;
 extern const float GRAVITY_ADDER;
 extern const float GROUP_SHUFFLE_DIST;
@@ -73,9 +73,9 @@ extern const float PUSH_THROTTLE_TIMEOUT;
 extern const float SHADOW_STRETCH_MULT;
 extern const float SHADOW_Y_MULT;
 extern const float SMACK_PARTICLE_DUR;
+extern const float STATUS_SHAKING_TIME_MULT;
 extern const float SWARM_MARGIN;
 extern const float SWARM_VERTICAL_SCALE;
-extern const float STATUS_SHAKING_TIME_MULT;
 };
 
 

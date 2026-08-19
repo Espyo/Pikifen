@@ -8,8 +8,6 @@ Next tasks (roughly sorted most important first)
     Using the transformation widget to resize hitboxes still doesn't work
     Long error messages, like leaders switching to unknown animations, cuts off
     Empty nugget piles still show up as a mission critical mob on the radar. Even when the nuggets have been delivered it'll still be marked until it's back on-camera
-    Free cam can't change zoom distance, pressing the button doesn't do anything
-    In free cam, the leader cursor Pikmin amount follows the camera
 
     --- 1.2.0 ---
     New leader animations should default to idling, for compatibility's sake
@@ -83,7 +81,7 @@ Next tasks (roughly sorted most important first)
     New Pikmin maker tool should probably spawn them in Pikmin order, not alphabetical
     The camera (at least for editors and radar) should control where it wants to go based on the specified rectangle corners. Then, every frame, it interpolates between the currently-visible corners and the intended corners and change the X, Y, and zoom to match. This should allow smoothly zooming in and out in editors while keeping the point under the mouse fixed
         Also add logic to release the mouse while moving the camera to make it slide and lose speed over time
-    The free camera maker tool should definitely be its own item, including the ability to pause and unpause gameplay
+    The free camera maker tool should definitely be its own item, including the ability to pause and unpause gameplay, and control the zoom level
     Controls should support multiple players, including a "none" player for things like maker tools, screenshot, etc.
     Controls menus
         Split into sub-menus by types of actions: leader control, cursor control, Pikmin management, menu basics, gameplay advanced, menu advanced
@@ -491,7 +489,7 @@ Next tasks (roughly sorted most important first)
                     Don't forget that sprouts should turn into flowers overnight
                 At the start of a new day, open bridges, dead enemies, etc. should go to the final states instantly
         Cutscenes http://www.pikminwiki.com/Cutscenes
-            Make all cutscenes skippable and pausable
+            Make all cutscenes skippable and pausable. Include a button to skip this cutscene and all next ones until the next gameplay portion
             Either make everything freeze during cutscenes, except for the actors that are part of it, or make everything continue, but health values be frozen (this way, leaders and Pikmin won't get hurt while the player can't react)
             A cutscene queue, in case multiple ones need to start at once
             Scripting for them
@@ -510,6 +508,7 @@ Next tasks (roughly sorted most important first)
             When entering, the player can choose to load an existing save file, or create a new one
                 Every save should have a name, or "Save File #" by default
             When the player creates a new save file, they can choose which campaign to play, if there are multiple
+            The save file should have a crown or something to mark 100% completion. Exactly what that entails may have to be controlled by the campaign's data
         Area selection menu
             Celebrate when an area was locked the previous day but is no longer locked today
         Today's Report
@@ -1076,4 +1075,5 @@ Difficult tasks (things I don't know how to tackle yet)
         If P1's leader throws a mine at P2's leader, and it sticks on them, that leader will be *holding* the mine. This will probably break a lot of logic that assumes holding just refers to the pre-throw Pikmin hold
         Do Pikmin need to have a delay before their health regeneration kicks in?
     If a hazard vulnerability is set to 0 but has a replacement, it should apply the replacement anyway... Except the hazard/damage/status/replacement logic is a bit intertwined and it's not so simple. For now, makers can just make the damage multiplier be like 0.001 or something
+    If you have 100 Red Pikmin with you, go to the Master Onion, put 100 inside and pull 100 Blue Pikmin outside, when you confirm the dialog only the Red Pikmin will go in, and the Blue Pikmin won't know that they need to show up afterwards. This would have to be solved with a complex queuing system... Plus, what happens if the Red Pikmin that are meant to go in get whistled? Or only some of them? What if they get killed by a bomb rock? What if them dying tripped an extinction and now the Onion also wants to spit out a new seed? (Thanks Piksol)
     

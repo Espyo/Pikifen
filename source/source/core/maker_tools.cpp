@@ -356,7 +356,7 @@ bool MakerToolRunners::newPikmin(
     
     if(type == "same" && mgr.lastPikminType) {
         newPikminType = mgr.lastPikminType;
-    } else if(type == "next") {
+    } else {
         newPikminType =
             game.content.mobTypes.list.pikmin.begin()->second;
             

@@ -1342,7 +1342,8 @@ void GameplayState::drawLeaderCursor(
     size_t nStandbyPikmin = 0;
     if(
         game.options.misc.showLeaderCursorCounter &&
-        player->leaderPtr->group->curStandbyType
+        player->leaderPtr->group->curStandbyType &&
+        !(game.makerTools.freeCamMode && !game.makerTools.freeCamFrozen)
     ) {
         forIdx(m, player->leaderPtr->group->members) {
             Mob* mPtr = player->leaderPtr->group->members[m];
