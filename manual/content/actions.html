@@ -77,7 +77,7 @@
         <th><code>for_each</code></th>
         <td><dl>
           <dt><code><b>for_each</b> &lt;iterator_variable_name&gt; &lt;item_variable_name&gt; &lt;list_or_string&gt; [&lt;list_delimiter&gt;]</code></dt>
-          <dd>Starts a block of actions that can be looped over multiple times. The block is ended by the matching <a href="#end-for-each"><code>end_for_each</code></a> action. The first time the <code>for</code> action is run in this loop, the variable &lt;iterator_variable_name&gt; receives the value of 1, and the variable &lt;item_variable_name&gt; receives the value of the first item in the list. Every other time it adds + 1 to the iterator variable and set the item variable to the next item over. Once the list has been combed through, the loop ends and the script continues from after the <code>end_for_each</code> action. In other words, you can use this to do something to each entry in a list. Even if you don't need the iterator variable or item variable, they still need to be present so the script knows how to continue between one loop and the next. The list delimiter can be <code>colon</code> (default), <code>semicolon</code>, or <code>space</code>. Careful that you don't use the same iterator variable when you have a loop inside another loop, or they'll compete for control of the variable! And careful that you aren't changing the list as you're going through it or you might end up confused!</dd>
+          <dd>Starts a block of actions that can be looped over multiple times. The block is ended by the matching <a href="#end-for-each"><code>end_for_each</code></a> action. The first time the <code>for</code> action is run in this loop, the variable &lt;iterator_variable_name&gt; receives the value of 1, and the variable &lt;item_variable_name&gt; receives the value of the first item in the list. Every other time it adds + 1 to the iterator variable and set the item variable to the next item over. Once the list has been combed through, the loop ends and the script continues from after the <code>end_for_each</code> action. In other words, you can use this to do something to each entry in a list. Even if you don't need the iterator variable or item variable, they still need to be present so the script knows how to continue between one loop and the next. The list delimiter can be <code>comma</code> (default), <code>semicolon</code>, or <code>space</code>. Careful that you don't use the same iterator variable when you have a loop inside another loop, or they'll compete for control of the variable! And careful that you aren't changing the list as you're going through it or you might end up confused!</dd>
         </dl></td>
       </tr>
       <tr id="goto">
@@ -292,7 +292,7 @@
 
     <h3 id="actions-common-list">List management</h3>
 
-    <p>Lists are just a string where all the items are laid out and separated by a space (or colon, or semicolon).</p>
+    <p>Lists are just a string where all the items are laid out and separated by a space (or comma, or semicolon).</p>
     
     <table>
       <tr><th>Action</th><th>Description</th></tr>
@@ -300,42 +300,42 @@
         <th><code>add_list_item</code></th>
         <td><dl>
           <dt><code><b>add_list_item</b> &lt;destination_variable_name&gt; &lt;list_or_string&gt; &lt;new_item&gt; [&lt;item_number&gt;] [&lt;list_delimiter&gt;]</code></dt>
-          <dd>Adds a new item to a list (or a string of items separated by a delimiter). The new list is then placed inside of &lt;destination_variable_name&gt;. If you specify an item number, it will be placed in that position, with "1" making it the new first item, "2" making it the new second item, etc. "0" is the default, and means it will be added to the end of the list. The list delimiter can be <code>colon</code> (default), <code>semicolon</code>, or <code>space</code>. If you want to create a new list with one item from scratch, you're better off using <code><a href="#set-var">set_var</a> &lt;new_list_var&gt; &lt;first_item&gt;</code>. See also <code><a href="#add-to-string">add_to_string</a></code>.</dd>
+          <dd>Adds a new item to a list (or a string of items separated by a delimiter). The new list is then placed inside of &lt;destination_variable_name&gt;. If you specify an item number, it will be placed in that position, with "1" making it the new first item, "2" making it the new second item, etc. "0" is the default, and means it will be added to the end of the list. The list delimiter can be <code>comma</code> (default), <code>semicolon</code>, or <code>space</code>. If you want to create a new list with one item from scratch, you're better off using <code><a href="#set-var">set_var</a> &lt;new_list_var&gt; &lt;first_item&gt;</code>. See also <code><a href="#add-to-string">add_to_string</a></code>.</dd>
         </dl></td>
       </tr>
       <tr id="get-list-item">
         <th><code>get_list_item</code></th>
         <td><dl>
           <dt><code><b>get_list_item</b> &lt;destination_variable_name&gt; &lt;list_or_string&gt; [&lt;item_number&gt;] [&lt;list_delimiter&gt;]</code></dt>
-          <dd>Gets one of the items in a list (or a string of items separated by a delimiter). Item number "1" is the first one, "2" is the second, etc. "0" is the default, and means it will get the last item. The list delimiter can be <code>colon</code> (default), <code>semicolon</code>, or <code>space</code>.</dd>
+          <dd>Gets one of the items in a list (or a string of items separated by a delimiter). Item number "1" is the first one, "2" is the second, etc. "0" is the default, and means it will get the last item. The list delimiter can be <code>comma</code> (default), <code>semicolon</code>, or <code>space</code>.</dd>
         </dl></td>
       </tr>
       <tr id="get-list-item-number">
         <th><code>get_list_item_number</code></th>
         <td><dl>
           <dt><code><b>get_list_item_number</b> &lt;destination_variable_name&gt; &lt;list_or_string&gt; &lt;item_to_search&gt; [&lt;list_delimiter&gt;]</code></dt>
-          <dd>Checks the items in a list (or a string of items separated by a delimiter), and gets the number of the item you want to search for. Item number "1" means it's the first item in the list, "2" means the second, etc. If the item number returned is "0", that means the item is not on the list. If the item appears multiple times in the list, this will only obtain the number of the first time it shows up. The list delimiter can be <code>colon</code> (default), <code>semicolon</code>, or <code>space</code>.</dd>
+          <dd>Checks the items in a list (or a string of items separated by a delimiter), and gets the number of the item you want to search for. Item number "1" means it's the first item in the list, "2" means the second, etc. If the item number returned is "0", that means the item is not on the list. If the item appears multiple times in the list, this will only obtain the number of the first time it shows up. The list delimiter can be <code>comma</code> (default), <code>semicolon</code>, or <code>space</code>.</dd>
         </dl></td>
       </tr>
       <tr id="get-list-size">
         <th><code>get_list_size</code></th>
         <td><dl>
           <dt><code><b>get_list_size</b> &lt;destination_variable_name&gt; &lt;list_or_string&gt; [&lt;list_delimiter&gt;]</code></dt>
-          <dd>Gets the amount of items in a list (or a string of items separated by a delimiter). The list delimiter can be <code>colon</code> (default), <code>semicolon</code>, or <code>space</code>.</dd>
+          <dd>Gets the amount of items in a list (or a string of items separated by a delimiter). The list delimiter can be <code>comma</code> (default), <code>semicolon</code>, or <code>space</code>.</dd>
         </dl></td>
       </tr>
       <tr id="remove-list-item">
         <th><code>remove_list_item</code></th>
         <td><dl>
           <dt><code><b>remove_list_item</b> &lt;destination_variable_name&gt; &lt;list_or_string&gt; [&lt;item_number&gt;] [&lt;list_delimiter&gt;]</code></dt>
-          <dd>Given the item number, removes that item from a list (or a string of items separated by a delimiter). The new list is then placed inside of &lt;destination_variable_name&gt;. Item number "1" will remove the first item, "2" will remove the second, etc. "0" is the default, and means it will remove the item at the end of the list. The list delimiter can be <code>colon</code> (default), <code>semicolon</code>, or <code>space</code>.</dd>
+          <dd>Given the item number, removes that item from a list (or a string of items separated by a delimiter). The new list is then placed inside of &lt;destination_variable_name&gt;. Item number "1" will remove the first item, "2" will remove the second, etc. "0" is the default, and means it will remove the item at the end of the list. The list delimiter can be <code>comma</code> (default), <code>semicolon</code>, or <code>space</code>.</dd>
         </dl></td>
       </tr>
       <tr id="set-list-item">
         <th><code>set_list_item</code></th>
         <td><dl>
           <dt><code><b>set_list_item</b> &lt;destination_variable_name&gt; &lt;list_or_string&gt; &lt;new_item&gt; [&lt;item_number&gt;] [&lt;list_delimiter&gt;]</code></dt>
-          <dd>Changes one of the items in a list (or a string of items separated by a delimiter). The new list is then placed inside of &lt;destination_variable_name&gt;. Item number "1" is the first one, "2" is the second, etc. "0" is the default, and means it will set the last item. The list delimiter can be <code>colon</code> (default), <code>semicolon</code>, or <code>space</code>.</dd>
+          <dd>Changes one of the items in a list (or a string of items separated by a delimiter). The new list is then placed inside of &lt;destination_variable_name&gt;. Item number "1" is the first one, "2" is the second, etc. "0" is the default, and means it will set the last item. The list delimiter can be <code>comma</code> (default), <code>semicolon</code>, or <code>space</code>.</dd>
         </dl></td>
       </tr>
     </table>

@@ -1870,7 +1870,7 @@ void initScriptActionTypes() {
     queueParam("list or string", ptString);
     queueParam("new item", ptString);
     queueParam("item number", ptInt, pfOpt, "0");
-    queueParam("list delimiter", ptEnum, pfOpt, "colon");
+    queueParam("list delimiter", ptEnum, pfOpt, "comma");
     commitAction(
         SCRIPT_ACTION_ADD_LIST_ITEM,
         "add_list_item",
@@ -2030,7 +2030,7 @@ void initScriptActionTypes() {
     queueParam("iterator var name", ptString, pfConst);
     queueParam("item var name", ptInt);
     queueParam("list or string", ptString);
-    queueParam("list delimiter", ptEnum, pfOpt, "colon");
+    queueParam("list delimiter", ptEnum, pfOpt, "comma");
     commitAction(
         SCRIPT_ACTION_FOR_EACH,
         "for_each",
@@ -2134,7 +2134,7 @@ void initScriptActionTypes() {
     queueParam("destination var name", ptString, pfConst);
     queueParam("list or string", ptString);
     queueParam("item number", ptInt, pfOpt, "0");
-    queueParam("list delimiter", ptEnum, pfOpt, "colon");
+    queueParam("list delimiter", ptEnum, pfOpt, "comma");
     commitAction(
         SCRIPT_ACTION_GET_LIST_ITEM,
         "get_list_item",
@@ -2145,7 +2145,7 @@ void initScriptActionTypes() {
     queueParam("destination var name", ptString, pfConst);
     queueParam("list or string", ptString);
     queueParam("item to search", ptInt);
-    queueParam("list delimiter", ptEnum, pfOpt, "colon");
+    queueParam("list delimiter", ptEnum, pfOpt, "comma");
     commitAction(
         SCRIPT_ACTION_GET_LIST_ITEM_NUMBER,
         "get_list_item_number",
@@ -2155,7 +2155,7 @@ void initScriptActionTypes() {
     //Get list size.
     queueParam("destination var name", ptString, pfConst);
     queueParam("list or string", ptString);
-    queueParam("list delimiter", ptEnum, pfOpt, "colon");
+    queueParam("list delimiter", ptEnum, pfOpt, "comma");
     commitAction(
         SCRIPT_ACTION_GET_LIST_SIZE,
         "get_list_size",
@@ -2311,7 +2311,7 @@ void initScriptActionTypes() {
     queueParam("destination var name", ptString, pfConst);
     queueParam("list or string", ptString);
     queueParam("item number", ptInt, pfOpt, "0");
-    queueParam("list delimiter", ptEnum, pfOpt, "colon");
+    queueParam("list delimiter", ptEnum, pfOpt, "comma");
     commitAction(
         SCRIPT_ACTION_REMOVE_LIST_ITEM,
         "remove_list_item",
@@ -2373,7 +2373,7 @@ void initScriptActionTypes() {
     queueParam("list or string", ptString);
     queueParam("new item", ptString);
     queueParam("item number", ptInt, pfOpt, "0");
-    queueParam("list delimiter", ptEnum, pfOpt, "colon");
+    queueParam("list delimiter", ptEnum, pfOpt, "comma");
     commitAction(
         SCRIPT_ACTION_SET_LIST_ITEM,
         "set_list_item",

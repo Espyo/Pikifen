@@ -837,8 +837,8 @@ buildEnumNames(scriptActionStabilizeZTypeINames, SCRIPT_ACTION_STABILIZE_Z_TYPE)
 //Delimiters for lists/strings in script actions.
 enum SCRIPT_ACTION_LIST_DELIMITER {
 
-    //Colons.
-    SCRIPT_ACTION_LIST_DELIMITER_COLON,
+    //Commas.
+    SCRIPT_ACTION_LIST_DELIMITER_COMMA,
     
     //Semicolon.
     SCRIPT_ACTION_LIST_DELIMITER_SEMICOLON,
@@ -851,7 +851,7 @@ enum SCRIPT_ACTION_LIST_DELIMITER {
 
 //Script action list delimiter enum naming (internal names).
 buildEnumNames(scriptActionListDelimiterINames, SCRIPT_ACTION_LIST_DELIMITER)({
-    { SCRIPT_ACTION_LIST_DELIMITER_COLON, "colon" },
+    { SCRIPT_ACTION_LIST_DELIMITER_COMMA, "comma" },
     { SCRIPT_ACTION_LIST_DELIMITER_SPACE, "space" },
     { SCRIPT_ACTION_LIST_DELIMITER_SEMICOLON, "semicolon" },
 });
@@ -859,7 +859,7 @@ buildEnumNames(scriptActionListDelimiterINames, SCRIPT_ACTION_LIST_DELIMITER)({
 
 //Script action list delimiter character listing.
 buildEnumNames(scriptActionListDelimiterChars, SCRIPT_ACTION_LIST_DELIMITER)({
-    { SCRIPT_ACTION_LIST_DELIMITER_COLON, "," },
+    { SCRIPT_ACTION_LIST_DELIMITER_COMMA, "," },
     { SCRIPT_ACTION_LIST_DELIMITER_SPACE, " " },
     { SCRIPT_ACTION_LIST_DELIMITER_SEMICOLON, ";" },
 });
