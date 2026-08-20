@@ -223,7 +223,7 @@
       </tr>
       <tr>
         <td>itch_damage</td>
-        <td>If an enemy has taken this much damage, it will be considered "itchy". With this, you can listen to the <code><a href="events_and_actions.html#on-itch">on_itch</a></code> event, and when it triggers, make the enemy shake the Pikmin off. Handling this event automatically resets the amount of damage, making it possible for the enemy to be itchy again, next time it takes this amount of damage. Setting this to something like 10% or 20% of the max health is usually the way to go.</td>
+        <td>If an enemy has taken this much damage, it will be considered "itchy". With this, you can listen to the <code><a href="events.html#on-itch">on_itch</a></code> event, and when it triggers, make the enemy shake the Pikmin off. Handling this event automatically resets the amount of damage, making it possible for the enemy to be itchy again, next time it takes this amount of damage. Setting this to something like 10% or 20% of the max health is usually the way to go.</td>
         <td>Number</td>
         <td>0</td>
       </tr>
@@ -720,7 +720,7 @@
       </tr>
       <tr>
         <td>loop</td>
-        <td>If you want the sound to loop, set this to <code>true</code>. Make sure you only use this for sounds that you intend to stop (i.e. via the <a href="script.html">script</a> actions <code><a href="events_and_actions.html#play-sound">play_sound</a></code> and <code><a href="events_and_actions.html#stop-sound">stop_sound</a></code>), otherwise the sound will keep playing forever!</td>
+        <td>If you want the sound to loop, set this to <code>true</code>. Make sure you only use this for sounds that you intend to stop (i.e. via the <a href="script.html">script</a> actions <code><a href="actions.html#play-sound">play_sound</a></code> and <code><a href="actions.html#stop-sound">stop_sound</a></code>), otherwise the sound will keep playing forever!</td>
         <td>Boolean</td>
         <td>false</td>
       </tr>
@@ -850,7 +850,7 @@
           <li>The object's target type is one of the types the attacker wants to hunt or can hurt.</li>
           <li>The object is not in the same team as the attacker.</li>
           <li>The object has more than zero health.</li>
-          <li>The object is not unhuntable via the <code><a href="events_and_actions.html#set-huntable">set_huntable</a></code> <a href="script.html">script action</a>.</li>
+          <li>The object is not unhuntable via the <code><a href="actions.html#set-huntable">set_huntable</a></code> <a href="script.html">script action</a>.</li>
           <li>The object is not invisible via a <a href="status.html">status effect</a>.</li>
         </ul>
       </li>

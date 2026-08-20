@@ -1,0 +1,221 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Pikifen manual</title>
+  <meta name="description" content="The Pikifen user manual">
+  
+  <link rel="stylesheet" href="../data/style.css">
+  <script src="../data/script.js"></script>
+  <link rel="icon" href="../../game_data/base/graphics/gui/icon.png" />
+</head>
+
+<body onload="setup('Events', ['Making content', 'Script'], ['making.html', 'script.html']);">
+  <div id="page-content" class="highlight-target">
+    
+    <p>This page will list all events for <a href="script.html">scripts</a>.</p>
+
+    <h2 id="events-common">Common events</h2>
+
+    <p>Events that can be used both in object scripts and in area scripts.</p>
+
+    <h3 id="events-common-script-flow">Script flow</h3>
+    
+    <table>
+      <tr><th>Event</th><th>Description</th></tr>
+      <tr id="on-enter">
+        <th style="text-align: left;"><code>on_enter</code></th>
+        <td>Triggered when its state is entered.</td>
+      </tr>
+      <tr id="on-leave">
+        <th style="text-align: left;"><code>on_leave</code></th>
+        <td>Triggered when its state is left.</td>
+      </tr>
+    </table>
+
+    <h3 id="events-common-timing">Timing</h3>
+    
+    <table>
+      <tr><th>Event</th><th>Description</th></tr>
+      <tr id="on-tick">
+        <th style="text-align: left;"><code>on_tick</code></th>
+        <td>Triggered every single game frame. Use this for when you want to have something that is always up-to-date, like making the object constantly turn to the focused object's position. If you want to use this to keep track of time, you probably want to use the <code><a href="actions.html#get-misc-info">get_misc_info</a></code> action to obtain the frame's "delta T"; see <a href="script.html#tips">script tips</a> for more information.</td>
+      </tr>
+      <tr id="on-timer">
+        <th style="text-align: left;"><code>on_timer</code></th>
+        <td>Triggered when the script's internal timer reaches 0. To have more than one timer, you can create custom timers by hand; see <a href="script.html#tips">script tips</a>.</td>
+      </tr>
+    </table>
+
+    <h3 id="events-common-misc">Misc.</h3>
+    
+    <table>
+      <tr><th>Event</th><th>Description</th></tr>
+      <tr id="on-input-received">
+        <th style="text-align: left;"><code>on_input_received</code></th>
+        <td>Triggered when the player performs an input. The player action and value can be obtained with the <code><a href="actions.html#get-event-info">get_event_info</a></code> action. This event is only run on the currently active <a href="mob_leader.html">leader</a> object and on the area script.</td>
+      </tr>
+    </table>
+
+    <h2 id="events-mobs">Object events</h2>
+
+    <p>Events that can only be used in object scripts. Object scripts can also use the <a href="#events-common">common events list</a>.</p>
+
+    <h3 id="events-mobs-timing">Timing</h3>
+    
+    <table>
+      <tr><th>Event</th><th>Description</th></tr>
+      <tr id="on-animation-end">
+        <th style="text-align: left;"><code>on_animation end</code></th>
+        <td>Triggered when the current animation finishes. Technically, this is triggered when the current animation begins looping.</td>
+      </tr>
+      <tr id="on-frame-signal">
+        <th style="text-align: left;"><code>on_frame_signal</code></th>
+        <td>Triggered when one of the frames of the current animation has launched a signal. The number of the signal can be obtained with the <code><a href="actions.html#get-event-info">get_event_info</a></code> action.</td>
+      </tr>
+      <tr id="on-ready">
+        <th style="text-align: left;"><del><code>on_ready</code></del></th>
+        <td><b>Deprecated in 1.2.0!</b> Please use the <code>ready</code> block of the script file instead. Triggered when the object has been initialized and is ready to do things, like all of its links have been properly placed. The <code>init</code> block in the script file and the <code><a href="#on-enter">on_enter</a></code> event of the first state are triggered before this.</td>
+      </tr>
+    </table>
+
+    <h3 id="events-mobs-movement">Movement</h3>
+    
+    <table>
+      <tr><th>Event</th><th>Description</th></tr>
+      <tr id="on-far-from-home">
+        <th style="text-align: left;"><code>on_far_from_home</code></th>
+        <td>Triggered every frame the object is far enough away from its home (as per the <code>territory_radius</code> property).</td>
+      </tr>
+      <tr id="on-land">
+        <th style="text-align: left;"><code>on_land</code></th>
+        <td>Triggered every frame the object is touching the floor.</td>
+      </tr>
+      <tr id="on-leave-hazard">
+        <th style="text-align: left;"><code>on_leave_hazard</code></th>
+        <td>Triggered when the object was on a hazardous sector, but no longer is.</td>
+      </tr>
+      <tr id="on-reach-destination">
+        <th style="text-align: left;"><code>on_reach_destination</code></th>
+        <td>Triggered every frame that the object is in its destination, by moving there with any of the "move" actions, or by reaching the final destination with any of the "follow_path" actions.</td>
+      </tr>
+      <tr id="on-touch-hazard">
+        <th style="text-align: left;"><code>on_touch_hazard</code></th>
+        <td>Triggered when it touches a hazard, whether from a hitbox, or from a sector.</td>
+      </tr>
+      <tr id="on-touch-wall">
+        <th style="text-align: left;"><code>on_touch_wall</code></th>
+        <td>Triggered every frame it is touching a wall.</td>
+      </tr>
+    </table>
+    
+    <h3 id="events-mobs-reach">Reaches</h3>
+    
+    <table>
+      <tr><th>Event</th><th>Description</th></tr>
+      <tr id="on-focus-off-reach">
+        <th style="text-align: left;"><code>on_focus_off_reach</code></th>
+        <td>Triggered every frame the focused object is beyond the current "far reach", or is dead. Also triggered when the focused object is deleted. Useful for making enemies lose track of focused Pikmin that are too far away.</td>
+      </tr>
+      <tr id="on-object-in-reach">
+        <th style="text-align: left;"><code>on_object_in_reach</code></th>
+        <td>Triggered when an object has entered within its "near reach". Will trigger every frame for the same object, too.</td>
+      </tr>
+      <tr id="on-opponent-in-reach">
+        <th style="text-align: left;"><code>on_opponent_in_reach</code></th>
+        <td>Same as <code>on_object_in_reach</code>, but for opponents only.</td>
+      </tr>
+    </table>
+
+    <h3 id="events-mobs-mob-touches">Object touches</h3>
+    
+    <table>
+      <tr><th>Event</th><th>Description</th></tr>
+      <tr id="on-hitbox-touch-a-n">
+        <th style="text-align: left;"><code>on_hitbox_touch_a_n</code></th>
+        <td>Triggered when one of the object's attack hitboxes touches an opponent's normal hitbox. The opposite doesn't exist since it's reserved by the engine for controlling attack damage, but you can try the <code><a href="#on-damage">on_damage</a></code> event.</td>
+      </tr>
+      <tr id="on-hitbox-touch-eat">
+        <th style="text-align: left;"><code>on_hitbox_touch_eat</code></th>
+        <td>Triggered when one of the object's normal hitboxes touches an opponent's "eat" hitbox. Particularly useful for tool objects.</td>
+      </tr>
+      <tr id="on-hitbox-touch-n-n">
+        <th style="text-align: left;"><code>on_hitbox_touch_n_n</code></th>
+        <td>Triggered when one of the object's normal hitboxes touches an opponent's normal hitbox.</td>
+      </tr>
+      <tr id="on-pikmin-land">
+        <th style="text-align: left;"><code>on_pikmin_land</code></th>
+        <td>Triggered when a thrown Pikmin lands on it. Technically, triggers when one of a thrown Pikmin's hitboxes touches one of its normal hitboxes.</td>
+      </tr>
+      <tr id="on-touch-object">
+        <th style="text-align: left;"><code>on_touch_object</code></th>
+        <td>Triggered every frame it is touches an object, for every object it's touching.</td>
+      </tr>
+      <tr id="on-touch-opponent">
+        <th style="text-align: left;"><code>on_touch_opponent</code></th>
+        <td>Same as <code>on_touch_object</code>, but for opponents only.</td>
+      </tr>
+    </table>
+
+    <h3 id="events-mobs-misc">Misc.</h3>
+    
+    <table>
+      <tr><th>Event</th><th>Description</th></tr>
+      <tr id="on-active-leader-changed">
+        <th style="text-align: left;"><code>on_active_leader_changed</code></th>
+        <td>Triggered when a player was controlling the leader that this mob is following, but is now controlling a different leader. The <a href="#target-mob">trigger mob</a> is the new current active leader. This is particularly useful for Glow Pikmin.</td>
+      </tr>
+      <tr id="on-damage">
+        <th style="text-align: left;"><code>on_damage</code></th>
+        <td>Triggered when the object takes any sort of damage.</td>
+      </tr>
+      <tr id="on-finish-receiving-delivery">
+        <th style="text-align: left;"><code>on_finish_receiving_delivery</code></th>
+        <td>Triggered when another object, delivered to it by carrier Pikmin, finishes being received.</td>
+      </tr>
+      <tr id="on-held">
+        <th style="text-align: left;"><code>on_held</code></th>
+        <td>Triggered when the object is picked up by another one. Particularly useful for tool objects.</td>
+      </tr>
+      <tr id="on-itch">
+        <th style="text-align: left;"><code>on_itch</code></th>
+        <td>Triggered when the object takes a certain amount of damage after the last itch, as defined by the <code>itch_damage</code> property. It will also only trigger if it's been a certain amount of time since the last itch, as per <code>itch_time</code>. If the current state cannot handle this event, it will continue being sent until a state shows up that can handle it.</td>
+      </tr>
+      <tr id="on-receive-message">
+        <th style="text-align: left;"><code>on_receive_message</code></th>
+        <td>Triggered when another object sent it a script message. The contents of the message can be obtained with the <code><a href="actions.html#get-event-info">get_event_info</a></code> action.</td>
+      </tr>
+      <tr id="on-released">
+        <th style="text-align: left;"><code>on_released</code></th>
+        <td>Triggered when the object was being held by another, but has now been released. Particularly useful for tool objects.</td>
+      </tr>
+      <tr id="on-start-receiving-delivery">
+        <th style="text-align: left;"><code>on_start_receiving_delivery</code></th>
+        <td>Triggered when another object, delivered to it by carrier Pikmin, starts being received.</td>
+      </tr>
+      <tr id="on-swallowed">
+        <th style="text-align: left;"><code>on_swallowed</code></th>
+        <td>Triggered when an enemy swallows this object. Particularly useful for tool objects.</td>
+      </tr>
+      <tr id="on-weight-added">
+        <th style="text-align: left;"><code>on_weight_added</code></th>
+        <td>Triggered when an object starts standing atop this one, thus adding weight.</td>
+      </tr>
+      <tr id="on-weight-removed">
+        <th style="text-align: left;"><code>on_weight_removed</code></th>
+        <td>Triggered when an object that was standing atop this one leaves, thus removing weight.</td>
+      </tr>
+    </table>
+
+    <h2 id="see-also">See also</h2>
+
+    <ul>
+      <li><a href="actions.html">List of actions</a></li>
+    </ul>
+    
+  </div>
+</body>
+
+</html>
