@@ -15,609 +15,1688 @@
 <body onload="setup('Actions', ['Making content', 'Script'], ['making.html', 'script.html']);">
   <div id="page-content" class="highlight-target">
     
-    <p>This page will list all actions for <a href="script.html">scripts</a>. Any parameter surrounded by square brackets is optional.</p>
+    <p>This page will list all actions for <a href="script.html">scripts</a>.</p>
+    
+    <p>Any parameter surrounded by square brackets is optional. Any parameter with the "constant" attribute means you have to write something fixed into it, you can't use a script variable. Any parameter with the "list" attribute means the word you pass in as an argument, as well as all words that come afterwards, are all a part of this parameter.</p>
 
     <h2 id="actions-common">Common actions</h2>
 
     <p>Actions that can be used both in object scripts and in area scripts.</p>
 
     <h3 id="actions-common-script-control">Script control</h3>
-    
-    <table>
-      <tr><th>Action</th><th>Description</th></tr>
-      <tr id="do-while">
-        <th><code>do_while</code></th>
-        <td>Starts a block of actions that can be looped over multiple times. The block is ended by the matching <a href="#end-do-while"><code>end_do_while</code></a> action. After running the block once, if the condition at the end of the block (specified by the <code>end_do_while</code> action) is still true, then the script jumps back to the <code>do_while</code> action, and the whole process repeats.<br>
-          The condition works just like how the <a href="#if"><code>if</code></a> action works. Make sure the condition can eventually be false otherwise this will be an <a href="glossary.html#infinite-loop">infinite loop</a>!<br>
-          This is similar to a <a href="#while-do"><code>while_do</code></a> loop, except this type of loop always runs the block at least once and only then checks the condition, while that one has the condition at the start and so may never run the block.</td>
+
+    <h4 id="do-while">Do while</h4>
+
+    <p>
+      Starts a block of actions that can be looped over multiple times. The block starts after this action and ends before the matching <a href="#end-do-while"><code>end_do_while</code></a> action.<br>
+      After running the block once, if the condition at the end of the block (specified by the <code>end_do_while</code> action) is still true, then the script jumps back to the <code>do_while</code> action, and the whole process repeats.<br>
+      The condition works just like how the <a href="#if"><code>if</code></a> action works. Make sure the condition can eventually be false otherwise this will be an <a href="glossary.html#infinite-loop">infinite loop</a>!<br>
+      This is similar to a <a href="#while-do"><code>while_do</code></a> loop, except this type of loop always runs the block at least once and only then checks the condition, while that one has the condition at the start and so may end up never needing to run the block.
+    </p>
+
+    <p>Syntax: <code><b>do_while</b></code></p>
+
+    <h4 id="else">Else</h4>
+
+    <p>If the corresponding <code><a href="#if">if</a></code> action's check ends up being false, the script will run this <code>else</code>'s block of actions. The block starts after this action and ends before the matching <code><a href="#end-if">end_if</a></code> action.</p>
+
+    <p>Syntax: <code><b>else</b></code></p>
+
+    <h4 id="else-if">Else if</h4>
+
+    <p>Same as if you had an <code><a href="#else">else</a></code> action followed by an <code><a href="#if">if</a></code> action, except it doesn't enter a new level of depth. In order words, you only have one <code><a href="#end-if">end_if</a></code> for this sequence. So something like: <code>if ... else_if ... else_if ... else_if ... else ... end_if</code>. If you have an <code>else</code> in the sequence, it must come after any <code>else_if</code>. The condition works exactly like the one in the <code>if</code> action.</p>
+
+    <p>Syntax: <code><b>else_if</b> &lt;left&gt; &lt;operator&gt; &lt;right&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>left</td>
+        <td>Same as the <a href="#if"><code>if</code> action</a>.</td>
+        <td>Mandatory</td>
+        <td>String</td>
       </tr>
-      <tr id="else">
-        <th><code>else</code></th>
-        <td>If the corresponding <code><a href="#if">if</a></code> action's check ends up being false, the script will run the block of actions after this <code>else</code>. The block ends with the matching <code>end_if</code> action.</td>
+      <tr>
+        <td>operator</td>
+        <td>Same as the <a href="#if"><code>if</code> action</a>.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
       </tr>
-      <tr id="else-if">
-        <th><code>else_if</code></th>
-        <td>Same as if you had an <code><a href="#else">else</a></code> action followed by an <code><a href="#if">if</a></code> action, except it doesn't enter a new level of depth. In order words, you only have one <code><a href="#end-if">end_if</a></code> for this sequence. So something like: <code>if ... else_if ... else_if ... else_if ... else ... end_if</code>. If you have an <code>else</code> in the sequence, it must come after any <code>else_if</code>.</td>
+      <tr>
+        <td>right</td>
+        <td>Same as the <a href="#if"><code>if</code> action</a>.</td>
+        <td>Mandatory</td>
+        <td>String</td>
       </tr>
-      <tr id="end-do-while">
-        <th><code>end_do_while</code></th>
-        <td><dl>
-          <dt><code><b>end_do_while</b> &lt;left&gt; &lt;operator&gt; &lt;right&gt;</code></dt>
-          <dd>See <a href="#do-while"><code>do_while</code></a>.</dd>
-        </dl></td>
+    </table>
+
+    <h4 id="end-do-while">End do while</h4>
+
+    <p>See <a href="#do-while"><code>do_while</code></a>.</p>
+
+    <p>Syntax: <code><b>end_do_while</b> &lt;left&gt; &lt;operator&gt; &lt;right&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>left</td>
+        <td>Same as the <a href="#if"><code>if</code> action</a>.</td>
+        <td>Mandatory</td>
+        <td>String</td>
       </tr>
-      <tr id="end-for">
-        <th><code>end_for</code></th>
-        <td>See <a href="#for"><code>for</code></a>.</td>
+      <tr>
+        <td>operator</td>
+        <td>Same as the <a href="#if"><code>if</code> action</a>.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
       </tr>
-      <tr id="end-for-each">
-        <th><code>end_for_each</code></th>
-        <td>See <a href="#for-each"><code>for_each</code></a>.</td>
+      <tr>
+        <td>right</td>
+        <td>Same as the <a href="#if"><code>if</code> action</a>.</td>
+        <td>Mandatory</td>
+        <td>String</td>
       </tr>
-      <tr id="end-if">
-        <th><code>end_if</code></th>
-        <td>Closes a condition sequence started by an <code><a href="#if">if</a></code> action.</td>
+    </table>
+
+    <h4 id="end-for">End for</h4>
+
+    <p>See <a href="#for"><code>for</code></a>.</p>
+
+    <p>Syntax: <code><b>end_for</b></code></p>
+
+    <h4 id="end-for-each">End for each</h4>
+
+    <p>See <a href="#for-each"><code>for_each</code></a>.</p>
+
+    <p>Syntax: <code><b>end_for_each</b></code></p>
+
+    <h4 id="end-if">End if</h4>
+
+    <p>See <a href="#if"><code>if</code></a>.</p>
+
+    <p>Syntax: <code><b>end_if</b></code></p>
+
+    <h4 id="end-while-do">End while do</h4>
+
+    <p>See <a href="#while-do"><code>while_do</code></a>.</p>
+
+    <p>Syntax: <code><b>end_while_do</b></code></p>
+
+    <h4 id="for">For</h4>
+
+    <p>
+      Starts a block of actions that can be looped over multiple times. The block starts after this action and ends before the matching <a href="#end-for"><code>end_for</code></a> action.<br>
+      The first time this <code>for</code> action is run, the variable &lt;iterator_var_name&gt; receives the default value of 1, and every other time it adds + 1 to the value. The block is looped over and over until the number is higher than &lt;target_amount&gt;, at which point the loop ends and the script continues from after the <code>end_for</code> action.<br>
+      In other words, you can use this to loop a block of actions exactly &lt;target_amount&gt; times, and every iteration you can check the &lt;iterator_var_name&gt; variable to know what loop iteration you're on: 1 means the first loop, 2 means the second, etc.<br>
+      In programming languages like C++ this is the same as <code>for(int &lt;iterator_var_name&gt; = 1; &lt;iterator_var_name&gt; &lt;= &lt;target_amount&gt;; &lt;iterator_var_name&gt;++)</code>.
+    </p>
+
+    <p>Syntax: <code><b>for</b> &lt;iterator_var_name&gt; &lt;target_amount&gt; [&lt;starting_amount&gt;] [&lt;jump&gt;]</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>iterator_var_name</td>
+        <td>Name of the variable that will control the iteration number. Even if you don't need the iterator variable, it still needs to be present so the script knows how to continue between one loop and the next. Careful that you don't use the same iterator variable when you have a loop inside another loop, or they'll compete for control of the variable!</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
       </tr>
-      <tr id="end-while-do">
-        <th><code>end_while_do</code></th>
-        <td>See <a href="#while-do"><code>while_do</code></a>.</td>
+      <tr>
+        <td>target_amount</td>
+        <td>The loop ends after the iterator is past this number. Normally, this is the number of times you want the loop to run for.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
-      <tr id="for">
-        <th><code>for</code></th>
-        <td><dl>
-          <dt><code><b>for</b> &lt;iterator_variable_name&gt; &lt;target_amount&gt;</code></dt>
-          <dd>Starts a block of actions that can be looped over multiple times. The block is ended by the matching <a href="#end-for"><code>end_for</code></a> action. The first time the <code>for</code> action is run in this loop, the variable &lt;iterator_variable_name&gt; receives the default value of 1, and every other time it adds + 1 to the value. The block is looped as many times as &lt;target_amount&gt;. The second that the iterator variable's value is higher than &lt;target_amount&gt; the loop ends and the script continues from after the <code>end_for</code> action. In other words, you can use this to loop a block of actions exactly &lt;target_amount&gt; times, and every iteration you can check the &lt;iterator_variable_name&gt; variable to know what loop you're on: 1 means the first loop, 2 means the second, etc. Even if you don't need the iterator variable, it still needs to be present so the script knows how to continue between one loop and the next. Careful that you don't use the same iterator variable when you have a loop inside another loop, or they'll compete for control of the variable! In programming languages like C++ this is the same as <code>for(int &lt;iterator_variable_name&gt; = 1; &lt;iterator_variable_name&gt; &lt;= &lt;target_amount&gt;; &lt;iterator_variable_name&gt;++)</code>.</dd>
-          <dt><code><b>for</b> &lt;iterator_variable_name&gt; &lt;target_amount&gt; [&lt;starting_value&gt;]</code></dt>
-          <dd>Same as above, but the iterator variable starts with the value &lt;starting_value&gt; instead of 1.</dd>
-          <dt><code><b>for</b> &lt;iterator_variable_name&gt; &lt;target_amount&gt; [&lt;starting_value&gt;] [&lt;jump&gt;]</code></dt>
-          <dd>Same as above, but you can specify how much each iteration makes the value jump. By default this is +1. You can use -1 to make it go backwards, +2 to make it skip every other number, etc.</dd>
-        </dl></td>
+      <tr>
+        <td>starting_amount</td>
+        <td>Starting value for the iteration number.</td>
+        <td>Optional, default: <code>1</code></td>
+        <td>Number</td>
       </tr>
-      <tr id="for-each">
-        <th><code>for_each</code></th>
-        <td><dl>
-          <dt><code><b>for_each</b> &lt;iterator_variable_name&gt; &lt;item_variable_name&gt; &lt;list_or_string&gt; [&lt;list_delimiter&gt;]</code></dt>
-          <dd>Starts a block of actions that can be looped over multiple times. The block is ended by the matching <a href="#end-for-each"><code>end_for_each</code></a> action. The first time the <code>for</code> action is run in this loop, the variable &lt;iterator_variable_name&gt; receives the value of 1, and the variable &lt;item_variable_name&gt; receives the value of the first item in the list. Every other time it adds + 1 to the iterator variable and set the item variable to the next item over. Once the list has been combed through, the loop ends and the script continues from after the <code>end_for_each</code> action. In other words, you can use this to do something to each entry in a list. Even if you don't need the iterator variable or item variable, they still need to be present so the script knows how to continue between one loop and the next. The list delimiter can be <code>comma</code> (default), <code>semicolon</code>, or <code>space</code>. Careful that you don't use the same iterator variable when you have a loop inside another loop, or they'll compete for control of the variable! And careful that you aren't changing the list as you're going through it or you might end up confused!</dd>
-        </dl></td>
+      <tr>
+        <td>jump</td>
+        <td>How much each iteration makes the iterator value jump. By default this is +1. You can use -1 to make it go backwards, +2 to make it skip every other number, etc.</td>
+        <td>Optional, default: <code>1</code></td>
+        <td>Number</td>
       </tr>
-      <tr id="goto">
-        <th><code>goto</code></th>
-        <td><dl>
-          <dt><code><b>goto</b> &lt;label_name&gt;</code></dt>
-          <dd>Orders the script to jump to where the label named &lt;label_name&gt; is. The label must be in the same action block as this <code>goto</code>. You can use this to loop actions multiple times in a row by returning to the top of the loop.</dd>
-        </dl></td>
+    </table>
+
+    <h4 id="for-each">For each</h4>
+
+    <p>
+      Starts a block of actions that can be looped over multiple times. The block starts after this action and ends before the matching <a href="#end-for-each"><code>end_for_each</code></a> action.<br>
+      The first time this <code>for_each</code> action is run, the variable &lt;iterator_var_name&gt; receives the value of 1, and the variable &lt;item_var_name&gt; receives the value of the first item in the list. Every other time it adds + 1 to the iterator variable and set the item variable to the next item over. Once the list has been combed through, the loop ends and the script continues from after the <code>end_for_each</code> action.<br>
+      In other words, you can use this to do something to each entry in a list. Be careful that you aren't changing the list as you're going through it or you might end up confused!
+    </p>
+
+    <p>Syntax: <code><b>for_each</b> &lt;iterator_var_name&gt; &lt;item_var_name&gt; &lt;list&gt; [&lt;list_delimiter&gt;]</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>iterator_var_name</td>
+        <td>Name of the variable that will control the iteration number. Even if you don't need the iterator variable, it still needs to be present so the script knows how to continue between one loop and the next. Careful that you don't use the same iterator variable when you have a loop inside another loop, or they'll compete for control of the variable!</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
       </tr>
-      <tr id="if">
-        <th><code>if</code></th>
+      <tr>
+        <td>item_var_name</td>
+        <td>Name of the variable that will hold what the current item is.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>list</td>
+        <td>String representing the <a href="#actions-common-list">list of items</a>.</td>
+        <td>Mandatory</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>list_delimiter</td>
+        <td>The <a href="#list-delimiter">list delimiter</a>.</td>
+        <td>Optional, default: <code>comma</code></td>
+        <td>String</td>
+      </tr>
+    </table>
+
+    <h4 id="goto">Goto</h4>
+
+    <p>Orders the script to jump to wherever the given label is. The label must be in the same action block as this <code>goto</code>. You can use this to loop actions multiple times in a row by returning to the top of the loop.</p>
+
+    <p>Syntax: <code><b>goto</b> &lt;label_name&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>label_name</td>
+        <td>Name of the label to jump to.</td>
+        <td>Mandatory</td>
+        <td>String</td>
+      </tr>
+    </table>
+
+    <h4 id="if">If</h4>
+
+    <p>
+      Only executes the next block of actions if the condition you specify is true.<br>
+      Said block starts after this action and ends before the next matching <code><a href="#else">else</a></code>, <code><a href="#else-if">else_if</a></code>, or <code><a href="#end-if">end_if</a></code> action.<br>
+      If the condition is false, the script jumps to the next matching <code>else</code>, <code>else_if</code>, or <code>end_if</code> action.<br>
+      You can compare two things, but unless you want the result to always be the same, you'll probably want at least one of those things to be the contents of a variable.
+    </p>
+
+    <p>Syntax: <code><b>if</b> &lt;left&gt; &lt;operator&gt; &lt;right&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>left</td>
+        <td>First thing to compare.</td>
+        <td>Mandatory</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>operator</td>
         <td>
-          Only executes the next block of actions if the condition you specify is true. If not, it jumps to the next matching <code><a href="#else">else</a></code>, <code><a href="#else-if">else_if</a></code>, or <code><a href="#end-if">end_if</a></code> action. The block to run goes between the <code>if</code> and the next matching <code>else</code>, <code>else_if</code>, or <code>end_if</code> action. 
-          <dl><dt><code><b>if</b> &lt;left&gt; &lt;operator&gt; &lt;right&gt;</code></dt>
-          <dd>
-            &lt;left&gt; and &lt;right&gt; are two values, and &lt;operator&gt; is how you want to compare them. As such, it makes sense to replace at least one of the values with a variable. Note that due to scripting limitations, only &lt;right&gt; may have spaces, if it is text. The possible operators are:
-            <ul>
-              <li><code><b>=</b></code>: True if &lt;left&gt; matches &lt;right&gt;. Works with numbers or text.</li>
-              <li><code><b>!=</b></code>: True if they don't match; also works with numbers or text.</li>
-              <li><code><b>&lt;</b></code>: True if the number in &lt;left&gt; is less than the number in &lt;right&gt;.</li>
-              <li><code><b>&gt;</b></code>: Greater than.</li>
-              <li><code><b>&lt;=</b></code>: Less than or equal.</li>
-              <li><code><b>&gt;=</b></code>: Greater than or equal.</li>
-            </ul>
-          </dd>
-        </dl></td>
+          How the two should be compared.
+          <ul>
+            <li><code><b>=</b></code>: True if &lt;left&gt; matches &lt;right&gt;. Works with numbers or text.</li>
+            <li><code><b>!=</b></code>: True if they don't match. Also works with numbers or text.</li>
+            <li><code><b>&lt;</b></code>: True if the number in &lt;left&gt; is less than the number in &lt;right&gt;.</li>
+            <li><code><b>&gt;</b></code>: Greater than.</li>
+            <li><code><b>&lt;=</b></code>: Less than or equal.</li>
+            <li><code><b>&gt;=</b></code>: Greater than or equal.</li>
+          </ul>
+        </td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
       </tr>
-      <tr id="label">
-        <th><code>label</code></th>
-        <td><dl>
-          <dt><code><b>label</b> &lt;label_name&gt;</code></dt>
-          <dd>Labels this point of the script as &lt;label_name&gt;. You can then use the <code><a href="#goto">goto</a></code> action to force the script to go to this point at will. Each label is only accessible to the action block it belongs to.</dd>
-        </dl></td>
+      <tr>
+        <td>right</td>
+        <td>Second thing to compare.</td>
+        <td>List, mandatory</td>
+        <td>String</td>
       </tr>
-      <tr id="set-state">
-        <th><code>set_state</code></th>
-        <td><dl>
-          <dt><code><b>set_state</b> &lt;state&gt;</code></dt>
-          <dd>Instantly changes to the specified state. If it was meant to run any actions after this one, they will not be run.</dd>
-        </dl></td>
+    </table>
+
+    <h4 id="label">Label</h4>
+
+    <p>Labels this point of the script with the given name. You can then use the <code><a href="#goto">goto</a></code> action to force the script to go to this point at will. Each label is only accessible in the action block it belongs to.</p>
+
+    <p>Syntax: <code><b>label</b> &lt;label_name&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>label_name</td>
+        <td>Name of the label. Should be unique within this block of actions.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
       </tr>
-      <tr id="while-do">
-        <th><code>while_do</code></th>
-        <td><dl>
-          <dt><code><b>while_do</b> &lt;left&gt; &lt;operator&gt; &lt;right&gt;</code></dt>
-          <dd>Starts a block of actions that can be looped over multiple times. The block is ended by the matching <a href="#end-while-do"><code>end_while_do</code></a> action. The block is only run if the condition at the start (specified by the <code>while_do</code> action) is true. If the block is run, then at the end the script returns to the <code>while_do</code> action and the whole process repeats.<br>
-            The condition works just like how the <a href="#if"><code>if</code></a> action works. Make sure the condition can eventually be false otherwise this will be an <a href="glossary.html#infinite-loop">infinite loop</a>!<br>
-            This is similar to <a href="#do-while"><code>do_while</code></a> loop, except this type of loop has the condition at the start and so may never run the block, while that one always runs the block at least once and only then checks the condition.</dd>
-        </dl></td>
+    </table>
+
+    <h4 id="set-state">Set state</h4>
+
+    <p>Instantly changes to the specified state. If there were other actions afterwards in this action's block, they will not be run.</p>
+
+    <p>Syntax: <code><b>set_state</b> &lt;state&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>state</td>
+        <td>Internal name of the state.</td>
+        <td>Mandatory</td>
+        <td>String</td>
+      </tr>
+    </table>
+
+    <h4 id="while-do">While do</h4>
+
+    <p>
+      Starts a block of actions that can be looped over multiple times. The starts after this action and ends before the matching <a href="#end-while-do"><code>end_while_do</code></a> action.<br>
+      The block is only run if the condition at the start (specified by the <code>while_do</code> action) is true. If the block is run, then at the end the script returns to the <code>while_do</code> action, and the whole process repeats.<br>
+      The condition works just like how the <a href="#if"><code>if</code></a> action works. Make sure the condition can eventually be false otherwise this will be an <a href="glossary.html#infinite-loop">infinite loop</a>!<br>
+      This is similar to a <a href="#do-while"><code>do_while</code></a> loop, except this type of loop has the condition at the start and so may end up never needing to run the block, while that one always runs the block at least once and only then checks the condition.
+    </p>
+
+    <p>Syntax: <code><b>while_do</b> &lt;left&gt; &lt;operator&gt; &lt;right&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>left</td>
+        <td>Same as the <a href="#if"><code>if</code> action</a>.</td>
+        <td>Mandatory</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>operator</td>
+        <td>Same as the <a href="#if"><code>if</code> action</a>.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>right</td>
+        <td>Same as the <a href="#if"><code>if</code> action</a>.</td>
+        <td>Mandatory</td>
+        <td>String</td>
       </tr>
     </table>
     
     <h3 id="actions-common-maths">Mathematics</h3>
+
+    <h4 id="absolute-number">Absolute number</h4>
+
+    <p>Gets the <a href="https://en.wikipedia.org/wiki/Absolute_value">absolute value</a> of the given number. In other words, it converts a negative number into its positive version.</p>
+
+    <p>Syntax: <code><b>absolute_number</b> &lt;destination_var_name&gt; &lt;number&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>number</td>
+        <td>Number to calculate.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+    </table>
+
+    <h4 id="calculate">Calculate</h4>
+
+    <p>Calculates a mathematical operation between two operand numbers. It makes sense to use a variable in at least one of the operands, otherwise you're just punching in a fixed number calculation that any household calculator could tell you about.</p>
+
+    <p>Syntax: <code><b>calculate</b> &lt;destination_var_name&gt; &lt;left&gt; &lt;operator&gt; &lt;right&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>left</td>
+        <td>First operand.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+      <tr>
+        <td>operator</td>
+        <td>
+          Mathematical operation.
+          <ul>
+            <li><code><b>+</b></code>: Add both numbers.</li>
+            <li><code><b>-</b></code>: Subtract the second number from the first.</li>
+            <li><code><b>*</b></code>: Multiply both numbers.</li>
+            <li><code><b>/</b></code>: Divide the first number by the second. A division by 0 results in a 0.</li>
+            <li><code><b>%</b></code>: <a href="https://en.wikipedia.org/wiki/Modulo_operation">Modulo operation</a>.</li>
+            <li><code><b>^</b></code>: Raise the first number to the power of the second.</li>
+          </ul>
+        </td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>right</td>
+        <td>Second operand.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+    </table>
+
+    <h4 id="ceil-number">Ceil number</h4>
+
+    <p>Gets the <a href="https://en.wikipedia.org/wiki/Floor_and_ceiling_functions">ceil</a> of the given number. In other words, it rounds the number's decimal places up to an integer. Using this on a positive number like 6.3 returns 7, and on a negative number like -6.3 it returns -6; if you want to just get rid of the decimal part, see <code><a href="#truncate-number">truncate_number</a></code>.</p>
+
+    <p>Syntax: <code><b>ceil_number</b> &lt;destination_var_name&gt; &lt;number&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>number</td>
+        <td>Number to ceil.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+    </table>
+
+    <h4 id="clamp-number">Clamp number</h4>
+
+    <p>Gets whatever &lt;number&gt; is, unless it goes under the lower bound or above the upper bound, in which case it stays at the number of that bound. In a way, this combines <code><a href="#min-number">min_number</a></code> and <code><a href="#max-number">max_number</a></code>.</p>
+
+    <p>Syntax: <code><b>clamp_number</b> &lt;destination_var_name&gt; &lt;number&gt; &lt;lower_bound&gt; &lt;upper_bound&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>number</td>
+        <td>Number to clamp.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+      <tr>
+        <td>lower_bound</td>
+        <td>Lower allowed bound.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+      <tr>
+        <td>upper_bound</td>
+        <td>Upper allowed bound.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+    </table>
+
+    <h4 id="ease-number">Ease number</h4>
+
+    <p>Gets the eased <a href="https://en.wikipedia.org/wiki/Interpolation_(computer_graphics)">interpolation</a> of the given number. In other words, it makes the number slow down as it approaches its destination, or speed up, or overshoot and then return, etc. As such, it's useful for animating things in interesting ways. The number should be between 0 (starting point) and 1 (ending point), and the output goes from 0 to 1 as well, though it can go over for effect. This means you can multiply whatever you need, like a distance, by the resulting number.</p>
+
+    <p>Syntax: <code><b>ease_number</b> &lt;destination_var_name&gt; &lt;number&gt; &lt;method&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>number</td>
+        <td>Number to ease.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+      <tr>
+        <td>method</td>
+        <td>
+          Easing method:
+          <ul>
+            <li><code><b>in</b></code>: Eases as it goes in, then gradually goes out normally.</li>
+            <li><code><b>out</b></code>: Gradually goes in normally, then eased as it goes out.</li>
+            <li><code><b>in_out</b></code>: Eased as it goes in and also as it goes out.</li>
+            <li><code><b>in_back</b></code>: Goes backwards before going in.</li>
+            <li><code><b>out_back</b></code>: Overshoots at the end then finishes.</li>
+            <li><code><b>in_out_back</b></code>: Combines in back with out back.</li>
+            <li><code><b>in_elastic</b></code>: Springs backwards before going in.</li>
+            <li><code><b>out_elastic</b></code>: Near the end, it overshoots and then springs to normal.</li>
+            <li><code><b>up_and_down</b></code>: Goes up to 1, then back down to 0, in a sine-wave.</li>
+            <li><code><b>up_and_down_elastic</b></code>: Goes up to 1, then down to 0, and wobbles around 0 for a bit.</li>
+          </ul>
+        </td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+    </table>
+
+    <h4 id="floor-number">Floor number</h4>
+
+    <p>Gets the <a href="https://en.wikipedia.org/wiki/Floor_and_ceiling_functions">floor</a> of the given number. In other words, it rounds the number's decimal places down to an integer. Using this on a positive number like 6.3 returns 6, but on a negative number like -6.3 it returns -7; if you want to just get rid of the decimal part, see <code><a href="#truncate-number">truncate_number</a></code>.</p>
+
+    <p>Syntax: <code><b>floor_number</b> &lt;destination_var_name&gt; &lt;number&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>number</td>
+        <td>Number to floor.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+    </table>
+
+    <h4 id="get-angle">Get angle</h4>
+
+    <p>Gets the <a href="glossary.html#angle">angle</a> (in degrees) between two sets of coordinates. See also <code><a href="#get-distance">get_distance</a></code>.</p>
+
+    <p>Syntax: <code><b>get_angle</b> &lt;destination_var_name&gt; &lt;center_x&gt; &lt;center_y&gt; &lt;focus_x&gt; &lt;focus_y&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>center_x</td>
+        <td>X coordinate of the center point, the point that is facing towards the other one.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+      <tr>
+        <td>center_y</td>
+        <td>Y coordinate of the center point, the point that is facing towards the other one.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+      <tr>
+        <td>focus_x</td>
+        <td>X coordinate of the focus point, the point that the other one is facing towards.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+      <tr>
+        <td>center_y</td>
+        <td>Y coordinate of the focus point, the point that the other one is facing towards.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+    </table>
+
+    <h4 id="get-angle-cw-diff">Get angle clockwise difference</h4>
+
+    <p>Gets the clockwise difference between two angles. In other words, how many degrees do we travel clockwise to get from the first angle to the second.</p>
+
+    <p>Syntax: <code><b>get_angle_clockwise_difference</b> &lt;destination_var_name&gt; &lt;angle_1&gt; &lt;angle_2&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>angle_1</td>
+        <td>Starting angle, in degrees. It can be negative or go beyond 360.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+      <tr>
+        <td>angle_2</td>
+        <td>Ending angle, in degrees. It can be negative or go beyond 360.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+    </table>
+
+    <h4 id="get-angle-smallest-diff">Get angle smallest difference</h4>
+
+    <p>Gets the smallest difference between two angles. In other words, how many degrees do we travel clockwise or counterclockwise to get from the first angle to the second, whichever number is smaller.</p>
+
+    <p>Syntax: <code><b>get_angle_smallest_difference</b> &lt;destination_var_name&gt; &lt;angle_1&gt; &lt;angle_2&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>angle_1</td>
+        <td>First angle to check, in degrees. It can be negative or go beyond 360.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+      <tr>
+        <td>angle_2</td>
+        <td>Second angle to check, in degrees. It can be negative or go beyond 360.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+    </table>
+
+    <h4 id="get-coordinates-from-angle">Get coordinates from angle</h4>
+
+    <p>Gets the X and Y <a href="glossary.html#coordinates">coordinates</a> that represent the specified <a href="glossary.html#angle">angle</a> and distance. Basically, imagine an imaginary point at coordinates 0,0. If you go in the specified angle, for the specified distance, you'll end up at the returned coordinates.</p>
+
+    <p>Syntax: <code><b>get_coordinates_from_angle</b> &lt;x_destination_var_name&gt; &lt;y_destination_var_name&gt; &lt;angle&gt; &lt;distance&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>x_destination_var_name</td>
+        <td>Name of the variable that will receive the final X coordinate.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>y_destination_var_name</td>
+        <td>Name of the variable that will receive the final Y coordinate.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>angle</td>
+        <td>Angle to use, in degrees. It can be negative or go beyond 360.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+      <tr>
+        <td>distance</td>
+        <td>Distance to use.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+    </table>
+
+    <h4 id="get-distance">Get distance</h4>
+
+    <p>Gets the distance between two sets of coordinates.</p>
+
+    <p>Syntax: <code><b>get_distance</b> &lt;destination_var_name&gt; &lt;center_x&gt; &lt;center_y&gt; &lt;focus_x&gt; &lt;focus_y&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>center_x</td>
+        <td>X coordinate of the first point.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+      <tr>
+        <td>center_y</td>
+        <td>Y coordinate of the first point.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+      <tr>
+        <td>focus_x</td>
+        <td>X coordinate of the second point.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+      <tr>
+        <td>center_y</td>
+        <td>Y coordinate of the second point.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+    </table>
     
-    <table>
-      <tr><th>Action</th><th>Description</th></tr>
-      <tr id="absolute-number">
-        <th><code>absolute_number</code></th>
-        <td><dl>
-          <dt><code><b>absolute_number</b> &lt;destination_variable_name&gt; &lt;number&gt;</code></dt>
-          <dd>Sets the variable &lt;destination_variable_name&gt; to the <a href="https://en.wikipedia.org/wiki/Absolute_value">absolute value</a> of the given number. In other words, it converts a negative number into its positive version.</dd>
-        </dl></td>
+    <h4 id="get-random-float">Get random float</h4>
+
+    <p>Gets a random <a href="glossary.html#float-number">float number</a> between the two given limits, inclusive.</p>
+
+    <p>Syntax: <code><b>get_random_float</b> &lt;destination_var_name&gt; &lt;minimum_value&gt; &lt;maximum_value&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
       </tr>
-      <tr id="calculate">
-        <th><code>calculate</code></th>
-        <td><dl>
-          <dt><code><b>calculate</b> &lt;destination_variable_name&gt; &lt;left&gt; &lt;operator&gt; &lt;right&gt;</code></dt>
-          <dd>Calculates the mathematical operation between the operands and sets the variable to the result. It makes sense to use a variable in at least one of the operands, otherwise you're just punching in a fixed number calculation that any household calculator could tell you about. The operator can be <code>+</code> (add), <code>-</code> (subtract), <code>*</code> (multiply), <code>/</code> (divide), <code>%</code> (<a href="https://en.wikipedia.org/wiki/Modulo_operation">modulo</a>), or <code>^</code> (power). For instance, <code>calculate jumps $jumps + 1</code> would increment the number of jumps. Be careful not to get your $ signs confused &ndash; the &lt;destination_variable_name&gt; field shouldn't use it!</dd>
-        </dl></td>
+      <tr>
+        <td>minimum_value</td>
+        <td>Minimum value that the random number can have, inclusive.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
-      <tr id="ceil-number">
-        <th><code>ceil_number</code></th>
-        <td><dl>
-          <dt><code><b>ceil_number</b> &lt;destination_variable_name&gt; &lt;number&gt;</code></dt>
-          <dd>Sets the variable &lt;destination_variable_name&gt; to the <a href="https://en.wikipedia.org/wiki/Floor_and_ceiling_functions">ceil</a> of the given number. In other words, it rounds the number's decimal places up integer. Using this on a positive number like 6.3 returns 7, and on a negative number like -6.3 it returns -6; if you want to just get rid of the decimal part, see <code><a href="#truncate-number">truncate_number</a></code>.</dd>
-        </dl></td>
+      <tr>
+        <td>maximum_value</td>
+        <td>Maximum value that the random number can have, inclusive.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
-      <tr id="clamp-number">
-        <th><code>clamp_number</code></th>
-        <td><dl>
-          <dt><code><b>clamp_number</b> &lt;destination_variable_name&gt; &lt;number&gt; &lt;lower_bound&gt; &lt;upper_bound</code></dt>
-          <dd>Sets the variable &lt;destination_variable_name&gt; to whatever &lt;number&gt; is, unless it goes under the lower bound or above the upper bound, in which case it stays at the number of the bound.</dd>
-        </dl></td>
+    </table>
+    
+    <h4 id="get-random-int">Get random int</h4>
+
+    <p>Gets a random <a href="glossary.html#integer">integer number</a> between the two given limits, inclusive.</p>
+
+    <p>Syntax: <code><b>get_random_int</b> &lt;destination_var_name&gt; &lt;minimum_value&gt; &lt;maximum_value&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
       </tr>
-      <tr id="ease-number">
-        <th><code>ease_number</code></th>
-        <td><dl>
-          <dt><code><b>ease_number</b> &lt;destination_variable_name&gt; &lt;number&gt; &lt;method&gt;</code></dt>
-          <dd>
-            Sets the variable &lt;destination_variable_name&gt; to the eased <a href="https://en.wikipedia.org/wiki/Interpolation_(computer_graphics)">interpolation</a> of the given number. In other words, it makes the number slow down as it approaches its destination, speed up, overshoot and then return, etc. As such, it's useful for animating things. The number should be between 0 (starting point) and 1 (ending point), and the output goes from 0 to 1 as well, though it can go over for effect. The available methods are:
-            <ul>
-              <li><code>in</code>: Eases as it goes in, then gradually goes out normally.</li>
-              <li><code>out</code>: Gradually goes in normally, then eased as it goes out.</li>
-              <li><code>in_out</code>: Eased as it goes in and also as it goes out.</li>
-              <li><code>in_back</code>: Goes backwards before going in.</li>
-              <li><code>out_back</code>: Overshoots at the end then finishes.</li>
-              <li><code>in_out_back</code>: Combines in back with out back.</li>
-              <li><code>in_elastic</code>: Springs backwards before going in.</li>
-              <li><code>out_elastic</code>: Near the end, it overshoots and then springs to normal.</li>
-              <li><code>up_and_down</code>: Goes up to 1, then back down to 0, in a sine-wave.</li>
-              <li><code>up_and_down_elastic</code>: Goes up to 1, then down to 0, and wobbles around 0 for a bit.</li>
-            </ul>
-          </dd>
-        </dl></td>
+      <tr>
+        <td>minimum_value</td>
+        <td>Minimum value that the random number can have, inclusive.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
-      <tr id="floor-number">
-        <th><code>floor_number</code></th>
-        <td><dl>
-          <dt><code><b>floor_number</b> &lt;destination_variable_name&gt; &lt;number&gt;</code></dt>
-          <dd>Sets the variable &lt;destination_variable_name&gt; to the <a href="https://en.wikipedia.org/wiki/Floor_and_ceiling_functions">floor</a> of the given number. In other words, it rounds the number's decimal places down to an integer. Using this on a positive number like 6.3 returns 6, but on a negative number like -6.3 it returns -7; if you want to just get rid of the decimal part, see <code><a href="#truncate-number">truncate_number</a></code>.</dd>
-        </dl></td>
+      <tr>
+        <td>maximum_value</td>
+        <td>Maximum value that the random number can have, inclusive.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
-      <tr id="get-angle">
-        <th><code>get_angle</code></th>
-        <td><dl>
-          <dt><code><b>get_angle</b> &lt;destination_variable_name&gt; &lt;center_x&gt; &lt;center_y&gt; &lt;focus_x&gt; &lt;focus_y&gt;</code></dt>
-          <dd>Sets the variable &lt;destination_variable_name&gt; to the <a href="glossary.html#angle">angle</a> (in degrees) between the two sets of coordinates.</dd>
-        </dl></td>
+    </table>
+
+    <h4 id="interpolate-number">Interpolate number</h4>
+
+    <p>Gets the <a href="https://en.wikipedia.org/wiki/Linear_interpolation">linear interpolation</a> of the given values. In other words, it gets a number that's somewhere between the given values. When the &lt;input_number&gt; matches &lt;input_start&gt;, the result matches &lt;output_start&gt;. And when it matches &lt;input_end&gt;, the result matches &lt;output_end&gt;. In-between input values result in in-between output values.</p>
+
+    <p>Syntax: <code><b>interpolate_number</b> &lt;destination_var_name&gt; &lt;input_number&gt; &lt;input_start&gt; &lt;input_end&gt; &lt;output_start&gt; &lt;output_end&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
       </tr>
-      <tr id="get-angle-cw-diff">
-        <th><code>get_angle_clockwise_difference</code></th>
-        <td><dl>
-          <dt><code><b>get_angle_clockwise_difference</b> &lt;destination_variable_name&gt; &lt;angle_1&gt; &lt;angle_2&gt;</code></dt>
-          <dd>Sets the variable &lt;destination_variable_name&gt; to the clockwise difference between &lt;angle_1&gt; and &lt;angle2_&gt;. In other words, how many degrees do we travel clockwise to get from the first angle to the second.</dd>
-        </dl></td>
+      <tr>
+        <td>input_number</td>
+        <td>Input number. This gets compared against <code>input_start</code> and <code>input_end</code>.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
-      <tr id="get-angle-smallest-diff">
-        <th><code>get_angle_smallest_difference</code></th>
-        <td><dl>
-          <dt><code><b>get_angle_smallest_difference</b> &lt;destination_variable_name&gt; &lt;angle_1&gt; &lt;angle_2&gt;</code></dt>
-          <dd>Sets the variable &lt;destination_variable_name&gt; to the smallest difference between &lt;angle_1&gt; and &lt;angle2_&gt;. In other words, how many degrees do we travel clockwise or counterclockwise to get from the first angle to the second, whichever number is smaller.</dd>
-        </dl></td>
+      <tr>
+        <td>input_start</td>
+        <td>Starting amount to compare the input number against.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
-      <tr id="get-coordinates-from-angle">
-        <th><code>get_coordinates_from_angle</code></th>
-        <td><dl>
-          <dt><code><b>get_coordinates_from_angle</b> &lt;x_destination_variable_name&gt; &lt;y_destination_variable_name&gt; &lt;angle&gt; &lt;distance&gt;</code></dt>
-          <dd>Sets the destination variables to the X and Y <a href="glossary.html#coordinates">coordinates</a> that represent the specified <a href="glossary.html#angle">angle</a> (in degrees) and distance. Basically, imagine an imaginary point at coordinates 0,0. If you go in the specified angle, for the specified distance, you'll end up at the returned coordinates.</dd>
-        </dl></td>
+      <tr>
+        <td>input_end</td>
+        <td>Ending amount to compare the input number against.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
-      <tr id="get-distance">
-        <th><code>get_distance</code></th>
-        <td><dl>
-          <dt><code><b>get_distance</b> &lt;destination_variable_name&gt; &lt;center_x&gt; &lt;center_y&gt; &lt;focus_x&gt; &lt;focus_y&gt;</code></dt>
-          <dd>Sets the variable &lt;destination_variable_name&gt; to the distance between the two sets of coordinates.</dd>
-        </dl></td>
+      <tr>
+        <td>output_start</td>
+        <td>Result for when the input number matches <code>input_start</code>.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
-      <tr id="get-random-float">
-        <th><code>get_random_float</code></th>
-        <td><dl>
-          <dt><code><b>get_random_float</b> &lt;destination_variable_name&gt; &lt;minimum_value&gt; &lt;maximum_value&gt;</code></dt>
-          <dd>Places a random <a href="glossary.html#float-number">float number</a> between &lt;minimum_value&gt; and &lt;maximum_value&gt; (including) into the variable &lt;destination_variable_name&gt;.</dd>
-        </dl></td>
+      <tr>
+        <td>output_end</td>
+        <td>Result for when the input number matches <code>input_end</code>.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
-      <tr id="get-random-int">
-        <th><code>get_random_int</code></th>
-        <td><dl>
-          <dt><code><b>get_random_int</b> &lt;destination_variable_name&gt; &lt;minimum_value&gt; &lt;maximum_value&gt;</code></dt>
-          <dd>Places a random <a href="glossary.html#integer">integer number</a> between &lt;minimum_value&gt; and &lt;maximum_value&gt; (including) into the variable &lt;destination_variable_name&gt;.</dd>
-        </dl></td>
+    </table>
+
+    <h4 id="max-number">Max number</h4>
+
+    <p>Gets the highest of the two given numbers.</p>
+
+    <p>Syntax: <code><b>max_number</b> &lt;destination_var_name&gt; &lt;first_number&gt; &lt;second_number&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
       </tr>
-      <tr id="interpolate-number">
-        <th><code>interpolate_number</code></th>
-        <td><dl>
-          <dt><code><b>interpolate_number</b> &lt;destination_variable_name&gt; &lt;input_number&gt; &lt;input_start&gt; &lt;input_end&gt; &lt;output_start&gt; &lt;output_end&gt;</code></dt>
-          <dd>Sets the variable &lt;destination_variable_name&gt; to the <a href="https://en.wikipedia.org/wiki/Linear_interpolation">linear interpolation</a> of the given values. In other words, it gets a number that's somewhere between the given values. When the &lt;input_number&gt; matches &lt;input_start&gt;, the result matches &lt;output_start&gt;. And when it matches &lt;input_end&gt;, the result matches &lt;output_end&gt;. In-between input values result in in-between output values.</dd>
-        </dl></td>
+      <tr>
+        <td>first_number</td>
+        <td>First number.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
-      <tr id="max-number">
-        <th><code>max_number</code></th>
-        <td><dl>
-          <dt><code><b>max_number</b> &lt;destination_variable_name&gt; &lt;first_number&gt; &lt;second_number&gt;</code></dt>
-          <dd>Sets the variable &lt;destination_variable_name&gt; to the highest of the two given numbers.</dd>
-        </dl></td>
+      <tr>
+        <td>second_number</td>
+        <td>Second number.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
-      <tr id="min-number">
-        <th><code>min_number</code></th>
-        <td><dl>
-          <dt><code><b>min_number</b> &lt;destination_variable_name&gt; &lt;first_number&gt; &lt;second_number&gt;</code></dt>
-          <dd>Sets the variable &lt;destination_variable_name&gt; to the lowest of the two given numbers.</dd>
-        </dl></td>
+    </table>
+
+    <h4 id="min-number">Min number</h4>
+
+    <p>Gets the lowest of the two given numbers.</p>
+
+    <p>Syntax: <code><b>min_number</b> &lt;destination_var_name&gt; &lt;first_number&gt; &lt;second_number&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
       </tr>
-      <tr id="round-number">
-        <th><code>round_number</code></th>
-        <td><dl>
-          <dt><code><b>round_number</b> &lt;destination_variable_name&gt; &lt;number&gt;</code></dt>
-          <dd><a href="https://en.wikipedia.org/wiki/Rounding">Rounds</a> the given number. In other words, it rounds the number's decimal places up or down to an integer, depending on whichever integer is closest.</dd>
-        </dl></td>
+      <tr>
+        <td>first_number</td>
+        <td>First number.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
-      <tr id="sign-number">
-        <th><code>sign_number</code></th>
-        <td><dl>
-          <dt><code><b>sign_number</b> &lt;destination_variable_name&gt; &lt;number&gt;</code></dt>
-          <dd>Sets the variable &lt;destination_variable_name&gt; to -1 if the given number is negative, 1 if positive, or 0 if it's zero. This is useful if you want to turn a different positive number into the same sign (positive or negative) as the number in this action, by multiplying that one by whatever this action returns.</dd>
-        </dl></td>
+      <tr>
+        <td>second_number</td>
+        <td>Second number.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
-      <tr id="square-root-number">
-        <th><code>square_root_number</code></th>
-        <td><dl>
-          <dt><code><b>square_root_number</b> &lt;destination_variable_name&gt; &lt;number&gt;</code></dt>
-          <dd>Sets the variable &lt;destination_variable_name&gt; to the <a href="https://en.wikipedia.org/wiki/Square_root">square root</a> of the given number.</dd>
-        </dl></td>
+    </table>
+
+    <h4 id="round-number">Round number</h4>
+
+    <p>Gets the <a href="https://en.wikipedia.org/wiki/Rounding">rounded</a> amount of the given number. In other words, it rounds the number's decimal places up or down to an integer, depending on whichever integer is closest.</p>
+
+    <p>Syntax: <code><b>round_number</b> &lt;destination_var_name&gt; &lt;number&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
       </tr>
-      <tr id="truncate-number">
-        <th><code>truncate_number</code></th>
-        <td><dl>
-          <dt><code><b>truncate_number</b> &lt;destination_variable_name&gt; &lt;number&gt;</code></dt>
-          <dd>Sets the variable &lt;destination_variable_name&gt; to the integer portion of the given number. For instance, if the number is 6.3, the result is 6. This works differently from <code><a href="#floor-number">floor_number</a></code> and <code><a href="#ceil-number">ceil_number</a></code> because of negative numbers &ndash; <code>floor_number</code> on -6.3 will return -7 whereas <code>truncate_number</code> will return -6.</dd>
-        </dl></td>
+      <tr>
+        <td>number</td>
+        <td>Number to round.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+    </table>
+
+    <h4 id="sign-number">Sign number</h4>
+
+    <p>Gets either -1 if the given number is negative, 1 if positive, or 0 if it's zero. This is useful if you want to turn a different positive number into the same sign (positive or negative) as the number in this action, by multiplying that one by whatever this action returns.</p>
+
+    <p>Syntax: <code><b>sign_number</b> &lt;destination_var_name&gt; &lt;number&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>number</td>
+        <td>Number to sign.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+    </table>
+
+    <h4 id="square-root-number">Square root number</h4>
+
+    <p>Gets the <a href="https://en.wikipedia.org/wiki/Square_root">square root</a> of the given number.</p>
+
+    <p>Syntax: <code><b>square_root_number</b> &lt;destination_var_name&gt; &lt;number&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>number</td>
+        <td>Number to square root.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+    </table>
+
+    <h4 id="truncate-number">Truncate number</h4>
+
+    <p>Gets the integer portion of the given number. For instance, if the number is 6.3, the result is 6. This works differently from <code><a href="#floor-number">floor_number</a></code> and <code><a href="#ceil-number">ceil_number</a></code> because of negative numbers &ndash; <code>floor_number</code> on -6.3 will return -7 whereas <code>truncate_number</code> will return -6.</p>
+
+    <p>Syntax: <code><b>truncate_number</b> &lt;destination_var_name&gt; &lt;number&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>number</td>
+        <td>Number to truncate.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
     </table>
 
     <h3 id="actions-common-list">List management</h3>
 
-    <p>Lists are just a string where all the items are laid out and separated by a space (or comma, or semicolon).</p>
-    
-    <table>
-      <tr><th>Action</th><th>Description</th></tr>
-      <tr id="add-list-item">
-        <th><code>add_list_item</code></th>
-        <td><dl>
-          <dt><code><b>add_list_item</b> &lt;destination_variable_name&gt; &lt;list_or_string&gt; &lt;new_item&gt; [&lt;item_number&gt;] [&lt;list_delimiter&gt;]</code></dt>
-          <dd>Adds a new item to a list (or a string of items separated by a delimiter). The new list is then placed inside of &lt;destination_variable_name&gt;. If you specify an item number, it will be placed in that position, with "1" making it the new first item, "2" making it the new second item, etc. "0" is the default, and means it will be added to the end of the list. The list delimiter can be <code>comma</code> (default), <code>semicolon</code>, or <code>space</code>. If you want to create a new list with one item from scratch, you're better off using <code><a href="#set-var">set_var</a> &lt;new_list_var&gt; &lt;first_item&gt;</code>. See also <code><a href="#add-to-string">add_to_string</a></code>.</dd>
-        </dl></td>
+    <p>Lists are just a string, inside a variable or not, where all the items are laid out and separated by a comma (or semicolon, or space). With some creative uses of these actions, you can edit sentences &ndash; they're just lists of words separated by a space!</p>
+
+    <h4 id="add-list-item">Add list item</h4>
+
+    <p>Adds a new item to a list. The new list is then placed inside of &lt;destination_var_name&gt;. If you want to create a new list with one item from scratch, you're better off using <code><a href="#set-var">set_var</a> &lt;new_list_var&gt; &lt;first_item&gt;</code>. See also <code><a href="#add-to-string">add_to_string</a></code>.</p>
+
+    <p>Syntax: <code><b>add_list_item</b> &lt;destination_var_name&gt; &lt;list&gt; &lt;new_item&gt; [&lt;item_number&gt;] [&lt;list_delimiter&gt;]</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
       </tr>
-      <tr id="get-list-item">
-        <th><code>get_list_item</code></th>
-        <td><dl>
-          <dt><code><b>get_list_item</b> &lt;destination_variable_name&gt; &lt;list_or_string&gt; [&lt;item_number&gt;] [&lt;list_delimiter&gt;]</code></dt>
-          <dd>Gets one of the items in a list (or a string of items separated by a delimiter). Item number "1" is the first one, "2" is the second, etc. "0" is the default, and means it will get the last item. The list delimiter can be <code>comma</code> (default), <code>semicolon</code>, or <code>space</code>.</dd>
-        </dl></td>
+      <tr>
+        <td>list</td>
+        <td>String representing the <a href="#actions-common-list">list of items</a>.</td>
+        <td>Mandatory</td>
+        <td>String</td>
       </tr>
-      <tr id="get-list-item-number">
-        <th><code>get_list_item_number</code></th>
-        <td><dl>
-          <dt><code><b>get_list_item_number</b> &lt;destination_variable_name&gt; &lt;list_or_string&gt; &lt;item_to_search&gt; [&lt;list_delimiter&gt;]</code></dt>
-          <dd>Checks the items in a list (or a string of items separated by a delimiter), and gets the number of the item you want to search for. Item number "1" means it's the first item in the list, "2" means the second, etc. If the item number returned is "0", that means the item is not on the list. If the item appears multiple times in the list, this will only obtain the number of the first time it shows up. The list delimiter can be <code>comma</code> (default), <code>semicolon</code>, or <code>space</code>.</dd>
-        </dl></td>
+      <tr>
+        <td>new_item</td>
+        <td>The new item to add.</td>
+        <td>Mandatory</td>
+        <td>String</td>
       </tr>
-      <tr id="get-list-size">
-        <th><code>get_list_size</code></th>
-        <td><dl>
-          <dt><code><b>get_list_size</b> &lt;destination_variable_name&gt; &lt;list_or_string&gt; [&lt;list_delimiter&gt;]</code></dt>
-          <dd>Gets the amount of items in a list (or a string of items separated by a delimiter). The list delimiter can be <code>comma</code> (default), <code>semicolon</code>, or <code>space</code>.</dd>
-        </dl></td>
+      <tr>
+        <td>item_number</td>
+        <td>Position to add the item to, with "1" making it the new first item, "2" making it the new second item, etc. "0" means it will be added to the end of the list.</td>
+        <td>Optional, default: <code>0</code></td>
+        <td>Number</td>
       </tr>
-      <tr id="remove-list-item">
-        <th><code>remove_list_item</code></th>
-        <td><dl>
-          <dt><code><b>remove_list_item</b> &lt;destination_variable_name&gt; &lt;list_or_string&gt; [&lt;item_number&gt;] [&lt;list_delimiter&gt;]</code></dt>
-          <dd>Given the item number, removes that item from a list (or a string of items separated by a delimiter). The new list is then placed inside of &lt;destination_variable_name&gt;. Item number "1" will remove the first item, "2" will remove the second, etc. "0" is the default, and means it will remove the item at the end of the list. The list delimiter can be <code>comma</code> (default), <code>semicolon</code>, or <code>space</code>.</dd>
-        </dl></td>
+      <tr>
+        <td>list_delimiter</td>
+        <td>The <a href="#list-delimiter">list delimiter</a>.</td>
+        <td>Optional, default: <code>comma</code></td>
+        <td>String</td>
       </tr>
-      <tr id="set-list-item">
-        <th><code>set_list_item</code></th>
-        <td><dl>
-          <dt><code><b>set_list_item</b> &lt;destination_variable_name&gt; &lt;list_or_string&gt; &lt;new_item&gt; [&lt;item_number&gt;] [&lt;list_delimiter&gt;]</code></dt>
-          <dd>Changes one of the items in a list (or a string of items separated by a delimiter). The new list is then placed inside of &lt;destination_variable_name&gt;. Item number "1" is the first one, "2" is the second, etc. "0" is the default, and means it will set the last item. The list delimiter can be <code>comma</code> (default), <code>semicolon</code>, or <code>space</code>.</dd>
-        </dl></td>
+    </table>
+
+    <h4 id="get-list-item">Get list item</h4>
+
+    <p>Gets one of the items in a list.</p>
+
+    <p>Syntax: <code><b>get_list_item</b> &lt;destination_var_name&gt; &lt;list&gt; [&lt;item_number&gt;] [&lt;list_delimiter&gt;]</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>list</td>
+        <td>String representing the <a href="#actions-common-list">list of items</a>.</td>
+        <td>Mandatory</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>item_number</td>
+        <td>Position to fetch the item from, with "1" retrieving the first item, "2" retrieving the second, etc. "0" means it will get the last item.</td>
+        <td>Optional, default: <code>0</code></td>
+        <td>Number</td>
+      </tr>
+      <tr>
+        <td>list_delimiter</td>
+        <td>The <a href="#list-delimiter">list delimiter</a>.</td>
+        <td>Optional, default: <code>comma</code></td>
+        <td>String</td>
+      </tr>
+    </table>
+
+    <h4 id="get-list-item-number">Get list item number</h4>
+
+    <p>Checks the items in a list, and gets the number of the item you're searching for. Item number "1" means it's the first item in the list, "2" means the second, etc. If the item number returned is "0", that means the item is not on the list. If the item appears multiple times in the list, this will only obtain the number of the first time it shows up.</p>
+
+    <p>Syntax: <code><b>get_list_item_number</b> &lt;destination_var_name&gt; &lt;list&gt; &lt;item_to_search&gt; [&lt;list_delimiter&gt;]</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>list</td>
+        <td>String representing the <a href="#actions-common-list">list of items</a>.</td>
+        <td>Mandatory</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>item_to_search</td>
+        <td>Item you're searching for.</td>
+        <td>Mandatory</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>list_delimiter</td>
+        <td>The <a href="#list-delimiter">list delimiter</a>.</td>
+        <td>Optional, default: <code>comma</code></td>
+        <td>String</td>
+      </tr>
+    </table>
+
+    <h4 id="get-list-size">Get list size</h4>
+
+    <p>Gets the amount of items in a list.</p>
+
+    <p>Syntax: <code><b>get_list_size</b> &lt;destination_var_name&gt; &lt;list&gt; [&lt;list_delimiter&gt;]</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>list</td>
+        <td>String representing the <a href="#actions-common-list">list of items</a>.</td>
+        <td>Mandatory</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>list_delimiter</td>
+        <td>The <a href="#list-delimiter">list delimiter</a>.</td>
+        <td>Optional, default: <code>comma</code></td>
+        <td>String</td>
+      </tr>
+    </table>
+
+    <h4 id="remove-list-item">Remove list item</h4>
+
+    <p>Given the item number, removes that item from a list. The new list is then placed inside of &lt;destination_var_name&gt;.</p>
+
+    <p>Syntax: <code><b>remove_list_item</b> &lt;destination_var_name&gt; &lt;list&gt; [&lt;item_number&gt;] [&lt;list_delimiter&gt;]</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>list</td>
+        <td>String representing the <a href="#actions-common-list">list of items</a>.</td>
+        <td>Mandatory</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>item_number</td>
+        <td>Position to remove the item from, with "1" removing the first item, "2" removing the second, etc. "0" means it will remove the last item.</td>
+        <td>Optional, default: <code>0</code></td>
+        <td>Number</td>
+      </tr>
+      <tr>
+        <td>list_delimiter</td>
+        <td>The <a href="#list-delimiter">list delimiter</a>.</td>
+        <td>Optional, default: <code>comma</code></td>
+        <td>String</td>
+      </tr>
+    </table>
+
+    <h4 id="set-list-item">Set list item</h4>
+
+    <p>Changes one of the items in a list. The new list is then placed inside of &lt;destination_var_name&gt;.</p>
+
+    <p>Syntax: <code><b>set_list_item</b> &lt;destination_var_name&gt; &lt;list&gt; &lt;new_item&gt; [&lt;item_number&gt;] [&lt;list_delimiter&gt;]</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>list</td>
+        <td>String representing the <a href="#actions-common-list">list of items</a>.</td>
+        <td>Mandatory</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>new_item</td>
+        <td>The new item.</td>
+        <td>Mandatory</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>item_number</td>
+        <td>Position to remove the item from, with "1" removing the first item, "2" removing the second, etc. "0" means it will remove the last item.</td>
+        <td>Optional, default: <code>0</code></td>
+        <td>Number</td>
+      </tr>
+      <tr>
+        <td>list_delimiter</td>
+        <td>The <a href="#list-delimiter">list delimiter</a>.</td>
+        <td>Optional, default: <code>comma</code></td>
+        <td>String</td>
       </tr>
     </table>
 
     <h3 id="actions-common-focus">Focused object management</h3>
-    
-    <table>
-      <tr><th>Action</th><th>Description</th></tr>
-      <tr id="focus">
-        <th><code>focus</code></th>
-        <td><dl>
-          <dt><code><b>focus</b> &lt;target_mob&gt;</code></dt>
-          <dd>Focuses on <a href="#target-mob">a given mob</a> from here on out.</dd>
-        </dl></td>
-      </tr>
-      <tr id="focus-on-id">
-        <th><code>focus_on_id</code></th>
-        <td><dl>
-          <dt><code><b>focus_on_id</b> &lt;mob_id&gt;</code></dt>
-          <dd>Focuses on the mob with the given ID from here on out. Use <code><a href="#get-mob-info">get_mob_info</a></code> to obtain a mob's ID. If this is called with an ID of 0 or an ID that no mob has, nothing will happen.</dd>
-        </dl></td>
-      </tr>
-      <tr id="get-focus-var">
-        <th><code>get_focus_var</code></th>
-        <td><dl>
-          <dt><code><b>get_focus_var</b> &lt;destination_variable_name&gt; &lt;focused_mob_variable_name&gt;</code></dt>
-          <dd>Sets the variable &lt;destination_variable_name&gt; of this mob to the same value as the variable &lt;focused_mob_variable_name&gt; of the focused mob, if any.</dd>
-        </dl></td>
-      </tr>
-      <tr id="set-focus-var">
-        <th><code>set_focus_var</code></th>
-        <td><dl>
-          <dt><code><b>set_focus_var</b> &lt;focus_destination_variable_name&gt; &lt;value&gt;</code></dt>
-          <dd>Sets the variable &lt;focus_destination_variable_name&gt; of the focused mob to the value &lt;value&gt;.</dd>
-        </dl></td>
-      </tr>
-      <tr id="unfocus">
-        <th><code>unfocus</code></th>
-        <td><dl>
-          <dt><code><b>unfocus</b></code></dt>
-          <dd>Loses focus on whatever object it had focus, if any.</dd>
-        </dl></td>
+
+    <h4 id="focus">Focus</h4>
+
+    <p>Focuses on a given mob from here on out. A script can only focus on one mob at a time. See also <code><a href="#unfocus">unfocus</a></code>.</p>
+
+    <p>Syntax: <code><b>focus</b> &lt;target_mob&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>target_mob</td>
+        <td>The <a href="#target-mob">target mob</a>.</td>
+        <td>Mandatory</td>
+        <td>String</td>
       </tr>
     </table>
 
+    <h4 id="focus-on-id">Focus on ID</h4>
+
+    <p>Focuses on the mob with the given ID from here on out. Use <code><a href="#get-mob-info">get_mob_info</a></code> to obtain a mob's ID. If this is called with an ID of 0 or an ID that no mob has, nothing will happen.</p>
+
+    <p>Syntax: <code><b>focus_on_id</b> &lt;mob_id&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>mob_id</td>
+        <td>ID number of the mob.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+    </table>
+
+    <h4 id="get-focus-var">Get focus var</h4>
+
+    <p>Sets the variable &lt;destination_var_name&gt; of this mob to the same value as the variable &lt;focused_mob_var_name&gt; of the focused mob, if any.</p>
+
+    <p>Syntax: <code><b>get_focus_var</b> &lt;destination_var_name&gt; &lt;focused_mob_var_name&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>focused_mob_var_name</td>
+        <td>Name of the variable of the focused mob that you want to read from.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+    </table>
+
+    <h4 id="set-focus-var">Set focus var</h4>
+
+    <p>Sets the variable &lt;focus_destination_var_name&gt; of the focused mob to the value &lt;value&gt;.</p>
+
+    <p>Syntax: <code><b>set_focus_var</b> &lt;focus_destination_var_name&gt; &lt;value&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>focus_destination_var_name</td>
+        <td>Name of the variable of the focused mob that you want to write to.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>value</td>
+        <td>Value to write.</td>
+        <td>Mandatory</td>
+        <td>String</td>
+      </tr>
+    </table>
+
+    <h4 id="unfocus">Unfocus</h4>
+
+    <p>Loses focus on whatever object it had focus, if any.</p>
+
+    <p>Syntax: <code><b>unfocus</b></code></p>
+
     <h3 id="actions-common-obtain-info">Obtaining information</h3>
+
+    <h4 id="get-area-info"><del>Get area info</del></h4>
+
+    <p>
+      <b>Deprecated in 1.2.0!</b> Please use <code><a href="#get-misc-info">get_misc_info</a></code> instead.<br>
+      Gets some special information about the area.
+    </p>
+
+    <p>Syntax: <code><b>get_area_info</b> &lt;destination_var_name&gt; &lt;information&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>information</td>
+        <td>
+          Information to obtain:
+          <ul>
+            <li><code><b>day_minutes</b></code>: What time of the in-game day it is, in minutes.</li>
+            <li><code><b>field_pikmin</b></code>: How many Pikmin are currently on the field.</li>
+          </ul>
+        </td>
+        <td>Mandatory</td>
+        <td>String</td>
+      </tr>
+    </table>
+
+    <h4 id="get-event-info">Get event info</h4>
+
+    <p>Gets some special information about the script FSM event.</p>
+
+    <p>Syntax: <code><b>get_event_info</b> &lt;destination_var_name&gt; &lt;information&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>information</td>
+        <td>
+          Information to obtain:
+          <ul>
+            <li><code><b>body_part</b></code>: For events that deal with hitboxes, this is the name of this mob's body part that's responsible.</li>
+            <li><code><b>frame_signal</b></code>: What the signal was that triggered an <code><a href="#on-frame-signal">on_frame_signal</a></code> event.</li>
+            <li><code><b>hazard</b></code>: Name of the hazard that the object has touched or left.</li>
+            <li><code><b>input_name</b></code>: The name of the input that triggered an <code><a href="#on-input-received">on_input_received</a></code> event.</li>
+            <li><code><b>input_value</b></code>: The value of the input that triggered an <code><a href="#on-input-received">on_input_received</a></code> event. 1 when fully pressed, 0 when fully released.</li>
+            <li><code><b>message</b></code>: What the script message was that got sent when the <code><a href="#on-receive-message">on_receive_message</a></code> event got triggered.</li>
+            <li><code><b>other_body_part</b></code>: For events that deal with hitboxes, this is the name of the other mob's body part that's responsible.</li>
+          </ul>
+        </td>
+        <td>Mandatory</td>
+        <td>String</td>
+      </tr>
+    </table>
     
-    <table>
-      <tr><th>Action</th><th>Description</th></tr>
-      <tr id="get-area-info">
-        <th><del><code>get_area_info</code></del></th>
-        <td><dl>
-          <dt><code><b>get_area_info</b> &lt;destination_variable_name&gt; &lt;information&gt;</code></dt>
-          <dd>
-            <b>Deprecated in 1.2.0!</b> Please use <code><a href="#get-misc-info">get_misc_info</a></code> instead. Sets the variable &lt;destination_variable_name&gt; to some special information about the area. The possible data are:
-            <ul>
-              <li><code><b>day_minutes</b></code>: What time of the in-game day it is, in minutes.</li>
-              <li><code><b>field_pikmin</b></code>: How many Pikmin are currently on the field.</li>
-            </ul>
-          </dd>
-        </dl></td>
+    <h4 id="get-leader-pikmin-count">Get leader Pikmin count</h4>
+
+    <p>Gets the amount of Pikmin in the target mob's group. Optionally, only Pikmin of a certain type. The target mob does not need to be of the leader category necessarily.</p>
+
+    <p>Syntax: <code><b>get_leader_pikmin_count</b> &lt;destination_var_name&gt; &lt;target_mob&gt; [&lt;pikmin_type&gt;]</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
       </tr>
-      <tr id="get-event-info">
-        <th><code>get_event_info</code></th>
-        <td><dl>
-          <dt><code><b>get_event_info</b> &lt;destination_variable_name&gt; &lt;information&gt;</code></dt>
-          <dd>
-            Sets the variable &lt;destination_variable_name&gt; to some special information about the script FSM event. The possible data are:
-            <ul>
-              <li><code><b>body_part</b></code>: For events that deal with hitboxes, this is the name of this mob's body part that's responsible.</li>
-              <li><code><b>frame_signal</b></code>: What the signal was that triggered an <code><a href="#on-frame-signal">on_frame_signal</a></code> event.</li>
-              <li><code><b>hazard</b></code>: Name of the hazard that the object has touched or left.</li>
-              <li><code><b>input_name</b></code>: The name of the input that triggered an <code><a href="#on-input-received">on_input_received</a></code> event.</li>
-              <li><code><b>input_value</b></code>: The value of the input that triggered an <code><a href="#on-input-received">on_input_received</a></code> event. 1 when fully pressed, 0 when fully released.</li>
-              <li><code><b>message</b></code>: What the script message was that got sent when the <code><a href="#on-receive-message">on_receive_message</a></code> event got triggered.</li>
-              <li><code><b>other_body_part</b></code>: For events that deal with hitboxes, this is the name of the other mob's body part that's responsible.</li>
-            </ul>
-          </dd>
-        </dl></td>
+      <tr>
+        <td>target_mob</td>
+        <td>The <a href="#target-mob">target mob</a>.</td>
+        <td>Mandatory</td>
+        <td>String</td>
       </tr>
-      <tr id="get-leader-pikmin-count">
-        <th><code>get_leader_pikmin_count</code></th>
-        <td><dl>
-          <dt><code><b>get_leader_pikmin_count</b> &lt;destination_variable_name&gt; &lt;target_mob&gt; [&lt;pikmin_type&gt;]</code></dt>
-          <dd>Sets the variable &lt;destination_variable_name&gt; to the amount of Pikmin in the target mob's group. The target mob does not need to be of the leader category necessarily. If &lt;pikmin_type&gt; is present, it only counts Pikmin of that type; this uses the type's <a href="making.html#content">internal name</a>.</dd>
-        </dl></td>
+      <tr>
+        <td>pikmin_type</td>
+        <td>If not empty, only count Pikmin of this type; this uses the type's <a href="making.html#content">internal name</a>.</td>
+        <td>Optional, default: <code></code></td>
+        <td>String</td>
       </tr>
-      <tr id="get-misc-info">
-        <th><code>get_misc_info</code></th>
-        <td><dl>
-          <dt><code><b>get_misc_info</b> &lt;destination_variable_name&gt; &lt;information&gt;</code></dt>
-          <dd>
-            Sets the variable &lt;destination_variable_name&gt; to some special information about miscellaneous things. The possible data are:
-            <ul>
-              <li><code><b>day_minutes</b></code>: What time of the in-game day it is, in minutes.</li>
-              <li><code><b>delta_t</b></code>: The amount of time that passed between the previous frame and the current frame. Use this to keep track of time; see <a href="script.html#tips">script tips</a> for more information.</li>
-              <li><code><b>field_pikmin</b></code>: How many Pikmin are currently on the field.</li>
-              <li><code><b>player_1_leader_id</b></code>: The ID number of the leader that player 1 is currently controlling. It will be 0 if player 1 is not controlling any leader.</li>
-              <li><code><b>player_2_leader_id</b></code>: Same as <code>player_1_leader_id</code> but for player 2.</li>
-              <li><code><b>player_3_leader_id</b></code>: Same as <code>player_1_leader_id</code> but for player 3.</li>
-              <li><code><b>player_4_leader_id</b></code>: Same as <code>player_1_leader_id</code> but for player 4.</li>
-            </ul>
-          </dd>
-        </dl></td>
+    </table>
+
+    <h4 id="get-misc-info">Get misc. info</h4>
+
+    <p>Gets some special information about miscellaneous things.</p>
+
+    <p>Syntax: <code><b>get_misc_info</b> &lt;destination_var_name&gt; &lt;information&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
       </tr>
-      <tr id="get-mission-metric">
-        <th><code>get_mission_metric</code></th>
-        <td><dl>
-          <dt><code><b>get_mission_metric</b> &lt;destination_variable_name&gt; &lt;metric&gt; [&lt;number_data&gt;] [&lt;get_auto_target_instead&lt;]</code></dt>
-          <dd>
-            Sets the variable &lt;destination_variable_name&gt; to some information about a <a href="mission.html">mission</a> metric. Some metrics also need data about a number to check, like the "leaders in region" metric needing to know the region number. In those cases, &lt;number_data&gt; needs to specify the intended number. Normally this action obtains the current value of a metric, but most metrics can obtain an automatic "target" value, like the "seconds left" metric using this to recommend to the total amount of seconds in the time limit. To obtain this information instead, &lt;get_auto_target_instead&gt; should be <code>true</code>. The possible metrics are:
-            <ul>
-              <li><code><b>mob_group_cleared_mobs</b></code>: Cleared mobs in a mob group. Needs the mob group number.</li>
-              <li><code><b>mob_group_health</b></code>: Combined health of the mobs in a mob group. Needs the mob group number.</li>
-              <li><code><b>seconds_left</b></code>: Seconds left in the time limit.</li>
-              <li><code><b>seconds_passed</b></code>: Seconds passed in the mission.</li>
-              <li><code><b>leaders_in_region</b></code>: Leaders inside an area region. Needs the region number.</li>
-              <li><code><b>living_pikmin</b></code>: Pikmin currently alive in total.</li>
-              <li><code><b>pikmin_born</b></code>: Pikmin born so far.</li>
-              <li><code><b>pikmin_lost</b></code>: Pikmin lost so far.</li>
-              <li><code><b>leaders_lost</b></code>: Leaders lost so far.</li>
-              <li><code><b>object_collection_points</b></code>: Object collection points obtained.</li>
-              <li><code><b>treasure_collection_points</b></code>: Treasure collection points obtained.</li>
-              <li><code><b>enemy_collection_points</b></code>: Enemy collection points obtained.</li>
-              <li><code><b>enemy_defeat_points</b></code>: Enemy defeat points obtained.</li>
-            </ul>
-          </dd>
-        </dl></td>
+      <tr>
+        <td>information</td>
+        <td>
+          Information to obtain:
+          <ul>
+            <li><code><b>day_minutes</b></code>: What time of the in-game day it is, in minutes.</li>
+            <li><code><b>delta_t</b></code>: The amount of time that passed between the previous frame and the current frame. Use this to keep track of time; see <a href="script.html#tips">script tips</a> for more information.</li>
+            <li><code><b>field_pikmin</b></code>: How many Pikmin are currently on the field.</li>
+            <li><code><b>player_1_leader_id</b></code>: The ID number of the leader that player 1 is currently controlling. It will be 0 if player 1 is not controlling any leader.</li>
+            <li><code><b>player_2_leader_id</b></code>: Same as <code>player_1_leader_id</code> but for player 2.</li>
+            <li><code><b>player_3_leader_id</b></code>: Same as <code>player_1_leader_id</code> but for player 3.</li>
+            <li><code><b>player_4_leader_id</b></code>: Same as <code>player_1_leader_id</code> but for player 4.</li>
+          </ul>
+        </td>
+        <td>Mandatory</td>
+        <td>String</td>
       </tr>
-      <tr id="get-mob-ids-in-region">
-        <th><code>get_mob_ids_in_region</code></th>
-        <td><dl>
-          <dt><code><b>get_mob_ids_in_region</b> &lt;destination_variable_name&gt; &lt;region_number</code></dt>
-          <dd>
-            Sets the variable &lt;destination_variable_name&gt; to a list of mob IDs, filled with the mobs that are currently inside the given area region.
-          </dd>
-        </dl></td>
+    </table>
+
+    <h4 id="get-mission-metric">Get mission metric</h4>
+
+    <p>
+      Gets some information about a <a href="mission.html">mission</a> metric.<br>
+      Some metrics also need data about a number to check, like the "leaders in region" metric needing to know the region number. In those cases, &lt;number_data&gt; needs to specify the intended number.<br>
+      Normally this action obtains the current value of a metric, but most metrics can obtain an automatic "target" value, like the "seconds left" metric using this to recommend to the total amount of seconds in the time limit. To obtain this information instead, use the &lt;get_auto_target_instead&gt; parameter.
+    </p>
+
+    <p>Syntax: <code><b>get_mission_metric</b> &lt;destination_var_name&gt; &lt;metric&gt; [&lt;number_data&gt;] [&lt;get_auto_target_instead&gt;]</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
       </tr>
-      <tr id="get-mob-ids-with-var">
-        <th><code>get_mob_ids_with_var</code></th>
-        <td><dl>
-          <dt><code><b>get_mob_ids_with_var</b> &lt;destination_variable_name&gt; &lt;var&gt; [&lt;value&gt;]</code></dt>
-          <dd>
-            Sets the variable &lt;destination_variable_name&gt; to a list of mob IDs, filled with the mobs that have the script var &lt;var&gt;. If &lt;value&gt; is specified, then that variable must also have that value in order to count.
-          </dd>
-        </dl></td>
+      <tr>
+        <td>metric</td>
+        <td>
+          Metric data to obtain:
+          <ul>
+            <li><code><b>mob_group_cleared_mobs</b></code>: Cleared mobs in a mob group. Needs the mob group number.</li>
+            <li><code><b>mob_group_health</b></code>: Combined health of the mobs in a mob group. Needs the mob group number.</li>
+            <li><code><b>seconds_left</b></code>: Seconds left in the time limit.</li>
+            <li><code><b>seconds_passed</b></code>: Seconds passed in the mission.</li>
+            <li><code><b>leaders_in_region</b></code>: Leaders inside an area region. Needs the region number.</li>
+            <li><code><b>living_pikmin</b></code>: Pikmin currently alive in total.</li>
+            <li><code><b>pikmin_born</b></code>: Pikmin born so far.</li>
+            <li><code><b>pikmin_lost</b></code>: Pikmin lost so far.</li>
+            <li><code><b>leaders_lost</b></code>: Leaders lost so far.</li>
+            <li><code><b>object_collection_points</b></code>: Object collection points obtained.</li>
+            <li><code><b>treasure_collection_points</b></code>: Treasure collection points obtained.</li>
+            <li><code><b>enemy_collection_points</b></code>: Enemy collection points obtained.</li>
+            <li><code><b>enemy_defeat_points</b></code>: Enemy defeat points obtained.</li>
+          </ul>
+        </td>
+        <td>Mandatory</td>
+        <td>String</td>
       </tr>
-      <tr id="get-mob-info">
-        <th><code>get_mob_info</code></th>
-        <td><dl>
-          <dt><code><b>get_mob_info</b> &lt;destination_variable_name&gt; &lt;target_mob&gt; &lt;information&gt;</code></dt>
-          <dd>
-            Sets the variable &lt;destination_variable_name&gt; to some special information about <a href="#target-mob">a given object</a>. The possible data are:
-            <ul>
-              <li><code><b>angle</b></code>: Current angle (in degrees).</li>
-              <li><code><b>animation</b></code>: Name of the current animation.</li>
-              <li><code><b>chomped_pikmin</b></code>: How many Pikmin it currently has chomped.</li>
-              <li><code><b>focus_distance</b></code>: Distance between the object and the focused object.</li>
-              <li><code><b>group_task_power</b></code>: For group task type objects, this is the "Pikmin power" currently being applied.</li>
-              <li><code><b>health</b></code>: The object's current health.</li>
-              <li><code><b>health_ratio</b></code>: The object's current health ratio. 0 for 0%, 1 for 100%, 0.5 for 50%, etc.</li>
-              <li><code><b>id</b></code>: The object's numeric ID. The first object that spawns in the area has ID 1, the second has ID 2, etc.</li>
-              <li><code><b>latched_pikmin</b></code>: How many Pikmin are currently latched on to it.</li>
-              <li><code><b>latched_pikmin_weight</b></code>: Total weight of the Pikmin that are currently latched on to it.</li>
-              <li><code><b>link_ids</b></code>: List of numeric IDs of each of the linked mobs.</li>
-              <li><code><b>max_health</b></code>: The object's maximum health.</li>
-              <li><code><b>mob_category</b></code>: Category of the mob. This is the category's internal name, which is basically the same name as the corresponding folder in <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/mob_types</code> but in singular.</li>
-              <li><code><b>mob_type</b></code>: Type of the mob. This is the mob type's <a href="making.html#content">internal name</a>.</li>
-              <li><code><b>state</b></code>: Name of the current script FSM state.</li>
-              <li><code><b>team</b></code>: Internal name of its current team.</li>
-              <li><code><b>weight</b></code>: Current weight on top of it.</li>
-              <li><code><b>x</b></code>: Current X coordinate.</li>
-              <li><code><b>y</b></code>: Current Y coordinate.</li>
-              <li><code><b>z</b></code>: Current Z coordinate.</li>
-            </ul>
-          </dd>
-        </dl></td>
+      <tr>
+        <td>number_data</td>
+        <td>If the metric requires some number data, specify it here.</td>
+        <td>Optional, default: <code>1</code></td>
+        <td>Number</td>
+      </tr>
+      <tr>
+        <td>get_auto_target_instead</td>
+        <td>If <code>true</code>, instead of getting the metric's current amount, gets the auto amount.</td>
+        <td>Optional, default: <code>false</code></td>
+        <td>Boolean</td>
+      </tr>
+    </table>
+
+    <h4 id="get-mob-ids-in-region">Get mob IDs in region</h4>
+
+    <p>Gets a list of mob IDs, filled with the mobs that are currently inside the given area region.</p>
+
+    <p>Syntax: <code><b>get_mob_ids_in_region</b> &lt;destination_var_name&gt; &lt;region_number&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>region_number</td>
+        <td>Number of the area region.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+    </table>
+
+    <h4 id="get-mob-ids-with-var">Get mob IDs with var</h4>
+
+    <p>Gets a list of mob IDs, filled with the mobs that have the specified script variable. If &lt;value&gt; is specified, then that variable must also have that value in order to count.</p>
+
+    <p>Syntax: <code><b>get_mob_ids_with_var</b> &lt;destination_var_name&gt; &lt;var&gt; [&lt;value&gt;]</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>var</td>
+        <td>Name of the variable that must exist.</td>
+        <td>Mandatory</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>value</td>
+        <td>If not empty, the variable must also have this value.</td>
+        <td>Optional, default: <code></code></td>
+        <td>String</td>
+      </tr>
+    </table>
+
+    <h4 id="get-mob-info">Get mob info</h4>
+
+    <p>Gets some special information about a given mob.</p>
+
+    <p>Syntax: <code><b>get_mob_info</b> &lt;destination_var_name&gt; &lt;target_mob&gt; &lt;information&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>target_mob</td>
+        <td>The <a href="#target-mob">target mob</a>.</td>
+        <td>Mandatory</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>information</td>
+        <td>
+          Information to obtain:
+          <ul>
+            <li><code><b>angle</b></code>: Current angle (in degrees).</li>
+            <li><code><b>animation</b></code>: Name of the current animation.</li>
+            <li><code><b>chomped_pikmin</b></code>: How many Pikmin it currently has chomped.</li>
+            <li><code><b>focus_distance</b></code>: Distance between the object and the focused object.</li>
+            <li><code><b>group_task_power</b></code>: For group task type objects, this is the "Pikmin power" currently being applied.</li>
+            <li><code><b>health</b></code>: The object's current health.</li>
+            <li><code><b>health_ratio</b></code>: The object's current health ratio. 0 for 0%, 1 for 100%, 0.5 for 50%, etc.</li>
+            <li><code><b>id</b></code>: The object's numeric ID. The first object that spawns in the area has ID 1, the second has ID 2, etc.</li>
+            <li><code><b>latched_pikmin</b></code>: How many Pikmin are currently latched on to it.</li>
+            <li><code><b>latched_pikmin_weight</b></code>: Total weight of the Pikmin that are currently latched on to it.</li>
+            <li><code><b>link_ids</b></code>: List of numeric IDs of each of the linked mobs.</li>
+            <li><code><b>max_health</b></code>: The object's maximum health.</li>
+            <li><code><b>mob_category</b></code>: Category of the mob. This is the category's internal name, which is basically the same name as the corresponding folder in <code>game_data/&lt;<a href="making.html#packs">pack</a>&gt;/mob_types</code> but in singular.</li>
+            <li><code><b>mob_type</b></code>: Type of the mob. This is the mob type's <a href="making.html#content">internal name</a>.</li>
+            <li><code><b>state</b></code>: Name of the current script FSM state.</li>
+            <li><code><b>team</b></code>: Internal name of its current team.</li>
+            <li><code><b>weight</b></code>: Current weight on top of it.</li>
+            <li><code><b>x</b></code>: Current X coordinate.</li>
+            <li><code><b>y</b></code>: Current Y coordinate.</li>
+            <li><code><b>z</b></code>: Current Z coordinate.</li>
+          </ul>
+        </td>
+        <td>Mandatory</td>
+        <td>String</td>
       </tr>
     </table>
     
     <h3 id="actions-common-important">Other important actions</h3>
-    
-    <table>
-      <tr><th>Action</th><th>Description</th></tr>
-      <tr id="set-var">
-        <th><code>set_var</code></th>
-        <td><dl>
-          <dt><code><b>set_var</b> &lt;destination_variable_name&gt; &lt;value&gt;</code></dt>
-          <dd>Sets the value of the specified variable.</dd>
-        </dl></td>
+
+    <h4 id="set-var">Set var</h4>
+
+    <p>Sets the value of the specified variable.</p>
+
+    <p>Syntax: <code><b>set_var</b> &lt;destination_var_name&gt; &lt;value&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the value.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
       </tr>
-      <tr id="set-timer">
-        <th><code>set_timer</code></th>
-        <td><dl>
-          <dt><code><b>set_timer</b> &lt;amount&gt;</code></dt>
-          <dd>Starts the mob's timer with the specified time period. Writing 0 makes the current timer stop, without triggering any <code>on_timer</code> events. For custom timers, see <a href="script.html#tips">script tips</a>.</dd>
-        </dl></td>
+      <tr>
+        <td>value</td>
+        <td>The value</td>
+        <td>Mandatory</td>
+        <td>String</td>
+      </tr>
+    </table>
+
+    <h4 id="set-timer">Set timer</h4>
+
+    <p>Starts the script's timer with the specified duration. 0 makes the current timer stop, without triggering any <code>on_timer</code> events. For custom timers, see <a href="script.html#tips">script tips</a>.</p>
+
+    <p>Syntax: <code><b>set_timer</b> &lt;amount&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>amount</td>
+        <td>The timer's duration, in seconds.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
     </table>
     
     <h3 id="actions-common-misc">Misc.</h3>
-    
-    <table>
-      <tr><th>Action</th><th>Description</th></tr>
-      <tr id="add-to-string">
-        <th><code>add_to_string</code></th>
-        <td><dl>
-          <dt><code><b>add_to_string</b> &lt;destination_variable_name&gt; &lt;base_string&gt; &lt;content_to_add&gt; [&lt;add_a_space_between&gt;]</code></dt>
-          <dd>Given a <a href="making.html#data-file-properties">string</a>, adds some more text to the end of it. If &lt;add_a_space_between&gt; is <code>true</code> (default is false), a space will be added between the base string and the new content. This is because you can't just write a space at the end of the content to add, since the script file will interpret that as you starting the next parameter of a script action. This action is very similar to <code><a href="#add-list-item">add_list_item</a></code>, but is more geared towards working with everyday strings, especially those that the player will read.</dd>
-        </dl></td>
+
+    <h4 id="add-to-string">Add to string</h4>
+
+    <p>Given a <a href="making.html#data-file-properties">string</a>, adds some more text to the end of it. This action is very similar to <code><a href="#add-list-item">add_list_item</a></code>, but is more geared towards working with everyday strings, especially those that the player will read.</p>
+
+    <p>Syntax: <code><b>add_to_string</b> &lt;destination_var_name&gt; &lt;base_string&gt; &lt;content_to_add&gt; [&lt;add_a_space_between&gt;]</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
       </tr>
-      <tr id="clear-var">
-        <th><code>clear_var</code></th>
-        <td><dl>
-          <dt><code><b>clear_var</b> &lt;variable_name&gt;</code></dt>
-          <dd>Empties the data inside the given variable, if the script even has that variable. See also <code><a href="#get-var-presence">get_var_presence</a></code>.</dd>
-        </dl></td>
+      <tr>
+        <td>base_string</td>
+        <td>The current string.</td>
+        <td>Mandatory</td>
+        <td>String</td>
       </tr>
-      <tr id="get-var-presence">
-        <th><code>get_var_presence</code></th>
-        <td><dl>
-          <dt><code><b>get_var_presence</b> &lt;destination_variable_name&gt; &lt;variable_name&gt;</code></dt>
-          <dd>Checks if the script has the variable &lt;variable_name&gt;, and also if that variable isn't empty. Then writes to &lt;destination_variable_name&gt; either <code>true</code> or <code>false</code> accordingly. See also <code><a href="#clear-var">clear_var</a></code>.</dd>
-        </dl></td>
+      <tr>
+        <td>content_to_add</td>
+        <td>The new text to add. Remember that typing a space here will try to go to the next parameter!</td>
+        <td>Mandatory</td>
+        <td>String</td>
       </tr>
-      <tr id="print">
-        <th><code>print</code></th>
-        <td><dl>
-          <dt><code><b>print</b> &lt;text&gt;</code></dt>
-          <dd>Prints some text to the top of the game window. Only useful for debugging the script, so you know how much a variable is worth, where the script passes, etc.</dd>
-        </dl></td>
+      <tr>
+        <td>add_a_space_between</td>
+        <td>Whether a space should be added between the base string and the new content. This is because you can't just write a space at the end of <code>content_to_add</code>, since the script file will interpret that as you starting the next parameter of a script action.</td>
+        <td>Optional, default: <code>false</code></td>
+        <td>Boolean</td>
       </tr>
-      <tr id="run_next_action_as">
-        <th><code>run_next_action_as</code></th>
-        <td><dl>
-          <dt><code><b>run_next_action_as</b> &lt;target_mob&gt;</code></dt>
-          <dd>Makes it so the next action in the script is run as the <a href="#target-mob">given mob</a> instead.</dd>
-        </dl></td>
+    </table>
+
+    <h4 id="clear-var">Clear var</h4>
+
+    <p>Empties the data inside the given variable, if the script even has that variable. See also <code><a href="#get-var-presence">get_var_presence</a></code>.</p>
+
+    <p>Syntax: <code><b>clear_var</b> &lt;var_name&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>var_name</td>
+        <td>Name of the variable to clear.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
       </tr>
-      <tr id="send-message-to-all-mobs">
-        <th><code>send_message_to_all_mobs</code></th>
-        <td><dl>
-          <dt><code><b>send_message_to_all_mobs</b> &lt;message&gt;</code></dt>
-          <dd>Same as <code><a href="#send-message-to-focus">send_message_to_focus</a></code>, but it sends it to all of the objects currently in the area.</dd>
-        </dl></td>
+    </table>
+
+    <h4 id="get-var-presence">Get var presence</h4>
+
+    <p>Checks if the script has the given variable, and also if that variable isn't empty. Then writes to &lt;destination_var_name&gt; either <code>true</code> or <code>false</code> accordingly. See also <code><a href="#clear-var">clear_var</a></code>.</p>
+
+    <p>Syntax: <code><b>get_var_presence</b> &lt;destination_var_name&gt; &lt;var_name&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
       </tr>
-      <tr id="send-message-to-area">
-        <th><code>send_message_to_area</code></th>
-        <td><dl>
-          <dt><code><b>send_message_to_area</b> &lt;message&gt;</code></dt>
-          <dd>Same as <code><a href="#send-message-to-focus">send_message_to_focus</a></code>, but it sends it to the area's script.</dd>
-        </dl></td>
+      <tr>
+        <td>var_name</td>
+        <td>Name of the variable to check.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
       </tr>
-      <tr id="send-message-to-focus">
-        <th><code>send_message_to_focus</code></th>
-        <td><dl>
-          <dt><code><b>send_message_to_focus</b> &lt;message&gt;</code></dt>
-          <dd>Send a script message to the currently focused mob. Objects that receive a message will be thrown the <code><a href="events.html#on-receive-message">on_receive_message</a></code> event.</dd>
-        </dl></td>
+    </table>
+
+    <h4 id="print">Print</h4>
+
+    <p>Prints some text to the top of the game window. Only useful for debugging the script, so you know how much a variable is worth, where the script passes, etc.</p>
+
+    <p>Syntax: <code><b>print</b> &lt;text&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>text</td>
+        <td>Text to write out. If you type spaces here for multiple words, they'll all be interpreted as this parameter.</td>
+        <td>List, mandatory</td>
+        <td>String</td>
       </tr>
-      <tr id="set-mission-metric-script-slot">
-        <th><code>set_mission_metric_script_slot</code></th>
-        <td><dl>
-          <dt><code><b>set_mission_metric_script_slot</b> &lt;slot_number&gt; &lt;value&gt;</code></dt>
-          <dd>
-            Sets a mission metric script slot's value. Mission end conditions, HUD items, etc. can check the value that is in here in order to update the score, end the mission, and so on.
-          </dd>
-        </dl></td>
+    </table>
+
+    <h4 id="run-next-action-as">Run next action as</h4>
+
+    <p>Makes it so the next action in the script is run as the given mob instead.</p>
+
+    <p>Syntax: <code><b>run_next_action_as</b> &lt;target_mob&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>target_mob</td>
+        <td>The <a href="#target-mob">target mob</a>.</td>
+        <td>Mandatory</td>
+        <td>String</td>
       </tr>
-      <tr id="show-cutscene-message">
-        <th><code>show_cutscene_message</code></th>
-        <td><dl>
-          <dt><code><b>show_cutscene_message</b> &lt;text&gt;</code></dt>
-          <dd>Pauses gameplay and shows a cutscene message on the HUD using the provided text. You can make use of <a href="misc_features.html#markup">markup</a> for this.</dd>
-        </dl></td>
+    </table>
+
+    <h4 id="send-message-to-all-mobs">Send message to all mobs</h4>
+
+    <p>Same as <code><a href="#send-message-to-focus">send_message_to_focus</a></code>, but it sends it to all of the objects currently in the area.</p>
+
+    <p>Syntax: <code><b>send_message_to_all_mobs</b> &lt;message&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>message</td>
+        <td>Message to send. Remember that typing a space here will try to go to the next parameter!</td>
+        <td>Mandatory</td>
+        <td>String</td>
       </tr>
-      <tr id="show-message-from-var">
-        <th><del><code>show_message_from_var</code></del></th>
-        <td><dl>
-          <dt><code><b>show_message_from_var</b> &lt;variable_name&gt;</code></dt>
-          <dd><b>Deprecated in 1.2.0!</b> Please use <code><a href="#show-cutscene-message">show_cutscene_message</a></code> instead. Pauses gameplay and shows a cutscene message on the HUD using the text inside the specific variable. You can make use of <a href="misc_features.html#markup">markup</a> for this.</dd>
-        </dl></td>
+    </table>
+
+    <h4 id="send-message-to-area">Send message to area</h4>
+
+    <p>Same as <code><a href="#send-message-to-focus">send_message_to_focus</a></code>, but it sends it to the area's script.</p>
+
+    <p>Syntax: <code><b>send_message_to_area</b> &lt;message&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>message</td>
+        <td>Message to send. Remember that typing a space here will try to go to the next parameter!</td>
+        <td>Mandatory</td>
+        <td>String</td>
+      </tr>
+    </table>
+
+    <h4 id="send-message-to-focus">Send message to focus</h4>
+
+    <p>Send a script message to the currently focused mob. Objects that receive a message will be thrown the <code><a href="events.html#on-receive-message">on_receive_message</a></code> event.</p>
+
+    <p>Syntax: <code><b>send_message_to_focus</b> &lt;message&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>message</td>
+        <td>Message to send. Remember that typing a space here will try to go to the next parameter!</td>
+        <td>Mandatory</td>
+        <td>String</td>
+      </tr>
+    </table>
+
+    <h4 id="set-mission-metric-script-slot">Set mission metric script slot</h4>
+
+    <p>Sets a mission metric script slot's value. Mission end conditions, HUD items, etc. can check the value that is in here in order to update the score, end the mission, and so on.</p>
+
+    <p>Syntax: <code><b>set_mission_metric_script_slot</b> &lt;slot_number&gt; &lt;value&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>slot_number</td>
+        <td>The number of the slot to set.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+      <tr>
+        <td>value</td>
+        <td>The new value.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+    </table>
+
+    <h4 id="show-cutscene-message">Show cutscene message</h4>
+
+    <p>Pauses gameplay and shows a cutscene message on the HUD using the provided text. You can make use of <a href="misc_features.html#markup">markup</a> for this.</p>
+
+    <p>Syntax: <code><b>show_cutscene_message</b> &lt;text&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>text</td>
+        <td>Text to show. If you type spaces here for multiple words, they'll all be interpreted as this parameter.</td>
+        <td>Mandatory</td>
+        <td>String</td>
+      </tr>
+    </table>
+
+    <h4 id="show-message-from-var"><del>Show message from var</del></h4>
+
+    <p>
+      <b>Deprecated in 1.2.0!</b> Please use <code><a href="#show-cutscene-message">show_cutscene_message</a></code> instead.<br>
+      Pauses gameplay and shows a cutscene message on the HUD using the text inside the specific variable. You can make use of <a href="misc_features.html#markup">markup</a> for this.
+    </p>
+
+    <p>Syntax: <code><b>show_message_from_var</b> &lt;var_name&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>var_name</td>
+        <td>Name of the variable that contains the text to show.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
       </tr>
     </table>
 
@@ -626,515 +1705,1061 @@
     <p>Actions that can only be used in object scripts. Object scripts can also use the <a href="#actions-common">common actions list</a>.</p>
     
     <h3 id="actions-mobs-movement">Movement</h3>
-    
-    <table>
-      <tr><th>Action</th><th>Description</th></tr>
-      <tr id="follow-path-randomly">
-        <th><code>follow_path_randomly</code></th>
-        <td><dl>
-          <dt><code><b>follow_path_randomly</b> [&lt;path_label&gt;]</code></dt>
-          <dd>Tells the object to pick a random path stop in the area, and begin heading there, following the path stops necessary to get there. If you specify a path label, the object will only be able to cross path links with this label. The choice of first stop is not affected by the label, but if you wrote a label, the last path stop has to have an outgoing link with that label. When the mob gets there, or in the case it can't follow a path there, the <code><a href="events.html#on-reach-destination">on_reach_destination</a></code> event will be triggered.</dd>
-        </dl></td>
+
+    <h4 id="follow-path-randomly">Follow path randomly</h4>
+
+    <p>Tells the object to pick a random path stop in the area, and begin heading there, following the path stops necessary to get there. If you specify a path label, the object will only be able to cross path links with this label. The choice of first stop is not affected by the label, but if you wrote a label, the last path stop has to have an outgoing link with that label. When the mob gets there, or in the case it can't follow a path there, the <code><a href="events.html#on-reach-destination">on_reach_destination</a></code> event will be triggered.</p>
+
+    <p>Syntax: <code><b>follow_path_randomly</b> [&lt;path_label&gt;]</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>path_label</td>
+        <td>Label to use for the path links it is forced to travel, if any.</td>
+        <td>Optional, default: <code></code></td>
+        <td>String</td>
       </tr>
-      <tr id="follow-path-to-absolute">
-        <th><code>follow_path_to_absolute</code></th>
-        <td><dl>
-          <dt><code><b>follow_path_to_absolute</b> &lt;x&gt; &lt;y&gt; [&lt;path_label&gt;]</code></dt>
-          <dd>Tells the object to begin heading towards the specified <a href="glossary.html#area-coordinates">area coordinates</a>, following the path stops necessary to get there. If you specify a path label, the object will only be able to cross path links with this label. The choice of first and last path stop are not affected by the label. When the mob gets there, or in the case it can't follow a path there, the <code><a href="events.html#on-reach-destination">on_reach_destination</a></code> event will be triggered.</dd>
-        </dl></td>
+    </table>
+
+    <h4 id="follow-path-to-absolute">Follow path to absolute</h4>
+
+    <p>Tells the object to begin heading towards the specified <a href="glossary.html#area-coordinates">area coordinates</a>, following the path stops necessary to get there. If you specify a path label, the object will only be able to cross path links with this label. The choice of first and last path stop are not affected by the label. When the mob gets there, or in the case it can't follow a path there, the <code><a href="events.html#on-reach-destination">on_reach_destination</a></code> event will be triggered.</p>
+
+    <p>Syntax: <code><b>follow_path_to_absolute</b> &lt;x&gt; &lt;y&gt; [&lt;path_label&gt;]</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>path_label</td>
+        <td>Label to use for the path links it is forced to travel, if any.</td>
+        <td>Optional, default: <code></code></td>
+        <td>String</td>
       </tr>
-      <tr id="move-to-absolute">
-        <th><code>move_to_absolute</code></th>
-        <td><dl>
-          <dt><code><b>move_to_absolute</b> &lt;x&gt; &lt;y&gt; [&lt;z&gt;]</code></dt>
-          <dd>Tells the object to begin moving to the specified <a href="glossary.html#area-coordinates">area coordinates</a>. The Z coordinate will only be useful if the object can fly (see <code><a href="#set-flying">set_flying</a></code>).</dd>
-        </dl></td>
+    </table>
+
+    <h4 id="move-to-absolute">Move to absolute</h4>
+
+    <p>Tells the object to begin moving to the specified <a href="glossary.html#area-coordinates">area coordinates</a>. The Z coordinate will only be useful if the object can fly (see <code><a href="#set-flying">set_flying</a></code>).</p>
+
+    <p>Syntax: <code><b>move_to_absolute</b> &lt;x&gt; &lt;y&gt; [&lt;z&gt;]</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>x</td>
+        <td>X coordinate.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
-      <tr id="move-to-relative">
-        <th><code>move_to_relative</code></th>
-        <td><dl>
-          <dt><code><b>move_to_relative</b> &lt;x&gt; &lt;y&gt; [&lt;z&gt;]</code></dt>
-          <dd>Tells the object to begin moving to the specified <a href="glossary.html#relative-coordinates">relative coordinates</a>. The Z coordinate will only be useful if the object can fly (see <code><a href="#set-flying">set_flying</a></code>).</dd>
-        </dl></td>
+      <tr>
+        <td>y</td>
+        <td>Y coordinate.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
-      <tr id="move-to-target">
-        <th><code>move_to_target</code></th>
-        <td><dl>
-          <dt><code><b>move_to_target</b> &lt;target&gt;</code></dt>
-          <dd>
-            Tells the object to begin moving towards a special target. Possible values:
-            <ul>
-              <li><code>arachnorb_foot_logic</code>: Used by <a href="https://www.pikminwiki.com/Arachnorb_family">arachnorb</a> feet objects to move according to the internal plan. See the <code><a href="#arachnorb-plan-logic">arachnorb_plan_logic</a></code> action for more information.</li>
-              <li><code>away_from_focused_mob</code>: Move away from the focused object, thus going in the direct opposite direction.</li>
-              <li><code>focused_mob</code>: Move towards the focused object, following it as it moves.</li>
-              <li><code>focused_mob_position</code>: Move towards the position of the focused object at this exact moment. In other words, don't follow it as it moves.</li>
-              <li><code>home</code>: Move towards home (spawn point).</li>
-              <li><code>linked_mob_average</code>: Move towards the average position of its linked objects. Useful for keeping an <a href="https://www.pikminwiki.com/Arachnorb_family">arachnorb</a>'s head in the center position of its feet objects, for instance.</li>
-            </ul>
-          </dd>
-        </dl></td>
+      <tr>
+        <td>Z</td>
+        <td>Z coordinate.</td>
+        <td>Optional, default: <code>0</code></td>
+        <td>Number</td>
       </tr>
-      <tr id="set-flying">
-        <th><code>set_flying</code></th>
-        <td><dl>
-          <dt><code><b>set_flying</b> &lt;true/false&gt;</code></dt>
-          <dd>Sets whether or not this object can fly.</dd>
-        </dl></td>
+    </table>
+
+    <h4 id="move-to-relative">Move to relative</h4>
+
+    <p>Tells the object to begin moving to the specified <a href="glossary.html#relative-coordinates">relative coordinates</a>. The Z coordinate will only be useful if the object can fly (see <code><a href="#set-flying">set_flying</a></code>).</p>
+
+    <p>Syntax: <code><b>move_to_relative</b> &lt;x&gt; &lt;y&gt; [&lt;z&gt;]</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>x</td>
+        <td>X coordinate.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
-      <tr id="set-gravity">
-        <th><code>set_gravity</code></th>
-        <td><dl>
-          <dt><code><b>set_gravity</b> &lt;multiplier&gt;</code></dt>
-          <dd>Sets how gravity affects this object. 1 is normal, 0 is no gravity, 0.5 is half gravity, -1 is upwards gravity, etc.</dd>
-        </dl></td>
+      <tr>
+        <td>y</td>
+        <td>Y coordinate.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
-      <tr id="stabilize-z">
-        <th><code>stabilize_z</code></th>
-        <td><dl>
-          <dt><code><b>stabilize_z</b> &lt;reference&gt; &lt;offset&gt;</code></dt>
-          <dd>Changes the object's Z coordinate to match the Z coordinate of its highest (if the reference is <code>highest</code>) or lowest (if the reference is <code>lowest</code>) linked object. After changing it, it also moves it up by the specified offset.</dd>
-        </dl></td>
+      <tr>
+        <td>Z</td>
+        <td>Z coordinate.</td>
+        <td>Optional, default: <code>0</code></td>
+        <td>Number</td>
       </tr>
-      <tr id="stop">
-        <th><code>stop</code></th>
-        <td>Makes the object stop moving laterally, and makes it stop rotating. If it was following a path, it will also stop doing that.</td>
+    </table>
+
+    <h4 id="move-to-target">Move to target</h4>
+
+    <p>Tells the object to begin moving towards a special target.</p>
+
+    <p>Syntax: <code><b>move_to_target</b> &lt;target&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>target</td>
+        <td>
+          Target to move towards:
+          <ul>
+            <li><code><b>arachnorb_foot_logic</b></code>: Used by <a href="https://www.pikminwiki.com/Arachnorb_family">arachnorb</a> feet objects to move according to the internal plan. See the <code><a href="#arachnorb-plan-logic">arachnorb_plan_logic</a></code> action for more information.</li>
+            <li><code><b>away_from_focused_mob</b></code>: Move away from the focused object, thus going in the direct opposite direction.</li>
+            <li><code><b>focused_mob</b></code>: Move towards the focused object, following it as it moves.</li>
+            <li><code><b>focused_mob_position</b></code>: Move towards the position of the focused object at this exact moment. In other words, don't follow it as it moves.</li>
+            <li><code><b>home</b></code>: Move towards home (spawn point).</li>
+            <li><code><b>linked_mob_average</b></code>: Move towards the average position of its linked objects. Useful for keeping an <a href="https://www.pikminwiki.com/Arachnorb_family">arachnorb</a>'s head in the center position of its feet objects, for instance.</li>
+          </ul>
+        </td>
+        <td>Mandatory</td>
+        <td>String</td>
       </tr>
-      <tr id="stop-vertically">
-        <th><code>stop_vertically</code></th>
-        <td>Kills the object's vertical momentum.</td>
+    </table>
+
+    <h4 id="set-flying">Set flying</h4>
+
+    <p>Sets whether or not this object can fly.</p>
+
+    <p>Syntax: <code><b>set_flying</b> &lt;flying&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>flying</td>
+        <td>Whether it can fly.</td>
+        <td>Mandatory</td>
+        <td>Boolean</td>
       </tr>
-      <tr id="teleport-to-absolute">
-        <th><code>teleport_to_absolute</code></th>
-        <td><dl>
-          <dt><code><b>teleport_to_absolute</b> &lt;x&gt; &lt;y&gt; &lt;z&gt;</code></dt>
-          <dd>Instantly teleports the object to the specified <a href="glossary.html#area-coordinates">area coordinates</a>.</dd>
-        </dl></td>
+    </table>
+
+    <h4 id="set-gravity">Set gravity</h4>
+
+    <p>Sets how gravity affects this object. 1 is normal, 0 is no gravity, 0.5 is half gravity, -1 is upwards gravity, etc.</p>
+
+    <p>Syntax: <code><b>set_gravity</b> &lt;multiplier&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>multiplier</td>
+        <td>Gravity strength multiplier.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
-      <tr id="teleport-to-relative">
-        <th><code>teleport_to_relative</code></th>
-        <td><dl>
-          <dt><code><b>teleport_to_relative</b> &lt;x&gt; &lt;y&gt; &lt;z&gt;</code></dt>
-          <dd>Instantly teleports the object to the specified <a href="glossary.html#relative-coordinates">relative coordinates</a>.</dd>
-        </dl></td>
+    </table>
+
+    <h4 id="stabilize-z">Stabilize Z</h4>
+
+    <p>Changes the object's Z coordinate to match the Z coordinate of its highest or lowest linked object. After changing it, it also moves it up by the specified offset.</p>
+
+    <p>Syntax: <code><b>stabilize_z</b> &lt;reference&gt; &lt;offset&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>reference</td>
+        <td>
+          Possible reference point:
+          <ul>
+            <li><code><b>highest</b></code>: Match the mob with the highest Z coordinate.</li>
+            <li><code><b>lowest</b></code>: Match the mob with the lowest Z coordinate.</li>
+          </ul>
+        </td>
+        <td>Mandatory</td>
+        <td>String</td>
       </tr>
-      <tr id="turn-to-absolute">
-        <th><code>turn_to_absolute</code></th>
-        <td><dl>
-          <dt><code><b>turn_to_absolute</b> &lt;angle&gt;</code></dt>
-          <dd>Turn towards the specified <a href="glossary.html#absolute-angle">absolute angle</a> (in degrees).</dd>
-          <dt><code><b>turn_to_absolute</b> &lt;x&gt; &lt;y&gt;</code></dt>
-          <dd>Turn towards the specified <a href="glossary.html#area-coordinates">area coordinates</a>.</dd>
-        </dl></td>
+      <tr>
+        <td>offset</td>
+        <td>Further vertical offset.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
-      <tr id="turn-to-relative">
-        <th><code>turn_to_relative</code></th>
-        <td><dl>
-          <dt><code><b>turn_to_relative</b> &lt;angle&gt;</code></dt>
-          <dd>Turn &lt;angle&gt; degrees clockwise.</dd>
-          <dt><code><b>turn_to_relative</b> &lt;x&gt; &lt;y&gt;</code></dt>
-          <dd>Turn towards the specified <a href="glossary.html#relative-coordinates">relative coordinates</a>.</dd>
-        </dl></td>
+    </table>
+
+    <h4 id="stop">Stop</h4>
+
+    <p>Makes the object stop moving laterally, and makes it stop rotating. If it was following a path, it will also stop doing that.</p>
+
+    <p>Syntax: <code><b>stop</b></code></p>
+
+    <h4 id="stop-vertically">Stop vertically</h4>
+
+    <p>Kills the object's vertical momentum.</p>
+
+    <p>Syntax: <code><b>stop_vertically</b></code></p>
+
+    <h4 id="teleport-to-absolute">Teleport to absolute</h4>
+
+    <p>Instantly teleports the object to the specified <a href="glossary.html#area-coordinates">area coordinates</a>.</p>
+
+    <p>Syntax: <code><b>teleport_to_absolute</b> &lt;x&gt; &lt;y&gt; &lt;z&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>x</td>
+        <td>X coordinate.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
-      <tr id="turn-to-target">
-        <th><code>turn_to_target</code></th>
-        <td><dl>
-          <dt><code><b>turn_to_target</b> &lt;target&gt;</code></dt>
-          <dd>
-            Turns towards a special target. Possible values are:
-            <ul>
-              <li><code>arachnorb_head_logic</code>: Used by <a href="https://www.pikminwiki.com/Arachnorb_family">arachnorb</a> head objects to turn according to where their feet objects are located. See the <code><a href="#arachnorb-plan-logic">arachnorb_plan_logic</a></code> action for more information.</li>
-              <li><code>focused_mob</code>: Constantly turn towards the focused mob. You can make it stop with the <code><a href="#stop">stop</a></code> action.</li>
-              <li><code>home</code>: Turn towards home (spawn point).</li>
-            </ul>
-          </dd>
-        </dl></td>
+      <tr>
+        <td>y</td>
+        <td>Y coordinate.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+      <tr>
+        <td>z</td>
+        <td>Z coordinate.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+    </table>
+
+    <h4 id="teleport-to-relative">Teleport to relative</h4>
+
+    <p>Instantly teleports the object to the specified <a href="glossary.html#relative-coordinates">relative coordinates</a>.</p>
+
+    <p>Syntax: <code><b>teleport_to_relative</b> &lt;x&gt; &lt;y&gt; &lt;z&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>x</td>
+        <td>X coordinate.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+      <tr>
+        <td>y</td>
+        <td>Y coordinate.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+      <tr>
+        <td>z</td>
+        <td>Z coordinate.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+    </table>
+
+    <h4 id="turn-to-absolute">Turn to absolute</h4>
+
+    <p>Turn towards the specified <a href="glossary.html#absolute-angle">absolute angle</a> (in degrees), or towards the specified <a href="glossary.html#area-coordinates">area coordinates</a>.</p>
+
+    <p>Syntax: <code><b>turn_to_absolute</b> &lt;angle_or_x&gt; [&lt;y&gt;]</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>angle_or_x</td>
+        <td>If &lt;y&gt; is not provided, this parameter will be treated as the angle. If it is provided, this will be treated as the X coordinate.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+      <tr>
+        <td>y</td>
+        <td>If the idea is to turn towards some area coordinates, this specifies the Y coordinate.</td>
+        <td>Optional, default: <code></code></td>
+        <td>Number</td>
+      </tr>
+    </table>
+
+    <h4 id="turn-to-target">Turn to target</h4>
+
+    <p>Turns towards a special target.</p>
+
+    <p>Syntax: <code><b>turn_to_target</b> &lt;target&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>target</td>
+        <td>
+          Target to turn to:
+          <ul>
+            <li><code><b>arachnorb_head_logic</b></code>: Used by <a href="https://www.pikminwiki.com/Arachnorb_family">arachnorb</a> head objects to turn according to where their feet objects are located. See the <code><a href="#arachnorb-plan-logic">arachnorb_plan_logic</a></code> action for more information.</li>
+            <li><code><b>focused_mob</b></code>: Constantly turn towards the focused mob. You can make it stop with the <code><a href="#stop">stop</a></code> action.</li>
+            <li><code><b>home</b></code>: Turn towards home (spawn point).</li>
+          </ul>
+        </td>
+        <td>Mandatory</td>
+        <td>String</td>
       </tr>
     </table>
 
     <h3 id="actions-mobs-combat">Combat</h3>
-    
-    <table>
-      <tr><th>Action</th><th>Description</th></tr>
-      <tr id="add-health">
-        <th><code>add_health</code></th>
-        <td><dl>
-          <dt><b><code>add_health &lt;amount&gt;</code></b></dt>
-          <dd>Add &lt;amount&gt; health to the object's health. You can also remove some health by specifying a negative number.</dd>
-        </dl></td>
-      </tr>
-      <tr id="finish-dying">
-        <th><code>finish_dying</code></th>
-        <td>Runs the procedure related to the end of the object's death sequence. Amongst other things, this makes enemies unleash a soul.</td>
-      </tr>
-      <tr id="receive-status">
-        <th><code>receive_status</code></th>
-        <td><dl>
-          <dt><code><b>receive_status</b> &lt;status name&gt;</code></dt>
-          <dd>Applies the specified status effect.</dd>
-        </dl></td>
-      </tr>
-      <tr id="remove-status">
-        <th><code>remove_status</code></th>
-        <td><dl>
-          <dt><code><b>remove_status</b> &lt;status name&gt;</code></dt>
-          <dd>Removes the specified status effect, if the object is currently afflicted by it.</dd>
-        </dl></td>
-      </tr>
-      <tr id="set-far-reach">
-        <th><code>set_far_reach</code></th>
-        <td><dl>
-          <dt><code><b>set_far_reach</b> &lt;reach_name&gt;</code></dt>
-          <dd>Makes it use the specified reach as the "far reach", from here on out.</dd>
-        </dl></td>
-      </tr>
-      <tr id="set-health">
-        <th><code>set_health</code></th>
-        <td><dl>
-          <dt><code><b>set_health</b> &lt;amount&gt;</code></dt>
-          <dd>Sets the object's health to the specified number.</dd>
-        </dl></td>
-      </tr>
-      <tr id="set-huntable">
-        <th><code>set_huntable</code></th>
-        <td><dl>
-          <dt><code><b>set_huntable</b> &lt;true/false&gt;</code></dt>
-          <dd>Sets whether or not this object can currently be hunted by other objects. This does not affect whether or not other objects can hurt it.</dd>
-        </dl></td>
-      </tr>
-      <tr id="set-near-reach">
-        <th><code>set_near_reach</code></th>
-        <td><dl>
-          <dt><code><b>set_near_reach</b> &lt;reach_name&gt;</code></dt>
-          <dd>Makes it use the specified reach as the "near reach", from here on out.</dd>
-        </dl></td>
-      </tr>
-      <tr id="set-team">
-        <th><code>set_team</code></th>
-        <td><dl>
-          <dt><code><b>set_team</b> &lt;team_name&gt;</code></dt>
-          <dd>
-            Sets the object's current team. Objects in the same team will not hunt or harm each other. For valid values, see the <code>team</code> property of <a href="mob_type.html">object types</a>.
-          </dd>
-        </dl></td>
-      </tr>
-      <tr id="start-dying">
-        <th><code>start_dying</code></th>
-        <td>Runs the procedure related to the start of the object's death sequence. Amongst other things, this makes enemies unleash a cloud of sparkle particles.</td>
+
+    <h4 id="add-health">Add health</h4>
+
+    <p>Changes the object's health by adding or removing some amount.</p>
+
+    <p>Syntax: <b><code>add_health &lt;amount&gt;</code></b></p>
+
+    <table class="params-t">
+      <tr>
+        <td>amount</td>
+        <td>Amount of health to add (if it's positive), or remove (if it's negative).</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
     </table>
+
+    <h4 id="finish-dying">Finish dying</h4>
+
+    <p>Runs the procedure related to the end of the object's death sequence. Amongst other things, this makes enemies unleash a soul.</p>
+
+    <p>Syntax: <code><b>finish_dying</b></code></p>
+
+    <h4 id="receive-status">Receive status</h4>
+
+    <p>Applies the specified status effect.</p>
+
+    <p>Syntax: <code><b>receive_status</b> &lt;status name&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>status_name</td>
+        <td>Internal name of the status effect to receive.</td>
+        <td>Mandatory</td>
+        <td>String</td>
+      </tr>
+    </table>
+
+    <h4 id="remove-status">Remove status</h4>
+
+    <p>Removes the specified status effect, if the object is currently afflicted by it.</p>
+
+    <p>Syntax: <code><b>remove_status</b> &lt;status name&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>status_name</td>
+        <td>Internal name of the status effect to remove.</td>
+        <td>Mandatory</td>
+        <td>String</td>
+      </tr>
+    </table>
+
+    <h4 id="set-far-reach">Set far reach</h4>
+
+    <p>Makes it use the specified reach as the "far reach", from here on out.</p>
+
+    <p>Syntax: <code><b>set_far_reach</b> &lt;reach_name&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>reach_name</td>
+        <td>Name of the reach.</td>
+        <td>Mandatory</td>
+        <td>String</td>
+      </tr>
+    </table>
+
+    <h4 id="set-health">Set health</h4>
+
+    <p>Sets the object's health to the specified number.</p>
+
+    <p>Syntax: <code><b>set_health</b> &lt;amount&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>amount</td>
+        <td>Amount of health to set to.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+    </table>
+
+    <h4 id="set-huntable">Set huntable</h4>
+
+    <p>Sets whether or not this object can currently be hunted by other objects. This does not affect whether or not other objects can hurt it.</p>
+
+    <p>Syntax: <code><b>set_huntable</b> &lt;huntable&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>huntable</td>
+        <td>Whether it can be hunted by others.</td>
+        <td>Mandatory</td>
+        <td>Boolean</td>
+      </tr>
+    </table>
+
+    <h4 id="set-near-reach">Set near reach</h4>
+
+    <p>Makes it use the specified reach as the "near reach", from here on out.</p>
+
+    <p>Syntax: <code><b>set_near_reach</b> &lt;reach_name&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>reach_name</td>
+        <td>Name of the reach.</td>
+        <td>Mandatory</td>
+        <td>String</td>
+      </tr>
+    </table>
+
+    <h4 id="set-team">Set team</h4>
+
+    <p>Sets the object's current team. Objects in the same team will not hunt or harm each other.</p>
+
+    <p>Syntax: <code><b>set_team</b> &lt;team_name&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>team_name</td>
+        <td>Internal name of the team. See the <code>team</code> property of <a href="mob_type.html">object types</a> for a list of team internal names.</td>
+        <td>Mandatory</td>
+        <td>String</td>
+      </tr>
+    </table>
+
+    <h4 id="start-dying">Start dying</h4>
+
+    <p>Runs the procedure related to the start of the object's death sequence. Amongst other things, this makes enemies unleash a cloud of sparkle particles.</p>
+
+    <p>Syntax: <code><b>start_dying</b></code></p>
 
     <h3 id="actions-mobs-eating">Eating</h3>
-    
-    <table>
-      <tr><th>Action</th><th>Description</th></tr>
-      <tr id="be-chomped">
-        <th><code>be_chomped</code></th>
-        <td>Makes the object get chomped as if it were a Pikmin. This is only applicable if run inside the <code><a href="events.html#on-hitbox-touch-eat">on_hitbox_touch_eat</a></code> event.</td>
+
+    <h4 id="be-chomped">Be chomped</h4>
+
+    <p>Makes the object get chomped as if it were a Pikmin. This is only applicable if run inside the <code><a href="events.html#on-hitbox-touch-eat">on_hitbox_touch_eat</a></code> event.</p>
+
+    <p>Syntax: <code><b>be_chomped</b></code></p>
+
+    <h4 id="get-chomped"><del>Get chomped</del></h4>
+
+    <p><b>Deprecated in 1.2.0!</b> Please use <code>be_chomped</code> instead, which works the same.</p>
+
+    <p>Syntax: <code><b>get_chomped</b></code></p>
+
+    <h4 id="release">Release</h4>
+
+    <p>All captured Pikmin are safely freed.</p>
+
+    <p>Syntax: <code><b>release</b></code></p>
+
+    <h4 id="start-chomping">Start chomping</h4>
+
+    <p>Sets what body parts will be used to trap Pikmin from here on out. You must specify a maximum number of Pikmin that can be caught in this chomp (i.e. until <code><a href="#stop-chomping">stop_chomping</a></code> is called).</p>
+
+    <p>Syntax: <code><b>start_chomping</b> &lt;victim_max&gt; &lt;body_part&gt; [&lt;more_body_parts&gt;]</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>victim_max</td>
+        <td>Maximum number of Pikmin that can get caught.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
-      <tr id="get-chomped">
-        <th><del><code>get_chomped</code></del></th>
-        <td><b>Deprecated in 1.2.0!</b> Please use <code>be_chomped</code> instead, which works the same.</td>
+      <tr>
+        <td>body_part</td>
+        <td>Internal name of the body part to use.</td>
+        <td>Mandatory</td>
+        <td>String</td>
       </tr>
-      <tr id="release">
-        <th><code>release</code></th>
-        <td>All captured Pikmin are safely freed.</td>
-      </tr>
-      <tr id="start-chomping">
-        <th><code>start_chomping</code></th>
-        <td>
-          Sets what body parts will be used to trap Pikmin from here on out.
-          <dl><dt><code><b>start_chomping</b> &lt;victim_max&gt; &lt;body_parts&gt;</code></dt>
-          <dd>&lt;victim_max&gt; is the maximum number of Pikmin that can be caught. &lt;body_parts&gt; is the name of the body part(s) that will be used for trapping, one per word.</dd>
-        </dl></td>
-      </tr>
-      <tr id="stop-chomping">
-        <th><code>stop_chomping</code></th>
-        <td>Makes it so no body parts will be used for chomping any more, from here on out.</td>
-      </tr>
-      <tr id="swallow">
-        <th><code>swallow</code></th>
-        <td><dl>
-          <dt><code><b>swallow</b> &lt;number&gt;</code></dt>
-          <dd>Makes the object swallow &lt;number&gt; amount out of the captured Pikmin, picked at random. This kills the Pikmin.</dd>
-        </dl></td>
-      </tr>
-      <tr id="swallow-all">
-        <th><code>swallow_all</code></th>
-        <td>Makes the object swallow all captured Pikmin. This kills the Pikmin.</td>
+      <tr>
+        <td>more_body_parts</td>
+        <td>Internal name of more body parts to use. If you type spaces here for multiple words, they'll all be interpreted as this parameter.</td>
+        <td>Optional, default: <code></code></td>
+        <td>String</td>
       </tr>
     </table>
 
+    <h4 id="stop-chomping">Stop chomping</h4>
+
+    <p>Makes it so no body parts will be used for chomping any more, from here on out.</p>
+
+    <p>Syntax: <code><b>stop_chomping</b></code></p>
+
+    <h4 id="swallow">Swallow</h4>
+
+    <p>Makes the object swallow a specific amount out of the captured Pikmin, picked at random. This kills the Pikmin.</p>
+
+    <p>Syntax: <code><b>swallow</b> &lt;number&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>number</td>
+        <td>Amount of Pikmin to swallow.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+    </table>
+
+    <h4 id="swallow-all">Swallow all</h4>
+
+    <p>Makes the object swallow all captured Pikmin. This kills the Pikmin.</p>
+
+    <p>Syntax: <code><b>swallow_all</b></code></p>
+
     <h3 id="actions-mobs-focus">Focused object management</h3>
-    
-    <table>
-      <tr><th>Action</th><th>Description</th></tr>
-      <tr id="link-with-focused-mob">
-        <th><code>link_with_focused_mob</code></th>
-        <td>Establishes a link between this mob and its focused mob, but not the other way around. If that mob is already a linked mob, nothing happens.</td>
+
+    <h4 id="link-with-focused-mob">Link with focused mob</h4>
+
+    <p>Establishes a link between this mob and its focused mob, but not the other way around. If that mob is already a linked mob, nothing happens.</p>
+
+    <p>Syntax: <code><b>link_with_focused_mob</b></code></p>
+
+    <h4 id="load-focused-mob-memory"><del>Load focused mob memory</del></h4>
+
+    <p>
+      <b>Deprecated in 1.2.0!</b> Please use <code><a href="#get-mob-info">get_mob_info</a></code> and <code><a href="#focus-on-id">focus_on_id</a></code> instead.<br>
+      Obtains a saved mob from the "focused mob memory", and focuses on that one instead. Does nothing if there is no mob in the specified slot, or if that specified mob has already disappeared. See also: <code>save_focused_mob_memory</code>.
+    </p>
+
+    <p>Syntax: <code><b>load_focused_mob_memory</b> &lt;slot_number&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>slot_number</td>
+        <td>Slot number to load from.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
-      <tr id="load-focused-mob-memory">
-        <th><del><code>load_focused_mob_memory</code></del></th>
-        <td><dl>
-          <dt><code><b>load_focused_mob_memory</b> &lt;slot_number&gt;</code></dt>
-          <dd><b>Deprecated in 1.2.0!</b> Please use <code><a href="#get-mob-info">get_mob_info</a></code> and <code><a href="#focus-on-id">focus_on_id</a></code> instead. Obtains a saved mob from the "focused mob memory", and focuses on that one instead. Does nothing if there is no mob in the specified slot, or if that specified mob has already disappeared. See also: <code>save_focused_mob_memory</code>.</dd>
-        </dl></td>
-      </tr>
-      <tr id="save-focused-mob-memory">
-        <th><del><code>save_focused_mob_memory</code></del></th>
-        <td><dl>
-          <dt><code><b>save_focused_mob_memory</b> &lt;slot_number&gt;</code></dt>
-          <dd><b>Deprecated in 1.2.0!</b> Please use <code><a href="#get-mob-info">get_mob_info</a></code> and <code><a href="#focus-on-id">focus_on_id</a></code> instead.Saves the currently focused mob into the "focused mob memory", in the specified slot number. Does nothing if there is no currently focused mob. See also: <code>load_focused_mob_memory</code>.</dd>
-        </dl></td>
+    </table>
+
+    <h4 id="save-focused-mob-memory"><del>Save focused mob memory</del></h4>
+
+    <p>
+      <b>Deprecated in 1.2.0!</b> Please use <code><a href="#get-mob-info">get_mob_info</a></code> and <code><a href="#focus-on-id">focus_on_id</a></code> instead.<br>
+      Saves the currently focused mob into the "focused mob memory", in the specified slot number. Does nothing if there is no currently focused mob. See also: <code>load_focused_mob_memory</code>.
+    </p>
+
+    <p>Syntax: <code><b>save_focused_mob_memory</b> &lt;slot_number&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>slot_number</td>
+        <td>Slot number to load from.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
     </table>
 
     <h3 id="actions-mobs-grabbing">Grabbing and releasing</h3>
-    
-    <table>
-      <tr><th>Action</th><th>Description</th></tr>
-      <tr id="hold-focused-mob">
-        <th><code>hold_focused_mob</code></th>
-        <td><dl>
-          <dt><code><b>hold_focused_mob</b> &lt;body_part_name&gt; [&lt;hold_above&gt;] [&lt;rotation_method&gt;]</code></dt>
-          <dd>Makes the mob hold the focused mob in its grasp. The focused mob will follow wherever the specified body part is. If &lt;hold_above&gt; is <code>true</code> (default is false), the held object will be forcefully drawn above the holder object. &lt;rotation_method&gt; controls how the grabbed object rotates, and can be one of the following: <code>never</code> means it never rotates (besides the starting angle). <code>face_holder</code> means it always rotates to face the center of the holder object. <code>copy_holder</code> means it's always the same angle as the holder object.</dd>
-        </dl></td>
+
+    <h4 id="hold-focused-mob">Hold focused mob</h4>
+
+    <p>Makes the mob hold the focused mob in its grasp. The focused mob will follow wherever the specified body part is.</p>
+
+    <p>Syntax: <code><b>hold_focused_mob</b> &lt;body_part_name&gt; [&lt;hold_above&gt;] [&lt;rotation_method&gt;]</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>body_part_name</td>
+        <td>Internal name of the body part the held mob will follow.</td>
+        <td>Mandatory</td>
+        <td>String</td>
       </tr>
-      <tr id="order-release">
-        <th><code>order_release</code></th>
-        <td>Orders the Pikmin that is holding on to this object to release it.</td>
+      <tr>
+        <td>hold_above</td>
+        <td>Whether the held object should be forcefully drawn above the holder object.</td>
+        <td>Optional, default: <code>false</code></td>
+        <td>Boolean</td>
       </tr>
-      <tr id="release-stored-mobs">
-        <th><code>release_stored_mobs</code></th>
-        <td>Releases any objects stored "inside" this one with <code>store_focus_inside</code>.</td>
+      <tr>
+        <td>rotation_method</td>
+        <td>
+          How the held mob should rotate:
+          <ul>
+            <li><code><b>never</b></code>: It never rotates (besides the starting angle).</li>
+            <li><code><b>face_holder</b></code>: It always rotates to face the center of the holder object.</li>
+            <li><code><b>copy_holder</b></code>: It's always the same angle as the holder object.</li>
+          </ul>
+        </td>
+        <td>Optional, default: <code>false</code></td>
+        <td>Boolean</td>
       </tr>
-      <tr id="store-focus-inside">
-        <th><code>store_focus_inside</code></th>
-        <td>Takes the focused object and stores it "inside" the current one. Once inside, it is not visible and cannot be interacted with. Objects stored inside another can be released with <code>release_stored_mobs</code>.</td>
+    </table>
+
+    <h4 id="order-release">Order release</h4>
+
+    <p>Orders the Pikmin that is holding on to this object to release it.</p>
+
+    <p>Syntax: <code><b>order_release</b></code></p>
+
+    <h4 id="release-stored-mobs">Release stored mobs</h4>
+
+    <p>Releases any objects stored "inside" this one with <code><a href="#store-focus-inside">store_focus_inside</a></code>.</p>
+
+    <p>Syntax: <code><b>release_stored_mobs</b></code></p>
+
+    <h4 id="store-focus-inside">Store focus inside</h4>
+
+    <p>Takes the focused object and stores it "inside" the current one. Once inside, it is not visible and cannot be interacted with. Objects stored inside another can be released with <code><a href="#release-stored-mobs">release_stored_mobs</a></code>.</p>
+
+    <p>Syntax: <code><b>store_focus_inside</b></code></p>
+
+    <h4 id="throw-focused-mob">Throw focused mob</h4>
+
+    <p>Makes the focused mob be thrown in an arc from where it is towards the specified <a href="glossary.html#absolute-coordinates">absolute coordinates</a>. The peak of its jump reaches a height specified by the &lt;max_height&gt; parameter. If this mob was holding the focused mob, then it will stop holding. If the &lt;max_height&gt; is 0, the mob is simply gently released.</p>
+
+    <p>Syntax: <code><b>throw_focused_mob</b> &lt;x&gt; &lt;y&gt; &lt;z&gt; &lt;max_height&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>x</td>
+        <td>X coordinate the thrown mob should land at.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
-      <tr id="throw-focused-mob">
-        <th><code>throw_focused_mob</code></th>
-        <td><dl>
-          <dt><code><b>throw_focused_mob</b> &lt;x&gt; &lt;y&gt; &lt;z&gt; &lt;max_height&gt;</code></dt>
-          <dd>Makes the focused mob be thrown in an arc from where it is towards the specified <a href="glossary.html#absolute-coordinates">absolute coordinates</a>. The peak of its jump reaches a height specified by the &lt;max_height&gt; parameter. If this mob was holding the focused mob, then it will stop holding. If the &lt;max_height&gt; is 0, the mob is simply gently released.</dd>
-        </dl></td>
+      <tr>
+        <td>y</td>
+        <td>Y coordinate the thrown mob should land at.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
-      
+      <tr>
+        <td>z</td>
+        <td>Z coordinate the thrown mob should land at.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+      <tr>
+        <td>max_height</td>
+        <td>How high the peak of the jump goes. This value is a coordinate relative to the starting Z coordinate.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
     </table>
     
     <h3 id="actions-mobs-messages">Messages</h3>
-    
-    <table>
-      <tr><th>Action</th><th>Description</th></tr>
-      <tr id="send-message-to-links">
-        <th><code>send_message_to_links</code></th>
-        <td><dl>
-          <dt><code><b>send_message_to_links</b> &lt;message&gt;</code></dt>
-          <dd>Same as <code><a href="#send-message-to-focus">send_message_to_focus</a></code>, but it sends it to all linked objects.</dd>
-        </dl></td>
+
+    <h4 id="send-message-to-links">Send message to links</h4>
+
+    <p>Same as <code><a href="#send-message-to-focus">send_message_to_focus</a></code>, but it sends it to all linked objects.</p>
+
+    <p>Syntax: <code><b>send_message_to_links</b> &lt;message&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>message</td>
+        <td>Message to send. Remember that typing a space here will try to go to the next parameter!</td>
+        <td>Mandatory</td>
+        <td>String</td>
       </tr>
-      <tr id="send-message-to-nearby">
-        <th><code>send_message_to_nearby</code></th>
-        <td><dl>
-          <dt><code><b>send_message_to_nearby</b> &lt;distance&gt; &lt;message&gt;</code></dt>
-          <dd>Same as <code><a href="#send-message-to-focus">send_message_to_focus</a></code>, but it sends it to all objects that are within the specified distance.</dd>
-        </dl></td>
+    </table>
+
+    <h4 id="send-message-to-nearby">Send message to nearby</h4>
+
+    <p>Same as <code><a href="#send-message-to-focus">send_message_to_focus</a></code>, but it sends it to all objects that are within the specified distance.</p>
+
+    <p>Syntax: <code><b>send_message_to_nearby</b> &lt;distance&gt; &lt;message&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>message</td>
+        <td>Message to send. Remember that typing a space here will try to go to the next parameter!</td>
+        <td>Mandatory</td>
+        <td>String</td>
       </tr>
     </table>
 
     <h3 id="actions-mobs-physical">Physical traits</h3>
-    
-    <table>
-      <tr><th>Action</th><th>Description</th></tr>
-      <tr id="set-can-block-paths">
-        <th><code>set_can_block_paths</code></th>
-        <td><dl>
-          <dt><code><b>set_can_block_paths</b> &lt;true/false&gt;</code></dt>
-          <dd>Sets whether or not this object blocks objects following the path it is on. This is automatically called, with a <code>false</code> parameter, when the object's health drops to 0.</dd>
-        </dl></td>
+
+    <h4 id="set-can-block-paths">Set can block paths</h4>
+
+    <p>Sets whether or not this object blocks objects following the path it is on. This is automatically called, with a <code>false</code> parameter, when the object's health drops to 0.</p>
+
+    <p>Syntax: <code><b>set_can_block_paths</b> &lt;can_block_paths&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>can_block_paths</td>
+        <td>Whether it can block paths.</td>
+        <td>Mandatory</td>
+        <td>Boolean</td>
       </tr>
-      <tr id="set-height">
-        <th><code>set_height</code></th>
-        <td><dl>
-          <dt><code><b>set_height</b> &lt;height&gt;</code></dt>
-          <dd>Sets the object's height. Objects atop this one will rise or lower accordingly.</dd>
-        </dl></td>
+    </table>
+
+    <h4 id="set-height">Set height</h4>
+
+    <p>Sets the object's height. Objects atop this one will rise or lower accordingly.</p>
+
+    <p>Syntax: <code><b>set_height</b> &lt;height&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>height</td>
+        <td>The new height.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
-      <tr id="set-holdable">
-        <th><code>set_holdable</code></th>
-        <td><dl>
-          <dt><code><b>set_holdable</b></code></dt>
-          <dd>Makes it so that nothing can hold this object.</dd>
-          <dt><code><b>set_holdable</b> &lt;rules&gt;</code></dt>
-          <dd>Makes it so that the specified kinds of objects can hold this object. You can write more than one, by writing one in each word. The valid values are <code>pikmin</code> for Pikmin, and <code>enemies</code> for enemies.</dd>
-        </dl></td>
+    </table>
+
+    <h4 id="set-holdable">Set holdable</h4>
+
+    <p>Makes it so that only the specified kinds of objects can hold this object, including none at all. The valid values are <code>pikmin</code> for Pikmin, and <code>enemies</code> for enemies.</p>
+
+    <p>Syntax: <code><b>set_holdable</b> [&lt;rules&gt;]</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>rules</td>
+        <td>
+          If none are provided, then no mobs can hold it. If you type spaces here for multiple words, they'll all be interpreted as this parameter. Possible rules are:
+          <ul>
+            <li><code><b>pikmin</b></code>: The mob can be held by Pikmin.</li>
+            <li><code><b>enemies</b></code>: The mob can be held by enemies.</li>
+          </ul>
+        </td>
+        <td>List, optional, default: <code></code></td>
+        <td>String</td>
       </tr>
-      <tr id="set-radius">
-        <th><code>set_radius</code></th>
-        <td><dl>
-          <dt><code><b>set_radius</b> &lt;radius&gt;</code></dt>
-          <dd>Sets the object's radius.</dd>
-        </dl></td>
+    </table>
+
+    <h4 id="set-radius">Set radius</h4>
+
+    <p>Sets the object's radius.</p>
+
+    <p>Syntax: <code><b>set_radius</b> &lt;radius&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>height</td>
+        <td>The new radius.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
-      <tr id="set-tangible">
-        <th><code>set_tangible</code></th>
-        <td><dl>
-          <dt><code><b>set_tangible</b> &lt;true/false&gt;</code></dt>
-          <dd>Sets whether or not this mob can be touched by others. This only affects whether or not the mob can push or be pushed.</dd>
-        </dl></td>
+    </table>
+
+    <h4 id="set-tangible">Set tangible</h4>
+
+    <p>Sets whether or not this mob can be touched by others. This only affects whether or not the mob can push or be pushed.</p>
+
+    <p>Syntax: <code><b>set_tangible</b> &lt;tangible&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>tangible</td>
+        <td>Whether it is tangible.</td>
+        <td>Mandatory</td>
+        <td>Boolean</td>
       </tr>
     </table>
 
     <h3 id="actions-mobs-aesthetic">Aesthetic</h3>
-    
-    <table>
-      <tr><th>Action</th><th>Description</th></tr>
-      <tr id="play-sound">
-        <th><code>play_sound</code></th>
-        <td><dl>
-          <dt><code><b>play_sound</b> &lt;sound_data&gt; [&lt;sound_ID_destination_variable_name&gt;]</code></dt>
-          <dd>Plays a sound using the provided <a href="mob_type.html#sounds">sound data</a>. You can obtain the ID of the resulting sound (technically the ID of the sound <i>source</i>) by specifying the name of the variable that will receive it in the second parameter. You can then use that ID to stop the sound prematurely with the <code><a href="#stop-sound">stop_sound</a></code> action. The ID will be 0 if the sound couldn't be played.</dd>
-        </dl></td>
+
+    <h4 id="play-sound">Play sound</h4>
+
+    <p>Plays a sound using the provided <a href="mob_type.html#sounds">sound data</a>. You can obtain the ID of the resulting sound (technically the ID of the sound <i>source</i>) by specifying the name of the variable that will receive it in the second parameter. You can then use that ID to stop the sound prematurely with the <code><a href="#stop-sound">stop_sound</a></code> action. The ID will be 0 if the sound couldn't be played.</p>
+
+    <p>Syntax: <code><b>play_sound</b> &lt;sound_data&gt; [&lt;sound_id_destination_var_name&gt;]</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>sound_data</td>
+        <td>Internal name of the sound data to play.</td>
+        <td>Mandatory</td>
+        <td>String</td>
       </tr>
-      <tr id="set-hiding">
-        <th><code>set_hiding</code></th>
-        <td><dl>
-          <dt><code><b>set_hiding</b> &lt;true/false&gt;</code></dt>
-          <dd>Sets whether or not the engine should hide this object from here on out. This makes the object, as well as its shadow and health to not be drawn. This is useful, for instance, when a Sheargrub digs underground.</dd>
-        </dl></td>
+      <tr>
+        <td>sound_id_destination_var_name</td>
+        <td>If not empty, this is the name of the variable that will receive the number ID of the sound.</td>
+        <td>Optional, default: <code></code></td>
+        <td>String</td>
       </tr>
-      <tr id="set-shadow-visibility">
-        <th><code>set_shadow_visibility</code></th>
-        <td><dl>
-          <dt><code><b>set_shadow_visibility</b> &lt;true/false&gt;</code></dt>
-          <dd>Sets whether or not the engine should draw this object's shadow from here on out.</dd>
-        </dl></td>
+    </table>
+
+    <h4 id="set-hiding">Set hiding</h4>
+
+    <p>Sets whether or not the engine should hide this object from here on out. This makes the object, as well as its shadow and health to not be drawn. This is useful, for instance, when a Sheargrub digs underground.</p>
+
+    <p>Syntax: <code><b>set_hiding</b> &lt;hiding&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>hiding</td>
+        <td>Whether it is hiding.</td>
+        <td>Mandatory</td>
+        <td>Boolean</td>
       </tr>
-      <tr id="start-height-effect">
-        <th><code>start_height_effect</code></th>
-        <td>Records the object's current Z and, from here on out, scales the object larger the higher it is from that pivot Z. This creates a fake perspective effect that reflects how high the object is. This feature cannot scale any smaller than normal size. Use <code>stop_height_effect</code> to return to normal.</td>
+    </table>
+
+    <h4 id="set-shadow-visibility">Set shadow visibility</h4>
+
+    <p>Sets whether or not the engine should draw this object's shadow from here on out.</p>
+
+    <p>Syntax: <code><b>set_shadow_visibility</b> &lt;visible&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>visible</td>
+        <td>Whether the shadow is visible.</td>
+        <td>Mandatory</td>
+        <td>Boolean</td>
       </tr>
-      <tr id="start-particles">
-        <th><code>start_particles</code></th>
-        <td><dl>
-          <dt><code><b>start_particles</b> &lt;generator_name&gt; [&lt;x offset&gt;] [&lt;y offset&gt;] [&lt;z offset&gt;]</code></dt>
-          <dd>Begin emitting particles using the specified particle generator. If specified, x, y, and z are the <a href="glossary.html#relative-coordinates">relative coordinates</a> of the object at which to place the particles. If the particle generator specified has no interval (i.e. it only launches particles once and then it's over), then the particle generator is automatically removed from the object after it emits its particles. An object can only have one script-given particle generator attached at a time.</dd>
-        </dl></td>
+    </table>
+
+    <h4 id="start-height-effect">Start height effect</h4>
+
+    <p>Records the object's current Z and, from here on out, scales the object larger the higher it is from that pivot Z. This creates a fake perspective effect that reflects how high the object is. This feature cannot scale any smaller than normal size. Use <code>stop_height_effect</code> to return to normal.</p>
+
+    <p>Syntax: <code><b>start_height_effect</b></code></p>
+
+    <h4 id="start-particles">Start particles</h4>
+
+    <p>Begin emitting particles using the specified particle generator. If the particle generator specified has no interval (i.e. it only launches particles once and then it's over), then the particle generator is automatically removed from the object after it emits its particles. An object can only have one script-given particle generator attached at a time.</p>
+
+    <p>Syntax: <code><b>start_particles</b> &lt;generator_name&gt; [&lt;x offset&gt;] [&lt;y offset&gt;] [&lt;z offset&gt;]</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>generator_name</td>
+        <td>Internal name of the particle generator.</td>
+        <td>Mandatory</td>
+        <td>String</td>
       </tr>
-      <tr id="stop-height-effect">
-        <th><code>stop_height_effect</code></th>
-        <td>Stops the height effect started with <code>start_height_effect</code>. This also gets called every time the object touches the floor.</td>
+      <tr>
+        <td>x_offset</td>
+        <td>X <a href="glossary.html#relative-coordinates">relative coordinate</a> to place the generator at.</td>
+        <td>Optional, default: <code>0</code></td>
+        <td>Number</td>
       </tr>
-      <tr id="stop-particles">
-        <th><code>stop_particles</code></th>
-        <td>Removes any currently attached particle generator.</td>
+      <tr>
+        <td>y_offset</td>
+        <td>Y <a href="glossary.html#relative-coordinates">relative coordinate</a> to place the generator at.</td>
+        <td>Optional, default: <code>0</code></td>
+        <td>Number</td>
       </tr>
-      <tr id="stop-sound">
-        <th><code>stop_sound</code></th>
-        <td><dl>
-          <dt><code><b>stop_sound</b> &lt;sound_ID&gt;</code></dt>
-          <dd>If the object is currently playing a sound, this stops it. You can obtain the ID of a sound when you start it by the second parameter in the <code><a href="#play-sound">play_sound</a></code> action. It's safe to use this action even if the ID is 0 (meaning the sound didn't play) or it's a sound that has already stopped.</dd>
-        </dl></td>
+      <tr>
+        <td>z_offset</td>
+        <td>Z <a href="glossary.html#relative-coordinates">relative coordinate</a> to place the generator at. You may want to set this to a value higher than the mob's height so that the particles can be clearly seen, but it depends on the nature of the particles.</td>
+        <td>Optional, default: <code>0</code></td>
+        <td>Number</td>
+      </tr>
+    </table>
+
+    <h4 id="stop-height-effect">Stop height effect</h4>
+
+    <p>Stops the height effect started with <code>start_height_effect</code>. This also gets called every time the object touches the floor.</p>
+
+    <p>Syntax: <code><b>stop_height_effect</b></code></p>
+
+    <h4 id="stop-particles">Stop particles</h4>
+
+    <p>Removes any currently attached <a href="#start-particles">script-given particle generator</a>.</p>
+
+    <p>Syntax: <code><b>stop_particles</b></code></p>
+
+    <h4 id="stop-sound">Stop sound</h4>
+
+    <p>If the object is currently playing a given sound, this stops it. You can obtain the ID of a sound when you start it by the second parameter in the <code><a href="#play-sound">play_sound</a></code> action. Calling this action with the ID being 0 (meaning the sound didn't play) or with the ID of a sound that has already stopped will not do anything.</p>
+
+    <p>Syntax: <code><b>stop_sound</b> &lt;sound_id&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>sound_id</td>
+        <td>Number ID of the sound to stop.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
     </table>
     
     <h3 id="actions-mobs-important">Other important actions</h3>
-    
-    <table>
-      <tr><th>Action</th><th>Description</th></tr>
-      <tr id="delete">
-        <th><code>delete</code></th>
-        <td>Delete this object.</td>
+
+    <h4 id="delete">Delete</h4>
+
+    <p>Delete this object.</p>
+
+    <p>Syntax: <code><b>delete</b></code></p>
+
+    <h4 id="set-animation">Set animation</h4>
+
+    <p>Changes to and begins the given animation.</p>
+
+    <p>Syntax: <code><b>set_animation</b> &lt;animation&gt; [&lt;start_option&gt;] [&lt;depend_on_mob_speed&gt;]</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>animation</td>
+        <td>Internal name of the animation.</td>
+        <td>Mandatory</td>
+        <td>String</td>
       </tr>
-      <tr id="set-animation">
-        <th><code>set_animation</code></th>
-        <td><dl>
-          <dt><code><b>set_animation</b> &lt;animation&gt;</code></dt>
-          <dd>Changes to and begins the animation &lt;animation&gt;.</dd>
-          <dt><code><b>set_animation</b> &lt;animation&gt; &lt;start_option&gt;</code></dt>
-          <dd>
-            Same as above, but controls how the animation is meant to start. Possible values for &lt;start_option&gt; are:
-            <ul>
-              <li><code>normal</code>: Starts the animation from the beginning as normal.</li>
-              <li><code>no_restart</code>: Sets animation but doesn't set the frame number to 0, meaning that animation will continue from whatever frame number the previous one left off.</li>
-              <li><code>random_time</code>: Starts on a random time.</li>
-              <li><code>random_time_on_spawn</code>: Starts on a random time but only when the enemy has just spawned. Otherwise it starts the animation from the beginning as normal.</li>
-            </ul>
-          </dd>
-          <dt><code><b>set_animation</b> &lt;animation&gt; &lt;start_option&gt; true</code></dt>
-          <dd>Same as above but also makes it so that the animation speed depends on the object's speed. If the object is moving at full speed (i.e. the speed defined in the <code>move_speed</code> property of its mob type data), the animation will play at normal speed. If the object is moving slower the animation will play slower (up to a limit), and the same is true if the object is going faster.</dd>
-        </dl></td>
+      <tr>
+        <td>start_option</td>
+        <td>
+          Controls how the animation is meant to start:
+          <ul>
+            <li><code><b>normal</b></code>: Starts the animation from the beginning as normal.</li>
+            <li><code><b>no_restart</b></code>: Sets animation but doesn't set the frame number to 0, meaning that animation will continue from whatever frame number the previous one left off.</li>
+            <li><code><b>random_time</b></code>: Starts on a random time.</li>
+            <li><code><b>random_time_on_spawn</b></code>: Starts on a random time but only when the enemy has just spawned. Otherwise it starts the animation from the beginning as normal.</li>
+          </ul>
+        </td>
+        <td>Optional, default: <code>normal</code></td>
+        <td>String</td>
       </tr>
-      <tr id="spawn">
-        <th><code>spawn</code></th>
-        <td><dl>
-          <dt><code><b>spawn</b> &lt;spawn data&gt;</code></dt>
-          <dd>Instantly creates a new object, with the information in the supplied spawn data block. See <a href="mob_type.html#spawning">here</a> for more information.</dd>
-        </dl></td>
+      <tr>
+        <td>depend_on_mob_speed</td>
+        <td>Whether the animation speed depends on the object's speed. If so, if the object is moving at full speed (i.e. the speed defined in the <code>move_speed</code> property of its mob type data), the animation will play at normal speed. If the object is moving slower the animation will play slower (up to a limit), and the same is true if the object is going faster.
+        </td>
+        <td>Optional, default: <code>false</code></td>
+        <td>Boolean</td>
+      </tr>
+    </table>
+
+    <h4 id="spawn">Spawn</h4>
+
+    <p>Instantly creates a new object, with the information in the supplied spawn data block. See <a href="mob_type.html#spawning">here</a> for more information.</p>
+
+    <p>Syntax: <code><b>spawn</b> &lt;spawn_data&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>spawn_data</td>
+        <td>Internal name of the spawn data block.</td>
+        <td>Mandatory</td>
+        <td>String</td>
       </tr>
     </table>
     
     <h3 id="actions-mobs-misc">Misc.</h3>
-    
-    <table>
-      <tr><th>Action</th><th>Description</th></tr>
-      <tr id="arachnorb-plan-logic">
-        <th><code>arachnorb_plan_logic</code></th>
+
+    <h4 id="arachnorb-plan-logic">Arachnorb plan logic</h4>
+
+    <p>
+      Special logic for <a href="https://www.pikminwiki.com/Arachnorb_family">arachnorb</a>-type enemies. This is used to internally plan what sort of movements the arachnorb's feet will need to do for the next sequence of steps, so that it can achieve the specified goal.<br>
+      This only works on the object that represents the arachnorb's head, which must be a <a href="mob_type.html#parent">parent object</a> with feet children objects.<br>
+      In order for the engine to know where to position the feet, the following script variables should be declared: <code>max_step_distance</code> specifies the maximum distance a foot can move per step; <code>max_turn_angle</code> specifies the maximum amount of degrees the arachnorb can turn per step; <code>min_turn_angle</code> specifies the minimum amount of degrees the arachnorb can turn per step; <code>feet_normal_distance</code> specifies the usual distance the feet are from the center of the head.
+    </p>
+
+    <p>Syntax: <code><b>arachnorb_plan_logic</b> &lt;goal&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>goal</td>
         <td>
-          Special logic for <a href="https://www.pikminwiki.com/Arachnorb_family">arachnorb</a>-type enemies. This is used to internally plan what sort of movements the arachnorb's feet will need to do for the next sequence of steps, so that it can achieve the specified goal. This only works on the object that represents the arachnorb's head, which must be a <a href="mob_type.html#parent">parent object</a> with feet children objects. In order for the engine to know where to position the feet, the following script variables should be declared: <code>max_step_distance</code> specifies the maximum distance a foot can move per step; <code>max_turn_angle</code> specifies the maximum amount of degrees the arachnorb can turn per step; <code>min_turn_angle</code> specifies the minimum amount of degrees the arachnorb can turn per step; <code>feet_normal_distance</code> specifies the usual distance the feet are from the center of the head.
-          <dl><dt><code><b>arachnorb_plan_logic</b> home</code></dt>
-          <dd>Sets up the internal logic for the arachnorb to head home. This will automatically decide how to turn or how to walk forward to get there.</dd>
-          <dt><code><b>arachnorb_plan_logic</b> forward</code></dt>
-          <dd>Sets up the internal logic for the arachnorb to move forward.</dd>
-          <dt><code><b>arachnorb_plan_logic</b> cw_turn</code></dt>
-          <dd>Sets up the internal logic for the arachnorb to rotate clockwise. When this is called manually, the arachnorb turns a random angle between the minimum and maximum turn amounts.</dd>
-          <dt><code><b>arachnorb_plan_logic</b> ccw_turn</code></dt>
-          <dd>Same as the <code>cw_turn</code> goal, but for a counterclockwise turn.</dd>
-        </dl></td>
+          The plan's goal:
+          <ul>
+            <li><code><b>home</b></code>: Sets up the internal logic for the arachnorb to head home. This will automatically decide how to turn or how to walk forward to get there.</li>
+            <li><code><b>forward</b></code>: Sets up the internal logic for the arachnorb to move forward.</li>
+            <li><code><b>cw_turn</b></code>: Sets up the internal logic for the arachnorb to rotate clockwise. When this is called manually, the arachnorb turns a random angle between the minimum and maximum turn amounts.</li>
+            <li><code><b>ccw_turn</b></code>: Same as the <code>cw_turn</code> goal, but for a counterclockwise turn.</li>
+          </ul>
+        </td>
+        <td>Mandatory</td>
+        <td>String</td>
       </tr>
-      <tr id="drain-liquid">
-        <th><code>drain_liquid</code></th>
-        <td>Makes the liquid in the sector it is on start draining. After a few seconds, it will be completely liquid-free. This will affect the sector it is on as well as all neighboring sectors that have liquid.</td>
+    </table>
+
+    <h4 id="drain-liquid">Drain liquid</h4>
+
+    <p>Makes the liquid in the sector it is on start draining. After a few seconds, it will be completely liquid-free. This will affect the sector it is on as well as all neighboring sectors that have liquid.</p>
+
+    <p>Syntax: <code><b>drain_liquid</b></code></p>
+
+    <h4 id="follow-mob-as-leader">Follow mob as leader</h4>
+
+    <p>Follows <a href="#target-mob">a given mob</a> as its new leader. For Pikmin, this calls the "whistled" event, and for other object types, it simply adds them to the group.</p>
+
+    <p>Syntax: <code><b>follow_mob_as_leader</b> &lt;target_mob&gt; [&lt;silent&gt;]</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>target_mob</td>
+        <td>The <a href="#target-mob">target mob</a>.</td>
+        <td>Mandatory</td>
+        <td>String</td>
       </tr>
-      <tr id="follow-mob-as-leader">
-        <th><code>follow_mob_as_leader</code></th>
-        <td><dl>
-          <dt><code><b>follow_mob_as_leader</b> &lt;target_mob&gt;</code></dt>
-          <dd>Follows <a href="#target-mob">a given mob</a> as its new leader. For Pikmin, this calls the "whistled" event, and for other object types, it simply adds them to the group.</dd>
-          <dt><code><b>follow_mob_as_leader</b> &lt;target_mob&gt; true</code></dt>
-          <dd>Same as above, but makes the Pikmin silent when joining the group.</dd>
-        </dl></td>
+      <tr>
+        <td>silent</td>
+        <td>For Pikmin, controls whether they are silent or make a noise.</td>
+        <td>Optional, default: <code>false</code></td>
+        <td>Boolean</td>
       </tr>
-      <tr id="get-floor-z">
-        <th><code>get_floor_z</code></th>
-        <td><dl>
-          <dt><code><b>get_floor_z</b> &lt;destination_variable_name&gt; &lt;x&gt; &lt;y&gt;</code></dt>
-          <dd>Sets the variable &lt;destination_variable_name&gt; to the Z coordinate of the floor at the specified coordinates. If there is no sector at those coordinates, the variable will receive the value 0.</dd>
-        </dl></td>
+    </table>
+
+    <h4 id="get-floor-z">Get floor Z</h4>
+
+    <p>Gets the Z coordinate of the floor at the specified area coordinates. If there is no sector at those coordinates, the variable will receive the value 0.</p>
+
+    <p>Syntax: <code><b>get_floor_z</b> &lt;destination_var_name&gt; &lt;x&gt; &lt;y&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
       </tr>
-      <tr id="set-limb-animation">
-        <th><code>set_limb_animation</code></th>
-        <td><dl>
-          <dt><code><b>set_limb_animation</b> &lt;animation&gt;</code></dt>
-          <dd>Same as <code>set_animation</code>, but for the limb connecting it to its parent mob.</dd>
-        </dl></td>
+      <tr>
+        <td>x</td>
+        <td>X coordinate to check.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
-      <tr id="set-sector-scroll">
-        <th><code>set_sector_scroll</code></th>
-        <td><dl>
-          <dt><code><b>set_sector_scroll</b> &lt;x_speed&gt; &lt;y_speed&gt;</code></dt>
-          <dd>Makes the sector this object is on begin scrolling, with the specified speed in the X axis (units per second) and the specified speed in the Y axis. Its floor texture will scroll along, and any objects on this sector will be dragged too. Setting both values to 0 will make it stop scrolling, naturally.</dd>
-        </dl></td>
+      <tr>
+        <td>y</td>
+        <td>Y coordinate to check.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
-      <tr id="shake-camera">
-        <th><code>shake_camera</code></th>
-        <td><dl>
-          <dt><code><b>shake_camera</b> &lt;amount&gt;</code></dt>
-          <dd>Makes the camera shake. The farther the camera's center is to the object, the weaker the shake. The amount ranges from 0 to 100, and multiple shakes in quick succession will add up to a stronger shake.</dd>
-        </dl></td>
+    </table>
+
+    <h4 id="set-limb-animation">Set limb animation</h4>
+
+    <p>Same as <code><a href="#set-animation">set_animation</a></code>, but for the limb connecting it to its parent mob.</p>
+
+    <p>Syntax: <code><b>set_limb_animation</b> &lt;animation&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>animation</td>
+        <td>Internal name of the animation.</td>
+        <td>Mandatory</td>
+        <td>String</td>
+      </tr>
+    </table>
+
+    <h4 id="set-sector-scroll">Set sector scroll</h4>
+
+    <p>Makes the sector this object is on begin scrolling, with the specified speed in the X axis and the specified speed in the Y axis. Its floor texture will scroll along, and any objects on this sector will be dragged too. Setting both values to 0 will make it stop scrolling, naturally.</p>
+
+    <p>Syntax: <code><b>set_sector_scroll</b> &lt;x_speed&gt; &lt;y_speed&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>x_speed</td>
+        <td>X speed to scroll at, in units per second.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+      <tr>
+        <td>y_speed</td>
+        <td>Y speed to scroll at, in units per second.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+    </table>
+
+    <h4 id="shake-camera">Shake camera</h4>
+
+    <p>Makes the camera shake with a given amount of force. The farther the camera's center is to the object, the weaker the shake. Multiple shakes in quick succession will add up to a stronger shake.</p>
+
+    <p>Syntax: <code><b>shake_camera</b> &lt;amount&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>amount</td>
+        <td>Amount to shake by, between 0 and 100.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
       </tr>
     </table>
     
-    <h2 id="target-mob">Target mob</h2>   
+    <h2 id="common-data">Common data</h2>
+
+    <h3 id="list-delimiter">List delimiter</h3>
+
+    <p>Actions that deal with <a href="#actions-common-list">lists</a> have a parameter that lets you pick the list's delimiter. This allows you to have lists in various formats to suit your needs. The delimiter is essentially what separates each of the items in the list. The possible values for the delimiter parameter are:</p>
+
+    <ul>
+      <li><code><b>comma</b></code>: Commas (<code>,</code>). The default.</li>
+      <li><code><b>semicolon</b></code>: Semicolons (<code>;</code>). Good for when some of your items need to use commas themselves.</li>
+      <li><code><b>space</b></code>: Spaces (<code> </code>). Good for treating a sentence as a list of words.</li>
+    </ul>
+
+    <h3 id="target-mob">Target mob</h3>
 
     <p>Some actions require a mob to be selected as a target. Possible target types are:</p>  
 

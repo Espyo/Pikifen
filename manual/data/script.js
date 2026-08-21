@@ -93,6 +93,40 @@ function create_header(title, bc_names, bc_links) {
 
 
 /**
+ * @brief Populates any parameter tables in the page with the header and such.
+ */
+function populate_param_tables() {
+  var tables = document.getElementsByClassName('params-t');
+  for (var table of tables) {
+    var isMandatory = table.classList.contains('params-t-m');
+
+    var trs = table.getElementsByTagName('tr');
+    for (var tr of trs) {
+      tr.classList.add('params');
+
+      var tds = tr.getElementsByTagName('td');
+      //Name.
+      tds[0].innerHTML = '<code>' + tds[0].innerHTML + '</code>';
+
+      //Type.
+      tds[3].innerHTML = get_data_type_inner_html(tds[3].innerHTML);
+
+    }
+
+    var headerTr = document.createElement('tr');
+    headerTr.innerHTML =
+      '<th>Parameter</th>' +
+      '<th>Description</th>' +
+      '<th>Attributes</th>' +
+      '<th><a href="making.html#data-file">Type</a></th>';
+    headerTr.classList.add('params-h');
+
+    table.prepend(headerTr);
+  }
+}
+
+
+/**
  * @brief Populates any property tables in the page with the header and such.
  */
 function populate_prop_tables() {
@@ -109,32 +143,7 @@ function populate_prop_tables() {
       tds[0].innerHTML = '<code>' + tds[0].innerHTML + '</code>';
 
       //Type.
-      switch (tds[2].innerHTML) {
-        case "Text":
-          tds[2].innerHTML = "<a href=\"making.html#data-file-text\">Text</a>";
-          break;
-        case "Number":
-          tds[2].innerHTML = "<a href=\"making.html#data-file-number\">Number</a>";
-          break;
-        case "Boolean":
-          tds[2].innerHTML = "<a href=\"making.html#data-file-boolean\">Boolean</a>";
-          break;
-        case "Point":
-          tds[2].innerHTML = "<a href=\"making.html#data-file-point\">Point</a>";
-          break;
-        case "Color":
-          tds[2].innerHTML = "<a href=\"making.html#data-file-color\">Color</a>";
-          break;
-        case "File name":
-          tds[2].innerHTML = "<a href=\"making.html#data-file-file-name\">File name</a>";
-          break;
-        case "Internal name":
-          tds[2].innerHTML = "<a href=\"making.html#data-file-internal-name\">Internal name</a>";
-          break;
-        case "List":
-          tds[2].innerHTML = "<a href=\"making.html#data-file-list\">List</a>";
-          break;
-      }
+      tds[2].innerHTML = get_data_type_inner_html(tds[2].innerHTML);
 
       //Default value.
       if (tds.length == 4) {
@@ -156,6 +165,43 @@ function populate_prop_tables() {
 
     table.prepend(headerTr);
   }
+}
+
+
+/**
+ * @brief Returns the inner HTML that should go in a table cell to link to
+ * the page and section that documents this data type.
+ * @param {string} type The data type.
+ * @returns The inner HTML.
+ */
+function get_data_type_inner_html(type) {
+  switch (type) {
+    case "Text":
+      return "<a href=\"making.html#data-file-text\">Text</a>";
+      break;
+    case "Number":
+      return "<a href=\"making.html#data-file-number\">Number</a>";
+      break;
+    case "Boolean":
+      return "<a href=\"making.html#data-file-boolean\">Boolean</a>";
+      break;
+    case "Point":
+      return "<a href=\"making.html#data-file-point\">Point</a>";
+      break;
+    case "Color":
+      return "<a href=\"making.html#data-file-color\">Color</a>";
+      break;
+    case "File name":
+      return "<a href=\"making.html#data-file-file-name\">File name</a>";
+      break;
+    case "Internal name":
+      return "<a href=\"making.html#data-file-internal-name\">Internal name</a>";
+      break;
+    case "List":
+      return "<a href=\"making.html#data-file-list\">List</a>";
+      break;
+  }
+  return type;
 }
 
 
@@ -187,6 +233,7 @@ function setup(title, bc_names, bc_links, use_toc) {
   create_header(title, bc_names, bc_links);
   if (use_toc) make_toc();
   populate_prop_tables();
+  populate_param_tables();
 }
 
 

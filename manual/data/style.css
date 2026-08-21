@@ -282,6 +282,39 @@ table.props-t-o tr.props td:nth-child(4) {
   text-align: center;
 }
 
+table.params-t {
+  width: 100%;
+}
+
+tr.params-h {
+  font-size: 70%;
+}
+
+tr.params td:first-child {
+  /* Parameter name. */
+  font-size: 110%;
+  font-weight: bold;
+}
+
+table.params-t tr.params td:nth-child(4) {
+  /* Type. */
+  font-size: 75%;
+  font-style: italic;
+  text-align: center;
+}
+
+table.params-t tr.params-h th:nth-child(3) {
+  /* Attributes header. */
+  font-size: 90%;
+  width: 80px;
+}
+
+table.params-t tr.params-h th:nth-child(4) {
+  /* Type header. */
+  font-size: 90%;
+  width: 80px;
+}
+
 /* Changelog. */
 .cl-a,
 .cl-c,
