@@ -1,8 +1,9 @@
 /**
  * @brief Creates the table of contents based on the h2 and beyond tags.
  * Then, it places it after the opening paragraphs.
+ * @param {boolean} max_depth Maximum depth the table of contents should list.
  */
-function make_toc() {
+function make_toc(max_depth) {
   var headings = [].slice.call(document.body.querySelectorAll('h2, h3, h4, h5, h6'));
 
   if (headings.length == 0) {
@@ -24,6 +25,8 @@ function make_toc() {
 
   for (var h = 0; h < headings.length; h++) {
     var level = headings[h].tagName[1];
+    if(level > max_depth) continue;
+    
     if (prev_level == -1) {
       prev_level = level;
     }
@@ -224,14 +227,15 @@ function set_title(title) {
  * @param {Array} bc_names List of names of the pages in the breadcrumbs.
  * The home page must not be included. Undefined for none.
  * @param {Array} bc_links Same as bc_names, but for the links.
- * @param {boolean} use_toc True to use table of contents.
+ * @param {boolean} toc_depth Maximum depth the table of contents should list.
+ * 0 means no table of contents.
  */
-function setup(title, bc_names, bc_links, use_toc) {
-  if (use_toc === undefined) use_toc = true;
+function setup(title, bc_names, bc_links, toc_depth) {
+  if (toc_depth === undefined) toc_depth = 4;
 
   set_title(title);
   create_header(title, bc_names, bc_links);
-  if (use_toc) make_toc();
+  if (toc_depth > 0) make_toc(toc_depth);
   populate_prop_tables();
   populate_param_tables();
 }

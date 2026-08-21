@@ -13,7 +13,6 @@ Next tasks (roughly sorted most important first)
     New leader animations should default to idling, for compatibility's sake
     Pressing Delete on a reminder in the area editor should delete it
     Add a button to move camera to current reminder in area editor
-    Action documentation on the manual should have a table for each argument in an action, with types and default values and such
     Add the Hocotate ship pod as a ship
     Add the S.S. Dolphin 2 and its pod as ships
     
