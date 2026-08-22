@@ -270,13 +270,11 @@ void AnimationDatabase::createConversions(
     
     forIdx(c, conversions) {
         size_t aPos = findAnimation(conversions[c].second);
-        preNamedConversions[conversions[c].first] = aPos;
         if(aPos == INVALID) {
-            game.errors.report(
-                "Animation \"" + conversions[c].second + "\" is required "
-                "by the engine, but does not exist!", file
-            );
+            //Use the default.
+            aPos = findAnimation(conversions[0].second);
         }
+        preNamedConversions[conversions[c].first] = aPos;
     }
 }
 
