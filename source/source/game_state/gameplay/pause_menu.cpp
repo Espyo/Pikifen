@@ -1180,25 +1180,32 @@ void PauseMenu::drawRadar(
     }
     
     //Mission mob markers.
+    float missionMobMarkerAlpha =
+        (sin(game.timePassed * PAUSE_MENU::MISSION_MOB_MARKER_TIME_MULT)) +
+        0.5f;
+    missionMobMarkerAlpha = std::clamp(missionMobMarkerAlpha, 0.0f, 1.0f);
     if(game.curArea->type == AREA_TYPE_MISSION) {
         forIdx(g, game.states.gameplay->missionMobGroups) {
             MissionMobGroupStatus* gPtr =
                 &game.states.gameplay->missionMobGroups[g];
             if(!game.curArea->mission.mobGroups[g].highlightOnRadar) continue;
             for(Mob* mPtr : gPtr->remaining) {
-                float alpha =
-                    (
-                        sin(
-                            game.timePassed *
-                            PAUSE_MENU::MISSION_MOB_MARKER_TIME_MULT
-                        )
-                    ) + 0.5f;
-                alpha = std::clamp(alpha, 0.0f, 1.0f);
+                if(mPtr->type->category->id == MOB_CATEGORY_PILES) {
+                    //Exception case for piles, which may be empty.
+                    //Not very elegant, but it'll do.
+                    Pile* pilPtr = (Pile*) mPtr;
+                    if(
+                        pilPtr->amount == 0 &&
+                        pilPtr->pilType->deleteWhenFinished
+                    ) {
+                        continue;
+                    }
+                }
                 drawBitmap(
                     game.sysContent.bmpMissionMob, mPtr->center,
                     Point(PAUSE_MENU::MISSION_MOB_MARKER_SIZE) /
-                    radarView.cam.zoom,
-                    0.0f, multAlpha(game.config.guiColors.gold, alpha)
+                    radarView.cam.zoom, 0.0f,
+                    multAlpha(game.config.guiColors.gold, missionMobMarkerAlpha)
                 );
             }
         };
