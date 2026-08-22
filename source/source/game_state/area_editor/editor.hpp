@@ -1172,6 +1172,7 @@ private:
     void zoomEverythingCmd(float inputValue);
     void zoomInCmd(float inputValue);
     void zoomOutCmd(float inputValue);
+    void zoomSelectionCmd(float inputValue);
     void processGui();
     void processGuiControlPanel();
     void processGuiDialogDeleteArea();

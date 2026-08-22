@@ -203,7 +203,7 @@ void Editor::centerCamera(const RectCorners& corners, bool instantaneous) {
     else z = game.editorsView.windowRect.size.y / size.y;
     z -= z * 0.1;
     
-    game.editorsView.cam.zoomTarget = z;
+    game.editorsView.cam.zoomTarget = std::clamp(z, zoomMinLevel, zoomMaxLevel);
     
     if(instantaneous) {
         game.editorsView.cam.center = game.editorsView.cam.centerTarget;
@@ -4262,6 +4262,21 @@ void Editor::zoomWithCursor(float newZoom) {
 
 
 /**
+ * @brief Zooms onto everything that is currently selected.
+ * Does nothing if nothing is selected.
+ */
+void Editor::zoomToSelection() {
+    forIdx(c, selectionControllers) {
+        Rect selectionRect;
+        if(selectionControllers[c]->getTotalBBox(&selectionRect)) {
+            centerCamera(rectToRectCorners(selectionRect));
+            return;
+        }
+    }
+}
+
+
+/**
  * @brief Constructs a new changes manager object.
  *
  * @param ed Pointer to the editor.
@@ -5262,11 +5277,12 @@ void Editor::SelectionController::getSingleRotatingItemInfo(
 bool Editor::SelectionController::getTotalBBox(Rect* outRect) const {
     Rect totalRect;
     bool hasFirst = false;
+    bool hasItems = false;
     
     forIdx(m, managers) {
         Rect mgrRect;
-        bool hasItems = managers[m]->getBBox(&mgrRect);
-        if(!hasItems) continue;
+        bool managerHasItems = managers[m]->getBBox(&mgrRect);
+        if(!managerHasItems) continue;
         
         if(!hasFirst) {
             totalRect = mgrRect;
@@ -5274,11 +5290,12 @@ bool Editor::SelectionController::getTotalBBox(Rect* outRect) const {
         } else {
             totalRect = combineBBoxes(totalRect, mgrRect);
         }
+        hasItems = true;
     }
     
     *outRect = totalRect;
     
-    return false;
+    return hasItems;
 }
 
 

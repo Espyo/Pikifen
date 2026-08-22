@@ -1285,6 +1285,7 @@ protected:
         const ContentManifest& manifest, const string& name
     );
     void zoomWithCursor(float newZoom);
+    void zoomToSelection();
     virtual void handleKeyCharAnywhere(const ALLEGRO_EVENT& ev);
     virtual void handleKeyCharCanvas(const ALLEGRO_EVENT& ev);
     virtual void handleKeyDownAnywhere(const ALLEGRO_EVENT& ev);

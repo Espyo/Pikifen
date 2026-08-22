@@ -1085,6 +1085,16 @@ void AreaEditor::processGuiMenuBar() {
                 "fits nicely into view.",
                 "Home"
             );
+
+            //Zoom onto selection.
+            if(ImGui::MenuItem("Zoom onto selection")) {
+                zoomSelectionCmd(1.0f);
+            }
+            setTooltip(
+                "Move and zoom the camera so that everything that is\n"
+                "selected fits nicely into view.",
+                "Home"
+            );
             
             ImGui::EndMenu();
             

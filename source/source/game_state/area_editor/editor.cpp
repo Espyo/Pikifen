@@ -4489,6 +4489,18 @@ void AreaEditor::zoomOutCmd(float inputValue) {
 
 
 /**
+ * @brief Code to run for the zoom selection command.
+ *
+ * @param inputValue Value of the player input for the command.
+ */
+void AreaEditor::zoomSelectionCmd(float inputValue) {
+    if(inputValue < 0.5f) return;
+    
+    Editor::zoomToSelection();
+}
+
+
+/**
  * @brief Constructs a new layout drawing node object.
  *
  * @param aePtr Pointer to the area editor instance in charge.
