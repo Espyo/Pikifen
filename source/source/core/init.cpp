@@ -1952,9 +1952,9 @@ void initScriptActionTypes() {
     );
     
     //Else if.
-    queueParam("comparand", ptString);
+    queueParam("left", ptString);
     queueParam("operation", ptEnum, pfConst);
-    queueParam("value", ptString, pfVector);
+    queueParam("right", ptString, pfVector);
     commitAction(
         SCRIPT_ACTION_ELSE_IF,
         "else_if",
@@ -1962,9 +1962,9 @@ void initScriptActionTypes() {
     );
     
     //End do-while loop.
-    queueParam("comparand", ptString);
+    queueParam("left", ptString);
     queueParam("operation", ptEnum, pfConst);
-    queueParam("value", ptString);
+    queueParam("right", ptString, pfVector);
     commitAction(
         SCRIPT_ACTION_END_DO_WHILE,
         "end_do_while",
@@ -2017,8 +2017,8 @@ void initScriptActionTypes() {
     
     //Start for loop.
     queueParam("iterator var name", ptString, pfConst);
-    queueParam("target value", ptInt);
-    queueParam("starting value", ptInt, pfOpt, "1");
+    queueParam("target amount", ptInt);
+    queueParam("starting amount", ptInt, pfOpt, "1");
     queueParam("jump", ptInt, pfOpt, "1");
     commitAction(
         SCRIPT_ACTION_FOR,
@@ -2028,7 +2028,7 @@ void initScriptActionTypes() {
     
     //Start for each loop.
     queueParam("iterator var name", ptString, pfConst);
-    queueParam("item var name", ptInt);
+    queueParam("item var name", ptString, pfConst);
     queueParam("list or string", ptString);
     queueParam("list delimiter", ptEnum, pfOpt, "comma");
     commitAction(
@@ -2193,8 +2193,8 @@ void initScriptActionTypes() {
     
     //Get mob IDs with var.
     queueParam("destination var name", ptString, pfConst);
-    queueParam("var", ptString);
-    queueParam("value", ptString, pfOpt, "");
+    queueParam("required var name", ptString);
+    queueParam("required value", ptString, pfOpt, "");
     commitAction(
         SCRIPT_ACTION_GET_MOB_IDS_WITH_VAR,
         "get_mob_ids_with_var",
@@ -2249,9 +2249,9 @@ void initScriptActionTypes() {
     );
     
     //If.
-    queueParam("comparand", ptString);
+    queueParam("left", ptString);
     queueParam("operation", ptEnum, pfConst);
-    queueParam("value", ptString);
+    queueParam("right", ptString);
     commitAction(
         SCRIPT_ACTION_IF,
         "if",
@@ -2638,7 +2638,7 @@ void initScriptActionTypes() {
     );
     
     //Receive status.
-    queueParam("status name", ptEnum);
+    queueParam("status name", ptString);
     commitAction(
         SCRIPT_ACTION_RECEIVE_STATUS,
         "receive_status",
@@ -3015,9 +3015,9 @@ void initScriptActionTypes() {
     );
     
     //Start while-do loop.
-    queueParam("comparand", ptString);
+    queueParam("left", ptString);
     queueParam("operation", ptEnum, pfConst);
-    queueParam("value", ptString);
+    queueParam("right", ptString, pfVector);
     commitAction(
         SCRIPT_ACTION_WHILE_DO,
         "while_do",

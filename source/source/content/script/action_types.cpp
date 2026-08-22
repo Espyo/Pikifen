@@ -3437,7 +3437,7 @@ void ScriptActionRunners::whileDo(ScriptActionInstRunData& data) {
  *
  * @param lhs The left-hand side comparand.
  * @param op The operator.
- * @param rhs The right-hand side value.
+ * @param rhs The right-hand side comparand.
  * @return Whether it is true.
  */
 bool ScriptActionUtils::doScriptCondition(
