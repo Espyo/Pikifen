@@ -1189,6 +1189,9 @@ void AreaEditor::deleteCmd(float inputValue) {
     } case EDITOR_STATE_DETAILS: {
         deleteTreeShadowCmd(1.0f);
         break;
+    } case EDITOR_STATE_REVIEW: {
+        deleteReminderCmd(1.0f);
+        break;
     }
     }
 }
@@ -1490,23 +1493,28 @@ void AreaEditor::deleteReminderCmd(float inputValue) {
     
     if(!reminderSelection.hasAny()) {
         setStatus("You have to select a reminder to delete!", true);
-    } else {
-        registerChange("reminder deletion");
-        eraseIndexesInVector(
-            reminderSelection.getItemIdxs(), game.curArea->reminders
-        );
-        if(reminderSelection.hasOne()) {
-            setStatus(
-                "Deleted reminder #" +
-                i2s(reminderSelection.getSingleItemIdx() + 1) + "."
-            );
-        } else {
-            setStatus(
-                "Deleted " + i2s(reminderSelection.getCount()) + " reminders."
-            );
-        }
-        reminderSelection.clear();
+        return;
     }
+    
+    //Prepare everything.
+    registerChange("reminder deletion");
+    size_t singleDeletionIdx = reminderSelection.getSingleItemIdx();
+    size_t nDeletions = reminderSelection.getCount();
+    
+    //Delete!
+    eraseIndexesInVector(
+        reminderSelection.getItemIdxs(), game.curArea->reminders
+    );
+    
+    //Cleanup.
+    clearSelections();
+    
+    //Report.
+    setStatus(
+        "Deleted " +
+        getAmountOrIdxDescription(singleDeletionIdx, nDeletions, "reminder") +
+        "."
+    );
 }
 
 
