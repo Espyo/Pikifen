@@ -26,13 +26,15 @@ void GuiEditor::openLoadDialog() {
     
     //Set up the picker's behavior and data.
     vector<PickerItem> fileItems;
-    for(const auto& f : game.content.guiDefs.manifests) {
+    for(auto& f : game.content.guiDefs.list) {
+        ContentManifest& manif = game.content.guiDefs.manifests[f.first];
         fileItems.push_back(
             PickerItem(
-                f.first,
-                "Pack: " + game.content.packs.list[f.second.pack].name, "",
-                (void*) &f.second,
-                getFileTooltip(f.second.path)
+                f.second.getChildByName("name")->getValueOrDefault(f.first),
+                "Pack: " +
+                game.content.packs.list[manif.pack].name, "",
+                (void*) &manif,
+                getFileTooltip(manif.path)
             )
         );
     }
