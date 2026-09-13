@@ -2083,6 +2083,8 @@ void MouseCursor::hideInOS() const {
 void MouseCursor::init() {
     hideInOS();
     reset();
+    winPos.x = game.winW / 2.0f;
+    winPos.y = game.winH / 2.0f;
     
     saveTimer.onEnd = [this] () {
         saveTimer.start();

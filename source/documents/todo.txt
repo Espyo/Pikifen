@@ -5,12 +5,10 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- Problems to fix ---
-    Helodity's many-mob-deletion crash
 
     --- 1.2.0 ---
     Healing at the ship should make a sound
     The sparkle particles on treasures need to be more obvious
-    SHOULD I do something about nuggets having changed their price?
     Add the S.S. Dolphin 2 and its pod as ships
         When the pod is on the ship, the speaker is upright, and the propellers are hidden
     

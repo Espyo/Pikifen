@@ -197,7 +197,10 @@ private:
     map<unsigned char, ALLEGRO_BITMAP*> wordmarkTypeBitmaps;
     
     //Time left until we start fading the GUI in.
-    float guiFadeTimer = MAIN_MENU::FADE_IN_DELAY;
+    float guiFadeTimer = 0.0f;
+    
+    //Time left for the zoom-in effect.
+    float zoomInTimer = 0.0f;
     
     
     //--- Private function declarations ---

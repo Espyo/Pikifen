@@ -308,6 +308,11 @@ void Game::globalLogicPost() {
             mouseCursor.intendedAlpha = 0.0f;
         }
     }
+    if(mouseCursor.purposely0Alpha) {
+        mouseCursor.alpha = 0.0f;
+        mouseCursor.intendedAlpha = 0.0f;
+    }
+    
     mouseCursor.alpha =
         inchTowards(
             mouseCursor.alpha, mouseCursor.intendedAlpha,

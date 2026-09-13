@@ -27,7 +27,7 @@ using DrawInfo = GuiItem::DrawInfo;
 namespace MAIN_MENU {
 
 //How long the main menu proper's fast fade in animation lasts for.
-const float FADE_IN_FAST_DURATION = 0.25f;
+const float FADE_IN_FAST_DURATION = 0.35f;
 
 //How long to wait before the menu proper starts fading in to view.
 const float FADE_IN_DELAY = 3.5f;
@@ -784,7 +784,7 @@ void MainMenu::startFadingIn() {
 void TitleScreen::doDrawing() {
     //To export the wordmark into its own bitmap, set this to true.
     //One good trick is to set it to true only if
-    //passedBy(game.timePassed, game.timePassed + game.deltaT, 10)
+    //passedBy(game.timePassed, game.timePassed + game.deltaT, 10);
     const bool justWordmark = false;
     
     ALLEGRO_BITMAP* bmpJustWordmark = nullptr;
@@ -796,7 +796,7 @@ void TitleScreen::doDrawing() {
     //Set up the zoom level.
     float zoomTimeRatio =
         interpolateNumber(
-            game.timePassed, 0.0f, MAIN_MENU::ZOOM_DURATION, 0.0f, 1.0f
+            zoomInTimer, MAIN_MENU::ZOOM_DURATION, 0.0f, 0.0f, 1.0f
         );
     zoomTimeRatio = std::clamp(zoomTimeRatio, 0.0f, 1.0f);
     zoomTimeRatio = ease(zoomTimeRatio, EASE_METHOD_OUT);
@@ -825,7 +825,8 @@ void TitleScreen::doDrawing() {
     al_use_transform(&game.identityTransform);
     
     if(justWordmark) {
-        //Do what you want with bmpJustWordmark, like using al_save_bitmap().
+        //Do what you want with bmpJustWordmark, like using
+        //al_save_bitmap("wordmark.png", bmpJustWordmark);
         al_destroy_bitmap(bmpJustWordmark);
         return;
     }
@@ -890,7 +891,11 @@ void TitleScreen::doLogic() {
         guiFadeTimer -= game.deltaT;
         if(guiFadeTimer <= 0.0f) {
             mainMenu.startFadingIn();
+            game.mouseCursor.purposely0Alpha = false;
         }
+    }
+    if(zoomInTimer > 0.0f) {
+        zoomInTimer -= game.deltaT;
     }
     mainMenu.tick(game.deltaT);
     
@@ -1012,6 +1017,7 @@ void TitleScreen::handleAllegroEvent(ALLEGRO_EVENT& ev) {
         if(guiFadeTimer > 0.0f) {
             guiFadeTimer = 0.0f;
             mainMenu.startFadingIn();
+            game.mouseCursor.purposely0Alpha = false;
         }
         mainMenu.speedUpFadeIn();
     }
@@ -1149,7 +1155,10 @@ void TitleScreen::load() {
     //Finishing touches.
     game.audio.setCurrentSong(game.sysContentNames.sngMenus, false);
     if(game.timePassed == 0.0f) {
+        zoomInTimer = MAIN_MENU::ZOOM_DURATION;
+        guiFadeTimer = MAIN_MENU::FADE_IN_DELAY;
         mainMenu.hide();
+        game.mouseCursor.purposely0Alpha = true;
         game.fadeMgr.setNextFadeDuration(GAME::FADE_SLOW_DURATION);
     }
     game.fadeMgr.startFade(true, nullptr);

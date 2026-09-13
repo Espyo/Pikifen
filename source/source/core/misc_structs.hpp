@@ -610,6 +610,9 @@ struct MouseCursor {
     //Timer that keeps track of how long the cursor's been stopped for.
     float stoppedTimer = MOUSE_CURSOR::HIDE_TIMER_DURATION;
     
+    //Is the cursor's alpha being purposely set to 0?
+    bool purposely0Alpha = false;
+    
     //Spots the cursor has been through, in window coordinates.
     //Used for the faint trail left behind.
     vector<Point> history;
