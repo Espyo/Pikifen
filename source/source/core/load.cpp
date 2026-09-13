@@ -436,6 +436,8 @@ void loadMiscSounds() {
         game.content.sounds.list.get(game.sysContentNames.sndFrozenLiquidThaw);
     game.sysContent.sndGo =
         game.content.sounds.list.get(game.sysContentNames.sndGo);
+    game.sysContent.sndHeal =
+        game.content.sounds.list.get(game.sysContentNames.sndHeal);
     game.sysContent.sndMedalGotIt =
         game.content.sounds.list.get(game.sysContentNames.sndMedalGotIt);
     game.sysContent.sndMenuActivate =
@@ -647,6 +649,7 @@ void unloadMiscResources() {
     game.content.sounds.list.free(game.sysContent.sndFrozenLiquidCrack);
     game.content.sounds.list.free(game.sysContent.sndFrozenLiquidThaw);
     game.content.sounds.list.free(game.sysContent.sndGo);
+    game.content.sounds.list.free(game.sysContent.sndHeal);
     game.content.sounds.list.free(game.sysContent.sndMedalGotIt);
     game.content.sounds.list.free(game.sysContent.sndMenuActivate);
     game.content.sounds.list.free(game.sysContent.sndMenuBack);

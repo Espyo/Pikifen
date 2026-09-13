@@ -236,6 +236,10 @@ void Ship::healLeader(Leader* l) const {
             game.sysContentNames.parLeaderHeal, l
         );
     l->particleGenerators.push_back(pg);
+    game.audio.addNewPosSoundSource(
+        game.sysContent.sndHeal, l->center, false,
+    { .volume = 0.5f }
+    );
 }
 
 

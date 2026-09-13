@@ -1186,6 +1186,9 @@ struct SystemContentList {
     //"Go!" big message.
     ALLEGRO_SAMPLE* sndGo = nullptr;
     
+    //Healing at a ship.
+    ALLEGRO_SAMPLE* sndHeal = nullptr;
+    
     //"Got it!" medal blurb.
     ALLEGRO_SAMPLE* sndMedalGotIt = nullptr;
     
@@ -1492,6 +1495,9 @@ struct SystemContentNames {
     
     //"Go!" big message.
     string sndGo = "gui/go";
+    
+    //Healing at a ship.
+    string sndHeal = "effects/heal";
     
     //"Got it!" medal blurb.
     string sndMedalGotIt = "gui/medal_got_it";

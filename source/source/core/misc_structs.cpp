@@ -3458,6 +3458,7 @@ void SystemContentNames::load(DataNode* file) {
     sndRS.set("frozen_liquid_crack", sndFrozenLiquidCrack);
     sndRS.set("frozen_liquid_thaw", sndFrozenLiquidThaw);
     sndRS.set("go", sndGo);
+    sndRS.set("heal", sndHeal);
     sndRS.set("medal_got_it", sndMedalGotIt);
     sndRS.set("menu_activate", sndMenuActivate);
     sndRS.set("menu_back", sndMenuBack);
