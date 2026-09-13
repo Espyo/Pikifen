@@ -58,7 +58,7 @@
       </tr>
       <tr>
         <td>tint_random_maximum</td>
-        <td>When an object of this type spawns, it will be tinted randomly. This property is the maximum tint that it can undergo, and the engine will pick a random color to tint it with between this color and full white (i.e. no tint). If you specify an alpha channel, the object's transparency will be decided randomly (but independently) too, between this value and 255 (full opacity).</td>
+        <td>When an object of this type spawns, it will be tinted randomly. Imagine a single gradient that is this property's color on one end and fully white. When the object is created, a random color in this gradient is picked, and the object becomes tinted with that color. Naturally, landing on full white means no tint happens. If you specify an alpha channel, the object's transparency will be decided randomly and independently from the other components, but it'll still choose between this property's alpha value and 255 (fully opaque). A value of <code>255 255 255</code> will make it so no change in color or opacity happens.</td>
         <td>Color</td>
         <td>255 255 255</td>
       </tr>

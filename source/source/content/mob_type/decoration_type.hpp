@@ -53,7 +53,9 @@ public:
 
     //--- Public members ---
     
-    //Maximum amount it can deviate the tint by, for every color component.
+    //First end of the gradient that'll be randomly sampled from to
+    //tint the decoration by. The second end is fully white.
+    //Alpha is also calculated, but independently.
     ALLEGRO_COLOR tintRandomMaximum = COLOR_WHITE;
     
     //Maximum amount it can deviate the scale by.
