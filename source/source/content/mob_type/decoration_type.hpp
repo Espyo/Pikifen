@@ -54,7 +54,7 @@ public:
     //--- Public members ---
     
     //Maximum amount it can deviate the tint by, for every color component.
-    ALLEGRO_COLOR tintRandomMaximum = COLOR_EMPTY;
+    ALLEGRO_COLOR tintRandomMaximum = COLOR_WHITE;
     
     //Maximum amount it can deviate the scale by.
     float scaleRandomVariation = 0.0f;
