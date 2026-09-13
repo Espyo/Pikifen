@@ -91,6 +91,7 @@ bool doesEdgeHaveWallShadow(
 void drawEdgeOffsetOnBuffer(
     const vector<EdgeOffsetCache>& caches, size_t eIdx, const Viewport& view
 );
+ALLEGRO_BITMAP* getBackBufferOpaqueCopy();
 Mob* getClosestMobToMouseCursor(
     const Viewport& view, bool mustHaveHealth = false
 );
@@ -108,6 +109,9 @@ void getEdgeOffsetIntersection(
     float baseShadowAngle1, float baseShadowAngle2,
     float shadowLength,
     float* outAngle, float* outLength
+);
+string getEngineVersionString(
+    bool includeInDev = false, bool includeDate = false
 );
 ALLEGRO_COLOR getLedgeSmoothingColor(Edge* ePtr);
 ALLEGRO_COLOR getLiquidLimitColor(Edge* ePtr);
@@ -134,9 +138,6 @@ unsigned char getThrowPreviewVertexes(
     const ALLEGRO_COLOR& color,
     float uOffset, float uScale,
     bool varyThickness
-);
-string getEngineVersionString(
-    bool includeInDev = false, bool includeDate = false
 );
 void getPikminSpitData(
     uint32_t spitNr, float baseHorizontalSpeed,

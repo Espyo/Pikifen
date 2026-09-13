@@ -110,11 +110,11 @@ bool areWallsBetween(
 /**
  * @brief Calls al_build_transform and returns the Allegro transform,
  * using the data from the specified Transform2d structure.
- * 
+ *
  * @param data The Transform2d data.
  * @return The Allegro transform data.
  */
-ALLEGRO_TRANSFORM buildTransform2d(const Transform2d &data) {
+ALLEGRO_TRANSFORM buildTransform2d(const Transform2d& data) {
     ALLEGRO_TRANSFORM tf;
     al_build_transform(
         &tf,
@@ -155,14 +155,13 @@ void clearAreaTextures() {
  */
 void crash(const string& reason, const string& info, int exitStatus) {
     if(game.display) {
-        ALLEGRO_BITMAP* backbuffer = al_get_backbuffer(game.display);
-        if(backbuffer) {
+        if(al_get_backbuffer(game.display)) {
             al_save_bitmap(
                 (
                     FOLDER_PATHS_FROM_ROOT::USER_DATA + "/" +
                     "crash_" + getCurrentTime(true) + ".png"
                 ).c_str(),
-                backbuffer
+                getBackBufferOpaqueCopy()
             );
         }
         
@@ -393,6 +392,39 @@ bool doesEdgeHaveWallShadow(
             (*outUnaffectedSector)->floorZ >
             (*outAffectedSector)->floorZ + GEOMETRY::STEP_HEIGHT;
     }
+}
+
+
+/**
+ * @brief Returns an opaque copy of the current display backbuffer.
+ * This is useful because alpha operations on the backbuffer behave weirdly.
+ * On some devices, when saving to a bitmap, it will use those weird
+ * alpha values, which may be harmless on the backbuffer, but not so much
+ * on a saved PNG file.
+ *
+ * @return The copy.
+ */
+ALLEGRO_BITMAP* getBackBufferOpaqueCopy() {
+    ALLEGRO_BITMAP* result = al_clone_bitmap(al_get_backbuffer(game.display));
+    ALLEGRO_LOCKED_REGION* region =
+        al_lock_bitmap(
+            result,
+            ALLEGRO_PIXEL_FORMAT_ABGR_8888_LE, ALLEGRO_LOCK_READWRITE
+        );
+        
+    unsigned char* row = (unsigned char*) region->data;
+    int bmpW = al_get_bitmap_width(result);
+    int bmpH = al_get_bitmap_height(result);
+    for(int y = 0; y < bmpH; y++) {
+        for(int x = 0; x < bmpW; x++) {
+            row[(x) * 4 + 3] = 255;
+        }
+        row += region->pitch;
+    }
+    
+    al_unlock_bitmap(result);
+    
+    return result;
 }
 
 
@@ -1259,30 +1291,7 @@ void saveScreenshot() {
     "_"
         );
         
-    //Before saving, let's set every pixel's alpha to 255.
-    //This is because alpha operations on the backbuffer behave weirdly.
-    //On some devices, when saving to a bitmap, it will use those weird
-    //alpha values, which may be harmless on the backbuffer, but not so much
-    //on a saved PNG file.
-    ALLEGRO_BITMAP* screenshot =
-        al_clone_bitmap(al_get_backbuffer(game.display));
-    ALLEGRO_LOCKED_REGION* region =
-        al_lock_bitmap(
-            screenshot,
-            ALLEGRO_PIXEL_FORMAT_ABGR_8888_LE, ALLEGRO_LOCK_READWRITE
-        );
-        
-    unsigned char* row = (unsigned char*) region->data;
-    int bmpW = al_get_bitmap_width(screenshot);
-    int bmpH = al_get_bitmap_height(screenshot);
-    for(int y = 0; y < bmpH; y++) {
-        for(int x = 0; x < bmpW; x++) {
-            row[(x) * 4 + 3] = 255;
-        }
-        row += region->pitch;
-    }
-    
-    al_unlock_bitmap(screenshot);
+    ALLEGRO_BITMAP* screenshot = getBackBufferOpaqueCopy();
     
     al_save_bitmap(
         (
