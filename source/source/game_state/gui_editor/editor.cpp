@@ -367,18 +367,29 @@ void GuiEditor::deleteGuiDefCmd(float inputValue) {
  */
 void GuiEditor::deleteSelectedItems() {
     const set<size_t>& selectedItems = itemSelection.getItemIdxs();
-    set<size_t> selectedCustomIdxs;
+    vector<size_t> itemIdxsToDelete(
+        selectedItems.begin(), selectedItems.end()
+    );
     
-    for(size_t iIdx : selectedItems) {
-        size_t customIdx = iIdx - hardcodedItems.size();
-        selectedCustomIdxs.insert(customIdx);
+    while(!itemIdxsToDelete.empty()) {
+        size_t itemIdxToDelete = itemIdxsToDelete[0];
+        size_t customIdx = itemIdxToDelete - hardcodedItems.size();
         
         //Clear its bitmap.
-        ((CustomGuiItemDef*) allItems[iIdx])->clearBitmap();
+        ((CustomGuiItemDef*) allItems[itemIdxToDelete])->clearBitmap();
+        
+        //Delete it.
+        customItems.erase(customItems.begin() + customIdx);
+        allItems.erase(allItems.begin() + itemIdxToDelete);
+        
+        //Adjust the indexes of the next ones to process.
+        itemIdxsToDelete.erase(itemIdxsToDelete.begin());
+        forIdx(i, itemIdxsToDelete) {
+            adjustMisalignedIndex(
+                itemIdxsToDelete[i], itemIdxToDelete, false
+            );
+        }
     }
-    
-    //Finally, erase them from the vectors.
-    eraseIndexesInVector(selectedCustomIdxs, customItems);
 }
 
 

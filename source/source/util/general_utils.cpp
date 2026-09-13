@@ -305,7 +305,7 @@ void Timer::tick(float deltaT) {
  * @brief Adjusts an item index number, based on whether an item
  * in the list that's being indexed got added or removed.
  *
- * @param idxToAlign Index number to be aligned, if necessary.
+ * @param idxToAlign Index number to be aligned.
  * @param changedItemIdx Index number of the item that got added or removed.
  * @param addition True for a new index addition, false for a removal.
  * @return Whether the number changed.

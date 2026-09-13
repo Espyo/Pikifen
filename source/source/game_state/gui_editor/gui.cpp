@@ -1186,7 +1186,7 @@ void GuiEditor::processGuiPanelItems() {
             "Create a new custom GUI item.", "N"
         );
         
-        if(curItemPtr) {
+        if(itemSelection.hasAny()) {
             //Delete item button.
             ImGui::SameLine();
             if(
@@ -1198,7 +1198,9 @@ void GuiEditor::processGuiPanelItems() {
                 deleteCmd(1.0f);
             }
             setTooltip("Delete the current item.", "Delete");
-            
+        }
+        
+        if(curItemPtr) {
             //Rename item button.
             ImGui::SameLine();
             if(
