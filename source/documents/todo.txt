@@ -7,8 +7,6 @@ Next tasks (roughly sorted most important first)
     --- Problems to fix ---
 
     --- 1.2.0 ---
-    Add the S.S. Dolphin 2 and its pod as ships
-        When the pod is on the ship, the speaker is upright, and the propellers are hidden
     
     --- 1.3.0 ---
     Create an area that's good for people to pick up and play

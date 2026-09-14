@@ -1,0 +1,59 @@
+name = S.S. Dolphin II exploration pod
+description = The detachable exploration pod of the S.S. Dolphin II. Instead of being bulky like the main ship, this pod can go underground and move more freely.
+
+can_heal = true
+control_point_offset = 0 0
+control_point_radius = 100
+height = 90
+peek_underneath_opacity = 50
+pushable = false
+pushes = true
+radius = 64
+receptacle_offset = 0 0
+
+sounds {
+    beam {
+        sound = effects/beam
+        volume = 30
+        speed = 95
+        speed_deviation = 5
+        loop = true
+    }
+    reception {
+        sound = effects/poof
+        volume = 40
+        speed = 95
+        speed_deviation = 15
+    }
+    hum {
+        sound = misc/hum_1
+        volume = 15
+        speed = 100
+        loop = true
+    }
+}
+
+children {
+    propeller {
+        spawn = propeller
+        parent_holds = true
+        hold_offset_vertical_distance = 1.1
+        hold_rotation_method = copy_parent
+        handle_events = true
+        relay_events = true
+        handle_statuses = true
+        relay_statuses = true
+    }
+}
+
+spawns {
+    propeller {
+        object = ss_dolphin_ii_propeller
+        relative = true
+        angle = 0
+    }
+}
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.2.0

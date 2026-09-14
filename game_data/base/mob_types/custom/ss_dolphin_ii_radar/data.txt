@@ -1,0 +1,16 @@
+name = S.S. Dolphin II radar
+description = The radar at the side of the S.S. Dolphin II.
+
+appears_in_area_editor = false
+casts_shadow = false
+custom_category_name = Aux
+height = 8
+pushable = false
+pushes = false
+radius = 20
+target_type = none
+team = none
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.2.0
