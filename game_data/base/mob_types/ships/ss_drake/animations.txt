@@ -14,7 +14,7 @@ animations{
 }
 sprites{
 	idling{
-		file=other_mobs/drake
+		file=other_mobs/ss_drake
 		file_pos=0.0000 0.0000
 		file_size=457.0000 378.0000
 		offset=20.0000 0.0000

@@ -19,14 +19,14 @@ animations{
 }
 sprites{
 	idling_01{
-		file=other_mobs/beagle
+		file=other_mobs/ss_beagle
 		file_pos=0.0000 0.0000
 		file_size=156.0000 152.0000
 		offset=1.0000 0.0000
 		scale=0.5000 0.5000
 	}
 	idling_02{
-		file=other_mobs/beagle
+		file=other_mobs/ss_beagle
 		file_pos=0.0000 0.0000
 		file_size=156.0000 152.0000
 		offset=1.0000 0.0000
