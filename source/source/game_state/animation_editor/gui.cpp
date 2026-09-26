@@ -2863,9 +2863,14 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
                 curHitbox->knockbackType == KNOCKBACK_TYPE_DIRECTIONAL
             ) {
                 ImGui::SetNextItemWidth(128.0f);
+                string label =
+                    curHitbox->knockbackType ==
+                    KNOCKBACK_TYPE_OUTWARD_PROXIMITY ?
+                    "Maximum knockback strength" :
+                    "Knockback strength";
                 if(
                     ImGui::DragFloat(
-                        "Knockback strength",
+                        label.c_str(),
                         &curHitbox->knockbackStrength, 0.01
                     )
                 ) {
