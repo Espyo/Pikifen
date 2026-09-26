@@ -134,7 +134,7 @@
       <ObjectFileName>$(IntDir)/obj/%(RelativeDir)</ObjectFileName>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <CompileAsManaged>false</CompileAsManaged>
-      <PreprocessorDefinitions>NOMINMAX;WIN32;WIN32_LEAN_AND_MEAN;_DEBUG;_WINDOWS;_CMATH_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;WIN32;WIN32_LEAN_AND_MEAN;_DEBUG;_WINDOWS;_CMATH_;ALLEGRO_UNSTABLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <CompileAs>CompileAsCpp</CompileAs>
       <DisableSpecificWarnings>4100;4458;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -154,7 +154,7 @@
       <ConformanceMode>true</ConformanceMode>
       <CompileAs>CompileAsCpp</CompileAs>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <PreprocessorDefinitions>NOMINMAX;WIN32;WIN32_LEAN_AND_MEAN;_WINDOWS;_CMATH_;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;WIN32;WIN32_LEAN_AND_MEAN;_WINDOWS;_CMATH_;NDEBUG;ALLEGRO_UNSTABLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <ObjectFileName>$(IntDir)/obj/%(RelativeDir)</ObjectFileName>
       <DisableSpecificWarnings>4100;4458;%(DisableSpecificWarnings)</DisableSpecificWarnings>
@@ -178,7 +178,7 @@
       <ObjectFileName>$(IntDir)/obj/%(RelativeDir)</ObjectFileName>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <PreprocessorDefinitions>NOMINMAX;WIN32;WIN32_LEAN_AND_MEAN;_WINDOWS;_CMATH_;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NOMINMAX;WIN32;WIN32_LEAN_AND_MEAN;_WINDOWS;_CMATH_;NDEBUG;ALLEGRO_UNSTABLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <CompileAs>CompileAsCpp</CompileAs>
       <DisableSpecificWarnings>4100;4458;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>

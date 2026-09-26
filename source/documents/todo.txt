@@ -93,7 +93,6 @@ Next tasks (roughly sorted most important first)
         Allow the GUI to be navigable via keyboard or joystick (this is a setting in Dear ImGui), and make it so the canvas can also be somewhat controlled, like the radar. Plus a button to switch which one is in focus
         If I can't figure this out, then before entering an editor it should detect if the last input was keyboard and mouse. If not, it should show a modal warning the player they'll want a keyboard and mouse to continue
     [NEEDS BRAINSTORMING] Look into the "Next maturity" controls -- does the way they work make sense? Why can't you switch without holding a Pikmin?
-    Use al_clear_keyboard_state instead of game.controls.releaseAll()
     Every code that checks for which mouse button is being pressed should compare with ALLEGRO_MOUSE_BUTTON_* instead of a magic number
     An option to add specific/all/unbound actions to the inventory, like dismiss, next leader, etc.
     If the player has the same input bound to different actions, there should be a warning... Except a lot of them are okay to have, like movement + leader cursor movement, menu movement + radar panning, etc.
