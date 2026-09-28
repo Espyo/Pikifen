@@ -74,12 +74,13 @@ void ModalGuiManager::draw() {
     } else {
         alphaMult = 1.0f - animTimer.getRatioLeft();
     }
+    alphaMult *= 0.8f;
 
     ALLEGRO_SHADER* bgShader = game.shaders.getShader(SHADER_TYPE_SCANLINE);
     if(bgShader) {
         al_use_shader(bgShader);
         al_set_shader_float("area_time", game.timePassed);
-        al_set_shader_float("intensity", 0.3);
+        al_set_shader_float("intensity", 0.1);
         al_set_shader_float("frequency", 0.4);
         al_set_shader_float("image_height", game.winH);
     }
