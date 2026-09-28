@@ -429,6 +429,84 @@ void main() {
 
 
 //Fragment shader for the Onion menu's background.
+const char* SCANLINE_FRAG_SHADER = R"(
+
+/*
+ * ========================
+ * Setup
+ * ========================
+ */
+
+#version 130
+#ifdef GL_ES
+precision mediump float;
+#endif
+
+uniform sampler2D al_tex;
+uniform bool al_use_tex;
+
+//Fragment shader input for texture coordinates.
+in vec2 varying_texcoord;
+
+//Fragment shader input for the tint.
+in vec4 varying_color;
+
+//Fragment shader output for the final color of the fragment.
+out vec4 frag_color;
+
+
+/*
+ * ========================
+ * Uniforms
+ * ========================
+ */
+
+// Time passed in the area.
+uniform float area_time;
+
+//Size the image is expected to appear on screen.
+//Scales the scanlines to keep them equally scaled
+uniform float image_height; 
+
+//Multiply the general distortion by this much.
+uniform float frequency;
+
+//Strength of the scanlines.
+uniform float intensity;
+
+/*
+ * ========================
+ * Main function
+ * ========================
+ */
+
+void main() {
+    //--- Basics ---
+
+    //Alpha ranges from [(1 - intensity) - 1]
+    float alpha = sin((varying_texcoord.y * frequency * image_height) - area_time);    //-1 to 1
+    alpha = ((alpha + 1) / 2) * (intensity);                            // 0 to intensity
+    alpha = 1 - alpha;                                                  // (intensity - 1) to 1
+
+    vec4 final_pixel;
+    if(al_use_tex) {
+        final_pixel = varying_color * texture2D(al_tex, varying_texcoord);
+    } else {
+        final_pixel = varying_color;
+    }
+    final_pixel.a *= alpha;
+    frag_color = final_pixel;
+
+}
+
+    )";
+
+
+#pragma endregion
+#pragma region Scanline Fragment Shader
+
+
+//Fragment shader for the Onion menu's background.
 const char* ONION_FRAG_SHADER = R"(
 
 /*
@@ -564,7 +642,9 @@ void main() {
 }
 
     )";
-}
 
 
 #pragma endregion
+
+
+}

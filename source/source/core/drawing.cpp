@@ -1077,6 +1077,35 @@ void drawLoadingScreen(
     
 }
 
+/**
+ * @brief Draws the background
+ *
+ * @param icon Icon ID.
+ * @param buttonCenter Center coordinates of the button.
+ * @param buttonSize Dimensions of the button.
+ * @param leftSide If true, place the icon to the left side of the button.
+ * If false, place it to the right.
+ * @param tint Color to tint with.
+ */
+void drawMenuBackground(const float alpha) {
+    ALLEGRO_SHADER* oldShader = al_get_current_shader();
+
+    drawPrimRect(
+        Point(0,0), Point(game.winW, game.winH),
+        multAlpha(game.config.guiColors.pauseBg, alpha)
+    );
+
+    al_use_shader(nullptr);
+
+    drawBitmap(
+        game.sysContent.bmpVignette,
+        Point(game.winW, game.winH) / 2.0f, Point(game.winW, game.winH), 0.0f,
+        multAlpha(game.config.guiColors.pauseVignette, alpha)
+    );
+
+    al_use_shader(oldShader);
+}
+
 
 /**
  * @brief Draws the icon for a menu button.

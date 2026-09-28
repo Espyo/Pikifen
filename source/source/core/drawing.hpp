@@ -139,6 +139,7 @@ void drawLoadingScreen(
     const string& areaName, const string& subtitle, const string& maker,
     float alpha
 );
+void drawMenuBackground(const float alpha);
 void drawMenuButtonIcon(
     MENU_ICON icon, const Point& buttonCenter, const Point& buttonSize,
     bool leftSide, const ALLEGRO_COLOR& tint

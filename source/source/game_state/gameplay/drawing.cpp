@@ -1461,18 +1461,11 @@ void GameplayState::drawOnionMenu() {
         al_set_shader_float("area_time", game.timePassed);
         al_set_shader_float("brightness", 0.4f);
         al_set_shader_float("alpha", 0.8f * onionMenu->bgAlphaMult);
-        
-        drawPrimRect(Point(), Point(game.winW, game.winH), COLOR_WHITE);
-        al_use_shader(nullptr);
-        
-    } else {
-        al_draw_filled_rectangle(
-            0, 0, game.winW, game.winH,
-            multAlpha(game.config.guiColors.pauseBg, onionMenu->bgAlphaMult)
-        );
-        
     }
-    
+
+    drawMenuBackground(onionMenu->bgAlphaMult);
+    al_use_shader(nullptr);
+
     onionMenu->gui.draw();
     
     drawMouseCursor(game.config.guiColors.standardMouseCursor);
@@ -1483,16 +1476,19 @@ void GameplayState::drawOnionMenu() {
  * @brief Draws the current pause menu.
  */
 void GameplayState::drawPauseMenu() {
-    al_draw_filled_rectangle(
-        0, 0, game.winW, game.winH,
-        multAlpha(game.config.guiColors.pauseBg, pauseMenu->bgAlphaMult)
-    );
-    drawBitmap(
-        game.sysContent.bmpVignette,
-        Point(game.winW, game.winH) / 2.0f, Point(game.winW, game.winH), 0.0f,
-        multAlpha(game.config.guiColors.pauseVignette, pauseMenu->bgAlphaMult)
-    );
+    ALLEGRO_SHADER* bgShader = game.shaders.getShader(SHADER_TYPE_SCANLINE);
+
+    if(bgShader) {
+        al_use_shader(bgShader);
+        al_set_shader_float("area_time", game.timePassed);
+        al_set_shader_float("intensity", 0.3);
+        al_set_shader_float("frequency", 0.4);
+        al_set_shader_float("image_height", game.winH);
+    }
     
+    drawMenuBackground(pauseMenu->bgAlphaMult);
+    al_use_shader(nullptr);
+
     pauseMenu->draw();
     
     drawMouseCursor(game.config.guiColors.standardMouseCursor);
