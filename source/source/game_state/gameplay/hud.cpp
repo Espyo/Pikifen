@@ -221,7 +221,7 @@ Hud::Hud() :
                 al_set_shader_float("intensity", 0.13f);
                 al_set_shader_float("frequency", 0.9f);
             }
-            float radius = std::min(finalDraw.size.x, finalDraw.size.y) * 0.47f;
+            float radius = (std::min(finalDraw.size.x, finalDraw.size.y)) * 0.5f - 1.0;
             al_draw_filled_circle(
                 finalDraw.center.x, finalDraw.center.y, radius, multAlpha(COLOR_BLACK, draw.tint.a)
             );
