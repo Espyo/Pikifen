@@ -213,26 +213,28 @@ Hud::Hud() :
             
             ALLEGRO_SHADER* healthShader = game.shaders.getShader(SHADER_TYPE_SCANLINE);
             
+            
             if(healthShader) {
                 al_use_shader(healthShader);
                 al_set_shader_float("image_height", 1.0f); //Pieslice prims map UV to [-r, r], so we don't need to scale based on image size
                 al_set_shader_float("area_time", game.timePassed * 2);
-                al_set_shader_float("intensity", 0.2f);
+                al_set_shader_float("intensity", 0.13f);
                 al_set_shader_float("frequency", 0.9f);
             }
+            float radius = std::min(finalDraw.size.x, finalDraw.size.y) * 0.47f;
+            al_draw_filled_circle(
+                finalDraw.center.x, finalDraw.center.y, radius, multAlpha(COLOR_BLACK, draw.tint.a)
+            );
             drawHealth(
                 finalDraw.center,
                 health.ratio,
                 draw.tint.a,
-                std::min(finalDraw.size.x, finalDraw.size.y) * 0.47f,
+                radius,
                 true
             );
 
-            if(healthShader) {
-                al_set_shader_float("image_height", finalDraw.size.y); //Bitmap needs image size set
-                al_set_shader_float("intensity", 0.1f);
-            }
-            
+            al_use_shader(nullptr);
+
             drawBitmapInBox(
                 bmpHardBubble,
                 finalDraw.center,
@@ -247,7 +249,6 @@ Hud::Hud() :
                 )
             );
 
-            al_use_shader(nullptr);
             
             if(health.cautionTimer > 0.0f) {
                 float animRatio =
