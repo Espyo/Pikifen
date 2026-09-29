@@ -174,7 +174,7 @@ Hud::Hud() :
                 al_set_shader_float("intensity", 0.3f);
                 al_set_shader_float("frequency", 0.9f);
             }
-
+            
             al_draw_filled_circle(
                 finalDraw.center.x, finalDraw.center.y,
                 std::min(finalDraw.size.x, finalDraw.size.y) / 2.0f,
@@ -186,7 +186,7 @@ Hud::Hud() :
             al_use_shader(nullptr);
             drawBitmapInBox(
                 icon.bmp,
-                finalDraw.center, finalDraw.size, true, true, 0.0f, draw.tint
+                finalDraw.center, finalDraw.size * 0.9f, true, true, 0.0f, draw.tint
             );
             drawBitmapInBox(
                 bmpBubble,
@@ -230,9 +230,9 @@ Hud::Hud() :
 
             if(healthShader) {
                 al_set_shader_float("image_height", finalDraw.size.y); //Bitmap needs image size set
-                al_set_shader_float("intensity", 0.15f);
+                al_set_shader_float("intensity", 0.1f);
             }
-
+            
             drawBitmapInBox(
                 bmpHardBubble,
                 finalDraw.center,
