@@ -478,7 +478,7 @@ void MobType::loadFromDataNode(
         if(words.size() >= 2) {
             statusName = words[1];
         }
-        auto statusIt = game.content.statusTypes.list.find(statusName);
+        auto statusOverrideIt = game.content.statusTypes.list.find(statusName);
         
         if(sdvIt == game.content.spikeDamageTypes.list.end()) {
             game.errors.report(
@@ -488,7 +488,7 @@ void MobType::loadFromDataNode(
             
         } else if(
             !statusName.empty() &&
-            statusIt == game.content.statusTypes.list.end()
+            statusOverrideIt == game.content.statusTypes.list.end()
         ) {
             game.errors.report(
                 "Unknown status type \"" + statusName + "\"!",
@@ -498,8 +498,9 @@ void MobType::loadFromDataNode(
         } else {
             auto& s = spikeDamageVulnerabilities[&(sdvIt->second)];
             s.effectMult = percentage / 100.0f;
-            s.statusToApply = statusIt->second;
-            
+            if (statusOverrideIt != game.content.statusTypes.list.end()) {
+                s.statusToApply = statusOverrideIt->second;
+            }
         }
     }
     
