@@ -369,6 +369,14 @@ void InWorldHealthWheel::draw() {
         ) * sizeMult;
     float curYOffset = m->radius + IN_WORLD_HEALTH_WHEEL::PADDING + wheelRadius;
     
+    ALLEGRO_SHADER* healthShader = game.shaders.getShader(SHADER_TYPE_SCANLINE);
+    if(healthShader) {
+        al_use_shader(healthShader);
+        al_set_shader_float("image_height", 1.0); //Pieslice prims map UV to [-r, r], so we don't need to scale based on image size
+        al_set_shader_float("area_time", game.timePassed);
+        al_set_shader_float("intensity", 0.2f);
+        al_set_shader_float("frequency", 2.0f);
+    }
     //Draw the health wheel.
     drawHealth(
         Point(m->center.x, m->center.y - curYOffset),
@@ -376,6 +384,8 @@ void InWorldHealthWheel::draw() {
         IN_WORLD_HEALTH_WHEEL::ALPHA * alphaMult,
         wheelRadius
     );
+
+    al_use_shader(nullptr);
     
     //Draw status bars.
     curYOffset += wheelRadius + IN_WORLD_STATUS_BUILDUP::PADDING;
