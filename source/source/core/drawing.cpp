@@ -1078,14 +1078,9 @@ void drawLoadingScreen(
 }
 
 /**
- * @brief Draws the background
+ * @brief Draws a menu's background
  *
- * @param icon Icon ID.
- * @param buttonCenter Center coordinates of the button.
- * @param buttonSize Dimensions of the button.
- * @param leftSide If true, place the icon to the left side of the button.
- * If false, place it to the right.
- * @param tint Color to tint with.
+ * @param alpha Alpha of the background.
  */
 void drawMenuBackground(const float alpha) {
     ALLEGRO_SHADER* oldShader = al_get_current_shader();
