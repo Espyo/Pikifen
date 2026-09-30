@@ -399,7 +399,7 @@ void drawFraction(
 void drawHealth(
     const Point& center, float ratio, float alpha, float radius, bool justChart
 ) {
-    const ALLEGRO_COLOR BG_COLOR = COLOR_BLACK;
+    const ALLEGRO_COLOR CHART_COLOR = al_map_rgb(10, 25, 35);
     const ALLEGRO_COLOR GOOD_COLOR = al_map_rgb(0, 255, 0);
     const ALLEGRO_COLOR MID_COLOR = al_map_rgb(255, 255, 0);
     const ALLEGRO_COLOR BAD_COLOR = al_map_rgb(255, 0, 0);
@@ -419,7 +419,7 @@ void drawHealth(
     
     if(!justChart) {
         al_draw_filled_circle(
-            center.x, center.y, radius, multAlpha(BG_COLOR, 0.5f * alpha)
+            center.x, center.y, radius, multAlpha(CHART_COLOR, 0.5f * alpha)
         );
     }
     al_draw_filled_pieslice(
@@ -427,9 +427,12 @@ void drawHealth(
         multAlpha(color, alpha)
     );
     if(!justChart) {
+        ALLEGRO_SHADER* old_shader = al_get_current_shader();
+        al_use_shader(nullptr);
         al_draw_circle(
-            center.x, center.y, radius + 1, multAlpha(BG_COLOR, alpha), 2
+            center.x, center.y, radius + 1, multAlpha(CHART_COLOR, alpha), 2
         );
+        al_use_shader(old_shader);
     }
 }
 

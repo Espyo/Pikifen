@@ -223,7 +223,7 @@ Hud::Hud() :
             }
             float radius = (std::min(finalDraw.size.x, finalDraw.size.y)) * 0.5f - 1.0;
             al_draw_filled_circle(
-                finalDraw.center.x, finalDraw.center.y, radius, multAlpha(COLOR_BLACK, draw.tint.a)
+                finalDraw.center.x, finalDraw.center.y, radius, multAlpha(mapGray(15), draw.tint.a)
             );
             drawHealth(
                 finalDraw.center,
