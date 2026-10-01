@@ -380,6 +380,10 @@ void InWorldMobStatus::draw() {
 
 /**
  * @brief Draws an in-world health wheel.
+ * 
+ * @param radius Radius to draw the wheel.
+ * @param yOffset Offset to draw the wheel from the mob.
+ * @param alpha Opacity to draw the wheel.
  */
 void InWorldMobStatus::drawHealthWheel(float radius, float yOffset, float alpha) {
     Point center = Point(m->center.x, m->center.y - yOffset);
@@ -429,6 +433,10 @@ void InWorldMobStatus::drawHealthWheel(float radius, float yOffset, float alpha)
 
 /**
  * @brief Draws in-world status buildup bars.
+ * 
+ * @param barSize Size of the bar, including the outline.
+ * @param yOffset Offset to draw the bar from the mob.
+ * @param alpha Opacity to draw the wheel.
  */
 void InWorldMobStatus::drawStatuses(Point barSize, float yOffset, float alpha) {
     const auto drawNextBar =

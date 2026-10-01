@@ -386,7 +386,7 @@ void drawFraction(
 
 
 /**
- * @brief Draws the fill of a health wheel, with a pie-slice that's fuller the more
+ * @brief Draws a pie-slice that's fuller the more
  * HP is full.
  *
  * @param center Center of the wheel.
@@ -399,7 +399,6 @@ void drawFraction(
 void drawHealthFill(
     const Point& center, float ratio, float alpha, float radius
 ) {
-    const ALLEGRO_COLOR CHART_COLOR = al_map_rgb(10, 25, 35);
     const ALLEGRO_COLOR GOOD_COLOR = al_map_rgb(0, 255, 0);
     const ALLEGRO_COLOR MID_COLOR = al_map_rgb(255, 255, 0);
     const ALLEGRO_COLOR BAD_COLOR = al_map_rgb(255, 0, 0);

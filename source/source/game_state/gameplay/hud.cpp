@@ -213,7 +213,6 @@ Hud::Hud() :
             
             ALLEGRO_SHADER* healthShader = game.shaders.getShader(SHADER_TYPE_SCANLINE);
             
-            
             if(healthShader) {
                 al_use_shader(healthShader);
                 //Pieslice prims map UV to [-r, r], so we don't need to scale based on image size
@@ -232,7 +231,7 @@ Hud::Hud() :
                 draw.tint.a,
                 radius
             );
-
+            
             al_use_shader(nullptr);
 
             drawBitmapInBox(

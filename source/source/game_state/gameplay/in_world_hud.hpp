@@ -177,6 +177,9 @@ public:
 
 
 private:
+
+    //--- Private function declarations ---
+
     void drawHealthWheel(float sizeMult, float alpha, float yOffset);
     void drawStatuses(Point barSize, float initialYOffset, float alpha);
     
