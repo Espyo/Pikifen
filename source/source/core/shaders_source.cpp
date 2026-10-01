@@ -570,7 +570,7 @@ void main() {
 #pragma region Scanline fragment shader
 
 
-//Fragment shader for the Onion menu's background.
+//Fragment shader for the scanline effect.
 const char* SCANLINE_FRAG_SHADER = R"(
 
 /*
