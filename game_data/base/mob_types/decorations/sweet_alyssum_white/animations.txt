@@ -1,0 +1,90 @@
+name=Sweet Alyssum (white) animations
+description=Animations for the white Sweet Alyssum.
+maker=Espyo
+version=1.0.0
+engine_version=1.2.0
+animations{
+	bumped{
+		frames{
+			bumped_01{
+				duration=0.1000
+			}
+			bumped_02{
+				duration=0.1000
+				sound=bumped
+			}
+			bumped_01{
+				duration=0.1000
+			}
+			idling_01{
+				duration=0.1000
+			}
+			bumped_03{
+				duration=0.1000
+			}
+			bumped_04{
+				duration=0.1000
+			}
+			bumped_03{
+				duration=0.1000
+			}
+			idling_01{
+				duration=0.1000
+			}
+		}
+	}
+	idling{
+		frames{
+			idling_01{
+				duration=0.3000
+			}
+			idling_02{
+				duration=0.3000
+			}
+			idling_01{
+				duration=0.3000
+			}
+			idling_03{
+				duration=0.3000
+			}
+		}
+	}
+}
+sprites{
+	bumped_01{
+		file=decorations/sweet_alyssum_white
+		file_pos=0.0000 423.0000
+		file_size=145.0000 140.0000
+	}
+	bumped_02{
+		file=decorations/sweet_alyssum_white
+		file_pos=0.0000 564.0000
+		file_size=145.0000 140.0000
+	}
+	bumped_03{
+		file=decorations/sweet_alyssum_white
+		file_pos=0.0000 705.0000
+		file_size=145.0000 140.0000
+	}
+	bumped_04{
+		file=decorations/sweet_alyssum_white
+		file_pos=0.0000 846.0000
+		file_size=145.0000 140.0000
+	}
+	idling_01{
+		file=decorations/sweet_alyssum_white
+		file_pos=0.0000 0.0000
+		file_size=145.0000 140.0000
+	}
+	idling_02{
+		file=decorations/sweet_alyssum_white
+		file_pos=0.0000 141.0000
+		file_size=145.0000 140.0000
+	}
+	idling_03{
+		file=decorations/sweet_alyssum_white
+		file_pos=0.0000 282.0000
+		file_size=145.0000 140.0000
+	}
+}
+body_parts

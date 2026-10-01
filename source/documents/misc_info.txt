@@ -72,6 +72,7 @@ Technical prowesses I'm proud of
 Misc. notes
     It took 2226 commits to reach version 1.0
     The mathematical term for when you want to grow a polygon outward is called buffering or offsetting (like the edge offset mechanism in the engine)
+    I'm using -DALLEGRO_UNSTABLE on Allegro 5.2.11 so that al_clear_keyboard_state() can be called, which helps when alt+tabbing away from a Dear ImGui GUI, so that you don't have the Alt key stuck until you re-press it
 
 
 How I fixed certain things

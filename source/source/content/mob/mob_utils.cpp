@@ -82,6 +82,7 @@ CarryInfo::CarryInfo(
  */
 bool CarryInfo::canFly() const {
     forIdx(c, spotInfo) {
+        if(spotInfo[c].state != CARRY_SPOT_STATE_USED) continue;
         Mob* carrierPtr = spotInfo[c].pikPtr;
         if(!carrierPtr) continue;
         if(!hasFlag(spotInfo[c].pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR)) {
@@ -102,6 +103,7 @@ vector<Hazard*> CarryInfo::getCarrierInvulnerabilities() const {
     //Get all types to save on the amount of hazard checks.
     unordered_set<MobType*> carrierTypes;
     forIdx(c, spotInfo) {
+        if(spotInfo[c].state != CARRY_SPOT_STATE_USED) continue;
         Mob* carrierPtr = spotInfo[c].pikPtr;
         if(!carrierPtr) continue;
         carrierTypes.insert(carrierPtr->type);

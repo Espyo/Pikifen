@@ -585,6 +585,7 @@ void ControlsMediator::reinsertAction(const Inpution::Action& action) {
  * Useful for when the game state is changed, or the window is out of focus.
  */
 void ControlsMediator::releaseAll() {
+    al_clear_keyboard_state(game.display);
     mgr.releaseEverything();
 }
 

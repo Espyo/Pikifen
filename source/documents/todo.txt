@@ -93,7 +93,6 @@ Next tasks (roughly sorted most important first)
         Allow the GUI to be navigable via keyboard or joystick (this is a setting in Dear ImGui), and make it so the canvas can also be somewhat controlled, like the radar. Plus a button to switch which one is in focus
         If I can't figure this out, then before entering an editor it should detect if the last input was keyboard and mouse. If not, it should show a modal warning the player they'll want a keyboard and mouse to continue
     [NEEDS BRAINSTORMING] Look into the "Next maturity" controls -- does the way they work make sense? Why can't you switch without holding a Pikmin?
-    Use al_clear_keyboard_state instead of game.controls.releaseAll()
     Every code that checks for which mouse button is being pressed should compare with ALLEGRO_MOUSE_BUTTON_* instead of a magic number
     An option to add specific/all/unbound actions to the inventory, like dismiss, next leader, etc.
     If the player has the same input bound to different actions, there should be a warning... Except a lot of them are okay to have, like movement + leader cursor movement, menu movement + radar panning, etc.
@@ -790,12 +789,12 @@ Misc. things (to be implemented whenever)
         Enemies
             Burrowing Snagret
             Bulbears
+            Kakureimo https://www.youtube.com/watch?v=gkkCeLvIHHY
             Scuttlebug?
             An enemy that follows you anywhere, but only at short-range. You can use this to goad it towards the Onion for less corpse carrying time, or to an opponent's Onion in multiplayer arenas
         More puzzle elements
             A cyclic lever? It automatically flips on and off over time
             A moving platform, useful to traverse a hazardous floor. Maybe Stemples?
-        A tall grass mob
         A bunch more flowers and vegetation
             Neo took a bunch of pictures in https://discord.com/channels/459094367425134593/1509291234349289512/1510067525793353768
         A turnstile mob

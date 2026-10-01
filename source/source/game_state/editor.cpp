@@ -3540,6 +3540,70 @@ void Editor::processGuiStatusBarText() {
 
 
 /**
+ * @brief Processes the Dear ImGui widgets that show a number + deviation, and
+ * a way to toggle to a minimum + maximum.
+ *
+ * @param label Base label for any widget that need one.
+ * @param minMaxMode Whether to use min-max mode.
+ * @param onBaseNumber Callback for what widget to place for the base number.
+ * @param onDeviation Callback for what widget to place for the deviation.
+ * @param onMin Callback for what widget to place for the minimum value.
+ * @param onMax Callback for what widget to place for the maximum value.
+ */
+void Editor::processGuiWidgetsDeviation(
+    const string label, bool& minMaxMode,
+    const std::function<void()>& onBaseNumber,
+    const std::function<void()>& onDeviation,
+    const std::function<void()>& onMin,
+    const std::function<void()>& onMax
+) {
+    if(!minMaxMode) {
+    
+        //Base number value.
+        onBaseNumber();
+        
+        //Deviation text.
+        ImGui::SameLine();
+        ImGui::Text(" +-");
+        
+        //Deviation value.
+        ImGui::SameLine();
+        onDeviation();
+        
+    } else {
+    
+        //Minimum value.
+        onMin();
+        
+        //Range text.
+        ImGui::SameLine();
+        ImGui::Text(" - ");
+        
+        //Maximum value.
+        ImGui::SameLine();
+        onMax();
+        
+    }
+    
+    //Mode swap button.
+    ImGui::SameLine();
+    if(
+        ImGui::Button(
+            ((minMaxMode ? "+-##" : "[]##") + label + "Swap").c_str()
+        )
+    ) {
+        minMaxMode = !minMaxMode;
+    }
+    setTooltip(
+        "Swap the widgets between showing the base number + deviation,\n"
+        "or minimum amount + maximum amount. The values are internally\n"
+        "the same, so just pick whichever one you like better."
+    );
+    
+}
+
+
+/**
  * @brief Processes the Dear ImGui widgets that let users select a hazard.
  *
  * @param selectedHazardIname Internal name of the currently selected hazard.

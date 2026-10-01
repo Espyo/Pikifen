@@ -1,0 +1,90 @@
+name=Chicory animations
+description=Animations for the Chicory.
+maker=Espyo
+version=1.0.0
+engine_version=1.2.0
+animations{
+	bumped{
+		frames{
+			bumped_01{
+				duration=0.1000
+			}
+			bumped_02{
+				duration=0.1000
+				sound=bumped
+			}
+			bumped_01{
+				duration=0.1000
+			}
+			idling_01{
+				duration=0.1000
+			}
+			bumped_03{
+				duration=0.1000
+			}
+			bumped_04{
+				duration=0.1000
+			}
+			bumped_03{
+				duration=0.1000
+			}
+			idling_01{
+				duration=0.1000
+			}
+		}
+	}
+	idling{
+		frames{
+			idling_01{
+				duration=0.3000
+			}
+			idling_02{
+				duration=0.3000
+			}
+			idling_01{
+				duration=0.3000
+			}
+			idling_03{
+				duration=0.3000
+			}
+		}
+	}
+}
+sprites{
+	bumped_01{
+		file=decorations/chicory
+		file_pos=0.0000 474.0000
+		file_size=151.0000 157.0000
+	}
+	bumped_02{
+		file=decorations/chicory
+		file_pos=0.0000 632.0000
+		file_size=151.0000 157.0000
+	}
+	bumped_03{
+		file=decorations/chicory
+		file_pos=0.0000 790.0000
+		file_size=151.0000 157.0000
+	}
+	bumped_04{
+		file=decorations/chicory
+		file_pos=0.0000 948.0000
+		file_size=151.0000 157.0000
+	}
+	idling_01{
+		file=decorations/chicory
+		file_pos=0.0000 0.0000
+		file_size=151.0000 157.0000
+	}
+	idling_02{
+		file=decorations/chicory
+		file_pos=0.0000 158.0000
+		file_size=151.0000 157.0000
+	}
+	idling_03{
+		file=decorations/chicory
+		file_pos=0.0000 316.0000
+		file_size=151.0000 157.0000
+	}
+}
+body_parts
