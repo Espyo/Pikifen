@@ -427,6 +427,20 @@ void drawHealth(
         multAlpha(color, alpha)
     );
     if(!justChart) {
+        //Additive glow
+        AllegroBlenderState prevBlender;
+        prevBlender.save();
+        al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_ONE);
+        drawBitmapInBox(
+            game.sysContent.bmpHealthGlow,
+            Point(center.x, center.y),
+            Point(radius * 2, radius * 2),
+            true, true, 0.0f,
+            multAlpha(COLOR_WHITE, alpha)
+        );
+        prevBlender.loadIfHasData();
+
+        //Don't use a shader for the border.
         ALLEGRO_SHADER* old_shader = al_get_current_shader();
         al_use_shader(nullptr);
         al_draw_circle(

@@ -373,7 +373,7 @@ void InWorldHealthWheel::draw() {
     if(healthShader) {
         al_use_shader(healthShader);
         al_set_shader_float("image_height", 1.0); //Pieslice prims map UV to [-r, r], so we don't need to scale based on image size
-        al_set_shader_float("area_time", game.timePassed);
+        al_set_shader_float("area_time", game.timePassed * 2);
         al_set_shader_float("intensity", 0.2f);
         al_set_shader_float("frequency", 2.0f);
     }
