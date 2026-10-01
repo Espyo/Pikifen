@@ -4368,7 +4368,7 @@ void Mob::tickMiscLogic(float deltaT) {
         hasHealthWheel && (shouldShowHealth || shouldShowStatusBuildups)
     ) {
         //No health wheel before, must show a new one.
-        healthWheel = new InWorldHealthWheel(this);
+        healthWheel = new InWorldMobStatus(this);
         
     } else if(
         healthWheel && healthWheel->transition == IN_WORLD_HUD_TRANSITION_OUT &&

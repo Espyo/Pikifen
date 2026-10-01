@@ -307,7 +307,7 @@ public:
     vector<ParticleGenerator> particleGenerators;
     
     //Data about its in-world health wheel, if any.
-    InWorldHealthWheel* healthWheel = nullptr;
+    InWorldMobStatus* healthWheel = nullptr;
     
     //Data about its in-world fraction numbers, if any.
     InWorldFraction* fraction = nullptr;

@@ -154,10 +154,10 @@ private:
 
 
 /**
- * @brief Info about a health wheel in the game world, placed
+ * @brief Info about a health wheel and status buildup, placed
  * atop an enemy.
  */
-class InWorldHealthWheel : public InWorldHudItem {
+class InWorldMobStatus : public InWorldHudItem {
 
 public:
 
@@ -169,10 +169,15 @@ public:
     
     //--- Public function declarations ---
     
-    explicit InWorldHealthWheel(Mob* m);
+    explicit InWorldMobStatus(Mob* m);
     void draw() override;
     void startFadingOut() override;
     void tick(float deltaT) override;
     void abortFadeOut();
+
+
+private:
+    void drawHealthWheel(float sizeMult, float alpha, float yOffset);
+    void drawStatuses(Point barSize, float initialYOffset, float alpha);
     
 };

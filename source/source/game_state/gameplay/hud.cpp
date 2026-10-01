@@ -226,12 +226,11 @@ Hud::Hud() :
             al_draw_filled_circle(
                 finalDraw.center.x, finalDraw.center.y, radius, multAlpha(mapGray(15), draw.tint.a)
             );
-            drawHealth(
+            drawHealthFill(
                 finalDraw.center,
                 health.ratio,
                 draw.tint.a,
-                radius,
-                true
+                radius
             );
 
             al_use_shader(nullptr);

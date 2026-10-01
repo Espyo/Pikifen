@@ -386,7 +386,7 @@ void drawFraction(
 
 
 /**
- * @brief Draws a health wheel, with a pie-slice that's fuller the more
+ * @brief Draws the fill of a health wheel, with a pie-slice that's fuller the more
  * HP is full.
  *
  * @param center Center of the wheel.
@@ -396,8 +396,8 @@ void drawFraction(
  * @param justChart If true, only draw the actual pie-slice (pie-chart).
  * Used for leader HP on the HUD.
  */
-void drawHealth(
-    const Point& center, float ratio, float alpha, float radius, bool justChart
+void drawHealthFill(
+    const Point& center, float ratio, float alpha, float radius
 ) {
     const ALLEGRO_COLOR CHART_COLOR = al_map_rgb(10, 25, 35);
     const ALLEGRO_COLOR GOOD_COLOR = al_map_rgb(0, 255, 0);
@@ -416,38 +416,10 @@ void drawHealth(
                 ratio, 0.0f, 0.5f, BAD_COLOR, MID_COLOR
             );
     }
-    
-    if(!justChart) {
-        al_draw_filled_circle(
-            center.x, center.y, radius, multAlpha(CHART_COLOR, 0.5f * alpha)
-        );
-    }
     al_draw_filled_pieslice(
         center.x, center.y, radius, -TAU / 4, -ratio * TAU,
         multAlpha(color, alpha)
     );
-    if(!justChart) {
-        //Additive glow
-        AllegroBlenderState prevBlender;
-        prevBlender.save();
-        al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_ONE);
-        drawBitmapInBox(
-            game.sysContent.bmpHealthGlow,
-            Point(center.x, center.y),
-            Point(radius * 2, radius * 2),
-            true, true, 0.0f,
-            multAlpha(COLOR_WHITE, alpha)
-        );
-        prevBlender.loadIfHasData();
-
-        //Don't use a shader for the border.
-        ALLEGRO_SHADER* old_shader = al_get_current_shader();
-        al_use_shader(nullptr);
-        al_draw_circle(
-            center.x, center.y, radius + 1, multAlpha(CHART_COLOR, alpha), 2
-        );
-        al_use_shader(old_shader);
-    }
 }
 
 
