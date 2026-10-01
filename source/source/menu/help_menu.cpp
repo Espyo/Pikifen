@@ -261,13 +261,13 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
             al_use_shader(scanlineShader);
             al_set_shader_float("image_height", draw.size.y);
             al_set_shader_float("area_time", game.timePassed * 2);
-            al_set_shader_float("intensity", 0.13f);
+            al_set_shader_float("intensity", 0.25f);
             al_set_shader_float("frequency", 0.9f);
         }
 
         drawBitmapInBox(
             curTidbit->image,
-            draw.center, draw.size, false, true, 0.0f, draw.tint
+            draw.center, draw.size, true, true, 0.0f, draw.tint
         );
         al_use_shader(nullptr);
     };
