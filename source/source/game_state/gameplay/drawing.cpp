@@ -1480,7 +1480,7 @@ void GameplayState::drawPauseMenu() {
 
     if(bgShader) {
         al_use_shader(bgShader);
-        al_set_shader_float("area_time", game.timePassed);
+        al_set_shader_float("area_time", game.timePassed * 2);
         al_set_shader_float("intensity", 0.4f);
         al_set_shader_float("frequency", 0.9f);
         al_set_shader_float("image_height", game.winH);

@@ -254,10 +254,22 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
     [this] (const DrawInfo & draw) {
         if(curTidbit == nullptr) return;
         if(curTidbit->image == nullptr) return;
+
+        ALLEGRO_SHADER* scanlineShader = game.shaders.getShader(SHADER_TYPE_SCANLINE);
+            
+        if(scanlineShader) {
+            al_use_shader(scanlineShader);
+            al_set_shader_float("image_height", draw.size.y);
+            al_set_shader_float("area_time", game.timePassed * 2);
+            al_set_shader_float("intensity", 0.13f);
+            al_set_shader_float("frequency", 0.9f);
+        }
+
         drawBitmapInBox(
             curTidbit->image,
             draw.center, draw.size, false, true, 0.0f, draw.tint
         );
+        al_use_shader(nullptr);
     };
     gui.addItem(imageItem, "image");
     
