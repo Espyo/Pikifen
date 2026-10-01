@@ -216,12 +216,13 @@ Hud::Hud() :
             
             if(healthShader) {
                 al_use_shader(healthShader);
-                al_set_shader_float("image_height", 1.0f); //Pieslice prims map UV to [-r, r], so we don't need to scale based on image size
+                //Pieslice prims map UV to [-r, r], so we don't need to scale based on image size
+                al_set_shader_float("image_height", 1.0f);
                 al_set_shader_float("area_time", game.timePassed * 2);
                 al_set_shader_float("intensity", 0.13f);
                 al_set_shader_float("frequency", 0.9f);
             }
-            float radius = std::max(0.0,std::min(finalDraw.size.x, finalDraw.size.y) * 0.5f - 1.0);
+            float radius = std::max(0.0, std::min(finalDraw.size.x, finalDraw.size.y) * 0.5f - 1.0);
             al_draw_filled_circle(
                 finalDraw.center.x, finalDraw.center.y, radius, multAlpha(mapGray(15), draw.tint.a)
             );
