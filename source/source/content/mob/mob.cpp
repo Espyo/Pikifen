@@ -776,7 +776,7 @@ bool Mob::calculateAttackBasics(
             //The victim is immune to this hazard!
             *outDefenseMultiplier = LARGE_FLOAT;
         } else {
-            *outDefenseMultiplier = 1.0f / vulnMult;
+            *outDefenseMultiplier *= 1.0f / vulnMult;
         }
     }
     
