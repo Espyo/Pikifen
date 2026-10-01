@@ -524,7 +524,6 @@ void InWorldMobStatus::startFadingOut() {
     }
     transition = IN_WORLD_HUD_TRANSITION_OUT;
     transitionTimer = IN_WORLD_HEALTH_WHEEL::TRANSITION_OUT_DURATION;
-    
 }
 
 
