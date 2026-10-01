@@ -228,7 +228,7 @@ Mob::~Mob() {
     if(carryInfo) delete carryInfo;
     if(deliveryInfo) delete deliveryInfo;
     if(trackInfo) delete trackInfo;
-    if(healthWheel) delete healthWheel;
+    if(statusUI) delete statusUI;
     if(fraction) delete fraction;
     if(group) delete group;
     if(parent) delete parent;
@@ -4364,32 +4364,32 @@ void Mob::tickMiscLogic(float deltaT) {
     }
     
     if(
-        !healthWheel &&
+        !statusUI &&
         hasHealthWheel && (shouldShowHealth || shouldShowStatusBuildups)
     ) {
         //No health wheel before, must show a new one.
-        healthWheel = new InWorldMobStatus(this);
+        statusUI = new InWorldMobStatus(this);
         
     } else if(
-        healthWheel && healthWheel->transition == IN_WORLD_HUD_TRANSITION_OUT &&
+        statusUI && statusUI->transition == IN_WORLD_HUD_TRANSITION_OUT &&
         hasHealthWheel && (shouldShowHealth || shouldShowStatusBuildups)
     ) {
         //Health wheel is trying to vanish, but we need it back! Abort.
-        healthWheel->abortFadeOut();
+        statusUI->abortFadeOut();
         
     } else if(
-        healthWheel &&
+        statusUI &&
         (!hasHealthWheel || (!shouldShowHealth && !shouldShowStatusBuildups))
     ) {
         //We have a wheel, and it needs to go away.
-        healthWheel->startFadingOut();
+        statusUI->startFadingOut();
     }
     
-    if(healthWheel) {
-        healthWheel->tick(deltaT);
-        if(healthWheel->toDelete) {
-            delete healthWheel;
-            healthWheel = nullptr;
+    if(statusUI) {
+        statusUI->tick(deltaT);
+        if(statusUI->toDelete) {
+            delete statusUI;
+            statusUI = nullptr;
         }
     }
     

@@ -161,12 +161,6 @@ class InWorldMobStatus : public InWorldHudItem {
 
 public:
 
-    //--- Public members ---
-    
-    //How much the health wheel is filled. Gradually moves to the target amount.
-    float visibleRatio = 0.0f;
-    
-    
     //--- Public function declarations ---
     
     explicit InWorldMobStatus(Mob* m);
@@ -177,6 +171,11 @@ public:
 
 
 private:
+
+    //--- Private Members ---
+
+    //How much the health wheel is filled. Gradually moves to the target amount.
+    float healthVisibleRatio = 0.0f;
 
     //--- Private function declarations ---
 

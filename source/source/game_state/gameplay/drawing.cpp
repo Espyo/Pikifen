@@ -847,9 +847,9 @@ void GameplayState::drawInGameText(Player* player) {
     for(size_t m = 0; m < nMobs; m++) {
         Mob* mobPtr = mobs.all[m];
         
-        //Fractions and health.
-        if(mobPtr->healthWheel) {
-            mobPtr->healthWheel->draw();
+        //UI elements.
+        if(mobPtr->statusUI) {
+            mobPtr->statusUI->draw();
         }
         if(mobPtr->fraction) {
             mobPtr->fraction->draw();

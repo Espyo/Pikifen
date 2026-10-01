@@ -314,7 +314,7 @@ InWorldMobStatus::InWorldMobStatus(Mob* m) :
     InWorldHudItem(m) {
     
     if(m->maxHealth > 0.0f) {
-        visibleRatio = m->health / m->maxHealth;
+        healthVisibleRatio = m->health / m->maxHealth;
     }
     transitionTimer = IN_WORLD_HEALTH_WHEEL::TRANSITION_IN_DURATION;
 }
@@ -406,7 +406,7 @@ void InWorldMobStatus::drawHealthWheel(float radius, float yOffset, float alpha)
     //Draw pieslice
     drawHealthFill(
         Point(center.x, center.y),
-        visibleRatio,
+        healthVisibleRatio,
         IN_WORLD_HEALTH_WHEEL::ALPHA * alpha,
         radius
     );
@@ -538,8 +538,8 @@ void InWorldMobStatus::tick(float deltaT) {
     
     if(m->maxHealth == 0.0f) return;
     
-    visibleRatio +=
-        ((m->health / m->maxHealth) - visibleRatio) *
+    healthVisibleRatio +=
+        ((m->health / m->maxHealth) - healthVisibleRatio) *
         (IN_WORLD_HEALTH_WHEEL::SMOOTHNESS_MULT * deltaT);
 }
 
