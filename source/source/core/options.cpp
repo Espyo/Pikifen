@@ -202,6 +202,9 @@ const float CAM_SHAKE_MULT = 1.0f;
 //Default value for whether to use true fullscreen.
 const bool TRUE_FULLSCREEN = false;
 
+//Default value for whether to force VSync.
+const bool VSYNC = false;
+
 //Default value for whether to use fullscreen.
 const bool WIN_FULLSCREEN = false;
 
@@ -498,6 +501,7 @@ void Options::loadFromDataNode(DataNode* file) {
         gRS.set("fullscreen", graphics.intendedWinFullscreen);
         gRS.set("resolution", resolutionStr);
         gRS.set("true_fullscreen", graphics.trueFullscreen);
+        gRS.set("vsync", graphics.vsync);
         
         vector<string> resolutionParts = split(resolutionStr);
         if(resolutionParts.size() >= 2) {
@@ -737,6 +741,7 @@ void Options::saveToDataNode(DataNode* file) const {
         gGW.write("fullscreen", graphics.intendedWinFullscreen);
         gGW.write("resolution", resolutionStr);
         gGW.write("true_fullscreen", graphics.trueFullscreen);
+        gGW.write("vsync", graphics.vsync);
     }
     
     //Gui editor.

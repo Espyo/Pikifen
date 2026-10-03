@@ -20,12 +20,17 @@ hardcoded_items{
 		description=Fullscreen checkbox.
 	}
 	resolution{
-		center=50.0000 42.5000
+		center=50.0000 37.5000
 		size=70.0000 10.0000
 		description=Resolution picker.
 	}
+	vsync{
+		center=50.0000 50.0000
+		size=70.0000 10.0000
+		description=VSync checkbox.
+	}
 	cam_shake_mult{
-		center=50.0000 60.0000
+		center=50.0000 62.5000
 		size=70.0000 10.0000
 		description=Camera shake multiplier picker.
 	}

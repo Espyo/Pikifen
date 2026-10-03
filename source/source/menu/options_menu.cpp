@@ -1204,6 +1204,26 @@ void OptionsMenu::initGuiGraphicsPage() {
     resolutionPicker->init();
     graphicsGui.addItem(resolutionPicker, "resolution");
     
+    //VSync checkbox.
+    CheckGuiItem* vsyncCheckbox =
+        new CheckGuiItem(
+        &game.options.graphics.vsync,
+        "VSync", game.sysContent.fntStandard
+    );
+    vsyncCheckbox->onActivate =
+    [this, vsyncCheckbox] (const Point&) {
+        vsyncCheckbox->defActivateCode();
+        triggerRestartWarning();
+    };
+    vsyncCheckbox->onGetTooltip =
+    [] () {
+        return
+            "Forcing VSync can fix tearing problems, but may add some "
+            "slight input delay. Default: " +
+            b2s(OPTIONS::GRAPHICS_D::VSYNC) + ".";
+    };
+    graphicsGui.addItem(vsyncCheckbox, "vsync");
+    
     //Camera shake multiplier picker.
     OptionsMenuPickerGuiItem<float>* camShakeMultPicker =
         new OptionsMenuPickerGuiItem<float>(

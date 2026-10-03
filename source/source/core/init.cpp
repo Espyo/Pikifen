@@ -1035,6 +1035,11 @@ void initEventThings(
             )
         );
     }
+    if(game.options.graphics.vsync) {
+        al_set_new_display_option(
+            ALLEGRO_VSYNC, 1, ALLEGRO_SUGGEST
+        );
+    }
     game.display = al_create_display(game.winW, game.winH);
     
     //It's possible that this resolution is not valid for fullscreen.
