@@ -1,0 +1,24 @@
+name = Fern (dead)
+description = A small cluster of simple brown ferns.
+
+height = 120
+peek_underneath_opacity = 50
+radius = 50
+random_animation_delay = true
+rotation_random_variation = 360
+scale_random_variation = 0.25
+tint_random_maximum = 224 224 224
+
+sounds {
+    bumped {
+        sound = nature/foliage_long
+        volume = 40
+        speed_deviation = 40
+        volume_deviation = 10
+        random_delay = 0.1
+    }
+}
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.2.0
