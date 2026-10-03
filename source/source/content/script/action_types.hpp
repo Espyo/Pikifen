@@ -41,6 +41,9 @@ enum SCRIPT_ACTION {
     //Add item to a list (split string).
     SCRIPT_ACTION_ADD_LIST_ITEM,
     
+    //Add a numeric value as an int to a string.
+    SCRIPT_ACTION_ADD_INT_TO_STRING,
+    
     //Add a string to another string.
     SCRIPT_ACTION_ADD_TO_STRING,
     
@@ -910,6 +913,7 @@ namespace ScriptActionRunners {
 void absoluteNumber(ScriptActionInstRunData& data);
 void addHealth(ScriptActionInstRunData& data);
 void addListItem(ScriptActionInstRunData& data);
+void addIntToString(ScriptActionInstRunData& data);
 void addToString(ScriptActionInstRunData& data);
 void arachnorbPlanLogic(ScriptActionInstRunData& data);
 void beChomped(ScriptActionInstRunData& data);

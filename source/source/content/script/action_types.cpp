@@ -118,6 +118,28 @@ void ScriptActionRunners::addListItem(ScriptActionInstRunData& data) {
 
 
 /**
+ * @brief Code for the string int addition script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::addIntToString(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& baseStrArg = data.args[1];
+    const string& newContentArg = data.args[2];
+    const string& addSpaceArg = data.args[3];
+    
+    //Main logic.
+    string result = baseStrArg;
+    if(s2b(addSpaceArg)) result += " ";
+    result += i2s(s2i(newContentArg));
+    
+    //Store the result.
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
+}
+
+
+/**
  * @brief Code for the string addition script action type.
  *
  * @param data Data about the action call.

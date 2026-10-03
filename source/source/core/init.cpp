@@ -1882,6 +1882,17 @@ void initScriptActionTypes() {
         ScriptActionRunners::addListItem
     );
     
+    //Add int to string.
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("base string", ptString);
+    queueParam("number to add", ptFloat);
+    queueParam("add a space between", ptBool, pfOpt, "false");
+    commitAction(
+        SCRIPT_ACTION_ADD_INT_TO_STRING,
+        "add_int_to_string",
+        ScriptActionRunners::addIntToString
+    );
+    
     //Add to string.
     queueParam("destination var name", ptString, pfConst);
     queueParam("base string", ptString);

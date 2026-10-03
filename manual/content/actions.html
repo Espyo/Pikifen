@@ -1502,6 +1502,39 @@
     
     <h3 id="actions-common-misc">Misc.</h3>
 
+    <h4 id="add-int-to-string">Add int to string</h4>
+
+    <p>Works just like <code><a href="#add-to-string">add_to_string</a></code>, but adds a number to the end of the string, as only the integer part. To add a number to the end of a string you can use <code>add_to_string</code>, but any number will be shown with the decimal places, so if you don't want that, use this action instead.</p>
+
+    <p>Syntax: <code><b>add_int_to_string</b> &lt;destination_var_name&gt; &lt;base_string&gt; &lt;number_to_add&gt; [&lt;add_a_space_between&gt;]</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>base_string</td>
+        <td>The current string.</td>
+        <td>Mandatory</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>number_to_add</td>
+        <td>The number to add.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+      <tr>
+        <td>add_a_space_between</td>
+        <td>Whether a space should be added between the base string and the new content. This is because you can't just write a space at the end of <code>content_to_add</code>, since the script file will interpret that as you starting the next parameter of a script action.</td>
+        <td>Optional, default: <code>false</code></td>
+        <td>Boolean</td>
+      </tr>
+    </table>
+
     <h4 id="add-to-string">Add to string</h4>
 
     <p>Given a <a href="making.html#data-file-properties">string</a>, adds some more text to the end of it. This action is very similar to <code><a href="#add-list-item">add_list_item</a></code>, but is more geared towards working with everyday strings, especially those that the player will read.</p>
