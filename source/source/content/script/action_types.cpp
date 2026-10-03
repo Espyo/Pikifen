@@ -1034,6 +1034,38 @@ void ScriptActionRunners::getFocusVar(ScriptActionInstRunData& data) {
 
 
 /**
+ * @brief Code for the leader activity retrieval script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::getLeaderActivity(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& targetArg = data.args[1];
+    
+    //Main logic.
+    SCRIPT_ACTION_MOB_TARGET_TYPE targetType =
+        ScriptActionUtils::getMobTargetType(data, targetArg);
+    Mob* target = ScriptActionUtils::getTargetMob(data, targetType);
+    
+    if(!target) return;
+    
+    bool result = false;
+    if(!target->group) {
+        result = false;
+    } else if(target->type->category->id != MOB_CATEGORY_LEADERS) {
+        result = false;
+    } else {
+        Leader* lPtr = (Leader*) target;
+        result = lPtr->player != nullptr;
+    }
+    
+    //Store the result.
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
+}
+
+
+/**
  * @brief Code for the leader Pikmin count retrieval script action type.
  *
  * @param data Data about the action call.
@@ -3558,6 +3590,14 @@ Mob* ScriptActionUtils::getTargetMob(
             data.scriptVM->getRunnerMob()->parent
         ) {
             return data.scriptVM->getRunnerMob()->parent->m;
+        }
+        break;
+    } case SCRIPT_ACTION_MOB_TARGET_TYPE_LEADER: {
+        if(
+            data.scriptVM->getRunnerMob() &&
+            data.scriptVM->getRunnerMob()->followingGroup
+        ) {
+            return data.scriptVM->getRunnerMob()->followingGroup;
         }
         break;
     }

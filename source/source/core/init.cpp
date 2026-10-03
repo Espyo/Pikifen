@@ -2136,6 +2136,15 @@ void initScriptActionTypes() {
         ScriptActionRunners::getFocusVar
     );
     
+    //Get leader activity.
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("target", ptString);
+    commitAction(
+        SCRIPT_ACTION_GET_LEADER_ACTIVITY,
+        "get_leader_activity",
+        ScriptActionRunners::getLeaderActivity
+    );
+    
     //Get leader Pikmin count var.
     queueParam("destination var name", ptString, pfConst);
     queueParam("target", ptString);

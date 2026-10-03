@@ -2969,8 +2969,8 @@ bool ScriptVarManager::fromString(const string& str) {
 
 
 /**
- * @brief Assigns an Allegro color to the value of a given variable,
- * if it exists.
+ * @brief Retrieves the value from the given var as an Allegro color,
+ * if the variable exists.
  *
  * @param name Name of the script variable to read.
  * @param dest Destination for the value.
@@ -2987,7 +2987,8 @@ bool ScriptVarManager::getValue(const string& name, ALLEGRO_COLOR& dest) const {
 
 
 /**
- * @brief Assigns a string to the value of a given variable, if it exists.
+ * @brief Retrieves the value from the given var as a string,
+ * if the variable exists.
  *
  * @param name Name of the script variable to read.
  * @param dest Destination for the value.
@@ -3004,7 +3005,8 @@ bool ScriptVarManager::getValue(const string& name, string& dest) const {
 
 
 /**
- * @brief Assigns a size_t to the value of a given variable, if it exists.
+ * @brief Retrieves the value from the given var as a size_t,
+ * if the variable exists.
  *
  * @param name Name of the script variable to read.
  * @param dest Destination for the value.
@@ -3021,7 +3023,8 @@ bool ScriptVarManager::getValue(const string& name, size_t& dest) const {
 
 
 /**
- * @brief Assigns an int to the value of a given variable, if it exists.
+ * @brief Retrieves the value from the given var as an int,
+ * if the variable exists.
  *
  * @param name Name of the script variable to read.
  * @param dest Destination for the value.
@@ -3038,8 +3041,8 @@ bool ScriptVarManager::getValue(const string& name, int& dest) const {
 
 
 /**
- * @brief Assigns an unsigned char to the value of a given variable,
- * if it exists.
+ * @brief Retrieves the value from the given var as an unsigned char,
+ * if the variable exists.
  *
  * @param name Name of the script variable to read.
  * @param dest Destination for the value.
@@ -3056,7 +3059,8 @@ bool ScriptVarManager::getValue(const string& name, unsigned char& dest) const {
 
 
 /**
- * @brief Assigns a bool to the value of a given variable, if it exists.
+ * @brief Retrieves the value from the given var as a boolean,
+ * if the variable exists.
  *
  * @param name Name of the script variable to read.
  * @param dest Destination for the value.
@@ -3073,7 +3077,8 @@ bool ScriptVarManager::getValue(const string& name, bool& dest) const {
 
 
 /**
- * @brief Assigns a float to the value of a given variable, if it exists.
+ * @brief Retrieves the value from the given var as a float,
+ * if the variable exists.
  *
  * @param name Name of the script variable to read.
  * @param dest Destination for the value.
@@ -3090,7 +3095,8 @@ bool ScriptVarManager::getValue(const string& name, float& dest) const {
 
 
 /**
- * @brief Assigns a point to the value of a given variable, if it exists.
+ * @brief Retrieves the value from the given var as a point,
+ * if the variable exists.
  *
  * @param name Name of the script variable to read.
  * @param dest Destination for the value.
@@ -3107,7 +3113,7 @@ bool ScriptVarManager::getValue(const string& name, Point& dest) const {
 
 
 /**
- * @brief Makes one of the script vars to have the specified value. The var
+ * @brief Assigns the specified value to the given var. The var
  * will be created if it does not exist.
  *
  * @param name Name of the script variable to write to.
@@ -3119,7 +3125,7 @@ void ScriptVarManager::setValue(const string& name, const string& value) {
 
 
 /**
- * @brief Makes one of the script vars to have the specified value. The var
+ * @brief Assigns the specified value to the given var. The var
  * will be created if it does not exist.
  *
  * @param name Name of the script variable to write to.
@@ -3131,7 +3137,7 @@ void ScriptVarManager::setValue(const string& name, size_t value) {
 
 
 /**
- * @brief Makes one of the script vars to have the specified value. The var
+ * @brief Assigns the specified value to the given var. The var
  * will be created if it does not exist.
  *
  * @param name Name of the script variable to write to.
@@ -3143,7 +3149,7 @@ void ScriptVarManager::setValue(const string& name, int value) {
 
 
 /**
- * @brief Makes one of the script vars to have the specified value. The var
+ * @brief Assigns the specified value to the given var. The var
  * will be created if it does not exist.
  *
  * @param name Name of the script variable to write to.
@@ -3155,7 +3161,7 @@ void ScriptVarManager::setValue(const string& name, unsigned char value) {
 
 
 /**
- * @brief Makes one of the script vars to have the specified value. The var
+ * @brief Assigns the specified value to the given var. The var
  * will be created if it does not exist.
  *
  * @param name Name of the script variable to write to.
@@ -3167,7 +3173,7 @@ void ScriptVarManager::setValue(const string& name, bool value) {
 
 
 /**
- * @brief Makes one of the script vars to have the specified value. The var
+ * @brief Assigns the specified value to the given var. The var
  * will be created if it does not exist.
  *
  * @param name Name of the script variable to write to.
@@ -3179,7 +3185,7 @@ void ScriptVarManager::setValue(const string& name, float value) {
 
 
 /**
- * @brief Makes one of the script vars to have the specified value. The var
+ * @brief Assigns the specified value to the given var. The var
  * will be created if it does not exist.
  *
  * @param name Name of the script variable to write to.
@@ -3193,7 +3199,7 @@ void ScriptVarManager::setValue(
 
 
 /**
- * @brief Makes one of the script vars to have the specified value. The var
+ * @brief Assigns the specified value to the given var. The var
  * will be created if it does not exist.
  *
  * @param name Name of the script variable to write to.

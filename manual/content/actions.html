@@ -1250,6 +1250,27 @@
       </tr>
     </table>
     
+    <h4 id="get-leader-activity">Get leader activity</h4>
+
+    <p>Gets whether the given leader is currently active, i.e. being controlled by a player.</p>
+
+    <p>Syntax: <code><b>get_leader_activity</b> &lt;destination_var_name&gt; &lt;target_mob&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>target_mob</td>
+        <td>The <a href="#target-mob">target mob</a>.</td>
+        <td>Mandatory</td>
+        <td>String</td>
+      </tr>
+    </table>
+    
     <h4 id="get-leader-pikmin-count">Get leader Pikmin count</h4>
 
     <p>Gets the amount of Pikmin in the target mob's group. Optionally, only Pikmin of a certain type. The target mob does not need to be of the leader category necessarily.</p>
@@ -2800,8 +2821,9 @@
       <li><code><b>self</b></code>: The object that the script belongs to.</li>
       <li><code><b>focus</b></code>: The object that is currently focused. The action does nothing if none is focused.</li>
       <li><code><b>trigger</b></code>: The object that triggered the event. The action does nothing if this is not applicable.</li>
-      <li><code><b>link</b></code>: The first linked object. The action does nothing if there is no linked object, or the mob has just spawned.</li>
-      <li><code><b>parent</b></code>: The parent object. The action does nothing if there is no parent object, or the mob has just spawned.</li>
+      <li><code><b>link</b></code>: The first linked object. The action does nothing if there is no linked object, <a href="script.html#tips">or the mob is still spawning</a>.</li>
+      <li><code><b>parent</b></code>: The parent object. The action does nothing if there is no parent object, <a href="script.html#tips">or the mob is still spawning</a>.</li>
+      <li><code><b>leader</b></code>: The object whose group this one is following. The action does nothing if the mob is not following any group.</li>
     </ul>
 
     <h2 id="see-also">See also</h2>
