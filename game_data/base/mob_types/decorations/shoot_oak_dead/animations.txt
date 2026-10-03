@@ -1,0 +1,109 @@
+name=Shoot (oak, dead) animations
+description=Animations for the dead oak Shoot.
+maker=Espyo
+version=1.0.0
+engine_version=1.2.0
+animations{
+	bumped{
+		frames{
+			bumped_01{
+				duration=0.1000
+				interpolate=true
+			}
+			bumped_02{
+				duration=0.1000
+				interpolate=true
+				sound=bumped
+			}
+			bumped_01{
+				duration=0.1000
+				interpolate=true
+			}
+			idling_01{
+				duration=0.1000
+				interpolate=true
+			}
+			bumped_03{
+				duration=0.1000
+				interpolate=true
+			}
+			bumped_04{
+				duration=0.1000
+				interpolate=true
+			}
+			bumped_03{
+				duration=0.1000
+				interpolate=true
+			}
+			idling_01{
+				duration=0.1000
+				interpolate=true
+			}
+		}
+	}
+	idling{
+		frames{
+			idling_01{
+				duration=0.3000
+				interpolate=true
+			}
+			idling_02{
+				duration=0.3000
+				interpolate=true
+			}
+			idling_01{
+				duration=0.3000
+				interpolate=true
+			}
+			idling_03{
+				duration=0.3000
+				interpolate=true
+			}
+		}
+	}
+}
+sprites{
+	bumped_01{
+		file=decorations/shoot_oak_dead
+		file_pos=0.0000 182.0000
+		file_size=177.0000 181.0000
+		offset=-30.0000 11.5000
+	}
+	bumped_02{
+		file=decorations/shoot_oak_dead
+		file_pos=0.0000 364.0000
+		file_size=177.0000 181.0000
+		offset=-30.0000 11.5000
+	}
+	bumped_03{
+		file=decorations/shoot_oak_dead
+		file_pos=0.0000 546.0000
+		file_size=177.0000 181.0000
+		offset=-30.0000 11.5000
+	}
+	bumped_04{
+		file=decorations/shoot_oak_dead
+		file_pos=0.0000 728.0000
+		file_size=177.0000 181.0000
+		offset=-30.0000 11.5000
+	}
+	idling_01{
+		file=decorations/shoot_oak_dead
+		file_pos=0.0000 0.0000
+		file_size=177.0000 181.0000
+		offset=-30.0000 11.5000
+	}
+	idling_02{
+		file=decorations/shoot_oak_dead
+		file_pos=0.0000 0.0000
+		file_size=177.0000 181.0000
+		offset=-30.5000 11.5000
+	}
+	idling_03{
+		file=decorations/shoot_oak_dead
+		file_pos=0.0000 0.0000
+		file_size=177.0000 181.0000
+		offset=-29.5000 11.5000
+	}
+}
+body_parts

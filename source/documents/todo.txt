@@ -1,4 +1,13 @@
 ﻿Point I left on (so I can continue the next day without losing my train of thought)
+    better scroll wheel icons
+    one of those succulents
+    monstera
+    simple mushroom
+    reed/cattail
+    some of the existing plants, but dead
+    add the new plants to base content areas
+
+    organize particle editor
 
 Current tasks (tasks being worked on, but not yet committed)
     
@@ -52,6 +61,7 @@ Next tasks (roughly sorted most important first)
         > Windows/Tables settings entries can now record the last used date in YYYYMMDD format, allowing tools to run to e.g. delete entries that haven't been used in X months. (#9460) / Added bool io.ConfigIniSettingsSaveLastUsedDate to disable saving that info
     https://github.com/Espyo/Pikifen/compare/master...Helodity:Pikifen:pack-loading-restart
     https://github.com/Helodity/Pikifen/commit/e2a5e3b982142474ff55ca60cc36fab21605115d
+    https://github.com/Espyo/Pikifen/pull/111
     Add a proper maker console
         Helpful so you can see error logs, script prints, etc.
         The ability to write commands that trigger maker tools, with parameters too
@@ -72,6 +82,7 @@ Next tasks (roughly sorted most important first)
     Consider having different control managers, one for the system things, one for gameplay, one for editor shortcuts
     Pressing left or right on a modal with a text input will just move the caret, but HOLDING will make the repeat events trigger
     New Pikmin maker tool should probably spawn them in Pikmin order, not alphabetical
+    Every annex menu should look different. The area menu is self-contained, so it can probably look radically different, but the others can be accessed from the pause menu, so at most they should have some stickers
     The camera (at least for editors and radar) should control where it wants to go based on the specified rectangle corners. Then, every frame, it interpolates between the currently-visible corners and the intended corners and change the X, Y, and zoom to match. This should allow smoothly zooming in and out in editors while keeping the point under the mouse fixed
         Also add logic to release the mouse while moving the camera to make it slide and lose speed over time
     The free camera maker tool should definitely be its own item, including the ability to pause and unpause gameplay, and control the zoom level
@@ -867,6 +878,9 @@ Small tasks (for when I'm feeling lazy)
         Remove parameter names in function declarations?
         Standardize classes and structs -- there's barely any rhyme or reason for me choosing one or the other
             Maybe place a public:, protected:, or private: tag before ALL sections of the class as relevant?
+            Maybe structs should be POD, everything else should be classes
+        Templated function that iterates through a vector's indexes, and if the lambda returns true, deletes the element?
+        Every onXYZ function should be renamed after what it actually does, not after when it's called
     Cleanup
         Remove magic numbers and magic strings (make numbers and strings into constants)
         Try to refactor the mission strategy patterns to also work for the area editor logic
@@ -1020,6 +1034,7 @@ Tasks for later on (I might never implement these)
             Could Queen Candypop Buds have script vars to control which types they can switch to? (thanks Darthvato)
             A way to change a mob's speed, rotation speed, etc., via scripting, instead of it being tied to the mob type's speed
                 You can just give the mob a status effect that changes its speed
+            A way to fill a sector with a liquid (thanks Neo)
         If a leader is on top of a moving walkable object, or on top of a scrolling sector, if they slide against the wall they will do it faster than normal
             This is kinda correct? Either way not a big deal I guess
         Optimize the Armored Cannon Beetle's spritesheet, ever since its inhale sprites stopped using drawn lines and started using dust particles

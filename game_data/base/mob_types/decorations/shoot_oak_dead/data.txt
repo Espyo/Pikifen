@@ -1,5 +1,5 @@
-name = Shoot (dead)
-description = A brown shoot that splits into three leaves.
+name = Shoot (oak, dead)
+description = A brown oak shoot that splits into three leaves.
 
 height = 160
 peek_underneath_opacity = 50
@@ -21,4 +21,4 @@ sounds {
 
 maker = Espyo
 version = 1.0.0
-engine_version = 1.0.0
+engine_version = 1.2.0
