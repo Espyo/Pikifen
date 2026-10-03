@@ -258,7 +258,7 @@ buildEnumNames(missionHudItemIdNames, MISSION_HUD_ITEM_ID)({
 //Possible types of ways to display something in a mission HUD item.
 enum MISSION_HUD_ITEM_DISPLAY {
 
-    //Just text.
+    //Just fixed text.
     MISSION_HUD_ITEM_DISPLAY_TEXT,
     
     //A clock that ticks down from a certain amount to 0.
@@ -288,6 +288,9 @@ enum MISSION_HUD_ITEM_DISPLAY {
     //The total amount of something.
     MISSION_HUD_ITEM_DISPLAY_TOT,
     
+    //The contents of the given area script var.
+    MISSION_HUD_ITEM_DISPLAY_SCRIPT_VAR,
+    
 };
 
 
@@ -303,6 +306,7 @@ buildEnumNames(missionHudItemDisplayTypeNames, MISSION_HUD_ITEM_DISPLAY)({
     { MISSION_HUD_ITEM_DISPLAY_CUR, "Current amount" },
     { MISSION_HUD_ITEM_DISPLAY_REM, "Remaining amount" },
     { MISSION_HUD_ITEM_DISPLAY_TOT, "Total amount" },
+    { MISSION_HUD_ITEM_DISPLAY_SCRIPT_VAR, "Script var" },
 });
 
 

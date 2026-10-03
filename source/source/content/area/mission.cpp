@@ -932,7 +932,8 @@ bool MissionHudItem::usesText() const {
         displayType == MISSION_HUD_ITEM_DISPLAY_REM_TOT ||
         displayType == MISSION_HUD_ITEM_DISPLAY_CUR ||
         displayType == MISSION_HUD_ITEM_DISPLAY_REM ||
-        displayType == MISSION_HUD_ITEM_DISPLAY_TOT;
+        displayType == MISSION_HUD_ITEM_DISPLAY_TOT ||
+        displayType == MISSION_HUD_ITEM_DISPLAY_SCRIPT_VAR;
 }
 
 

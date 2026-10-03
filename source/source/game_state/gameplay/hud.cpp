@@ -972,7 +972,8 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
     if(!itemInfo->enabled) return;
     
     switch(itemInfo->displayType) {
-    case MISSION_HUD_ITEM_DISPLAY_TEXT: {
+    case MISSION_HUD_ITEM_DISPLAY_TEXT:
+    case MISSION_HUD_ITEM_DISPLAY_SCRIPT_VAR: {
         //Text.
         
         DataNode* guiFile =
@@ -984,8 +985,14 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         GuiItem* text = new GuiItem();
         text->onDraw =
         [itemInfo, this] (const DrawInfo & draw) {
+            string str = itemInfo->text;
+            if(itemInfo->displayType == MISSION_HUD_ITEM_DISPLAY_SCRIPT_VAR) {
+                game.states.gameplay->scriptVM.vars.getValue(
+                    itemInfo->text, str
+                );
+            }
             drawText(
-                itemInfo->text, game.sysContent.fntStandard,
+                str, game.sysContent.fntStandard,
                 draw.center, draw.size,
                 tintColor(mapAlpha(224), draw.tint)
             );

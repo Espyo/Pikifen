@@ -504,7 +504,7 @@ string AnimationEditor::getFileTooltip(const string& path) const {
         return
             "File path: " + path + "\n"
             "Pack: " + game.content.packs.list[tempManif.pack].name + "\n"
-            "Mob's internal name: " + type + " (category " + cat + ")";
+            "Mob's internal name: " + type + " (category: " + cat + ")";
     } else {
         ContentManifest tempManif;
         game.content.globalAnimDbs.pathToManifest(

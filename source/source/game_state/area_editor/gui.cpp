@@ -3799,13 +3799,22 @@ void AreaEditor::processGuiPanelMissionHudItems() {
             
             if(itemPtr->usesText()) {
             
+                bool isScriptVarName =
+                    itemPtr->displayType == MISSION_HUD_ITEM_DISPLAY_SCRIPT_VAR;
+                    
                 //Text input.
                 string text = itemPtr->text;
-                if(ImGui::InputText("Text", &text)) {
+                if(
+                    ImGui::InputText(
+                        isScriptVarName ? "Script var name" : "Text", &text
+                    )
+                ) {
                     registerChange("mission HUD item text change");
                     itemPtr->text = text;
                 }
                 setTooltip(
+                    isScriptVarName ?
+                    "Name of the area script var to get the text from." :
                     "Text to show in the HUD item."
                 );
                 
