@@ -1,5 +1,5 @@
-name=Carnation (red) animations
-description=Animations for the red Carnation.
+name=Lily (white) animations
+description=Animations for the white Lily.
 maker=Espyo
 version=1.0.0
 engine_version=1.2.0
@@ -52,36 +52,36 @@ animations{
 }
 sprites{
 	bumped_01{
-		file=decorations/carnation_red
+		file=decorations/lily_white
 		file_pos=0.0000 0.0000
-		file_size=128.0000 128.0000
+		file_size=285.0000 302.0000
 		offset=1.0000 0.0000
 		scale=0.9950 0.9950
 		angle=0.0524
 	}
 	bumped_02{
-		file=decorations/carnation_red
+		file=decorations/lily_white
 		file_pos=0.0000 0.0000
-		file_size=128.0000 128.0000
+		file_size=285.0000 302.0000
 		offset=-1.0000 0.0000
 		scale=1.0050 1.0050
 		angle=6.2308
 	}
 	idling_01{
-		file=decorations/carnation_red
+		file=decorations/lily_white
 		file_pos=0.0000 0.0000
-		file_size=128.0000 128.0000
+		file_size=285.0000 302.0000
 	}
 	idling_02{
-		file=decorations/carnation_red
+		file=decorations/lily_white
 		file_pos=0.0000 0.0000
-		file_size=128.0000 128.0000
+		file_size=285.0000 302.0000
 		offset=0.5000 0.0000
 	}
 	idling_03{
-		file=decorations/carnation_red
+		file=decorations/lily_white
 		file_pos=0.0000 0.0000
-		file_size=128.0000 128.0000
+		file_size=285.0000 302.0000
 		offset=-0.5000 0.0000
 	}
 }
