@@ -165,6 +165,15 @@ Hud::Hud() :
             );
             
             if(!icon.bmp) return;
+            ALLEGRO_SHADER* healthShader = game.shaders.getShader(SHADER_TYPE_SCANLINE);
+            
+            if(healthShader) {
+                al_use_shader(healthShader);
+                al_set_shader_float("image_height", 1.0f); //Pieslice prims map UV to [-r, r], so we don't need to scale based on image size
+                al_set_shader_float("area_time", game.timePassed);
+                al_set_shader_float("intensity", 0.3f);
+                al_set_shader_float("frequency", 0.9f);
+            }
             
             al_draw_filled_circle(
                 finalDraw.center.x, finalDraw.center.y,
@@ -174,9 +183,10 @@ Hud::Hud() :
                     draw.tint
                 )
             );
+            al_use_shader(nullptr);
             drawBitmapInBox(
                 icon.bmp,
-                finalDraw.center, finalDraw.size, true, true, 0.0f, draw.tint
+                finalDraw.center, finalDraw.size * 0.9f, true, true, 0.0f, draw.tint
             );
             drawBitmapInBox(
                 bmpBubble,
@@ -201,13 +211,29 @@ Hud::Hud() :
             
             if(health.ratio <= 0.0f) return;
             
-            drawHealth(
+            ALLEGRO_SHADER* healthShader = game.shaders.getShader(SHADER_TYPE_SCANLINE);
+            
+            if(healthShader) {
+                al_use_shader(healthShader);
+                //Pieslice prims map UV to [-r, r], so we don't need to scale based on image size
+                al_set_shader_float("image_height", 1.0f);
+                al_set_shader_float("area_time", game.timePassed * 2);
+                al_set_shader_float("intensity", 0.13f);
+                al_set_shader_float("frequency", 0.9f);
+            }
+            float radius = std::max(0.0, std::min(finalDraw.size.x, finalDraw.size.y) * 0.5f - 1.0);
+            al_draw_filled_circle(
+                finalDraw.center.x, finalDraw.center.y, radius, multAlpha(mapGray(15), draw.tint.a)
+            );
+            drawHealthFill(
                 finalDraw.center,
                 health.ratio,
                 draw.tint.a,
-                std::min(finalDraw.size.x, finalDraw.size.y) * 0.47f,
-                true
+                radius
             );
+            
+            al_use_shader(nullptr);
+
             drawBitmapInBox(
                 bmpHardBubble,
                 finalDraw.center,
@@ -221,6 +247,7 @@ Hud::Hud() :
                     draw.tint
                 )
             );
+
             
             if(health.cautionTimer > 0.0f) {
                 float animRatio =
