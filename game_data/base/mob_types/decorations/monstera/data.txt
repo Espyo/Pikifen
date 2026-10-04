@@ -1,0 +1,37 @@
+name = Monstera
+description = A monstera leaf.
+
+blackout_radius = 40
+height = 120
+peek_underneath_opacity = 160
+radius = 32
+random_animation_delay = true
+rotation_random_variation = 360
+scale_random_variation = 0.1
+tint_random_maximum = 208 208 208
+
+sounds {
+    bumped {
+        sound = nature/foliage_long
+        volume = 40
+        speed_deviation = 40
+        volume_deviation = 10
+        random_delay = 0.1
+    }
+}
+
+area_editor_properties {
+    Hole pattern {
+        var = pattern
+        type = list
+        def_value = 0
+        list = Pattern 1; Pattern 2; Random
+        list_internal = 1; 2; 0
+        tooltip = Which pattern of the holes to use.
+    }
+}
+
+maker = Espyo, BulblaXIUM
+version = 1.0.0
+engine_version = 1.2.0
+notes = Original drawing by BulblaXIUM

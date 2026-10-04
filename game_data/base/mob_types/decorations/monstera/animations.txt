@@ -1,0 +1,168 @@
+name=Monstera animations
+description=Animations for the Monstera.
+maker=Espyo
+version=1.0.0
+engine_version=1.2.0
+animations{
+	bumped{
+		frames{
+			idling_01_01{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_01_01{
+				duration=0.1500
+				interpolate=true
+				sound=bumped
+			}
+			bumped_01_01{
+				duration=0.2000
+				interpolate=true
+			}
+			idling_01_01{
+				duration=0.2000
+				interpolate=true
+			}
+			bumped_01_02{
+				duration=0.2000
+				interpolate=true
+			}
+		}
+	}
+	bumped_pattern_2{
+		frames{
+			idling_02_01{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_02_01{
+				duration=0.1500
+				interpolate=true
+				sound=bumped
+			}
+			bumped_02_01{
+				duration=0.2000
+				interpolate=true
+			}
+			idling_02_01{
+				duration=0.2000
+				interpolate=true
+			}
+			bumped_02_02{
+				duration=0.2000
+				interpolate=true
+			}
+		}
+	}
+	idling{
+		frames{
+			idling_01_01{
+				duration=0.4000
+				interpolate=true
+			}
+			idling_01_02{
+				duration=0.4000
+				interpolate=true
+			}
+			idling_01_01{
+				duration=0.4000
+				interpolate=true
+			}
+			idling_01_03{
+				duration=0.4000
+				interpolate=true
+			}
+		}
+	}
+	idling_pattern_2{
+		frames{
+			idling_02_01{
+				duration=0.4000
+				interpolate=true
+			}
+			idling_02_02{
+				duration=0.4000
+				interpolate=true
+			}
+			idling_02_01{
+				duration=0.4000
+				interpolate=true
+			}
+			idling_02_03{
+				duration=0.4000
+				interpolate=true
+			}
+		}
+	}
+}
+sprites{
+	bumped_01_01{
+		file=decorations/monstera
+		file_pos=0.0000 0.0000
+		file_size=336.0000 190.0000
+		offset=155.0000 -13.0000
+		scale=0.9950 0.9950
+		angle=0.0175
+	}
+	bumped_01_02{
+		file=decorations/monstera
+		file_pos=0.0000 0.0000
+		file_size=336.0000 190.0000
+		offset=156.0000 -21.0000
+		scale=1.0050 1.0050
+		angle=6.2657
+	}
+	bumped_02_01{
+		file=decorations/monstera
+		file_pos=0.0000 191.0000
+		file_size=336.0000 190.0000
+		offset=155.0000 -13.0000
+		scale=0.9950 0.9950
+		angle=0.0175
+	}
+	bumped_02_02{
+		file=decorations/monstera
+		file_pos=0.0000 191.0000
+		file_size=336.0000 190.0000
+		offset=156.0000 -21.0000
+		scale=1.0050 1.0050
+		angle=6.2657
+	}
+	idling_01_01{
+		file=decorations/monstera
+		file_pos=0.0000 0.0000
+		file_size=336.0000 190.0000
+		offset=155.0000 -17.0000
+	}
+	idling_01_02{
+		file=decorations/monstera
+		file_pos=0.0000 0.0000
+		file_size=336.0000 190.0000
+		offset=155.0000 -17.5000
+	}
+	idling_01_03{
+		file=decorations/monstera
+		file_pos=0.0000 0.0000
+		file_size=336.0000 190.0000
+		offset=155.0000 -16.5000
+	}
+	idling_02_01{
+		file=decorations/monstera
+		file_pos=0.0000 191.0000
+		file_size=336.0000 190.0000
+		offset=155.0000 -17.0000
+	}
+	idling_02_02{
+		file=decorations/monstera
+		file_pos=0.0000 191.0000
+		file_size=336.0000 190.0000
+		offset=155.0000 -17.5000
+	}
+	idling_02_03{
+		file=decorations/monstera
+		file_pos=0.0000 191.0000
+		file_size=336.0000 190.0000
+		offset=155.0000 -16.5000
+	}
+}
+body_parts
