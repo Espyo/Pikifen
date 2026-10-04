@@ -1,0 +1,97 @@
+name=Rosy Parachute animations
+description=Animations for the Rosy Parachute.
+maker=Espyo
+version=1.0.0
+engine_version=1.2.0
+animations{
+	bumped{
+		frames{
+			bumped_01{
+				duration=0.1000
+			}
+			bumped_02{
+				duration=0.1000
+				sound=boing
+			}
+			bumped_01{
+				duration=0.1000
+			}
+			idling_01{
+				duration=0.1000
+			}
+			bumped_03{
+				duration=0.1000
+			}
+			bumped_04{
+				duration=0.1000
+			}
+			bumped_03{
+				duration=0.1000
+			}
+			idling_01{
+				duration=0.1000
+			}
+		}
+	}
+	idling{
+		frames{
+			idling_01{
+				duration=0.3000
+			}
+			idling_02{
+				duration=0.3000
+			}
+			idling_01{
+				duration=0.3000
+			}
+			idling_03{
+				duration=0.3000
+			}
+		}
+	}
+}
+sprites{
+	bumped_01{
+		file=decorations/rosy_parachute
+		file_pos=0.0000 336.0000
+		file_size=106.0000 111.0000
+		offset=-10.0000 14.0000
+	}
+	bumped_02{
+		file=decorations/rosy_parachute
+		file_pos=0.0000 448.0000
+		file_size=106.0000 111.0000
+		offset=-10.0000 14.0000
+	}
+	bumped_03{
+		file=decorations/rosy_parachute
+		file_pos=0.0000 560.0000
+		file_size=106.0000 111.0000
+		offset=-10.0000 14.0000
+	}
+	bumped_04{
+		file=decorations/rosy_parachute
+		file_pos=0.0000 672.0000
+		file_size=106.0000 111.0000
+		offset=-10.0000 14.0000
+	}
+	idling_01{
+		file=decorations/rosy_parachute
+		file_pos=0.0000 0.0000
+		file_size=106.0000 111.0000
+		offset=-10.0000 14.0000
+	}
+	idling_02{
+		file=decorations/rosy_parachute
+		file_pos=0.0000 112.0000
+		file_size=106.0000 111.0000
+		offset=-10.0000 14.0000
+	}
+	idling_03{
+		file=decorations/rosy_parachute
+		file_pos=0.0000 224.0000
+		file_size=106.0000 111.0000
+		offset=-10.0000 14.0000
+	}
+}
+body_parts

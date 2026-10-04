@@ -1,0 +1,24 @@
+name = Rosy Parachute
+description = A small cluster of three rosy parachute mushrooms.
+
+height = 120
+peek_underneath_opacity = 50
+radius = 24
+random_animation_delay = true
+rotation_random_variation = 360
+scale_random_variation = 0.25
+tint_random_maximum = 192 192 192
+
+sounds {
+    boing {
+        sound = effects/boing_low_1
+        volume = 30
+        speed = 120
+        speed_deviation = 10
+    }
+}
+
+maker = Espyo, Neo, BulblaXIUM
+version = 1.0.0
+engine_version = 1.2.0
+notes = Original drawing by BulblaXIUM, initial SVG by Neo.
