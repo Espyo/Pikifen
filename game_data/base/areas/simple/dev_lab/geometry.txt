@@ -269,8 +269,8 @@ vertexes{
 	v=104.0000 -256.0000
 	v=192.0000 -256.0000
 	v=192.0000 -448.0000
-	v=3648.0000 -448.0000
-	v=3648.0000 -128.0000
+	v=3776.0000 -448.0000
+	v=3776.0000 -128.0000
 	v=256.0000 -128.0000
 	v=256.0000 -256.0000
 	v=192.0000 -512.0000
@@ -1771,18 +1771,18 @@ vertexes{
 	v=-4928.0000 0.0000
 	v=0.0000 192.0000
 	v=0.0000 3328.0000
-	v=3104.0000 -128.0000
-	v=3104.0000 -448.0000
-	v=3168.0000 -448.0000
-	v=3168.0000 -128.0000
-	v=3288.0000 -296.0000
-	v=3288.0000 -280.0000
-	v=3304.0000 -280.0000
-	v=3304.0000 -296.0000
-	v=3512.0000 -296.0000
-	v=3512.0000 -280.0000
-	v=3528.0000 -280.0000
-	v=3528.0000 -296.0000
+	v=3232.0000 -128.0000
+	v=3232.0000 -448.0000
+	v=3296.0000 -448.0000
+	v=3296.0000 -128.0000
+	v=3416.0000 -296.0000
+	v=3416.0000 -280.0000
+	v=3432.0000 -280.0000
+	v=3432.0000 -296.0000
+	v=3640.0000 -296.0000
+	v=3640.0000 -280.0000
+	v=3656.0000 -280.0000
+	v=3656.0000 -296.0000
 	v=832.0000 672.0000
 	v=736.0000 672.0000
 	v=736.0000 760.0000
@@ -13523,7 +13523,7 @@ mobs{
 	interactable{
 		type=orb_sign
 		p=76.0000 -288.0000
-		vars=text=Background vegetation
+		vars=text=Decorations
 	}
 	bouncer{
 		type=geyser
@@ -13536,23 +13536,23 @@ mobs{
 	}
 	decoration{
 		type=clover
-		p=960.0000 -352.0000
+		p=1088.0000 -352.0000
 	}
 	decoration{
 		type=common_glowcap
-		p=1056.0000 -224.0000
+		p=1184.0000 -224.0000
 	}
 	decoration{
 		type=leaves
-		p=1728.0000 -224.0000
+		p=1856.0000 -224.0000
 	}
 	decoration{
 		type=margaret
-		p=2176.0000 -224.0000
+		p=2304.0000 -224.0000
 	}
 	decoration{
 		type=shoot
-		p=2560.0000 -192.0000
+		p=2688.0000 -192.0000
 	}
 	pile{
 		type=ceramic_pile_red
@@ -15044,30 +15044,30 @@ mobs{
 	}
 	custom{
 		type=smoke_generator
-		p=3296.0000 -288.0000
+		p=3424.0000 -288.0000
 	}
 	custom{
 		type=firefly_generator
-		p=3520.0000 -288.0000
+		p=3648.0000 -288.0000
 	}
 	bouncer{
 		type=geyser
-		p=3200.0000 -160.0000
+		p=3328.0000 -160.0000
 		links=467
 	}
 	custom{
 		type=dummy
-		p=3136.0000 -160.0000
+		p=3264.0000 -160.0000
 	}
 	interactable{
 		type=orb_sign
-		p=1664.0000 -384.0000
+		p=1792.0000 -384.0000
 		vars=text=Plants, fungi, and other such vegetation.
 	}
 	interactable{
 		type=orb_sign
-		p=3424.0000 -384.0000
-		vars=text=Particle generators.
+		p=3552.0000 -384.0000
+		vars=text=Particle generators
 	}
 	resource{
 		type=nugget
@@ -15377,71 +15377,75 @@ mobs{
 	}
 	decoration{
 		type=fern
-		p=1184.0000 -352.0000
+		p=1312.0000 -352.0000
 	}
 	decoration{
 		type=malva
-		p=2112.0000 -352.0000
+		p=2240.0000 -352.0000
 	}
 	decoration{
 		type=poppy_yellow
-		p=2400.0000 -224.0000
+		p=2528.0000 -224.0000
 	}
 	decoration{
 		type=shoot_oak
-		p=2784.0000 -192.0000
+		p=2912.0000 -192.0000
 	}
 	decoration{
 		type=grass_tall
-		p=1440.0000 -352.0000
+		p=1568.0000 -352.0000
 	}
 	decoration{
 		type=carnation_red
-		p=704.0000 -352.0000
+		p=832.0000 -352.0000
 	}
 	decoration{
 		type=chicory
-		p=832.0000 -224.0000
+		p=960.0000 -224.0000
 	}
 	decoration{
 		type=sweet_alyssum_white
-		p=2976.0000 -224.0000
+		p=3104.0000 -224.0000
 	}
 	decoration{
 		type=fern_dead
-		p=1280.0000 -224.0000
+		p=1408.0000 -224.0000
 	}
 	decoration{
 		type=grass_tall_dead
-		p=1568.0000 -224.0000
+		p=1696.0000 -224.0000
 	}
 	decoration{
 		type=leaves_dead
-		p=1824.0000 -352.0000
+		p=1952.0000 -352.0000
 	}
 	decoration{
 		type=shoot_dead
-		p=2688.0000 -352.0000
+		p=2816.0000 -352.0000
 	}
 	decoration{
 		type=shoot_oak_dead
-		p=2880.0000 -352.0000
+		p=3008.0000 -352.0000
 	}
 	decoration{
 		type=rosy_parachute
-		p=2496.0000 -352.0000
+		p=2624.0000 -352.0000
 	}
 	decoration{
 		type=lily_white
-		p=1952.0000 -224.0000
+		p=2080.0000 -224.0000
 	}
 	decoration{
 		type=monstera
-		p=2304.0000 -352.0000
+		p=2432.0000 -352.0000
 	}
 	decoration{
 		type=cactus_barrel
 		p=480.0000 -320.0000
+	}
+	decoration{
+		type=cattail
+		p=704.0000 -224.0000
 	}
 }
 path_stops{
