@@ -1,7 +1,7 @@
 name = Rosy Parachute
 description = A small cluster of three rosy parachute mushrooms.
 
-height = 120
+height = 90
 peek_underneath_opacity = 50
 radius = 24
 random_animation_delay = true

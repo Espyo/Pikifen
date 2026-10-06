@@ -21,7 +21,7 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:dc="http://purl.org/dc/elements/1.1/"><title
-     id="title1027">Clover spritesheet</title><defs
+     id="title1027">Grass (tall) spritesheet</title><defs
      id="defs2109"><linearGradient
        id="linearGradient4413"
        inkscape:label="blade_3"><stop
@@ -582,7 +582,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.73879966"
-     inkscape:cx="184.75915"
+     inkscape:cx="185.43593"
      inkscape:cy="591.5"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -618,7 +618,7 @@
        visible="true" /></sodipodi:namedview><metadata
      id="metadata2112"><rdf:RDF><cc:Work
          rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title>Clover spritesheet</dc:title><dc:creator><cc:Agent><dc:title>André &quot;Espyo&quot; Silva</dc:title></cc:Agent></dc:creator><dc:subject><rdf:Bag><rdf:li>Pikifen spritesheet</rdf:li></rdf:Bag></dc:subject><dc:description>Spritesheet for the Clover in the base content of Pikifen. See https://github.com/Espyo/Pikifen</dc:description><cc:license
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title>Grass (tall) spritesheet</dc:title><dc:creator><cc:Agent><dc:title>André &quot;Espyo&quot; Silva</dc:title></cc:Agent></dc:creator><dc:subject><rdf:Bag><rdf:li>Pikifen spritesheet</rdf:li></rdf:Bag></dc:subject><dc:description>Spritesheet for the tall grass in the base content of Pikifen. See https://github.com/Espyo/Pikifen</dc:description><cc:license
            rdf:resource="https://opensource.org/licenses/MIT" /></cc:Work></rdf:RDF></metadata><g
      inkscape:label="Grid"
      inkscape:groupmode="layer"

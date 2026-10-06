@@ -1,5 +1,5 @@
 name=Shoot (dead) animations
-description=Animations for the dead Shoot.
+description=Animations for the dead shoot.
 maker=Espyo
 version=1.0.0
 engine_version=1.0.0

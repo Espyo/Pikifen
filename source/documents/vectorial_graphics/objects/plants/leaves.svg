@@ -18,7 +18,7 @@
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:dc="http://purl.org/dc/elements/1.1/">
   <title
-     id="title853">Leaves object spritesheet</title>
+     id="title853">Leaves spritesheet</title>
   <defs
      id="defs2109">
     <linearGradient
@@ -177,7 +177,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="4.9219331"
-     inkscape:cx="134.5"
+     inkscape:cx="134.70317"
      inkscape:cy="34.539275"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -221,8 +221,8 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>Leaves object spritesheet</dc:title>
-        <dc:description>Spritesheet for the leaves object in the base content of Pikifen. See https://github.com/Espyo/Pikifen</dc:description>
+        <dc:title>Leaves spritesheet</dc:title>
+        <dc:description>Spritesheet for the leaves in the base content of Pikifen. See https://github.com/Espyo/Pikifen</dc:description>
         <dc:creator>
           <cc:Agent>
             <dc:title>André &quot;Espyo&quot; Silva</dc:title>

@@ -1,5 +1,5 @@
 name=Fern (dead) animations
-description=Animations for the dead Fern.
+description=Animations for the dead fern.
 maker=Espyo
 version=1.0.0
 engine_version=1.2.0

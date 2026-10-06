@@ -1,20 +1,20 @@
 name = Lily (white)
 description = A single white lily.
 
-blackout_radius = 40
-height = 120
+height = 180
 peek_underneath_opacity = 160
 radius = 64
 random_animation_delay = true
 rotation_random_variation = 360
 scale_random_variation = 0.1
-tint_random_maximum = 224 255 224
+tint_random_maximum = 240 255 240
 
 sounds {
     bumped {
         sound = nature/foliage_long
         volume = 40
-        speed_deviation = 40
+        speed = 80
+        speed_deviation = 20
         volume_deviation = 10
         random_delay = 0.1
     }

@@ -1,5 +1,5 @@
 name=Poppy (yellow) animations
-description=Animations for the yellow Poppy.
+description=Animations for the yellow poppy.
 maker=Espyo
 version=1.0.0
 engine_version=1.2.0

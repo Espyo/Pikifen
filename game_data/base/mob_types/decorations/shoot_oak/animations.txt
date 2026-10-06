@@ -1,5 +1,5 @@
 name=Shoot (oak) animations
-description=Animations for the oak Shoot.
+description=Animations for the oak shoot.
 maker=Espyo
 version=1.0.0
 engine_version=1.2.0

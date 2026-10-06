@@ -1,5 +1,5 @@
 name=Shoot (oak, dead) animations
-description=Animations for the dead oak Shoot.
+description=Animations for the dead oak shoot.
 maker=Espyo
 version=1.0.0
 engine_version=1.2.0

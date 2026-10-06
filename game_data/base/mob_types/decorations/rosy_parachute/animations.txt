@@ -1,5 +1,5 @@
 name=Rosy Parachute animations
-description=Animations for the Rosy Parachute.
+description=Animations for the rosy parachute.
 maker=Espyo
 version=1.0.0
 engine_version=1.2.0

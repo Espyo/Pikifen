@@ -1,13 +1,13 @@
 name = Shoot (oak)
 description = A green oak shoot that splits into three leaves.
 
-height = 160
+height = 140
 peek_underneath_opacity = 50
 radius = 24
 random_animation_delay = true
 rotation_random_variation = 360
 scale_random_variation = 0.1
-tint_random_maximum = 192 255 192
+tint_random_maximum = 192 208 192
 
 sounds {
     bumped {

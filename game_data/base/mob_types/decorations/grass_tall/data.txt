@@ -1,7 +1,7 @@
 name = Grass (tall)
 description = A lump of tall grass blades.
 
-height = 120
+height = 150
 peek_underneath_opacity = 50
 radius = 50
 random_animation_delay = true

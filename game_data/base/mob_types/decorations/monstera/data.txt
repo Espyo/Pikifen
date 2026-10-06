@@ -1,20 +1,20 @@
 name = Monstera
 description = A monstera leaf.
 
-blackout_radius = 40
-height = 120
+height = 250
 peek_underneath_opacity = 160
 radius = 32
 random_animation_delay = true
 rotation_random_variation = 360
 scale_random_variation = 0.1
-tint_random_maximum = 208 208 208
+tint_random_maximum = 192 192 224
 
 sounds {
     bumped {
         sound = nature/foliage_long
         volume = 40
-        speed_deviation = 40
+        speed = 80
+        speed_deviation = 20
         volume_deviation = 10
         random_delay = 0.1
     }

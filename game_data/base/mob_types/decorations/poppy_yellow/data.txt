@@ -6,7 +6,7 @@ peek_underneath_opacity = 50
 radius = 40
 random_animation_delay = true
 rotation_random_variation = 360
-scale_random_variation = 0.1
+scale_random_variation = 0.15
 tint_random_maximum = 246 210 170
 
 sounds {

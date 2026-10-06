@@ -2,7 +2,7 @@ name = Common Glowcap
 description = A single glowing cyan mushroom.
 
 blackout_radius = 48
-height = 120
+height = 100
 peek_underneath_opacity = 50
 radius = 24
 random_animation_delay = true

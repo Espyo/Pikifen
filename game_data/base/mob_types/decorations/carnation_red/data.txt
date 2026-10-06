@@ -1,8 +1,7 @@
 name = Carnation (red)
 description = A single red carnation.
 
-blackout_radius = 40
-height = 120
+height = 140
 peek_underneath_opacity = 160
 radius = 50
 random_animation_delay = true

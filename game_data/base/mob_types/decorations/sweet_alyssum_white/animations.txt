@@ -1,5 +1,5 @@
 name=Sweet Alyssum (white) animations
-description=Animations for the white Sweet Alyssum.
+description=Animations for the white sweet alyssum.
 maker=Espyo
 version=1.0.0
 engine_version=1.2.0

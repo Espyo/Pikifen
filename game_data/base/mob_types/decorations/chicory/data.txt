@@ -7,7 +7,7 @@ radius = 60
 random_animation_delay = true
 rotation_random_variation = 360
 scale_random_variation = 0.25
-tint_random_maximum = 224 224 224
+tint_random_maximum = 255 208 192
 
 sounds {
     bumped {

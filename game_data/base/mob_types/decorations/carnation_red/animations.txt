@@ -1,5 +1,5 @@
 name=Carnation (red) animations
-description=Animations for the red Carnation.
+description=Animations for the red carnation.
 maker=Espyo
 version=1.0.0
 engine_version=1.2.0

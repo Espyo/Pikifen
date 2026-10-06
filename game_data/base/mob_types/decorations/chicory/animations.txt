@@ -1,5 +1,5 @@
 name=Chicory animations
-description=Animations for the Chicory.
+description=Animations for the chicory.
 maker=Espyo
 version=1.0.0
 engine_version=1.2.0

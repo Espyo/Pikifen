@@ -1,5 +1,5 @@
 name=Grass (tall) animations
-description=Animations for the tall Grass.
+description=Animations for the tall grass.
 maker=Espyo
 version=1.0.0
 engine_version=1.2.0

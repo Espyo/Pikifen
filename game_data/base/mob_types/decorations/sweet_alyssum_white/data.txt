@@ -1,13 +1,13 @@
 name = Sweet Alyssum (white)
 description = A large bundle of many tiny white sweet alyssums.
 
-height = 120
+height = 100
 peek_underneath_opacity = 50
 radius = 65
 random_animation_delay = true
 rotation_random_variation = 360
 scale_random_variation = 0.1
-tint_random_maximum = 224 224 224
+tint_random_maximum = 208 208 208
 
 sounds {
     bumped {

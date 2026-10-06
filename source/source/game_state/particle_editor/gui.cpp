@@ -758,9 +758,7 @@ void ParticleEditor::processGuiPanelGenerator() {
     if(
         ImGui::ImageButton(
             "playSystemButton",
-            mgrRunning ?
-            editorIcons[EDITOR_ICON_STOP] :
-            editorIcons[EDITOR_ICON_PLAY],
+            editorIcons[EDITOR_ICON_PLAY_PAUSE],
             Point(EDITOR::ICON_BMP_SIZE)
         )
     ) {

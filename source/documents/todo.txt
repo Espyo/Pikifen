@@ -1,19 +1,12 @@
 ﻿Point I left on (so I can continue the next day without losing my train of thought)
-    better scroll wheel icons
-    one of those succulents
-    monstera
-    simple mushroom
-    reed/cattail
-    some of the existing plants, but dead
-    add the new plants to base content areas
 
-    organize particle editor
 
 Current tasks (tasks being worked on, but not yet committed)
     
 
 Next tasks (roughly sorted most important first)
     --- Problems to fix ---
+    Tools dropped by a Pikmin can only be picked up by said Pikmin (thanks Neo)
 
     --- 1.2.0 ---
     
@@ -66,8 +59,10 @@ Next tasks (roughly sorted most important first)
         Helpful so you can see error logs, script prints, etc.
         The ability to write commands that trigger maker tools, with parameters too
         If you're writing a command, there should be an exception for the console's key, since you probably want to toggle it, not type the \ character
+        As you're writing a command, a list of the five or so most relevant commands show up, the one closest to the bottom (input) should be the one that's filled in when tab is pressed. This sorting should pick the most relevant first, and should be fuzzy (so "tlp" should find "TeLePort", "am" should suggest "frAMe_advance" before it suggests "Area_iMage"). For arguments, it should suggest the default if nothing's been typed yet, and hitting tab should auto-place the default
         Page up and page down to scroll the output, up and down for input history, tab to auto-complete
             If you're not at the bottom, new commands shouldn't scroll the view down, and deleting old commands shouldn't scroll the view up
+            Save the history in options.txt?
         Add general commands
             help
             clear
@@ -77,10 +72,12 @@ Next tasks (roughly sorted most important first)
         Maybe the button-based maker tool activations could be made into commands sent to the console, and the player could add custom binds so they could customize calling the maker tools to be however they want
         Warnings? For things like leaders needing certain animations, but since they don't exist, the idling animation will be used instead. Or for usages of deprecated stuff
             Maybe a maker tool that makes it so the next time you reload an area, it checks for warnings and prints those to the console as errors
+    Review panel checks for whether the area has tags, a thumbnail, etc.
     A command to spawn any type of mob?
     GUI items and GUI manager need to be split into a generic usage library, where the Pikifen variants inherit from them
     Consider having different control managers, one for the system things, one for gameplay, one for editor shortcuts
     Pressing left or right on a modal with a text input will just move the caret, but HOLDING will make the repeat events trigger
+    Mob shadows should depend on the mob's radius AND height
     New Pikmin maker tool should probably spawn them in Pikmin order, not alphabetical
     Every annex menu should look different. The area menu is self-contained, so it can probably look radically different, but the others can be accessed from the pause menu, so at most they should have some stickers
     The camera (at least for editors and radar) should control where it wants to go based on the specified rectangle corners. Then, every frame, it interpolates between the currently-visible corners and the intended corners and change the X, Y, and zoom to match. This should allow smoothly zooming in and out in editors while keeping the point under the mouse fixed
@@ -689,6 +686,7 @@ Misc. things (to be implemented whenever)
         "a suggestion, when using pushes_with_hitboxes it should use the hitbox's height rather than the object's height" (thanks Helodity)
         The scale category doesn't really need to exist -- the code that gets the current weight could be something any mob could use, and a way to display a custom number atop the mob could be added to the script (thanks Helodity)
         Resources should be able to specify what happens when they fall in the pit; carriable rocks need to respawn
+        Converters could have a field that controls what Pikmin types are allowed to be inserted. This way one could create converters that "level up" certain Pikmin types (thanks Neo)
     Pikmin behaviors
         When Pikmin destroy something that drops something (Pellet Posy, Flukeweed, enemy corpse, enemy spoils, etc.), they should focus on retrieving that ASAP instead of just idling and leaving it up to chance whether they pick it up or not. This is especially important for Rock Pikmin, which usually bounce far away after attacking and killing an enemy
             Same for Red Pikmin fighting a Fiery Blowhog and when shaken off, landing too far away to care from there on

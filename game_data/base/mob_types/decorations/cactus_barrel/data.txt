@@ -1,9 +1,7 @@
 name = Cactus (barrel)
 description = A single sort-of-small barrel cactus.
 
-blackout_radius = 40
-height = 120
-peek_underneath_opacity = 255
+height = 140
 pushes = true
 pushable = false
 radius = 120
@@ -11,16 +9,6 @@ random_animation_delay = true
 rotation_random_variation = 360
 scale_random_variation = 0.1
 tint_random_maximum = 208 208 208
-
-sounds {
-    bumped {
-        sound = nature/foliage_long
-        volume = 40
-        speed_deviation = 40
-        volume_deviation = 10
-        random_delay = 0.1
-    }
-}
 
 maker = Espyo, BulblaXIUM
 version = 1.0.0

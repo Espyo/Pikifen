@@ -1,13 +1,13 @@
 name = Shoot (dead)
 description = A brown shoot that splits into three leaves.
 
-height = 160
+height = 140
 peek_underneath_opacity = 50
 radius = 24
 random_animation_delay = true
 rotation_random_variation = 360
-scale_random_variation = 0.1
-tint_random_maximum = 255 192 192
+scale_random_variation = 0.15
+tint_random_maximum = 255 160 160
 
 sounds {
     bumped {

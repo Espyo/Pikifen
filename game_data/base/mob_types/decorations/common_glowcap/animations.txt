@@ -1,5 +1,5 @@
 name=Common Glowcap animations
-description=Animations for the Common Glowcap.
+description=Animations for the common glowcap.
 maker=Espyo
 version=1.0.1
 engine_version=1.2.0
