@@ -819,10 +819,6 @@ Hud::Hud() :
     };
     
     loader(bmpBubble,               "bubble");
-    loader(bmpCounterBubbleField,   "counter_bubble_field");
-    loader(bmpCounterBubbleGroup,   "counter_bubble_group");
-    loader(bmpCounterBubbleStandby, "counter_bubble_standby");
-    loader(bmpCounterBubbleTotal,   "counter_bubble_total");
     loader(bmpDayBubble,            "dayBubble");
     loader(bmpDistantPikminMarker,  "distant_pikmin_marker");
     loader(bmpHardBubble,           "hard_bubble");
@@ -844,10 +840,6 @@ Hud::Hud() :
  */
 Hud::~Hud() {
     game.content.bitmaps.list.free(bmpBubble);
-    game.content.bitmaps.list.free(bmpCounterBubbleField);
-    game.content.bitmaps.list.free(bmpCounterBubbleGroup);
-    game.content.bitmaps.list.free(bmpCounterBubbleStandby);
-    game.content.bitmaps.list.free(bmpCounterBubbleTotal);
     game.content.bitmaps.list.free(bmpDayBubble);
     game.content.bitmaps.list.free(bmpDistantPikminMarker);
     game.content.bitmaps.list.free(bmpHardBubble);

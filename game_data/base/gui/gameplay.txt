@@ -149,10 +149,6 @@ bitmaps{
 	bubble=effects/bubble
 	checkbox_check=gui/checkbox_check
 	checkbox_no_check=gui/checkbox_no_check
-	counter_bubble_field=gui/counter_bubble_field
-	counter_bubble_group=gui/counter_bubble_group
-	counter_bubble_standby=gui/counter_bubble
-	counter_bubble_total=gui/counter_bubble_total
 	day_bubble=gui/day_bubble
 	distant_pikmin_marker=gui/distant_pikmin_marker
 	hard_bubble=gui/hard_bubble
