@@ -546,7 +546,7 @@ void ParticleGenerator::saveToDataNode(DataNode* node) {
     GetterWriter pGW(baseParticleNode);
     
     pGW.write("bitmap", baseParticle.bmpName);
-    pGW.write("bitmap_angle", baseParticle.bmpAngle);
+    pGW.write("bitmap_angle", radToDeg(baseParticle.bmpAngle));
     pGW.write("bitmap_angle_type", baseParticle.bmpAngleType);
     pGW.write("duration", baseParticle.duration);
     pGW.write("friction", baseParticle.friction);
