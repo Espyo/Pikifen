@@ -74,16 +74,19 @@ void ModalGuiManager::draw() {
     } else {
         alphaMult = 1.0f - animTimer.getRatioLeft();
     }
+    alphaMult *= 0.8f;
+
+    ALLEGRO_SHADER* bgShader = game.shaders.getShader(SHADER_TYPE_SCANLINE);
+    if(bgShader) {
+        al_use_shader(bgShader);
+        al_set_shader_float("area_time", game.timePassed * 2);
+        al_set_shader_float("intensity", 0.3f);
+        al_set_shader_float("frequency", 0.9f);
+        al_set_shader_float("image_height", game.winH);
+    }
     
-    al_draw_filled_rectangle(
-        0, 0, game.winW, game.winH,
-        multAlpha(game.config.guiColors.pauseBg, alphaMult)
-    );
-    drawBitmap(
-        game.sysContent.bmpVignette,
-        Point(game.winW, game.winH) / 2.0f, Point(game.winW, game.winH), 0.0f,
-        multAlpha(game.config.guiColors.pauseVignette, alphaMult)
-    );
+    drawMenuBackground(alphaMult);
+    al_use_shader(nullptr);
     
     GuiManager::draw();
 }

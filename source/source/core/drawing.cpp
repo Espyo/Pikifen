@@ -386,7 +386,7 @@ void drawFraction(
 
 
 /**
- * @brief Draws a health wheel, with a pie-slice that's fuller the more
+ * @brief Draws a pie-slice that's fuller the more
  * HP is full.
  *
  * @param center Center of the wheel.
@@ -396,10 +396,9 @@ void drawFraction(
  * @param justChart If true, only draw the actual pie-slice (pie-chart).
  * Used for leader HP on the HUD.
  */
-void drawHealth(
-    const Point& center, float ratio, float alpha, float radius, bool justChart
+void drawHealthFill(
+    const Point& center, float ratio, float alpha, float radius
 ) {
-    const ALLEGRO_COLOR BG_COLOR = COLOR_BLACK;
     const ALLEGRO_COLOR GOOD_COLOR = al_map_rgb(0, 255, 0);
     const ALLEGRO_COLOR MID_COLOR = al_map_rgb(255, 255, 0);
     const ALLEGRO_COLOR BAD_COLOR = al_map_rgb(255, 0, 0);
@@ -416,21 +415,10 @@ void drawHealth(
                 ratio, 0.0f, 0.5f, BAD_COLOR, MID_COLOR
             );
     }
-    
-    if(!justChart) {
-        al_draw_filled_circle(
-            center.x, center.y, radius, multAlpha(BG_COLOR, 0.5f * alpha)
-        );
-    }
     al_draw_filled_pieslice(
         center.x, center.y, radius, -TAU / 4, -ratio * TAU,
         multAlpha(color, alpha)
     );
-    if(!justChart) {
-        al_draw_circle(
-            center.x, center.y, radius + 1, multAlpha(BG_COLOR, alpha), 2
-        );
-    }
 }
 
 
@@ -1075,6 +1063,30 @@ void drawLoadingScreen(
         );
     }
     
+}
+
+/**
+ * @brief Draws a menu's background
+ *
+ * @param alpha Alpha of the background.
+ */
+void drawMenuBackground(const float alpha) {
+    ALLEGRO_SHADER* oldShader = al_get_current_shader();
+
+    drawPrimRect(
+        Point(0,0), Point(game.winW, game.winH),
+        multAlpha(game.config.guiColors.pauseBg, alpha)
+    );
+
+    al_use_shader(nullptr);
+
+    drawBitmap(
+        game.sysContent.bmpVignette,
+        Point(game.winW, game.winH) / 2.0f, Point(game.winW, game.winH), 0.0f,
+        multAlpha(game.config.guiColors.pauseVignette, alpha)
+    );
+
+    al_use_shader(oldShader);
 }
 
 

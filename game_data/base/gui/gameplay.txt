@@ -64,11 +64,6 @@ hardcoded_items{
 		size=8.0000 4.0000
 		description=Number of group members of the standby type.
 	}
-	standby_bubble{
-		center=0.0000 0.0000
-		size=0.0000 0.0000
-		description=Bubble surrounding the number of group members of the standby type.
-	}
 	standby_maturity_icon{
 		center=54.0000 88.0000
 		size=4.0000 8.0000
@@ -95,54 +90,19 @@ hardcoded_items{
 		description=Same as "standby_next_input", but for the previous standby type.
 	}
 	group_amount{
-		center=73.0000 91.0000
-		size=15.0000 14.0000
+		center=73.0000 91.5000
+		size=12.0000 7.0000
 		description=Number of Pikmin on the leader's group.
 	}
-	group_bubble{
-		center=73.0000 91.0000
-		size=15.0000 14.0000
-		description=Bubble surrounding the number of Pikmin on the leader's group.
-	}
 	field_amount{
-		center=91.0000 91.0000
-		size=15.0000 14.0000
+		center=91.0000 91.5000
+		size=12.0000 7.0000
 		description=Number of Pikmin on the field.
-	}
-	field_bubble{
-		center=91.0000 91.0000
-		size=15.0000 14.0000
-		description=Bubble surrounding the number of Pikmin on the field.
 	}
 	total_amount{
 		center=0.0000 0.0000
 		size=0.0000 0.0000
 		description=Number of total Pikmin (field + Onions).
-	}
-	total_bubble{
-		center=0.0000 0.0000
-		size=0.0000 0.0000
-		description=Bubble surrounding the number of total Pikmin (field + Onions).
-	}
-	counters_x{
-		center=0.0000 0.0000
-		size=0.0000 0.0000
-		description=Multiplication sign ("x") that goes between the counter HUD items. In Pikmin and Pikmin 2, this is placed to the right of the standby icon.
-	}
-	counters_slash_1{
-		center=82.0000 91.0000
-		size=4.0000 8.0000
-		description=One of the slashes that go between the counter HUD items. There are three of them to be used at will, depending on how many counter numbers you want visible.
-	}
-	counters_slash_2{
-		center=0.0000 0.0000
-		size=0.0000 0.0000
-		description=See "counters_slash_1".
-	}
-	counters_slash_3{
-		center=0.0000 0.0000
-		size=0.0000 0.0000
-		description=See "counters_slash_1".
 	}
 	mission_goal{
 		center=18.0000 8.0000
@@ -189,14 +149,57 @@ bitmaps{
 	bubble=effects/bubble
 	checkbox_check=gui/checkbox_check
 	checkbox_no_check=gui/checkbox_no_check
-	counter_bubble_field=gui/counter_bubble_field
-	counter_bubble_group=gui/counter_bubble_group
-	counter_bubble_standby=gui/counter_bubble
-	counter_bubble_total=gui/counter_bubble_total
 	day_bubble=gui/day_bubble
 	distant_pikmin_marker=gui/distant_pikmin_marker
 	hard_bubble=gui/hard_bubble
 	no_pikmin_bubble=gui/no_pikmin
 	sun=gui/sun
 }
-custom_items
+custom_items{
+	group_text{
+		center=73.0000 85.5000
+		size=15.0000 4.0000
+		description=Label for the number of Pikmin in the group.
+		type=text
+		color=255 255 255
+		text=Group
+		font=area_name
+		text_alignment=1
+	}
+	group_bubble{
+		center=73.0000 91.5000
+		size=15.0000 9.0000
+		description=Bubble surrounding the number of Pikmin in the group.
+		type=9_slice
+		color=255 255 255
+		bitmap=gui/bubble_box
+	}
+	field_text{
+		center=91.0000 85.5000
+		size=15.0000 4.0000
+		description=Label for the number of Pikmin on the field.
+		type=text
+		color=255 255 255
+		text=Field
+		font=area_name
+		text_alignment=1
+	}
+	field_bubble{
+		center=91.0000 91.5000
+		size=15.0000 9.0000
+		description=Bubble surrounding the number of Pikmin on the field.
+		type=9_slice
+		color=255 255 255
+		bitmap=gui/bubble_box
+	}
+	counter_slash{
+		center=82.0000 92.0000
+		size=4.0000 8.0000
+		description=A slash that go between the counter HUD items.
+		type=text
+		color=255 255 255
+		text=/
+		font=area_name
+		text_alignment=1
+	}
+}

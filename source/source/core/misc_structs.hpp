@@ -994,6 +994,9 @@ struct SystemContentList {
     //A hard bubble.
     ALLEGRO_BITMAP* bmpHardBubble = nullptr;
     
+    //Health wheel glow.
+    ALLEGRO_BITMAP* bmpHealthGlow = nullptr;
+    
     //Pikifen or game icon.
     ALLEGRO_BITMAP* bmpIcon = nullptr;
     
@@ -1306,6 +1309,9 @@ struct SystemContentNames {
     //A hard bubble.
     string bmpHardBubble = "gui/hard_bubble";
     
+    //Health wheel glow.
+    string bmpHealthGlow = "gui/health_glow";
+
     //Pikifen or game icon.
     string bmpIcon = "gui/icon";
     

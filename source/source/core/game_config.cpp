@@ -99,10 +99,10 @@ const ALLEGRO_COLOR GOOD = al_map_rgb(96, 226, 80);
 const ALLEGRO_COLOR PAGE_CHANGE = al_map_rgb(188, 230, 230);
 
 //Default value for the pause menu's background.
-const ALLEGRO_COLOR PAUSE_BG = al_map_rgba(25, 46, 70, 204);
+const ALLEGRO_COLOR PAUSE_BG = al_map_rgba(25, 96, 140, 96);
 
 //Default value for the pause menu's vignette.
-const ALLEGRO_COLOR PAUSE_VIGNETTE = al_map_rgba(140, 182, 224, 44);
+const ALLEGRO_COLOR PAUSE_VIGNETTE = al_map_rgba(0, 0, 0, 96);
 
 //Default value for small headers.
 const ALLEGRO_COLOR SMALL_HEADER = al_map_rgb(188, 230, 230);

@@ -25,6 +25,7 @@ namespace SHADER_SOURCES {
 extern const char* COLORIZER_FRAG_SHADER;
 extern const char* DEFAULT_VERT_SHADER;
 extern const char* LIQUID_FRAG_SHADER;
+extern const char* SCANLINE_FRAG_SHADER;
 extern const char* ONION_FRAG_SHADER;
 };
 
@@ -40,6 +41,9 @@ enum SHADER_TYPE {
     
     //Onion swirls, used for the Onion menu's background.
     SHADER_TYPE_ONION,
+
+    //Applies a slight scanline effect, used for the Pause menu's background.
+    SHADER_TYPE_SCANLINE,
     
     //Total number of shader types.
     N_SHADER_TYPES

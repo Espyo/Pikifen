@@ -63,6 +63,13 @@ void ShaderManager::compileShaders() {
         SHADER_SOURCES::ONION_FRAG_SHADER,
         SHADER_SOURCES::DEFAULT_VERT_SHADER
     );
+
+    //Pause menu background.
+    compileShader(
+        SHADER_TYPE_SCANLINE,
+        SHADER_SOURCES::SCANLINE_FRAG_SHADER,
+        SHADER_SOURCES::DEFAULT_VERT_SHADER
+    );
     
 }
 

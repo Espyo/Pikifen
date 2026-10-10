@@ -33,8 +33,8 @@ gui_colors {
     gold = 255 242 0
     good = 96 226 80
     page_change = 188 230 230
-    pause_bg = 25 46 70 204
-    pause_vignette = 140 182 224 44
+    pause_bg = 25 96 140 96
+    pause_vignette = 0 0 0 96
     small_header = 188 230 230
     standard_mouse_cursor = 188 230 230
 }
