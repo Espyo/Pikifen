@@ -7854,8 +7854,10 @@ mobs{
 		p=464.0000 -1680.0000
 	}
 	decoration{
-		type=clover
+		type=malva
 		p=1056.0000 -1584.0000
+		angle=1.9224
+		vars=random_rotation=false
 	}
 	decoration{
 		type=clover
@@ -7886,7 +7888,7 @@ mobs{
 		p=880.0000 -144.0000
 	}
 	decoration{
-		type=clover
+		type=malva
 		p=912.0000 0.0000
 	}
 	decoration{
@@ -7898,7 +7900,7 @@ mobs{
 		p=864.0000 304.0000
 	}
 	decoration{
-		type=clover
+		type=chicory
 		p=704.0000 832.0000
 	}
 	decoration{
@@ -7910,7 +7912,7 @@ mobs{
 		p=192.0000 1168.0000
 	}
 	decoration{
-		type=clover
+		type=chicory
 		p=-44.0000 1544.0000
 	}
 	decoration{
@@ -7950,7 +7952,7 @@ mobs{
 		p=160.0000 1760.0000
 	}
 	decoration{
-		type=clover
+		type=malva
 		p=-752.0000 1792.0000
 	}
 	decoration{
@@ -7982,7 +7984,7 @@ mobs{
 		p=-1456.0000 1184.0000
 	}
 	decoration{
-		type=clover
+		type=chicory
 		p=-1424.0000 920.0000
 	}
 	decoration{
@@ -8014,7 +8016,7 @@ mobs{
 		p=-816.0000 304.0000
 	}
 	decoration{
-		type=clover
+		type=malva
 		p=-608.0000 352.0000
 	}
 	decoration{
@@ -8022,7 +8024,7 @@ mobs{
 		p=-576.0000 -272.0000
 	}
 	decoration{
-		type=clover
+		type=chicory
 		p=-544.0000 -624.0000
 	}
 	decoration{
@@ -8030,8 +8032,10 @@ mobs{
 		p=-528.0000 -752.0000
 	}
 	decoration{
-		type=clover
-		p=-288.0000 -1216.0000
+		type=malva
+		p=-269.2499 -1191.2231
+		angle=0.2857
+		vars=random_rotation=false
 	}
 	decoration{
 		type=clover
@@ -8078,7 +8082,7 @@ mobs{
 		p=-688.0000 464.0000
 	}
 	decoration{
-		type=clover
+		type=chicory
 		p=1088.0000 288.0000
 	}
 	decoration{
@@ -8090,7 +8094,7 @@ mobs{
 		p=736.0000 1200.0000
 	}
 	decoration{
-		type=clover
+		type=malva
 		p=464.0000 1328.0000
 	}
 	decoration{
@@ -8118,7 +8122,7 @@ mobs{
 		p=-128.0000 -1840.0000
 	}
 	decoration{
-		type=clover
+		type=chicory
 		p=208.0000 -1920.0000
 	}
 	decoration{
@@ -8210,7 +8214,7 @@ mobs{
 		p=560.0000 720.0000
 	}
 	decoration{
-		type=leaves
+		type=clover
 		p=432.0000 896.0000
 	}
 	decoration{
@@ -8315,6 +8319,20 @@ mobs{
 		type=crystal_nodule
 		p=-704.0000 1008.0000
 		angle=-2.7275
+	}
+	decoration{
+		type=rosy_parachute
+		p=1440.0000 -928.0000
+	}
+	decoration{
+		type=malva
+		p=416.0000 -416.0000
+		angle=-1.3581
+		vars=random_rotation=false
+	}
+	decoration{
+		type=rosy_parachute
+		p=-792.0344 1240.6145
 	}
 }
 path_stops{

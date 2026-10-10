@@ -2,7 +2,7 @@ name=Emerald Grove
 description=You figured when the Koppaites mentioned growing food on the planet, they didn't have this nasty swamp in mind! It doesn't matter; they're paying you based on how much you clear out by morning.
 tags=Swamp; Standard
 maker=Helodity
-version=1.0.1
+version=1.0.2
 engine_version=1.2.0
 subtitle=Collect everything!
 difficulty=4
@@ -122,11 +122,13 @@ mission_score_criteria{
 		index_param=0
 		points=1
 		affects_hud=true
+		custom_name
 	}
 	criterion{
 		type=Enemy collection points
 		index_param=0
 		points=5
 		affects_hud=true
+		custom_name
 	}
 }

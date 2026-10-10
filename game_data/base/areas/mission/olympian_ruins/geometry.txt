@@ -3229,7 +3229,7 @@ mobs{
 		p=688.0000 160.0000
 	}
 	decoration{
-		type=fern
+		type=carnation_red
 		p=400.0000 112.0000
 	}
 	decoration{

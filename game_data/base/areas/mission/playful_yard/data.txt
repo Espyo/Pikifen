@@ -2,9 +2,8 @@ name=Playful Yard
 description=In the forest, a few creatures found some large wooden object... While its origin is mysterious, it does give this otherwise drab place some playful life!
 tags=Standard; Forest
 maker=Espyo
-version=1.1.1
+version=1.1.2
 engine_version=1.2.0
-notes=This stage is an evolution of the "Play" stage from older versions of Pikifen, which in turn is based on the geometry of an unused stage in Pikmin, "tuto2".
 subtitle=Collect treasures
 difficulty=2
 bg_angle=0.0000
@@ -30,8 +29,8 @@ mission_bronze_req=300
 mission_silver_req=550
 mission_gold_req=800
 mission_platinum_req=1050
-mission_briefing_objective=Collect treasures!
-mission_briefing_notes=Get them all for a platinum medal!;Losing a leader ends the mission early!
+mission_briefing_objective
+mission_briefing_notes
 mission_maker_record=1980
 mission_maker_record_date=2025/03/01
 mission_end_conditions{
@@ -117,17 +116,4 @@ mission_hud_items{
 		total_amount=-1
 	}
 }
-mission_score_criteria{
-	criterion{
-		type=Seconds left
-		index_param=0
-		points=10
-		affects_hud=false
-	}
-	criterion{
-		type=Treasure collection points
-		index_param=0
-		points=1
-		affects_hud=true
-	}
-}
+mission_score_criteria

@@ -2,7 +2,7 @@ name=Turbulent Tundra
 description=Brave the icy cold to get as many Pikmin as possible.
 tags=Standard; Snow
 maker=Helodity
-version=1.0.1
+version=1.0.2
 engine_version=1.2.0
 subtitle=Grow Pikmin!
 difficulty=4
@@ -116,5 +116,6 @@ mission_score_criteria{
 		index_param=0
 		points=1
 		affects_hud=true
+		custom_name
 	}
 }

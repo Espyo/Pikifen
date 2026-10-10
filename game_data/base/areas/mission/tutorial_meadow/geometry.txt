@@ -6026,7 +6026,7 @@ mobs{
 		p=-416.0000 640.0000
 	}
 	decoration{
-		type=margaret
+		type=poppy_yellow
 		p=-960.0000 992.0000
 	}
 	decoration{
@@ -6034,11 +6034,11 @@ mobs{
 		p=-1280.0000 960.0000
 	}
 	decoration{
-		type=margaret
+		type=poppy_yellow
 		p=-1472.0000 736.0000
 	}
 	decoration{
-		type=margaret
+		type=poppy_yellow
 		p=-1408.0000 160.0000
 	}
 	decoration{
@@ -6046,11 +6046,11 @@ mobs{
 		p=-1216.0000 0.0000
 	}
 	decoration{
-		type=margaret
+		type=poppy_yellow
 		p=-928.0000 -32.0000
 	}
 	decoration{
-		type=margaret
+		type=poppy_yellow
 		p=-672.0000 -32.0000
 	}
 	decoration{
@@ -6370,11 +6370,11 @@ mobs{
 		p=1449.0869 1412.0062
 	}
 	decoration{
-		type=margaret
+		type=poppy_yellow
 		p=-64.0000 288.0000
 	}
 	decoration{
-		type=margaret
+		type=poppy_yellow
 		p=1376.0000 -512.0000
 	}
 	decoration{
@@ -6406,15 +6406,15 @@ mobs{
 		p=-768.0000 -64.0000
 	}
 	decoration{
-		type=margaret
+		type=poppy_yellow
 		p=1632.0000 1728.0000
 	}
 	decoration{
-		type=margaret
+		type=poppy_yellow
 		p=1024.0000 864.0000
 	}
 	decoration{
-		type=margaret
+		type=poppy_yellow
 		p=32.0000 800.0000
 	}
 	decoration{
