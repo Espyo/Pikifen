@@ -336,7 +336,7 @@ public:
     //Padding amount, if it has children items.
     float padding = 0.0f;
     
-    //Whether to clip the children items' drawing to the confines of the item
+    //Whether to clip the children items' drawing to the confines of the item.
     bool clipChildren = true;
     
     //Drawing layer. The lower the number, the sooner it'll be drawn.

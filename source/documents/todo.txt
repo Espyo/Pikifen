@@ -6,9 +6,9 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- Problems to fix ---
-    Tools dropped by a Pikmin can only be picked up by said Pikmin (thanks Neo)
 
     --- 1.2.0 ---
+    Revert the title screen zoom in so the logic is still there, but it looks the same as 1.1.1. Move the effect to 1.3
     
     --- 1.3.0 ---
     Create an area that's good for people to pick up and play
@@ -53,57 +53,94 @@ Next tasks (roughly sorted most important first)
         > DragXXX, SliderXXX, InputScalar: with ImGuiItemFlags_LiveEditOnInputScalar now defaulting to being disabled: inputting a value with the keyboard doesn't write intermediate values to the backing variable.
         > Windows/Tables settings entries can now record the last used date in YYYYMMDD format, allowing tools to run to e.g. delete entries that haven't been used in X months. (#9460) / Added bool io.ConfigIniSettingsSaveLastUsedDate to disable saving that info
     https://github.com/Espyo/Pikifen/compare/master...Helodity:Pikifen:pack-loading-restart
-    https://github.com/Helodity/Pikifen/commit/e2a5e3b982142474ff55ca60cc36fab21605115d
-    https://github.com/Espyo/Pikifen/pull/111
-    Add a proper maker console
-        Helpful so you can see error logs, script prints, etc.
-        The ability to write commands that trigger maker tools, with parameters too
-        If you're writing a command, there should be an exception for the console's key, since you probably want to toggle it, not type the \ character
-        As you're writing a command, a list of the five or so most relevant commands show up, the one closest to the bottom (input) should be the one that's filled in when tab is pressed. This sorting should pick the most relevant first, and should be fuzzy (so "tlp" should find "TeLePort", "am" should suggest "frAMe_advance" before it suggests "Area_iMage"). For arguments, it should suggest the default if nothing's been typed yet, and hitting tab should auto-place the default
-        Page up and page down to scroll the output, up and down for input history, tab to auto-complete
-            If you're not at the bottom, new commands shouldn't scroll the view down, and deleting old commands shouldn't scroll the view up
-            Save the history in options.txt?
-        Add general commands
-            help
-            clear
-            alias
-        Printing something to the console should receive an argument that specifies whether that gets shown in the "console preview" and added to the console's output for later viewing (errors, script prints) or if it is just shown in the preview (mob inspector, area inspector)
-        Move somewhere the logic that is common between this system and the existing script action parsing/running system
-        Maybe the button-based maker tool activations could be made into commands sent to the console, and the player could add custom binds so they could customize calling the maker tools to be however they want
-        Warnings? For things like leaders needing certain animations, but since they don't exist, the idling animation will be used instead. Or for usages of deprecated stuff
-            Maybe a maker tool that makes it so the next time you reload an area, it checks for warnings and prints those to the console as errors
-    Review panel checks for whether the area has tags, a thumbnail, etc.
-    A command to spawn any type of mob?
-    GUI items and GUI manager need to be split into a generic usage library, where the Pikifen variants inherit from them
-    Consider having different control managers, one for the system things, one for gameplay, one for editor shortcuts
-    Pressing left or right on a modal with a text input will just move the caret, but HOLDING will make the repeat events trigger
-    Mob shadows should depend on the mob's radius AND height
-    New Pikmin maker tool should probably spawn them in Pikmin order, not alphabetical
-    Every annex menu should look different. The area menu is self-contained, so it can probably look radically different, but the others can be accessed from the pause menu, so at most they should have some stickers
+    Maker tool improvements
+        Add a proper maker console
+            Helpful so you can see error logs, script prints, etc.
+            The ability to write commands that trigger maker tools, with parameters too
+            If you're writing a command, there should be an exception for the console's key, since you probably want to toggle it, not type the \ character
+            As you're writing a command, a list of the five or so most relevant commands show up, the one closest to the bottom (input) should be the one that's filled in when tab is pressed. This sorting should pick the most relevant first, and should be fuzzy (so "tlp" should find "TeLePort", "am" should suggest "frAMe_advance" before it suggests "Area_iMage"). For arguments, it should suggest the default if nothing's been typed yet, and hitting tab should auto-place the default
+            Page up and page down to scroll the output, up and down for input history, tab to auto-complete
+                If you're not at the bottom, new commands shouldn't scroll the view down, and deleting old commands shouldn't scroll the view up
+                Save the history in options.txt?
+            Add general commands
+                help
+                clear
+                alias
+            Printing something to the console should receive an argument that specifies whether that gets shown in the "console preview" and added to the console's output for later viewing (errors, script prints) or if it is just shown in the preview (mob inspector, area inspector)
+            Move somewhere the logic that is common between this system and the existing script action parsing/running system
+            Maybe the button-based maker tool activations could be made into commands sent to the console, and the player could add custom binds so they could customize calling the maker tools to be however they want
+            Warnings? For things like leaders needing certain animations, but since they don't exist, the idling animation will be used instead. Or for usages of deprecated stuff
+                Maybe a maker tool that makes it so the next time you reload an area, it checks for warnings and prints those to the console as errors
+        A tool to spawn any type of mob?
+        New Pikmin maker tool should probably spawn them in Pikmin order, not alphabetical
+        The free camera maker tool should definitely be its own item, including the ability to pause and unpause gameplay, control the zoom level, and toggle the HUD
+    GUI improvements
+        GUI items and GUI manager need to be split into a generic usage library, where the Pikifen variants inherit from them
+        Make it possible for GUI items to have children items, or to have a family of group items under a tag. This allows custom items to follow the same alpha, visibility, responsiveness, etc. attributes of the hardcoded ones they're related to
+            For HUD items like the Pikmin counter, make the text itself be the item, and have the bubble and the label be their own items (thanks Helodity)
+                https://github.com/Espyo/Pikifen/pull/111
+            Move the "x" and all the "/" to custom items
+        Every annex menu should look different. The area menu is self-contained, so it can probably look radically different, but the others can be accessed from the pause menu, so at most they should have some stickers
+        Better loading screen
+            Make the elements be controlled with a GUI definition
+            Animate it
+                When loading stuff, the loading functions could receive a callback as an argument. Then, for every one piece of content they load, they call the callback. The callback would be a function that checks if it's time to draw a frame, and if not, quits out. If it is meant to draw a frame, it just draws it
+                See how Allegro's ex_loading_thread.c does it
+                https://github.com/Helodity/Pikifen/commit/e2a5e3b982142474ff55ca60cc36fab21605115d
+            Area names and subtitles could have custom colors like https://cdn.discordapp.com/attachments/212795100818833408/1095572527583080488/image.png (thanks Captain Salty)
+    Editor improvements
+        The grid options in editors should go in the menu, not the options dialog (thanks Neo)
+        Add a shortcut for toggling the transformation widget (thanks Neo)
+        Review panel checks for whether the area has tags, a thumbnail, etc.
+    Controls improvements
+        Consider having different control managers, one for the system things, one for gameplay, one for editor shortcuts
+        Controls should support multiple players, including a "none" player for things like maker tools, screenshot, etc.
+        Controls menus
+            Split into sub-menus by types of actions: leader control, cursor control, Pikmin management, menu basics, gameplay advanced, menu advanced
+                Something like the cursor control sub-menu could contain the "controlled with mouse" checkbox. If the checkbox is on, the binds are invisible or disabled. Maybe also do the same for the cursor speed picker?
+                Some binds, like the radar pan, should be preceded by a "same as leader movement" checkbox, which if it is on, should make them invisible
+            The player only edits and creates control schemes, like the list of saved rulesets in Smash Ultimate
+                Each one should be saved to the same folder as different files. That way players can share the data file of a scheme they've created
+            When assigning an input to an action, if it's a controller, also save a controller placeholder number, which can be changed in this menu
+            A button or text or something explaining that this is just a control scheme, and if you want to assign it to player 1, go to the player setup menu
+            It should come pre-packed with a few schemes: "Keyboard+Mouse" (default), "Switch Pro Controller", "Steam Deck", "Single Joy-Con", etc.
+                Confirm that these work both on Linux and on Windows
+            Some of the misc. control options, like using the mouse cursor, should be a part of the control scheme, while others are just personal preference
+            How is the "placeholder controller" thing going to work with system controls, like the maker tools or taking a screenshot?
+        Editor controls
+            Customizable controls overall, including double-clicking any of the mouse buttons
+            Allow the GUI to be navigable via keyboard or joystick (this is a setting in Dear ImGui), and make it so the canvas can also be somewhat controlled, like the radar. Plus a button to switch which one is in focus
+            If I can't figure this out, then before entering an editor it should detect if the last input was keyboard and mouse. If not, it should show a modal warning the player they'll want a keyboard and mouse to continue
+        [NEEDS BRAINSTORMING] Look into the "Next maturity" controls -- does the way they work make sense? Why can't you switch without holding a Pikmin?
+        Every code that checks for which mouse button is being pressed should compare with ALLEGRO_MOUSE_BUTTON_* instead of a magic number
+        An option to add specific/all/unbound actions to the inventory, like dismiss, next leader, etc.
+        If the player has the same input bound to different actions, there should be a warning... Except a lot of them are okay to have, like movement + leader cursor movement, menu movement + radar panning, etc.
+        Pressing left or right on a modal with a text input will just move the caret, but HOLDING will make the repeat events trigger
+    Visual improvements
+        Use a screenshot for the title screen
+            The left side should be all organic, and the right side should have some DEV Lab stuff. The bottom should probably be something special but not attention-grabbing, the top should give space for the Pikmin to form the letters, and the topmost pixels should probably help the disclaimer text and version number readable, but not call attention
+            Maybe the play and the make sides could have their own backgrounds, and once you flip to either of those pages the backgrounds slides in
+        Cursor trail improvements
+            In-game, it should be the leader's cursor that has the trail. In menus, it should be the mouse cursor
+            If the trail gets temporarily interrupted, like when you switch to a different leader, or when the mouse cursor goes off-window, it should know to split the trail, instead of trying to connect it between the two break spots
+        Particles for every time the player activates a GUI item, and/or whenever they click? Same for editors
+            Better resolution and quality
+        Particles
+            Splash particles for going in water
+            [NEEDS BRAINSTORMING] Particles should have a "emits light?" property, right?
+            Particles floating in the wind
+            A background detail: those little floaty white things you see in forests
+            Ceiling water droplets
+        Sprites need more shading for more depth; highlights help too (thanks Neo)
+        God rays -- beams of light shining between the leaves; they should spin with the sun, and sometimes fade out to non-existence
+        Mob shadows should depend on the mob's radius AND height
+        Upscale fonts and other things that are really crusty and low-res
+            Currently, text in buttons and such does not grow past its font size. This makes it look small if the window is a large resolution
+    Areas should be able to include "decals", in the same vein as tree shadows. These are a lightweight way to add leaves, rocks, pebbles, sticks, small plants, cobwebs, etc. to the area's terrain without using sectors or objects
+        Add the previously mentioned ones to the base content
+    Content manager should load and unload different parts of the content (manifests, data, graphics) through flags, not a level enum (basic, editor, full) with arbitrary cut-off points
     The camera (at least for editors and radar) should control where it wants to go based on the specified rectangle corners. Then, every frame, it interpolates between the currently-visible corners and the intended corners and change the X, Y, and zoom to match. This should allow smoothly zooming in and out in editors while keeping the point under the mouse fixed
         Also add logic to release the mouse while moving the camera to make it slide and lose speed over time
-    The free camera maker tool should definitely be its own item, including the ability to pause and unpause gameplay, and control the zoom level
-    Controls should support multiple players, including a "none" player for things like maker tools, screenshot, etc.
-    Controls menus
-        Split into sub-menus by types of actions: leader control, cursor control, Pikmin management, menu basics, gameplay advanced, menu advanced
-            Something like the cursor control sub-menu could contain the "controlled with mouse" checkbox. If the checkbox is on, the binds are invisible or disabled. Maybe also do the same for the cursor speed picker?
-            Some binds, like the radar pan, should be preceded by a "same as leader movement" checkbox, which if it is on, should make them invisible
-        The player only edits and creates control schemes, like the list of saved rulesets in Smash Ultimate
-            Each one should be saved to the same folder as different files. That way players can share the data file of a scheme they've created
-        When assigning an input to an action, if it's a controller, also save a controller placeholder number, which can be changed in this menu
-        A button or text or something explaining that this is just a control scheme, and if you want to assign it to player 1, go to the player setup menu
-        It should come pre-packed with a few schemes: "Keyboard+Mouse" (default), "Switch Pro Controller", "Steam Deck", "Single Joy-Con", etc.
-            Confirm that these work both on Linux and on Windows
-        Some of the misc. control options, like using the mouse cursor, should be a part of the control scheme, while others are just personal preference
-        How is the "placeholder controller" thing going to work with system controls, like the maker tools or taking a screenshot?
-    Editor controls
-        Customizable controls overall, including double-clicking any of the mouse buttons
-        Allow the GUI to be navigable via keyboard or joystick (this is a setting in Dear ImGui), and make it so the canvas can also be somewhat controlled, like the radar. Plus a button to switch which one is in focus
-        If I can't figure this out, then before entering an editor it should detect if the last input was keyboard and mouse. If not, it should show a modal warning the player they'll want a keyboard and mouse to continue
-    [NEEDS BRAINSTORMING] Look into the "Next maturity" controls -- does the way they work make sense? Why can't you switch without holding a Pikmin?
-    Every code that checks for which mouse button is being pressed should compare with ALLEGRO_MOUSE_BUTTON_* instead of a magic number
-    An option to add specific/all/unbound actions to the inventory, like dismiss, next leader, etc.
-    If the player has the same input bound to different actions, there should be a warning... Except a lot of them are okay to have, like movement + leader cursor movement, menu movement + radar panning, etc.
     Maybe the signs in Tutorial Meadow could have a preview that is just a summary of what it teaches, half a dozen of words, and if you interact it shows the whole thing
 
     --- 2.0.0 ---
@@ -566,12 +603,6 @@ Misc. things (to be implemented whenever)
         Animate the mission results screen. Basically, reveal one thing at a time
             Add sounds for an item's run-up ticking, an item's run-up finishing, and a ka-ching for getting a medal
             Add particles to the medal
-        Loading screen
-            Area names and subtitles could have custom colors like https://cdn.discordapp.com/attachments/212795100818833408/1095572527583080488/image.png (thanks Captain Salty)
-            Make it animated
-                When loading stuff, the loading functions could receive a callback as an argument. Then, for every one piece of content they load, they call the callback. The callback would be a function that checks if it's time to draw a frame, and if not, quits out. If it is meant to draw a frame, it just draws it
-                See how Allegro's ex_loading_thread.c does it
-            Make the elements be controlled with a GUI definition
         A way for an area maker to specify sectors or regions that are out-of-bounds, but should still show up on the radar (darkened). This would help the player recognize parts of the area in the radar via landmarks
         Pitch the whistle by the swarm angle (or intensity)
         More music mixes
@@ -579,14 +610,7 @@ Misc. things (to be implemented whenever)
                 If we can't get away with many variants, explain in the FAQ why that is
                 What if only one variant can play at a time, but multiple can be supported? Playing the base song and also the fight, task, treasure, and Spiderwort overlays means five streamed songs. But if only one is allowed to be picked at a time, it's probably still good without sacrificing performance -- the music manager would be told what conditions are currently met (leader is fighting an enemy, Pikmin are working somewhere, leader is near Spiderwort, etc.), and then play the variant for the highest priority one. When swapping variants, it should quickly fade the old variant down and fade the new one up
             Boss music logic for attack jingles
-        Use a screenshot for the title screen
-            The left side should be all organic, and the right side should have some DEV Lab stuff. The bottom should probably be something special but not attention-grabbing, the top should give space for the Pikmin to form the letters, and the topmost pixels should probably help the disclaimer text and version number readable, but not call attention
-            Maybe the play and the make sides could have their own backgrounds, and once you flip to either of those pages the backgrounds slides in
-        Cursor trail improvements
-            In-game, it should be the leader's cursor that has the trail. In menus, it should be the mouse cursor
-            If the trail gets temporarily interrupted, like when you switch to a different leader, or when the mouse cursor goes off-window, it should know to split the trail, instead of trying to connect it between the two break spots
         There should be some way to represent what item is bound to what shortcut within the inventory menu
-        Particles for every time the player activates a GUI item, and/or whenever they click? Same for editors
     New options
         An option that changes the font to something easier to read, and decreases the effect of GUI text juice grow
     Mechanics
@@ -684,7 +708,6 @@ Misc. things (to be implemented whenever)
         Whistle upgrades?
     Mob data
         "a suggestion, when using pushes_with_hitboxes it should use the hitbox's height rather than the object's height" (thanks Helodity)
-        The scale category doesn't really need to exist -- the code that gets the current weight could be something any mob could use, and a way to display a custom number atop the mob could be added to the script (thanks Helodity)
         Resources should be able to specify what happens when they fall in the pit; carriable rocks need to respawn
         Converters could have a field that controls what Pikmin types are allowed to be inserted. This way one could create converters that "level up" certain Pikmin types (thanks Neo)
     Pikmin behaviors
@@ -771,8 +794,6 @@ Misc. things (to be implemented whenever)
     Gameplay notifications
         Useful for making characters talk mid-mission, via scripting
         Also useful for stating that an obstacle was destroyed and stuff like that [PIKMIN 4]
-    Areas should be able to include "decals", in the same vein as tree shadows. These are a lightweight way to add leaves, rocks, pebbles, sticks, small plants, cobwebs, etc. to the area's terrain without using sectors or objects
-        Add the previously mentioned ones to the base content
     Reorganize tree shadows - they should be building blocks that area makers can mix and match so people don't have to paint their own texture just to get a different pattern going
     Areas should have an option that controls whether Onions should pop new seeds when an extinction happen or if they should let the extinction happen. But for this to make sense, they have to list which Pikmin type are crucial and which are just bonuses, right?
     The leader and Pikmin FSMs are pretty messy with the whole active/inactive, not holding/holding thing
@@ -784,7 +805,6 @@ Misc. things (to be implemented whenever)
     Treasure collection should probably count when the ship retrieval starts (thanks Helodity)
     The area selection menu should have a way to search with text, and to sort by default/completion/difficulty (thanks Helodity)
     The ability for areas to have multiple bases, and for the player to move the ship and Onion between them [PIKMIN 4]
-    The text inside of various HUD elements should be a different HUD item from the bubble that encompasses it
     If Pikmin are killed (off-screen, on-screen, or both?), the counters should have some feedback -- this also helps audibly impaired players who can't hear the Pikmin squeals
     Mission record improvements
         Save the best 3 or 5 or 20 records in each mission
@@ -804,8 +824,6 @@ Misc. things (to be implemented whenever)
         More puzzle elements
             A cyclic lever? It automatically flips on and off over time
             A moving platform, useful to traverse a hazardous floor. Maybe Stemples?
-        A bunch more flowers and vegetation
-            Neo took a bunch of pictures in https://discord.com/channels/459094367425134593/1509291234349289512/1510067525793353768
         A turnstile mob
         Sounds
             Menus
@@ -878,7 +896,6 @@ Small tasks (for when I'm feeling lazy)
             Maybe place a public:, protected:, or private: tag before ALL sections of the class as relevant?
             Maybe structs should be POD, everything else should be classes
         Templated function that iterates through a vector's indexes, and if the lambda returns true, deletes the element?
-        Every onXYZ function should be renamed after what it actually does, not after when it's called
     Cleanup
         Remove magic numbers and magic strings (make numbers and strings into constants)
         Try to refactor the mission strategy patterns to also work for the area editor logic
@@ -934,9 +951,6 @@ Tasks for later on (I might never implement these)
     Radar
         Icons of Pikmin souls indicating Pikmin died here in the past 10 seconds or so
         When it is opened, it should fade into view, as well as zoom out, to give the impression that the camera is moving up to show a larger view, from the point the leader is. Maybe only for story mode, and only the first time you do it?
-        Survey drone? It'd just be a way for the player to view the area with free-cam (same as if there are no players)
-            The ability to place beacons?
-            Buttons to disable the HUD and other niceties for players wanting to use it just to take photos
     Petrified enemies should break open when defeated
         Maybe define loot tables somewhere, like "standard", "boss", "weakling", etc. Enemy types use the "standard" one by default (which one is the default should be specified somewhere), but can choose a different one
             Maybe individual enemy instances in an area can also specify their own loot table?
@@ -974,21 +988,11 @@ Tasks for later on (I might never implement these)
     HUD element for a digital clock?
     Hidden medallions for story mode campaigns. The maker specifies the requirements for a medallion, like completing with fewer than X throws, fewer than X Pikmin born, etc.
     Pikmin that finish delivering a resource and are thinking of returning to a pile should check if other Pikmin aren't already returning to that pile. If there are already enough to bring the remainder back, this Pikmin shouldn't bother going [PIKMIN 4]
-    Better resolution and quality
-        Upscale fonts and other things that are really crusty and low-res
-        Currently, text in buttons and such does not grow past its font size. This makes it look small if the window is a large resolution
     Aesthetic details
         Enemies should have a cloud of breath in cold areas (GitHub issue #10)
         Different "switched to Pikmin" sound for when you switch to a held leader instead of a Pikmin
         HUD elements that aren't needed right now should be super-transparent. For example, in Metroid Prime, when there is no hazard danger, the meter on the right is barely visible, but is still there
         The music should change to swing for Louie
-        Particles
-            Splash particles for going in water
-            [NEEDS BRAINSTORMING] Particles should have a "emits light?" property, right?
-            Particles floating in the wind
-            A background detail: those little floaty white things you see in forests
-            Ceiling water droplets
-        God rays -- beams of light shining between the leaves; they should spin with the sun, and sometimes fade out to non-existence
         Shadows of leaves should shift along the day, and become less opaque at the start and end
         Cloud shadows? When a cloud is casting a shadow, tree shadows shouldn't exist
         Water should reflect clouds and the sun... and maybe other things like an aurora borealis?
@@ -1077,4 +1081,5 @@ Difficult tasks (things I don't know how to tackle yet)
         Do Pikmin need to have a delay before their health regeneration kicks in?
     If a hazard vulnerability is set to 0 but has a replacement, it should apply the replacement anyway... Except the hazard/damage/status/replacement logic is a bit intertwined and it's not so simple. For now, makers can just make the damage multiplier be like 0.001 or something
     If you have 100 Red Pikmin with you, go to the Master Onion, put 100 inside and pull 100 Blue Pikmin outside, when you confirm the dialog only the Red Pikmin will go in, and the Blue Pikmin won't know that they need to show up afterwards. This would have to be solved with a complex queuing system... Plus, what happens if the Red Pikmin that are meant to go in get whistled? Or only some of them? What if they get killed by a bomb rock? What if them dying tripped an extinction and now the Onion also wants to spit out a new seed? (Thanks Piksol)
+    Mobs with large sprites, like the monstera, can visibly be seen vanishing from the edge of the camera
     
