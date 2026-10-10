@@ -29,9 +29,6 @@ namespace MAIN_MENU {
 //How long the main menu proper's fast fade in animation lasts for.
 const float FADE_IN_FAST_DURATION = 0.35f;
 
-//How long to wait before the menu proper starts fading in to view.
-const float FADE_IN_DELAY = 3.5f;
-
 //How long the main menu proper's fade in animation lasts for.
 const float FADE_IN_DURATION = 1.5f;
 
@@ -1157,7 +1154,8 @@ void TitleScreen::load() {
     game.audio.setCurrentSong(game.sysContentNames.sngMenus, false);
     if(game.timePassed == 0.0f) {
         zoomInTimer = MAIN_MENU::ZOOM_DURATION;
-        guiFadeTimer = MAIN_MENU::FADE_IN_DELAY;
+        guiFadeTimer =
+            std::max(0.0001f, game.config.aestheticGen.titleScreenGuiFadeDelay);
         mainMenu.hide();
         game.mouseCursor.purposely0Alpha = true;
         game.fadeMgr.setNextFadeDuration(GAME::FADE_SLOW_DURATION);

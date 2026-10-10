@@ -8,7 +8,6 @@ Next tasks (roughly sorted most important first)
     --- Problems to fix ---
 
     --- 1.2.0 ---
-    Revert the title screen zoom in so the logic is still there, but it looks the same as 1.1.1. Move the effect to 1.3
     
     --- 1.3.0 ---
     Create an area that's good for people to pick up and play
@@ -120,6 +119,7 @@ Next tasks (roughly sorted most important first)
         Use a screenshot for the title screen
             The left side should be all organic, and the right side should have some DEV Lab stuff. The bottom should probably be something special but not attention-grabbing, the top should give space for the Pikmin to form the letters, and the topmost pixels should probably help the disclaimer text and version number readable, but not call attention
             Maybe the play and the make sides could have their own backgrounds, and once you flip to either of those pages the backgrounds slides in
+            Bring back the zoom in and GUI fade
         Cursor trail improvements
             In-game, it should be the leader's cursor that has the trail. In menus, it should be the mouse cursor
             If the trail gets temporarily interrupted, like when you switch to a different leader, or when the mouse cursor goes off-window, it should know to split the trail, instead of trying to connect it between the two break spots

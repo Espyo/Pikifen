@@ -22,7 +22,6 @@ using std::string;
 
 namespace MAIN_MENU {
 extern const float FADE_IN_FAST_DURATION;
-extern const float FADE_IN_DELAY;
 extern const float FADE_IN_DURATION;
 extern const string GUI_FILE_NAME;
 extern const float HUD_MOVE_TIME;

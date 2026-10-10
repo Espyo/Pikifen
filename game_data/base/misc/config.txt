@@ -4,7 +4,8 @@ aesthetic_general {
     cutscene_msg_char_interval = 0.03
     mouse_cursor_spin_speed = 180
     no_pikmin_color = 168 190 230
-    title_screen_bg_final_zoom = 150
+    title_screen_bg_final_zoom = 100
+    title_screen_gui_fade_delay = 0
 }
 
 aesthetic_radar {

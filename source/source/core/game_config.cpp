@@ -38,6 +38,12 @@ const float MOUSE_CURSOR_SPIN_SPEED = degToRad(180.0f);
 //Default value for the color that represents no Pikmin.
 const ALLEGRO_COLOR NO_PIKMIN_COLOR = { 0.66f, 0.74f, 0.90f, 1.0f };
 
+//Default value for the final zoom level of the title screen's zoom effect.
+const float TITLE_SCREEN_BG_FINAL_ZOOM = 1.5f;
+
+//Default value for the title screen GUI's fade-in delay.
+const float TITLE_SCREEN_GUI_FADE_DELAY = 3.5f;
+
 }
 
 
@@ -235,6 +241,9 @@ void GameConfig::load(DataNode* file) {
         aRS.set(
             "title_screen_bg_final_zoom", aestheticGen.titleScreenBgFinalZoom,
             &titleScreenBgFinalZoomNode
+        );
+        aRS.set(
+            "title_screen_gui_fade_delay", aestheticGen.titleScreenGuiFadeDelay
         );
         
         aestheticGen.mouseCursorSpinSpeed =

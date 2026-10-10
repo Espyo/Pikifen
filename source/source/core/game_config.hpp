@@ -36,6 +36,8 @@ extern const ALLEGRO_COLOR CARRYING_COLOR_STOP;
 extern const float CUTSCENE_MSG_CHAR_INTERVAL;
 extern const float MOUSE_CURSOR_SPIN_SPEED;
 extern const ALLEGRO_COLOR NO_PIKMIN_COLOR;
+extern const float TITLE_SCREEN_BG_FINAL_ZOOM;
+extern const float TITLE_SCREEN_GUI_FADE_DELAY;
 }
 
 
@@ -150,8 +152,13 @@ struct GameConfig {
             AESTHETIC_GENERAL_D::NO_PIKMIN_COLOR;
             
         //Final zoom level for the title screen background, and similar things.
-        float titleScreenBgFinalZoom = 1.5f;
-        
+        float titleScreenBgFinalZoom =
+            AESTHETIC_GENERAL_D::TITLE_SCREEN_BG_FINAL_ZOOM;
+            
+        //How long to wait before the menu proper starts fading in to view.
+        float titleScreenGuiFadeDelay =
+            AESTHETIC_GENERAL_D::TITLE_SCREEN_GUI_FADE_DELAY;
+            
     } aestheticGen;
     
     //Radar aesthetic details.
