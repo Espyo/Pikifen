@@ -4087,7 +4087,7 @@ void PikminFsm::rechaseOpponent(ScriptVM* scriptVM, void* info1, void* info2) {
 void PikminFsm::releaseTool(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
-    Mob* tooPtr = pikPtr->getMobHeldInHand();
+    Tool* tooPtr = (Tool*) pikPtr->getMobHeldInHand();
     
     if(!tooPtr) return;
     
@@ -4100,6 +4100,7 @@ void PikminFsm::releaseTool(ScriptVM* scriptVM, void* info1, void* info2) {
     tooPtr->center = pikPtr->center;
     tooPtr->speed = Point();
     tooPtr->pushAmount = 0.0f;
+    tooPtr->reserved = nullptr;
     pikPtr->subgroupTypePtr =
         game.states.gameplay->subgroupTypes.getType(
             SUBGROUP_TYPE_CATEGORY_PIKMIN, pikPtr->pikType
