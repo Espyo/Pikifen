@@ -196,7 +196,9 @@ void ResourceFsm::handleDelivery(ScriptVM* scriptVM, void* info1, void* info2) {
         );
         
         HitboxInteraction evInfo(resPtr, nullptr, nullptr);
-        resPtr->scriptVM.fsm.runEvent(FSM_EV_DAMAGE, (void*) &evInfo);
+        resPtr->scriptVM.fsm.runEvent(
+            FSM_EV_DAMAGE, (void*) &evInfo, &resPtr->resType->damageMobAmount
+        );
     }
 }
 

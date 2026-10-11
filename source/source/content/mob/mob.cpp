@@ -305,7 +305,7 @@ void Mob::applyAttackDamage(
         setHealth(true, false, -damage);
         
         HitboxInteraction evInfo(this, victimH, attackH);
-        scriptVM.fsm.runEvent(FSM_EV_DAMAGE, (void*) &evInfo);
+        scriptVM.fsm.runEvent(FSM_EV_DAMAGE, (void*) &evInfo, (void*) &damage);
         
         attacker->causeSpikeDamage(this, false);
     }

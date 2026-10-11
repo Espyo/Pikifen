@@ -982,6 +982,13 @@ void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
         }
         break;
         
+    } case SCRIPT_ACTION_GET_EV_INFO_TYPE_DAMAGE: {
+        if(data.actionDef->parentEvent == FSM_EV_DAMAGE) {
+            float damage = *((float*) data.customData2);
+            result = f2s(damage);
+        }
+        break;
+        
     }
     }
     

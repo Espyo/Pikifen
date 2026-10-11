@@ -607,6 +607,9 @@ enum SCRIPT_ACTION_GET_EV_INFO_TYPE {
     //Get the other body part that triggered the event.
     SCRIPT_ACTION_GET_EV_INFO_TYPE_OTHER_BODY_PART,
     
+    //Get the amount of damage dealt.
+    SCRIPT_ACTION_GET_EV_INFO_TYPE_DAMAGE,
+    
 };
 
 
@@ -619,6 +622,7 @@ buildEnumNames(scriptActionGetEvInfoTypeINames, SCRIPT_ACTION_GET_EV_INFO_TYPE)(
     { SCRIPT_ACTION_GET_EV_INFO_TYPE_INPUT_VALUE, "input_value" },
     { SCRIPT_ACTION_GET_EV_INFO_TYPE_SCRIPT_MESSAGE, "message" },
     { SCRIPT_ACTION_GET_EV_INFO_TYPE_OTHER_BODY_PART, "other_body_part" },
+    { SCRIPT_ACTION_GET_EV_INFO_TYPE_DAMAGE, "damage" },
 });
 
 
