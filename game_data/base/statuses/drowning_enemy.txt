@@ -1,0 +1,12 @@
+name = Drowning enemy
+description = Some enemies lose health at a rapid pace when underwater.
+
+affects = enemies
+color = 0 0 255
+health_change_ratio = -0.3
+remove_on_hazard_leave = true
+speed_multiplier = 0.7
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.0.0
