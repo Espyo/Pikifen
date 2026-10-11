@@ -306,8 +306,10 @@ void Options::loadFromDataNode(DataNode* file) {
         
         //DEPRECATED in 1.1.0 by "controls" > "p*_mouse_moves_leader_cursor".
         for(unsigned char p = 0; p < MAX_PLAYERS; p++) {
-            aRS.set(
-                "p" + i2s((p + 1)) + "_mouse_moves_cursor",
+            deprecatedReaderSetter(
+                aRS,
+                "p" + i2s(p + 1) + "_mouse_moves_cursor",
+                "p" + i2s(p + 1) + "_mouse_moves_leader_cursor",
                 controls.mouseMovesLeaderCursor[p]
             );
         }
@@ -429,7 +431,10 @@ void Options::loadFromDataNode(DataNode* file) {
         unsigned char autoThrowModeChar = controls.autoThrowMode;
         
         //DEPRECATED in 1.1.0 by "leader_cursor_speed".
-        cRS.set("cursor_speed", controls.leaderCursorSpeed);
+        deprecatedReaderSetter(
+            cRS, "cursor_speed", "leader_cursor_speed",
+            controls.leaderCursorSpeed
+        );
         
         cRS.set("auto_throw_mode", autoThrowModeChar);
         cRS.set("fast_inventory", controls.fastInventory);
@@ -534,11 +539,20 @@ void Options::loadFromDataNode(DataNode* file) {
         unsigned char leavingConfModeChar = misc.leavingConfMode;
         
         //DEPRECATED in 1.1.0 by "leader_cursor_cam_weight".
-        mRS.set("cursor_cam_weight", misc.leaderCursorCamWeight);
+        deprecatedReaderSetter(
+            mRS, "cursor_cam_weight", "leader_cursor_cam_weight",
+            misc.leaderCursorCamWeight
+        );
         //DEPRECATED in 1.1.0 by "show_leader_cursor_counter".
-        mRS.set("show_counter_on_cursor", misc.showLeaderCursorCounter);
+        deprecatedReaderSetter(
+            mRS, "show_counter_on_cursor", "show_leader_cursor_counter",
+            misc.showLeaderCursorCounter
+        );
         //DEPRECATED in 1.2.0 by "show_gui_input_icons".
-        mRS.set("show_hud_input_icons", misc.showGuiInputIcons);
+        deprecatedReaderSetter(
+            mRS, "show_hud_input_icons", "show_gui_input_icons",
+            misc.showGuiInputIcons
+        );
         
         mRS.set("dismiss_all", misc.dismissAll);
         mRS.set("leader_cursor_cam_weight", misc.leaderCursorCamWeight);

@@ -319,3 +319,34 @@ bool readEnumProp(
     );
     return false;
 }
+
+
+/**
+ * @brief Calls a reader setter's "set" function, but throws a warning
+ * if the property actually exists, since the property is deprecated.
+ *
+ * @tparam DataT Data type for the reader setter to read.
+ * @param rs The reader setter.
+ * @param childName Name of the child node.
+ * @param replacement Description of what the maker should use instead.
+ * @param var The var to set.
+ * @param outChildNode If not nullptr, the node from whence the value came
+ * is placed here. nullptr is placed if the property does not exist or has
+ * no value.
+ */
+template<class DataT>
+void deprecatedReaderSetter(
+    ReaderSetter& rs, const string& childName, const string& replacement,
+    DataT& var, DataNode** outChildNode = nullptr
+) {
+    DataNode* childNode = nullptr;
+    rs.set(childName, var, &childNode);
+    if(childNode && game.makerTools.useWarnings) {
+        game.errors.report(
+            "The property \"" + childName + "\" is deprecated and may be "
+            "removed in the future! Please " + replacement + " instead.",
+            childNode
+        );
+    }
+    if(outChildNode) *outChildNode = childNode;
+}

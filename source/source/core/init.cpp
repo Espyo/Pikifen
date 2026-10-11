@@ -1823,7 +1823,8 @@ void initScriptActionTypes() {
     auto commitAction =
         [&params, &contexts] (
             SCRIPT_ACTION actionType, const string& actionName,
-            ScriptActionTypeCode * actionRunCode
+            ScriptActionTypeCode * actionRunCode,
+            const string& deprecationReplacement = ""
     ) {
         validateCommandParams(
             params, "Script action type \"" + actionName + "\""
@@ -1836,6 +1837,7 @@ void initScriptActionTypes() {
         actionTypePtr->code = actionRunCode;
         actionTypePtr->parameters = params;
         actionTypePtr->contexts = contexts;
+        actionTypePtr->deprecationReplacement = deprecationReplacement;
         params.clear();
     };
     
@@ -2092,7 +2094,8 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_GET_AREA_INFO,
         "get_area_info",
-        ScriptActionRunners::getAreaInfo
+        ScriptActionRunners::getAreaInfo,
+        "get_misc_info"
     );
     
     //Get coordinates from angle.
@@ -2453,7 +2456,8 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SHOW_MESSAGE_FROM_VAR,
         "show_message_from_var",
-        ScriptActionRunners::showMessageFromVar
+        ScriptActionRunners::showMessageFromVar,
+        "show_cutscene_message"
     );
     
     //Sign number.
@@ -2579,7 +2583,8 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_GET_CHOMPED,
         "get_chomped",
-        ScriptActionRunners::beChomped
+        ScriptActionRunners::beChomped,
+        "be_chomped"
     );
     
     //Get floor Z.
@@ -2615,7 +2620,8 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_LOAD_FOCUS_MEMORY,
         "load_focused_mob_memory",
-        ScriptActionRunners::loadFocusMemory
+        ScriptActionRunners::loadFocusMemory,
+        "get_mob_info/focus_on_id"
     );
     
     //Move to absolute.
@@ -2698,7 +2704,8 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SAVE_FOCUS_MEMORY,
         "save_focused_mob_memory",
-        ScriptActionRunners::saveFocusMemory
+        ScriptActionRunners::saveFocusMemory,
+        "get_mob_info/focus_on_id"
     );
     
     //Send script message to links.

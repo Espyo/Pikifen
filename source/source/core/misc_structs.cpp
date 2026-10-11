@@ -3362,9 +3362,13 @@ void SystemContentNames::load(DataNode* file) {
     ReaderSetter graRS(file->getChildByName("graphics"));
     
     //DEPRECATED in 1.1.0 by "leader_cursor".
-    graRS.set("cursor", bmpLeaderCursor);
+    deprecatedReaderSetter(
+        graRS, "cursor", "leader_cursor", bmpLeaderCursor
+    );
     //DEPRECATED in 1.1.0 by "leader_prompt".
-    graRS.set("notification", bmpLeaderPrompt);
+    deprecatedReaderSetter(
+        graRS, "notification", "leader_prompt", bmpLeaderPrompt
+    );
     
     graRS.set("arrow_down", bmpArrowDown);
     graRS.set("arrow_left", bmpArrowLeft);
@@ -3435,7 +3439,9 @@ void SystemContentNames::load(DataNode* file) {
     ReaderSetter fntRS(file->getChildByName("fonts"));
     
     //DEPRECATED in 1.1.0 by "leader_cursor_counter".
-    fntRS.set("cursor_counter", fntLeaderCursorCounter);
+    deprecatedReaderSetter(
+        fntRS, "cursor_counter", "leader_cursor_counter", fntLeaderCursorCounter
+    );
     
     fntRS.set("area_name", fntAreaName);
     fntRS.set("counter", fntCounter);
@@ -3450,9 +3456,14 @@ void SystemContentNames::load(DataNode* file) {
     ReaderSetter sndRS(file->getChildByName("sounds"));
     
     //DEPRECATED in 1.1.0 by "menu_focus".
-    sndRS.set("menu_selected", sndMenuFocus);
+    deprecatedReaderSetter(
+        sndRS, "menu_selected", "menu_focus", sndMenuFocus
+    );
     //DEPRECATED in 1.2.0 by "cutscene_message_char".
-    sndRS.set("gameplay_message_char", sndCutsceneMsgChar);
+    deprecatedReaderSetter(
+        sndRS, "gameplay_message_char", "cutscene_message_char",
+        sndCutsceneMsgChar
+    );
     
     sndRS.set("attack", sndAttack);
     sndRS.set("camera", sndCamera);

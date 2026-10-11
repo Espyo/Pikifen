@@ -542,7 +542,10 @@ void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
     DataNode* topReplacementNode = nullptr;
     
     //DEPRECATED in 1.2.0 by "remove_on_whistle".
-    sRS.set("removable_with_whistle",   removeOnWhistle);
+    deprecatedReaderSetter(
+        sRS, "removable_with_whistle", "use \"remove_on_whistle\"",
+        removeOnWhistle
+    );
     
     sRS.set("color",                    color);
     sRS.set("tint",                     tint);

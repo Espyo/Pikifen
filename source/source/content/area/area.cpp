@@ -1346,7 +1346,9 @@ void Area::loadGeometryFromDataNode(
         bool isBossBool = false;
         
         //DEPRECATED in 1.2.0 by "boss" as a script var.
-        mRS.set("boss", isBossBool);
+        deprecatedReaderSetter(
+            mRS, "boss", "use the \"boss\" script var", isBossBool
+        );
         
         mRS.set("p", newMob->center);
         mRS.set("angle", newMob->angle);
@@ -1460,7 +1462,9 @@ void Area::loadGeometryFromDataNode(
         DataNode* alphaNode = nullptr;
         
         //DEPRECATED in 1.2.0 by "tint".
-        sRS.set("alpha", alphaC, &alphaNode);
+        deprecatedReaderSetter(
+            sRS, "alpha", "use \"tint\"", alphaC, &alphaNode
+        );
         if(alphaNode) {
             newShadow->tint.a = alphaC / 255.0f;
         }
@@ -1601,7 +1605,9 @@ void Area::loadMainDataFromDataNode(
     DataNode* bossVictorySongOverrideNode = nullptr;
     
     //DEPRECATED in 1.2.0 by "bg_scale".
-    aRS.set("bg_zoom", bgBmpZoom, &bgBmpZoomNode);
+    deprecatedReaderSetter(
+        aRS, "bg_zoom", "use \"bg_scale\"", bgBmpZoom, &bgBmpZoomNode
+    );
     if(bgBmpZoomNode) {
         bgBmpTrans.scale = Point(bgBmpZoom);
     }
@@ -1705,6 +1711,15 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
     
     //DEPRECATED in 1.2.0 by the new mission system.
     if(node->getNrOfChildrenByName("mission_goal") > 0) {
+        if(game.makerTools.useWarnings) {
+            game.errors.report(
+                "The mission system used before Pikifen 1.2.0 "
+                "is deprecated and may be removed in the future! "
+                "Please rework the mission in the area editor so that "
+                "it uses the new system.",
+                node
+            );
+        }
         loadOldMissionSystem(node);
     }
     

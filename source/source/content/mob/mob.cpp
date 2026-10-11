@@ -3433,7 +3433,7 @@ void Mob::setAnimation(
     
     if(finalIdx == INVALID) {
         game.errors.report(
-            "Mob (" + getErrorMessageMobInfo(this) +
+            "A mob (" + getErrorMessageMobInfo(this) +
             ") tried to switch from " +
             (
                 anim.curAnim ? "animation \"" + anim.curAnim->name + "\"" :
@@ -3611,7 +3611,7 @@ Mob* Mob::spawn(const MobType::SpawnInfo* info, MobType* typePtr) {
     
     if(!typePtr) {
         game.errors.report(
-            "Mob (" + getErrorMessageMobInfo(this) +
+            "A mob (" + getErrorMessageMobInfo(this) +
             ") tried to spawn an object of the "
             "type \"" + info->mobTypeName + "\", but there is no such "
             "object type!"
@@ -4252,6 +4252,15 @@ void Mob::tickMiscLogic(float deltaT) {
         //This is a convenient spot to signal that the mob is ready.
         //This will only run once, and only after the mob is all set up.
         scriptVM.runReadyActions();
+        FsmEventDef* readyEv = scriptVM.fsm.getEvent(FSM_EV_ON_READY);
+        if(readyEv && game.makerTools.useWarnings) {
+            game.errors.report(
+                "A mob (" + getErrorMessageMobInfo(this) + ") just used the "
+                "\"on_ready\" event. That event is deprecated "
+                "and may be removed in the future! Please use "
+                "the \"ready\" script block instead."
+            );
+        }
         scriptVM.fsm.runEvent(FSM_EV_ON_READY);
     }
     timeAlive += deltaT;

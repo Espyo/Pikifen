@@ -11,6 +11,7 @@
 #include "game_config.hpp"
 
 #include "../util/string_utils.hpp"
+#include "misc_functions.hpp"
 #include "game.hpp"
 
 
@@ -225,10 +226,15 @@ void GameConfig::load(DataNode* file) {
         DataNode* titleScreenBgFinalZoomNode = nullptr;
         
         //DEPRECATED in 1.1.0 by "mouse_cursor_spin_speed".
-        aRS.set("cursor_spin_speed", aestheticGen.mouseCursorSpinSpeed);
+        deprecatedReaderSetter(
+            aRS, "cursor_spin_speed", "use \"mouse_cursor_spin_speed\"",
+            aestheticGen.mouseCursorSpinSpeed
+        );
         //DEPRECATED in 1.2.0 by "cutscene_msg_char_interval".
-        aRS.set(
-            "gameplay_msg_char_interval", aestheticGen.cutsceneMsgChInterval
+        deprecatedReaderSetter(
+            aRS, "gameplay_msg_char_interval",
+            "use \"cutscene_msg_char_interval\"",
+            aestheticGen.cutsceneMsgChInterval
         );
         
         aRS.set("carrying_color_move", aestheticGen.carryingColorMove);
@@ -351,7 +357,10 @@ void GameConfig::load(DataNode* file) {
         ReaderSetter rRS(file->getChildByName("rules"));
         
         //DEPRECATED in 1.1.0 by "leader_cursor_max_dist".
-        rRS.set("cursor_max_dist", rules.leaderCursorMaxDist);
+        deprecatedReaderSetter(
+            rRS, "cursor_max_dist", "use \"leader_cursor_max_dist\"",
+            rules.leaderCursorMaxDist
+        );
         
         rRS.set("can_throw_leaders", rules.canThrowLeaders);
         rRS.set("leader_cursor_max_dist", rules.leaderCursorMaxDist);

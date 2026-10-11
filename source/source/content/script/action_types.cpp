@@ -3539,6 +3539,29 @@ bool ScriptActionUtils::doScriptCondition(
 
 
 /**
+ * @brief Returns the path to the data node file that an action comes from.
+ * Returns an empty string if it does not come from any data node.
+ *
+ * @param data Action data to read.
+ * @return The path, or an empty string.
+ */
+string ScriptActionUtils::getNodePath(const ScriptActionInstRunData& data) {
+    if(data.actionDef->dataFileLine != 0) {
+        if(data.scriptVM->getRunnerMob()) {
+            return
+                data.scriptVM->getRunnerMob()->type->manifest->path + "/" +
+                FILE_NAMES::MOB_TYPE_SCRIPT;
+        } else {
+            return
+                game.curArea->manifest->path + "/" +
+                FILE_NAMES::AREA_SCRIPT;
+        }
+    }
+    return "";
+}
+
+
+/**
  * @brief Returns a mob script action mob target type from an action call.
  *
  * @param data Data about the action call.
@@ -3664,18 +3687,7 @@ Mob* ScriptActionUtils::getTriggerMob(ScriptActionInstRunData& data) {
 void ScriptActionUtils::reportActionError(
     const ScriptActionInstRunData& data, const string& info
 ) {
-    string filePath;
-    if(data.actionDef->dataFileLine != 0) {
-        if(data.scriptVM->getRunnerMob()) {
-            filePath =
-                data.scriptVM->getRunnerMob()->type->manifest->path + "/" +
-                FILE_NAMES::MOB_TYPE_SCRIPT;
-        } else {
-            filePath =
-                game.curArea->manifest->path + "/" +
-                FILE_NAMES::AREA_SCRIPT;
-        }
-    }
+    string filePath = getNodePath(data);
     
     if(filePath.empty()) {
         game.errors.report(info);

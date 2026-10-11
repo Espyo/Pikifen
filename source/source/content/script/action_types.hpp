@@ -913,6 +913,9 @@ struct ScriptActionType {
     //Flags for the contexts in which it can be run. Use SCRIPT_CONTEXT.
     Bitmask8 contexts = 0;
     
+    //If this action is deprecated, this is the replacement's name.
+    string deprecationReplacement;
+    
 };
 
 
@@ -1056,6 +1059,7 @@ namespace ScriptActionUtils {
 bool doScriptCondition(
     const string& lhs, SCRIPT_ACTION_IF_OP op, const string& rhs
 );
+string getNodePath(const ScriptActionInstRunData& data);
 SCRIPT_ACTION_MOB_TARGET_TYPE getMobTargetType(
     const ScriptActionInstRunData& data, const string& name
 );

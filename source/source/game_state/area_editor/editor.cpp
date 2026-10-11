@@ -2921,7 +2921,9 @@ void AreaEditor::loadReference() {
         DataNode* alphaNode = nullptr;
         
         //DEPRECATED in 1.2.0 by "tint".
-        rRS.set("alpha", alphaC);
+        deprecatedReaderSetter(
+            rRS, "alpha", "tint", alphaC
+        );
         if(alphaNode) {
             referenceTint.a = alphaC / 255.0f;
         }
