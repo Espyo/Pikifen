@@ -990,13 +990,30 @@ void PikminFsm::createFsm(MobType* typ) {
         }
         efc.newEvent(FSM_EV_ANIMATION_END); {
             efc.run(PikminFsm::finishPickingUp);
-            efc.changeState("idling_h");
+        }
+        efc.newEvent(FSM_EV_HITBOX_TOUCH_N_A); {
+            efc.run(PikminFsm::checkIncomingAttack);
+        }
+        efc.newEvent(FSM_EV_PIKMIN_DAMAGE_CONFIRMED); {
+            efc.run(PikminFsm::beAttacked);
+        }
+        efc.newEvent(FSM_EV_HITBOX_TOUCH_EAT); {
+            efc.run(PikminFsm::touchedEatHitbox);
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
             efc.run(GenMobFsm::leaveHazard);
+        }
+        efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
+            efc.run(PikminFsm::touchedSpray);
+        }
+        efc.newEvent(FSM_EV_BOTTOMLESS_PIT); {
+            efc.run(PikminFsm::fallDownPit);
+        }
+        efc.newEvent(FSM_EV_ZERO_HEALTH); {
+            efc.changeState("dying");
         }
     }
     
@@ -3165,7 +3182,10 @@ void PikminFsm::finishPickingUp(ScriptVM* scriptVM, void* info1, void* info2) {
     
     Tool* tooPtr = (Tool*) (scriptVM->focusedMob);
     
-    if(!hasFlag(tooPtr->holdabilityFlags, HOLDABILITY_FLAG_PIKMIN)) {
+    if(
+        !tooPtr ||
+        !hasFlag(tooPtr->holdabilityFlags, HOLDABILITY_FLAG_PIKMIN)
+    ) {
         scriptVM->fsm.setState(PIKMIN_STATE_IDLING);
         return;
     }
@@ -3179,6 +3199,8 @@ void PikminFsm::finishPickingUp(ScriptVM* scriptVM, void* info1, void* info2) {
         true, HOLD_ROTATION_METHOD_FACE_HOLDER
     );
     scriptVM->unfocusFromMob();
+    
+    scriptVM->fsm.setState(PIKMIN_STATE_IDLING_H);
 }
 
 
