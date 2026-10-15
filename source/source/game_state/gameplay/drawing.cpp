@@ -1471,38 +1471,7 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
     unsigned char blackoutS =
         game.curArea->weatherCondition.getBlackoutStrength();
     if(blackoutS > 0) {    
-        //Get a list of mobs that we should care about
-        vector<Mob*> mobsToDraw;
-        for(size_t m = 0; m < mobs.all.size(); m++) {
-            Mob* mPtr = mobs.all[m];
-            if(
-                hasFlag(mPtr->flags, MOB_FLAG_HIDDEN) ||
-                mPtr->type->blackoutRadius == 0.0f
-            ) {
-                continue;
-            }
-            mobsToDraw.push_back(mPtr);
-        }
 
-        //Put each mob's relevant data into an SSBO.
-        vector<float> mobData;
-        for(size_t m = 0; m < mobsToDraw.size(); m++) {
-            Mob* mPtr = mobsToDraw[m];
-            mobData.push_back(mPtr->center.x);
-            mobData.push_back(mPtr->center.y);
-            mobData.push_back(sign(mPtr->type->blackoutRadius) == 1 ? mPtr->type->blackoutRadius * 2 : mPtr->radius * 2);
-        }
-
-        GLuint ssbo = 0;     
-        glGenBuffers(1, &ssbo);
-        glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
-        glBufferData(
-            GL_SHADER_STORAGE_BUFFER, sizeof(float) * mobData.size(),
-            &mobData[0], GL_STREAM_READ
-        );
-        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, ssbo);
-        glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
-    
         //Get the viewport's settings to pass to the shader
         float camPos[2] = {
             view.windowRect.center.x - (view.windowRect.size.x / 2), 
@@ -1515,14 +1484,56 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
             view.windowRect.size.y / view.cam.zoom
         };
 
+
+        //Put each mob's relevant data into an SSBO.
+        int mobCount = 0;
+        vector<float> mobData;
+        for(size_t m = 0; m < mobs.all.size(); m++) {
+            Mob* mPtr = mobs.all[m];
+
+            //Make sure the mob will render
+            if(
+                hasFlag(mPtr->flags, MOB_FLAG_HIDDEN) ||
+                mPtr->type->blackoutRadius == 0.0f
+            ) {
+                continue;
+            }
+
+            float finalBlackoutRadius = (sign(mPtr->type->blackoutRadius) == 1 ? mPtr->type->blackoutRadius : mPtr->radius);
+
+            if(bBoxCheck(view.worldCorners, mPtr->center, finalBlackoutRadius)) {
+                //Add this mob's data to the SSBO.
+                mobData.push_back(mPtr->center.x);
+                mobData.push_back(mPtr->center.y);
+                mobData.push_back(finalBlackoutRadius * 2);
+                mobCount++;
+            }
+        }
+
+        //Bind the SSBO to the shader.
+        if(mobCount > 0) {
+            GLuint ssbo = 0;     
+            glGenBuffers(1, &ssbo);
+            glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+            glBufferData(
+                GL_SHADER_STORAGE_BUFFER, sizeof(float) * mobData.size(),
+                &mobData[0], GL_STREAM_READ
+            );
+            glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, ssbo);
+            glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+        }
+
         //Set the remaining shader options
         ALLEGRO_SHADER* blackoutShader = game.shaders.getShader(SHADER_TYPE_BLACKOUT);
         al_use_shader(blackoutShader);
         al_set_shader_float("alpha", blackoutS / 255.0f);
-        al_set_shader_int("mob_count", mobsToDraw.size());
+        al_set_shader_int("mob_count", mobCount);
         al_set_shader_float_vector("cam_pos", 2, &camPos[0], 1);
         al_set_shader_float_vector("cam_size", 2, &camSize[0], 1);
+
+        //Draw the blackout effect.
         drawPrimRect(Point(), Point(game.winW, game.winH), COLOR_WHITE);
+
         al_use_shader(nullptr);
     }
     
