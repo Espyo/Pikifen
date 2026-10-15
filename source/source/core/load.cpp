@@ -308,6 +308,8 @@ void loadMiscGraphics() {
         game.content.bitmaps.list.get(game.sysContentNames.bmpGithubIcon);
     game.sysContent.bmpHardBubble =
         game.content.bitmaps.list.get(game.sysContentNames.bmpHardBubble);
+    game.sysContent.bmpHealthGlow =
+        game.content.bitmaps.list.get(game.sysContentNames.bmpHealthGlow);
     game.sysContent.bmpIdleGlow =
         game.content.bitmaps.list.get(game.sysContentNames.bmpIdleGlow);
     game.sysContent.bmpKeyBox =
