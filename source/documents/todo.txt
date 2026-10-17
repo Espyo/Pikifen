@@ -6,8 +6,6 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- Problems to fix ---
-    Increase the range at which Pikmin lose the party
-    Bulbmin should cause 10 damage, if they're not already
 
     --- 1.2.0 ---
     Make ships and Onions react to sucking something up
@@ -145,6 +143,7 @@ Next tasks (roughly sorted most important first)
         Upscale fonts and other things that are really crusty and low-res
             Currently, text in buttons and such does not grow past its font size. This makes it look small if the window is a large resolution
         Upon taking damage, the screen should shake and temporarily turn red (thanks Neo)
+    Update the inhale sound https://freesound.org/people/Sadiquecat/sounds/817257/ (thanks Neo)
     Areas should be able to include "decals", in the same vein as tree shadows. These are a lightweight way to add leaves, rocks, pebbles, sticks, small plants, cobwebs, etc. to the area's terrain without using sectors or objects
         Add the previously mentioned ones to the base content
     Content manager should load and unload different parts of the content (manifests, data, graphics) through flags, not a level enum (basic, editor, full) with arbitrary cut-off points
