@@ -139,7 +139,7 @@ void drawFilledDiamond(
 
 
 /**
- * @brief Draws a filled equilateral triangle made.
+ * @brief Draws a filled equilateral triangle.
  *
  * @param center Center point of the triangle.
  * @param radius Radius between the center and each vertex.
