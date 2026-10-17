@@ -32,6 +32,9 @@ enum ONION_STATE {
     //Dead.
     ONION_STATE_DEAD,
     
+    //Finished receiving a delivery.
+    ONION_STATE_RECEIVED,
+    
     //Total amount of Onion object states.
     N_ONION_STATES,
     
@@ -49,6 +52,9 @@ enum ONION_ANIM {
     
     //Winding down since it stopped generating.
     ONION_ANIM_STOPPING_GENERATION,
+    
+    //Finished receiving a delivery.
+    ONION_ANIM_RECEIVED,
     
 };
 

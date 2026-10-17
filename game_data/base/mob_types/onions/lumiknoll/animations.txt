@@ -125,6 +125,57 @@ animations{
 			}
 		}
 	}
+	received{
+		frames
+	}
+	received_full{
+		frames{
+			full_smaller{
+				duration=0.1000
+				interpolate=true
+			}
+			full_larger{
+				duration=0.1000
+				interpolate=true
+			}
+		}
+	}
+	received_high{
+		frames{
+			high_smaller{
+				duration=0.1000
+				interpolate=true
+			}
+			high_larger{
+				duration=0.1000
+				interpolate=true
+			}
+		}
+	}
+	received_low{
+		frames{
+			low_smaller{
+				duration=0.1000
+				interpolate=true
+			}
+			low_larger{
+				duration=0.1000
+				interpolate=true
+			}
+		}
+	}
+	received_mid{
+		frames{
+			mid_smaller{
+				duration=0.1000
+				interpolate=true
+			}
+			mid_larger{
+				duration=0.1000
+				interpolate=true
+			}
+		}
+	}
 	stopping_generation{
 		frames
 	}

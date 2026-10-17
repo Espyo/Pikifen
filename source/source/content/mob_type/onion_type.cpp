@@ -61,6 +61,7 @@ AnimConversionVector OnionType::getAnimConversions() const {
     AnimConversionVector v;
     v.push_back(std::make_pair(ONION_ANIM_IDLING, "idling"));
     v.push_back(std::make_pair(ONION_ANIM_GENERATING, "generating"));
+    v.push_back(std::make_pair(ONION_ANIM_RECEIVED, "received"));
     v.push_back(
         std::make_pair(ONION_ANIM_STOPPING_GENERATION, "stopping_generation")
     );

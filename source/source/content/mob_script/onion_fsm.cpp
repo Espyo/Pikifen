@@ -39,6 +39,7 @@ void OnionFsm::createFsm(MobType* typ) {
         }
         efc.newEvent(FSM_EV_FINISHED_RECEIVING_DELIVERY); {
             efc.run(OnionFsm::receiveMob);
+            efc.run(OnionFsm::doReceptionJump);
         }
         efc.newEvent(FSM_EV_HITBOX_TOUCH_N_A); {
             efc.run(GenMobFsm::beAttacked);
@@ -76,6 +77,27 @@ void OnionFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(OnionFsm::stopGenerating);
         }
+        efc.newEvent(FSM_EV_STARTED_RECEIVING_DELIVERY); {
+            efc.run(OnionFsm::startDelivery);
+        }
+        efc.newEvent(FSM_EV_FINISHED_RECEIVING_DELIVERY); {
+            efc.run(OnionFsm::receiveMob);
+        }
+        efc.newEvent(FSM_EV_ANIMATION_END); {
+            efc.changeState("idling");
+        }
+        efc.newEvent(FSM_EV_HITBOX_TOUCH_N_A); {
+            efc.run(GenMobFsm::beAttacked);
+        }
+        efc.newEvent(FSM_EV_RECEIVE_SCRIPT_MESSAGE); {
+            efc.run(OnionFsm::checkStartGenerating);
+        }
+        efc.newEvent(FSM_EV_ZERO_HEALTH); {
+            efc.changeState("dead");
+        }
+    }
+    
+    efc.newState("received", ONION_STATE_RECEIVED); {
         efc.newEvent(FSM_EV_STARTED_RECEIVING_DELIVERY); {
             efc.run(OnionFsm::startDelivery);
         }
@@ -172,6 +194,24 @@ void OnionFsm::die(
 
 
 /**
+ * @brief When an Onion has received something and is in a state
+ * where it should change to the appropriate animation.
+ *
+ * @param scriptVM The script VM responsible.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void OnionFsm::doReceptionJump(
+    ScriptVM* scriptVM, void* info1, void* info2
+) {
+    Onion* oniPtr = (Onion*) scriptVM->mob;
+    
+    oniPtr->setAnimation(ONION_ANIM_RECEIVED);
+    scriptVM->fsm.setState(ONION_STATE_RECEIVED);
+}
+
+
+/**
  * @brief When an Onion finishes receiving a mob carried by Pikmin.
  *
  * @param scriptVM The script VM responsible.
@@ -211,7 +251,7 @@ void OnionFsm::receiveMob(ScriptVM* scriptVM, void* info1, void* info2) {
         break;
     }
     }
-
+    
     //Either accept the nutrients or forward them.
     Onion* nutrientReceiver = nullptr;
     if(

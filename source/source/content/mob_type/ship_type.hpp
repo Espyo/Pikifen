@@ -24,6 +24,9 @@ enum SHIP_ANIM {
     //Idling.
     SHIP_ANIM_IDLING,
     
+    //Finished receiving a delivery.
+    SHIP_ANIM_RECEIVED,
+    
 };
 
 

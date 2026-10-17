@@ -59,6 +59,7 @@ ShipType::~ShipType() {
 AnimConversionVector ShipType::getAnimConversions() const {
     AnimConversionVector v;
     v.push_back(std::make_pair(SHIP_ANIM_IDLING, "idling"));
+    v.push_back(std::make_pair(SHIP_ANIM_RECEIVED, "received"));
     return v;
 }
 

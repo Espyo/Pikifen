@@ -61,6 +61,9 @@ public:
     //The receptacle's absolute coordinates.
     Point receptacleFinalPos;
     
+    //Is it currently in the "received" animation?
+    bool inReceivedAnimation = false;
+    
     //Distance between control point and receptacle. Cache for convenience.
     float controlPointToReceptacleDist = 0.0f;
     

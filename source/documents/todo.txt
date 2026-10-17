@@ -8,7 +8,6 @@ Next tasks (roughly sorted most important first)
     --- Problems to fix ---
 
     --- 1.2.0 ---
-    Make ships and Onions react to sucking something up
     Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
     
     --- 1.3.0 ---

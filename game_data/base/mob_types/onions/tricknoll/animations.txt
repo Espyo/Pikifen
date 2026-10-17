@@ -32,6 +32,18 @@ animations{
 			}
 		}
 	}
+	received{
+		frames{
+			active{
+				duration=0.1000
+				interpolate=true
+			}
+			received{
+				duration=0.1000
+				interpolate=true
+			}
+		}
+	}
 	stopping_generation{
 		frames{
 			active{
@@ -74,6 +86,22 @@ sprites{
 		file=onions/tricknoll
 		file_pos=111.0000 0.0000
 		file_size=110.0000 110.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=100.0000
+				radius=50.0000
+				type=0
+				value=1.0000
+				surface_type=1
+			}
+		}
+	}
+	received{
+		file=onions/tricknoll
+		file_pos=0.0000 0.0000
+		file_size=110.0000 110.0000
+		scale=1.0700 1.0700
 		hitboxes{
 			body{
 				coords=0.0000 0.0000 0.0000

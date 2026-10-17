@@ -22,6 +22,7 @@ void createFsm(MobType* typ);
 void checkStartGenerating(ScriptVM* scriptVM, void* info1, void* info2);
 void checkStopGenerating(ScriptVM* scriptVM, void* info1, void* info2);
 void die(ScriptVM* scriptVM, void* info1, void* info2);
+void doReceptionJump(ScriptVM* scriptVM, void* info1, void* info2);
 void receiveMob(ScriptVM* scriptVM, void* info1, void* info2);
 void startDelivery(ScriptVM* scriptVM, void* info1, void* info2);
 void startGenerating(ScriptVM* scriptVM, void* info1, void* info2);

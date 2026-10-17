@@ -2008,7 +2008,7 @@ void ScriptActionRunners::print(ScriptActionInstRunData& data) {
     string line =
         "(" + speaker + " said:) " + textArg;
         
-    game.console.write(LOG_LEVEL_INFO, line, false);
+    game.console.write(LOG_LEVEL_INFO, line);
 }
 
 
