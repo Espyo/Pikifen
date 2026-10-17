@@ -2679,6 +2679,23 @@ void ScriptActionRunners::setNearReach(ScriptActionInstRunData& data) {
 
 
 /**
+ * @brief Code for the Onion activity setting script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::setOnionActivity(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& valueArg = data.args[0];
+    
+    //Main logic.
+    Mob* mPtr = data.scriptVM->getRunnerMob();
+    if(mPtr->type->category->id != MOB_CATEGORY_ONIONS) return;
+    Onion* oPtr = (Onion*) mPtr;
+    oPtr->activated = s2b(valueArg);
+}
+
+
+/**
  * @brief Code for the radius setting script action type.
  *
  * @param data Data about the action call.

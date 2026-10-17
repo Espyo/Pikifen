@@ -2825,6 +2825,14 @@ void initScriptActionTypes() {
         ScriptActionRunners::setNearReach
     );
     
+    //Set Onion activity.
+    queueParam("activated", ptBool);
+    commitAction(
+        SCRIPT_ACTION_SET_ONION_ACTIVITY,
+        "set_onion_activity",
+        ScriptActionRunners::setOnionActivity
+    );
+    
     //Set radius.
     queueParam("radius", ptFloat);
     commitAction(

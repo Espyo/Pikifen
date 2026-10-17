@@ -323,6 +323,9 @@ enum SCRIPT_ACTION {
     //Set its near reach.
     SCRIPT_ACTION_SET_NEAR_REACH,
     
+    //Set whether an Onion is activated.
+    SCRIPT_ACTION_SET_ONION_ACTIVITY,
+    
     //Set its radius.
     SCRIPT_ACTION_SET_RADIUS,
     
@@ -1011,6 +1014,7 @@ void setLimbAnimation(ScriptActionInstRunData& data);
 void setListItem(ScriptActionInstRunData& data);
 void setMissionMetricScriptSlot(ScriptActionInstRunData& data);
 void setNearReach(ScriptActionInstRunData& data);
+void setOnionActivity(ScriptActionInstRunData& data);
 void setRadius(ScriptActionInstRunData& data);
 void setSectorScroll(ScriptActionInstRunData& data);
 void setShadowVisibility(ScriptActionInstRunData& data);
