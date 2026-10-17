@@ -68,6 +68,28 @@ void GameplayState::BindLightsToShader(const Viewport& view) {
             mobCount++;
         }
     }
+    vector<WorldComponent> allParts;
+    particles.fillComponentList(allParts, view.worldCorners);
+    for(size_t p = 0; p < allParts.size(); p++) {
+        Particle* pPtr = allParts[p].particlePtr;
+        if(pPtr->blendType != PARTICLE_BLEND_TYPE_ADDITIVE) continue;
+        float t = 1.0f - pPtr->time / pPtr->duration;
+        ALLEGRO_COLOR finalColor = pPtr->color.get(t);
+        if(finalColor.a < 0.05f) continue;
+        float finalSize = pPtr->size.get(t);
+        if(finalSize <= 0.0f) continue;
+
+        lightData.push_back(pPtr->center.x);
+        lightData.push_back(pPtr->center.y);
+        lightData.push_back(finalSize * 3);
+
+        //Light color
+        lightData.push_back(finalColor.a * finalColor.r / 20);
+        lightData.push_back(finalColor.a * finalColor.g / 20);
+        lightData.push_back(finalColor.a * finalColor.b / 20);
+        mobCount++;
+    }
+
     //Bind the SSBO to the shader.
     if(mobCount > 0) {
         GLuint ssbo = 0;     
@@ -2061,6 +2083,7 @@ void GameplayState::drawWorldComponents(
     //but this is a nice estimate.
     components.reserve(
         game.curArea->sectors.size() + //Sectors.
+        game.curArea->sectors.size() + //Sector lighting.
         mobs.all.size() + //Mob shadows.
         mobs.all.size() + //Mobs.
         particles.getCount() //Particles.
@@ -2082,6 +2105,11 @@ void GameplayState::drawWorldComponents(
         c.sectorPtr = sPtr;
         c.z = sPtr->floorZ;
         components.push_back(c);
+
+        WorldComponent c2;
+        c2.sectorLightingPtr = sPtr;
+        c2.z = 2000000; //Some arbitrary height ABOVE mob max draw height
+        components.push_back(c2);
     }
     
     //Particles.
@@ -2192,6 +2220,29 @@ void GameplayState::drawWorldComponents(
         mobShadowStretch = (dayMinutes - 60 * 12) / (60 * 20 - 60 * 12);
     }
     
+    //Setup the lighting shader for use later
+    float camPos[2] = {
+        view.windowRect.center.x - (view.windowRect.size.x / 2), 
+        view.windowRect.center.y - (view.windowRect.size.y / 2)
+    };
+    al_transform_coordinates(&view.windowToWorldTransform, &camPos[0], &camPos[1]);
+
+    float camSize[2] = {
+        view.windowRect.size.x / view.cam.zoom, 
+        view.windowRect.size.y / view.cam.zoom
+    };
+
+    //Set shader options
+    ALLEGRO_SHADER* blackoutShader = game.shaders.getShader(SHADER_TYPE_BLACKOUT);
+    al_use_shader(blackoutShader);
+    al_set_shader_float_vector("cam_pos", 2, &camPos[0], 1);
+    al_set_shader_float_vector("cam_size", 2, &camSize[0], 1);
+
+    BindLightsToShader(view);
+    //Even though we set the shader null here, it'll retain these
+    //values because we set them while the shader was active.
+    al_use_shader(nullptr);
+
     forIdx(c, components) {
         WorldComponent* cPtr = &components[c];
         
@@ -2250,27 +2301,6 @@ void GameplayState::drawWorldComponents(
                     frozenThawEffectAlpha, frozenFlashEffectAlpha, cracked
                 );
             }
-            //Get the viewport's settings to pass to the shader
-            float camPos[2] = {
-                view.windowRect.center.x - (view.windowRect.size.x / 2), 
-                view.windowRect.center.y - (view.windowRect.size.y / 2)
-            };
-            al_transform_coordinates(&view.windowToWorldTransform, &camPos[0], &camPos[1]);
-
-            float camSize[2] = {
-                view.windowRect.size.x / view.cam.zoom, 
-                view.windowRect.size.y / view.cam.zoom
-            };
-
-            //Set shader options
-            ALLEGRO_SHADER* blackoutShader = game.shaders.getShader(SHADER_TYPE_BLACKOUT);
-            al_use_shader(blackoutShader);
-            al_set_shader_float_vector("cam_pos", 2, &camPos[0], 1);
-            al_set_shader_float_vector("cam_size", 2, &camSize[0], 1);
-
-            BindLightsToShader(view);
-            drawSectorLighting(cPtr->sectorPtr, Point(), 1.0f, 1.0f);
-            al_use_shader(nullptr);
 
             drawSectorEdgeOffsets(
                 cPtr->sectorPtr,
@@ -2279,7 +2309,12 @@ void GameplayState::drawWorldComponents(
                 game.wallOffsetEffectBuffer,
                 1.0f, view
             );
-            
+        } else if(cPtr->sectorLightingPtr) {
+
+            al_use_shader(blackoutShader);
+            drawSectorLighting(cPtr->sectorLightingPtr, Point(), 1.0f, 1.0f);
+            al_use_shader(nullptr);
+
         } else if(cPtr->mobShadowPtr) {
             float deltaZ = 0;
             if(!cPtr->mobShadowPtr->standingOnMob) {

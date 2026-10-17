@@ -30,6 +30,9 @@ public:
     
     //If it's a sector, this points to it.
     Sector* sectorPtr = nullptr;
+
+    //If it's a sector's lighting, this points to it.
+    Sector* sectorLightingPtr = nullptr;
     
     //If it's a mob shadow, this points to its mob.
     Mob* mobShadowPtr = nullptr;
