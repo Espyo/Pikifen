@@ -294,6 +294,12 @@ public:
     
     //How much light does it cast in a blackout? <0 to use the mob's radius.
     float blackoutRadius = -1.0f;
+
+    //How much light does it cast in a blackout? <0 to use the mob's radius.
+    float lightRadius = -1.0f;
+
+    //How much light does it cast in a blackout? <0 to use the mob's radius.
+    ALLEGRO_COLOR lightColor = COLOR_BLACK;
     
     //List of sounds it can play.
     vector<Sound> sounds;

@@ -1797,6 +1797,7 @@ void AreaEditor::drawSectors(const AreaEdCanvasStyle& style) {
             } else {
                 drawSectorTexture(sPtr, Point(), 1.0, style.textureAlpha);
             }
+            drawSectorLighting(sPtr, Point(), 1.0, style.textureAlpha);
             
             if(style.wallShadowAlpha > 0.0f) {
                 drawSectorEdgeOffsets(

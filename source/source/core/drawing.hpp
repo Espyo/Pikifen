@@ -151,6 +151,9 @@ void drawInputSourceIcon(
     bool condensed = true, const ALLEGRO_FONT* font = nullptr,
     const ALLEGRO_COLOR& tint = COLOR_WHITE
 );
+void drawSectorLighting(
+    Sector* sPtr, const Point& where, float scale, float alpha
+);
 void drawSectorTexture(
     Sector* sPtr, const Point& where, float scale, float alpha
 );

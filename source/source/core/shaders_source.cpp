@@ -47,9 +47,11 @@ const char* BLACKOUT_FRAG_SHADER = R"(
 #version 430
 #extension GL_ARB_shader_storage_buffer_object: enable
 
+const int lightBufferSize = 6;
+
 readonly layout(std430, binding = 3) buffer mobLayout
 {
-    //Formatted in (x, y, radius)
+    //Formatted in (x, y, radius, r, g, b)
     readonly float mobEntries[];
 };
 
@@ -61,6 +63,7 @@ uniform vec2 cam_pos;
 //Size of the camera
 uniform vec2 cam_size;
 
+uniform bool convert_to_world_coords;
 
 //Fragment shader input for texture coordinates.
 in vec2 varying_texcoord;
@@ -75,20 +78,21 @@ uniform float alpha;
 
 bool alpha_test_func(float x, int op, float compare);
 
-float getFadeVal(vec2 xy) {
-    float fadeVal = 0.0;
+vec4 getColor(vec2 xy) {
+    vec4 fadeVal = varying_color;
     for(int i = 0; i < mob_count; i++) {
-        if(fadeVal >= 1.0) return 1.0;
-        vec2 mobPos = vec2(mobEntries[3 * i], mobEntries[(3 * i) + 1]);
+        vec2 mobPos = vec2(mobEntries[lightBufferSize * i], mobEntries[(lightBufferSize * i) + 1]);
 
         float dist = sqrt(pow(mobPos.x - xy.x, 2.0) + pow(mobPos.y - xy.y, 2.0));
 
         float trans = smoothstep(
-            mobEntries[(3 * i) + 2], 
-            mobEntries[(3 * i) + 2] + 48, 
+            0, 
+            mobEntries[(lightBufferSize * i) + 2], 
             dist
         );
-        fadeVal += 1 - trans;
+        fadeVal.r += (1 - trans) * mobEntries[(lightBufferSize * i) + 3];
+        fadeVal.g += (1 - trans) * mobEntries[(lightBufferSize * i) + 4];
+        fadeVal.b += (1 - trans) * mobEntries[(lightBufferSize * i) + 5];
     }
     return fadeVal;
 }
@@ -99,12 +103,18 @@ vec2 toWorldCoords(vec2 texcoord){
 
 
 void main() {
-    //Setup.
 
-    float fadeVal = getFadeVal(toWorldCoords(varying_texcoord));
+    vec4 finalColor = getColor(varying_texcoord);
 
-    //Finish up.
-    fragColor = vec4(0, 0, 0, alpha - fadeVal);
+    if(convert_to_world_coords) {
+        finalColor = getColor(toWorldCoords(varying_texcoord));
+    }
+
+    finalColor.r += 1 - alpha;
+    finalColor.g += 1 - alpha;
+    finalColor.b += 1 - alpha;
+
+    fragColor = finalColor;
 }
 
     )";

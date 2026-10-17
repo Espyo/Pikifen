@@ -42,6 +42,47 @@
 #pragma warning(disable: 4701)
 
 
+void GameplayState::BindLightsToShader(const Viewport& view) {
+    vector<float> lightData;
+    int mobCount = 0;
+    for(size_t m = 0; m < mobs.all.size(); m++) {
+        Mob* mPtr = mobs.all[m];
+
+        //Make sure the mob will render
+        if(
+            hasFlag(mPtr->flags, MOB_FLAG_HIDDEN) ||
+            mPtr->type->lightRadius <= 0.0f
+        ) {
+            continue;
+        }
+
+        if(bBoxCheck(view.worldCorners, mPtr->center, mPtr->type->lightRadius)) {
+            lightData.push_back(mPtr->center.x);
+            lightData.push_back(mPtr->center.y);
+            lightData.push_back(mPtr->type->lightRadius);
+
+            //Light color
+            lightData.push_back(mPtr->type->lightColor.r);
+            lightData.push_back(mPtr->type->lightColor.g);
+            lightData.push_back(mPtr->type->lightColor.b);
+            mobCount++;
+        }
+    }
+    //Bind the SSBO to the shader.
+    if(mobCount > 0) {
+        GLuint ssbo = 0;     
+        glGenBuffers(1, &ssbo);
+        glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+        glBufferData(
+            GL_SHADER_STORAGE_BUFFER, sizeof(float) * lightData.size(),
+            &lightData[0], GL_STREAM_READ
+        );
+        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, ssbo);
+        glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+    }
+    al_set_shader_int("mob_count", mobCount);
+}
+
 /**
  * @brief Does the drawing for the main game loop.
  *
@@ -1457,85 +1498,46 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
         );
         
     }
-    
+
+    //Get the viewport's settings to pass to the shader
+    float camPos[2] = {
+        view.windowRect.center.x - (view.windowRect.size.x / 2), 
+        view.windowRect.center.y - (view.windowRect.size.y / 2)
+    };
+    al_transform_coordinates(&view.windowToWorldTransform, &camPos[0], &camPos[1]);
+
+    float camSize[2] = {
+        view.windowRect.size.x / view.cam.zoom, 
+        view.windowRect.size.y / view.cam.zoom
+    };
+
+    //Set shader options
+    ALLEGRO_SHADER* blackoutShader = game.shaders.getShader(SHADER_TYPE_BLACKOUT);
+    al_use_shader(blackoutShader);
+    al_set_shader_float_vector("cam_pos", 2, &camPos[0], 1);
+    al_set_shader_float_vector("cam_size", 2, &camSize[0], 1);
+    al_set_shader_bool("convert_to_world_coords", true);
+
+    AllegroBlenderState prevState;
+    prevState.save();
+    al_set_blender(ALLEGRO_ADD, ALLEGRO_DEST_COLOR, ALLEGRO_ZERO);
+
     //Draw the daylight.
     ALLEGRO_COLOR daylightC =
         game.curArea->weatherCondition.getDaylightColor();
     if(daylightC.a > 0) {
-        al_draw_filled_rectangle(
-            0, 0, view.windowRect.size.x, view.windowRect.size.y, daylightC
-        );
-    }
-    
-    //Draw the blackout effect.
-    unsigned char blackoutS =
-        game.curArea->weatherCondition.getBlackoutStrength();
-    if(blackoutS > 0) {    
-
-        //Get the viewport's settings to pass to the shader
-        float camPos[2] = {
-            view.windowRect.center.x - (view.windowRect.size.x / 2), 
-            view.windowRect.center.y - (view.windowRect.size.y / 2)
-        };
-        al_transform_coordinates(&view.windowToWorldTransform, &camPos[0], &camPos[1]);
-
-        float camSize[2] = {
-            view.windowRect.size.x / view.cam.zoom, 
-            view.windowRect.size.y / view.cam.zoom
-        };
-
-
-        //Put each mob's relevant data into an SSBO.
-        int mobCount = 0;
-        vector<float> mobData;
-        for(size_t m = 0; m < mobs.all.size(); m++) {
-            Mob* mPtr = mobs.all[m];
-
-            //Make sure the mob will render
-            if(
-                hasFlag(mPtr->flags, MOB_FLAG_HIDDEN) ||
-                mPtr->type->blackoutRadius == 0.0f
-            ) {
-                continue;
-            }
-
-            float finalBlackoutRadius = (sign(mPtr->type->blackoutRadius) == 1 ? mPtr->type->blackoutRadius : mPtr->radius);
-
-            if(bBoxCheck(view.worldCorners, mPtr->center, finalBlackoutRadius)) {
-                //Add this mob's data to the SSBO.
-                mobData.push_back(mPtr->center.x);
-                mobData.push_back(mPtr->center.y);
-                mobData.push_back(finalBlackoutRadius * 2);
-                mobCount++;
-            }
-        }
-
-        //Bind the SSBO to the shader.
-        if(mobCount > 0) {
-            GLuint ssbo = 0;     
-            glGenBuffers(1, &ssbo);
-            glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
-            glBufferData(
-                GL_SHADER_STORAGE_BUFFER, sizeof(float) * mobData.size(),
-                &mobData[0], GL_STREAM_READ
-            );
-            glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, ssbo);
-            glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
-        }
-
         //Set the remaining shader options
-        ALLEGRO_SHADER* blackoutShader = game.shaders.getShader(SHADER_TYPE_BLACKOUT);
-        al_use_shader(blackoutShader);
-        al_set_shader_float("alpha", blackoutS / 255.0f);
-        al_set_shader_int("mob_count", mobCount);
-        al_set_shader_float_vector("cam_pos", 2, &camPos[0], 1);
-        al_set_shader_float_vector("cam_size", 2, &camSize[0], 1);
+        al_set_shader_float("alpha", daylightC.a);
+
+        BindLightsToShader(view);
 
         //Draw the blackout effect.
-        drawPrimRect(Point(), Point(game.winW, game.winH), COLOR_WHITE);
+        drawPrimRect(Point(), Point(game.winW, game.winH), daylightC);
 
-        al_use_shader(nullptr);
     }
+
+    prevState.load();
+    al_use_shader(nullptr);
     
 }
 
@@ -2227,25 +2229,8 @@ void GameplayState::drawWorldComponents(
             if(mustDrawGround) {
                 drawSectorTexture(cPtr->sectorPtr, Point(), 1.0f, 1.0f);
             }
-            if(mustDrawLiquid) {
-                float drainAlpha = 1.0f;
-                if(
-                    cPtr->sectorPtr->liquid &&
-                    cPtr->sectorPtr->liquid->state == LIQUID_STATE_DRAINING
-                ) {
-                    drainAlpha =
-                        (
-                            LIQUID::DRAIN_DURATION -
-                            cPtr->sectorPtr->liquid->stateTime
-                        ) /
-                        LIQUID::DRAIN_DURATION;
-                } else if(
-                    cPtr->sectorPtr->liquid &&
-                    cPtr->sectorPtr->liquid->state == LIQUID_STATE_GONE
-                ) {
-                    drainAlpha = 0.0f;
-                }
-                
+            if(mustDrawLiquid && cPtr->sectorPtr->liquid) {
+                float drainAlpha = cPtr->sectorPtr->liquid->getDrainAlpha();          
                 drawLiquid(
                     cPtr->sectorPtr,
                     cPtr->sectorPtr->liquid->hazard->associatedLiquid,
@@ -2265,7 +2250,28 @@ void GameplayState::drawWorldComponents(
                     frozenThawEffectAlpha, frozenFlashEffectAlpha, cracked
                 );
             }
-            
+            //Get the viewport's settings to pass to the shader
+            float camPos[2] = {
+                view.windowRect.center.x - (view.windowRect.size.x / 2), 
+                view.windowRect.center.y - (view.windowRect.size.y / 2)
+            };
+            al_transform_coordinates(&view.windowToWorldTransform, &camPos[0], &camPos[1]);
+
+            float camSize[2] = {
+                view.windowRect.size.x / view.cam.zoom, 
+                view.windowRect.size.y / view.cam.zoom
+            };
+
+            //Set shader options
+            ALLEGRO_SHADER* blackoutShader = game.shaders.getShader(SHADER_TYPE_BLACKOUT);
+            al_use_shader(blackoutShader);
+            al_set_shader_float_vector("cam_pos", 2, &camPos[0], 1);
+            al_set_shader_float_vector("cam_size", 2, &camSize[0], 1);
+
+            BindLightsToShader(view);
+            drawSectorLighting(cPtr->sectorPtr, Point(), 1.0f, 1.0f);
+            al_use_shader(nullptr);
+
             drawSectorEdgeOffsets(
                 cPtr->sectorPtr,
                 bmpOutput ?

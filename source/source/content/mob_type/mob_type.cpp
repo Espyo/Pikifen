@@ -295,6 +295,8 @@ void MobType::loadFromDataNode(
     );
     tRS.set("area_editor_tips", areaEditorTips, &areaEditorTipsNode);
     tRS.set("blackout_radius", blackoutRadius);
+    tRS.set("light_radius", lightRadius);
+    tRS.set("light_color", lightColor);
     tRS.set("can_block_paths", canBlockPaths);
     tRS.set("can_free_move", canFreeMove);
     tRS.set(

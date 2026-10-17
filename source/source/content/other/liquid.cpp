@@ -129,6 +129,21 @@ void Liquid::changeSectorsHazard(Hazard* hPtr) {
 }
 
 
+float Liquid::getDrainAlpha() {
+    switch(state) {
+        case LIQUID_STATE_DRAINING:
+            return 1.0f - (stateTime / LIQUID::DRAIN_DURATION);
+        case LIQUID_STATE_GONE:
+        case LIQUID_STATE_FROZEN:
+        case LIQUID_STATE_THAWING:
+            return 0.0f;
+        case LIQUID_STATE_NORMAL:
+            return 1.0f;
+    }
+    return 1.0f;
+}
+
+
 /**
  * @brief Returns the center point of the entire liquid.
  */
