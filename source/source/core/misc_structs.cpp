@@ -553,7 +553,7 @@ void LogManager::report(
         return;
         break;
     } case LOG_LEVEL_WARNING: {
-        if(!game.makerTools.useWarnings) return;
+        if(!game.options.misc.showWarnings) return;
         if(inBundle) nrBundleWarnings++;
         break;
     } case LOG_LEVEL_ERROR: {

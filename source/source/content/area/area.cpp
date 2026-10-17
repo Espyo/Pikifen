@@ -1718,16 +1718,14 @@ void Area::loadMissionDataFromDataNode(DataNode* node) {
     
     //DEPRECATED in 1.2.0 by the new mission system.
     if(node->getNrOfChildrenByName("mission_goal") > 0) {
-        if(game.makerTools.useWarnings) {
-            game.log.report(
-                LOG_LEVEL_WARNING,
-                "The mission system used before Pikifen 1.2.0 "
-                "is deprecated and may be removed in the future! "
-                "Please rework the mission in the area editor so that "
-                "it uses the new system.",
-                node
-            );
-        }
+        game.log.report(
+            LOG_LEVEL_WARNING,
+            "The mission system used before Pikifen 1.2.0 "
+            "is deprecated and may be removed in the future! "
+            "Please rework the mission in the area editor so that "
+            "it uses the new system.",
+            node
+        );
         loadOldMissionSystem(node);
     }
     

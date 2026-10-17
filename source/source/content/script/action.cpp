@@ -100,14 +100,12 @@ bool ScriptActionDef::loadFromDataNode(
     
     //Check if it's deprecated.
     if(!actionType->deprecationReplacement.empty()) {
-        if(game.makerTools.useWarnings) {
-            game.log.report(
-                LOG_LEVEL_WARNING,
-                "The action \"" + actionType->name + "\" is deprecated "
-                "and may be removed in the future! Please use \"" +
-                actionType->deprecationReplacement + "\" instead."
-            );
-        }
+        game.log.report(
+            LOG_LEVEL_WARNING,
+            "The action \"" + actionType->name + "\" is deprecated "
+            "and may be removed in the future! Please use \"" +
+            actionType->deprecationReplacement + "\" instead."
+        );
     }
     
     //Check if this action is allowed in the current context.

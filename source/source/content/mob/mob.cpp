@@ -4256,7 +4256,7 @@ void Mob::tickMiscLogic(float deltaT) {
         //This will only run once, and only after the mob is all set up.
         scriptVM.runReadyActions();
         FsmEventDef* readyEv = scriptVM.fsm.getEvent(FSM_EV_ON_READY);
-        if(readyEv && game.makerTools.useWarnings) {
+        if(readyEv) {
             game.log.report(
                 LOG_LEVEL_ERROR,
                 "A mob (" + getErrorMessageMobInfo(this) + ") just used the "
