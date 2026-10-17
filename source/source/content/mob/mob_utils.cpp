@@ -1180,7 +1180,7 @@ void PikminNestType::createColormap() {
         ALLEGRO_COLOR c =
             tintColor(pikTypes[0]->mainColor, mapGray(0.40f * 255));
         ki.addNew(0.5, c, EASE_METHOD_IN_OUT);
-    } 
+    }
     //Readd the first color at the end to allow smooth looping
     ALLEGRO_COLOR c =
         pikTypes[0]->mainColor;
@@ -1227,12 +1227,14 @@ void PikminNestType::loadProperties(DataNode* file, MobType* mobType) {
     
     legBodyParts = semicolonListToVector(legsStr);
     if(pikTypesNode && legBodyParts.empty()) {
-        game.errors.report(
+        game.log.report(
+            LOG_LEVEL_ERROR,
             "A nest-like object type needs a list of leg body parts!",
             file
         );
     } else if(legsNode && legBodyParts.size() % 2 == 1) {
-        game.errors.report(
+        game.log.report(
+            LOG_LEVEL_ERROR,
             "A nest-like object type needs an even number of leg body parts!",
             legsNode
         );
@@ -1242,7 +1244,8 @@ void PikminNestType::loadProperties(DataNode* file, MobType* mobType) {
     forIdx(t, pikTypesStrs) {
         string& str = pikTypesStrs[t];
         if(!isInMap(game.content.mobTypes.list.pikmin, str)) {
-            game.errors.report(
+            game.log.report(
+                LOG_LEVEL_ERROR,
                 "Unknown Pikmin type \"" + str + "\"!",
                 pikTypesNode
             );
@@ -1372,7 +1375,8 @@ Mob* createMob(
             getSpawnInfoFromChildInfo(mPtr->type, &type->children[c]);
             
         if(!spawnInfo) {
-            game.errors.report(
+            game.log.report(
+                LOG_LEVEL_ERROR,
                 "Object \"" + type->name + "\" tried to spawn a child with the "
                 "spawn name \"" + childInfo->spawnName + "\", but that name "
                 "does not exist in the list of spawn data!"
@@ -1408,7 +1412,8 @@ Mob* createMob(
                 pInfo->limbAnim.curAnim = animToUse;
                 pInfo->limbAnim.toStart();
             } else {
-                game.errors.report(
+                game.log.report(
+                    LOG_LEVEL_ERROR,
                     "Object \"" + newMob->type->name + "\", child object of "
                     "object \"" + type->name + "\", tried to use animation \"" +
                     childInfo->limbAnimName + "\" for a limb, but that "

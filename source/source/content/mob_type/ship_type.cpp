@@ -100,7 +100,8 @@ void ShipType::loadCatResources(DataNode* file) {
     //Now's a good time to check the leg body parts.
     forIdx(b, nest->legBodyParts) {
         if(animDb->findBodyPart(nest->legBodyParts[b]) == INVALID) {
-            game.errors.report(
+            game.log.report(
+                LOG_LEVEL_ERROR,
                 "The ship type \"" + name + "\" specifies a leg body part "
                 "called \"" + nest->legBodyParts[b] + "\", "
                 "but no such body part exists!"

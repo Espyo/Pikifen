@@ -50,13 +50,15 @@ bool MakerToolRunners::areaImage(
         "_" + getCurrentTime(true) + ".png";
         
     if(!al_save_bitmap(fileName.c_str(), bmp)) {
-        game.errors.report(
+        game.log.report(
+            LOG_LEVEL_ERROR,
             "Could not save the area onto an image,"
             " with the name \"" + fileName + "\"!"
         );
     } else {
         game.console.write(
-            "Saved area image \"" + fileName + "\".", false, 5.0f
+            LOG_LEVEL_INFO,
+            "Saved area image \"" + fileName + "\".", 5.0f
         );
     }
     
@@ -409,7 +411,7 @@ bool MakerToolRunners::newReminder(
     game.modal.onBack =
     [] () {
         game.controls.ignoreMenuCloseActions();
-        game.console.write("Canceled reminder.", false, 5.0f);
+        game.console.write(LOG_LEVEL_INFO, "Canceled reminder.", 5.0f);
     };
     game.modal.extraButtons.push_back(
     ModalGuiManager::Button {
@@ -423,7 +425,7 @@ bool MakerToolRunners::newReminder(
             game.content.areas.saveAreaReminders(game.curArea);
             game.modal.close();
             game.controls.ignoreMenuCloseActions();
-            game.console.write("Created reminder!", false, 5.0f);
+            game.console.write(LOG_LEVEL_INFO, "Created reminder!", 5.0f);
         }
     }
     );
@@ -490,7 +492,7 @@ bool MakerToolRunners::setAutoStart(
     
     saveMakerTools();
     if(mgr.autoStartState.empty()) {
-        game.console.write("Reset Pikifen's auto-start.", false, 5.0f);
+        game.console.write(LOG_LEVEL_INFO, "Reset Pikifen's auto-start.", 5.0f);
     } else {
         string msg =
             "Set Pikifen to auto-start in the \"" + mgr.autoStartState +
@@ -500,7 +502,7 @@ bool MakerToolRunners::setAutoStart(
         } else {
             msg += ", option \"" + mgr.autoStartOption + "\".";
         }
-        game.console.write(msg, false, 5.0f);
+        game.console.write(LOG_LEVEL_INFO, msg, 5.0f);
     }
     
     mgr.usedHelpingTools = true;
@@ -649,7 +651,7 @@ bool MakerTools::checkMakerToolsAllowed(float inputValue) {
                 "normal gameplay.\n"
                 "Are you sure? Quickly press a maker tool button three times "
                 "to confirm.";
-            game.console.write(info, false);
+            game.console.write(LOG_LEVEL_INFO, info);
             playConfirmationTimer = MAKER_TOOLS::PLAY_CONFIRMATION_TIMER;
             playConfirmationPresses++;
             return false;
@@ -659,7 +661,7 @@ bool MakerTools::checkMakerToolsAllowed(float inputValue) {
                 "Maker tools are now allowed till you next enter an area.\n"
                 "Check the options to always allow maker tools in normal "
                 "gameplay.";
-            game.console.write(info, false);
+            game.console.write(LOG_LEVEL_INFO, info);
             allowedInPlayNow = true;
             return false;
             

@@ -45,7 +45,8 @@ void SpikeDamageType::loadFromDataNode(DataNode* node) {
     
     if(particleGeneratorNode) {
         if(!isInMap(game.content.particleGens.list, particleGeneratorName)) {
-            game.errors.report(
+            game.log.report(
+                LOG_LEVEL_ERROR,
                 "Unknown particle generator \"" +
                 particleGeneratorName + "\"!", particleGeneratorNode
             );
@@ -65,13 +66,14 @@ void SpikeDamageType::loadFromDataNode(DataNode* node) {
         if(s != game.content.statusTypes.list.end()) {
             statusToApply = s->second;
         } else {
-            game.errors.report(
+            game.log.report(
+                LOG_LEVEL_ERROR,
                 "Unknown status type \"" + statusName + "\"!",
                 statusNameNode
             );
         }
     }
-
+    
     if(statusBuildupNode) {
         statusBuildupAmount /= 100.0f;
     }

@@ -842,7 +842,8 @@ void initDearImGui() {
             [assetInternalName].path;
             
         if(!strEndsWith(strToLower(path), ".ttf")) {
-            game.errors.report(
+            game.log.report(
+                LOG_LEVEL_ERROR,
                 "Could not load the editor font \"" + path + "\"! Only "
                 "TTF font files are allowed."
             );
@@ -1045,7 +1046,8 @@ void initEventThings(
     //It's possible that this resolution is not valid for fullscreen.
     //Detect this and try again in windowed.
     if(!game.display && game.winFullscreen) {
-        game.errors.report(
+        game.log.report(
+            LOG_LEVEL_ERROR,
             "Could not create a fullscreen window with the resolution " +
             i2s(game.winW) + "x" + i2s(game.winH) + ". "
             "Setting the fullscreen option back to false. "

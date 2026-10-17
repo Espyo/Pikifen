@@ -74,7 +74,8 @@ MobCategory* CategoryManager::getFromFolderName(
     forIdx(n, categories) {
         if(categories[n]->folderName == name) return categories[n];
     }
-    game.errors.report(
+    game.log.report(
+        LOG_LEVEL_ERROR,
         "Mob category with the folder name \"" + name + "\" not found!"
     );
     return nullptr;

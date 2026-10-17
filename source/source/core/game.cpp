@@ -249,7 +249,7 @@ void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT& ev) {
         }
         
         if(!line.empty()) {
-            console.write(line, false, 5.0f);
+            console.write(LOG_LEVEL_INFO, line, 5.0f);
         }
     }
     
@@ -345,7 +345,7 @@ void Game::globalLogicPre() {
                 str += " | ";
             }
         }
-        console.write(str, false, 5.0f);
+        console.write(LOG_LEVEL_INFO, str, 5.0f);
     }
     
     //Player action handling.

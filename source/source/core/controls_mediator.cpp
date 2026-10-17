@@ -785,8 +785,8 @@ Inpution::InputSource ControlsMediator::strToInputSource(
         inputSource.axisNr = s2i(parts[3]);
         
     } else {
-        game.errors.report(
-            "Unrecognized input \"" + s + "\"!"
+        game.log.report(
+            LOG_LEVEL_ERROR, "Unrecognized input \"" + s + "\"!"
         );
     }
     

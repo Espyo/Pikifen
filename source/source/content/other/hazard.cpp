@@ -45,7 +45,8 @@ void Hazard::loadFromDataNode(DataNode* node) {
         forIdx(e, effectsStrs) {
             string effectName = effectsStrs[e];
             if(!isInMap(game.content.statusTypes.list, effectName)) {
-                game.errors.report(
+                game.log.report(
+                    LOG_LEVEL_ERROR,
                     "Unknown status effect \"" + effectName + "\"!",
                     effectsNode
                 );
@@ -59,7 +60,8 @@ void Hazard::loadFromDataNode(DataNode* node) {
     
     if(liquidNode) {
         if(!isInMap(game.content.liquids.list, liquidStr)) {
-            game.errors.report(
+            game.log.report(
+                LOG_LEVEL_ERROR,
                 "Unknown liquid \"" + liquidStr + "\"!",
                 liquidNode
             );

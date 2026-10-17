@@ -167,7 +167,8 @@ bool FsmDef::loadFromDataNode(
     //First state index.
     if(!firstStateNode->value.empty()) {
         if(!setFirstState(firstStateNode->value)) {
-            game.errors.report(
+            game.log.report(
+                LOG_LEVEL_ERROR,
                 "Unknown state \"" + firstStateNode->value + "\" "
                 "to set as the first state!",
                 firstStateNode

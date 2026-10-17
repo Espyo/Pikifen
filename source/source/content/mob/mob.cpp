@@ -3317,7 +3317,8 @@ void Mob::readScriptVars(const ScriptVarManager& varsMgr) {
         bool found;
         setTeam(enumGetValue(mobTeamINames, teamVar, &found));
         if(!found) {
-            game.errors.report(
+            game.log.report(
+                LOG_LEVEL_ERROR,
                 "Unknown team name \"" + teamVar +
                 "\", when trying to create mob (" +
                 getErrorMessageMobInfo(this) + ")!", nullptr
@@ -3432,7 +3433,8 @@ void Mob::setAnimation(
     }
     
     if(finalIdx == INVALID) {
-        game.errors.report(
+        game.log.report(
+            LOG_LEVEL_ERROR,
             "A mob (" + getErrorMessageMobInfo(this) +
             ") tried to switch from " +
             (
@@ -3610,7 +3612,8 @@ Mob* Mob::spawn(const MobType::SpawnInfo* info, MobType* typePtr) {
     }
     
     if(!typePtr) {
-        game.errors.report(
+        game.log.report(
+            LOG_LEVEL_ERROR,
             "A mob (" + getErrorMessageMobInfo(this) +
             ") tried to spawn an object of the "
             "type \"" + info->mobTypeName + "\", but there is no such "
@@ -4254,7 +4257,8 @@ void Mob::tickMiscLogic(float deltaT) {
         scriptVM.runReadyActions();
         FsmEventDef* readyEv = scriptVM.fsm.getEvent(FSM_EV_ON_READY);
         if(readyEv && game.makerTools.useWarnings) {
-            game.errors.report(
+            game.log.report(
+                LOG_LEVEL_ERROR,
                 "A mob (" + getErrorMessageMobInfo(this) + ") just used the "
                 "\"on_ready\" event. That event is deprecated "
                 "and may be removed in the future! Please use "

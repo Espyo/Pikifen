@@ -6,8 +6,12 @@ Current tasks (tasks being worked on, but not yet committed)
 
 Next tasks (roughly sorted most important first)
     --- Problems to fix ---
+    Increase the range at which Pikmin lose the party
+    Bulbmin should cause 10 damage, if they're not already
 
     --- 1.2.0 ---
+    Make ships and Onions react to sucking something up
+    Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
     
     --- 1.3.0 ---
     Create an area that's good for people to pick up and play
@@ -47,17 +51,18 @@ Next tasks (roughly sorted most important first)
             Have a bomb rock tucked in the corner?
             Have a climbing stick somewhere?
             Enemies: Crumbugs, Dwarf Reds, loads of Female Sheargrubs, Puffy Blowhog?, White Spectralids
-    Update Dear ImGui to 1.92.9
+    Update Dear ImGui to 1.93.0
         > Made AddCallback() user data default to Null for convenience.
         > DragXXX, SliderXXX, InputScalar: with ImGuiItemFlags_LiveEditOnInputScalar now defaulting to being disabled: inputting a value with the keyboard doesn't write intermediate values to the backing variable.
         > Windows/Tables settings entries can now record the last used date in YYYYMMDD format, allowing tools to run to e.g. delete entries that haven't been used in X months. (#9460) / Added bool io.ConfigIniSettingsSaveLastUsedDate to disable saving that info
+        AddPrimitiveNameHere() functions now render slightly differently, but it should be fine
     https://github.com/Espyo/Pikifen/compare/master...Helodity:Pikifen:pack-loading-restart
     Maker tool improvements
         Add a proper maker console
             Helpful so you can see error logs, script prints, etc.
             The ability to write commands that trigger maker tools, with parameters too
             If you're writing a command, there should be an exception for the console's key, since you probably want to toggle it, not type the \ character
-            As you're writing a command, a list of the five or so most relevant commands show up, the one closest to the bottom (input) should be the one that's filled in when tab is pressed. This sorting should pick the most relevant first, and should be fuzzy (so "tlp" should find "TeLePort", "am" should suggest "frAMe_advance" before it suggests "Area_iMage"). For arguments, it should suggest the default if nothing's been typed yet, and hitting tab should auto-place the default
+            As you're writing a command, a list of the five or so most relevant commands should show up, the one closest to the bottom (input) should be the one that's filled in when tab is pressed. This sorting should pick the most relevant first, and should be fuzzy (so "tlp" should find "TeLePort", "am" should suggest "frAMe_advance" before it suggests "Area_iMage"). For arguments, it should suggest the default if nothing's been typed yet, and hitting tab should auto-place the default
             Page up and page down to scroll the output, up and down for input history, tab to auto-complete
                 If you're not at the bottom, new commands shouldn't scroll the view down, and deleting old commands shouldn't scroll the view up
                 Save the history in options.txt?
@@ -87,6 +92,7 @@ Next tasks (roughly sorted most important first)
                 See how Allegro's ex_loading_thread.c does it
                 https://github.com/Helodity/Pikifen/commit/e2a5e3b982142474ff55ca60cc36fab21605115d
             Area names and subtitles could have custom colors like https://cdn.discordapp.com/attachments/212795100818833408/1095572527583080488/image.png (thanks Captain Salty)
+        https://github.com/Helodity/Pikifen/tree/button-revamp
     Editor improvements
         The grid options in editors should go in the menu, not the options dialog (thanks Neo)
         Add a shortcut for toggling the transformation widget (thanks Neo)
@@ -116,6 +122,7 @@ Next tasks (roughly sorted most important first)
         If the player has the same input bound to different actions, there should be a warning... Except a lot of them are okay to have, like movement + leader cursor movement, menu movement + radar panning, etc.
         Pressing left or right on a modal with a text input will just move the caret, but HOLDING will make the repeat events trigger
     Visual improvements
+        https://github.com/Helodity/Pikifen/tree/graphic-revamp
         Use a screenshot for the title screen
             The left side should be all organic, and the right side should have some DEV Lab stuff. The bottom should probably be something special but not attention-grabbing, the top should give space for the Pikmin to form the letters, and the topmost pixels should probably help the disclaimer text and version number readable, but not call attention
             Maybe the play and the make sides could have their own backgrounds, and once you flip to either of those pages the backgrounds slides in
@@ -131,11 +138,13 @@ Next tasks (roughly sorted most important first)
             Particles floating in the wind
             A background detail: those little floaty white things you see in forests
             Ceiling water droplets
+            Pikmin and enemy spirits shouldn't be hardcoded; also maybe add a way for different types to use different generators?
         Sprites need more shading for more depth; highlights help too (thanks Neo)
         God rays -- beams of light shining between the leaves; they should spin with the sun, and sometimes fade out to non-existence
         Mob shadows should depend on the mob's radius AND height
         Upscale fonts and other things that are really crusty and low-res
             Currently, text in buttons and such does not grow past its font size. This makes it look small if the window is a large resolution
+        Upon taking damage, the screen should shake and temporarily turn red (thanks Neo)
     Areas should be able to include "decals", in the same vein as tree shadows. These are a lightweight way to add leaves, rocks, pebbles, sticks, small plants, cobwebs, etc. to the area's terrain without using sectors or objects
         Add the previously mentioned ones to the base content
     Content manager should load and unload different parts of the content (manifests, data, graphics) through flags, not a level enum (basic, editor, full) with arbitrary cut-off points
@@ -847,7 +856,6 @@ Misc. things (to be implemented whenever)
     Base content to tweak
         Move the areas into their own pack, so people can disable it if they ever want to not have them (like if they installed another pack that changes Pikifen entirely and the base areas don't fit)
             Make sure the Tutorial Meadow prompt doesn't crash trying to access a non-existent area. The engine should probably read a property from the game config with the name of the tutorial area, and simply not show the prompt if it's empty
-        Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
         Water Dumples should wander around a small bit, right?
         Make Rock Pikmin colors darker (thanks Nataly171)
         Skutterchucks should throw bomb rocks
@@ -969,7 +977,7 @@ Tasks for later on (I might never implement these)
             "Sprite" -> "Pose"?
             You start by being presented with the spritesheet, then you click on a sprite, write its name, click on the next, its name, etc.
                 Or you just draw a line or something above all sprites you want, and it auto-creates some sprites (thanks Tenacious)
-            Add a section to find errors
+            Add a section to find problems
                 It could check what kind of animation this is, like a Pikmin type, and determine that there are some needed animations that are not included
                 Maybe report if an enemy has attack hitboxes that don't hit below it?
         All editors
@@ -980,6 +988,7 @@ Tasks for later on (I might never implement these)
                 a. Have the icon represent the current mode?
                 b. Have the icon represent the next mode?
                 c. Only use buttons for one-off actions, and use radio buttons or something else for these mode-changing widgets
+            Mixed-value widgets for when you have multiple objects, sectors, whatever selected (only with Dear ImGui 1.93.0 or higher)
     GUI
         Make it so images in custom GUI items can randomly select between a selection of images (useful for the title screen) (thanks Helodity)
         GUI items could be told they are currently being activated, so that buttons can appear pressed in

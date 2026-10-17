@@ -2008,7 +2008,7 @@ void ScriptActionRunners::print(ScriptActionInstRunData& data) {
     string line =
         "(" + speaker + " said:) " + textArg;
         
-    game.console.write(line, false);
+    game.console.write(LOG_LEVEL_INFO, line, false);
 }
 
 
@@ -3690,9 +3690,11 @@ void ScriptActionUtils::reportActionError(
     string filePath = getNodePath(data);
     
     if(filePath.empty()) {
-        game.errors.report(info);
+        game.log.report(LOG_LEVEL_ERROR, info);
     } else {
-        game.errors.report(info, filePath, data.actionDef->dataFileLine);
+        game.log.report(
+            LOG_LEVEL_ERROR, info, filePath, data.actionDef->dataFileLine
+        );
     }
 }
 
