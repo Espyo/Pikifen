@@ -404,6 +404,7 @@ struct MakerConsoleTerminal {
     
     void clear();
     int draw(int y) const;
+    void handleAllegroEvent(const ALLEGRO_EVENT& ev);
     void tick(float deltaT);
     void write(LOG_LEVEL level, const string& text);
     void open(bool instant = false);
@@ -422,6 +423,9 @@ struct MakerConsoleTerminal {
     //How much of it is visible [0 - 1].
     //Used when scrolling it in and out of view.
     float visibility = 0.0f;
+    
+    //How many entries to scroll up from the bottom.
+    size_t scroll = 0;
     
     //Text that had been written out, in chronological order.
     vector<string> output;
@@ -488,6 +492,7 @@ struct MakerConsole {
     
     void clear();
     int draw(int y) const;
+    void handleAllegroEvent(const ALLEGRO_EVENT& ev);
     void tick(float deltaT);
     void write(
         LOG_LEVEL level, const string& text,
