@@ -256,6 +256,9 @@ void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT& ev) {
     //Hardware mediator.
     hardware.handleAllegroEvent(ev);
     
+    //Maker console.
+    console.handleAllegroEvent(ev);
+    
     //Dear ImGui.
     ImGui_ImplAllegro5_ProcessEvent((ALLEGRO_EVENT*) &ev);
 }
