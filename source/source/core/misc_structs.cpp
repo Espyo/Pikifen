@@ -1277,6 +1277,16 @@ int MakerConsole::draw(int y) const {
 
 
 /**
+ * @brief Handles an Allegro event.
+ *
+ * @param ev The event.
+ */
+void MakerConsole::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
+    terminal.handleAllegroEvent(ev);
+}
+
+
+/**
  * @brief Opens the console terminal,
  * gradually showing it unless specified otherwise.
  *
@@ -1582,6 +1592,7 @@ void MakerConsoleTerminal::clear() {
     output.clear();
     outputTimestamps.clear();
     outputLevels.clear();
+    scroll = 0;
     input.clear();
     visibilityState = OPEN_CLOSE_STATE_CLOSED;
     visibility = 0.0f;
@@ -1653,16 +1664,47 @@ int MakerConsoleTerminal::draw(int y) const {
         CONSOLE::COLOR_BG
     );
     
+    //Scrollbar.
+    if(output.size() > 1) {
+        bool hasMoreAbove = scroll < output.size() - 1;
+        drawFilledEquilateralTriangle(
+            Point(boxX + boxW - 8.0f, boxY + 8.0f),
+            6.0f, -(TAU / 4.0f),
+            multAlpha(CONSOLE::COLOR_MUTED, hasMoreAbove ? 1.0f : 0.3f)
+        );
+        bool hasMoreBelow = scroll > 0;
+        drawFilledEquilateralTriangle(
+            Point(boxX + boxW - 8.0f, boxY + boxH - 8.0f),
+            6.0f, TAU / 4.0f,
+            multAlpha(CONSOLE::COLOR_MUTED, hasMoreBelow ? 1.0f : 0.3f)
+        );
+        int scrollZoneY1 = boxY + 18.0f;
+        int scrollZoneY2 = boxY + boxH - 18.0f;
+        float scrollRatio = scroll / (float) (output.size() - 1);
+        int scrollY =
+            interpolateNumber(
+                scrollRatio, 0.0f, 1.0f, scrollZoneY2, scrollZoneY1
+            );
+        al_draw_line(
+            boxX + boxW - 14.0f, scrollY,
+            boxX + boxW - 2.0f, scrollY,
+            CONSOLE::COLOR_MUTED, 6.0f
+        );
+    }
+    
     //Calculate the lines to show.
     vector<string> lines;
     vector<float> lineTimestamps;
     vector<LOG_LEVEL> lineLevels;
-    size_t entryIt = 0;
+    size_t entryIt = scroll;
+    size_t entriesDrawn = 0;
     
     while(true) {
         bool done = false;
         int entryIdx = output.size() - entryIt - 1;
-        if(entryIdx < 0 || entryIdx >= (int) output.size()) break;
+        if(entryIdx < 0) break;
+        if(entryIdx >= (int) output.size()) break;
+        if(entriesDrawn >= CONSOLE::OUTPUT_MAX_VISIBLE_LINES) break;
         
         //Split the entry into lines, since it may be too long to fit
         //in the game window.
@@ -1693,6 +1735,7 @@ int MakerConsoleTerminal::draw(int y) const {
         
         if(done) break;
         entryIt++;
+        entriesDrawn++;
     }
     
     //Text lines.
@@ -1788,6 +1831,24 @@ OPEN_CLOSE_STATE MakerConsoleTerminal::getVisibilityState() const {
 
 
 /**
+ * @brief Handles an Allegro event.
+ *
+ * @param ev The event.
+ */
+void MakerConsoleTerminal::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
+    if(visibility == 0.0f) return;
+    
+    if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {
+        if(ev.keyboard.keycode == ALLEGRO_KEY_PGUP) {
+            if(output.size() > 1 && scroll < output.size() - 1) scroll++;
+        } else if(ev.keyboard.keycode == ALLEGRO_KEY_PGDN) {
+            if(output.size() > 1 && scroll > 0) scroll--;
+        }
+    }
+}
+
+
+/**
  * @brief Opens the console terminal,
  * gradually showing it unless specified otherwise.
  *
@@ -1878,6 +1939,16 @@ void MakerConsoleTerminal::write(LOG_LEVEL level, const string& text) {
         outputTimestamps.push_back(game.timePassed);
         outputLevels.push_back(level);
     }
+    
+    if(scroll > 0) scroll += lines.size();
+    
+    while(output.size() > CONSOLE::OUTPUT_MAX_SIZE) {
+        eraseInVector(output, 0);
+        eraseInVector(outputTimestamps, 0);
+        eraseInVector(outputLevels, 0);
+    }
+    
+    scroll = std::min(scroll, output.size() - 1);
 }
 
 
