@@ -5443,7 +5443,7 @@ mobs{
 		p=336.0000 -128.0000
 	}
 	decoration{
-		type=shoot
+		type=fern
 		p=640.0000 -176.0000
 	}
 	decoration{
@@ -5475,7 +5475,7 @@ mobs{
 		p=-224.0000 -736.0000
 	}
 	decoration{
-		type=shoot
+		type=cattail
 		p=192.0000 -912.0000
 	}
 	custom{
@@ -5841,8 +5841,8 @@ mobs{
 		p=32.0000 -1200.0000
 	}
 	decoration{
-		type=shoot
-		p=384.0000 -1184.0000
+		type=fern
+		p=288.0000 -1088.0000
 	}
 	decoration{
 		type=shoot
@@ -5929,8 +5929,9 @@ mobs{
 		p=-656.0000 -784.0000
 	}
 	decoration{
-		type=leaves
-		p=-832.0000 -1168.0000
+		type=fern
+		p=-896.0000 -1120.0000
+		vars=random_rotation=false
 	}
 	decoration{
 		type=leaves
@@ -5949,7 +5950,7 @@ mobs{
 		p=128.0000 400.0000
 	}
 	decoration{
-		type=leaves
+		type=fern
 		p=-320.0000 432.0000
 	}
 	decoration{
@@ -5965,12 +5966,14 @@ mobs{
 		p=-464.0000 1120.0000
 	}
 	decoration{
-		type=leaves
+		type=cattail
 		p=-224.0000 1344.0000
 	}
 	decoration{
-		type=leaves
+		type=fern
 		p=960.0000 1120.0000
+		angle=-2.2982
+		vars=random_rotation=false
 	}
 	decoration{
 		type=leaves
@@ -6009,8 +6012,10 @@ mobs{
 		p=1200.0000 800.0000
 	}
 	decoration{
-		type=shoot
-		p=1536.0000 624.0000
+		type=fern
+		p=1568.0000 672.0000
+		angle=-2.3404
+		vars=random_rotation=false
 	}
 	decoration{
 		type=shoot
@@ -6029,8 +6034,10 @@ mobs{
 		p=1600.0000 176.0000
 	}
 	decoration{
-		type=shoot
-		p=1808.0000 -176.0000
+		type=fern
+		p=1888.0000 -224.0000
+		angle=2.9982
+		vars=random_rotation=false
 	}
 	decoration{
 		type=shoot

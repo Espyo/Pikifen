@@ -469,170 +469,15 @@ void AreaEditor::processGuiDialogNew() {
 void AreaEditor::processGuiDialogOptions() {
     //Controls node.
     if(saveableTreeNode("options", "Controls")) {
-    
-        //Snap threshold value.
-        int snapThreshold = (int) game.options.areaEd.snapThreshold;
-        ImGui::SetNextItemWidth(64.0f);
-        ImGui::DragInt(
-            "Snap threshold", &snapThreshold,
-            0.1f, 0, INT_MAX
-        );
-        setTooltip(
-            "Mouse cursor must be these many pixels close\n"
-            "to a vertex/edge in order to snap there.\n"
-            "Default: " +
-            i2s(OPTIONS::AREA_ED_D::SNAP_THRESHOLD) + ".",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        game.options.areaEd.snapThreshold = snapThreshold;
-        
-        //Middle mouse button pans checkbox.
-        ImGui::Checkbox("Use MMB to pan", &game.options.editors.mmbPan);
-        setTooltip(
-            "Use the middle mouse button to pan the camera\n"
-            "(and RMB to reset camera/zoom).\n"
-            "Default: " +
-            b2s(OPTIONS::EDITORS_D::MMB_PAN) + "."
-        );
-        
-        //Drag threshold value.
-        int dragThreshold = (int) game.options.editors.mouseDragThreshold;
-        ImGui::SetNextItemWidth(64.0f);
-        ImGui::DragInt(
-            "Drag threshold", &dragThreshold,
-            0.1f, 0, INT_MAX
-        );
-        setTooltip(
-            "Mouse cursor must move these many pixels "
-            "to be considered a drag.\n"
-            "Default: " + i2s(OPTIONS::EDITORS_D::MOUSE_DRAG_THRESHOLD) +
-            ".",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        game.options.editors.mouseDragThreshold = dragThreshold;
-        
+        processGuiDialogOptionsControls();
         ImGui::TreePop();
-        
     }
     
     //View node.
     ImGui::Spacer();
     if(saveableTreeNode("options", "View")) {
-    
-        //Show edge length checkbox.
-        ImGui::Checkbox(
-            "Show edge length", &game.options.areaEd.showEdgeLength
-        );
-        setTooltip(
-            "Show the length of nearby edges when drawing or moving vertexes.\n"
-            "Default: " +
-            b2s(OPTIONS::AREA_ED_D::SHOW_EDGE_LENGTH) + "."
-        );
-        
-        //Show circular sector info checkbox.
-        ImGui::Checkbox(
-            "Show circular sector info",
-            &game.options.areaEd.showCircularInfo
-        );
-        setTooltip(
-            "Show the radius and number of vertexes of a circular sector\n"
-            "when drawing one.\n"
-            "Default: " +
-            b2s(OPTIONS::AREA_ED_D::SHOW_CIRCULAR_INFO) + "."
-        );
-        
-        //Show path link length checkbox.
-        ImGui::Checkbox(
-            "Show path link length",
-            &game.options.areaEd.showPathLinkLength
-        );
-        setTooltip(
-            "Show the length of nearby path links when drawing or\n"
-            "moving path stops.\n"
-            "Default: " +
-            b2s(OPTIONS::AREA_ED_D::SHOW_PATH_LINK_LENGTH) + "."
-        );
-        
-        //Show territory checkbox.
-        ImGui::Checkbox(
-            "Show territory/terrain radius",
-            &game.options.areaEd.showTerritory
-        );
-        setTooltip(
-            "Show the territory radius and terrain radius\n"
-            "of the selected objects, when applicable.\n"
-            "Default: " + b2s(OPTIONS::AREA_ED_D::SHOW_TERRITORY) +
-            "."
-        );
-        
-        //View mode text.
-        int viewMode = game.options.areaEd.viewMode;
-        ImGui::Text("View mode:");
-        
-        ImGui::Indent();
-        
-        //Textures view mode radio button.
-        ImGui::RadioButton("Textures", &viewMode, VIEW_MODE_TEXTURES);
-        setTooltip(
-            "Draw textures on the sectors." +
-            (string) (
-                (
-                    OPTIONS::AREA_ED_D::VIEW_MODE ==
-                    VIEW_MODE_TEXTURES
-                ) ?
-                "\nThis is the default." :
-                ""
-            )
-        );
-        
-        //Wireframe view mode radio button.
-        ImGui::RadioButton("Wireframe", &viewMode, VIEW_MODE_WIREFRAME);
-        setTooltip(
-            "Do not draw sectors, only edges and vertexes.\n"
-            "Best for performance." +
-            (string) (
-                (
-                    OPTIONS::AREA_ED_D::VIEW_MODE ==
-                    VIEW_MODE_WIREFRAME
-                ) ?
-                "This is the default." :
-                ""
-            )
-        );
-        
-        //Heightmap view mode radio button.
-        ImGui::RadioButton("Heightmap", &viewMode, VIEW_MODE_HEIGHTMAP);
-        setTooltip(
-            "Draw sectors as heightmaps. Lighter means taller." +
-            (string) (
-                (
-                    OPTIONS::AREA_ED_D::VIEW_MODE ==
-                    VIEW_MODE_HEIGHTMAP
-                ) ?
-                "This is the default." :
-                ""
-            )
-        );
-        
-        //Brightness view mode radio button.
-        ImGui::RadioButton("Brightness", &viewMode, VIEW_MODE_BRIGHTNESS);
-        setTooltip(
-            "Draw sectors as solid grays based on their brightness." +
-            (string) (
-                (
-                    OPTIONS::AREA_ED_D::VIEW_MODE ==
-                    VIEW_MODE_BRIGHTNESS
-                ) ?
-                "This is the default." :
-                ""
-            )
-        );
-        game.options.areaEd.viewMode = (VIEW_MODE) viewMode;
-        
-        ImGui::Unindent();
-        
+        processGuiDialogOptionsView();
         ImGui::TreePop();
-        
     }
     
     ImGui::Spacer();
@@ -643,117 +488,288 @@ void AreaEditor::processGuiDialogOptions() {
     
     //Misc. node.
     if(saveableTreeNode("options", "Misc.")) {
-    
-        //Interface mode text.
-        ImGui::Text("Interface mode:");
-        
-        //Basic interface button.
-        int interfaceModeI = (int) game.options.areaEd.advancedMode;
-        ImGui::Indent();
-        ImGui::RadioButton("Basic", &interfaceModeI, 0);
-        setTooltip(
-            "Only shows basic GUI items. Recommended for starters\n"
-            "so that the interface isn't overwhelming. See the\n"
-            "\"Advanced\" option's description for a list of such items."
-        );
-        
-        //Advanced interface button.
-        ImGui::RadioButton("Advanced", &interfaceModeI, 1);
-        setTooltip(
-            "Shows and enables some advanced GUI items:\n"
-            "- Toolbar buttons (and shortcut keys) to quickly swap "
-            "modes with.\n"
-            "- Toolbar button to toggle preview mode with."
-        );
-        ImGui::Unindent();
-        game.options.areaEd.advancedMode = (bool) interfaceModeI;
-        
-        //Selection transformation checkbox.
-        ImGui::Checkbox(
-            "Selection transformation", &game.options.areaEd.selTrans
-        );
-        setTooltip(
-            "If true, when you select two or more things, some handles\n"
-            "will appear, allowing you to scale or rotate them together.\n"
-            "Default: " + b2s(OPTIONS::AREA_ED_D::SEL_TRANS) + "."
-        );
-        
-        //Grid interval text.
-        ImGui::Text(
-            "Grid interval: %i", (int) game.options.areaEd.gridInterval
-        );
-        
-        //Increase grid interval button.
-        ImGui::SameLine();
-        if(
-            ImGui::Button(
-                "+",
-                ImVec2(ImGui::GetFrameHeight(), ImGui::GetFrameHeight())
-            )
-        ) {
-            gridIntervalIncreaseCmd(1.0f);
-        }
-        setTooltip(
-            "Increase the spacing on the grid.\n"
-            "Default: " + i2s(OPTIONS::AREA_ED_D::GRID_INTERVAL) +
-            ".",
-            "Shift + Plus"
-        );
-        
-        //Decrease grid interval button.
-        ImGui::SameLine();
-        if(
-            ImGui::Button(
-                "-",
-                ImVec2(ImGui::GetFrameHeight(), ImGui::GetFrameHeight())
-            )
-        ) {
-            gridIntervalDecreaseCmd(1.0f);
-        }
-        setTooltip(
-            "Decrease the spacing on the grid.\n"
-            "Default: " + i2s(OPTIONS::AREA_ED_D::GRID_INTERVAL) +
-            ".",
-            "Shift + Minus"
-        );
-        
-        //Auto-backup interval value.
-        int backupInterval = game.options.areaEd.backupInterval;
-        ImGui::SetNextItemWidth(64.0f);
-        ImGui::DragInt(
-            "Auto-backup interval", &backupInterval, 1, 0, INT_MAX
-        );
-        setTooltip(
-            "Interval between auto-backup saves, in seconds. 0 = off.\n"
-            "Default: " + i2s(OPTIONS::AREA_ED_D::BACKUP_INTERVAL) +
-            ".",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        game.options.areaEd.backupInterval = backupInterval;
-        
-        //Undo limit value.
-        size_t oldUndoLimit = game.options.areaEd.undoLimit;
-        int undoLimit = (int) game.options.areaEd.undoLimit;
-        ImGui::SetNextItemWidth(64.0f);
-        ImGui::DragInt(
-            "Undo limit", &undoLimit, 0.1, 0, INT_MAX
-        );
-        setTooltip(
-            "Maximum number of operations that can be undone. 0 = off.\n"
-            "Default: " + i2s(OPTIONS::AREA_ED_D::UNDO_LIMIT) + ".",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        game.options.areaEd.undoLimit = undoLimit;
-        
-        if(game.options.areaEd.undoLimit != oldUndoLimit) {
-            updateUndoHistory();
-        }
-        
-        ImGui::Spacer();
-        
+        processGuiDialogOptionsMisc();
         ImGui::TreePop();
-        
     }
+}
+
+
+/**
+ * @brief Processes the controls widgets of the
+ * options dialog for this frame.
+ */
+void AreaEditor::processGuiDialogOptionsControls() {
+    //Snap threshold value.
+    int snapThreshold = (int) game.options.areaEd.snapThreshold;
+    ImGui::SetNextItemWidth(64.0f);
+    ImGui::DragInt(
+        "Snap threshold", &snapThreshold,
+        0.1f, 0, INT_MAX
+    );
+    setTooltip(
+        "Mouse cursor must be these many pixels close\n"
+        "to a vertex/edge in order to snap there.\n"
+        "Default: " +
+        i2s(OPTIONS::AREA_ED_D::SNAP_THRESHOLD) + ".",
+        "", WIDGET_EXPLANATION_DRAG
+    );
+    game.options.areaEd.snapThreshold = snapThreshold;
+    
+    //Middle mouse button pans checkbox.
+    ImGui::Checkbox("Use MMB to pan", &game.options.editors.mmbPan);
+    setTooltip(
+        "Use the middle mouse button to pan the camera\n"
+        "(and RMB to reset camera/zoom).\n"
+        "Default: " +
+        b2s(OPTIONS::EDITORS_D::MMB_PAN) + "."
+    );
+    
+    //Drag threshold value.
+    int dragThreshold = (int) game.options.editors.mouseDragThreshold;
+    ImGui::SetNextItemWidth(64.0f);
+    ImGui::DragInt(
+        "Drag threshold", &dragThreshold,
+        0.1f, 0, INT_MAX
+    );
+    setTooltip(
+        "Mouse cursor must move these many pixels "
+        "to be considered a drag.\n"
+        "Default: " + i2s(OPTIONS::EDITORS_D::MOUSE_DRAG_THRESHOLD) +
+        ".",
+        "", WIDGET_EXPLANATION_DRAG
+    );
+    game.options.editors.mouseDragThreshold = dragThreshold;
+}
+
+
+/**
+ * @brief Processes the misc. widgets of the
+ * options dialog for this frame.
+ */
+void AreaEditor::processGuiDialogOptionsMisc() {
+    //Interface mode text.
+    ImGui::Text("Interface mode:");
+    
+    //Basic interface button.
+    int interfaceModeI = (int) game.options.areaEd.advancedMode;
+    ImGui::Indent();
+    ImGui::RadioButton("Basic", &interfaceModeI, 0);
+    setTooltip(
+        "Only shows basic GUI items. Recommended for starters\n"
+        "so that the interface isn't overwhelming. See the\n"
+        "\"Advanced\" option's description for a list of such items."
+    );
+    
+    //Advanced interface button.
+    ImGui::RadioButton("Advanced", &interfaceModeI, 1);
+    setTooltip(
+        "Shows and enables some advanced GUI items:\n"
+        "- Toolbar buttons (and shortcut keys) to quickly swap "
+        "modes with.\n"
+        "- Toolbar button to toggle preview mode with."
+    );
+    ImGui::Unindent();
+    game.options.areaEd.advancedMode = (bool) interfaceModeI;
+    
+    //Selection transformation checkbox.
+    ImGui::Checkbox(
+        "Selection transformation", &game.options.areaEd.selTrans
+    );
+    setTooltip(
+        "If true, when you select two or more things, some handles\n"
+        "will appear, allowing you to scale or rotate them together.\n"
+        "Default: " + b2s(OPTIONS::AREA_ED_D::SEL_TRANS) + "."
+    );
+    
+    //Grid interval text.
+    ImGui::Text(
+        "Grid interval: %i", (int) game.options.areaEd.gridInterval
+    );
+    
+    //Increase grid interval button.
+    ImGui::SameLine();
+    if(
+        ImGui::Button(
+            "+",
+            ImVec2(ImGui::GetFrameHeight(), ImGui::GetFrameHeight())
+        )
+    ) {
+        gridIntervalIncreaseCmd(1.0f);
+    }
+    setTooltip(
+        "Increase the spacing on the grid.\n"
+        "Default: " + i2s(OPTIONS::AREA_ED_D::GRID_INTERVAL) +
+        ".",
+        "Shift + Plus"
+    );
+    
+    //Decrease grid interval button.
+    ImGui::SameLine();
+    if(
+        ImGui::Button(
+            "-",
+            ImVec2(ImGui::GetFrameHeight(), ImGui::GetFrameHeight())
+        )
+    ) {
+        gridIntervalDecreaseCmd(1.0f);
+    }
+    setTooltip(
+        "Decrease the spacing on the grid.\n"
+        "Default: " + i2s(OPTIONS::AREA_ED_D::GRID_INTERVAL) +
+        ".",
+        "Shift + Minus"
+    );
+    
+    //Auto-backup interval value.
+    int backupInterval = game.options.areaEd.backupInterval;
+    ImGui::SetNextItemWidth(64.0f);
+    ImGui::DragInt(
+        "Auto-backup interval", &backupInterval, 1, 0, INT_MAX
+    );
+    setTooltip(
+        "Interval between auto-backup saves, in seconds. 0 = off.\n"
+        "Default: " + i2s(OPTIONS::AREA_ED_D::BACKUP_INTERVAL) +
+        ".",
+        "", WIDGET_EXPLANATION_DRAG
+    );
+    game.options.areaEd.backupInterval = backupInterval;
+    
+    //Undo limit value.
+    size_t oldUndoLimit = game.options.areaEd.undoLimit;
+    int undoLimit = (int) game.options.areaEd.undoLimit;
+    ImGui::SetNextItemWidth(64.0f);
+    ImGui::DragInt(
+        "Undo limit", &undoLimit, 0.1, 0, INT_MAX
+    );
+    setTooltip(
+        "Maximum number of operations that can be undone. 0 = off.\n"
+        "Default: " + i2s(OPTIONS::AREA_ED_D::UNDO_LIMIT) + ".",
+        "", WIDGET_EXPLANATION_DRAG
+    );
+    game.options.areaEd.undoLimit = undoLimit;
+    
+    if(game.options.areaEd.undoLimit != oldUndoLimit) {
+        updateUndoHistory();
+    }
+}
+
+
+/**
+ * @brief Processes the view widgets of the
+ * options dialog for this frame.
+ */
+void AreaEditor::processGuiDialogOptionsView() {
+    //Show edge length checkbox.
+    ImGui::Checkbox(
+        "Show edge length", &game.options.areaEd.showEdgeLength
+    );
+    setTooltip(
+        "Show the length of nearby edges when drawing or moving vertexes.\n"
+        "Default: " +
+        b2s(OPTIONS::AREA_ED_D::SHOW_EDGE_LENGTH) + "."
+    );
+    
+    //Show circular sector info checkbox.
+    ImGui::Checkbox(
+        "Show circular sector info",
+        &game.options.areaEd.showCircularInfo
+    );
+    setTooltip(
+        "Show the radius and number of vertexes of a circular sector\n"
+        "when drawing one.\n"
+        "Default: " +
+        b2s(OPTIONS::AREA_ED_D::SHOW_CIRCULAR_INFO) + "."
+    );
+    
+    //Show path link length checkbox.
+    ImGui::Checkbox(
+        "Show path link length",
+        &game.options.areaEd.showPathLinkLength
+    );
+    setTooltip(
+        "Show the length of nearby path links when drawing or\n"
+        "moving path stops.\n"
+        "Default: " +
+        b2s(OPTIONS::AREA_ED_D::SHOW_PATH_LINK_LENGTH) + "."
+    );
+    
+    //Show territory checkbox.
+    ImGui::Checkbox(
+        "Show territory/terrain radius",
+        &game.options.areaEd.showTerritory
+    );
+    setTooltip(
+        "Show the territory radius and terrain radius\n"
+        "of the selected objects, when applicable.\n"
+        "Default: " + b2s(OPTIONS::AREA_ED_D::SHOW_TERRITORY) +
+        "."
+    );
+    
+    //View mode text.
+    int viewMode = game.options.areaEd.viewMode;
+    ImGui::Text("View mode:");
+    
+    ImGui::Indent();
+    
+    //Textures view mode radio button.
+    ImGui::RadioButton("Textures", &viewMode, VIEW_MODE_TEXTURES);
+    setTooltip(
+        "Draw textures on the sectors." +
+        (string) (
+            (
+                OPTIONS::AREA_ED_D::VIEW_MODE ==
+                VIEW_MODE_TEXTURES
+            ) ?
+            "\nThis is the default." :
+            ""
+        )
+    );
+    
+    //Wireframe view mode radio button.
+    ImGui::RadioButton("Wireframe", &viewMode, VIEW_MODE_WIREFRAME);
+    setTooltip(
+        "Do not draw sectors, only edges and vertexes.\n"
+        "Best for performance." +
+        (string) (
+            (
+                OPTIONS::AREA_ED_D::VIEW_MODE ==
+                VIEW_MODE_WIREFRAME
+            ) ?
+            "This is the default." :
+            ""
+        )
+    );
+    
+    //Heightmap view mode radio button.
+    ImGui::RadioButton("Heightmap", &viewMode, VIEW_MODE_HEIGHTMAP);
+    setTooltip(
+        "Draw sectors as heightmaps. Lighter means taller." +
+        (string) (
+            (
+                OPTIONS::AREA_ED_D::VIEW_MODE ==
+                VIEW_MODE_HEIGHTMAP
+            ) ?
+            "This is the default." :
+            ""
+        )
+    );
+    
+    //Brightness view mode radio button.
+    ImGui::RadioButton("Brightness", &viewMode, VIEW_MODE_BRIGHTNESS);
+    setTooltip(
+        "Draw sectors as solid grays based on their brightness." +
+        (string) (
+            (
+                OPTIONS::AREA_ED_D::VIEW_MODE ==
+                VIEW_MODE_BRIGHTNESS
+            ) ?
+            "This is the default." :
+            ""
+        )
+    );
+    game.options.areaEd.viewMode = (VIEW_MODE) viewMode;
+    
+    ImGui::Unindent();
 }
 
 
@@ -766,184 +782,7 @@ void AreaEditor::processGuiMenuBar() {
         //Editor menu.
         if(ImGui::BeginMenu("Editor")) {
         
-            //Load or create area item.
-            if(ImGui::MenuItem("Load or create...", "Ctrl+L")) {
-                loadWidgetPos = getLastWidgetPost();
-                loadCmd(1.0f);
-            }
-            setTooltip(
-                "Pick an area to load, or create a new one.",
-                "Ctrl + L"
-            );
-            
-            //Reload current area item.
-            if(ImGui::MenuItem("Reload current area")) {
-                reloadWidgetPos = getLastWidgetPost();
-                reloadCmd(1.0f);
-            }
-            setTooltip(
-                "Lose all changes and reload the current area from your disk."
-            );
-            
-            //Save current area item.
-            if(ImGui::MenuItem("Save current area", "Ctrl+S")) {
-                saveCmd(1.0f);
-            }
-            setTooltip(
-                "Save the GUI definition to your disk.",
-                "Ctrl + S"
-            );
-            
-            //Delete current area item.
-            if(ImGui::MenuItem("Delete current area")) {
-                deleteAreaCmd(1.0f);
-            }
-            setTooltip(
-                "Delete the current area from your disk."
-            );
-            
-            //Open externally item.
-            if(ImGui::MenuItem("Open externally")) {
-                openExternallyCmd(1.0f);
-            }
-            setTooltip(
-                "Open the folder with the area's data in your "
-                "operative system.\n"
-                "Useful if you need to edit things by hand."
-            );
-            
-            //Open user data externally item.
-            if(ImGui::MenuItem("Open user data externally")) {
-                openUserDataExternallyCmd(1.0f);
-            }
-            setTooltip(
-                "Open the folder with the area's user data in your "
-                "operative system."
-            );
-            
-            //Quick play item.
-            if(ImGui::MenuItem("Quick play", "Ctrl+P")) {
-                quickPlayCmd(1.0f);
-            }
-            setTooltip(
-                "Save, quit, and start playing the area. Leaving will return "
-                "to the editor.",
-                "Ctrl + P"
-            );
-            
-            //Separator item.
-            ImGui::Separator();
-            
-            //Options menu item.
-            if(ImGui::MenuItem("Options...")) {
-                openOptionsDialog();
-            }
-            setTooltip(
-                "Open the options menu, so you can tweak your preferences."
-            );
-            
-            //Debug menu.
-            if(ImGui::BeginMenu("Debug")) {
-            
-                //Show edge indexes item.
-                if(
-                    ImGui::MenuItem(
-                        "Show edge indexes", "F2", &debugEdgeIdxs
-                    )
-                ) {
-                    if(debugEdgeIdxs) {
-                        setStatus("Enabled debug edge index display.");
-                    } else {
-                        setStatus("Disabled debug edge index display.");
-                    }
-                }
-                setTooltip(
-                    "Shows what index each edge is.\n"
-                    "Mostly useful for debugging the engine."
-                );
-                
-                //Show sector indexes item.
-                if(
-                    ImGui::MenuItem(
-                        "Show sector indexes", "F3", &debugSectorIdxs
-                    )
-                ) {
-                    if(debugSectorIdxs) {
-                        setStatus("Enabled debug sector index display.");
-                    } else {
-                        setStatus("Disabled debug sector index display.");
-                    }
-                }
-                setTooltip(
-                    "Shows the sector index on either side of an edge.\n"
-                    "Mostly useful for debugging the engine."
-                );
-                
-                //Show vertex indexes item.
-                if(
-                    ImGui::MenuItem(
-                        "Show vertex indexes", "F4", &debugVertexIdxs
-                    )
-                ) {
-                    if(debugVertexIdxs) {
-                        setStatus("Enabled debug vertex index display.");
-                    } else {
-                        setStatus("Disabled debug vertex index display.");
-                    }
-                }
-                setTooltip(
-                    "Shows what index each vertex is.\n"
-                    "Mostly useful for debugging the engine."
-                );
-                
-                //Show sector triangulation item.
-                if(
-                    ImGui::MenuItem(
-                        "Show sector triangulation", "F5", &debugTriangulation
-                    )
-                ) {
-                    if(debugTriangulation) {
-                        setStatus("Enabled debug triangulation display.");
-                    } else {
-                        setStatus("Disabled debug triangulation display.");
-                    }
-                }
-                setTooltip(
-                    "Shows what triangles make up the selected sector.\n"
-                    "Mostly useful for debugging the engine."
-                );
-                
-                //Show path indexes item.
-                if(
-                    ImGui::MenuItem(
-                        "Show path indexes", "F6", &debugPathIdxs
-                    )
-                ) {
-                    if(debugPathIdxs) {
-                        setStatus("Enabled debug path index display.");
-                    } else {
-                        setStatus("Disabled debug path index display.");
-                    }
-                }
-                setTooltip(
-                    "Shows what index each path stop is.\n"
-                    "Mostly useful for debugging the engine."
-                );
-                
-                ImGui::EndMenu();
-                
-            }
-            
-            //Quit editor item.
-            if(ImGui::MenuItem("Quit", "Ctrl+Q")) {
-                quitWidgetPos = getLastWidgetPost();
-                quitCmd(1.0f);
-            }
-            setTooltip(
-                "Quit the area editor.",
-                "Ctrl + Q"
-            );
-            
+            processGuiMenuBarEditor();
             ImGui::EndMenu();
             
         }
@@ -951,96 +790,7 @@ void AreaEditor::processGuiMenuBar() {
         //Edit menu.
         if(ImGui::BeginMenu("Edit")) {
         
-            //Undo item.
-            if(ImGui::MenuItem("Undo", "Ctrl+Z")) {
-                undoCmd(1.0f);
-            }
-            string undoText;
-            if(undoHistory.empty()) {
-                undoText = "Nothing to undo.";
-            } else {
-                undoText = "Undo: " + undoHistory.front().second + ".";
-            }
-            setTooltip(
-                undoText,
-                "Ctrl + Z"
-            );
-            
-            //Redo item.
-            if(ImGui::MenuItem("Redo", "Ctrl+Y")) {
-                redoCmd(1.0f);
-            }
-            string redoText;
-            if(redoHistory.empty()) {
-                redoText =
-                    "Nothing to redo.";
-            } else {
-                redoText =
-                    "Redo: " + redoHistory.front().second + ".";
-            }
-            setTooltip(
-                redoText,
-                "Ctrl + Y"
-            );
-            
-            //Separator.
-            ImGui::Separator();
-            
-            //Copy properties item.
-            if(ImGui::MenuItem("Copy properties", "Ctrl+C")) {
-                copyPropertiesCmd(1.0f);
-            }
-            setTooltip(
-                "Copies the properties of what you selected, if applicable.",
-                "Ctrl + C"
-            );
-            
-            //Paste properties item.
-            if(ImGui::MenuItem("Paste properties", "Ctrl+V")) {
-                pastePropertiesCmd(1.0f);
-            }
-            setTooltip(
-                "Pastes previously-copied properties onto what you selected, "
-                "if applicable.",
-                "Ctrl + V"
-            );
-            
-            if(
-                state == EDITOR_STATE_LAYOUT &&
-                subState == EDITOR_SUB_STATE_NONE
-            ) {
-                //Paste texture item.
-                if(ImGui::MenuItem("Paste texture", "Ctrl+T")) {
-                    pasteTextureCmd(1.0f);
-                }
-                setTooltip(
-                    "Pastes a previously-copied sector's texture onto "
-                    "the sector you selected.",
-                    "Ctrl + T"
-                );
-            }
-            
-            //Separator.
-            ImGui::Separator();
-            
-            //Select all item.
-            if(ImGui::MenuItem("Select all", "Ctrl+A")) {
-                selectAllCmd(1.0f);
-            }
-            setTooltip(
-                "Selects everything in the current mode, if applicable.",
-                "Ctrl + A"
-            );
-            
-            //Delete item.
-            if(ImGui::MenuItem("Delete", "Delete")) {
-                deleteCmd(1.0f);
-            }
-            setTooltip(
-                "Deletes the selected things, if applicable.",
-                "Delete"
-            );
-            
+            processGuiMenuBarEdit();
             ImGui::EndMenu();
             
         }
@@ -1048,54 +798,7 @@ void AreaEditor::processGuiMenuBar() {
         //View menu.
         if(ImGui::BeginMenu("View")) {
         
-            //Zoom in item.
-            if(ImGui::MenuItem("Zoom in", "Plus")) {
-                zoomInCmd(1.0f);
-            }
-            setTooltip(
-                "Zooms the camera in a bit.",
-                "Plus"
-            );
-            
-            //Zoom out item.
-            if(ImGui::MenuItem("Zoom out", "Minus")) {
-                zoomOutCmd(1.0f);
-            }
-            setTooltip(
-                "Zooms the camera out a bit.",
-                "Minus"
-            );
-            
-            //Zoom and position reset item.
-            if(ImGui::MenuItem("Zoom/position reset", "0")) {
-                zoomAndPosResetCmd(1.0f);
-            }
-            setTooltip(
-                "Reset the zoom level, and if pressed again,\n"
-                "reset the camera position.",
-                "0"
-            );
-            
-            //Zoom everything item.
-            if(ImGui::MenuItem("Zoom onto everything", "Home")) {
-                zoomEverythingCmd(1.0f);
-            }
-            setTooltip(
-                "Move and zoom the camera so that everything in the area\n"
-                "fits nicely into view.",
-                "Home"
-            );
-
-            //Zoom onto selection.
-            if(ImGui::MenuItem("Zoom onto selection")) {
-                zoomSelectionCmd(1.0f);
-            }
-            setTooltip(
-                "Move and zoom the camera so that everything that is\n"
-                "selected fits nicely into view.",
-                "Home"
-            );
-            
+            processGuiMenuBarView();
             ImGui::EndMenu();
             
         }
@@ -1146,6 +849,340 @@ void AreaEditor::processGuiMenuBar() {
         ImGui::EndMenuBar();
         
     }
+}
+
+
+/**
+ * @brief Processes the Dear ImGui menu bar's edit menu for this frame.
+ */
+void AreaEditor::processGuiMenuBarEdit() {
+    //Undo item.
+    if(ImGui::MenuItem("Undo", "Ctrl+Z")) {
+        undoCmd(1.0f);
+    }
+    string undoText;
+    if(undoHistory.empty()) {
+        undoText = "Nothing to undo.";
+    } else {
+        undoText = "Undo: " + undoHistory.front().second + ".";
+    }
+    setTooltip(
+        undoText,
+        "Ctrl + Z"
+    );
+    
+    //Redo item.
+    if(ImGui::MenuItem("Redo", "Ctrl+Y")) {
+        redoCmd(1.0f);
+    }
+    string redoText;
+    if(redoHistory.empty()) {
+        redoText =
+            "Nothing to redo.";
+    } else {
+        redoText =
+            "Redo: " + redoHistory.front().second + ".";
+    }
+    setTooltip(
+        redoText,
+        "Ctrl + Y"
+    );
+    
+    //Separator.
+    ImGui::Separator();
+    
+    //Copy properties item.
+    if(ImGui::MenuItem("Copy properties", "Ctrl+C")) {
+        copyPropertiesCmd(1.0f);
+    }
+    setTooltip(
+        "Copies the properties of what you selected, if applicable.",
+        "Ctrl + C"
+    );
+    
+    //Paste properties item.
+    if(ImGui::MenuItem("Paste properties", "Ctrl+V")) {
+        pastePropertiesCmd(1.0f);
+    }
+    setTooltip(
+        "Pastes previously-copied properties onto what you selected, "
+        "if applicable.",
+        "Ctrl + V"
+    );
+    
+    if(
+        state == EDITOR_STATE_LAYOUT &&
+        subState == EDITOR_SUB_STATE_NONE
+    ) {
+        //Paste texture item.
+        if(ImGui::MenuItem("Paste texture", "Ctrl+T")) {
+            pasteTextureCmd(1.0f);
+        }
+        setTooltip(
+            "Pastes a previously-copied sector's texture onto "
+            "the sector you selected.",
+            "Ctrl + T"
+        );
+    }
+    
+    //Separator.
+    ImGui::Separator();
+    
+    //Select all item.
+    if(ImGui::MenuItem("Select all", "Ctrl+A")) {
+        selectAllCmd(1.0f);
+    }
+    setTooltip(
+        "Selects everything in the current mode, if applicable.",
+        "Ctrl + A"
+    );
+    
+    //Delete item.
+    if(ImGui::MenuItem("Delete", "Delete")) {
+        deleteCmd(1.0f);
+    }
+    setTooltip(
+        "Deletes the selected things, if applicable.",
+        "Delete"
+    );
+}
+
+
+/**
+ * @brief Processes the Dear ImGui menu bar's editor menu for this frame.
+ */
+void AreaEditor::processGuiMenuBarEditor() {
+    //Load or create area item.
+    if(ImGui::MenuItem("Load or create...", "Ctrl+L")) {
+        loadWidgetPos = getLastWidgetPost();
+        loadCmd(1.0f);
+    }
+    setTooltip(
+        "Pick an area to load, or create a new one.",
+        "Ctrl + L"
+    );
+    
+    //Reload current area item.
+    if(ImGui::MenuItem("Reload current area")) {
+        reloadWidgetPos = getLastWidgetPost();
+        reloadCmd(1.0f);
+    }
+    setTooltip(
+        "Lose all changes and reload the current area from your disk."
+    );
+    
+    //Save current area item.
+    if(ImGui::MenuItem("Save current area", "Ctrl+S")) {
+        saveCmd(1.0f);
+    }
+    setTooltip(
+        "Save the GUI definition to your disk.",
+        "Ctrl + S"
+    );
+    
+    //Delete current area item.
+    if(ImGui::MenuItem("Delete current area")) {
+        deleteAreaCmd(1.0f);
+    }
+    setTooltip(
+        "Delete the current area from your disk."
+    );
+    
+    //Open externally item.
+    if(ImGui::MenuItem("Open externally")) {
+        openExternallyCmd(1.0f);
+    }
+    setTooltip(
+        "Open the folder with the area's data in your "
+        "operative system.\n"
+        "Useful if you need to edit things by hand."
+    );
+    
+    //Open user data externally item.
+    if(ImGui::MenuItem("Open user data externally")) {
+        openUserDataExternallyCmd(1.0f);
+    }
+    setTooltip(
+        "Open the folder with the area's user data in your "
+        "operative system."
+    );
+    
+    //Quick play item.
+    if(ImGui::MenuItem("Quick play", "Ctrl+P")) {
+        quickPlayCmd(1.0f);
+    }
+    setTooltip(
+        "Save, quit, and start playing the area. Leaving will return "
+        "to the editor.",
+        "Ctrl + P"
+    );
+    
+    //Separator item.
+    ImGui::Separator();
+    
+    //Options menu item.
+    if(ImGui::MenuItem("Options...")) {
+        openOptionsDialog();
+    }
+    setTooltip(
+        "Open the options menu, so you can tweak your preferences."
+    );
+    
+    //Debug menu.
+    if(ImGui::BeginMenu("Debug")) {
+    
+        //Show edge indexes item.
+        if(
+            ImGui::MenuItem(
+                "Show edge indexes", "F2", &debugEdgeIdxs
+            )
+        ) {
+            if(debugEdgeIdxs) {
+                setStatus("Enabled debug edge index display.");
+            } else {
+                setStatus("Disabled debug edge index display.");
+            }
+        }
+        setTooltip(
+            "Shows what index each edge is.\n"
+            "Mostly useful for debugging the engine."
+        );
+        
+        //Show sector indexes item.
+        if(
+            ImGui::MenuItem(
+                "Show sector indexes", "F3", &debugSectorIdxs
+            )
+        ) {
+            if(debugSectorIdxs) {
+                setStatus("Enabled debug sector index display.");
+            } else {
+                setStatus("Disabled debug sector index display.");
+            }
+        }
+        setTooltip(
+            "Shows the sector index on either side of an edge.\n"
+            "Mostly useful for debugging the engine."
+        );
+        
+        //Show vertex indexes item.
+        if(
+            ImGui::MenuItem(
+                "Show vertex indexes", "F4", &debugVertexIdxs
+            )
+        ) {
+            if(debugVertexIdxs) {
+                setStatus("Enabled debug vertex index display.");
+            } else {
+                setStatus("Disabled debug vertex index display.");
+            }
+        }
+        setTooltip(
+            "Shows what index each vertex is.\n"
+            "Mostly useful for debugging the engine."
+        );
+        
+        //Show sector triangulation item.
+        if(
+            ImGui::MenuItem(
+                "Show sector triangulation", "F5", &debugTriangulation
+            )
+        ) {
+            if(debugTriangulation) {
+                setStatus("Enabled debug triangulation display.");
+            } else {
+                setStatus("Disabled debug triangulation display.");
+            }
+        }
+        setTooltip(
+            "Shows what triangles make up the selected sector.\n"
+            "Mostly useful for debugging the engine."
+        );
+        
+        //Show path indexes item.
+        if(
+            ImGui::MenuItem(
+                "Show path indexes", "F6", &debugPathIdxs
+            )
+        ) {
+            if(debugPathIdxs) {
+                setStatus("Enabled debug path index display.");
+            } else {
+                setStatus("Disabled debug path index display.");
+            }
+        }
+        setTooltip(
+            "Shows what index each path stop is.\n"
+            "Mostly useful for debugging the engine."
+        );
+        
+        ImGui::EndMenu();
+        
+    }
+    
+    //Quit editor item.
+    if(ImGui::MenuItem("Quit", "Ctrl+Q")) {
+        quitWidgetPos = getLastWidgetPost();
+        quitCmd(1.0f);
+    }
+    setTooltip(
+        "Quit the area editor.",
+        "Ctrl + Q"
+    );
+}
+
+
+/**
+ * @brief Processes the Dear ImGui menu bar's view menu for this frame.
+ */
+void AreaEditor::processGuiMenuBarView() {
+    //Zoom in item.
+    if(ImGui::MenuItem("Zoom in", "Plus")) {
+        zoomInCmd(1.0f);
+    }
+    setTooltip(
+        "Zooms the camera in a bit.",
+        "Plus"
+    );
+    
+    //Zoom out item.
+    if(ImGui::MenuItem("Zoom out", "Minus")) {
+        zoomOutCmd(1.0f);
+    }
+    setTooltip(
+        "Zooms the camera out a bit.",
+        "Minus"
+    );
+    
+    //Zoom and position reset item.
+    if(ImGui::MenuItem("Zoom/position reset", "0")) {
+        zoomAndPosResetCmd(1.0f);
+    }
+    setTooltip(
+        "Reset the zoom level, and if pressed again,\n"
+        "reset the camera position.",
+        "0"
+    );
+    
+    //Zoom everything item.
+    if(ImGui::MenuItem("Zoom onto everything", "Home")) {
+        zoomEverythingCmd(1.0f);
+    }
+    setTooltip(
+        "Move and zoom the camera so that everything in the area\n"
+        "fits nicely into view.",
+        "Home"
+    );
+    
+    //Zoom onto selection.
+    if(ImGui::MenuItem("Zoom onto selection")) {
+        zoomSelectionCmd(1.0f);
+    }
+    setTooltip(
+        "Move and zoom the camera so that everything that is\n"
+        "selected fits nicely into view.",
+        "Home"
+    );
 }
 
 
@@ -1421,184 +1458,7 @@ void AreaEditor::processGuiPanelDetails() {
         //Tree shadows node.
         if(saveableTreeNode("details", "Tree shadows")) {
         
-            //Nav box start.
-            size_t curShadowIdx = shadowSelection.getSingleItemIdx();
-            processGuiNavBoxStart(
-                "shadow", "Tree shadow", "", &curShadowIdx,
-            [this] () { return game.curArea->treeShadows.size(); },
-            [this] () { return shadowSelection.getCount(); }
-            );
-            
-            //Previous shadow button.
-            if(processGuiNavBoxPrev()) {
-                shadowSelection.setSingle(curShadowIdx);
-            }
-            
-            //Current shadow text.
-            processGuiNavBoxCur();
-            
-            //Next shadow button.
-            if(processGuiNavBoxNext()) {
-                shadowSelection.setSingle(curShadowIdx);
-            }
-            
-            //Nav box second line setup.
-            processGuiNavBoxSecondLine(2);
-            
-            //New shadow button.
-            if(
-                processGuiNavWidgetNew(
-                    &curShadowIdx, game.curArea->treeShadows.size()
-                )
-            ) {
-                addNewTreeShadowCmd(1.0f);
-            }
-            setTooltip(
-                "Start creating a new tree shadow.\n"
-                "Click on the canvas where you want the shadow to be.",
-                "N"
-            );
-            
-            //Delete shadow button.
-            ImGui::SameLine();
-            if(shadowSelection.getCount() > 0) {
-                if(
-                    processGuiNavWidgetDel(
-                        &curShadowIdx, game.curArea->treeShadows.size()
-                    )
-                ) {
-                    deleteTreeShadowCmd(1.0f);
-                }
-                setTooltip(
-                    "Delete the selected tree shadow.",
-                    "Delete"
-                );
-            } else {
-                processGuiNavBoxPlaceholder();
-            }
-            
-            //End the nav box.
-            processGuiNavBoxEnd();
-            
-            if(shadowSelection.hasOne()) {
-                TreeShadow* curShadow =
-                    game.curArea->treeShadows[
-                        shadowSelection.getSingleItemIdx()
-                    ];
-                    
-                //Choose the tree shadow image button.
-                if(ImGui::Button("Choose image...")) {
-                    openBitmapDialog(
-                    [this, curShadow] (const string& bmp) {
-                        if(bmp != curShadow->bmpName) {
-                            //New image, delete the old one.
-                            registerChange("tree shadow image change");
-                            if(curShadow->bitmap != game.bmpError) {
-                                game.content.bitmaps.list.free(
-                                    curShadow->bmpName
-                                );
-                            }
-                            curShadow->bmpName = bmp;
-                            curShadow->bitmap =
-                                game.content.bitmaps.list.get(
-                                    curShadow->bmpName, nullptr, false
-                                );
-                        }
-                        setStatus("Picked a tree shadow image successfully.");
-                    },
-                    FOLDER_NAMES::TEXTURES
-                    );
-                }
-                setTooltip(
-                    "Choose which texture to use from the game's content."
-                );
-                
-                //Tree shadow image name text.
-                ImGui::SameLine();
-                monoText("%s", curShadow->bmpName.c_str());
-                setTooltip("Internal name:\n" + curShadow->bmpName);
-                
-                //Tree shadow center value.
-                Point shadowCenter = curShadow->pose.pos;
-                if(
-                    ImGui::DragFloat2("Center", (float*) &shadowCenter)
-                ) {
-                    registerChange("tree shadow center change");
-                    curShadow->pose.pos = shadowCenter;
-                }
-                setTooltip(
-                    "Center coordinates of the tree shadow.",
-                    "", WIDGET_EXPLANATION_DRAG
-                );
-                
-                //Tree shadow size value.
-                Point shadowSize = curShadow->pose.size;
-                if(
-                    processGuiWidgetsSize(
-                        "Size", shadowSize,
-                        1.0f, selectedShadowKeepAspectRatio, false,
-                        -FLT_MAX
-                    )
-                ) {
-                    registerChange("tree shadow size change");
-                    curShadow->pose.size = shadowSize;
-                };
-                setTooltip(
-                    "Width and height of the tree shadow.",
-                    "", WIDGET_EXPLANATION_DRAG
-                );
-                
-                //Tree shadow aspect ratio checkbox.
-                ImGui::Indent();
-                ImGui::Checkbox(
-                    "Keep aspect ratio",
-                    &selectedShadowKeepAspectRatio
-                );
-                ImGui::Unindent();
-                setTooltip("Keep the aspect ratio when resizing the image.");
-                
-                //Tree shadow angle value.
-                float shadowAngle =
-                    normalizeAngle(curShadow->pose.angle);
-                if(
-                    ImGui::SliderAngleWithContext(
-                        "Angle", &shadowAngle, 0, 360, "%.2f"
-                    )
-                ) {
-                    registerChange("tree shadow angle change");
-                    curShadow->pose.angle = shadowAngle;
-                }
-                setTooltip(
-                    "Angle of the tree shadow.",
-                    "", WIDGET_EXPLANATION_SLIDER
-                );
-                
-                //Tree shadow tint color.
-                ALLEGRO_COLOR shadowTint = curShadow->tint;
-                if(ImGui::ColorEdit4("Tint", (float*) &shadowTint)) {
-                    registerChange("tree shadow tint change");
-                    curShadow->tint = shadowTint;
-                }
-                setTooltip(
-                    "Tint color. You can use this to control how "
-                    "opaque the tree shadow is.",
-                    "", WIDGET_EXPLANATION_SLIDER
-                );
-                
-                //Tree shadow sway value.
-                Point shadowSway = curShadow->sway;
-                if(ImGui::DragFloat2("Sway", (float*) &shadowSway, 0.1)) {
-                    registerChange("tree shadow sway change");
-                    curShadow->sway = shadowSway;
-                }
-                setTooltip(
-                    "Multiply the amount of swaying by this much. 0 means "
-                    "no swaying in that direction.",
-                    "", WIDGET_EXPLANATION_DRAG
-                );
-                
-            }
-            
+            processGuiPanelDetailsShadows();
             ImGui::TreePop();
             
         }
@@ -1607,131 +1467,7 @@ void AreaEditor::processGuiPanelDetails() {
         ImGui::Spacer();
         if(saveableTreeNode("details", "Ambiance")) {
         
-            //Area song widgets.
-            processGuiWidgetsSong(
-                &game.curArea->songName, "Area theme",
-                "Song to play in the area."
-            );
-            
-            //Boss theme override widgets.
-            processGuiWidgetsSong(
-                &game.curArea->bossSongOverrideName, "Boss theme override",
-                "If you want boss encounters to play a different theme\n"
-                "from the game's default, specify it here."
-            );
-            
-            //Boss victory theme override widgets.
-            processGuiWidgetsSong(
-                &game.curArea->bossVictoryOverrideSongName,
-                "Boss victory theme override",
-                "If you want boss defeats to play a different fanfare\n"
-                "from the game's default, specify it here."
-            );
-            
-            //Area weather combobox.
-            vector<string> weatherCondInternals;
-            vector<string> weatherCondNames;
-            weatherCondInternals.push_back("");
-            weatherCondNames.push_back(NONE_OPTION);
-            for(auto& w : game.content.weatherConditions.list) {
-                weatherCondInternals.push_back(w.first);
-                weatherCondNames.push_back(w.second.name);
-            }
-            string weatherName = game.curArea->weatherName;
-            if(
-                ImGui::Combo(
-                    "Weather", &weatherName,
-                    weatherCondInternals, weatherCondNames, 15
-                )
-            ) {
-                registerChange("area weather change");
-                game.curArea->weatherName = weatherName;
-            }
-            setTooltip(
-                "The weather condition to use."
-            );
-            
-            ImGui::Spacer();
-            
-            bool hasTimeLimit = false;
-            float missionMin = 0;
-            if(game.curArea->type == AREA_TYPE_MISSION) {
-                hasTimeLimit = game.curArea->mission.timeLimit != 0;
-                if(hasTimeLimit) {
-                    missionMin = game.curArea->mission.timeLimit / 60.0f;
-                }
-            }
-            int dayStartMin = (int) game.curArea->dayTimeStart;
-            dayStartMin = wrapFloat(dayStartMin, 0, 60 * 24);
-            float daySpeed = game.curArea->dayTimeSpeed;
-            int dayEndMin = (int) (dayStartMin + missionMin * daySpeed);
-            dayEndMin = wrapFloat(dayEndMin, 0, 60 * 24);
-            
-            //Area day time at start value.
-            if(
-                ImGui::DragTime2(
-                    "Start day time", &dayStartMin, "h", "m", 23, 59
-                )
-            ) {
-                registerChange("day time change");
-                game.curArea->dayTimeStart = dayStartMin;
-                if(hasTimeLimit) {
-                    daySpeed =
-                        calculateDaySpeed(
-                            dayStartMin, dayEndMin, missionMin
-                        );
-                    game.curArea->dayTimeSpeed = daySpeed;
-                }
-            }
-            setTooltip(
-                "Point of the (game world) day at which gameplay starts.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            
-            if(hasTimeLimit) {
-                //Area day time at end value.
-                if(
-                    ImGui::DragTime2(
-                        "End day time", &dayEndMin, "h", "m", 23, 59
-                    )
-                ) {
-                    registerChange("day time change");
-                    daySpeed =
-                        calculateDaySpeed(
-                            dayStartMin, dayEndMin, missionMin
-                        );
-                    game.curArea->dayTimeSpeed = daySpeed;
-                }
-                setTooltip(
-                    "Point of the (game world) day at which gameplay ends.\n"
-                    "Only applicable in missions with time limits.\n"
-                    "Set this to the same as the area start time to make\n"
-                    "the day time frozen.",
-                    "", WIDGET_EXPLANATION_DRAG
-                );
-                
-            } else {
-            
-                //Area day time speed value.
-                ImGui::SetNextItemWidth(165);
-                if(
-                    ImGui::DragFloat(
-                        "Day time speed", &daySpeed, 0.1f, 0.0f, FLT_MAX
-                    )
-                ) {
-                    registerChange("day time change");
-                    game.curArea->dayTimeSpeed = daySpeed;
-                }
-                setTooltip(
-                    "Speed at which the (game world) day passes.\n"
-                    "60 means 1 game-world-hour goes by "
-                    "in 1 real-world-minute.\n"
-                    "0 means it's stopped.",
-                    "", WIDGET_EXPLANATION_DRAG
-                );
-                
-            }
-            
+            processGuiPanelDetailsAmbiance();
             ImGui::TreePop();
         }
         
@@ -1739,94 +1475,492 @@ void AreaEditor::processGuiPanelDetails() {
         ImGui::Spacer();
         if(saveableTreeNode("details", "Background")) {
         
-            //Remove background texture button.
-            float remBgAlpha = game.curArea->bgBmpName.empty() ? 0.20f : 1.0f;
-            if(
-                ImGui::ImageButton(
-                    "remBgButton", editorIcons[EDITOR_ICON_REMOVE],
-                    Point(ImGui::GetTextLineHeight()), Point(), Point(1.0f),
-                    COLOR_EMPTY, mapAlpha(remBgAlpha * 255)
-                ) &&
-                !game.curArea->bgBmpName.empty()
-            ) {
-                registerChange("area background removal");
-                game.curArea->bgBmpName.clear();
-                setStatus("Removed the background image successfully.");
-            }
-            setTooltip(
-                "Remove the background image for the area."
-            );
-            
-            //Choose background texture button.
-            ImGui::SameLine();
-            if(ImGui::Button("Choose image...")) {
-                openBitmapDialog(
-                [this] (const string& bmp) {
-                    registerChange("area background change");
-                    game.curArea->bgBmpName = bmp;
-                    setStatus("Picked a background image successfully.");
-                },
-                FOLDER_NAMES::TEXTURES
-                );
-            }
-            setTooltip(
-                "Choose which background image to "
-                "use from the game's content.\n"
-                "This repeating texture can be "
-                "seen when looking at the void."
-            );
-            
-            //Background image name text.
-            ImGui::SameLine();
-            monoText("%s", game.curArea->bgBmpName.c_str());
-            setTooltip("Internal name:\n" + game.curArea->bgBmpName);
-            
-            //Background color value.
-            ALLEGRO_COLOR bgColor = game.curArea->bgColor;
-            if(
-                ImGui::ColorEdit4(
-                    "Void color", (float*) &bgColor,
-                    ImGuiColorEditFlags_NoInputs
-                )
-            ) {
-                registerChange("area background color change");
-                game.curArea->bgColor = bgColor;
-            }
-            setTooltip(
-                "Set the color of the void. If you have a background image,\n"
-                "this will appear below it."
-            );
-            
-            //Background distance value.
-            float bgDist = game.curArea->bgDist;
-            if(ImGui::DragFloat("Distance", &bgDist)) {
-                registerChange("area background distance change");
-                game.curArea->bgDist = bgDist;
-            }
-            setTooltip(
-                "How far away the background texture is. "
-                "Affects parallax scrolling.\n"
-                "2 is a good value.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            
-            //Background zoom value.
-            float bgBmpZoom = game.curArea->bgBmpZoom;
-            if(ImGui::DragFloat("Zoom", &bgBmpZoom, 0.01)) {
-                registerChange("area background zoom change");
-                game.curArea->bgBmpZoom = bgBmpZoom;
-            }
-            setTooltip(
-                "Scale the texture by this amount.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            
+            processGuiPanelDetailsBackground();
             ImGui::TreePop();
         }
         
     }
     
     ImGui::EndChild();
+}
+
+
+/**
+ * @brief Processes the Dear ImGui ambiance widgets in the
+ * area details control panel for this frame.
+ */
+void AreaEditor::processGuiPanelDetailsAmbiance() {
+    //Area song widgets.
+    processGuiWidgetsSong(
+        &game.curArea->songName, "Area theme",
+        "Song to play in the area."
+    );
+    
+    //Boss theme override widgets.
+    processGuiWidgetsSong(
+        &game.curArea->bossSongOverrideName, "Boss theme override",
+        "If you want boss encounters to play a different theme\n"
+        "from the game's default, specify it here."
+    );
+    
+    //Boss victory theme override widgets.
+    processGuiWidgetsSong(
+        &game.curArea->bossVictoryOverrideSongName,
+        "Boss victory theme override",
+        "If you want boss defeats to play a different fanfare\n"
+        "from the game's default, specify it here."
+    );
+    
+    //Area weather combobox.
+    vector<string> weatherCondInternals;
+    vector<string> weatherCondNames;
+    weatherCondInternals.push_back("");
+    weatherCondNames.push_back(NONE_OPTION);
+    for(auto& w : game.content.weatherConditions.list) {
+        weatherCondInternals.push_back(w.first);
+        weatherCondNames.push_back(w.second.name);
+    }
+    string weatherName = game.curArea->weatherName;
+    if(
+        ImGui::Combo(
+            "Weather", &weatherName,
+            weatherCondInternals, weatherCondNames, 15
+        )
+    ) {
+        registerChange("area weather change");
+        game.curArea->weatherName = weatherName;
+    }
+    setTooltip(
+        "The weather condition to use."
+    );
+    
+    ImGui::Spacer();
+    
+    bool hasTimeLimit = false;
+    float missionMin = 0;
+    if(game.curArea->type == AREA_TYPE_MISSION) {
+        hasTimeLimit = game.curArea->mission.timeLimit != 0;
+        if(hasTimeLimit) {
+            missionMin = game.curArea->mission.timeLimit / 60.0f;
+        }
+    }
+    int dayStartMin = (int) game.curArea->dayTimeStart;
+    dayStartMin = wrapFloat(dayStartMin, 0, 60 * 24);
+    float daySpeed = game.curArea->dayTimeSpeed;
+    int dayEndMin = (int) (dayStartMin + missionMin * daySpeed);
+    dayEndMin = wrapFloat(dayEndMin, 0, 60 * 24);
+    
+    //Area day time at start value.
+    if(
+        ImGui::DragTime2(
+            "Start day time", &dayStartMin, "h", "m", 23, 59
+        )
+    ) {
+        registerChange("day time change");
+        game.curArea->dayTimeStart = dayStartMin;
+        if(hasTimeLimit) {
+            daySpeed =
+                calculateDaySpeed(
+                    dayStartMin, dayEndMin, missionMin
+                );
+            game.curArea->dayTimeSpeed = daySpeed;
+        }
+    }
+    setTooltip(
+        "Point of the (game world) day at which gameplay starts.",
+        "", WIDGET_EXPLANATION_DRAG
+    );
+    
+    if(hasTimeLimit) {
+        //Area day time at end value.
+        if(
+            ImGui::DragTime2(
+                "End day time", &dayEndMin, "h", "m", 23, 59
+            )
+        ) {
+            registerChange("day time change");
+            daySpeed =
+                calculateDaySpeed(
+                    dayStartMin, dayEndMin, missionMin
+                );
+            game.curArea->dayTimeSpeed = daySpeed;
+        }
+        setTooltip(
+            "Point of the (game world) day at which gameplay ends.\n"
+            "Only applicable in missions with time limits.\n"
+            "Set this to the same as the area start time to make\n"
+            "the day time frozen.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        
+    } else {
+    
+        //Area day time speed value.
+        ImGui::SetNextItemWidth(165);
+        if(
+            ImGui::DragFloat(
+                "Day time speed", &daySpeed, 0.1f, 0.0f, FLT_MAX
+            )
+        ) {
+            registerChange("day time change");
+            game.curArea->dayTimeSpeed = daySpeed;
+        }
+        setTooltip(
+            "Speed at which the (game world) day passes.\n"
+            "60 means 1 game-world-hour goes by "
+            "in 1 real-world-minute.\n"
+            "0 means it's stopped.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        
+    }
+}
+
+
+/**
+ * @brief Processes the Dear ImGui background widgets in the
+ * area details control panel for this frame.
+ */
+void AreaEditor::processGuiPanelDetailsBackground() {
+    //Background void color value.
+    ALLEGRO_COLOR bgVoidColor = game.curArea->bgVoidColor;
+    if(
+        ImGui::ColorEdit3(
+            "Void color", (float*) &bgVoidColor,
+            ImGuiColorEditFlags_NoInputs
+        )
+    ) {
+        registerChange("area background void color change");
+        game.curArea->bgVoidColor = bgVoidColor;
+        quickPreviewTimer.start();
+    }
+    setTooltip(
+        "The color of the void. If you have a background texture,\n"
+        "it will appear above this solid void color."
+    );
+    
+    //Background texture node.
+    ImGui::Spacer();
+    if(saveableTreeNode("details", "Texture")) {
+    
+        //Remove background texture button.
+        float remBgAlpha =
+            game.curArea->bgBmpName.empty() ? 0.20f : 1.0f;
+        if(
+            ImGui::ImageButton(
+                "remBgButton", editorIcons[EDITOR_ICON_REMOVE],
+                Point(ImGui::GetTextLineHeight()), Point(), Point(1.0f),
+                COLOR_EMPTY, mapAlpha(remBgAlpha * 255)
+            ) &&
+            !game.curArea->bgBmpName.empty()
+        ) {
+            registerChange("area background removal");
+            game.content.bitmaps.list.free(
+                game.curArea->bgBmpName
+            );
+            game.curArea->bgBmp = nullptr;
+            game.curArea->bgBmpName.clear();
+            setStatus("Removed the background texture successfully.");
+            quickPreviewTimer.start();
+        }
+        setTooltip(
+            "Remove the background texture for the area."
+        );
+        
+        //Choose background image button.
+        ImGui::SameLine();
+        if(ImGui::Button("Choose image...")) {
+            openBitmapDialog(
+            [this] (const string& bmp) {
+                registerChange("area background change");
+                game.content.bitmaps.list.free(
+                    game.curArea->bgBmpName
+                );
+                game.curArea->bgBmpName = bmp;
+                game.curArea->bgBmp =
+                    game.content.bitmaps.list.get(
+                        game.curArea->bgBmpName
+                    );
+                setStatus("Picked a background texture successfully.");
+                quickPreviewTimer.start();
+            },
+            FOLDER_NAMES::TEXTURES
+            );
+        }
+        setTooltip(
+            "Choose which background image to "
+            "use from the game's content.\n"
+            "This repeating texture can be "
+            "seen when looking at the void."
+        );
+        
+        //Background texture name text.
+        ImGui::SameLine();
+        monoText("%s", game.curArea->bgBmpName.c_str());
+        setTooltip("Internal name:\n" + game.curArea->bgBmpName);
+        
+        //Background texture offset value.
+        Point bgBmpOffset = game.curArea->bgBmpTrans.trans;
+        if(
+            ImGui::DragFloat2("Offset", (float*) &bgBmpOffset)
+        ) {
+            registerChange("area background texture offset change");
+            game.curArea->bgBmpTrans.trans = bgBmpOffset;
+            quickPreviewTimer.start();
+        }
+        setTooltip(
+            "Offset the background texture horizontally or vertically.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        
+        //Background texture scale value.
+        Point bgBmpScale = game.curArea->bgBmpTrans.scale;
+        if(
+            ImGui::DragFloat2(
+                "Scale", (float*) &bgBmpScale, 0.01f, 0.001f
+            )
+        ) {
+            registerChange("area background texture scale change");
+            game.curArea->bgBmpTrans.scale = bgBmpScale;
+            quickPreviewTimer.start();
+        }
+        setTooltip(
+            "Scale the background texture by this amount.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        
+        //Background texture angle value.
+        float bgBmpAngle =
+            normalizeAngle(game.curArea->bgBmpTrans.rot);
+        if(
+            ImGui::SliderAngleWithContext(
+                "Angle", &bgBmpAngle, 0, 360, "%.2f"
+            )
+        ) {
+            registerChange("area background texture angle change");
+            game.curArea->bgBmpTrans.rot = bgBmpAngle;
+            quickPreviewTimer.start();
+        }
+        setTooltip(
+            "Angle of the background texture.",
+            "", WIDGET_EXPLANATION_SLIDER
+        );
+        
+        //Background texture tint color.
+        ALLEGRO_COLOR bgBmpTint = game.curArea->bgBmpTint;
+        if(ImGui::ColorEdit4("Tint", (float*) &bgBmpTint)) {
+            registerChange("area background texture tint change");
+            game.curArea->bgBmpTint = bgBmpTint;
+            quickPreviewTimer.start();
+        }
+        setTooltip(
+            "Background texture tint color, including opacity."
+        );
+        
+        //Background texture distance value.
+        float bgDist = game.curArea->bgBmpDist;
+        if(ImGui::DragFloat("Distance", &bgDist, 0.05f)) {
+            registerChange("area background texture distance change");
+            game.curArea->bgBmpDist = bgDist;
+            quickPreviewTimer.start();
+        }
+        setTooltip(
+            "How far away the background texture is. "
+            "Affects parallax scrolling, and also naturally\n"
+            "zooms the texture out, accordingly.\n"
+            "2 is a good general value for distant floors.\n"
+            "1 makes it flush with the regular terrain.\n"
+            "Values less than 1 use an inverse effect!",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        
+        ImGui::TreePop();
+        
+    }
+}
+
+
+/**
+ * @brief Processes the Dear ImGui tree shadow widgets in the
+ * area details control panel for this frame.
+ */
+void AreaEditor::processGuiPanelDetailsShadows() {
+    //Nav box start.
+    size_t curShadowIdx = shadowSelection.getSingleItemIdx();
+    processGuiNavBoxStart(
+        "shadow", "Tree shadow", "", &curShadowIdx,
+    [this] () { return game.curArea->treeShadows.size(); },
+    [this] () { return shadowSelection.getCount(); }
+    );
+    
+    //Previous shadow button.
+    if(processGuiNavBoxPrev()) {
+        shadowSelection.setSingle(curShadowIdx);
+    }
+    
+    //Current shadow text.
+    processGuiNavBoxCur();
+    
+    //Next shadow button.
+    if(processGuiNavBoxNext()) {
+        shadowSelection.setSingle(curShadowIdx);
+    }
+    
+    //Nav box second line setup.
+    processGuiNavBoxSecondLine(2);
+    
+    //New shadow button.
+    if(
+        processGuiNavWidgetNew(
+            &curShadowIdx, game.curArea->treeShadows.size()
+        )
+    ) {
+        addNewTreeShadowCmd(1.0f);
+    }
+    setTooltip(
+        "Start creating a new tree shadow.\n"
+        "Click on the canvas where you want the shadow to be.",
+        "N"
+    );
+    
+    //Delete shadow button.
+    ImGui::SameLine();
+    if(shadowSelection.getCount() > 0) {
+        if(
+            processGuiNavWidgetDel(
+                &curShadowIdx, game.curArea->treeShadows.size()
+            )
+        ) {
+            deleteTreeShadowCmd(1.0f);
+        }
+        setTooltip(
+            "Delete the selected tree shadow.",
+            "Delete"
+        );
+    } else {
+        processGuiNavBoxPlaceholder();
+    }
+    
+    //End the nav box.
+    processGuiNavBoxEnd();
+    
+    if(shadowSelection.hasOne()) {
+        TreeShadow* curShadow =
+            game.curArea->treeShadows[
+                shadowSelection.getSingleItemIdx()
+            ];
+            
+        //Choose the tree shadow image button.
+        if(ImGui::Button("Choose image...")) {
+            openBitmapDialog(
+            [this, curShadow] (const string& bmp) {
+                if(bmp != curShadow->bmpName) {
+                    //New image, delete the old one.
+                    registerChange("tree shadow image change");
+                    if(curShadow->bitmap != game.bmpError) {
+                        game.content.bitmaps.list.free(
+                            curShadow->bmpName
+                        );
+                    }
+                    curShadow->bmpName = bmp;
+                    curShadow->bitmap =
+                        game.content.bitmaps.list.get(
+                            curShadow->bmpName, nullptr, false
+                        );
+                }
+                setStatus("Picked a tree shadow image successfully.");
+            },
+            FOLDER_NAMES::TEXTURES
+            );
+        }
+        setTooltip(
+            "Choose which texture to use from the game's content."
+        );
+        
+        //Tree shadow image name text.
+        ImGui::SameLine();
+        monoText("%s", curShadow->bmpName.c_str());
+        setTooltip("Internal name:\n" + curShadow->bmpName);
+        
+        //Tree shadow center value.
+        Point shadowCenter = curShadow->pose.pos;
+        if(
+            ImGui::DragFloat2("Center", (float*) &shadowCenter)
+        ) {
+            registerChange("tree shadow center change");
+            curShadow->pose.pos = shadowCenter;
+        }
+        setTooltip(
+            "Center coordinates of the tree shadow.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        
+        //Tree shadow size value.
+        Point shadowSize = curShadow->pose.size;
+        if(
+            processGuiWidgetsSize(
+                "Size", shadowSize,
+                1.0f, selectedShadowKeepAspectRatio, false,
+                -FLT_MAX
+            )
+        ) {
+            registerChange("tree shadow size change");
+            curShadow->pose.size = shadowSize;
+        };
+        setTooltip(
+            "Width and height of the tree shadow.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        
+        //Tree shadow aspect ratio checkbox.
+        ImGui::Indent();
+        ImGui::Checkbox(
+            "Keep aspect ratio",
+            &selectedShadowKeepAspectRatio
+        );
+        ImGui::Unindent();
+        setTooltip("Keep the aspect ratio when resizing the image.");
+        
+        //Tree shadow angle value.
+        float shadowAngle =
+            normalizeAngle(curShadow->pose.angle);
+        if(
+            ImGui::SliderAngleWithContext(
+                "Angle", &shadowAngle, 0, 360, "%.2f"
+            )
+        ) {
+            registerChange("tree shadow angle change");
+            curShadow->pose.angle = shadowAngle;
+        }
+        setTooltip(
+            "Angle of the tree shadow.",
+            "", WIDGET_EXPLANATION_SLIDER
+        );
+        
+        //Tree shadow tint color.
+        ALLEGRO_COLOR shadowTint = curShadow->tint;
+        if(ImGui::ColorEdit4("Tint", (float*) &shadowTint)) {
+            registerChange("tree shadow tint change");
+            curShadow->tint = shadowTint;
+        }
+        setTooltip(
+            "Tint color. You can use this to control how "
+            "opaque the tree shadow is."
+        );
+        
+        //Tree shadow sway value.
+        Point shadowSway = curShadow->sway;
+        if(ImGui::DragFloat2("Sway", (float*) &shadowSway, 0.1)) {
+            registerChange("tree shadow sway change");
+            curShadow->sway = shadowSway;
+        }
+        setTooltip(
+            "Multiply the amount of swaying by this much. 0 means "
+            "no swaying in that direction.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        
+    }
 }
 
 
@@ -1839,94 +1973,7 @@ void AreaEditor::processGuiPanelEdge() {
     //Wall shadow node.
     if(saveableTreeNode("layout", "Wall shadow")) {
     
-        //Length/presence text.
-        ImGui::Text("Length and presence:");
-        
-        //Automatic length radio button.
-        bool autoLength = (ePtr->wallShadowLength == LARGE_FLOAT);
-        if(ImGui::RadioButton("Automatic length", autoLength)) {
-            if(!autoLength) {
-                registerChange("edge shadow length change");
-                ePtr->wallShadowLength = LARGE_FLOAT;
-                quickPreviewTimer.start();
-            }
-            autoLength = true;
-        }
-        setTooltip(
-            "The wall shadow's length will depend "
-            "on the height of the wall.\n"
-            "If it's too short, the wall shadow will also "
-            "automatically disappear."
-        );
-        
-        //Never show radio button.
-        bool noLength = (ePtr->wallShadowLength == 0.0f);
-        if(ImGui::RadioButton("Never show", noLength)) {
-            if(!noLength) {
-                registerChange("edge shadow length change");
-                ePtr->wallShadowLength = 0.0f;
-                quickPreviewTimer.start();
-            }
-            noLength = true;
-        }
-        setTooltip(
-            "The wall shadow will never appear, no matter what."
-        );
-        
-        //Fixed length radio button.
-        bool fixedLength = (!noLength && !autoLength);
-        if(ImGui::RadioButton("Fixed length", fixedLength)) {
-            if(!fixedLength) {
-                registerChange("edge shadow length change");
-                ePtr->wallShadowLength = 30.0f;
-                quickPreviewTimer.start();
-            }
-            fixedLength = true;
-        }
-        setTooltip(
-            "The wall shadow will always appear, and will "
-            "have a fixed length regardless of the wall's height."
-        );
-        
-        //Length value.
-        if(fixedLength) {
-            float length = ePtr->wallShadowLength;
-            if(
-                ImGui::DragFloat(
-                    "Length", &length, 0.2f,
-                    GEOMETRY::SHADOW_MIN_LENGTH, GEOMETRY::SHADOW_MAX_LENGTH
-                )
-            ) {
-                registerChange("edge shadow length change");
-                ePtr->wallShadowLength = length;
-                quickPreviewTimer.start();
-            }
-            setTooltip(
-                "Length of the shadow.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-        }
-        
-        //Shadow color.
-        ALLEGRO_COLOR color = ePtr->wallShadowColor;
-        ImGui::Spacer();
-        if(
-            ImGui::ColorEdit4(
-                "Color", (float*) &color,
-                ImGuiColorEditFlags_NoInputs
-            )
-        ) {
-            registerChange("edge shadow color change");
-            ePtr->wallShadowColor = color;
-            quickPreviewTimer.start();
-        }
-        setTooltip(
-            "Color of the shadow, opacity included. "
-            "This is the color\n"
-            "closest to the wall, since it becomes more "
-            "transparent as it goes out."
-        );
-        
+        processGuiPanelEdgeShadow(ePtr);
         ImGui::TreePop();
     }
     
@@ -1934,45 +1981,7 @@ void AreaEditor::processGuiPanelEdge() {
     ImGui::Spacer();
     if(saveableTreeNode("layout", "Ledge smoothing")) {
     
-        //Length value.
-        float length = ePtr->ledgeSmoothingLength;
-        if(
-            ImGui::DragFloat(
-                "Length", &length, 0.2f,
-                0.0f, GEOMETRY::SMOOTHING_MAX_LENGTH
-            )
-        ) {
-            registerChange("edge ledge smoothing length change");
-            ePtr->ledgeSmoothingLength = length;
-            quickPreviewTimer.start();
-        }
-        setTooltip(
-            "Length of the ledge smoothing effect.\n"
-            "Use this to make a ledge leading into a wall look more rounded.\n"
-            "0 means there will be no effect.",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        
-        //Smoothing color.
-        ALLEGRO_COLOR color = ePtr->ledgeSmoothingColor;
-        ImGui::Spacer();
-        if(
-            ImGui::ColorEdit4(
-                "Color", (float*) &color,
-                ImGuiColorEditFlags_NoInputs
-            )
-        ) {
-            registerChange("edge ledge smoothing color change");
-            ePtr->ledgeSmoothingColor = color;
-            quickPreviewTimer.start();
-        }
-        setTooltip(
-            "Color of the ledge smoothing effect, opacity included. "
-            "This is the color\n"
-            "closest to the edge, since it becomes more "
-            "transparent as it goes out."
-        );
-        
+        processGuiPanelEdgeSmoothing(ePtr);
         ImGui::TreePop();
     }
     
@@ -2047,6 +2056,151 @@ void AreaEditor::processGuiPanelEdge() {
 
 
 /**
+ * @brief Processes the Dear ImGui wall shadow widgets in the
+ * edge control panel for this frame.
+ *
+ * @param ePtr The edge.
+ */
+void AreaEditor::processGuiPanelEdgeShadow(Edge* ePtr) {
+    //Length/presence text.
+    ImGui::Text("Length and presence:");
+    
+    //Automatic length radio button.
+    bool autoLength = (ePtr->wallShadowLength == LARGE_FLOAT);
+    if(ImGui::RadioButton("Automatic length", autoLength)) {
+        if(!autoLength) {
+            registerChange("edge shadow length change");
+            ePtr->wallShadowLength = LARGE_FLOAT;
+            quickPreviewTimer.start();
+        }
+        autoLength = true;
+    }
+    setTooltip(
+        "The wall shadow's length will depend "
+        "on the height of the wall.\n"
+        "If it's too short, the wall shadow will also "
+        "automatically disappear."
+    );
+    
+    //Never show radio button.
+    bool noLength = (ePtr->wallShadowLength == 0.0f);
+    if(ImGui::RadioButton("Never show", noLength)) {
+        if(!noLength) {
+            registerChange("edge shadow length change");
+            ePtr->wallShadowLength = 0.0f;
+            quickPreviewTimer.start();
+        }
+        noLength = true;
+    }
+    setTooltip(
+        "The wall shadow will never appear, no matter what."
+    );
+    
+    //Fixed length radio button.
+    bool fixedLength = (!noLength && !autoLength);
+    if(ImGui::RadioButton("Fixed length", fixedLength)) {
+        if(!fixedLength) {
+            registerChange("edge shadow length change");
+            ePtr->wallShadowLength = 30.0f;
+            quickPreviewTimer.start();
+        }
+        fixedLength = true;
+    }
+    setTooltip(
+        "The wall shadow will always appear, and will "
+        "have a fixed length regardless of the wall's height."
+    );
+    
+    //Length value.
+    if(fixedLength) {
+        float length = ePtr->wallShadowLength;
+        if(
+            ImGui::DragFloat(
+                "Length", &length, 0.2f,
+                GEOMETRY::SHADOW_MIN_LENGTH, GEOMETRY::SHADOW_MAX_LENGTH
+            )
+        ) {
+            registerChange("edge shadow length change");
+            ePtr->wallShadowLength = length;
+            quickPreviewTimer.start();
+        }
+        setTooltip(
+            "Length of the shadow.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+    }
+    
+    //Shadow color.
+    ALLEGRO_COLOR color = ePtr->wallShadowColor;
+    ImGui::Spacer();
+    if(
+        ImGui::ColorEdit4(
+            "Color", (float*) &color,
+            ImGuiColorEditFlags_NoInputs
+        )
+    ) {
+        registerChange("edge shadow color change");
+        ePtr->wallShadowColor = color;
+        quickPreviewTimer.start();
+    }
+    setTooltip(
+        "Color of the shadow, opacity included. "
+        "This is the color\n"
+        "closest to the wall, since it becomes more "
+        "transparent as it goes out."
+    );
+}
+
+
+/**
+ * @brief Processes the Dear ImGui ledge smoothing widgets in the
+ * edge control panel for this frame.
+ *
+ * @param ePtr The edge.
+ */
+void AreaEditor::processGuiPanelEdgeSmoothing(Edge* ePtr) {
+    //Length value.
+    float length = ePtr->ledgeSmoothingLength;
+    if(
+        ImGui::DragFloat(
+            "Length", &length, 0.2f,
+            0.0f, GEOMETRY::SMOOTHING_MAX_LENGTH
+        )
+    ) {
+        registerChange("edge ledge smoothing length change");
+        ePtr->ledgeSmoothingLength = length;
+        quickPreviewTimer.start();
+    }
+    setTooltip(
+        "Length of the ledge smoothing effect.\n"
+        "Use this to make a ledge leading into a wall look more rounded.\n"
+        "0 means there will be no effect.",
+        "", WIDGET_EXPLANATION_DRAG
+    );
+    
+    //Smoothing color.
+    ALLEGRO_COLOR color = ePtr->ledgeSmoothingColor;
+    ImGui::Spacer();
+    if(
+        ImGui::ColorEdit4(
+            "Color", (float*) &color,
+            ImGuiColorEditFlags_NoInputs
+        )
+    ) {
+        registerChange("edge ledge smoothing color change");
+        ePtr->ledgeSmoothingColor = color;
+        quickPreviewTimer.start();
+    }
+    setTooltip(
+        "Color of the ledge smoothing effect, opacity included. "
+        "This is the color\n"
+        "closest to the edge, since it becomes more "
+        "transparent as it goes out."
+    );
+}
+
+
+/**
  * @brief Processes the Dear ImGui area gameplay settings control panel for
  * this frame.
  */
@@ -2096,71 +2250,7 @@ void AreaEditor::processGuiPanelGameplay() {
     ImGui::Spacer();
     if(saveableTreeNode("gameplay", "Game rules")) {
     
-        //Max Pikmin in field override checkbox.
-        bool overrideMaxPik = game.curArea->maxPikminInField != INVALID;
-        if(
-            ImGui::Checkbox(
-                "Override max Pikmin in field", &overrideMaxPik
-            )
-        ) {
-            registerChange("Pikmin maximum override");
-            if(overrideMaxPik) {
-                game.curArea->maxPikminInField =
-                    game.config.rules.maxPikminInField;
-            } else {
-                game.curArea->maxPikminInField = INVALID;
-            }
-        }
-        setTooltip(
-            "Whether to use a custom maximum of Pikmin on the field,\n"
-            "or to use the game configuration default."
-        );
-        
-        if(overrideMaxPik) {
-        
-            //Max Pikmin in field override value.
-            int maxPik = (int) game.curArea->maxPikminInField;
-            ImGui::Indent();
-            ImGui::SetNextItemWidth(50);
-            if(
-                ImGui::DragInt(
-                    "Maximum", &maxPik,
-                    0.1, 0, INT_MAX
-                )
-            ) {
-                registerChange("Pikmin maximum override");
-                game.curArea->maxPikminInField = maxPik;
-            }
-            ImGui::Unindent();
-            setTooltip(
-                "Maximum amount of Pikmin that can be out on the field.", "",
-                WIDGET_EXPLANATION_DRAG
-            );
-            
-        }
-        
-        //Onions auto eject override checkbox.
-        bool onionsAutoEject = game.curArea->onionsAutoEject;
-        if(ImGui::Checkbox("Onions auto-eject", &onionsAutoEject)) {
-            registerChange("Onion auto-eject override");
-            game.curArea->onionsAutoEject = onionsAutoEject;
-        }
-        setTooltip(
-            "If checked, all Onions will automatically eject Pikmin\n"
-            "whenever there is enough free space in the field."
-        );
-        
-        //Onions eject grown Pikmin override checkbox.
-        bool onionsEjectGrown = game.curArea->onionsEjectGrownPikmin;
-        if(ImGui::Checkbox("Onions eject grown Pikmin", &onionsEjectGrown)) {
-            registerChange("Onion eject grown Pikmin override");
-            game.curArea->onionsEjectGrownPikmin = onionsEjectGrown;
-        }
-        setTooltip(
-            "If checked, all Onions will eject fully-grown Pikmin\n"
-            "instead of seeds."
-        );
-        
+        processGuiPanelGameplayRules();
         ImGui::TreePop();
     }
     
@@ -2168,120 +2258,7 @@ void AreaEditor::processGuiPanelGameplay() {
     ImGui::Spacer();
     if(saveableTreeNode("gameplay", "Regions")) {
     
-        //Nav box start.
-        size_t curRegionIdx = regionSelection.getSingleItemIdx();
-        processGuiNavBoxStart(
-            "region", "Region", "", &curRegionIdx,
-        [this] () { return game.curArea->regions.size(); },
-        [this] () { return regionSelection.getCount(); }
-        );
-        
-        //Previous region button.
-        if(processGuiNavBoxPrev()) {
-            regionSelection.setSingle(curRegionIdx);
-        }
-        
-        //Current region text.
-        processGuiNavBoxCur();
-        
-        //Next region button.
-        if(processGuiNavBoxNext()) {
-            regionSelection.setSingle(curRegionIdx);
-        }
-        
-        //Nav box second line setup.
-        processGuiNavBoxSecondLine(2);
-        
-        //New region button.
-        if(
-            processGuiNavWidgetNew(
-                &curRegionIdx, game.curArea->regions.size()
-            )
-        ) {
-            addNewRegionCmd(1.0f);
-        }
-        setTooltip("Create a new area region.");
-        
-        //Delete region button.
-        ImGui::SameLine();
-        if(regionSelection.getCount() > 0) {
-            if(
-                processGuiNavWidgetDel(
-                    &curRegionIdx, game.curArea->regions.size()
-                )
-            ) {
-                deleteRegionCmd(1.0f);
-            }
-            setTooltip("Delete the selected area region.", "Delete");
-        } else {
-            processGuiNavBoxPlaceholder();
-        }
-        
-        //End the nav box.
-        processGuiNavBoxEnd();
-        
-        if(regionSelection.hasOne()) {
-        
-            AreaRegion* curRegion =
-                game.curArea->regions[
-                    regionSelection.getSingleItemIdx()
-                ];
-                
-            //Region type combobox.
-            int typeInt = curRegion->type;
-            if(
-                ImGui::Combo(
-                    "Type", &typeInt, enumGetNames(areaRegionTypeNames), 15
-                )
-            ) {
-                registerChange("region type change");
-                curRegion->type = (AREA_REGION_TYPE) typeInt;
-            }
-            setTooltip("The type and purpose of the region.");
-            
-            //Region center value.
-            Point regionCenter = curRegion->pose.pos;
-            if(
-                ImGui::DragFloat2("Center", (float*) &regionCenter)
-            ) {
-                registerChange("region center change");
-                curRegion->pose.pos = regionCenter;
-            };
-            setTooltip(
-                "Center coordinates of the region.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            
-            //Region size value.
-            Point regionSize = curRegion->pose.size;
-            if(
-                ImGui::DragFloat2("Size", (float*) &regionSize)
-            ) {
-                registerChange("region size change");
-                curRegion->pose.size = regionSize;
-            };
-            setTooltip(
-                "Width and height of the region.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            
-            //Region angle value.
-            float regionAngle = curRegion->pose.angle;
-            if(
-                ImGui::SliderAngleWithContext(
-                    "Angle", &regionAngle, 0, 360, "%.2f"
-                )
-            ) {
-                registerChange("region angle change");
-                curRegion->pose.angle = regionAngle;
-            };
-            setTooltip(
-                "Angle of the region.",
-                "", WIDGET_EXPLANATION_SLIDER
-            );
-            
-        }
-        
+        processGuiPanelGameplayRegions();
         ImGui::TreePop();
         
     }
@@ -2310,6 +2287,201 @@ void AreaEditor::processGuiPanelGameplay() {
     }
     
     ImGui::EndChild();
+}
+
+
+/**
+ * @brief Processes the Dear ImGui regions widgets in the
+ * area gameplay settings control panel for this frame.
+ */
+void AreaEditor::processGuiPanelGameplayRegions() {
+    //Nav box start.
+    size_t curRegionIdx = regionSelection.getSingleItemIdx();
+    processGuiNavBoxStart(
+        "region", "Region", "", &curRegionIdx,
+    [this] () { return game.curArea->regions.size(); },
+    [this] () { return regionSelection.getCount(); }
+    );
+    
+    //Previous region button.
+    if(processGuiNavBoxPrev()) {
+        regionSelection.setSingle(curRegionIdx);
+    }
+    
+    //Current region text.
+    processGuiNavBoxCur();
+    
+    //Next region button.
+    if(processGuiNavBoxNext()) {
+        regionSelection.setSingle(curRegionIdx);
+    }
+    
+    //Nav box second line setup.
+    processGuiNavBoxSecondLine(2);
+    
+    //New region button.
+    if(
+        processGuiNavWidgetNew(
+            &curRegionIdx, game.curArea->regions.size()
+        )
+    ) {
+        addNewRegionCmd(1.0f);
+    }
+    setTooltip("Create a new area region.");
+    
+    //Delete region button.
+    ImGui::SameLine();
+    if(regionSelection.getCount() > 0) {
+        if(
+            processGuiNavWidgetDel(
+                &curRegionIdx, game.curArea->regions.size()
+            )
+        ) {
+            deleteRegionCmd(1.0f);
+        }
+        setTooltip("Delete the selected area region.", "Delete");
+    } else {
+        processGuiNavBoxPlaceholder();
+    }
+    
+    //End the nav box.
+    processGuiNavBoxEnd();
+    
+    if(regionSelection.hasOne()) {
+    
+        AreaRegion* curRegion =
+            game.curArea->regions[
+                regionSelection.getSingleItemIdx()
+            ];
+            
+        //Region type combobox.
+        int typeInt = curRegion->type;
+        if(
+            ImGui::Combo(
+                "Type", &typeInt, enumGetNames(areaRegionTypeNames), 15
+            )
+        ) {
+            registerChange("region type change");
+            curRegion->type = (AREA_REGION_TYPE) typeInt;
+        }
+        setTooltip("The type and purpose of the region.");
+        
+        //Region center value.
+        Point regionCenter = curRegion->pose.pos;
+        if(
+            ImGui::DragFloat2("Center", (float*) &regionCenter)
+        ) {
+            registerChange("region center change");
+            curRegion->pose.pos = regionCenter;
+        };
+        setTooltip(
+            "Center coordinates of the region.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        
+        //Region size value.
+        Point regionSize = curRegion->pose.size;
+        if(
+            ImGui::DragFloat2(
+                "Size", (float*) &regionSize, 1.0f, 1.0f
+            )
+        ) {
+            registerChange("region size change");
+            curRegion->pose.size = regionSize;
+        };
+        setTooltip(
+            "Width and height of the region.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        
+        //Region angle value.
+        float regionAngle = curRegion->pose.angle;
+        if(
+            ImGui::SliderAngleWithContext(
+                "Angle", &regionAngle, 0, 360, "%.2f"
+            )
+        ) {
+            registerChange("region angle change");
+            curRegion->pose.angle = regionAngle;
+        };
+        setTooltip(
+            "Angle of the region.",
+            "", WIDGET_EXPLANATION_SLIDER
+        );
+        
+    }
+}
+
+
+/**
+ * @brief Processes the Dear ImGui game rules widgets in the
+ * area gameplay settings control panel for this frame.
+ */
+void AreaEditor::processGuiPanelGameplayRules() {
+    //Max Pikmin in field override checkbox.
+    bool overrideMaxPik = game.curArea->maxPikminInField != INVALID;
+    if(
+        ImGui::Checkbox(
+            "Override max Pikmin in field", &overrideMaxPik
+        )
+    ) {
+        registerChange("Pikmin maximum override");
+        if(overrideMaxPik) {
+            game.curArea->maxPikminInField =
+                game.config.rules.maxPikminInField;
+        } else {
+            game.curArea->maxPikminInField = INVALID;
+        }
+    }
+    setTooltip(
+        "Whether to use a custom maximum of Pikmin on the field,\n"
+        "or to use the game configuration default."
+    );
+    
+    if(overrideMaxPik) {
+    
+        //Max Pikmin in field override value.
+        int maxPik = (int) game.curArea->maxPikminInField;
+        ImGui::Indent();
+        ImGui::SetNextItemWidth(50);
+        if(
+            ImGui::DragInt(
+                "Maximum", &maxPik,
+                0.1, 0, INT_MAX
+            )
+        ) {
+            registerChange("Pikmin maximum override");
+            game.curArea->maxPikminInField = maxPik;
+        }
+        ImGui::Unindent();
+        setTooltip(
+            "Maximum amount of Pikmin that can be out on the field.", "",
+            WIDGET_EXPLANATION_DRAG
+        );
+        
+    }
+    
+    //Onions auto eject override checkbox.
+    bool onionsAutoEject = game.curArea->onionsAutoEject;
+    if(ImGui::Checkbox("Onions auto-eject", &onionsAutoEject)) {
+        registerChange("Onion auto-eject override");
+        game.curArea->onionsAutoEject = onionsAutoEject;
+    }
+    setTooltip(
+        "If checked, all Onions will automatically eject Pikmin\n"
+        "whenever there is enough free space in the field."
+    );
+    
+    //Onions eject grown Pikmin override checkbox.
+    bool onionsEjectGrown = game.curArea->onionsEjectGrownPikmin;
+    if(ImGui::Checkbox("Onions eject grown Pikmin", &onionsEjectGrown)) {
+        registerChange("Onion eject grown Pikmin override");
+        game.curArea->onionsEjectGrownPikmin = onionsEjectGrown;
+    }
+    setTooltip(
+        "If checked, all Onions will eject fully-grown Pikmin\n"
+        "instead of seeds."
+    );
 }
 
 
@@ -3161,9 +3333,8 @@ void AreaEditor::processGuiPanelMissionBriefing() {
                 )
             ) {
                 registerChange("mission briefing note deletion");
-                game.curArea->mission.briefingNotes.erase(
-                    game.curArea->mission.briefingNotes.begin() +
-                    prevCurNoteIdx
+                eraseInVector(
+                    game.curArea->mission.briefingNotes, prevCurNoteIdx
                 );
                 setStatus(
                     "Deleted mission briefing note #" +
@@ -3265,9 +3436,8 @@ void AreaEditor::processGuiPanelMissionEndCond() {
                 )
             ) {
                 registerChange("mission end condition deletion");
-                game.curArea->mission.endConds.erase(
-                    game.curArea->mission.endConds.begin() +
-                    prevCurCondIdx
+                eraseInVector(
+                    game.curArea->mission.endConds, prevCurCondIdx
                 );
                 setStatus(
                     "Deleted mission end condition #" +
@@ -3629,13 +3799,22 @@ void AreaEditor::processGuiPanelMissionHudItems() {
             
             if(itemPtr->usesText()) {
             
+                bool isScriptVarName =
+                    itemPtr->displayType == MISSION_HUD_ITEM_DISPLAY_SCRIPT_VAR;
+                    
                 //Text input.
                 string text = itemPtr->text;
-                if(ImGui::InputText("Text", &text)) {
+                if(
+                    ImGui::InputText(
+                        isScriptVarName ? "Script var name" : "Text", &text
+                    )
+                ) {
                     registerChange("mission HUD item text change");
                     itemPtr->text = text;
                 }
                 setTooltip(
+                    isScriptVarName ?
+                    "Name of the area script var to get the text from." :
                     "Text to show in the HUD item."
                 );
                 
@@ -3868,9 +4047,8 @@ void AreaEditor::processGuiPanelMissionMobGroups() {
                 )
             ) {
                 registerChange("mission mob group deletion");
-                game.curArea->mission.mobGroups.erase(
-                    game.curArea->mission.mobGroups.begin() +
-                    prevCurMobGroupIdx
+                eraseInVector(
+                    game.curArea->mission.mobGroups, prevCurMobGroupIdx
                 );
                 forIdx(e, game.curArea->mission.endConds) {
                     MissionEndCond* ePtr = &game.curArea->mission.endConds[e];
@@ -4051,9 +4229,8 @@ void AreaEditor::processGuiPanelMissionScoreCriteria() {
                 )
             ) {
                 registerChange("mission score criterion deletion");
-                game.curArea->mission.scoreCriteria.erase(
-                    game.curArea->mission.scoreCriteria.begin() +
-                    prevCurCriterionIdx
+                eraseInVector(
+                    game.curArea->mission.scoreCriteria, prevCurCriterionIdx
                 );
                 setStatus(
                     "Deleted mission score criterion #" +
@@ -4110,6 +4287,21 @@ void AreaEditor::processGuiPanelMissionScoreCriteria() {
                 "If checked, it will also affect the score items in the HUD\n"
                 "in real time.",
                 "", WIDGET_EXPLANATION_DRAG
+            );
+            
+            //Custom name input.
+            string customName = criterionPtr->customName;
+            if(ImGui::InputText("Custom name", &customName)) {
+                registerChange("mission score criterion name change");
+                criterionPtr->customName = customName;
+            }
+            setTooltip(
+                "What name to show in the results screen.\n"
+                "If empty, the metric type's name will be shown.\n"
+                "This is useful for those cases where the metric type's\n"
+                "name is something technical or not specific enough, and\n"
+                "you want a name that better explains to the player\n"
+                "what they are being scored with."
             );
         }
         
@@ -4561,117 +4753,7 @@ void AreaEditor::processGuiPanelPaths() {
     
     if(subState == EDITOR_SUB_STATE_PATH_DRAWING) {
     
-        //Drawing explanation text.
-        ImGui::TextWrapped(
-            "Use the canvas to draw path links and path stops. "
-            "Each click places a stop and/or connects to a stop. "
-            "Use the following widgets the change how new links will be."
-        );
-        
-        //Link settings text.
-        ImGui::Spacer();
-        ImGui::Text("New path link settings:");
-        ImGui::Indent();
-        
-        int oneWayMode = pathDrawingNormals;
-        
-        //One-way links radio button.
-        ImGui::RadioButton("Draw one-way links", &oneWayMode, 0);
-        setTooltip(
-            "When drawing, new links drawn will be one-way links.",
-            "1"
-        );
-        
-        //Normal links radio button.
-        ImGui::RadioButton("Draw normal links", &oneWayMode, 1);
-        setTooltip(
-            "When drawing, new links drawn will be normal (two-way) links.",
-            "2"
-        );
-        
-        pathDrawingNormals = oneWayMode;
-        
-        //Type combobox.
-        vector<string> linkTypeNames;
-        linkTypeNames.push_back("Normal");
-        linkTypeNames.push_back("Ledge");
-        
-        int typeI = pathDrawingType;
-        if(ImGui::Combo("Type", &typeI, linkTypeNames, 15)) {
-            pathDrawingType = (PATH_LINK_TYPE) typeI;
-        }
-        setTooltip(
-            "What type of link to draw."
-        );
-        ImGui::Unindent();
-        
-        //Stop settings text.
-        ImGui::Spacer();
-        ImGui::Text("New path stop settings:");
-        
-        //Script use only checkbox.
-        ImGui::Indent();
-        int flagsI = pathDrawingFlags;
-        if(
-            ImGui::CheckboxFlags(
-                "Script use only",
-                &flagsI,
-                PATH_STOP_FLAG_SCRIPT_ONLY
-            )
-        ) {
-            pathDrawingFlags = flagsI;
-        }
-        setTooltip(
-            "Can only be used by objects if their script tells them to."
-        );
-        
-        //Light load only checkbox.
-        if(
-            ImGui::CheckboxFlags(
-                "Light load only",
-                &flagsI,
-                PATH_STOP_FLAG_LIGHT_LOAD_ONLY
-            )
-        ) {
-            pathDrawingFlags = flagsI;
-        }
-        setTooltip(
-            "Can only be used by objects that are not carrying anything, "
-            "or by objects that only have a weight of 1."
-        );
-        
-        //Airborne only checkbox.
-        if(
-            ImGui::CheckboxFlags(
-                "Airborne only",
-                &flagsI,
-                PATH_STOP_FLAG_AIRBORNE_ONLY
-            )
-        ) {
-            pathDrawingFlags = flagsI;
-        }
-        setTooltip(
-            "Can only be used by objects that can fly."
-        );
-        
-        //Label text.
-        monoInputText("Label", &pathDrawingLabel);
-        setTooltip(
-            "If the new stop is part of a path that you want\n"
-            "to address in a script, write the name here."
-        );
-        ImGui::Unindent();
-        
-        //Drawing stop button.
-        ImGui::Spacer();
-        if(ImGui::Button("Done", ImVec2(-1.0f, 32.0f))) {
-            setStatus();
-            subState = EDITOR_SUB_STATE_NONE;
-        }
-        setTooltip(
-            "Stop drawing.",
-            "Escape"
-        );
+        processGuiPanelPathsDrawing();
         
     } else {
     
@@ -4806,141 +4888,7 @@ void AreaEditor::processGuiPanelPaths() {
         ImGui::Spacer();
         if(saveableTreeNode("paths", "Path preview")) {
         
-            //Show preview path checkbox.
-            if(ImGui::Checkbox("Show preview path", &showPathPreview)) {
-                if(
-                    showPathPreview &&
-                    pathPreviewCheckpoints[0].x == LARGE_FLOAT
-                ) {
-                    //No previous location. Place them on-camera.
-                    pathPreviewCheckpoints[0].x =
-                        game.editorsView.cam.center.x - AREA_EDITOR::COMFY_DIST;
-                    pathPreviewCheckpoints[0].y =
-                        game.editorsView.cam.center.y;
-                    pathPreviewCheckpoints[1].x =
-                        game.editorsView.cam.center.x + AREA_EDITOR::COMFY_DIST;
-                    pathPreviewCheckpoints[1].y =
-                        game.editorsView.cam.center.y;
-                }
-                pathPreviewDist = calculatePreviewPath();
-            }
-            setTooltip(
-                "Show the path objects will take to travel from point A\n"
-                "to point B. These points can be dragged in the canvas.\n"
-                "Hazards and obstacles will not be taken into consideration\n"
-                "when calculating the preview path."
-            );
-            
-            ImGui::Spacer();
-            
-            if(showPathPreview) {
-            
-                unsigned int flagsI = pathPreviewSettings.flags;
-                
-                //Is from script checkbox.
-                if(
-                    ImGui::CheckboxFlags(
-                        "Is from script",
-                        &flagsI,
-                        PATH_FOLLOW_FLAG_SCRIPT_USE
-                    )
-                ) {
-                    pathPreviewSettings.flags = flagsI;
-                    pathPreviewDist = calculatePreviewPath();
-                }
-                setTooltip(
-                    "Whether the path preview feature is considered to be\n"
-                    "from a script, meaning it can use script-only stops."
-                );
-                
-                //Has light load checkbox.
-                if(
-                    ImGui::CheckboxFlags(
-                        "Has light load",
-                        &flagsI,
-                        PATH_FOLLOW_FLAG_LIGHT_LOAD
-                    )
-                ) {
-                    pathPreviewSettings.flags = flagsI;
-                    pathPreviewDist = calculatePreviewPath();
-                }
-                setTooltip(
-                    "Whether the path preview feature is considered to have\n"
-                    "a light load, meaning it can use light load-only stops."
-                );
-                
-                //Is airborne checkbox.
-                if(
-                    ImGui::CheckboxFlags(
-                        "Is airborne",
-                        &flagsI,
-                        PATH_FOLLOW_FLAG_AIRBORNE
-                    )
-                ) {
-                    pathPreviewSettings.flags = flagsI;
-                    pathPreviewDist = calculatePreviewPath();
-                }
-                setTooltip(
-                    "Whether the path preview feature is considered to be\n"
-                    "airborne, meaning it can use airborne-only stops\n"
-                    "and go up ledges."
-                );
-                
-                //Use stops with this label input.
-                if(
-                    ImGui::InputText(
-                        "Label",
-                        &pathPreviewSettings.label
-                    )
-                ) {
-                    pathPreviewDist = calculatePreviewPath();
-                }
-                setTooltip(
-                    "To limit the path preview feature to only use stops with\n"
-                    "a given label, write its name here, or leave it empty\n"
-                    "for no label enforcement."
-                );
-                
-                string result;
-                float totalDist = 0.0f;
-                size_t totalNrStops = 0;
-                bool success = false;
-                
-                if(pathPreviewResult > 0) {
-                    totalDist = pathPreviewDist;
-                    totalNrStops = pathPreview.size();
-                    success = true;
-                }
-                
-                result = pathResultToString(pathPreviewResult);
-                
-                //Path result header text.
-                ImGui::Spacer();
-                ImGui::Text("Result:");
-                
-                //Path result text.
-                ImGui::BulletText("%s", result.c_str());
-                
-                //Path total travel distance text.
-                if(success) {
-                    ImGui::BulletText(
-                        "Total travel distance: %f", totalDist
-                    );
-                } else {
-                    ImGui::Text(" ");
-                }
-                
-                //Path total stops visited text.
-                if(success) {
-                    ImGui::BulletText(
-                        "Total stops visited: %lu", totalNrStops
-                    );
-                } else {
-                    ImGui::Text(" ");
-                }
-                
-            }
-            
+            processGuiPanelPathsPreview();
             ImGui::TreePop();
             
         }
@@ -4981,6 +4929,267 @@ void AreaEditor::processGuiPanelPaths() {
     }
     
     ImGui::EndChild();
+}
+
+
+/**
+ * @brief Processes the Dear ImGui drawing widgets in the
+ * paths control panel for this frame.
+ */
+void AreaEditor::processGuiPanelPathsDrawing() {
+    //Drawing explanation text.
+    ImGui::TextWrapped(
+        "Use the canvas to draw path links and path stops. "
+        "Each click places a stop and/or connects to a stop. "
+        "Use the following widgets the change how new links will be."
+    );
+    
+    //Link settings text.
+    ImGui::Spacer();
+    ImGui::Text("New path link settings:");
+    ImGui::Indent();
+    
+    int oneWayMode = pathDrawingNormals;
+    
+    //One-way links radio button.
+    ImGui::RadioButton("Draw one-way links", &oneWayMode, 0);
+    setTooltip(
+        "When drawing, new links drawn will be one-way links.",
+        "1"
+    );
+    
+    //Normal links radio button.
+    ImGui::RadioButton("Draw normal links", &oneWayMode, 1);
+    setTooltip(
+        "When drawing, new links drawn will be normal (two-way) links.",
+        "2"
+    );
+    
+    pathDrawingNormals = oneWayMode;
+    
+    //Type combobox.
+    vector<string> linkTypeNames;
+    linkTypeNames.push_back("Normal");
+    linkTypeNames.push_back("Ledge");
+    
+    int typeI = pathDrawingType;
+    if(ImGui::Combo("Type", &typeI, linkTypeNames, 15)) {
+        pathDrawingType = (PATH_LINK_TYPE) typeI;
+    }
+    setTooltip(
+        "What type of link to draw."
+    );
+    ImGui::Unindent();
+    
+    //Stop settings text.
+    ImGui::Spacer();
+    ImGui::Text("New path stop settings:");
+    
+    //Script use only checkbox.
+    ImGui::Indent();
+    int flagsI = pathDrawingFlags;
+    if(
+        ImGui::CheckboxFlags(
+            "Script use only",
+            &flagsI,
+            PATH_STOP_FLAG_SCRIPT_ONLY
+        )
+    ) {
+        pathDrawingFlags = flagsI;
+    }
+    setTooltip(
+        "Can only be used by objects if their script tells them to."
+    );
+    
+    //Light load only checkbox.
+    if(
+        ImGui::CheckboxFlags(
+            "Light load only",
+            &flagsI,
+            PATH_STOP_FLAG_LIGHT_LOAD_ONLY
+        )
+    ) {
+        pathDrawingFlags = flagsI;
+    }
+    setTooltip(
+        "Can only be used by objects that are not carrying anything, "
+        "or by objects that only have a weight of 1."
+    );
+    
+    //Airborne only checkbox.
+    if(
+        ImGui::CheckboxFlags(
+            "Airborne only",
+            &flagsI,
+            PATH_STOP_FLAG_AIRBORNE_ONLY
+        )
+    ) {
+        pathDrawingFlags = flagsI;
+    }
+    setTooltip(
+        "Can only be used by objects that can fly."
+    );
+    
+    //Label text.
+    monoInputText("Label", &pathDrawingLabel);
+    setTooltip(
+        "If the new stop is part of a path that you want\n"
+        "to address in a script, write the name here."
+    );
+    ImGui::Unindent();
+    
+    //Drawing stop button.
+    ImGui::Spacer();
+    if(ImGui::Button("Done", ImVec2(-1.0f, 32.0f))) {
+        setStatus();
+        subState = EDITOR_SUB_STATE_NONE;
+    }
+    setTooltip(
+        "Stop drawing.",
+        "Escape"
+    );
+}
+
+
+/**
+ * @brief Processes the Dear ImGui path preview widgets in the
+ * paths control panel for this frame.
+ */
+void AreaEditor::processGuiPanelPathsPreview() {
+    //Show preview path checkbox.
+    if(ImGui::Checkbox("Show preview path", &showPathPreview)) {
+        if(
+            showPathPreview &&
+            pathPreviewCheckpoints[0].x == LARGE_FLOAT
+        ) {
+            //No previous location. Place them on-camera.
+            pathPreviewCheckpoints[0].x =
+                game.editorsView.cam.center.x - AREA_EDITOR::COMFY_DIST;
+            pathPreviewCheckpoints[0].y =
+                game.editorsView.cam.center.y;
+            pathPreviewCheckpoints[1].x =
+                game.editorsView.cam.center.x + AREA_EDITOR::COMFY_DIST;
+            pathPreviewCheckpoints[1].y =
+                game.editorsView.cam.center.y;
+        }
+        pathPreviewDist = calculatePreviewPath();
+    }
+    setTooltip(
+        "Show the path objects will take to travel from point A\n"
+        "to point B. These points can be dragged in the canvas.\n"
+        "Hazards and obstacles will not be taken into consideration\n"
+        "when calculating the preview path."
+    );
+    
+    ImGui::Spacer();
+    
+    if(showPathPreview) {
+    
+        unsigned int flagsI = pathPreviewSettings.flags;
+        
+        //Is from script checkbox.
+        if(
+            ImGui::CheckboxFlags(
+                "Is from script",
+                &flagsI,
+                PATH_FOLLOW_FLAG_SCRIPT_USE
+            )
+        ) {
+            pathPreviewSettings.flags = flagsI;
+            pathPreviewDist = calculatePreviewPath();
+        }
+        setTooltip(
+            "Whether the path preview feature is considered to be\n"
+            "from a script, meaning it can use script-only stops."
+        );
+        
+        //Has light load checkbox.
+        if(
+            ImGui::CheckboxFlags(
+                "Has light load",
+                &flagsI,
+                PATH_FOLLOW_FLAG_LIGHT_LOAD
+            )
+        ) {
+            pathPreviewSettings.flags = flagsI;
+            pathPreviewDist = calculatePreviewPath();
+        }
+        setTooltip(
+            "Whether the path preview feature is considered to have\n"
+            "a light load, meaning it can use light load-only stops."
+        );
+        
+        //Is airborne checkbox.
+        if(
+            ImGui::CheckboxFlags(
+                "Is airborne",
+                &flagsI,
+                PATH_FOLLOW_FLAG_AIRBORNE
+            )
+        ) {
+            pathPreviewSettings.flags = flagsI;
+            pathPreviewDist = calculatePreviewPath();
+        }
+        setTooltip(
+            "Whether the path preview feature is considered to be\n"
+            "airborne, meaning it can use airborne-only stops\n"
+            "and go up ledges."
+        );
+        
+        //Use stops with this label input.
+        if(
+            ImGui::InputText(
+                "Label",
+                &pathPreviewSettings.label
+            )
+        ) {
+            pathPreviewDist = calculatePreviewPath();
+        }
+        setTooltip(
+            "To limit the path preview feature to only use stops with\n"
+            "a given label, write its name here, or leave it empty\n"
+            "for no label enforcement."
+        );
+        
+        string result;
+        float totalDist = 0.0f;
+        size_t totalNrStops = 0;
+        bool success = false;
+        
+        if(pathPreviewResult > 0) {
+            totalDist = pathPreviewDist;
+            totalNrStops = pathPreview.size();
+            success = true;
+        }
+        
+        result = pathResultToString(pathPreviewResult);
+        
+        //Path result header text.
+        ImGui::Spacer();
+        ImGui::Text("Result:");
+        
+        //Path result text.
+        ImGui::BulletText("%s", result.c_str());
+        
+        //Path total travel distance text.
+        if(success) {
+            ImGui::BulletText(
+                "Total travel distance: %f", totalDist
+            );
+        } else {
+            ImGui::Text(" ");
+        }
+        
+        //Path total stops visited text.
+        if(success) {
+            ImGui::BulletText(
+                "Total stops visited: %lu", totalNrStops
+            );
+        } else {
+            ImGui::Text(" ");
+        }
+        
+    }
 }
 
 
@@ -5438,158 +5647,7 @@ void AreaEditor::processGuiPanelSector() {
     //Sector behavior node.
     if(saveableTreeNode("layout", "Behavior")) {
     
-        //Sector height value.
-        float sectorZ = sPtr->floorZ;
-        if(ImGui::DragFloat("Height", &sectorZ)) {
-            registerChange("sector height change");
-            sPtr->floorZ = sectorZ;
-            updateAllEdgeOffsetCaches();
-        }
-        if(ImGui::BeginPopupContextItem()) {
-            //-50 height selectable.
-            if(ImGui::Selectable("-50")) {
-                registerChange("sector height change");
-                sPtr->floorZ -= 50.0f;
-                updateAllEdgeOffsetCaches();
-                ImGui::CloseCurrentPopup();
-            }
-            
-            //+50 height selectable.
-            if(ImGui::Selectable("+50")) {
-                registerChange("sector height change");
-                sPtr->floorZ += 50.0f;
-                updateAllEdgeOffsetCaches();
-                ImGui::CloseCurrentPopup();
-            }
-            
-            //Set to zero selectable.
-            if(ImGui::Selectable("Set to 0")) {
-                registerChange("sector height change");
-                sPtr->floorZ = 0.0f;
-                updateAllEdgeOffsetCaches();
-                ImGui::CloseCurrentPopup();
-            }
-            
-            ImGui::EndPopup();
-        }
-        setTooltip(
-            "Height of the floor. Positive numbers are higher.\n"
-            "Right-click for some shortcuts.\n"
-            "You can also hold H in the canvas to set a sector's height\n"
-            "by moving the cursor up or down.",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        
-        //Sector hazard node.
-        ImGui::Spacer();
-        if(saveableTreeNode("layout", "Hazard")) {
-        
-            string hazardIname;
-            if(sPtr->hazard) {
-                hazardIname = sPtr->hazard->manifest->internalName;
-            }
-            if(processGuiWidgetsHazardManagement(hazardIname)) {
-                registerChange("sector hazard changes");
-                sPtr->hazard =
-                    hazardIname.empty() ?
-                    nullptr :
-                    &game.content.hazards.list[hazardIname];
-            }
-            setTooltip("This sector's hazard, if any.");
-            
-            if(!hazardIname.empty()) {
-                //Sector hazard floor only checkbox.
-                bool sectorHazardFloor = sPtr->hazardFloor;
-                ImGui::Indent();
-                if(ImGui::Checkbox("Floor only", &sectorHazardFloor)) {
-                    registerChange("sector hazard floor option change");
-                    sPtr->hazardFloor = sectorHazardFloor;
-                }
-                ImGui::Unindent();
-                setTooltip(
-                    "Do the hazards only affects objects on the floor,\n"
-                    "or do they affect airborne objects in the sector too?"
-                );
-            }
-            
-            //Sector bottomless pit checkbox.
-            bool sectorBottomlessPit = sPtr->isBottomlessPit;
-            if(ImGui::Checkbox("Bottomless pit", &sectorBottomlessPit)) {
-                registerChange("sector bottomless pit change");
-                sPtr->isBottomlessPit = sectorBottomlessPit;
-                if(!sectorBottomlessPit) {
-                    updateSectorTexture(sPtr, sPtr->textureInfo.bmpName);
-                }
-            }
-            setTooltip(
-                "Is this sector's floor a bottomless pit?\n"
-                "Pikmin die when they fall in pits,\n"
-                "and you can see the background (or void)."
-            );
-            
-            if(
-                sPtr->hazard && sPtr->hazard->associatedLiquid &&
-                sPtr->hazard->associatedLiquid->canFreeze
-            ) {
-            
-                //Freezing point override.
-                ScriptVarManager vars(sPtr->varsStr);
-                int freezingPointVar = 0;
-                vars.getValue(
-                    LIQUID::FREEZING_POINT_SECTOR_VAR, freezingPointVar
-                );
-                ImGui::SetNextItemWidth(50);
-                if(ImGui::DragInt("Freezing point", &freezingPointVar, 0.1f)) {
-                    registerChange("sector vars change");
-                    if(freezingPointVar <= 0) {
-                        vars.erase(LIQUID::FREEZING_POINT_SECTOR_VAR);
-                    } else {
-                        vars.setValue(
-                            LIQUID::FREEZING_POINT_SECTOR_VAR, freezingPointVar
-                        );
-                    }
-                    sPtr->varsStr = vars.toString();
-                }
-                setTooltip(
-                    "Normally, a liquid's freezing point is determined\n"
-                    "automatically from its surface area. The closest\n"
-                    "multiple of 5 is used so the freezing point is a\n"
-                    "nice round number. You can override it with a manual\n"
-                    "value here. Use 0 to not override.",
-                    "", WIDGET_EXPLANATION_DRAG
-                );
-            }
-            
-            ImGui::TreePop();
-        }
-        
-        //Sector advanced behavior node.
-        ImGui::Spacer();
-        if(saveableTreeNode("layout", "Advanced")) {
-        
-            //Sector type combobox.
-            vector<string> typesList;
-            for(size_t t = 0; t < enumGetCount(sectorTypeINames); t++) {
-                typesList.push_back(
-                    strToSentence(
-                        enumGetName(sectorTypeINames, (SECTOR_TYPE) t)
-                    )
-                );
-            }
-            int sectorType = sPtr->type;
-            if(ImGui::Combo("Type", &sectorType, typesList, 15)) {
-                registerChange("sector type change");
-                sPtr->type = (SECTOR_TYPE) sectorType;
-            }
-            setTooltip(
-                "What type of sector this is."
-            );
-            
-            ImGui::Spacer();
-            
-            ImGui::TreePop();
-        }
-        
+        processGuiPanelSectorBehavior(sPtr);
         ImGui::TreePop();
     }
     
@@ -5597,229 +5655,404 @@ void AreaEditor::processGuiPanelSector() {
     ImGui::Spacer();
     if(saveableTreeNode("layout", "Appearance")) {
     
-        int textureType = !sPtr->fade;
-        
-        //Sector texture fader radio button.
-        ImGui::RadioButton("Texture fader", &textureType, 0);
-        setTooltip(
-            "Makes the surrounding textures fade into each other."
-        );
-        
-        //Sector regular texture radio button.
-        ImGui::RadioButton("Regular texture", &textureType, 1);
-        setTooltip(
-            "Makes the sector use a regular texture."
-        );
-        
-        if(sPtr->fade != (textureType == 0)) {
-            registerChange("sector texture type change");
-            sPtr->fade = textureType == 0;
-            if(!sPtr->fade) {
-                updateSectorTexture(sPtr, sPtr->textureInfo.bmpName);
-            }
-        }
-        
+        processGuiPanelSectorAppearance(sPtr);
+        ImGui::TreePop();
+    }
+    
+    homogenizeSelectedSectors();
+}
+
+
+/**
+ * @brief Processes the Dear ImGui appearance widgets in the
+ * sector control panel for this frame.
+ *
+ * @param sPtr The sector.
+ */
+void AreaEditor::processGuiPanelSectorAppearance(Sector* sPtr) {
+    int textureType = !sPtr->fade;
+    
+    //Sector texture fader radio button.
+    ImGui::RadioButton("Texture fader", &textureType, 0);
+    setTooltip(
+        "Makes the surrounding textures fade into each other."
+    );
+    
+    //Sector regular texture radio button.
+    ImGui::RadioButton("Regular texture", &textureType, 1);
+    setTooltip(
+        "Makes the sector use a regular texture."
+    );
+    
+    if(sPtr->fade != (textureType == 0)) {
+        registerChange("sector texture type change");
+        sPtr->fade = textureType == 0;
         if(!sPtr->fade) {
+            updateSectorTexture(sPtr, sPtr->textureInfo.bmpName);
+        }
+    }
+    
+    if(!sPtr->fade) {
+    
+        ImGui::Indent();
+        
+        //Sector texture button.
+        if(ImGui::Button("Choose image...")) {
+            vector<PickerItem> pickerButtons;
+            
+            pickerButtons.push_back(PickerItem("Choose another..."));
+            
+            forIdx(s, textureSuggestions) {
+                pickerButtons.push_back(
+                    PickerItem(
+                        textureSuggestions[s].name,
+                        "", "", nullptr,
+                        "",
+                        textureSuggestions[s].bmp
+                    )
+                );
+            }
+            openPickerDialog(
+                "Pick a texture",
+                pickerButtons,
+                std::bind(
+                    &AreaEditor::pickTexture, this,
+                    std::placeholders::_1,
+                    std::placeholders::_2,
+                    std::placeholders::_3,
+                    std::placeholders::_4,
+                    std::placeholders::_5
+                ),
+                "Suggestions:", false, true
+            );
+        }
+        setTooltip("Pick a texture to use.");
+        
+        //Sector texture name text.
+        ImGui::SameLine();
+        monoText("%s", sPtr->textureInfo.bmpName.c_str());
+        setTooltip("Internal name:\n" + sPtr->textureInfo.bmpName);
+        
+        ImGui::Unindent();
+        
+    }
+    
+    //Sector texture effects node.
+    ImGui::Spacer();
+    if(saveableTreeNode("layout", "Texture effects")) {
+    
+        //Sector texture offset value.
+        Point textureTranslation = sPtr->textureInfo.tf.trans;
+        if(ImGui::DragFloat2("Offset", (float*) &textureTranslation)) {
+            registerChange("sector texture offset change");
+            sPtr->textureInfo.tf.trans = textureTranslation;
+            quickPreviewTimer.start();
+        }
+        setTooltip(
+            "Offset the texture horizontally or vertically "
+            "by this much.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        
+        //Sector texture scale value.
+        Point textureScale = sPtr->textureInfo.tf.scale;
+        if(
+            ImGui::DragFloat2(
+                "Scale", (float*) &textureScale, 0.01f, 0.001f
+            )
+        ) {
+            registerChange("sector texture scale change");
+            sPtr->textureInfo.tf.scale = textureScale;
+            quickPreviewTimer.start();
+        }
+        setTooltip(
+            "Scale the texture horizontally or vertically "
+            "by this much.\n"
+            "The scale's anchor point is at the origin "
+            "of the area, at coordinates 0,0.",
+            "", WIDGET_EXPLANATION_DRAG
+        );
+        
+        //Sector texture rotation value.
+        float textureRotation = normalizeAngle(sPtr->textureInfo.tf.rot);
+        if(
+            ImGui::SliderAngleWithContext(
+                "Angle", &textureRotation, 0, 360, "%.2f"
+            )
+        ) {
+            registerChange("sector texture angle change");
+            sPtr->textureInfo.tf.rot = textureRotation;
+            quickPreviewTimer.start();
+        }
+        setTooltip(
+            "Rotate the texture by these many degrees.\n"
+            "The rotation's center point is at the origin "
+            "of the area, at coordinates 0,0.",
+            "", WIDGET_EXPLANATION_SLIDER
+        );
+        
+        //Sector texture tint value.
+        ALLEGRO_COLOR textureTint = sPtr->textureInfo.tint;
+        if(
+            ImGui::ColorEdit4(
+                "Tint color", (float*) &textureTint,
+                ImGuiColorEditFlags_NoInputs
+            )
+        ) {
+            registerChange("sector texture tint change");
+            sPtr->textureInfo.tint = textureTint;
+            quickPreviewTimer.start();
+        }
+        setTooltip(
+            "Tint the texture with this color. White means no tint."
+        );
+        
+        //On-canvas texture effect editing checkbox.
+        bool octeeOn =
+            subState == EDITOR_SUB_STATE_OCTEE;
+        if(ImGui::Checkbox("On-canvas editing", &octeeOn)) {
+            subState =
+                octeeOn ?
+                EDITOR_SUB_STATE_OCTEE :
+                EDITOR_SUB_STATE_NONE;
+        }
+        setTooltip(
+            "Enable on-canvas texture effect editing.\n"
+            "With this, you can click and drag on the canvas "
+            "to adjust the texture,\n"
+            "based on whatever mode is currently active."
+        );
+        
+        if(octeeOn) {
         
             ImGui::Indent();
             
-            //Sector texture button.
-            if(ImGui::Button("Choose image...")) {
-                vector<PickerItem> pickerButtons;
-                
-                pickerButtons.push_back(PickerItem("Choose another..."));
-                
-                forIdx(s, textureSuggestions) {
-                    pickerButtons.push_back(
-                        PickerItem(
-                            textureSuggestions[s].name,
-                            "", "", nullptr,
-                            "",
-                            textureSuggestions[s].bmp
-                        )
-                    );
-                }
-                openPickerDialog(
-                    "Pick a texture",
-                    pickerButtons,
-                    std::bind(
-                        &AreaEditor::pickTexture, this,
-                        std::placeholders::_1,
-                        std::placeholders::_2,
-                        std::placeholders::_3,
-                        std::placeholders::_4,
-                        std::placeholders::_5
-                    ),
-                    "Suggestions:", false, true
-                );
-            }
-            setTooltip("Pick a texture to use.");
+            int octeeModeInt = (int) octeeMode;
             
-            //Sector texture name text.
-            ImGui::SameLine();
-            monoText("%s", sPtr->textureInfo.bmpName.c_str());
-            setTooltip("Internal name:\n" + sPtr->textureInfo.bmpName);
+            //On-canvas texture effect editing offset radio button.
+            ImGui::RadioButton(
+                "Change offset", &octeeModeInt,
+                (int) OCTEE_MODE_OFFSET
+            );
+            setTooltip(
+                "Dragging will change the texture's offset.",
+                "1"
+            );
+            
+            //On-canvas texture effect editing scale radio button.
+            ImGui::RadioButton(
+                "Change scale", &octeeModeInt,
+                (int) OCTEE_MODE_SCALE
+            );
+            setTooltip(
+                "Dragging will change the texture's scale.",
+                "2"
+            );
+            
+            //On-canvas texture effect editing angle radio button.
+            ImGui::RadioButton(
+                "Change angle", &octeeModeInt,
+                (int) OCTEE_MODE_ANGLE
+            );
+            setTooltip(
+                "Dragging will change the texture's angle.",
+                "3"
+            );
+            
+            octeeMode = (OCTEE_MODE) octeeModeInt;
             
             ImGui::Unindent();
             
         }
         
-        //Sector texture effects node.
-        ImGui::Spacer();
-        if(saveableTreeNode("layout", "Texture effects")) {
-        
-            //Sector texture offset value.
-            Point textureTranslation = sPtr->textureInfo.tf.trans;
-            if(ImGui::DragFloat2("Offset", (float*) &textureTranslation)) {
-                registerChange("sector texture offset change");
-                sPtr->textureInfo.tf.trans = textureTranslation;
-                quickPreviewTimer.start();
-            }
-            setTooltip(
-                "Offset the texture horizontally or vertically "
-                "by this much.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            
-            //Sector texture scale value.
-            Point textureScale = sPtr->textureInfo.tf.scale;
-            if(ImGui::DragFloat2("Scale", (float*) &textureScale, 0.01)) {
-                registerChange("sector texture scale change");
-                sPtr->textureInfo.tf.scale = textureScale;
-                quickPreviewTimer.start();
-            }
-            setTooltip(
-                "Scale the texture horizontally or vertically "
-                "by this much.\n"
-                "The scale's anchor point is at the origin "
-                "of the area, at coordinates 0,0.",
-                "", WIDGET_EXPLANATION_DRAG
-            );
-            
-            //Sector texture rotation value.
-            float textureRotation = normalizeAngle(sPtr->textureInfo.tf.rot);
-            if(
-                ImGui::SliderAngleWithContext(
-                    "Angle", &textureRotation, 0, 360, "%.2f"
-                )
-            ) {
-                registerChange("sector texture angle change");
-                sPtr->textureInfo.tf.rot = textureRotation;
-                quickPreviewTimer.start();
-            }
-            setTooltip(
-                "Rotate the texture by these many degrees.\n"
-                "The rotation's center point is at the origin "
-                "of the area, at coordinates 0,0.",
-                "", WIDGET_EXPLANATION_SLIDER
-            );
-            
-            //Sector texture tint value.
-            ALLEGRO_COLOR textureTint = sPtr->textureInfo.tint;
-            if(
-                ImGui::ColorEdit4(
-                    "Tint color", (float*) &textureTint,
-                    ImGuiColorEditFlags_NoInputs
-                )
-            ) {
-                registerChange("sector texture tint change");
-                sPtr->textureInfo.tint = textureTint;
-                quickPreviewTimer.start();
-            }
-            setTooltip(
-                "Tint the texture with this color. White means no tint."
-            );
-            
-            //On-canvas texture effect editing checkbox.
-            bool octeeOn =
-                subState == EDITOR_SUB_STATE_OCTEE;
-            if(ImGui::Checkbox("On-canvas editing", &octeeOn)) {
-                subState =
-                    octeeOn ?
-                    EDITOR_SUB_STATE_OCTEE :
-                    EDITOR_SUB_STATE_NONE;
-            }
-            setTooltip(
-                "Enable on-canvas texture effect editing.\n"
-                "With this, you can click and drag on the canvas "
-                "to adjust the texture,\n"
-                "based on whatever mode is currently active."
-            );
-            
-            if(octeeOn) {
-            
-                ImGui::Indent();
-                
-                int octeeModeInt = (int) octeeMode;
-                
-                //On-canvas texture effect editing offset radio button.
-                ImGui::RadioButton(
-                    "Change offset", &octeeModeInt,
-                    (int) OCTEE_MODE_OFFSET
-                );
-                setTooltip(
-                    "Dragging will change the texture's offset.",
-                    "1"
-                );
-                
-                //On-canvas texture effect editing scale radio button.
-                ImGui::RadioButton(
-                    "Change scale", &octeeModeInt,
-                    (int) OCTEE_MODE_SCALE
-                );
-                setTooltip(
-                    "Dragging will change the texture's scale.",
-                    "2"
-                );
-                
-                //On-canvas texture effect editing angle radio button.
-                ImGui::RadioButton(
-                    "Change angle", &octeeModeInt,
-                    (int) OCTEE_MODE_ANGLE
-                );
-                setTooltip(
-                    "Dragging will change the texture's angle.",
-                    "3"
-                );
-                
-                octeeMode = (OCTEE_MODE) octeeModeInt;
-                
-                ImGui::Unindent();
-                
-            }
-            
-            ImGui::TreePop();
+        ImGui::TreePop();
+    }
+    
+    //Sector mood node.
+    ImGui::Spacer();
+    if(saveableTreeNode("layout", "Sector mood")) {
+    
+        //Sector brightness value.
+        int sectorBrightness = sPtr->brightness;
+        ImGui::SetNextItemWidth(180);
+        if(ImGui::SliderInt("Brightness", &sectorBrightness, 0, 255)) {
+            registerChange("sector brightness change");
+            sPtr->brightness = sectorBrightness;
         }
-        
-        //Sector mood node.
-        ImGui::Spacer();
-        if(saveableTreeNode("layout", "Sector mood")) {
-        
-            //Sector brightness value.
-            int sectorBrightness = sPtr->brightness;
-            ImGui::SetNextItemWidth(180);
-            if(ImGui::SliderInt("Brightness", &sectorBrightness, 0, 255)) {
-                registerChange("sector brightness change");
-                sPtr->brightness = sectorBrightness;
-            }
-            setTooltip(
-                "How bright the sector is. Affects not just the sector's "
-                "appearance, but everything inside it.\n"
-                "0 is fully dark, 255 is fully lit.",
-                "", WIDGET_EXPLANATION_SLIDER
-            );
-            
-            ImGui::Spacer();
-            
-            ImGui::TreePop();
-        }
+        setTooltip(
+            "How bright the sector is. Affects not just the sector's "
+            "appearance, but everything inside it.\n"
+            "0 is fully dark, 255 is fully lit.",
+            "", WIDGET_EXPLANATION_SLIDER
+        );
         
         ImGui::Spacer();
         
         ImGui::TreePop();
     }
     
-    homogenizeSelectedSectors();
+    ImGui::Spacer();
+}
+
+
+/**
+ * @brief Processes the Dear ImGui behavior widgets in the
+ * sector control panel for this frame.
+ *
+ * @param sPtr The sector.
+ */
+void AreaEditor::processGuiPanelSectorBehavior(Sector* sPtr) {
+    //Sector height value.
+    float sectorZ = sPtr->floorZ;
+    if(ImGui::DragFloat("Height", &sectorZ)) {
+        registerChange("sector height change");
+        sPtr->floorZ = sectorZ;
+        updateAllEdgeOffsetCaches();
+    }
+    if(ImGui::BeginPopupContextItem()) {
+        //-50 height selectable.
+        if(ImGui::Selectable("-50")) {
+            registerChange("sector height change");
+            sPtr->floorZ -= 50.0f;
+            updateAllEdgeOffsetCaches();
+            ImGui::CloseCurrentPopup();
+        }
+        
+        //+50 height selectable.
+        if(ImGui::Selectable("+50")) {
+            registerChange("sector height change");
+            sPtr->floorZ += 50.0f;
+            updateAllEdgeOffsetCaches();
+            ImGui::CloseCurrentPopup();
+        }
+        
+        //Set to zero selectable.
+        if(ImGui::Selectable("Set to 0")) {
+            registerChange("sector height change");
+            sPtr->floorZ = 0.0f;
+            updateAllEdgeOffsetCaches();
+            ImGui::CloseCurrentPopup();
+        }
+        
+        ImGui::EndPopup();
+    }
+    setTooltip(
+        "Height of the floor. Positive numbers are higher.\n"
+        "Right-click for some shortcuts.\n"
+        "You can also hold H in the canvas to set a sector's height\n"
+        "by moving the cursor up or down.",
+        "", WIDGET_EXPLANATION_DRAG
+    );
+    
+    //Sector hazard node.
+    ImGui::Spacer();
+    if(saveableTreeNode("layout", "Hazard")) {
+    
+        string hazardIname;
+        if(sPtr->hazard) {
+            hazardIname = sPtr->hazard->manifest->internalName;
+        }
+        if(processGuiWidgetsHazardManagement(hazardIname)) {
+            registerChange("sector hazard changes");
+            sPtr->hazard =
+                hazardIname.empty() ?
+                nullptr :
+                &game.content.hazards.list[hazardIname];
+        }
+        setTooltip("This sector's hazard, if any.");
+        
+        if(!hazardIname.empty()) {
+            //Sector hazard floor only checkbox.
+            bool sectorHazardFloor = sPtr->hazardFloor;
+            ImGui::Indent();
+            if(ImGui::Checkbox("Floor only", &sectorHazardFloor)) {
+                registerChange("sector hazard floor option change");
+                sPtr->hazardFloor = sectorHazardFloor;
+            }
+            ImGui::Unindent();
+            setTooltip(
+                "Do the hazards only affects objects on the floor,\n"
+                "or do they affect airborne objects in the sector too?"
+            );
+        }
+        
+        //Sector bottomless pit checkbox.
+        bool sectorBottomlessPit = sPtr->isBottomlessPit;
+        if(ImGui::Checkbox("Bottomless pit", &sectorBottomlessPit)) {
+            registerChange("sector bottomless pit change");
+            sPtr->isBottomlessPit = sectorBottomlessPit;
+            if(!sectorBottomlessPit) {
+                updateSectorTexture(sPtr, sPtr->textureInfo.bmpName);
+            }
+        }
+        setTooltip(
+            "Is this sector's floor a bottomless pit?\n"
+            "Pikmin die when they fall in pits,\n"
+            "and you can see the background (or void)."
+        );
+        
+        if(
+            sPtr->hazard && sPtr->hazard->associatedLiquid &&
+            sPtr->hazard->associatedLiquid->canFreeze
+        ) {
+        
+            //Freezing point override.
+            ScriptVarManager vars(sPtr->varsStr);
+            int freezingPointVar = 0;
+            vars.getValue(
+                LIQUID::FREEZING_POINT_SECTOR_VAR, freezingPointVar
+            );
+            ImGui::SetNextItemWidth(50);
+            if(ImGui::DragInt("Freezing point", &freezingPointVar, 0.1f)) {
+                registerChange("sector vars change");
+                if(freezingPointVar <= 0) {
+                    vars.erase(LIQUID::FREEZING_POINT_SECTOR_VAR);
+                } else {
+                    vars.setValue(
+                        LIQUID::FREEZING_POINT_SECTOR_VAR, freezingPointVar
+                    );
+                }
+                sPtr->varsStr = vars.toString();
+            }
+            setTooltip(
+                "Normally, a liquid's freezing point is determined\n"
+                "automatically from its surface area. The closest\n"
+                "multiple of 5 is used so the freezing point is a\n"
+                "nice round number. You can override it with a manual\n"
+                "value here. Use 0 to not override.",
+                "", WIDGET_EXPLANATION_DRAG
+            );
+        }
+        
+        ImGui::TreePop();
+    }
+    
+    //Sector advanced behavior node.
+    ImGui::Spacer();
+    if(saveableTreeNode("layout", "Advanced")) {
+    
+        //Sector type combobox.
+        vector<string> typesList;
+        for(size_t t = 0; t < enumGetCount(sectorTypeINames); t++) {
+            typesList.push_back(
+                strToSentence(
+                    enumGetName(sectorTypeINames, (SECTOR_TYPE) t)
+                )
+            );
+        }
+        int sectorType = sPtr->type;
+        if(ImGui::Combo("Type", &sectorType, typesList, 15)) {
+            registerChange("sector type change");
+            sPtr->type = (SECTOR_TYPE) sectorType;
+        }
+        setTooltip(
+            "What type of sector this is."
+        );
+        
+        ImGui::Spacer();
+        
+        ImGui::TreePop();
+    }
 }
 
 
@@ -5919,8 +6152,7 @@ void AreaEditor::processGuiPanelTools() {
         ImGui::ColorEdit4("Tint", (float*) &tint);
         referenceTint = tint;
         setTooltip(
-            "Tint color. You can use this to control how opaque it is.",
-            "", WIDGET_EXPLANATION_SLIDER
+            "Tint color. You can use this to control how opaque it is."
         );
         
         ImGui::TreePop();
@@ -5963,7 +6195,7 @@ void AreaEditor::processGuiPanelTools() {
         //Resize everything multiplier value.
         static float resizeMults[2] = { 1.0f, 1.0f };
         ImGui::SetNextItemWidth(128.0f);
-        ImGui::DragFloat2("##resizeMult", resizeMults, 0.01);
+        ImGui::DragFloat2("##resizeMult", resizeMults, 0.01f, 0.001f);
         setTooltip(
             "Resize multipliers, vertically and horizontally.",
             "", WIDGET_EXPLANATION_DRAG

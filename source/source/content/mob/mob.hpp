@@ -231,8 +231,8 @@ public:
     //How much time has passed the last time the itch event triggered?
     float itchTime = 0.0f;
     
-    //Status effects currently inflicted on the mob.
-    vector<Status> statuses;
+    //Status effect states.
+    StatusManager statuses;
     
     //Hazard of the sector the mob is currently on.
     Hazard* onHazard = nullptr;
@@ -488,15 +488,15 @@ public:
     void arachnorbPlanLogic(SCRIPT_ACTION_ARACHNORB_PLAN_LOGIC_TYPE goal);
     void arachnorbFootMoveLogic();
     
-    void applyStatus(
-        StatusType* s, bool givenByParent, bool fromHazard,
+    void handleStatusSource(
+        StatusType* type, bool givenByParent, bool fromHazard,
         Mob* fromMob = nullptr, float overrideBuildup = FLT_MAX,
         bool forceReapplyResetTime = false
     );
-    void deleteOldStatusEffects();
-    void deleteParticleGenerator(const MOB_PARTICLE_GENERATOR_ID id);
+    void applyStatusParticles(const Status* sPtr, ParticleGenerator* pg);
     ALLEGRO_BITMAP* getStatusBitmap(float* bmpScale) const;
     virtual bool canReceiveStatus(StatusType* s) const;
+    void deleteParticleGenerator(const MOB_PARTICLE_GENERATOR_ID id);
     virtual void getGroupSpotInfo(
         Point* outSpot, float* outDist
     ) const;
@@ -504,8 +504,8 @@ public:
         float* outValueNr, float* outReqNr, ALLEGRO_COLOR* outColor
     ) const;
     virtual int getMissionPoints(bool* applicableInThisMission) const;
-    virtual void handleStatusEffectGain(StatusType* staType);
-    virtual void handleStatusEffectLoss(StatusType* staType);
+    virtual void handleStatusActivation(StatusType* staType);
+    virtual void handleStatusDeactivation(StatusType* staType);
     virtual void readScriptVars(const ScriptVarManager& varsMgr);
     virtual void startDyingClassSpecifics();
     virtual void finishDyingClassSpecifics();
@@ -529,15 +529,9 @@ protected:
     
     //--- Protected function declarations ---
     
-    bool applyStatusBuildup(
-        StatusType* s, bool givenByParent, bool fromHazard, Mob* fromMob,
-        float overrideAmount
-    );
-    void applyStatusEffects(
-        StatusType* s, bool givenByParent, bool fromHazard, Mob* fromMob,
-        bool forceReapplyResetTime
-    );
-    bool applyStatusParentLogic(
+    void applyActivatedStatusEffects(Status* newStatus, Mob* fromMob);
+    void deleteDeactivatedStatusEffects();
+    bool handleStatusSourceParentLogic(
         StatusType* s, bool givenByParent, bool fromHazard,
         Mob* fromMob = nullptr
     );

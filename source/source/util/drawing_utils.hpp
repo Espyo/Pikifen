@@ -89,9 +89,8 @@ void drawBitmap(
 );
 void drawBitmapInBox(
     ALLEGRO_BITMAP* bmp, const Point& center,
-    const Point& boxSize, bool scaleUp,
-    float angle = 0,
-    const ALLEGRO_COLOR& tint = COLOR_WHITE
+    const Point& boxSize, bool scaleUp, bool stayInside,
+    float angle = 0, const ALLEGRO_COLOR& tint = COLOR_WHITE
 );
 void drawEquilateralTriangle(
     const Point& center, float radius, float angle,

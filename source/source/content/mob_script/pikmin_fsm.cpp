@@ -990,13 +990,30 @@ void PikminFsm::createFsm(MobType* typ) {
         }
         efc.newEvent(FSM_EV_ANIMATION_END); {
             efc.run(PikminFsm::finishPickingUp);
-            efc.changeState("idling_h");
+        }
+        efc.newEvent(FSM_EV_HITBOX_TOUCH_N_A); {
+            efc.run(PikminFsm::checkIncomingAttack);
+        }
+        efc.newEvent(FSM_EV_PIKMIN_DAMAGE_CONFIRMED); {
+            efc.run(PikminFsm::beAttacked);
+        }
+        efc.newEvent(FSM_EV_HITBOX_TOUCH_EAT); {
+            efc.run(PikminFsm::touchedEatHitbox);
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
             efc.run(PikminFsm::touchedHazard);
         }
         efc.newEvent(FSM_EV_LEFT_HAZARD); {
             efc.run(GenMobFsm::leaveHazard);
+        }
+        efc.newEvent(FSM_EV_TOUCHED_SPRAY); {
+            efc.run(PikminFsm::touchedSpray);
+        }
+        efc.newEvent(FSM_EV_BOTTOMLESS_PIT); {
+            efc.run(PikminFsm::fallDownPit);
+        }
+        efc.newEvent(FSM_EV_ZERO_HEALTH); {
+            efc.changeState("dying");
         }
     }
     
@@ -1355,7 +1372,7 @@ void PikminFsm::createFsm(MobType* typ) {
         }
         
         //The logic to lose helplessness is in
-        //pikmin::handleStatusEffectLoss();
+        //pikmin::handleStatusDeactivation();
     }
     
     efc.newState("flailing", PIKMIN_STATE_FLAILING); {
@@ -1386,7 +1403,7 @@ void PikminFsm::createFsm(MobType* typ) {
         }
         
         //The logic to stop flailing is in
-        //pikmin::handleStatusEffectLoss();
+        //pikmin::handleStatusDeactivation();
     }
     
     efc.newState("panicking", PIKMIN_STATE_PANICKING); {
@@ -1415,7 +1432,7 @@ void PikminFsm::createFsm(MobType* typ) {
         }
         
         //The logic to stop panicking is in
-        //pikmin::handleStatusEffectLoss();
+        //pikmin::handleStatusDeactivation();
     }
     
     efc.newState("wading", PIKMIN_STATE_WADING); {
@@ -1453,7 +1470,7 @@ void PikminFsm::createFsm(MobType* typ) {
         }
         
         //The logic to stop wading is in
-        //pikmin::handleStatusEffectLoss();
+        //pikmin::handleStatusDeactivation();
     }
     
     efc.newState("wading_in_group", PIKMIN_STATE_WADING_IN_GROUP); {
@@ -1495,7 +1512,7 @@ void PikminFsm::createFsm(MobType* typ) {
         }
         
         //The logic to stop wading is in
-        //pikmin::handleStatusEffectLoss();
+        //pikmin::handleStatusDeactivation();
     }
     
     efc.newState("drinking", PIKMIN_STATE_DRINKING); {
@@ -3061,7 +3078,7 @@ void PikminFsm::finishDrinking(ScriptVM* scriptVM, void* info1, void* info2) {
         pikPtr->increaseMaturity(droPtr->droType->increaseAmount);
         break;
     } case DROP_EFFECT_GIVE_STATUS: {
-        pikPtr->applyStatus(
+        pikPtr->handleStatusSource(
             droPtr->droType->statusToGive, false, false, droPtr
         );
         break;
@@ -3165,7 +3182,10 @@ void PikminFsm::finishPickingUp(ScriptVM* scriptVM, void* info1, void* info2) {
     
     Tool* tooPtr = (Tool*) (scriptVM->focusedMob);
     
-    if(!hasFlag(tooPtr->holdabilityFlags, HOLDABILITY_FLAG_PIKMIN)) {
+    if(
+        !tooPtr ||
+        !hasFlag(tooPtr->holdabilityFlags, HOLDABILITY_FLAG_PIKMIN)
+    ) {
         scriptVM->fsm.setState(PIKMIN_STATE_IDLING);
         return;
     }
@@ -3179,6 +3199,8 @@ void PikminFsm::finishPickingUp(ScriptVM* scriptVM, void* info1, void* info2) {
         true, HOLD_ROTATION_METHOD_FACE_HOLDER
     );
     scriptVM->unfocusFromMob();
+    
+    scriptVM->fsm.setState(PIKMIN_STATE_IDLING_H);
 }
 
 
@@ -4087,7 +4109,7 @@ void PikminFsm::rechaseOpponent(ScriptVM* scriptVM, void* info1, void* info2) {
 void PikminFsm::releaseTool(ScriptVM* scriptVM, void* info1, void* info2) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
-    Mob* tooPtr = pikPtr->getMobHeldInHand();
+    Tool* tooPtr = (Tool*) pikPtr->getMobHeldInHand();
     
     if(!tooPtr) return;
     
@@ -4100,6 +4122,7 @@ void PikminFsm::releaseTool(ScriptVM* scriptVM, void* info1, void* info2) {
     tooPtr->center = pikPtr->center;
     tooPtr->speed = Point();
     tooPtr->pushAmount = 0.0f;
+    tooPtr->reserved = nullptr;
     pikPtr->subgroupTypePtr =
         game.states.gameplay->subgroupTypes.getType(
             SUBGROUP_TYPE_CATEGORY_PIKMIN, pikPtr->pikType
@@ -4305,13 +4328,15 @@ void PikminFsm::startChasingLeader(
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
     scriptVM->focusOnMob(pikPtr->followingGroup);
-    PikminFsm::updateInGroupChasing(scriptVM, nullptr, nullptr);
     pikPtr->setAnimation(
         pikPtr->getMobHeldInHand() ?
         PIKMIN_ANIM_CARRYING_LIGHT :
         PIKMIN_ANIM_WALKING,
         START_ANIM_OPTION_RANDOM_TIME, true, pikPtr->type->moveSpeed
     );
+    pikPtr->leaderChaseTimer = PIKMIN::LEADER_CHASE_TIMER_DURATION;
+    
+    PikminFsm::updateInGroupChasing(scriptVM, nullptr, nullptr);
 }
 
 
@@ -4861,9 +4886,8 @@ void PikminFsm::touchedEatHitbox(ScriptVM* scriptVM, void* info1, void* info2) {
         return;
     }
     
-    forIdx(s, pikPtr->statuses) {
-        if(pikPtr->statuses[s].state != STATUS_STATE_ACTIVE) continue;
-        if(pikPtr->statuses[s].type->turnsInedible) {
+    forIdx(s, pikPtr->statuses.getList()) {
+        if(pikPtr->statuses.getList()[s].type->turnsInedible) {
             return;
         }
     }
@@ -4913,7 +4937,7 @@ void PikminFsm::touchedSpray(ScriptVM* scriptVM, void* info1, void* info2) {
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     forIdx(e, s->effects) {
-        pikPtr->applyStatus(s->effects[e], false, false, sprayer);
+        pikPtr->handleStatusSource(s->effects[e], false, false, sprayer);
     }
     
     if(s->buriesPikmin) {
@@ -4992,17 +5016,40 @@ void PikminFsm::updateInGroupChasing(
 ) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
+    if(!pikPtr->followingGroup) return;
+    
+    //Get the target position.
     Point targetPos;
-    float targetDist; //Unused dummy value.
-    
-    if(pikPtr->pikType->canFly) {
-        enableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
-    }
-    
     if(!info1) {
-        pikPtr->getGroupSpotInfo(&targetPos, &targetDist);
+        float dummy;
+        pikPtr->getGroupSpotInfo(&targetPos, &dummy);
     } else {
         targetPos = *((Point*) info1);
+    }
+    
+    //Check if the Pikmin should give up on chasing after that spot.
+    bool mustGiveUp = false;
+    Distance distToSpot(pikPtr->center, targetPos);
+    if(distToSpot >= PIKMIN::LEADER_CHASE_MAX_DIST) {
+        mustGiveUp = true;
+    } else if(distToSpot >= PIKMIN::LEADER_CHASE_TIMER_DIST) {
+        pikPtr->leaderChaseTimer -= game.deltaT;
+        if(pikPtr->leaderChaseTimer <= 0.0f) {
+            mustGiveUp = true;
+        }
+    } else {
+        pikPtr->leaderChaseTimer = PIKMIN::LEADER_CHASE_TIMER_DURATION;
+    }
+    
+    if(mustGiveUp) {
+        pikPtr->leaveGroup();
+        scriptVM->fsm.setState(PIKMIN_STATE_SIGHING);
+        return;
+    }
+    
+    //Prepare to chase it.
+    if(pikPtr->pikType->canFly) {
+        enableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     }
     
     float targetZ = pikPtr->followingGroup->bottomZ;

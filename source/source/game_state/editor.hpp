@@ -1176,6 +1176,13 @@ protected:
         bool useMonospace = false
     );
     void processGuiStatusBarText();
+    void processGuiWidgetsDeviation(
+        const string label, bool& minMaxMode,
+        const std::function<void()>& onBaseNumber,
+        const std::function<void()>& onDeviation,
+        const std::function<void()>& onMin,
+        const std::function<void()>& onMax
+    );
     bool processGuiWidgetsHazardManagement(string& selectedHazardIname);
     bool processGuiWidgetsMobType(
         string* customCatName, MobType** type, const string& packFilter = ""

@@ -6,10 +6,13 @@ version=1.1.0
 engine_version=1.2.0
 subtitle
 difficulty=0
+bg_angle=0.0000
 bg_bmp=textures/space
 bg_color=0 0 0
 bg_dist=20.0000
-bg_zoom=19.0000
+bg_offset=0.0000 0.0000
+bg_scale=20.0000 20.0000
+bg_tint=255 255 255
 song=areas/we_do_science
 boss_song
 boss_victory_song

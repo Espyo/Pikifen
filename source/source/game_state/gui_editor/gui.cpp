@@ -26,13 +26,15 @@ void GuiEditor::openLoadDialog() {
     
     //Set up the picker's behavior and data.
     vector<PickerItem> fileItems;
-    for(const auto& f : game.content.guiDefs.manifests) {
+    for(auto& f : game.content.guiDefs.list) {
+        ContentManifest& manif = game.content.guiDefs.manifests[f.first];
         fileItems.push_back(
             PickerItem(
-                f.first,
-                "Pack: " + game.content.packs.list[f.second.pack].name, "",
-                (void*) &f.second,
-                getFileTooltip(f.second.path)
+                f.second.getChildByName("name")->getValueOrDefault(f.first),
+                "Pack: " +
+                game.content.packs.list[manif.pack].name, "",
+                (void*) &manif,
+                getFileTooltip(manif.path)
             )
         );
     }
@@ -372,86 +374,105 @@ void GuiEditor::processGuiDialogNew() {
 void GuiEditor::processGuiDialogOptions() {
     //Controls node.
     if(saveableTreeNode("options", "Controls")) {
-    
-        //Middle mouse button pans checkbox.
-        ImGui::Checkbox("Use MMB to pan", &game.options.editors.mmbPan);
-        setTooltip(
-            "Use the middle mouse button to pan the camera\n"
-            "(and RMB to reset camera/zoom).\n"
-            "Default: " +
-            b2s(OPTIONS::EDITORS_D::MMB_PAN) + "."
-        );
-        
-        //Grid interval text.
-        ImGui::Text(
-            "Grid interval: %f", game.options.guiEd.gridInterval
-        );
-        
-        //Increase grid interval button.
-        ImGui::SameLine();
-        if(
-            ImGui::Button(
-                "+",
-                ImVec2(ImGui::GetFrameHeight(), ImGui::GetFrameHeight())
-            )
-        ) {
-            gridIntervalIncreaseCmd(1.0f);
-        }
-        setTooltip(
-            "Increase the spacing on the grid.\n"
-            "Default: " + i2s(OPTIONS::GUI_ED_D::GRID_INTERVAL) +
-            ".",
-            "Shift + Plus"
-        );
-        
-        //Decrease grid interval button.
-        ImGui::SameLine();
-        if(
-            ImGui::Button(
-                "-",
-                ImVec2(ImGui::GetFrameHeight(), ImGui::GetFrameHeight())
-            )
-        ) {
-            gridIntervalDecreaseCmd(1.0f);
-        }
-        setTooltip(
-            "Decrease the spacing on the grid.\n"
-            "Default: " + i2s(OPTIONS::GUI_ED_D::GRID_INTERVAL) +
-            ".",
-            "Shift + Minus"
-        );
-        
-        ImGui::TreePop();
-        
-    }
-    
-    //Misc. node.
-    if(saveableTreeNode("options", "Misc.")) {
-    
-        //Quick play area combo.
-        vector<string> areaNames;
-        vector<string> areaPaths;
-        int selectedAreaIdx = -1;
-        getQuickPlayAreaList(
-            game.options.guiEd.quickPlayAreaPath,
-            &areaNames, &areaPaths, &selectedAreaIdx
-        );
-        if(ImGui::Combo("Quick play area", &selectedAreaIdx, areaNames)) {
-            if(selectedAreaIdx == -1) {
-                game.options.guiEd.quickPlayAreaPath.clear();
-            } else {
-                game.options.guiEd.quickPlayAreaPath =
-                    areaPaths[selectedAreaIdx];
-            }
-        }
-        setTooltip("Area to play on when choosing the quick play feature.");
-        
+        processGuiDialogOptionsControls();
         ImGui::TreePop();
     }
     
     ImGui::Spacer();
     
     processGuiEditorStyle();
+    
+    ImGui::Spacer();
+    
+    //Misc. node.
+    if(saveableTreeNode("options", "Misc.")) {
+        processGuiDialogOptionsMisc();
+        ImGui::TreePop();
+    }
+}
+
+
+/**
+ * @brief Processes the controls widgets in the
+ * options dialog for this frame.
+ */
+void GuiEditor::processGuiDialogOptionsControls() {
+    //Middle mouse button pans checkbox.
+    ImGui::Checkbox("Use MMB to pan", &game.options.editors.mmbPan);
+    setTooltip(
+        "Use the middle mouse button to pan the camera\n"
+        "(and RMB to reset camera/zoom).\n"
+        "Default: " +
+        b2s(OPTIONS::EDITORS_D::MMB_PAN) + "."
+    );
+    
+    //Grid interval text.
+    ImGui::Text(
+        "Grid interval: %f", game.options.guiEd.gridInterval
+    );
+    
+    //Increase grid interval button.
+    ImGui::SameLine();
+    if(
+        ImGui::Button(
+            "+",
+            ImVec2(ImGui::GetFrameHeight(), ImGui::GetFrameHeight())
+        )
+    ) {
+        gridIntervalIncreaseCmd(1.0f);
+    }
+    setTooltip(
+        "Increase the spacing on the grid.\n"
+        "Default: " + i2s(OPTIONS::GUI_ED_D::GRID_INTERVAL) +
+        ".",
+        "Shift + Plus"
+    );
+    
+    //Decrease grid interval button.
+    ImGui::SameLine();
+    if(
+        ImGui::Button(
+            "-",
+            ImVec2(ImGui::GetFrameHeight(), ImGui::GetFrameHeight())
+        )
+    ) {
+        gridIntervalDecreaseCmd(1.0f);
+    }
+    setTooltip(
+        "Decrease the spacing on the grid.\n"
+        "Default: " + i2s(OPTIONS::GUI_ED_D::GRID_INTERVAL) +
+        ".",
+        "Shift + Minus"
+    );
+}
+
+
+/**
+ * @brief Processes the misc. widgets in the
+ * options dialog for this frame.
+ */
+void GuiEditor::processGuiDialogOptionsMisc() {
+    //Quick play area combo.
+    vector<string> areaNames;
+    vector<string> areaPaths;
+    int selectedAreaIdx = -1;
+    getQuickPlayAreaList(
+        game.options.guiEd.quickPlayAreaPath,
+        &areaNames, &areaPaths, &selectedAreaIdx
+    );
+    if(ImGui::Combo("Quick play area", &selectedAreaIdx, areaNames)) {
+        if(selectedAreaIdx == -1) {
+            game.options.guiEd.quickPlayAreaPath.clear();
+        } else {
+            game.options.guiEd.quickPlayAreaPath =
+                areaPaths[selectedAreaIdx];
+        }
+    }
+    setTooltip(
+        "Area to play on when choosing the quick play feature.\n"
+        "You can also choose one by right-clicking the\n"
+        "quick play button in the toolbar."
+    );
 }
 
 
@@ -464,74 +485,7 @@ void GuiEditor::processGuiMenuBar() {
         //Editor menu.
         if(ImGui::BeginMenu("Editor")) {
         
-            //Load file item.
-            if(ImGui::MenuItem("Load or create...", "Ctrl+L")) {
-                loadWidgetPos = getLastWidgetPost();
-                loadCmd(1.0f);
-            }
-            setTooltip(
-                "Pick a GUI definition to load.",
-                "Ctrl + L"
-            );
-            
-            //Reload current file item.
-            if(ImGui::MenuItem("Reload current GUI definition")) {
-                reloadWidgetPos = getLastWidgetPost();
-                reloadCmd(1.0f);
-            }
-            setTooltip(
-                "Lose all changes and reload the current definition "
-                "from your disk."
-            );
-            
-            //Save file item.
-            if(ImGui::MenuItem("Save current GUI definition", "Ctrl+S")) {
-                saveCmd(1.0f);
-            }
-            setTooltip(
-                "Save the GUI definition to your disk.",
-                "Ctrl + S"
-            );
-            
-            //Delete current GUI definition item.
-            if(ImGui::MenuItem("Delete current GUI definition")) {
-                deleteGuiDefCmd(1.0f);
-            }
-            setTooltip(
-                "Delete the current GUI definition from your disk."
-            );
-            
-            //Open externally item.
-            if(ImGui::MenuItem("Open externally")) {
-                openExternallyCmd(1.0f);
-            }
-            setTooltip(
-                "Open the file with the GUI definition's data in your "
-                "operative system.\n"
-                "Useful if you need to edit things by hand."
-            );
-            
-            //Separator item.
-            ImGui::Separator();
-            
-            //Options menu item.
-            if(ImGui::MenuItem("Options...")) {
-                openOptionsDialog();
-            }
-            setTooltip(
-                "Open the options menu, so you can tweak your preferences."
-            );
-            
-            //Quit editor item.
-            if(ImGui::MenuItem("Quit", "Ctrl+Q")) {
-                quitWidgetPos = getLastWidgetPost();
-                quitCmd(1.0f);
-            }
-            setTooltip(
-                "Quit the GUI editor.",
-                "Ctrl + Q"
-            );
-            
+            processGuiMenuBarEditor();
             ImGui::EndMenu();
             
         }
@@ -539,33 +493,7 @@ void GuiEditor::processGuiMenuBar() {
         //View menu.
         if(ImGui::BeginMenu("View")) {
         
-            //Zoom in item.
-            if(ImGui::MenuItem("Zoom in", "Plus")) {
-                zoomInCmd(1.0f);
-            }
-            setTooltip(
-                "Zooms the camera in a bit.",
-                "Plus"
-            );
-            
-            //Zoom out item.
-            if(ImGui::MenuItem("Zoom out", "Minus")) {
-                zoomOutCmd(1.0f);
-            }
-            setTooltip(
-                "Zooms the camera out a bit.",
-                "Minus"
-            );
-            
-            //Zoom and position reset item.
-            if(ImGui::MenuItem("Reset", "0")) {
-                zoomAndPosResetCmd(1.0f);
-            }
-            setTooltip(
-                "Reset the zoom level and camera position.",
-                "0"
-            );
-            
+            processGuiMenuBarView();
             ImGui::EndMenu();
             
         }
@@ -620,6 +548,115 @@ void GuiEditor::processGuiMenuBar() {
         
         ImGui::EndMenuBar();
     }
+}
+
+
+/**
+ * @brief Processes the editor widgets in the
+ * Dear ImGui menu bar for this frame.
+ */
+void GuiEditor::processGuiMenuBarEditor() {
+    //Load file item.
+    if(ImGui::MenuItem("Load or create...", "Ctrl+L")) {
+        loadWidgetPos = getLastWidgetPost();
+        loadCmd(1.0f);
+    }
+    setTooltip(
+        "Pick a GUI definition to load.",
+        "Ctrl + L"
+    );
+    
+    //Reload current file item.
+    if(ImGui::MenuItem("Reload current GUI definition")) {
+        reloadWidgetPos = getLastWidgetPost();
+        reloadCmd(1.0f);
+    }
+    setTooltip(
+        "Lose all changes and reload the current definition "
+        "from your disk."
+    );
+    
+    //Save file item.
+    if(ImGui::MenuItem("Save current GUI definition", "Ctrl+S")) {
+        saveCmd(1.0f);
+    }
+    setTooltip(
+        "Save the GUI definition to your disk.",
+        "Ctrl + S"
+    );
+    
+    //Delete current GUI definition item.
+    if(ImGui::MenuItem("Delete current GUI definition")) {
+        deleteGuiDefCmd(1.0f);
+    }
+    setTooltip(
+        "Delete the current GUI definition from your disk."
+    );
+    
+    //Open externally item.
+    if(ImGui::MenuItem("Open externally")) {
+        openExternallyCmd(1.0f);
+    }
+    setTooltip(
+        "Open the file with the GUI definition's data in your "
+        "operative system.\n"
+        "Useful if you need to edit things by hand."
+    );
+    
+    //Separator item.
+    ImGui::Separator();
+    
+    //Options menu item.
+    if(ImGui::MenuItem("Options...")) {
+        openOptionsDialog();
+    }
+    setTooltip(
+        "Open the options menu, so you can tweak your preferences."
+    );
+    
+    //Quit editor item.
+    if(ImGui::MenuItem("Quit", "Ctrl+Q")) {
+        quitWidgetPos = getLastWidgetPost();
+        quitCmd(1.0f);
+    }
+    setTooltip(
+        "Quit the GUI editor.",
+        "Ctrl + Q"
+    );
+}
+
+
+/**
+ * @brief Processes the view widgets in the
+ * Dear ImGui menu bar for this frame.
+ */
+void GuiEditor::processGuiMenuBarView() {
+    //Zoom in item.
+    if(ImGui::MenuItem("Zoom in", "Plus")) {
+        zoomInCmd(1.0f);
+    }
+    setTooltip(
+        "Zooms the camera in a bit.",
+        "Plus"
+    );
+    
+    //Zoom out item.
+    if(ImGui::MenuItem("Zoom out", "Minus")) {
+        zoomOutCmd(1.0f);
+    }
+    setTooltip(
+        "Zooms the camera out a bit.",
+        "Minus"
+    );
+    
+    //Zoom and position reset item.
+    if(ImGui::MenuItem("Reset", "0")) {
+        zoomAndPosResetCmd(1.0f);
+    }
+    setTooltip(
+        "Reset the zoom level and camera position.",
+        "0"
+    );
 }
 
 
@@ -1151,7 +1188,7 @@ void GuiEditor::processGuiPanelItems() {
             "Create a new custom GUI item.", "N"
         );
         
-        if(curItemPtr) {
+        if(itemSelection.hasAny()) {
             //Delete item button.
             ImGui::SameLine();
             if(
@@ -1163,7 +1200,9 @@ void GuiEditor::processGuiPanelItems() {
                 deleteCmd(1.0f);
             }
             setTooltip("Delete the current item.", "Delete");
-            
+        }
+        
+        if(curItemPtr) {
             //Rename item button.
             ImGui::SameLine();
             if(

@@ -13,6 +13,7 @@
 #include "vertex.hpp"
 
 #include "edge.hpp"
+#include "../../util/container_utils.hpp"
 
 
 /**
@@ -163,8 +164,8 @@ void Vertex::removeEdge(const Edge* ePtr) {
     size_t i = 0;
     for(; i < edges.size(); i++) {
         if(edges[i] == ePtr) {
-            edges.erase(edges.begin() + i);
-            edgeIdxs.erase(edgeIdxs.begin() + i);
+            eraseInVector(edges, i);
+            eraseInVector(edgeIdxs, i);
             return;
         }
     }

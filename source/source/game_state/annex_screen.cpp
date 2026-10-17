@@ -22,9 +22,11 @@
 void AnnexScreen::doDrawing() {
     al_clear_to_color(COLOR_BLACK);
     
-    drawBitmap(
+    drawBitmapInBox(
         bmpBg, Point(game.winW * 0.5, game.winH * 0.5),
-        Point(game.winW, game.winH), 0, mapGray(64)
+        Point(game.winW, game.winH) *
+        game.config.aestheticGen.titleScreenBgFinalZoom,
+        true, false, 0, mapGray(64)
     );
     
     if(curMenu) curMenu->draw();

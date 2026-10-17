@@ -1,7 +1,7 @@
 states_ignoring_hazard = teleporting_to_leader; teleported_to_leader
 
 init {
-    set_var follow_upon_idling false
+    set_var on_idle_enter wait_search
 }
 
 script {
@@ -10,87 +10,115 @@ script {
             stop_particles
             start_particles glow_pikmin
             custom_actions_after
-            if $follow_upon_idling = true
-                set_var follow_upon_idling false
+
+            if $on_idle_enter = follow
+                set_var on_idle_enter wait_search
                 set_var teleport_timer 9999
                 focus_on_id $leader_id
                 follow_mob_as_leader focus true
+            else_if $on_idle_enter = instant_search
+                set_var on_idle_enter wait_search
+                set_var teleport_timer 0
             else
                 get_random_float temp 1.0 1.5
                 set_var teleport_timer $temp
             end_if
         }
         on_tick {
+            set_var leader_is_active false
+            get_leader_activity leader_is_active leader
             get_misc_info temp delta_t
             calculate teleport_timer $teleport_timer - $temp
+
             if $teleport_timer <= 0
+                if $leader_is_active = false
 
-                //Decide which leader to teleport to.
-                get_mob_info cur_team self team
-                clear_var player_leaders
-                clear_var player_leaders_glows
+                    //Decide which leader to teleport to.
+                    get_mob_info cur_team self team
+                    clear_var player_leaders
+                    clear_var player_leaders_glows
 
-                get_misc_info temp player_1_leader_id
-                add_list_item player_leaders $player_leaders $temp
-                get_misc_info temp player_2_leader_id
-                add_list_item player_leaders $player_leaders $temp
-                get_misc_info temp player_3_leader_id
-                add_list_item player_leaders $player_leaders $temp
-                get_misc_info temp player_4_leader_id
-                add_list_item player_leaders $player_leaders $temp
+                    get_misc_info temp player_1_leader_id
+                    add_list_item player_leaders $player_leaders $temp
+                    get_misc_info temp player_2_leader_id
+                    add_list_item player_leaders $player_leaders $temp
+                    get_misc_info temp player_3_leader_id
+                    add_list_item player_leaders $player_leaders $temp
+                    get_misc_info temp player_4_leader_id
+                    add_list_item player_leaders $player_leaders $temp
 
-                for_each nr id $player_leaders
-                    if $id != 0
-                        focus_on_id $id
-                        get_mob_info temp focus team
-                        if $temp = $cur_team
-                            //This is one of our active leaders.
-                            get_leader_pikmin_count temp focus glow_pikmin
-                            add_list_item player_leaders_glows $player_leaders_glows $temp
+                    for_each nr id $player_leaders
+                        if $id != 0
+                            focus_on_id $id
+                            get_mob_info temp focus team
+                            if $temp = $cur_team
+                                //This is one of our active leaders.
+                                get_leader_pikmin_count temp focus glow_pikmin
+                                add_list_item player_leaders_glows $player_leaders_glows $temp
+                            else
+                                //This leader is not on our team.
+                                add_list_item player_leaders_glows $player_leaders_glows -1
+                            end_if
                         else
-                            //This leader is not on our team.
+                            //This player has no leader.
                             add_list_item player_leaders_glows $player_leaders_glows -1
                         end_if
-                    else
-                        //This player has no leader.
-                        add_list_item player_leaders_glows $player_leaders_glows -1
-                    end_if
-                end_for_each
+                    end_for_each
 
-                set_var neediest_leader_nr 0
-                set_var neediest_leader_amount 99999
-                for_each nr glows $player_leaders_glows
-                    if $glows != -1
-                        if $glows < $neediest_leader_amount
-                            //This leader needs Glow Pikmin more than the previous best.
-                            set_var neediest_leader_nr $nr
-                            set_var neediest_leader_amount $glows
+                    set_var neediest_leader_nr 0
+                    set_var neediest_leader_amount 99999
+                    for_each nr glows $player_leaders_glows
+                        if $glows != -1
+                            if $glows < $neediest_leader_amount
+                                //This leader needs Glow Pikmin more than the previous best.
+                                set_var neediest_leader_nr $nr
+                                set_var neediest_leader_amount $glows
+                            end_if
                         end_if
+                    end_for_each
+
+                    //Teleport, if possible.
+                    if $neediest_leader_nr != 0
+                        get_list_item temp $player_leaders $neediest_leader_nr
+                        set_var leader_id $temp
+                        set_state teleporting_to_leader
                     end_if
-                end_for_each
 
-                //Teleport, if possible.
-                if $neediest_leader_nr != 0
-                    get_list_item temp $player_leaders $neediest_leader_nr
-                    set_var leader_id $temp
-                    set_state teleporting_to_leader
                 end_if
-
             end_if
         }
     }
+
     in_group_chasing {
         on_active_leader_changed {
             get_mob_info leader_id trigger id
             set_state teleporting_to_leader
         }
+        on_tick {
+            set_var leader_is_active false
+            get_leader_activity leader_is_active leader
+            if $leader_is_active = false
+                set_var on_idle_enter instant_search
+                set_state idling
+            end_if
+        }
     }
+
     in_group_stopped {
         on_active_leader_changed {
             get_mob_info leader_id trigger id
             set_state teleporting_to_leader
         }
+        on_tick {
+            set_var leader_is_active false
+            get_leader_activity leader_is_active leader
+            if $leader_is_active = false
+                set_var on_idle_enter instant_search
+                set_state idling
+            end_if
+        }
     }
+
     teleporting_to_leader {
         on_enter {
             set_shadow_visibility false
@@ -122,6 +150,7 @@ script {
             set_state teleported_to_leader
         }
     }
+
     teleported_to_leader {
         on_enter {
             set_animation teleport_end
@@ -131,10 +160,18 @@ script {
         }
         on_animation_end {
             set_shadow_visibility true
-            set_var follow_upon_idling true
+            focus_on_id $leader_id
+            set_var leader_is_active false
+            get_leader_activity leader_is_active focus
+            if $leader_is_active = true
+                set_var on_idle_enter follow
+            else
+                set_var on_idle_enter instant_search
+            end_if
             set_state idling
         }
     }
+
     dying {
         on_enter {
             set_timer 1.9
@@ -143,6 +180,7 @@ script {
             start_particles glow_pikmin_pop
         }
     }
+
     knocked_down_dying {
         on_enter {
             set_timer 0.5
@@ -151,6 +189,7 @@ script {
             start_particles glow_pikmin_pop
         }
     }
+
     crushed {
         on_enter {
             set_timer 1.2

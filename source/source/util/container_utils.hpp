@@ -56,8 +56,22 @@ void eraseIndexesInVector(const IdxContainerT& idxs, vector<ContentT>& v) {
     //Go one by one and delete them.
     for(size_t i = 0; i < idxsV.size(); i++) {
         size_t iToUse = idxsV.size() - i - 1;
-        v.erase(v.begin() + idxsV[iToUse]);
+        eraseInVector(v, idxsV[iToUse]);
     }
+}
+
+
+/**
+ * @brief Removes the item at the given index of a vector. This does
+ * not perform bounds checks.
+ *
+ * @tparam ContainerT Type of container.
+ * @param v The vector.
+ * @param idx The index.
+ */
+template<typename ContainerT>
+void eraseInVector(ContainerT& v, size_t idx) {
+    v.erase(v.begin() + idx);
 }
 
 
@@ -76,7 +90,7 @@ vector<ContentT> filterVectorWithBanList(
     vector<ContentT> result = v;
     for(size_t i = 0; i < result.size();) {
         if(isInContainer(banList, result[i])) {
-            result.erase(result.begin() + i);
+            eraseInVector(result, i);
         } else {
             i++;
         }
@@ -279,7 +293,7 @@ vector<ContentT> shuffleVector(
         //Add a safeguard for if the float is exactly 1.0.
         pick = std::min(pick, itemsAvailable.size() - 1);
         result.push_back(itemsAvailable[pick]);
-        itemsAvailable.erase(itemsAvailable.begin() + pick);
+        eraseInVector(itemsAvailable, pick);
     }
     return result;
 }

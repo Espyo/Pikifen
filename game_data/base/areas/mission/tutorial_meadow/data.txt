@@ -2,14 +2,17 @@ name=Tutorial Meadow
 description=A tutorial area designed to teach you how to navigate through PNF-404!
 tags=Tutorial
 maker=Espyo
-version=1.1.2
+version=1.1.4
 engine_version=1.2.0
 subtitle=Get the treasure
 difficulty=1
+bg_angle=0.0000
 bg_bmp=textures/space
 bg_color=0 0 0
 bg_dist=20.0000
-bg_zoom=19.0000
+bg_offset=0.0000 0.0000
+bg_scale=20.0000 20.0000
+bg_tint=255 255 255
 song=areas/coastal_pavement_in_early_fall
 boss_song
 boss_victory_song
@@ -26,7 +29,7 @@ mission_bronze_req=1000
 mission_silver_req=2000
 mission_gold_req=3000
 mission_platinum_req=4000
-mission_briefing_objective=Recover the treasure!
+mission_briefing_objective
 mission_briefing_notes
 mission_maker_record=0
 mission_maker_record_date

@@ -6118,8 +6118,8 @@ mobs{
 		p=-1078.8373 1122.5756
 	}
 	decoration{
-		type=margaret
-		p=-1236.4142 1085.5756
+		type=fern_dead
+		p=-1312.0000 1120.0000
 	}
 	decoration{
 		type=margaret
@@ -6361,15 +6361,15 @@ mobs{
 		stored_inside=60
 	}
 	decoration{
-		type=leaves
+		type=leaves_dead
 		p=-406.0245 1009.2078
 	}
 	decoration{
-		type=leaves
+		type=leaves_dead
 		p=-495.7913 1004.3630
 	}
 	decoration{
-		type=leaves
+		type=leaves_dead
 		p=-466.4378 1073.5718
 	}
 	pellet{
@@ -6399,15 +6399,15 @@ mobs{
 		p=-918.7759 -102.2117
 	}
 	decoration{
-		type=shoot
+		type=shoot_dead
 		p=390.6129 314.7357
 	}
 	decoration{
-		type=shoot
+		type=shoot_dead
 		p=927.0215 111.2294
 	}
 	decoration{
-		type=shoot
+		type=shoot_dead
 		p=-1282.3231 497.9460
 	}
 	custom{
@@ -6470,15 +6470,15 @@ mobs{
 		angle=1.7342
 	}
 	decoration{
-		type=leaves
+		type=leaves_dead
 		p=-391.1171 414.8151
 	}
 	decoration{
-		type=leaves
+		type=leaves_dead
 		p=-1041.9012 60.9973
 	}
 	decoration{
-		type=leaves
+		type=leaves_dead
 		p=-347.8887 -407.1091
 	}
 	pellet{
@@ -6487,15 +6487,15 @@ mobs{
 		stored_inside=53
 	}
 	decoration{
-		type=leaves
+		type=leaves_dead
 		p=-686.5697 405.1596
 	}
 	decoration{
-		type=leaves
+		type=fern_dead
 		p=-663.8602 732.6036
 	}
 	decoration{
-		type=leaves
+		type=leaves_dead
 		p=-358.4149 641.8231
 	}
 	enemy{
@@ -6584,11 +6584,11 @@ mobs{
 		p=-34.7726 -782.3408
 	}
 	decoration{
-		type=leaves
+		type=leaves_dead
 		p=-257.2064 -552.0764
 	}
 	decoration{
-		type=leaves
+		type=leaves_dead
 		p=-84.6135 -1458.1833
 	}
 	decoration{
@@ -6596,11 +6596,11 @@ mobs{
 		p=-594.9845 -1099.3289
 	}
 	decoration{
-		type=leaves
+		type=leaves_dead
 		p=-214.1998 -919.9015
 	}
 	decoration{
-		type=leaves
+		type=leaves_dead
 		p=-618.5127 -1498.4891
 	}
 	bouncer{
@@ -6628,23 +6628,23 @@ mobs{
 		angle=-1.5879
 	}
 	decoration{
-		type=clover
+		type=fern_dead
 		p=705.9250 420.1886
 	}
 	decoration{
-		type=clover
+		type=fern_dead
 		p=793.9251 330.2635
 	}
 	decoration{
-		type=clover
+		type=fern_dead
 		p=776.1387 536.2773
 	}
 	decoration{
-		type=clover
+		type=fern_dead
 		p=640.0000 528.0000
 	}
 	decoration{
-		type=clover
+		type=fern_dead
 		p=828.1887 442.4410
 	}
 	pellet{
@@ -6652,59 +6652,59 @@ mobs{
 		p=1176.0000 -376.0000
 	}
 	decoration{
-		type=clover
+		type=fern_dead
 		p=936.0000 352.0000
 	}
 	decoration{
-		type=clover
+		type=fern_dead
 		p=960.0000 472.0000
 	}
 	decoration{
-		type=clover
+		type=fern_dead
 		p=904.0000 576.0000
 	}
 	decoration{
-		type=clover
+		type=fern_dead
 		p=1040.0000 544.0000
 	}
 	decoration{
-		type=clover
+		type=fern_dead
 		p=1056.0000 408.0000
 	}
 	decoration{
-		type=clover
+		type=fern_dead
 		p=1168.0000 480.0000
 	}
 	decoration{
-		type=clover
+		type=fern_dead
 		p=1256.0000 400.0000
 	}
 	decoration{
-		type=clover
+		type=fern_dead
 		p=1344.0000 496.0000
 	}
 	decoration{
-		type=clover
+		type=fern_dead
 		p=1240.0000 584.0000
 	}
 	decoration{
-		type=clover
+		type=fern_dead
 		p=1416.0000 392.0000
 	}
 	decoration{
-		type=clover
+		type=fern_dead
 		p=1432.0000 600.0000
 	}
 	decoration{
-		type=clover
+		type=fern_dead
 		p=1456.0000 496.0000
 	}
 	decoration{
-		type=clover
+		type=fern_dead
 		p=1112.0000 616.0000
 	}
 	decoration{
-		type=clover
+		type=fern_dead
 		p=720.0000 648.0000
 	}
 	enemy{
@@ -6775,7 +6775,7 @@ mobs{
 		p=-493.2278 1188.4255
 	}
 	decoration{
-		type=margaret
+		type=fern_dead
 		p=-48.0000 896.0000
 	}
 	decoration{
@@ -6818,6 +6818,24 @@ mobs{
 		type=bridge_base_ceramic_red
 		p=446.9377 -22.7792
 		angle=-0.1735
+	}
+	decoration{
+		type=rosy_parachute
+		p=-1536.0000 -672.0000
+		angle=0.6252
+		vars=random_rotation=false;random_scale=false
+	}
+	decoration{
+		type=rosy_parachute
+		p=992.0000 -768.0000
+	}
+	decoration{
+		type=rosy_parachute
+		p=1696.0000 -1152.0000
+	}
+	decoration{
+		type=rosy_parachute
+		p=1900.5269 -156.8683
 	}
 }
 path_stops{

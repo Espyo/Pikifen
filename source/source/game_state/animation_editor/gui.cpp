@@ -468,34 +468,8 @@ void AnimationEditor::processGuiDialogNew() {
 void AnimationEditor::processGuiDialogOptions() {
     //Controls node.
     if(saveableTreeNode("options", "Controls")) {
-    
-        //Middle mouse button pans checkbox.
-        ImGui::Checkbox("Use MMB to pan", &game.options.editors.mmbPan);
-        setTooltip(
-            "Use the middle mouse button to pan the camera\n"
-            "(and RMB to reset camera/zoom).\n"
-            "Default: " +
-            b2s(OPTIONS::EDITORS_D::MMB_PAN) + "."
-        );
-        
-        //Drag threshold value.
-        int dragThreshold = (int) game.options.editors.mouseDragThreshold;
-        ImGui::SetNextItemWidth(64.0f);
-        ImGui::DragInt(
-            "Drag threshold", &dragThreshold,
-            0.1f, 0, INT_MAX
-        );
-        setTooltip(
-            "Mouse cursor must move these many pixels to "
-            "be considered a drag.\n"
-            "Default: " + i2s(OPTIONS::EDITORS_D::MOUSE_DRAG_THRESHOLD) +
-            ".",
-            "", WIDGET_EXPLANATION_DRAG
-        );
-        game.options.editors.mouseDragThreshold = dragThreshold;
-        
+        processGuiDialogOptionsControls();
         ImGui::TreePop();
-        
     }
     
     ImGui::Spacer();
@@ -506,105 +480,147 @@ void AnimationEditor::processGuiDialogOptions() {
     
     //Misc. node.
     if(saveableTreeNode("options", "Misc.")) {
+        processGuiDialogOptionsMisc();
+        ImGui::TreePop();
+    }
+}
+
+
+/**
+ * @brief Processes the controls widgets in the
+ * options dialog for this frame.
+ */
+void AnimationEditor::processGuiDialogOptionsControls() {
+    //Middle mouse button pans checkbox.
+    ImGui::Checkbox("Use MMB to pan", &game.options.editors.mmbPan);
+    setTooltip(
+        "Use the middle mouse button to pan the camera\n"
+        "(and RMB to reset camera/zoom).\n"
+        "Default: " +
+        b2s(OPTIONS::EDITORS_D::MMB_PAN) + "."
+    );
     
-        //Background texture checkbox.
-        if(ImGui::Checkbox("Use background texture", &useBg)) {
-            if(!useBg) {
-                if(bg) {
-                    al_destroy_bitmap(bg);
-                    bg = nullptr;
-                }
-                game.options.animEd.bgPath.clear();
+    //Drag threshold value.
+    int dragThreshold = (int) game.options.editors.mouseDragThreshold;
+    ImGui::SetNextItemWidth(64.0f);
+    ImGui::DragInt(
+        "Drag threshold", &dragThreshold,
+        0.1f, 0, INT_MAX
+    );
+    setTooltip(
+        "Mouse cursor must move these many pixels to "
+        "be considered a drag.\n"
+        "Default: " + i2s(OPTIONS::EDITORS_D::MOUSE_DRAG_THRESHOLD) +
+        ".",
+        "", WIDGET_EXPLANATION_DRAG
+    );
+    game.options.editors.mouseDragThreshold = dragThreshold;
+}
+
+
+/**
+ * @brief Processes the misc. widgets in the
+ * options dialog for this frame.
+ */
+void AnimationEditor::processGuiDialogOptionsMisc() {
+    //Background texture checkbox.
+    if(ImGui::Checkbox("Use background texture", &useBg)) {
+        if(!useBg) {
+            if(bg) {
+                al_destroy_bitmap(bg);
+                bg = nullptr;
+            }
+            game.options.animEd.bgPath.clear();
+        }
+    }
+    setTooltip(
+        "Check this to use a repeating texture on the background\n"
+        "of the editor."
+    );
+    
+    if(useBg) {
+        ImGui::Indent();
+        
+        //Remove background texture button.
+        float remBgAlpha =
+            game.options.animEd.bgPath.empty() ? 0.20f : 1.0f;
+        if(
+            ImGui::ImageButton(
+                "remBgButton", editorIcons[EDITOR_ICON_REMOVE],
+                Point(ImGui::GetTextLineHeight()), Point(), Point(1.0f),
+                COLOR_EMPTY, mapAlpha(remBgAlpha * 255)
+            )
+        ) {
+            game.options.animEd.bgPath.clear();
+            if(bg) {
+                al_destroy_bitmap(bg);
+                bg = nullptr;
             }
         }
         setTooltip(
-            "Check this to use a repeating texture on the background\n"
-            "of the editor."
+            "Remove the background image.\n"
+            "This does not delete the file in your disk."
         );
         
-        if(useBg) {
-            ImGui::Indent();
-            
-            //Remove background texture button.
-            float remBgAlpha =
-                game.options.animEd.bgPath.empty() ? 0.20f : 1.0f;
-            if(
-                ImGui::ImageButton(
-                    "remBgButton", editorIcons[EDITOR_ICON_REMOVE],
-                    Point(ImGui::GetTextLineHeight()), Point(), Point(1.0f),
-                    COLOR_EMPTY, mapAlpha(remBgAlpha * 255)
-                )
-            ) {
-                game.options.animEd.bgPath.clear();
+        //Background texture browse button.
+        ImGui::SameLine();
+        if(ImGui::Button("Browse...")) {
+            vector<string> f =
+                promptFileDialog(
+                    FOLDER_PATHS_FROM_ROOT::BASE_PACK + "/" +
+                    FOLDER_PATHS_FROM_PACK::TEXTURES,
+                    "Please choose a background texture.",
+                    "*.*", 0, game.display
+                );
+                
+            if(!f.empty() && !f[0].empty()) {
+                game.options.animEd.bgPath = f[0];
                 if(bg) {
                     al_destroy_bitmap(bg);
                     bg = nullptr;
                 }
-            }
-            setTooltip(
-                "Remove the background image.\n"
-                "This does not delete the file in your disk."
-            );
-            
-            //Background texture browse button.
-            ImGui::SameLine();
-            if(ImGui::Button("Browse...")) {
-                vector<string> f =
-                    promptFileDialog(
-                        FOLDER_PATHS_FROM_ROOT::BASE_PACK + "/" +
-                        FOLDER_PATHS_FROM_PACK::TEXTURES,
-                        "Please choose a background texture.",
-                        "*.*", 0, game.display
+                bg =
+                    loadBmp(
+                        game.options.animEd.bgPath,
+                        nullptr, false, false, false
                     );
-                    
-                if(!f.empty() && !f[0].empty()) {
-                    game.options.animEd.bgPath = f[0];
-                    if(bg) {
-                        al_destroy_bitmap(bg);
-                        bg = nullptr;
-                    }
-                    bg =
-                        loadBmp(
-                            game.options.animEd.bgPath,
-                            nullptr, false, false, false
-                        );
-                }
             }
-            setTooltip(
-                "Browse for which texture file in your disk to use."
-            );
-            
-            //Background texture name text.
-            string fileName =
-                getPathLastComponent(game.options.animEd.bgPath);
-            ImGui::SameLine();
-            monoText("%s", fileName.c_str());
-            setTooltip("Full path:\n" + game.options.animEd.bgPath);
-            
-            ImGui::Unindent();
         }
-        
-        //Quick play area combo.
-        vector<string> areaNames;
-        vector<string> areaPaths;
-        int selectedAreaIdx = -1;
-        getQuickPlayAreaList(
-            game.options.animEd.quickPlayAreaPath,
-            &areaNames, &areaPaths, &selectedAreaIdx
+        setTooltip(
+            "Browse for which texture file in your disk to use."
         );
-        if(ImGui::Combo("Quick play area", &selectedAreaIdx, areaNames)) {
-            if(selectedAreaIdx == -1) {
-                game.options.animEd.quickPlayAreaPath.clear();
-            } else {
-                game.options.animEd.quickPlayAreaPath =
-                    areaPaths[selectedAreaIdx];
-            }
-        }
-        setTooltip("Area to play on when choosing the quick play feature.");
         
-        ImGui::TreePop();
+        //Background texture name text.
+        string fileName =
+            getPathLastComponent(game.options.animEd.bgPath);
+        ImGui::SameLine();
+        monoText("%s", fileName.c_str());
+        setTooltip("Full path:\n" + game.options.animEd.bgPath);
         
+        ImGui::Unindent();
     }
+    
+    //Quick play area combo.
+    vector<string> areaNames;
+    vector<string> areaPaths;
+    int selectedAreaIdx = -1;
+    getQuickPlayAreaList(
+        game.options.animEd.quickPlayAreaPath,
+        &areaNames, &areaPaths, &selectedAreaIdx
+    );
+    if(ImGui::Combo("Quick play area", &selectedAreaIdx, areaNames)) {
+        if(selectedAreaIdx == -1) {
+            game.options.animEd.quickPlayAreaPath.clear();
+        } else {
+            game.options.animEd.quickPlayAreaPath =
+                areaPaths[selectedAreaIdx];
+        }
+    }
+    setTooltip(
+        "Area to play on when choosing the quick play feature.\n"
+        "You can also choose one by right-clicking the\n"
+        "quick play button in the toolbar."
+    );
 }
 
 
@@ -640,74 +656,7 @@ void AnimationEditor::processGuiMenuBar() {
         //Editor menu.
         if(ImGui::BeginMenu("Editor")) {
         
-            //Load file item.
-            if(ImGui::MenuItem("Load or create...", "Ctrl+L")) {
-                loadWidgetPos = getLastWidgetPost();
-                loadCmd(1.0f);
-            }
-            setTooltip(
-                "Pick a database to load.",
-                "Ctrl + L"
-            );
-            
-            //Reload current file item.
-            if(ImGui::MenuItem("Reload current animation database")) {
-                reloadWidgetPos = getLastWidgetPost();
-                reloadCmd(1.0f);
-            }
-            setTooltip(
-                "Lose all changes and reload the current "
-                "database from your disk."
-            );
-            
-            //Save current file item.
-            if(ImGui::MenuItem("Save current animation database", "Ctrl+S")) {
-                saveCmd(1.0f);
-            }
-            setTooltip(
-                "Save the animation database to your disk.",
-                "Ctrl + S"
-            );
-            
-            //Delete current animation database item.
-            if(ImGui::MenuItem("Delete current animation database")) {
-                deleteAnimDbCmd(1.0f);
-            }
-            setTooltip(
-                "Delete the current animation database from your disk."
-            );
-            
-            //Open externally item.
-            if(ImGui::MenuItem("Open externally")) {
-                openExternallyCmd(1.0f);
-            }
-            setTooltip(
-                "Open the file with the animation database's data in your "
-                "operative system.\n"
-                "Useful if you need to edit things by hand."
-            );
-            
-            //Separator item.
-            ImGui::Separator();
-            
-            //Options menu item.
-            if(ImGui::MenuItem("Options...")) {
-                openOptionsDialog();
-            }
-            setTooltip(
-                "Open the options menu, so you can tweak your preferences."
-            );
-            
-            //Quit editor item.
-            if(ImGui::MenuItem("Quit", "Ctrl+Q")) {
-                quitWidgetPos = getLastWidgetPost();
-                quitCmd(1.0f);
-            }
-            setTooltip(
-                "Quit the animation editor.",
-                "Ctrl + Q"
-            );
-            
+            processGuiMenuBarEditor();
             ImGui::EndMenu();
             
         }
@@ -715,44 +664,7 @@ void AnimationEditor::processGuiMenuBar() {
         //View menu.
         if(ImGui::BeginMenu("View")) {
         
-            //Zoom in item.
-            if(ImGui::MenuItem("Zoom in", "Plus")) {
-                zoomInCmd(1.0f);
-            }
-            setTooltip(
-                "Zooms the camera in a bit.",
-                "Plus"
-            );
-            
-            //Zoom out item.
-            if(ImGui::MenuItem("Zoom out", "Minus")) {
-                zoomOutCmd(1.0f);
-            }
-            setTooltip(
-                "Zooms the camera out a bit.",
-                "Minus"
-            );
-            
-            //Zoom and position reset item.
-            if(ImGui::MenuItem("Zoom/position reset", "0")) {
-                zoomAndPosResetCmd(1.0f);
-            }
-            setTooltip(
-                "Reset the zoom level, and if pressed again,\n"
-                "reset the camera position.",
-                "0"
-            );
-            
-            //Zoom everything item.
-            if(ImGui::MenuItem("Zoom onto everything", "Home")) {
-                zoomEverythingCmd(1.0f);
-            }
-            setTooltip(
-                "Move and zoom the camera so that everything in the animation\n"
-                "fits nicely into view.",
-                "Home"
-            );
-            
+            processGuiMenuBarView();
             ImGui::EndMenu();
             
         }
@@ -802,6 +714,126 @@ void AnimationEditor::processGuiMenuBar() {
         ImGui::EndMenuBar();
         
     }
+}
+
+
+/**
+ * @brief Processes the Dear ImGui editor widgets in the
+ * menu bar for this frame.
+ */
+void AnimationEditor::processGuiMenuBarEditor() {
+    //Load file item.
+    if(ImGui::MenuItem("Load or create...", "Ctrl+L")) {
+        loadWidgetPos = getLastWidgetPost();
+        loadCmd(1.0f);
+    }
+    setTooltip(
+        "Pick a database to load.",
+        "Ctrl + L"
+    );
+    
+    //Reload current file item.
+    if(ImGui::MenuItem("Reload current animation database")) {
+        reloadWidgetPos = getLastWidgetPost();
+        reloadCmd(1.0f);
+    }
+    setTooltip(
+        "Lose all changes and reload the current "
+        "database from your disk."
+    );
+    
+    //Save current file item.
+    if(ImGui::MenuItem("Save current animation database", "Ctrl+S")) {
+        saveCmd(1.0f);
+    }
+    setTooltip(
+        "Save the animation database to your disk.",
+        "Ctrl + S"
+    );
+    
+    //Delete current animation database item.
+    if(ImGui::MenuItem("Delete current animation database")) {
+        deleteAnimDbCmd(1.0f);
+    }
+    setTooltip(
+        "Delete the current animation database from your disk."
+    );
+    
+    //Open externally item.
+    if(ImGui::MenuItem("Open externally")) {
+        openExternallyCmd(1.0f);
+    }
+    setTooltip(
+        "Open the file with the animation database's data in your "
+        "operative system.\n"
+        "Useful if you need to edit things by hand."
+    );
+    
+    //Separator item.
+    ImGui::Separator();
+    
+    //Options menu item.
+    if(ImGui::MenuItem("Options...")) {
+        openOptionsDialog();
+    }
+    setTooltip(
+        "Open the options menu, so you can tweak your preferences."
+    );
+    
+    //Quit editor item.
+    if(ImGui::MenuItem("Quit", "Ctrl+Q")) {
+        quitWidgetPos = getLastWidgetPost();
+        quitCmd(1.0f);
+    }
+    setTooltip(
+        "Quit the animation editor.",
+        "Ctrl + Q"
+    );
+}
+
+
+/**
+ * @brief Processes the Dear ImGui view widgets in the
+ * menu bar for this frame.
+ */
+void AnimationEditor::processGuiMenuBarView() {
+    //Zoom in item.
+    if(ImGui::MenuItem("Zoom in", "Plus")) {
+        zoomInCmd(1.0f);
+    }
+    setTooltip(
+        "Zooms the camera in a bit.",
+        "Plus"
+    );
+    
+    //Zoom out item.
+    if(ImGui::MenuItem("Zoom out", "Minus")) {
+        zoomOutCmd(1.0f);
+    }
+    setTooltip(
+        "Zooms the camera out a bit.",
+        "Minus"
+    );
+    
+    //Zoom and position reset item.
+    if(ImGui::MenuItem("Zoom/position reset", "0")) {
+        zoomAndPosResetCmd(1.0f);
+    }
+    setTooltip(
+        "Reset the zoom level, and if pressed again,\n"
+        "reset the camera position.",
+        "0"
+    );
+    
+    //Zoom everything item.
+    if(ImGui::MenuItem("Zoom onto everything", "Home")) {
+        zoomEverythingCmd(1.0f);
+    }
+    setTooltip(
+        "Move and zoom the camera so that everything in the animation\n"
+        "fits nicely into view.",
+        "Home"
+    );
 }
 
 
@@ -1043,7 +1075,7 @@ void AnimationEditor::processGuiPanelAnimationHeader() {
             string curAnimName = curAnimInst.curAnim->name;
             size_t nr = db.findAnimation(curAnimName);
             delete db.animations[nr];
-            db.animations.erase(db.animations.begin() + nr);
+            eraseInVector(db.animations, nr);
             if(db.animations.empty()) {
                 curAnimInst.clear();
             } else {
@@ -1215,9 +1247,7 @@ void AnimationEditor::processGuiPanelBodyPart() {
                 string deletedPartName =
                     db.bodyParts[selectedPart]->name;
                 delete db.bodyParts[selectedPart];
-                db.bodyParts.erase(
-                    db.bodyParts.begin() + selectedPart
-                );
+                eraseInVector(db.bodyParts, selectedPart);
                 if(db.bodyParts.empty()) {
                     selectedPart = -1;
                 } else if(selectedPart > 0) {
@@ -2788,6 +2818,7 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
                 "None",
                 "Flinch",
                 "Outward",
+                "Outward, proximity-based",
                 "Directional",
             };
             int knockbackType = curHitbox->knockbackType;
@@ -2828,12 +2859,18 @@ void AnimationEditor::processGuiPanelSpriteHitboxes() {
             //Knockback strength value.
             if(
                 curHitbox->knockbackType == KNOCKBACK_TYPE_OUTWARD ||
+                curHitbox->knockbackType == KNOCKBACK_TYPE_OUTWARD_PROXIMITY ||
                 curHitbox->knockbackType == KNOCKBACK_TYPE_DIRECTIONAL
             ) {
                 ImGui::SetNextItemWidth(128.0f);
+                string label =
+                    curHitbox->knockbackType ==
+                    KNOCKBACK_TYPE_OUTWARD_PROXIMITY ?
+                    "Maximum knockback strength" :
+                    "Knockback strength";
                 if(
                     ImGui::DragFloat(
-                        "Knockback strength",
+                        label.c_str(),
                         &curHitbox->knockbackStrength, 0.01
                     )
                 ) {
@@ -3336,8 +3373,6 @@ void AnimationEditor::processGuiStatusBar() {
             resizeString(f2s(curTime), 7).c_str()
         );
     }
-    
-    
 }
 
 

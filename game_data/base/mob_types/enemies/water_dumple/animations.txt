@@ -256,7 +256,7 @@ sprites{
 				radius=32.0000
 				type=1
 				value=20.0000
-				knockback_type=3
+				knockback_type=4
 				knockback=1.0000
 			}
 		}
@@ -281,7 +281,7 @@ sprites{
 				radius=32.0000
 				type=1
 				value=20.0000
-				knockback_type=3
+				knockback_type=4
 				knockback=1.0000
 			}
 		}

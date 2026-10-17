@@ -286,7 +286,7 @@ void Inventory::populateInventoryListGui() {
             if(iPtr->icon) {
                 drawBitmapInBox(
                     iPtr->icon, draw.center, draw.size * 0.8f,
-                    true, 0.0f, bmpTint
+                    true, true, 0.0f, bmpTint
                 );
             }
             if(iPtr->onGetAmount) {

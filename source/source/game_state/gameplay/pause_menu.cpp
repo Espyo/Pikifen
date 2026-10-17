@@ -391,7 +391,8 @@ void PauseMenu::addNewPikminStatusLine(
         typeItem->onDraw =
         [pikType] (const DrawInfo & draw) {
             drawBitmapInBox(
-                pikType->bmpIcon, draw.center, draw.size, true, 0.0f, draw.tint
+                pikType->bmpIcon, draw.center, draw.size, true, true,
+                0.0f, draw.tint
             );
         };
         typeItem->ratioRect.center =

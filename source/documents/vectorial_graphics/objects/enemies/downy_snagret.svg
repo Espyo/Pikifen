@@ -3923,7 +3923,7 @@
             <rdf:li>Pikifen spritesheet</rdf:li>
           </rdf:Bag>
         </dc:subject>
-        <dc:description>Spritesheet for the Downy Snagret in the base content of Pikifen. See https://www.pikminfanon.com/wiki/Pikifen</dc:description>
+        <dc:description>Spritesheet for the Downy Snagret in the base content of Pikifen. See https://github.com/Espyo/Pikifen</dc:description>
         <cc:license
            rdf:resource="https://opensource.org/licenses/MIT" />
       </cc:Work>

@@ -176,11 +176,11 @@ Hud::Hud() :
             );
             drawBitmapInBox(
                 icon.bmp,
-                finalDraw.center, finalDraw.size, true, 0.0f, draw.tint
+                finalDraw.center, finalDraw.size, true, true, 0.0f, draw.tint
             );
             drawBitmapInBox(
                 bmpBubble,
-                finalDraw.center, finalDraw.size, true, 0.0f, draw.tint
+                finalDraw.center, finalDraw.size, true, true, 0.0f, draw.tint
             );
         };
         gui.addItem(leaderIcon, "leader_" + i2s(l + 1) + "_icon");
@@ -212,7 +212,7 @@ Hud::Hud() :
                 bmpHardBubble,
                 finalDraw.center,
                 finalDraw.size,
-                true, 0.0f,
+                true, true, 0.0f,
                 tintColor(
                     interpolateColor(
                         health.redness, 0.0f, 1.0f,
@@ -386,7 +386,7 @@ Hud::Hud() :
     dayBubble->onDraw =
     [this] (const DrawInfo & draw) {
         drawBitmapInBox(
-            bmpDayBubble, draw.center, draw.size, true, 0.0f, draw.tint
+            bmpDayBubble, draw.center, draw.size, true, true, 0.0f, draw.tint
         );
     };
     gui.addItem(dayBubble, "day_bubble");
@@ -528,13 +528,13 @@ Hud::Hud() :
             drawBitmapInBox(
                 standbyMatBmp, draw.center,
                 (draw.size * 0.8) + standbyMaturityIcon->getJuiceValue(),
-                true,
+                true, true,
                 0.0f, tintColor(color, draw.tint)
             );
             drawBitmapInBox(
                 bmpBubble, draw.center,
                 draw.size + standbyMaturityIcon->getJuiceValue(),
-                true, 0.0f, tintColor(color, draw.tint)
+                true, true, 0.0f, tintColor(color, draw.tint)
             );
         }
         
@@ -826,7 +826,7 @@ Hud::Hud() :
             Point offset(0.0f, yOffsetKI.get(timeRatio));
             
             drawBitmapInBox(
-                iPtr->icon, draw.center + offset, draw.size, true, 0.0f,
+                iPtr->icon, draw.center + offset, draw.size, true, true, 0.0f,
                 multAlpha(draw.tint, alphaMult)
             );
             if(iPtr->onGetAmount) {
@@ -850,8 +850,8 @@ Hud::Hud() :
         watermarkWordmark->onDraw =
         [this] (const DrawInfo & draw) {
             drawBitmapInBox(
-                game.sysContent.bmpWordmark, draw.center, draw.size, true, 0.0f,
-                multAlpha(draw.tint, 0.80f)
+                game.sysContent.bmpWordmark, draw.center, draw.size,
+                true, true, 0.0f, multAlpha(draw.tint, 0.80f)
             );
         };
         gui.addItem(watermarkWordmark, "watermark_wordmark");
@@ -861,8 +861,8 @@ Hud::Hud() :
         watermarkLogo->onDraw =
         [this] (const DrawInfo & draw) {
             drawBitmapInBox(
-                game.sysContent.bmpIcon, draw.center, draw.size, true, 0.0f,
-                multAlpha(draw.tint, 0.80f)
+                game.sysContent.bmpIcon, draw.center, draw.size,
+                true, true, 0.0f, multAlpha(draw.tint, 0.80f)
             );
         };
         gui.addItem(watermarkLogo, "watermark_logo");
@@ -938,7 +938,9 @@ void Hud::drawStandbyIcon(BUBBLE_RELATION which) {
     ALLEGRO_COLOR color =
         tintColor(mapAlpha(standbyItemsAlpha * 255), draw.tint);
         
-    drawBitmapInBox(icon, draw.center, draw.size * 0.8, true, 0.0f, color);
+    drawBitmapInBox(
+        icon, draw.center, draw.size * 0.8, true, true, 0.0f, color
+    );
     
     if(
         player->closestGroupMemberDistant &&
@@ -948,12 +950,13 @@ void Hud::drawStandbyIcon(BUBBLE_RELATION which) {
             bmpDistantPikminMarker,
             draw.center,
             draw.size * 0.8,
-            true,
-            0.0f, color
+            true, true, 0.0f, color
         );
     }
     
-    drawBitmapInBox(bmpBubble, draw.center, draw.size, true, 0.0f, color);
+    drawBitmapInBox(
+        bmpBubble, draw.center, draw.size, true, true, 0.0f, color
+    );
 }
 
 
@@ -969,7 +972,8 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
     if(!itemInfo->enabled) return;
     
     switch(itemInfo->displayType) {
-    case MISSION_HUD_ITEM_DISPLAY_TEXT: {
+    case MISSION_HUD_ITEM_DISPLAY_TEXT:
+    case MISSION_HUD_ITEM_DISPLAY_SCRIPT_VAR: {
         //Text.
         
         DataNode* guiFile =
@@ -981,8 +985,14 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         GuiItem* text = new GuiItem();
         text->onDraw =
         [itemInfo, this] (const DrawInfo & draw) {
+            string str = itemInfo->text;
+            if(itemInfo->displayType == MISSION_HUD_ITEM_DISPLAY_SCRIPT_VAR) {
+                game.states.gameplay->scriptVM.vars.getValue(
+                    itemInfo->text, str
+                );
+            }
             drawText(
-                itemInfo->text, game.sysContent.fntStandard,
+                str, game.sysContent.fntStandard,
                 draw.center, draw.size,
                 tintColor(mapAlpha(224), draw.tint)
             );

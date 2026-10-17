@@ -103,25 +103,13 @@ void AreaEditor::drawCanvas() {
     //Setup.
     RectCorners canvasCorners = game.editorsView.getWindowCorners();
     
-    al_set_clipping_rectangle(
-        canvasCorners.tl.x, canvasCorners.tl.y,
-        game.editorsView.windowRect.size.x, game.editorsView.windowRect.size.y
-    );
-    
-    al_clear_to_color(COLOR_BLACK);
-    
-    if(!game.curArea) {
-        al_reset_clipping_rectangle();
-        return;
-    }
-    
-    al_use_transform(&game.editorsView.worldToWindowTransform);
-    
     AreaEdCanvasStyle style {
         .textureAlpha = 0.4f,
         .wallShadowAlpha = 0.0f,
         .edgeAlpha = 0.25f,
         .mobAlpha = 0.15f,
+        .treeShadowAlpha = 0.0f,
+        .backgroundAlpha = 0.0f,
         .overlayAlpha = 1.0f,
     };
     
@@ -154,6 +142,10 @@ void AreaEditor::drawCanvas() {
         style.mobAlpha = 1.0f;
         break;
         
+    } case EDITOR_STATE_DETAILS: {
+        style.treeShadowAlpha = 1.0f;
+        break;
+        
     } case EDITOR_STATE_MAIN:
     case EDITOR_STATE_REVIEW: {
         style.textureAlpha = 0.6f;
@@ -166,11 +158,13 @@ void AreaEditor::drawCanvas() {
     }
     
     if(previewMode) {
+        style.gridAlpha = 0.0f;
         style.textureAlpha = 1.0f;
         style.wallShadowAlpha = 1.0f;
         style.edgeAlpha = 0.0f;
-        style.gridAlpha = 0.0f;
         style.mobAlpha = 0.0f;
+        style.treeShadowAlpha = showShadows ? 1.0f : 0.0f;
+        style.backgroundAlpha = 1.0f;
         style.overlayAlpha = 0.0f;
     } else if(subState == EDITOR_SUB_STATE_OCTEE) {
         quickPreviewTimer.start();
@@ -181,6 +175,11 @@ void AreaEditor::drawCanvas() {
             std::min(
                 quickPreviewTimer.timeLeft,
                 quickPreviewTimer.duration / 2.0f
+            );
+        style.gridAlpha =
+            interpolateNumber(
+                t, 0.0f, quickPreviewTimer.duration / 2.0f,
+                style.gridAlpha, 0.0f
             );
         style.textureAlpha =
             interpolateNumber(
@@ -197,24 +196,56 @@ void AreaEditor::drawCanvas() {
                 t, 0.0f, quickPreviewTimer.duration / 2.0f,
                 style.edgeAlpha, 0.0f
             );
-        style.gridAlpha =
+        style.mobAlpha =
             interpolateNumber(
                 t, 0.0f, quickPreviewTimer.duration / 2.0f,
-                style.gridAlpha, 0.0f
+                style.mobAlpha, 0.0f
+            );
+        style.treeShadowAlpha =
+            interpolateNumber(
+                t, 0.0f, quickPreviewTimer.duration / 2.0f,
+                style.treeShadowAlpha, showShadows ? 1.0f : 0.0f
+            );
+        style.backgroundAlpha =
+            interpolateNumber(
+                t, 0.0f, quickPreviewTimer.duration / 2.0f,
+                style.backgroundAlpha, 1.0f
             );
         style.overlayAlpha =
             interpolateNumber(
                 t, 0.0f, quickPreviewTimer.duration / 2.0f,
                 style.overlayAlpha, 0.0f
             );
-        style.mobAlpha =
-            interpolateNumber(
-                t, 0.0f, quickPreviewTimer.duration / 2.0f,
-                style.mobAlpha, 0.0f
-            );
     }
     
-    //Draw!
+    //Background.
+    al_set_clipping_rectangle(
+        canvasCorners.tl.x, canvasCorners.tl.y,
+        game.editorsView.windowRect.size.x, game.editorsView.windowRect.size.y
+    );
+    
+    ALLEGRO_COLOR voidColor =
+        game.curArea ?
+        changeAlpha(game.curArea->bgVoidColor, 255) :
+        COLOR_BLACK;
+    al_clear_to_color(
+        interpolateColor(
+            style.backgroundAlpha, 0.0f, 1.0f, COLOR_BLACK, voidColor
+        )
+    );
+    
+    if(game.curArea) {
+        drawAreaBackgroundTexture(
+            game.editorsView, style.backgroundAlpha, nullptr
+        );
+    } else {
+        al_reset_clipping_rectangle();
+        return;
+    }
+    
+    al_use_transform(&game.editorsView.worldToWindowTransform);
+    
+    //Main stuff.
     drawSectors(style);
     
     drawGrid(
@@ -252,8 +283,9 @@ void AreaEditor::drawCanvas() {
     
     drawPaths(style);
     
+    drawTreeShadows(style);
+    
     if(state == EDITOR_STATE_DETAILS) {
-        drawTreeShadows(style);
         drawSelectionAndTransformationThings(
             detailsSelCtrl, curTransformationWidget, false
         );
@@ -1894,49 +1926,46 @@ void AreaEditor::drawSectors(const AreaEdCanvasStyle& style) {
 void AreaEditor::drawTreeShadows(const AreaEdCanvasStyle& style) {
     const ALLEGRO_COLOR SHADOW_OUTLINE_COLOR = al_map_rgb(128, 192, 128);
     
-    if(
-        state == EDITOR_STATE_DETAILS ||
-        (previewMode && showShadows)
-    ) {
-        forIdx(s, game.curArea->treeShadows) {
-            TreeShadow* sPtr = game.curArea->treeShadows[s];
-            if(!previewMode && shadowSelection.contains(s)) {
-                //Draw a white rectangle to contrast the shadow better.
-                ALLEGRO_TRANSFORM tra, current;
-                al_identity_transform(&tra);
-                al_rotate_transform(&tra, sPtr->pose.angle);
-                al_translate_transform(
-                    &tra, sPtr->pose.pos.x, sPtr->pose.pos.y
-                );
-                al_copy_transform(&current, al_get_current_transform());
-                al_compose_transform(&tra, &current);
-                al_use_transform(&tra);
-                
-                al_draw_filled_rectangle(
-                    -sPtr->pose.size.x / 2.0,
-                    -sPtr->pose.size.y / 2.0,
-                    sPtr->pose.size.x / 2.0,
-                    sPtr->pose.size.y / 2.0,
-                    multAlpha(sPtr->tint, 0.33f)
-                );
-                
-                al_use_transform(&current);
-            }
+    forIdx(s, game.curArea->treeShadows) {
+        TreeShadow* sPtr = game.curArea->treeShadows[s];
+        if(!previewMode && shadowSelection.contains(s)) {
+            //Draw a white rectangle to contrast the shadow better.
+            ALLEGRO_TRANSFORM tra, current;
+            al_identity_transform(&tra);
+            al_rotate_transform(&tra, sPtr->pose.angle);
+            al_translate_transform(
+                &tra, sPtr->pose.pos.x, sPtr->pose.pos.y
+            );
+            al_copy_transform(&current, al_get_current_transform());
+            al_compose_transform(&tra, &current);
+            al_use_transform(&tra);
             
-            drawBitmap(
-                sPtr->bitmap, sPtr->pose.pos, sPtr->pose.size,
-                sPtr->pose.angle, sPtr->tint
+            al_draw_filled_rectangle(
+                -sPtr->pose.size.x / 2.0,
+                -sPtr->pose.size.y / 2.0,
+                sPtr->pose.size.x / 2.0,
+                sPtr->pose.size.y / 2.0,
+                multAlpha(sPtr->tint, 0.33f)
             );
             
-            if(state == EDITOR_STATE_DETAILS) {
-                drawRotatedRectangle(
-                    sPtr->pose.pos, sPtr->pose.size, sPtr->pose.angle,
-                    shadowSelection.contains(s) ?
-                    getSelectionEffectReplacementColor(SHADOW_OUTLINE_COLOR) :
-                    SHADOW_OUTLINE_COLOR,
-                    4.0 / game.editorsView.cam.zoom
-                );
-            }
+            al_use_transform(&current);
+        }
+        
+        //Draw the shadow proper.
+        drawBitmap(
+            sPtr->bitmap, sPtr->pose.pos, sPtr->pose.size,
+            sPtr->pose.angle, multAlpha(sPtr->tint, style.treeShadowAlpha)
+        );
+        
+        if(state == EDITOR_STATE_DETAILS) {
+            //Draw the selection highlight.
+            drawRotatedRectangle(
+                sPtr->pose.pos, sPtr->pose.size, sPtr->pose.angle,
+                shadowSelection.contains(s) ?
+                getSelectionEffectReplacementColor(SHADOW_OUTLINE_COLOR) :
+                SHADOW_OUTLINE_COLOR,
+                4.0 / game.editorsView.cam.zoom
+            );
         }
     }
 }

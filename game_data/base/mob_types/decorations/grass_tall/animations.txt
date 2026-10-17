@@ -1,0 +1,90 @@
+name=Grass (tall) animations
+description=Animations for the tall grass.
+maker=Espyo
+version=1.0.0
+engine_version=1.2.0
+animations{
+	bumped{
+		frames{
+			bumped_01{
+				duration=0.1000
+			}
+			bumped_02{
+				duration=0.1000
+				sound=bumped
+			}
+			bumped_01{
+				duration=0.1000
+			}
+			idling_01{
+				duration=0.1000
+			}
+			bumped_03{
+				duration=0.1000
+			}
+			bumped_04{
+				duration=0.1000
+			}
+			bumped_03{
+				duration=0.1000
+			}
+			idling_01{
+				duration=0.1000
+			}
+		}
+	}
+	idling{
+		frames{
+			idling_01{
+				duration=0.3000
+			}
+			idling_02{
+				duration=0.3000
+			}
+			idling_01{
+				duration=0.3000
+			}
+			idling_03{
+				duration=0.3000
+			}
+		}
+	}
+}
+sprites{
+	bumped_01{
+		file=decorations/grass_tall
+		file_pos=0.0000 507.0000
+		file_size=168.0000 168.0000
+	}
+	bumped_02{
+		file=decorations/grass_tall
+		file_pos=0.0000 676.0000
+		file_size=168.0000 168.0000
+	}
+	bumped_03{
+		file=decorations/grass_tall
+		file_pos=0.0000 845.0000
+		file_size=168.0000 168.0000
+	}
+	bumped_04{
+		file=decorations/grass_tall
+		file_pos=0.0000 1014.0000
+		file_size=168.0000 168.0000
+	}
+	idling_01{
+		file=decorations/grass_tall
+		file_pos=0.0000 0.0000
+		file_size=168.0000 168.0000
+	}
+	idling_02{
+		file=decorations/grass_tall
+		file_pos=0.0000 169.0000
+		file_size=168.0000 168.0000
+	}
+	idling_03{
+		file=decorations/grass_tall
+		file_pos=0.0000 338.0000
+		file_size=168.0000 168.0000
+	}
+}
+body_parts

@@ -56,6 +56,15 @@ const float IDLE_GLOW_SPIN_SPEED = TAU / 4;
 //Invulnerability period after getting hit.
 const float INVULN_PERIOD = 0.7f;
 
+//If the leader's group spot is this far away, give up entirely immediately.
+const float LEADER_CHASE_MAX_DIST = 500.0f;
+
+//If the leader's group spot is this far away, tick the timeout for giving up.
+const float LEADER_CHASE_TIMER_DIST = 100.0f;
+
+//If the leader's group spot is far enough away, give up after this long.
+const float LEADER_CHASE_TIMER_DURATION = 4.0f;
+
 //How long to remember a missed incoming attack for.
 const float MISSED_ATTACK_DURATION = 1.5f;
 
@@ -165,10 +174,9 @@ void Pikmin::drawMob() {
         BitmapEffect topEff = mobEff;
         ALLEGRO_BITMAP* topBmp = pikType->bmpTop[maturity];
         
-        forIdx(s, statuses) {
-            if(statuses[s].state != STATUS_STATE_ACTIVE) continue;
-            if(statuses[s].type->topReplacementBmp) {
-                topBmp = statuses[s].type->topReplacementBmp;
+        forIdx(s, statuses.getList()) {
+            if(statuses.getList()[s].type->topReplacementBmp) {
+                topBmp = statuses.getList()[s].type->topReplacementBmp;
             }
         }
         
@@ -335,8 +343,8 @@ float Pikmin::getTaskRange() const {
  *
  * @param staType Status effect to handle.
  */
-void Pikmin::handleStatusEffectGain(StatusType* staType) {
-    Mob::handleStatusEffectGain(staType);
+void Pikmin::handleStatusActivation(StatusType* staType) {
+    Mob::handleStatusActivation(staType);
     
     switch(staType->stateChangeType) {
     case STATUS_STATE_CHANGE_FLAILING: {
@@ -378,16 +386,16 @@ void Pikmin::handleStatusEffectGain(StatusType* staType) {
  *
  * @param staType Status effect to handle.
  */
-void Pikmin::handleStatusEffectLoss(StatusType* staType) {
+void Pikmin::handleStatusDeactivation(StatusType* staType) {
     bool stillHasFlailing = false;
     bool stillHasHelplessness = false;
     bool stillHasPanic = false;
     bool stillHasWading = false;
     
-    forIdx(s, statuses) {
-        if(statuses[s].type == staType) continue;
+    forIdx(s, statuses.getList()) {
+        if(statuses.getList()[s].type == staType) continue;
         
-        switch(statuses[s].type->stateChangeType) {
+        switch(statuses.getList()[s].type->stateChangeType) {
         case STATUS_STATE_CHANGE_FLAILING: {
             stillHasFlailing = true;
             break;

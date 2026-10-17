@@ -236,6 +236,10 @@ void Ship::healLeader(Leader* l) const {
             game.sysContentNames.parLeaderHeal, l
         );
     l->particleGenerators.push_back(pg);
+    game.audio.addNewPosSoundSource(
+        game.sysContent.sndHeal, l->center, false,
+    { .volume = 0.5f }
+    );
 }
 
 
@@ -281,12 +285,8 @@ void Ship::tickClassSpecifics(float deltaT) {
         //Delete rings that have reached the end of their animation.
         beamRings[r] += deltaT;
         if(beamRings[r] > SHIP::BEAM_RING_ANIM_DUR) {
-            beamRings.erase(
-                beamRings.begin() + r
-            );
-            beamRingColors.erase(
-                beamRingColors.begin() + r
-            );
+            eraseInVector(beamRings, r);
+            eraseInVector(beamRingColors, r);
         } else {
             r++;
         }

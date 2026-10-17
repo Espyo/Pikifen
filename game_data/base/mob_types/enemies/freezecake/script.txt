@@ -200,6 +200,7 @@ script {
             end_if
             set_animation landing
             play_sound landing
+            shake_camera 20
         }
         on_animation_end {
             set_state recovering

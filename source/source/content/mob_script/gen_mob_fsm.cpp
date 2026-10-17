@@ -578,11 +578,13 @@ void GenMobFsm::touchHazard(ScriptVM* scriptVM, void* info1, void* info2) {
     
     if(!vuln.statusToApply || !vuln.statusOverrides) {
         forIdx(e, hazPtr->effects) {
-            mPtr->applyStatus(hazPtr->effects[e], false, true, hitboxMob);
+            mPtr->handleStatusSource(
+                hazPtr->effects[e], false, true, hitboxMob
+            );
         }
     }
     if(vuln.statusToApply) {
-        mPtr->applyStatus(vuln.statusToApply, false, true, hitboxMob);
+        mPtr->handleStatusSource(vuln.statusToApply, false, true, hitboxMob);
     }
 }
 
@@ -601,6 +603,6 @@ void GenMobFsm::touchSpray(ScriptVM* scriptVM, void* info1, void* info2) {
     Mob* sprayer = (Mob*) info2;
     
     forIdx(e, s->effects) {
-        scriptVM->mob->applyStatus(s->effects[e], false, false, sprayer);
+        scriptVM->mob->handleStatusSource(s->effects[e], false, false, sprayer);
     }
 }

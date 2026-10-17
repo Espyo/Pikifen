@@ -20,7 +20,7 @@ namespace DropFsm {
 void createFsm(MobType* typ);
 
 void land(ScriptVM* scriptVM, void* info1, void* info2);
-void onTouched(ScriptVM* scriptVM, void* info1, void* info2);
+void beTouched(ScriptVM* scriptVM, void* info1, void* info2);
 void setBumpedAnim(ScriptVM* scriptVM, void* info1, void* info2);
 void setFallingAnim(ScriptVM* scriptVM, void* info1, void* info2);
 void setIdlingAnim(ScriptVM* scriptVM, void* info1, void* info2);

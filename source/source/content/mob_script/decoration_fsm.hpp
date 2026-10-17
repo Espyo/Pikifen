@@ -22,4 +22,5 @@ void createFsm(MobType* typ);
 void beBumped(ScriptVM* scriptVM, void* info1, void* info2);
 void becomeIdle(ScriptVM* scriptVM, void* info1, void* info2);
 void checkBump(ScriptVM* scriptVM, void* info1, void* info2);
+void setup(ScriptVM* scriptVM, void* info1, void* info2);
 }

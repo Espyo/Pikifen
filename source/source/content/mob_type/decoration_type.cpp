@@ -59,8 +59,9 @@ DecorationType::DecorationType() :
     aepRandomRotation.type = AEMP_TYPE_BOOL;
     aepRandomRotation.defValue = "true";
     aepRandomRotation.tooltip =
-        "If this decoration type can have a random scale,\n"
-        "this property makes this decoration use it or not.";
+        "If this decoration type can have a random rotation,\n"
+        "this property makes this decoration use it or not.\n"
+        "Random rotations actually rotate the mob.";
     areaEditorProps.push_back(aepRandomRotation);
     
     blackoutRadius = 0.0f;

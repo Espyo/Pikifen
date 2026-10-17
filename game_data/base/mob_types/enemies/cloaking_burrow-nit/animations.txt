@@ -530,7 +530,7 @@ sprites{
 				type=1
 				value=15.0000
 				hazard=stab
-				knockback_type=3
+				knockback_type=4
 				knockback=1.0000
 			}
 			mouth_kb{
@@ -539,7 +539,7 @@ sprites{
 				radius=12.0000
 				type=1
 				value=15.0000
-				knockback_type=3
+				knockback_type=4
 				knockback=1.0000
 			}
 		}
@@ -573,7 +573,7 @@ sprites{
 				type=1
 				value=15.0000
 				hazard=stab
-				knockback_type=3
+				knockback_type=4
 				knockback=1.0000
 			}
 			mouth_kb{
@@ -582,7 +582,7 @@ sprites{
 				radius=24.0000
 				type=1
 				value=15.0000
-				knockback_type=3
+				knockback_type=4
 				knockback=1.0000
 			}
 		}

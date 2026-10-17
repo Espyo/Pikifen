@@ -51,6 +51,10 @@ enum KNOCKBACK_TYPE {
     //Knocks the mob away from the hitbox center.
     KNOCKBACK_TYPE_OUTWARD,
     
+    //Knocks the mob away from the hitbox center. Full strength when the mob
+    //is at the hitbox's center, barely any if the mob is at the edge.
+    KNOCKBACK_TYPE_OUTWARD_PROXIMITY,
+    
     //Knocks the mob away in a specific direction.
     KNOCKBACK_TYPE_DIRECTIONAL,
     

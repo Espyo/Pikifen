@@ -95,9 +95,7 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
             leaderToCursorDist;
             
         if(maxDist < player->leaderPtr->swarmArrows[a]) {
-            player->leaderPtr->swarmArrows.erase(
-                player->leaderPtr->swarmArrows.begin() + a
-            );
+            eraseInVector(player->leaderPtr->swarmArrows, a);
         } else {
             a++;
         }
@@ -1036,7 +1034,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
                     curArea.weatherCondition.
                     precipitationSpeed.getRandomNumber() * deltaT;
                 if(precipitation[p].y > scrH) {
-                    precipitation.erase(precipitation.begin() + p);
+                    eraseInVector(precipitation, p);
                 } else {
                     p++;
                 }
@@ -2271,7 +2269,7 @@ void GameplayState::processMobTouches(
                 m2Ptr->center, m2Ptr->radius,
                 m2Ptr->rectangularDim, m2Ptr->angle
             );
-        
+            
         if(
             zTouch && !hasFlag(m2Ptr->flags, MOB_FLAG_INTANGIBLE) &&
             xyCollision
@@ -2457,11 +2455,8 @@ void GameplayState::processMobTouches(
                 //Check if m2 is under any status effect
                 //that disables attacks.
                 bool disableAttackStatus = false;
-                forIdx(s, m2Ptr->statuses) {
-                    if(m2Ptr->statuses[s].state != STATUS_STATE_ACTIVE) {
-                        continue;
-                    }
-                    if(m2Ptr->statuses[s].type->disablesAttack) {
+                forIdx(s, m2Ptr->statuses.getList()) {
+                    if(m2Ptr->statuses.getList()[s].type->disablesAttack) {
                         disableAttackStatus = true;
                         break;
                     }

@@ -783,10 +783,9 @@ void Leader::drawMob() {
         BitmapEffect lightEff = mobEff;
         ALLEGRO_BITMAP* lightBmp = leaType->bmpLight;
         
-        forIdx(s, statuses) {
-            if(statuses[s].state != STATUS_STATE_ACTIVE) continue;
-            if(statuses[s].type->topReplacementBmp) {
-                lightBmp = statuses[s].type->topReplacementBmp;
+        forIdx(s, statuses.getList()) {
+            if(statuses.getList()[s].type->topReplacementBmp) {
+                lightBmp = statuses.getList()[s].type->topReplacementBmp;
             }
         }
         

@@ -218,7 +218,7 @@ void PacksMenu::initGuiMain() {
                 upButton->defDrawCode(draw);
                 drawBitmapInBox(
                     game.sysContent.bmpArrowUp, draw.center,
-                    draw.size * 0.80f, true, 0.0f, draw.tint
+                    draw.size * 0.80f, true, true, 0.0f, draw.tint
                 );
             };
             upButton->onActivate =
@@ -256,7 +256,7 @@ void PacksMenu::initGuiMain() {
                 downButton->defDrawCode(draw);
                 drawBitmapInBox(
                     game.sysContent.bmpArrowDown, draw.center,
-                    draw.size * 0.80f, true, 0.0f, draw.tint
+                    draw.size * 0.80f, true, true, 0.0f, draw.tint
                 );
             };
             downButton->onActivate =

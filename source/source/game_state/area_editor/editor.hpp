@@ -242,6 +242,12 @@ private:
         //Mob alpha, [0 - 1].
         float mobAlpha = 1.0f;
         
+        //Tree shadow alpha, [0 - 1].
+        float treeShadowAlpha = 1.0f;
+        
+        //Background void and texture alpha, [0 - 1].
+        float backgroundAlpha = 0.0f;
+        
         //Selection, error, etc. effect alpha, [0 - 1].
         float overlayAlpha = 1.0f;
         
@@ -1180,11 +1186,24 @@ private:
     void processGuiDialogMissionPreset();
     void processGuiDialogNew();
     void processGuiDialogOptions();
+    void processGuiDialogOptionsControls();
+    void processGuiDialogOptionsMisc();
+    void processGuiDialogOptionsView();
     void processGuiMenuBar();
+    void processGuiMenuBarEdit();
+    void processGuiMenuBarEditor();
+    void processGuiMenuBarView();
     void processGuiMobScriptVars(MobGen* gen);
     void processGuiPanelDetails();
+    void processGuiPanelDetailsAmbiance();
+    void processGuiPanelDetailsBackground();
+    void processGuiPanelDetailsShadows();
     void processGuiPanelEdge();
+    void processGuiPanelEdgeShadow(Edge* ePtr);
+    void processGuiPanelEdgeSmoothing(Edge* ePtr);
     void processGuiPanelGameplay();
+    void processGuiPanelGameplayRegions();
+    void processGuiPanelGameplayRules();
     void processGuiPanelInfo();
     void processGuiPanelLayout();
     void processGuiPanelMain();
@@ -1201,8 +1220,12 @@ private:
     void processGuiPanelPathLink();
     void processGuiPanelPathStop();
     void processGuiPanelPaths();
+    void processGuiPanelPathsDrawing();
+    void processGuiPanelPathsPreview();
     void processGuiPanelReview();
     void processGuiPanelSector();
+    void processGuiPanelSectorAppearance(Sector* sPtr);
+    void processGuiPanelSectorBehavior(Sector* sPtr);
     void processGuiPanelTools();
     void processGuiStatusBar();
     void processGuiToolbar();

@@ -181,8 +181,15 @@ private:
     void processGuiDialogLoad();
     void processGuiDialogNew();
     void processGuiDialogOptions();
+    void processGuiDialogOptionsControls();
+    void processGuiDialogOptionsMisc();
     void processGuiMenuBar();
+    void processGuiMenuBarEditor();
+    void processGuiMenuBarView();
     void processGuiPanelGenerator();
+    void processGuiPanelGeneratorAppearance();
+    void processGuiPanelGeneratorEmission();
+    void processGuiPanelGeneratorPBehavior();
     void processGuiStatusBar();
     void processGuiToolbar();
     void handleKeyCharCanvas(const ALLEGRO_EVENT& ev) override;

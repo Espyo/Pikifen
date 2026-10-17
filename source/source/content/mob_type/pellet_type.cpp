@@ -52,9 +52,14 @@ void PelletType::loadCatProperties(DataNode* file) {
     string pikTypeStr;
     DataNode* pikTypeNode = nullptr;
     
-    //DEPRECATED in 1.2.0 by "match_nutrients" and "non_match_nutrients".
-    pRS.set("match_seeds", matchNutrients);
-    pRS.set("non_match_seeds", nonMatchNutrients);
+    //DEPRECATED in 1.2.0 by "match_nutrients".
+    deprecatedReaderSetter(
+        pRS, "match_seeds", "use \"match_nutrients\"", matchNutrients
+    );
+    //DEPRECATED in 1.2.0 by "non_match_nutrients".
+    deprecatedReaderSetter(
+        pRS, "non_match_seeds", "use \"non_match_nutrients\"", nonMatchNutrients
+    );
     
     pRS.set("draw_number", drawNumber);
     pRS.set("match_nutrients", matchNutrients);

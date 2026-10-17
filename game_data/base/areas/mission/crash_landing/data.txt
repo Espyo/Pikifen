@@ -2,14 +2,17 @@ name=Crash Landing
 description=The Koppaites' cargo ship is going to crash! Get all three leaders to the cockpit so they can escape! But if you can rescue some of the treasures along the way, all the better...
 tags=Short and sweet; Metal
 maker=Helodity
-version=1.4.1
+version=1.4.2
 engine_version=1.2.0
 subtitle=Escape the cargo ship!
 difficulty=5
+bg_angle=0.0000
 bg_bmp=textures/space
 bg_color=0 0 0
-bg_dist=2.0000
-bg_zoom=3.0000
+bg_dist=20.0000
+bg_offset=0.0000 0.0000
+bg_scale=20.0000 20.0000
+bg_tint=255 255 255
 song=areas/red_alert
 boss_song
 boss_victory_song

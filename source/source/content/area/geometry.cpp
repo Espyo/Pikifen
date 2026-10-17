@@ -124,7 +124,7 @@ void Polygon::clean(bool recursive) {
         }
         
         if(shouldDelete) {
-            vertexes.erase(vertexes.begin() + v);
+            eraseInVector(vertexes, v);
         } else {
             v++;
         }
@@ -1126,7 +1126,7 @@ TRIANGULATION_ERROR triangulatePolygon(
             );
             
             //Remove the ear.
-            vertexesLeft.erase(vertexesLeft.begin() + ears[0]);
+            eraseInVector(vertexesLeft, ears[0]);
             
             //Recalculate the ears, concave, and convex vertexes.
             getCCE(vertexesLeft, ears, convexVertexes, concaveVertexes);

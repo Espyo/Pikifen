@@ -3229,23 +3229,23 @@ mobs{
 		p=688.0000 160.0000
 	}
 	decoration{
-		type=clover
+		type=carnation_red
 		p=400.0000 112.0000
 	}
 	decoration{
-		type=clover
+		type=fern
 		p=768.0000 -528.0000
 	}
 	decoration{
-		type=clover
+		type=fern
 		p=-608.0000 -208.0000
 	}
 	decoration{
-		type=clover
+		type=fern
 		p=-448.0000 624.0000
 	}
 	decoration{
-		type=clover
+		type=fern
 		p=448.0000 864.0000
 	}
 	pikmin{

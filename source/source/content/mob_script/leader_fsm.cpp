@@ -1812,7 +1812,9 @@ void LeaderFsm::fallAsleep(ScriptVM* scriptVM, void* info1, void* info2) {
     
     leaPtr->setAnimation(LEADER_ANIM_SLEEPING);
     if(leaPtr->leaType->sleepingStatus) {
-        leaPtr->applyStatus(leaPtr->leaType->sleepingStatus, false, false);
+        leaPtr->handleStatusSource(
+            leaPtr->leaType->sleepingStatus, false, false
+        );
     }
 }
 
@@ -1888,7 +1890,7 @@ void LeaderFsm::finishDrinking(ScriptVM* scriptVM, void* info1, void* info2) {
         );
         break;
     } case DROP_EFFECT_GIVE_STATUS: {
-        leaPtr->applyStatus(
+        leaPtr->handleStatusSource(
             droPtr->droType->statusToGive, false, false, droPtr
         );
         break;
@@ -2828,14 +2830,7 @@ void LeaderFsm::startWakingUp(ScriptVM* scriptVM, void* info1, void* info2) {
     
     leaPtr->setAnimation(LEADER_ANIM_GETTING_UP);
     
-    if(leaPtr->leaType->sleepingStatus) {
-        forIdx(s, leaPtr->statuses) {
-            if(leaPtr->statuses[s].type == leaPtr->leaType->sleepingStatus) {
-                leaPtr->statuses[s].prevState = leaPtr->statuses[s].state;
-                leaPtr->statuses[s].state = STATUS_STATE_TO_DELETE;
-            }
-        }
-    }
+    leaPtr->statuses.handleWakingUp();
 }
 
 
@@ -2987,7 +2982,7 @@ void LeaderFsm::touchedSpray(ScriptVM* scriptVM, void* info1, void* info2) {
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     forIdx(e, s->effects) {
-        leaPtr->applyStatus(s->effects[e], false, false, sprayer);
+        leaPtr->handleStatusSource(s->effects[e], false, false, sprayer);
     }
 }
 

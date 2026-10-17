@@ -130,6 +130,7 @@ ALLEGRO_COLOR interpolateColor(
     float input, float inputStart, float inputEnd,
     const ALLEGRO_COLOR& outputStart, const ALLEGRO_COLOR& outputEnd
 );
+bool isAllegroEventUserInput(ALLEGRO_EVENT& ev);
 ALLEGRO_COLOR multAlpha(const ALLEGRO_COLOR& c, float mult);
 vector<string> promptFileDialog(
     const string& initialPath, const string& title,

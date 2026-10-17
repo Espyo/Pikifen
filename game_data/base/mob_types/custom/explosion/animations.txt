@@ -1,8 +1,8 @@
 name=Explosion animations
 description=Animations for an explosion.
 maker=Espyo
-version=1.0.0
-engine_version=1.0.0
+version=2.0.0
+engine_version=1.2.0
 animations{
 	exploding{
 		frames{
@@ -49,8 +49,8 @@ sprites{
 				type=1
 				value=600.0000
 				hazard=explosion
-				knockback_type=2
-				knockback=3.0000
+				knockback_type=3
+				knockback=10.0000
 			}
 		}
 	}
@@ -68,8 +68,8 @@ sprites{
 				type=1
 				value=600.0000
 				hazard=explosion
-				knockback_type=2
-				knockback=3.0000
+				knockback_type=3
+				knockback=10.0000
 			}
 		}
 	}
@@ -87,8 +87,8 @@ sprites{
 				type=1
 				value=600.0000
 				hazard=explosion
-				knockback_type=2
-				knockback=3.0000
+				knockback_type=3
+				knockback=10.0000
 			}
 		}
 	}
@@ -106,8 +106,8 @@ sprites{
 				type=1
 				value=600.0000
 				hazard=explosion
-				knockback_type=2
-				knockback=3.0000
+				knockback_type=3
+				knockback=10.0000
 			}
 		}
 	}
@@ -125,8 +125,8 @@ sprites{
 				type=1
 				value=600.0000
 				hazard=explosion
-				knockback_type=2
-				knockback=3.0000
+				knockback_type=3
+				knockback=10.0000
 			}
 		}
 	}
@@ -144,8 +144,8 @@ sprites{
 				type=1
 				value=600.0000
 				hazard=explosion
-				knockback_type=2
-				knockback=3.0000
+				knockback_type=3
+				knockback=10.0000
 			}
 		}
 	}
@@ -162,8 +162,8 @@ sprites{
 				type=1
 				value=600.0000
 				hazard=explosion
-				knockback_type=2
-				knockback=3.0000
+				knockback_type=3
+				knockback=10.0000
 			}
 		}
 	}

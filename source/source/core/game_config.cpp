@@ -11,6 +11,7 @@
 #include "game_config.hpp"
 
 #include "../util/string_utils.hpp"
+#include "misc_functions.hpp"
 #include "game.hpp"
 
 
@@ -37,6 +38,12 @@ const float MOUSE_CURSOR_SPIN_SPEED = degToRad(180.0f);
 
 //Default value for the color that represents no Pikmin.
 const ALLEGRO_COLOR NO_PIKMIN_COLOR = { 0.66f, 0.74f, 0.90f, 1.0f };
+
+//Default value for the final zoom level of the title screen's zoom effect.
+const float TITLE_SCREEN_BG_FINAL_ZOOM = 1.5f;
+
+//Default value for the title screen GUI's fade-in delay.
+const float TITLE_SCREEN_GUI_FADE_DELAY = 3.5f;
 
 }
 
@@ -216,11 +223,18 @@ void GameConfig::load(DataNode* file) {
     {
         ReaderSetter aRS(file->getChildByName("aesthetic_general"));
         
+        DataNode* titleScreenBgFinalZoomNode = nullptr;
+        
         //DEPRECATED in 1.1.0 by "mouse_cursor_spin_speed".
-        aRS.set("cursor_spin_speed", aestheticGen.mouseCursorSpinSpeed);
+        deprecatedReaderSetter(
+            aRS, "cursor_spin_speed", "use \"mouse_cursor_spin_speed\"",
+            aestheticGen.mouseCursorSpinSpeed
+        );
         //DEPRECATED in 1.2.0 by "cutscene_msg_char_interval".
-        aRS.set(
-            "gameplay_msg_char_interval", aestheticGen.cutsceneMsgChInterval
+        deprecatedReaderSetter(
+            aRS, "gameplay_msg_char_interval",
+            "use \"cutscene_msg_char_interval\"",
+            aestheticGen.cutsceneMsgChInterval
         );
         
         aRS.set("carrying_color_move", aestheticGen.carryingColorMove);
@@ -230,9 +244,20 @@ void GameConfig::load(DataNode* file) {
         );
         aRS.set("mouse_cursor_spin_speed", aestheticGen.mouseCursorSpinSpeed);
         aRS.set("no_pikmin_color", aestheticGen.noPikminColor);
+        aRS.set(
+            "title_screen_bg_final_zoom", aestheticGen.titleScreenBgFinalZoom,
+            &titleScreenBgFinalZoomNode
+        );
+        aRS.set(
+            "title_screen_gui_fade_delay", aestheticGen.titleScreenGuiFadeDelay
+        );
         
         aestheticGen.mouseCursorSpinSpeed =
             degToRad(aestheticGen.mouseCursorSpinSpeed);
+            
+        if(titleScreenBgFinalZoomNode) {
+            aestheticGen.titleScreenBgFinalZoom /= 100.0f;
+        }
     }
     
     //Aesthetic radar.
@@ -332,7 +357,10 @@ void GameConfig::load(DataNode* file) {
         ReaderSetter rRS(file->getChildByName("rules"));
         
         //DEPRECATED in 1.1.0 by "leader_cursor_max_dist".
-        rRS.set("cursor_max_dist", rules.leaderCursorMaxDist);
+        deprecatedReaderSetter(
+            rRS, "cursor_max_dist", "use \"leader_cursor_max_dist\"",
+            rules.leaderCursorMaxDist
+        );
         
         rRS.set("can_throw_leaders", rules.canThrowLeaders);
         rRS.set("leader_cursor_max_dist", rules.leaderCursorMaxDist);

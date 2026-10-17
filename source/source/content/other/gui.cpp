@@ -572,7 +572,7 @@ bool GuiItem::removeChild(GuiItem* item) {
     bool success = false;
     forIdx(c, children) {
         if(children[c] == item) {
-            children.erase(children.begin() + c);
+            eraseInVector(children, c);
             item->parent = nullptr;
             success = true;
         }
@@ -670,6 +670,21 @@ bool GuiManager::addItem(GuiItem* item, const string& id) {
     item->manager = this;
     
     return true;
+}
+
+
+/**
+ * @brief Changes the duration of the current animation, if any.
+ * Keeps the ratio of time left the same.
+ *
+ * @param newDuration The new duration.
+ */
+void GuiManager::changeCurAnimationDuration(float newDuration) {
+    if(animType == GUI_MANAGER_ANIM_NONE) return;
+    float oldRatioLeft = animTimer.getRatioLeft();
+    float newTimeLeft = newDuration * oldRatioLeft;
+    animTimer.timeLeft = newTimeLeft;
+    animTimer.duration = newDuration;
 }
 
 
@@ -894,7 +909,10 @@ bool GuiManager::draw() {
         drawTexturedBox(
             focusCursor.curRect.center, focusCursor.curRect.size + sizeAddition,
             game.sysContent.bmpFocusBox,
-            mapAlpha(255 * ease(focusCursor.alpha, EASE_METHOD_OUT))
+            mapAlpha(
+                255 * ease(focusCursor.alpha, EASE_METHOD_OUT) *
+                getFadeAnimationAlpha()
+            )
         );
     }
     
@@ -924,6 +942,16 @@ bool GuiManager::draw() {
 
 
 /**
+ * @brief Returns the current animation, if any.
+ *
+ * @return The animation.
+ */
+GUI_MANAGER_ANIM GuiManager::getAnimation() const {
+    return animType;
+}
+
+
+/**
  * @brief Returns the currently focused item's tooltip, if any.
  *
  * @return The tooltip.
@@ -932,6 +960,28 @@ string GuiManager::getCurrentTooltip() const {
     if(!focusedItem) return string();
     if(!focusedItem->onGetTooltip) return string();
     return focusedItem->onGetTooltip();
+}
+
+
+/**
+ * @brief Returns the alpha that GUI items should have, based on the
+ * current animation, if the animation controls alpha.
+ *
+ * @return The alpha [0 - 1].
+ */
+float GuiManager::getFadeAnimationAlpha() const {
+    if(animType == GUI_MANAGER_ANIM_FADE_IN) {
+        return
+            interpolateNumber(
+                animTimer.getRatioLeft(), 0.0f, 1.0f, 1.0f, 0
+            );
+    } else if(animType == GUI_MANAGER_ANIM_FADE_OUT) {
+        return
+            interpolateNumber(
+                animTimer.getRatioLeft(), 0.0f, 1.0f, 0, 1.0f
+            );
+    }
+    return 1.0f;
 }
 
 
@@ -1169,18 +1219,9 @@ bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
                 );
             break;
             
-        } case GUI_MANAGER_ANIM_FADE_IN: {
-            finalAlpha =
-                interpolateNumber(
-                    animTimer.getRatioLeft(), 0.0f, 1.0f, 1.0f, 0
-                );
-            break;
-            
-        } case GUI_MANAGER_ANIM_FADE_OUT: {
-            finalAlpha =
-                interpolateNumber(
-                    animTimer.getRatioLeft(), 0.0f, 1.0f, 0, 1.0f
-                );
+        } case GUI_MANAGER_ANIM_FADE_IN:
+        case GUI_MANAGER_ANIM_FADE_OUT: {
+            finalAlpha = getFadeAnimationAlpha();
             break;
             
         } default: {
@@ -1495,7 +1536,7 @@ bool GuiManager::removeItem(GuiItem* item) {
     
     forIdx(i, items) {
         if(items[i] == item) {
-            items.erase(items.begin() + i);
+            eraseInVector(items, i);
             item->manager = nullptr;
             success = true;
         }
@@ -1785,7 +1826,7 @@ void ListGuiItem::defChildFocusedViaSNCode(const GuiItem* child) {
     float* offsetPtr = !horizontal ? &offset.y : &offset.x;
     float coord =
         !horizontal ? child->ratioRect.center.y : child->ratioRect.center.x;
-    
+        
     if(childrenSpan <= 1.0f && *offsetPtr == 0.0f) return;
     targetOffset = std::clamp(coord - 0.5f, 0.0f, childrenSpan - 1.0f);
 }

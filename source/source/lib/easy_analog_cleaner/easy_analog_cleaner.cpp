@@ -159,9 +159,9 @@ float EasyAnalogCleaner::getSnapDirDeadzone(
 
 
 /**
- * @brief Returns the interpolation between two numbers, given a number in
- * an interval. Input values can go outside the input range, which results
- * in the output going outside the output range.
+ * @brief Returns the linear interpolation between two numbers,
+ * given a number in an interval. If the input value falls outside,
+ * it will do an extrapolation.
  *
  * @param input The input number.
  * @param inputStart Start of the interval the input number falls on,
@@ -186,8 +186,9 @@ float EasyAnalogCleaner::interpolate(
 
 
 /**
- * @brief Returns the interpolation between two numbers, given a number in
- * an interval. Then, it clamps it to that interval.
+ * @brief Returns the linear interpolation between two number,
+ * given a number in an interval. If the input value falls outside,
+ * it will do an extrapolation. Then, it clamps it to that interval.
  *
  * @param input The input number.
  * @param inputStart Start of the interval the input number falls on,

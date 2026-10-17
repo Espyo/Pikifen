@@ -46,7 +46,7 @@ void DropFsm::createFsm(MobType* typ) {
             efc.run(DropFsm::setIdlingAnim);
         }
         efc.newEvent(FSM_EV_TOUCHED_OBJECT); {
-            efc.run(DropFsm::onTouched);
+            efc.run(DropFsm::beTouched);
         }
     }
     efc.newState("bumped", DROP_STATE_BUMPED); {
@@ -54,7 +54,7 @@ void DropFsm::createFsm(MobType* typ) {
             efc.run(DropFsm::setBumpedAnim);
         }
         efc.newEvent(FSM_EV_TOUCHED_OBJECT); {
-            efc.run(DropFsm::onTouched);
+            efc.run(DropFsm::beTouched);
         }
         efc.newEvent(FSM_EV_ANIMATION_END); {
             efc.changeState("idling");
@@ -78,19 +78,7 @@ void DropFsm::createFsm(MobType* typ) {
 #pragma region FSM functions
 
 
-/**
- * @brief When the drop lands on the floor.
- *
- * @param scriptVM The script VM responsible.
- * @param info1 Unused.
- * @param info2 Unused.
- */
-void DropFsm::land(ScriptVM* scriptVM, void* info1, void* info2) {
-    Drop* droPtr = (Drop*) scriptVM->mob;
-    
-    droPtr->stopChasing();
-    droPtr->setAnimation(DROP_ANIM_LANDING);
-}
+
 
 
 /**
@@ -100,7 +88,7 @@ void DropFsm::land(ScriptVM* scriptVM, void* info1, void* info2) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void DropFsm::onTouched(ScriptVM* scriptVM, void* info1, void* info2) {
+void DropFsm::beTouched(ScriptVM* scriptVM, void* info1, void* info2) {
     Drop* droPtr = (Drop*) scriptVM->mob;
     Mob* toucher = (Mob*) info1;
     
@@ -173,6 +161,21 @@ void DropFsm::onTouched(ScriptVM* scriptVM, void* info1, void* info2) {
             droPtr->scriptVM.fsm.setState(DROP_STATE_BUMPED, info1, info2);
         }
     }
+}
+
+
+/**
+ * @brief When the drop lands on the floor.
+ *
+ * @param scriptVM The script VM responsible.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void DropFsm::land(ScriptVM* scriptVM, void* info1, void* info2) {
+    Drop* droPtr = (Drop*) scriptVM->mob;
+    
+    droPtr->stopChasing();
+    droPtr->setAnimation(DROP_ANIM_LANDING);
 }
 
 

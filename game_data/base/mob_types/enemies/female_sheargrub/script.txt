@@ -40,6 +40,12 @@ script {
         on_pikmin_land {
             set_state crushed
         }
+        on_touch_hazard {
+            get_event_info temp hazard
+            if $temp = water
+                receive_status drowning_enemy
+            end_if
+        }
     }
     
     burying {
@@ -65,6 +71,12 @@ script {
         on_pikmin_land {
             set_state crushed
         }
+        on_touch_hazard {
+            get_event_info temp hazard
+            if $temp = water
+                receive_status drowning_enemy
+            end_if
+        }
     }
     
     going_home {
@@ -77,6 +89,12 @@ script {
         }
         on_pikmin_land {
             set_state crushed
+        }
+        on_touch_hazard {
+            get_event_info temp hazard
+            if $temp = water
+                receive_status drowning_enemy
+            end_if
         }
     }
     

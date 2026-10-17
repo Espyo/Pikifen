@@ -32,6 +32,9 @@ enum DECORATION_ANIM {
 //Decoration object states.
 enum DECORATION_STATE {
 
+    //Setup.
+    DECORATION_STATE_SETUP,
+    
     //Idling.
     DECORATION_STATE_IDLING,
     
@@ -53,8 +56,10 @@ public:
 
     //--- Public members ---
     
-    //Maximum amount it can deviate the tint by, for every color component.
-    ALLEGRO_COLOR tintRandomMaximum = COLOR_EMPTY;
+    //First end of the gradient that'll be randomly sampled from to
+    //tint the decoration by. The second end is fully white.
+    //Alpha is also calculated, but independently.
+    ALLEGRO_COLOR tintRandomMaximum = COLOR_WHITE;
     
     //Maximum amount it can deviate the scale by.
     float scaleRandomVariation = 0.0f;

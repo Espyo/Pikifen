@@ -76,6 +76,7 @@ bool areWallsBetween(
     const Point& p1, const Point& p2,
     float ignoreWallsBelowZ = -FLT_MAX, bool* outImpassableWalls = nullptr
 );
+ALLEGRO_TRANSFORM buildTransform2d(const Transform2d& data);
 void clearAreaTextures();
 void crash(const string& reason, const string& info, int exitStatus);
 bool doesEdgeHaveLedgeSmoothing(
@@ -90,6 +91,7 @@ bool doesEdgeHaveWallShadow(
 void drawEdgeOffsetOnBuffer(
     const vector<EdgeOffsetCache>& caches, size_t eIdx, const Viewport& view
 );
+ALLEGRO_BITMAP* getBackBufferOpaqueCopy();
 Mob* getClosestMobToMouseCursor(
     const Viewport& view, bool mustHaveHealth = false
 );
@@ -107,6 +109,9 @@ void getEdgeOffsetIntersection(
     float baseShadowAngle1, float baseShadowAngle2,
     float shadowLength,
     float* outAngle, float* outLength
+);
+string getEngineVersionString(
+    bool includeInDev = false, bool includeDate = false
 );
 ALLEGRO_COLOR getLedgeSmoothingColor(Edge* ePtr);
 ALLEGRO_COLOR getLiquidLimitColor(Edge* ePtr);
@@ -133,9 +138,6 @@ unsigned char getThrowPreviewVertexes(
     const ALLEGRO_COLOR& color,
     float uOffset, float uScale,
     bool varyThickness
-);
-string getEngineVersionString(
-    bool includeInDev = false, bool includeDate = false
 );
 void getPikminSpitData(
     uint32_t spitNr, float baseHorizontalSpeed,
@@ -316,4 +318,35 @@ bool readEnumProp(
         errorNode
     );
     return false;
+}
+
+
+/**
+ * @brief Calls a reader setter's "set" function, but throws a warning
+ * if the property actually exists, since the property is deprecated.
+ *
+ * @tparam DataT Data type for the reader setter to read.
+ * @param rs The reader setter.
+ * @param childName Name of the child node.
+ * @param replacement Description of what the maker should use instead.
+ * @param var The var to set.
+ * @param outChildNode If not nullptr, the node from whence the value came
+ * is placed here. nullptr is placed if the property does not exist or has
+ * no value.
+ */
+template<class DataT>
+void deprecatedReaderSetter(
+    ReaderSetter& rs, const string& childName, const string& replacement,
+    DataT& var, DataNode** outChildNode = nullptr
+) {
+    DataNode* childNode = nullptr;
+    rs.set(childName, var, &childNode);
+    if(childNode && game.makerTools.useWarnings) {
+        game.errors.report(
+            "The property \"" + childName + "\" is deprecated and may be "
+            "removed in the future! Please " + replacement + " instead.",
+            childNode
+        );
+    }
+    if(outChildNode) *outChildNode = childNode;
 }

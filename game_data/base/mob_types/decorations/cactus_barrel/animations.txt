@@ -1,0 +1,29 @@
+name=Cactus (barrel) animations
+description=Animations for the barrel cactus.
+maker=Espyo
+version=1.0.0
+engine_version=1.2.0
+animations{
+	bumped{
+		frames{
+			idling_01{
+				duration=0.1000
+			}
+		}
+	}
+	idling{
+		frames{
+			idling_01{
+				duration=0.1000
+			}
+		}
+	}
+}
+sprites{
+	idling_01{
+		file=decorations/cactus_barrel
+		file_pos=1.0000 1.0000
+		file_size=249.0000 249.0000
+	}
+}
+body_parts

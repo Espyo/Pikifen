@@ -28,6 +28,18 @@ reaches {
     search = 80 360
 }
 
+vulnerabilities {
+    ice_pikmin = 0
+}
+
+spike_damage_vulnerabilities {
+    ice = 0
+}
+
+status_vulnerabilities {
+    frozen_enemy = 0
+}
+
 sounds {
     falling {
         sound = effects/falling

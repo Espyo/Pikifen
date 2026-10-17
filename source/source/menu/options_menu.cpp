@@ -581,7 +581,7 @@ void OptionsMenu::deleteBind(
     forIdx(b, allBinds) {
         if(allBinds[b].actionTypeId != actionType) continue;
         if(bindsCounted == bindIdx) {
-            allBinds.erase(allBinds.begin() + b);
+            eraseInVector(allBinds, b);
             break;
         } else {
             bindsCounted++;
@@ -895,7 +895,7 @@ void OptionsMenu::initGuiControlBindsPage() {
         bindsWarningButton->defDrawCode(draw);
         drawBitmapInBox(
             game.sysContent.bmpWarning, draw.center, draw.size * 0.8f,
-            true, 0.0f, draw.tint
+            true, true, 0.0f, draw.tint
         );
     };
     bindsWarningButton->onActivate =
@@ -1203,6 +1203,26 @@ void OptionsMenu::initGuiGraphicsPage() {
     };
     resolutionPicker->init();
     graphicsGui.addItem(resolutionPicker, "resolution");
+    
+    //VSync checkbox.
+    CheckGuiItem* vsyncCheckbox =
+        new CheckGuiItem(
+        &game.options.graphics.vsync,
+        "VSync", game.sysContent.fntStandard
+    );
+    vsyncCheckbox->onActivate =
+    [this, vsyncCheckbox] (const Point&) {
+        vsyncCheckbox->defActivateCode();
+        triggerRestartWarning();
+    };
+    vsyncCheckbox->onGetTooltip =
+    [] () {
+        return
+            "Forcing VSync can fix tearing problems, but may add some "
+            "slight input delay. Default: " +
+            b2s(OPTIONS::GRAPHICS_D::VSYNC) + ".";
+    };
+    graphicsGui.addItem(vsyncCheckbox, "vsync");
     
     //Camera shake multiplier picker.
     OptionsMenuPickerGuiItem<float>* camShakeMultPicker =
@@ -1786,7 +1806,7 @@ void OptionsMenu::load() {
     //Delete any duplicates.
     for(size_t p = 0; p < resolutionPresets.size() - 1;) {
         if(resolutionPresets[p] == resolutionPresets[p + 1]) {
-            resolutionPresets.erase(resolutionPresets.begin() + (p + 1));
+            eraseInVector(resolutionPresets, (p + 1));
         } else {
             p++;
         }
@@ -1928,7 +1948,7 @@ void OptionsMenu::restoreDefaultBinds(
             allBinds[b].playerNr == 0 &&
             allBinds[b].actionTypeId == actionTypeId
         ) {
-            allBinds.erase(allBinds.begin() + b);
+            eraseInVector(allBinds, b);
         } else {
             b++;
         }

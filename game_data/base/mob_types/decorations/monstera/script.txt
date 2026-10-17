@@ -1,0 +1,31 @@
+init {
+    set_var pattern 0
+}
+
+ready {
+    if $pattern = 0
+        get_random_int pattern 1 2
+    end_if
+    if $pattern = 2
+        set_animation idling_pattern_2
+    end_if
+}
+
+script {
+    idling {
+        on_enter {
+            custom_actions_after
+            if $pattern = 2
+                set_animation idling_pattern_2
+            end_if
+        }
+    }
+    bumped {
+        on_enter {
+            custom_actions_after
+            if $pattern = 2
+                set_animation bumped_pattern_2
+            end_if
+        }
+    }
+}

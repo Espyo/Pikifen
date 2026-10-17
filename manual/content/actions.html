@@ -1237,6 +1237,7 @@
           Information to obtain:
           <ul>
             <li><code><b>body_part</b></code>: For events that deal with hitboxes, this is the name of this mob's body part that's responsible.</li>
+            <li><code><b>damage</b></code>: For events that report damage dealt, this is how much damage was dealt.</li>
             <li><code><b>frame_signal</b></code>: What the signal was that triggered an <code><a href="#on-frame-signal">on_frame_signal</a></code> event.</li>
             <li><code><b>hazard</b></code>: Name of the hazard that the object has touched or left.</li>
             <li><code><b>input_name</b></code>: The name of the input that triggered an <code><a href="#on-input-received">on_input_received</a></code> event.</li>
@@ -1245,6 +1246,27 @@
             <li><code><b>other_body_part</b></code>: For events that deal with hitboxes, this is the name of the other mob's body part that's responsible.</li>
           </ul>
         </td>
+        <td>Mandatory</td>
+        <td>String</td>
+      </tr>
+    </table>
+    
+    <h4 id="get-leader-activity">Get leader activity</h4>
+
+    <p>Gets whether the given leader is currently active, i.e. being controlled by a player.</p>
+
+    <p>Syntax: <code><b>get_leader_activity</b> &lt;destination_var_name&gt; &lt;target_mob&gt;</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>target_mob</td>
+        <td>The <a href="#target-mob">target mob</a>.</td>
         <td>Mandatory</td>
         <td>String</td>
       </tr>
@@ -1501,6 +1523,39 @@
     </table>
     
     <h3 id="actions-common-misc">Misc.</h3>
+
+    <h4 id="add-int-to-string">Add int to string</h4>
+
+    <p>Works just like <code><a href="#add-to-string">add_to_string</a></code>, but adds a number to the end of the string, as only the integer part. To add a number to the end of a string you can use <code>add_to_string</code>, but any number will be shown with the decimal places, so if you don't want that, use this action instead.</p>
+
+    <p>Syntax: <code><b>add_int_to_string</b> &lt;destination_var_name&gt; &lt;base_string&gt; &lt;number_to_add&gt; [&lt;add_a_space_between&gt;]</code></p>
+
+    <table class="params-t">
+      <tr>
+        <td>destination_var_name</td>
+        <td>Name of the variable that will receive the final result.</td>
+        <td>Mandatory, constant</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>base_string</td>
+        <td>The current string.</td>
+        <td>Mandatory</td>
+        <td>String</td>
+      </tr>
+      <tr>
+        <td>number_to_add</td>
+        <td>The number to add.</td>
+        <td>Mandatory</td>
+        <td>Number</td>
+      </tr>
+      <tr>
+        <td>add_a_space_between</td>
+        <td>Whether a space should be added between the base string and the new content. This is because you can't just write a space at the end of <code>content_to_add</code>, since the script file will interpret that as you starting the next parameter of a script action.</td>
+        <td>Optional, default: <code>false</code></td>
+        <td>Boolean</td>
+      </tr>
+    </table>
 
     <h4 id="add-to-string">Add to string</h4>
 
@@ -2767,8 +2822,9 @@
       <li><code><b>self</b></code>: The object that the script belongs to.</li>
       <li><code><b>focus</b></code>: The object that is currently focused. The action does nothing if none is focused.</li>
       <li><code><b>trigger</b></code>: The object that triggered the event. The action does nothing if this is not applicable.</li>
-      <li><code><b>link</b></code>: The first linked object. The action does nothing if there is no linked object, or the mob has just spawned.</li>
-      <li><code><b>parent</b></code>: The parent object. The action does nothing if there is no parent object, or the mob has just spawned.</li>
+      <li><code><b>link</b></code>: The first linked object. The action does nothing if there is no linked object, <a href="script.html#tips">or the mob is still spawning</a>.</li>
+      <li><code><b>parent</b></code>: The parent object. The action does nothing if there is no parent object, <a href="script.html#tips">or the mob is still spawning</a>.</li>
+      <li><code><b>leader</b></code>: The object whose group this one is following. The action does nothing if the mob is not following any group.</li>
     </ul>
 
     <h2 id="see-also">See also</h2>

@@ -139,6 +139,7 @@ extern const bool USE_CUSTOM_STYLE;
 namespace GRAPHICS_D {
 extern const float CAM_SHAKE_MULT;
 extern const bool TRUE_FULLSCREEN;
+extern const bool VSYNC;
 extern const bool WIN_FULLSCREEN;
 extern const unsigned int WIN_H;
 extern const unsigned int WIN_W;
@@ -401,6 +402,9 @@ struct Options {
         
         //When using fullscreen, is this true fullscreen, or borderless window?
         bool trueFullscreen = GRAPHICS_D::TRUE_FULLSCREEN;
+        
+        //Force VSync?
+        bool vsync = GRAPHICS_D::VSYNC;
         
     } graphics;
     

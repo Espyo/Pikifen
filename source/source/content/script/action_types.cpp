@@ -118,6 +118,28 @@ void ScriptActionRunners::addListItem(ScriptActionInstRunData& data) {
 
 
 /**
+ * @brief Code for the string int addition script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::addIntToString(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& baseStrArg = data.args[1];
+    const string& newContentArg = data.args[2];
+    const string& addSpaceArg = data.args[3];
+    
+    //Main logic.
+    string result = baseStrArg;
+    if(s2b(addSpaceArg)) result += " ";
+    result += i2s(s2i(newContentArg));
+    
+    //Store the result.
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
+}
+
+
+/**
  * @brief Code for the string addition script action type.
  *
  * @param data Data about the action call.
@@ -960,6 +982,13 @@ void ScriptActionRunners::getEventInfo(ScriptActionInstRunData& data) {
         }
         break;
         
+    } case SCRIPT_ACTION_GET_EV_INFO_TYPE_DAMAGE: {
+        if(data.actionDef->parentEvent == FSM_EV_DAMAGE) {
+            float damage = *((float*) data.customData2);
+            result = f2s(damage);
+        }
+        break;
+        
     }
     }
     
@@ -1005,6 +1034,38 @@ void ScriptActionRunners::getFocusVar(ScriptActionInstRunData& data) {
     data.scriptVM->getRunnerScriptVM()->focusedMob->scriptVM.vars.getValue(
         focusVarArg, result
     );
+    
+    //Store the result.
+    data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
+}
+
+
+/**
+ * @brief Code for the leader activity retrieval script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::getLeaderActivity(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& destVarArg = data.args[0];
+    const string& targetArg = data.args[1];
+    
+    //Main logic.
+    SCRIPT_ACTION_MOB_TARGET_TYPE targetType =
+        ScriptActionUtils::getMobTargetType(data, targetArg);
+    Mob* target = ScriptActionUtils::getTargetMob(data, targetType);
+    
+    if(!target) return;
+    
+    bool result = false;
+    if(!target->group) {
+        result = false;
+    } else if(target->type->category->id != MOB_CATEGORY_LEADERS) {
+        result = false;
+    } else {
+        Leader* lPtr = (Leader*) target;
+        result = lPtr->player != nullptr;
+    }
     
     //Store the result.
     data.scriptVM->getRunnerScriptVM()->vars.setValue(destVarArg, result);
@@ -1568,7 +1629,7 @@ void ScriptActionRunners::holdFocus(ScriptActionInstRunData& data) {
         );
         return;
     }
-
+    
     bool rotationFound;
     HOLD_ROTATION_METHOD rotationMethod =
         enumGetValue(holdRotationMethodINames, rotationArg, &rotationFound);
@@ -1970,7 +2031,7 @@ void ScriptActionRunners::receiveStatus(ScriptActionInstRunData& data) {
         return;
     }
     
-    data.scriptVM->getRunnerMob()->applyStatus(it->second, false, false);
+    data.scriptVM->getRunnerMob()->handleStatusSource(it->second, false, false);
 }
 
 
@@ -2027,7 +2088,7 @@ void ScriptActionRunners::removeListItem(ScriptActionInstRunData& data) {
     if(!isIdxValid(idx, items)) idx = items.size() - 1;
     
     if(isIdxValid(idx, items)) {
-        items.erase(items.begin() + idx);
+        eraseInVector(items, idx);
     }
     string newListStr = join(items, delChar);
     
@@ -2055,14 +2116,8 @@ void ScriptActionRunners::removeStatus(ScriptActionInstRunData& data) {
         return;
     }
     
-    forIdx(s, data.scriptVM->getRunnerMob()->statuses) {
-        if(data.scriptVM->getRunnerMob()->statuses[s].type == it->second) {
-            data.scriptVM->getRunnerMob()->statuses[s].prevState =
-                data.scriptVM->getRunnerMob()->statuses[s].state;
-            data.scriptVM->getRunnerMob()->statuses[s].state =
-                STATUS_STATE_TO_DELETE;
-        }
-    }
+    Mob* mPtr = data.scriptVM->getRunnerMob();
+    mPtr->statuses.deactivate(it->second);
 }
 
 
@@ -3484,6 +3539,29 @@ bool ScriptActionUtils::doScriptCondition(
 
 
 /**
+ * @brief Returns the path to the data node file that an action comes from.
+ * Returns an empty string if it does not come from any data node.
+ *
+ * @param data Action data to read.
+ * @return The path, or an empty string.
+ */
+string ScriptActionUtils::getNodePath(const ScriptActionInstRunData& data) {
+    if(data.actionDef->dataFileLine != 0) {
+        if(data.scriptVM->getRunnerMob()) {
+            return
+                data.scriptVM->getRunnerMob()->type->manifest->path + "/" +
+                FILE_NAMES::MOB_TYPE_SCRIPT;
+        } else {
+            return
+                game.curArea->manifest->path + "/" +
+                FILE_NAMES::AREA_SCRIPT;
+        }
+    }
+    return "";
+}
+
+
+/**
  * @brief Returns a mob script action mob target type from an action call.
  *
  * @param data Data about the action call.
@@ -3544,6 +3622,14 @@ Mob* ScriptActionUtils::getTargetMob(
             return data.scriptVM->getRunnerMob()->parent->m;
         }
         break;
+    } case SCRIPT_ACTION_MOB_TARGET_TYPE_LEADER: {
+        if(
+            data.scriptVM->getRunnerMob() &&
+            data.scriptVM->getRunnerMob()->followingGroup
+        ) {
+            return data.scriptVM->getRunnerMob()->followingGroup;
+        }
+        break;
     }
     }
     
@@ -3601,18 +3687,7 @@ Mob* ScriptActionUtils::getTriggerMob(ScriptActionInstRunData& data) {
 void ScriptActionUtils::reportActionError(
     const ScriptActionInstRunData& data, const string& info
 ) {
-    string filePath;
-    if(data.actionDef->dataFileLine != 0) {
-        if(data.scriptVM->getRunnerMob()) {
-            filePath =
-                data.scriptVM->getRunnerMob()->type->manifest->path + "/" +
-                FILE_NAMES::MOB_TYPE_SCRIPT;
-        } else {
-            filePath =
-                game.curArea->manifest->path + "/" +
-                FILE_NAMES::AREA_SCRIPT;
-        }
-    }
+    string filePath = getNodePath(data);
     
     if(filePath.empty()) {
         game.errors.report(info);

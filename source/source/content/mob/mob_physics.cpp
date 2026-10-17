@@ -810,13 +810,7 @@ void Mob::tickVerticalMovementPhysics(
             (void*) onHazard
         );
         
-        forIdx(s, statuses) {
-            if(statuses[s].type->removeOnHazardLeave) {
-                statuses[s].prevState = statuses[s].state;
-                statuses[s].state = STATUS_STATE_TO_DELETE;
-            }
-        }
-        deleteOldStatusEffects();
+        statuses.handleHazardLeave();
     }
     onHazard = newOnHazard;
     

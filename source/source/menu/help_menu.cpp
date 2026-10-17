@@ -256,7 +256,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
         if(curTidbit->image == nullptr) return;
         drawBitmapInBox(
             curTidbit->image,
-            draw.center, draw.size, false, 0.0f, draw.tint
+            draw.center, draw.size, false, true, 0.0f, draw.tint
         );
     };
     gui.addItem(imageItem, "image");

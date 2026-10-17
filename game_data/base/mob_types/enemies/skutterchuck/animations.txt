@@ -803,7 +803,7 @@ sprites{
 				radius=35.0000
 				type=1
 				value=2.0000
-				knockback_type=3
+				knockback_type=4
 				knockback_angle=3.1416
 				knockback=5.0000
 				wither_chance=30
@@ -829,7 +829,7 @@ sprites{
 				radius=38.0000
 				type=1
 				value=2.0000
-				knockback_type=3
+				knockback_type=4
 				knockback_angle=3.1416
 				knockback=5.0000
 				wither_chance=30

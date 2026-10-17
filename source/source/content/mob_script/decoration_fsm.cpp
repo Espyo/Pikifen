@@ -26,6 +26,12 @@
  */
 void DecorationFsm::createFsm(MobType* typ) {
     EasyFsmCreator efc;
+    efc.newState("setup", DECORATION_STATE_SETUP); {
+        efc.newEvent(FSM_EV_ON_ENTER); {
+            efc.run(DecorationFsm::setup);
+            efc.changeState("idling");
+        }
+    }
     efc.newState("idling", DECORATION_STATE_IDLING); {
         efc.newEvent(FSM_EV_ON_ENTER); {
             efc.run(DecorationFsm::becomeIdle);
@@ -45,7 +51,7 @@ void DecorationFsm::createFsm(MobType* typ) {
     
     
     typ->scriptDef.fsm.states = efc.finish();
-    typ->scriptDef.fsm.setFirstState("idling");
+    typ->scriptDef.fsm.setFirstState("setup");
     
     //Check if the number in the enum and the total match up.
     engineAssert(
@@ -117,6 +123,21 @@ void DecorationFsm::checkBump(ScriptVM* scriptVM, void* info1, void* info2) {
     }
     
     scriptVM->fsm.setState(DECORATION_STATE_BUMPED);
+}
+
+
+/**
+ * @brief Sets up the decoration's rotation.
+ *
+ * @param scriptVM The script VM responsible.
+ * @param info1 Unused.
+ * @param info2 Unused.
+ */
+void DecorationFsm::setup(ScriptVM* scriptVM, void* info1, void* info2) {
+    Decoration* decPtr = (Decoration*) scriptVM->mob;
+    
+    decPtr->angle += decPtr->individualRotation;
+    decPtr->intendedTurnAngle = decPtr->angle;
 }
 
 

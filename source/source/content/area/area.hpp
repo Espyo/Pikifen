@@ -263,15 +263,18 @@ struct Area : public Content {
     
     //Internal name of the background bitmap.
     string bgBmpName;
+
+    //Background texture transformation.
+    Transform2d bgBmpTrans;
     
-    //Zoom the background by this much.
-    float bgBmpZoom = 1.0f;
+    //Tint color of the background texture.
+    ALLEGRO_COLOR bgBmpTint = COLOR_WHITE;
     
-    //How far away the background is.
-    float bgDist = 2.0f;
+    //How far away the background texture is. Used for parallax scrolling.
+    float bgBmpDist = 2.0f;
     
-    //Tint the background with this color.
-    ALLEGRO_COLOR bgColor = COLOR_BLACK;
+    //Solid color for the void in the background.
+    ALLEGRO_COLOR bgVoidColor = COLOR_BLACK;
     
     //Area subtitle, if any.
     string subtitle;

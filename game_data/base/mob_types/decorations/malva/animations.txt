@@ -1,0 +1,89 @@
+name=Malva animations
+description=Animations for the malva.
+maker=Espyo
+version=1.0.0
+engine_version=1.2.0
+animations{
+	bumped{
+		frames{
+			idling_01{
+				duration=0.0500
+				interpolate=true
+			}
+			idling_01{
+				duration=0.1500
+				interpolate=true
+				sound=bumped
+			}
+			bumped_01{
+				duration=0.2000
+				interpolate=true
+			}
+			idling_01{
+				duration=0.2000
+				interpolate=true
+			}
+			bumped_02{
+				duration=0.2000
+				interpolate=true
+			}
+		}
+	}
+	idling{
+		frames{
+			idling_01{
+				duration=0.4000
+				interpolate=true
+			}
+			idling_02{
+				duration=0.4000
+				interpolate=true
+			}
+			idling_01{
+				duration=0.4000
+				interpolate=true
+			}
+			idling_03{
+				duration=0.4000
+				interpolate=true
+			}
+		}
+	}
+}
+sprites{
+	bumped_01{
+		file=decorations/malva
+		file_pos=0.0000 0.0000
+		file_size=54.0000 32.0000
+		offset=19.2500 -2.0000
+		scale=0.9352 1.0000
+	}
+	bumped_02{
+		file=decorations/malva
+		file_pos=0.0000 0.0000
+		file_size=54.0000 32.0000
+		offset=25.2500 -2.0000
+		scale=0.9907 1.0000
+	}
+	idling_01{
+		file=decorations/malva
+		file_pos=0.0000 0.0000
+		file_size=54.0000 32.0000
+		offset=23.0000 -2.0000
+	}
+	idling_02{
+		file=decorations/malva
+		file_pos=0.0000 0.0000
+		file_size=54.0000 32.0000
+		offset=22.5000 -2.0000
+		scale=0.9815 1.0000
+	}
+	idling_03{
+		file=decorations/malva
+		file_pos=0.0000 0.0000
+		file_size=54.0000 32.0000
+		offset=23.7500 -2.0000
+		scale=1.0278 1.0000
+	}
+}
+body_parts

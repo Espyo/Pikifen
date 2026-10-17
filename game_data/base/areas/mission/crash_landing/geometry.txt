@@ -3134,6 +3134,7 @@ sectors{
 		z=50.0000
 		texture=textures/metal_rusted
 		texture_rotate=2.7925
+		texture_tint=85 85 85
 	}
 	s{
 		type=blocking

@@ -100,7 +100,7 @@ void Animation::deleteFrame(size_t idx) {
         //Stop the loop frame from going out of bounds.
         loopFrame--;
     }
-    frames.erase(frames.begin() + idx);
+    eraseInVector(frames, idx);
 }
 
 
@@ -272,6 +272,16 @@ void AnimationDatabase::createConversions(
         size_t aPos = findAnimation(conversions[c].second);
         if(aPos == INVALID) {
             //Use the default.
+            if(game.makerTools.useWarnings) {
+                game.errors.report(
+                    "The engine expected an animation called "
+                    "\"" + conversions[c].second + "\", but it doesn't exist. "
+                    "Using the default animation "
+                    "(\"" + conversions[0].second + "\") "
+                    "instead as a fail-safe.",
+                    file
+                );
+            }
             aPos = findAnimation(conversions[0].second);
         }
         preNamedConversions[conversions[c].first] = aPos;
@@ -298,7 +308,7 @@ void AnimationDatabase::deleteSprite(size_t idx) {
     }
     
     delete sprites[idx];
-    sprites.erase(sprites.begin() + idx);
+    eraseInVector(sprites, idx);
     
     forIdx(a, animations) {
         Animation* aPtr = animations[a];
@@ -476,8 +486,9 @@ void AnimationDatabase::loadFromDataNode(DataNode* node) {
             //DEPRECATED in 1.2.0 by "knockback_type".
             bool knockbackOutward = false;
             DataNode* knockbackOutwardNode = nullptr;
-            hRS.set(
-                "knockback_outward", knockbackOutward, &knockbackOutwardNode
+            deprecatedReaderSetter(
+                hRS, "knockback_outward", "use \"knockback_type\"",
+                knockbackOutward, &knockbackOutwardNode
             );
             if(knockbackOutwardNode) {
                 knockbackTypeInt =
@@ -488,8 +499,9 @@ void AnimationDatabase::loadFromDataNode(DataNode* node) {
             //DEPRECATED in 1.2.0 by "surface_type".
             bool canPikminLatch = false;
             DataNode* canPikminLatchNode = nullptr;
-            hRS.set(
-                "can_pikmin_latch", canPikminLatch, &canPikminLatchNode
+            deprecatedReaderSetter(
+                hRS, "can_pikmin_latch", "use \"surface_type\"",
+                canPikminLatch, &canPikminLatchNode
             );
             if(canPikminLatchNode) {
                 surfaceTypeInt =
@@ -670,7 +682,7 @@ void AnimationDatabase::saveToDataNode(
         if(!spritePtr->hitboxes.empty()) {
             //Hitboxes.
             DataNode* hitboxesNode = spriteNode->addNew("hitboxes");
-
+            
             forIdx(h, spritePtr->hitboxes) {
                 //Hitbox.
                 Hitbox* hitboxPtr = &spritePtr->hitboxes[h];

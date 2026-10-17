@@ -369,7 +369,7 @@ void PathStop::deleteLink(const PathLink* linkPtr) {
     forIdx(l, links) {
         if(links[l] == linkPtr) {
             delete links[l];
-            links.erase(links.begin() + l);
+            eraseInVector(links, l);
             return;
         }
     }
@@ -386,7 +386,7 @@ void PathStop::deleteLink(const PathStop* otherStop) {
     forIdx(l, links) {
         if(links[l]->endPtr == otherStop) {
             delete links[l];
-            links.erase(links.begin() + l);
+            eraseInVector(links, l);
             return;
         }
     }

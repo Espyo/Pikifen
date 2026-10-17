@@ -305,7 +305,7 @@ sprites{
 				radius=50.0000
 				type=1
 				value=30.0000
-				knockback_type=3
+				knockback_type=4
 				knockback=1.0000
 			}
 			zapping{
@@ -337,7 +337,7 @@ sprites{
 				radius=50.0000
 				type=1
 				value=30.0000
-				knockback_type=3
+				knockback_type=4
 				knockback=1.0000
 			}
 			zapping{

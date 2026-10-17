@@ -38,7 +38,7 @@
     <table class="props-t props-t-o">
       <tr>
         <td>color</td>
-        <td>Color that represents the status effect.</td>
+        <td>Color that represents the status effect. Used for the buildup and cooldown bars.</td>
         <td>Color</td>
         <td>0 0 0 0</td>
       </tr>
@@ -93,13 +93,19 @@
       </tr>
       <tr>
         <td>buildup</td>
-        <td>If you want this status effect to not be applied instantly, and to instead build a bar up, only applying when the bar is full, then specify a value higher than 0 here. This value is a percentage of how much the bar should fill up each time.</td>
+        <td>If you want this status effect to not be applied instantly, and to instead build a bar up, only applying when the bar is full, then specify a value higher than 0 here. This value is a percentage of how much the bar should fill up each time. In order for the bar to look right, you'll want to set the <code>color</code> property too.</td>
         <td>Number</td>
         <td>0</td>
       </tr>
       <tr>
         <td>buildup_removal_duration</td>
         <td>If using buildup, then if these many seconds pass without a contribution to the buildup bar, it will be completely emptied. This won't happen if the bar is full and the effect has been successfully applied. 0 means it never empties with time.</td>
+        <td>Number</td>
+        <td>0</td>
+      </tr>
+      <tr>
+        <td>cooldown</td>
+        <td>When the affected object loses this status effect, it cannot regain it until these many seconds have passed. This cooldown will be shown in a bar, so in order for it to look right, you'll want to set the <code>color</code> property too.</td>
         <td>Number</td>
         <td>0</td>
       </tr>

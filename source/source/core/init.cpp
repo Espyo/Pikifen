@@ -1035,6 +1035,11 @@ void initEventThings(
             )
         );
     }
+    if(game.options.graphics.vsync) {
+        al_set_new_display_option(
+            ALLEGRO_VSYNC, 1, ALLEGRO_SUGGEST
+        );
+    }
     game.display = al_create_display(game.winW, game.winH);
     
     //It's possible that this resolution is not valid for fullscreen.
@@ -1818,7 +1823,8 @@ void initScriptActionTypes() {
     auto commitAction =
         [&params, &contexts] (
             SCRIPT_ACTION actionType, const string& actionName,
-            ScriptActionTypeCode * actionRunCode
+            ScriptActionTypeCode * actionRunCode,
+            const string& deprecationReplacement = ""
     ) {
         validateCommandParams(
             params, "Script action type \"" + actionName + "\""
@@ -1831,6 +1837,7 @@ void initScriptActionTypes() {
         actionTypePtr->code = actionRunCode;
         actionTypePtr->parameters = params;
         actionTypePtr->contexts = contexts;
+        actionTypePtr->deprecationReplacement = deprecationReplacement;
         params.clear();
     };
     
@@ -1875,6 +1882,17 @@ void initScriptActionTypes() {
         SCRIPT_ACTION_ADD_LIST_ITEM,
         "add_list_item",
         ScriptActionRunners::addListItem
+    );
+    
+    //Add int to string.
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("base string", ptString);
+    queueParam("number to add", ptFloat);
+    queueParam("add a space between", ptBool, pfOpt, "false");
+    commitAction(
+        SCRIPT_ACTION_ADD_INT_TO_STRING,
+        "add_int_to_string",
+        ScriptActionRunners::addIntToString
     );
     
     //Add to string.
@@ -2076,7 +2094,8 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_GET_AREA_INFO,
         "get_area_info",
-        ScriptActionRunners::getAreaInfo
+        ScriptActionRunners::getAreaInfo,
+        "get_misc_info"
     );
     
     //Get coordinates from angle.
@@ -2118,6 +2137,15 @@ void initScriptActionTypes() {
         SCRIPT_ACTION_GET_FOCUS_VAR,
         "get_focus_var",
         ScriptActionRunners::getFocusVar
+    );
+    
+    //Get leader activity.
+    queueParam("destination var name", ptString, pfConst);
+    queueParam("target", ptString);
+    commitAction(
+        SCRIPT_ACTION_GET_LEADER_ACTIVITY,
+        "get_leader_activity",
+        ScriptActionRunners::getLeaderActivity
     );
     
     //Get leader Pikmin count var.
@@ -2428,7 +2456,8 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SHOW_MESSAGE_FROM_VAR,
         "show_message_from_var",
-        ScriptActionRunners::showMessageFromVar
+        ScriptActionRunners::showMessageFromVar,
+        "show_cutscene_message"
     );
     
     //Sign number.
@@ -2554,7 +2583,8 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_GET_CHOMPED,
         "get_chomped",
-        ScriptActionRunners::beChomped
+        ScriptActionRunners::beChomped,
+        "be_chomped"
     );
     
     //Get floor Z.
@@ -2590,7 +2620,8 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_LOAD_FOCUS_MEMORY,
         "load_focused_mob_memory",
-        ScriptActionRunners::loadFocusMemory
+        ScriptActionRunners::loadFocusMemory,
+        "get_mob_info/focus_on_id"
     );
     
     //Move to absolute.
@@ -2673,7 +2704,8 @@ void initScriptActionTypes() {
     commitAction(
         SCRIPT_ACTION_SAVE_FOCUS_MEMORY,
         "save_focused_mob_memory",
-        ScriptActionRunners::saveFocusMemory
+        ScriptActionRunners::saveFocusMemory,
+        "get_mob_info/focus_on_id"
     );
     
     //Send script message to links.

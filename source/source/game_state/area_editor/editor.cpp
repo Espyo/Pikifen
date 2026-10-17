@@ -1920,7 +1920,7 @@ void AreaEditor::finishLayoutMoving() {
                 mvPtr == vPtr ||
                 vertexSelection.contains(game.curArea->findVertexIdx(mvPtr))
             ) {
-                mergeVertexes.erase(mergeVertexes.begin() + mv);
+                eraseInVector(mergeVertexes, mv);
             } else {
                 mv++;
             }
@@ -2035,7 +2035,7 @@ void AreaEditor::finishLayoutMoving() {
                         intersections[i].contains(m.first->edges[e1]) &&
                         intersections[i].contains(m.second->edges[e2])
                     ) {
-                        intersections.erase(intersections.begin() + i);
+                        eraseInVector(intersections, i);
                     } else {
                         i++;
                     }
@@ -2050,7 +2050,7 @@ void AreaEditor::finishLayoutMoving() {
                     intersections[i].contains(v.first->edges[e]) &&
                     intersections[i].contains(v.second)
                 ) {
-                    intersections.erase(intersections.begin() + i);
+                    eraseInVector(intersections, i);
                 } else {
                     i++;
                 }
@@ -2921,7 +2921,9 @@ void AreaEditor::loadReference() {
         DataNode* alphaNode = nullptr;
         
         //DEPRECATED in 1.2.0 by "tint".
-        rRS.set("alpha", alphaC);
+        deprecatedReaderSetter(
+            rRS, "alpha", "tint", alphaC
+        );
         if(alphaNode) {
             referenceTint.a = alphaC / 255.0f;
         }
@@ -4119,9 +4121,7 @@ void AreaEditor::undoCmd(float inputValue) {
  */
 void AreaEditor::undoLayoutDrawingNode() {
     if(drawingNodes.empty()) return;
-    drawingNodes.erase(
-        drawingNodes.begin() + drawingNodes.size() - 1
-    );
+    eraseInVector(drawingNodes, drawingNodes.size() - 1);
     if(
         sectorSplitInfo.uselessSplitPart2Checkpoint != INVALID &&
         drawingNodes.size() < sectorSplitInfo.uselessSplitPart2Checkpoint
@@ -4354,15 +4354,13 @@ void AreaEditor::updateTextureSuggestions(const string& n) {
     } else {
         //Otherwise, remove it from its spot and bump it to the top.
         TextureSuggestion s = textureSuggestions[pos];
-        textureSuggestions.erase(textureSuggestions.begin() + pos);
+        eraseInVector(textureSuggestions, pos);
         textureSuggestions.insert(textureSuggestions.begin(), s);
     }
     
     if(textureSuggestions.size() > AREA_EDITOR::MAX_TEXTURE_SUGGESTIONS) {
         textureSuggestions[textureSuggestions.size() - 1].destroy();
-        textureSuggestions.erase(
-            textureSuggestions.begin() + textureSuggestions.size() - 1
-        );
+        eraseInVector(textureSuggestions, textureSuggestions.size() - 1);
     }
 }
 

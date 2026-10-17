@@ -2,13 +2,22 @@ name = Common Glowcap
 description = A single glowing cyan mushroom.
 
 blackout_radius = 48
-height = 120
+height = 100
 peek_underneath_opacity = 50
 radius = 24
 random_animation_delay = true
 rotation_random_variation = 360
 scale_random_variation = 0.1
 tint_random_maximum = 224 224 224
+
+sounds {
+    boing {
+        sound = effects/boing_low_1
+        volume = 30
+        speed = 120
+        speed_deviation = 10
+    }
+}
 
 maker = Espyo
 version = 1.0.0

@@ -412,8 +412,9 @@ void getShiftCtrlAltState(
 
 
 /**
- * @brief Returns the interpolation between two colors, given a number in
- * an interval.
+ * @brief Returns the linear interpolation between two colors,
+ * given a number in an interval. If the input value falls outside,
+ * it will do an extrapolation.
  *
  * @param input The input number.
  * @param inputStart Start of the interval the input number falls on,
@@ -437,6 +438,34 @@ ALLEGRO_COLOR interpolateColor(
             outputStart.b + progress * (outputEnd.b - outputStart.b),
             outputStart.a + progress * (outputEnd.a - outputStart.a)
         );
+}
+
+
+/**
+ * @brief Returns whether the given Allegro event counts as an
+ * input made by the user.
+ *
+ * @param ev The event.
+ * @return Whether it's a user input.
+ */
+bool isAllegroEventUserInput(ALLEGRO_EVENT& ev) {
+    switch(ev.type) {
+    case ALLEGRO_EVENT_JOYSTICK_AXIS:
+    case ALLEGRO_EVENT_JOYSTICK_BUTTON_DOWN:
+    case ALLEGRO_EVENT_JOYSTICK_BUTTON_UP:
+    case ALLEGRO_EVENT_KEY_CHAR:
+    case ALLEGRO_EVENT_KEY_DOWN:
+    case ALLEGRO_EVENT_KEY_UP:
+    case ALLEGRO_EVENT_MOUSE_AXES:
+    case ALLEGRO_EVENT_MOUSE_BUTTON_DOWN:
+    case ALLEGRO_EVENT_MOUSE_BUTTON_UP:
+    case ALLEGRO_EVENT_MOUSE_ENTER_DISPLAY: {
+        return true;
+        break;
+    }
+    }
+    
+    return false;
 }
 
 

@@ -362,8 +362,12 @@ private:
     void processGuiDialogLoad();
     void processGuiDialogNew();
     void processGuiDialogOptions();
+    void processGuiDialogOptionsControls();
+    void processGuiDialogOptionsMisc();
     void processGuiHitboxHazards();
     void processGuiMenuBar();
+    void processGuiMenuBarEditor();
+    void processGuiMenuBarView();
     void processGuiPanelAnimation();
     void processGuiPanelAnimationData();
     void processGuiPanelAnimationHeader();

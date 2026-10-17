@@ -402,7 +402,8 @@ void AreaMenu::initGuiInfoPage() {
             [this] (const DrawInfo & draw) {
                 if(curMedal) {
                     drawBitmapInBox(
-                        curMedal, draw.center, draw.size, true, 0.0f, draw.tint
+                        curMedal, draw.center, draw.size, true, true,
+                        0.0f, draw.tint
                     );
                 }
             };
@@ -608,7 +609,7 @@ void AreaMenu::initGuiMain() {
                     
                     if(medalBmp) {
                         drawBitmapInBox(
-                            medalBmp, draw.center, draw.size, true,
+                            medalBmp, draw.center, draw.size, true, true,
                             0.0f, draw.tint
                         );
                     }
@@ -642,7 +643,7 @@ void AreaMenu::initGuiMain() {
             );
             drawBitmapInBox(
                 game.sysContent.bmpRandom,
-                draw.center, draw.size - 8, true, 0.0f, draw.tint
+                draw.center, draw.size - 8, true, true, 0.0f, draw.tint
             );
         };
         randomButton->onActivate =

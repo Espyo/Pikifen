@@ -57,13 +57,17 @@ void drawBitmap(
  * @param boxSize Width and height of the box.
  * @param scaleUp If true, the bitmap is scaled up to fit the box.
  * If false, it stays at its original size (unless it needs to be scaled down).
+ * @param stayInside If true, the image is resized such that it does not
+ * go outside the box. If false, it can go outside the box, but ensures
+ * the entirety of the box has at least some part of the image, instead of
+ * being empty.
  * @param angle Angle to rotate the bitmap by.
  * The box does not take angling into account.
  * @param tint Tint the bitmap with this color.
  */
 void drawBitmapInBox(
     ALLEGRO_BITMAP* bmp, const Point& center, const Point& boxSize,
-    bool scaleUp, float angle, const ALLEGRO_COLOR& tint
+    bool scaleUp, bool stayInside, float angle, const ALLEGRO_COLOR& tint
 ) {
     if(boxSize.x == 0 || boxSize.y == 0) return;
     int bmpW = al_get_bitmap_width(bmp);
@@ -73,7 +77,11 @@ void drawBitmapInBox(
     float maxW = scaleUp ? boxSize.x : std::min((int) boxSize.x, bmpW);
     float maxH = scaleUp ? boxSize.y : std::min((int) boxSize.y, bmpH);
     
-    if(wDiff > hDiff) {
+    bool useWidth =
+        (wDiff > hDiff && stayInside) ||
+        (wDiff < hDiff && !stayInside);
+        
+    if(useWidth) {
         drawBitmap(bmp, center, Point(maxW, -1), angle, tint);
     } else {
         drawBitmap(bmp, center, Point(-1, maxH), angle, tint);

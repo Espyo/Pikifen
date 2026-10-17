@@ -1037,7 +1037,7 @@ sprites{
 				radius=60.5700
 				type=1
 				value=5.0000
-				knockback_type=3
+				knockback_type=4
 				knockback_angle=4.7100
 				knockback=3.0000
 				wither_chance=10
@@ -1048,7 +1048,7 @@ sprites{
 				radius=36.0000
 				type=1
 				value=5.0000
-				knockback_type=3
+				knockback_type=4
 				knockback_angle=4.7100
 				knockback=3.0000
 				wither_chance=10
@@ -1081,7 +1081,7 @@ sprites{
 				radius=60.5700
 				type=1
 				value=5.0000
-				knockback_type=3
+				knockback_type=4
 				knockback_angle=4.7100
 				knockback=3.0000
 				wither_chance=10
@@ -1092,7 +1092,7 @@ sprites{
 				radius=36.0000
 				type=1
 				value=5.0000
-				knockback_type=3
+				knockback_type=4
 				knockback_angle=4.7100
 				knockback=3.0000
 				wither_chance=10

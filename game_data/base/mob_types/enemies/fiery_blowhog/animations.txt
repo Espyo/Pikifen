@@ -541,7 +541,7 @@ sprites{
 				radius=50.0000
 				type=1
 				value=5.0000
-				knockback_type=3
+				knockback_type=4
 				knockback=3.0000
 				wither_chance=5
 			}
@@ -580,7 +580,7 @@ sprites{
 				radius=50.0000
 				type=1
 				value=5.0000
-				knockback_type=3
+				knockback_type=4
 				knockback=3.0000
 				wither_chance=5
 			}

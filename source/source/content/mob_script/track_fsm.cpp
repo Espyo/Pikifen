@@ -31,7 +31,7 @@ void TrackFsm::createFsm(MobType* typ) {
             efc.run(TrackFsm::spawn);
         }
         efc.newEvent(FSM_EV_TOUCHED_OBJECT); {
-            efc.run(TrackFsm::onTouched);
+            efc.run(TrackFsm::beTouched);
         }
     }
     
@@ -59,7 +59,7 @@ void TrackFsm::createFsm(MobType* typ) {
  * @param info1 Unused.
  * @param info2 Unused.
  */
-void TrackFsm::onTouched(ScriptVM* scriptVM, void* info1, void* info2) {
+void TrackFsm::beTouched(ScriptVM* scriptVM, void* info1, void* info2) {
     Track* traPtr = (Track*) scriptVM->mob;
     Mob* toucher = (Mob*) info1;
     

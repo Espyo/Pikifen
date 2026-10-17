@@ -1024,7 +1024,7 @@ void AudioManager::tick(float deltaT) {
     //Delete destroyed playbacks.
     for(size_t p = 0; p < playbacks.size();) {
         if(playbacks[p].state == SOUND_PLAYBACK_STATE_DESTROYED) {
-            playbacks.erase(playbacks.begin() + p);
+            eraseInVector(playbacks, p);
         } else {
             p++;
         }

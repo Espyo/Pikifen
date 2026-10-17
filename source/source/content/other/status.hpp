@@ -90,21 +90,6 @@ buildEnumNames(statusStateChangeINames, STATUS_STATE_CHANGE)({
 });
 
 
-//Possible states for a status effect instance.
-enum STATUS_STATE {
-
-    //Active and normal.
-    STATUS_STATE_ACTIVE,
-    
-    //Inactive, but is being built up.
-    STATUS_STATE_BUILDING,
-    
-    //Inactive, needs to be deleted.
-    STATUS_STATE_TO_DELETE,
-    
-};
-
-
 //Rule to follow when re-applying a status effect.
 enum STATUS_REAPPLY_RULE {
 
@@ -174,11 +159,16 @@ public:
     //Rule to follow when re-applying the status effect.
     STATUS_REAPPLY_RULE reapplyRule = STATUS_REAPPLY_RULE_KEEP_TIME;
     
-    //If 0, apply instantly. Otherwise, apply this much buildup [0 - 1].
+    //If 0, activate the status instantly.
+    //Otherwise, apply this much buildup [0 - 1].
     float buildup = 0.0f;
     
+    //If not 0, apply a cooldown of these many seconds, during which
+    //the status effect cannot be re-activated.
+    float cooldown = 0.0f;
+    
     //If it uses buildup, all of it is gone after these many seconds
-    //without any application of the status.
+    //without any bumps in buildup.
     float buildupRemovalDuration = 0.0f;
     
     //Health addition/subtraction per second.
@@ -230,10 +220,10 @@ public:
     //Particles to emit constantly, if any.
     ParticleGenerator* particleGen = nullptr;
     
-    //Particles to emit when the status is applied, if any.
+    //Particles to emit when the status is activated, if any.
     ParticleGenerator* particleGenStart = nullptr;
     
-    //Particles to emit when the status is removed, if any.
+    //Particles to emit when the status is deactivated, if any.
     ParticleGenerator* particleGenEnd = nullptr;
     
     //Horizontal offset of the particle generators.
@@ -248,10 +238,10 @@ public:
     //Whether the particle emission reaches scale with the mob.
     bool particleScaleReaches = false;
     
-    //Sound to play when the status is applied, if any.
+    //Sound to play when the status is activated, if any.
     DataNodeSound soundStart;
     
-    //Sound to play when the status is removed, if any.
+    //Sound to play when the status is deactivated, if any.
     DataNodeSound soundEnd;
     
     //How much the affected mob should shake by, if at all.
@@ -301,18 +291,6 @@ struct Status {
     //Status type.
     StatusType* type = nullptr;
     
-    //Current state.
-    STATUS_STATE state = STATUS_STATE_ACTIVE;
-    
-    //Previous state.
-    STATUS_STATE prevState = STATUS_STATE_ACTIVE;
-    
-    //Current buildup, if applicable [0 - 1].
-    float buildup = 0.0f;
-    
-    //Time left until the buildup is removed, if applicable.
-    float buildupRemovalTimeLeft = 0.0f;
-    
     //Time left, if this status effect auto-removes itself.
     float timeLeft = 0.0f;
     
@@ -326,8 +304,124 @@ struct Status {
     //--- Public function declarations ---
     
     explicit Status(StatusType* type);
-    void applyParticles(Mob* m, ParticleGenerator* pg);
+    
+};
+
+
+#pragma endregion
+#pragma region Status buildup
+
+
+/**
+ * @brief Instance of the buildup of a status on a mob.
+ */
+struct StatusBuildup {
+
+    //--- Public members ---
+    
+    //Status type.
+    StatusType* type = nullptr;
+    
+    //Current buildup amount [0 - 1].
+    float amount = 0.0f;
+    
+    //Time left until the buildup is removed, if applicable.
+    float removalTimeLeft = 0.0f;
+    
+    
+    //--- Public function declarations ---
+    
+    explicit StatusBuildup(StatusType* type);
+    
+};
+
+
+#pragma endregion
+#pragma region Status cooldown
+
+
+/**
+ * @brief Instance of the cooldown of a status on a mob.
+ */
+struct StatusCooldown {
+
+    //--- Public members ---
+    
+    //Status type.
+    StatusType* type = nullptr;
+    
+    //Time left until it is no longer in cooldown.
+    float timeLeft = 0.0f;
+    
+    
+    //--- Public function declarations ---
+    
+    explicit StatusCooldown(StatusType* type);
+    
+};
+
+
+#pragma endregion
+#pragma region Status manager
+
+
+/**
+ * @brief Manages everything about a mob's statuses. This only concerns itself
+ * with what statuses should be activated and deactivated, buildups, and
+ * cooldowns. Anything more mob-centric is not handled here.
+ */
+struct StatusManager {
+
+    //--- Public function declarations ---
+    
+    explicit StatusManager(Mob* mob);
+    void clearBuildupsAndCooldowns();
+    void deactivate(StatusType* statusType);
+    void deactivateAll();
+    void deleteDeactivated();
+    const vector<StatusCooldown>& getCooldowns() const;
+    const vector<StatusBuildup>& getBuildups() const;
+    const vector<Status>& getList() const;
+    const vector<Status>& getDeactivated() const;
+    void handleHazardLeave();
+    void handleKnockdown();
+    Status* handleStatusSource(
+        StatusType* type,
+        float overrideBuildup = FLT_MAX, bool forceReapplyResetTime = false
+    );
+    void handleWakingUp();
+    bool handleWhistle();
+    bool hasBuildups() const;
+    bool hasCooldowns() const;
     void tick(float deltaT);
+    
+    
+    //--- Private members ---
+    
+    //Mob it belongs to.
+    Mob* mob = nullptr;
+    
+    //Active status effects currently inflicted on the mob.
+    vector<Status> statuses;
+    
+    //Status effects that are inactive, but are being built-up.
+    vector<StatusBuildup> buildups;
+    
+    //Status effects that are inactive, but are in cooldown.
+    vector<StatusCooldown> cooldowns;
+    
+    //Status effects that were deactivated this frame, and not yet reported.
+    vector<Status> deactivated;
+    
+    
+    //--- Private function declarations ---
+    
+    Status* activate(StatusType* statusType);
+    bool applyBuildup(StatusType* statusType, float overrideAmount);
+    void deactivate(size_t idx);
+    void deactivateIf(
+        const std::function<bool(Status*)>& condition
+    );
     
 };
 

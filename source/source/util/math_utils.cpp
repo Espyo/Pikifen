@@ -219,8 +219,9 @@ float inchTowards(float start, float target, float maxStep) {
 
 
 /**
- * @brief Returns the interpolation between two numbers, given a number in
- * an interval.
+ * @brief Returns the linear interpolation between two numbers,
+ * given a number in an interval. If the input value falls outside,
+ * it will do an extrapolation.
  *
  * @param input The input number.
  * @param inputStart Start of the interval the input number falls on,

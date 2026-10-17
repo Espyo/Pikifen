@@ -1,0 +1,7 @@
+script {
+    idling {
+        on_enter {
+            play_sound hum
+        }
+    }
+}

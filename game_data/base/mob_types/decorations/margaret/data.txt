@@ -1,7 +1,7 @@
 name = Margaret
 description = A cluster of yellow margarets.
 
-height = 160
+height = 140
 peek_underneath_opacity = 50
 radius = 32
 random_animation_delay = true

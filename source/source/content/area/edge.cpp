@@ -127,7 +127,7 @@ size_t Edge::removeFromSectors() {
         forIdx(e, sPtr->edges) {
             Edge* ePtr = sPtr->edges[e];
             if(ePtr == this) {
-                sPtr->edges.erase(sPtr->edges.begin() + e);
+                eraseInVector(sPtr->edges, e);
                 auto nrIt = sPtr->edgeIdxs.begin() + e;
                 eIdx = *nrIt;
                 sPtr->edgeIdxs.erase(nrIt);
@@ -155,7 +155,7 @@ size_t Edge::removeFromVertexes() {
         forIdx(e, vPtr->edges) {
             Edge* ePtr = vPtr->edges[e];
             if(ePtr == this) {
-                vPtr->edges.erase(vPtr->edges.begin() + e);
+                eraseInVector(vPtr->edges, e);
                 auto nrIt = vPtr->edgeIdxs.begin() + e;
                 eIdx = *nrIt;
                 vPtr->edgeIdxs.erase(nrIt);

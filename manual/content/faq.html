@@ -48,6 +48,16 @@
           <li>Custom content created by players would need to be localized into other languages too, meaning those players would have to find translators for the supported languages.</li>
         </ol>
       </dd>
+
+      <dt><b>Why not use <a href="https://semver.org/">semantic versioning</a>?</b></dt>
+      <dd>Semantic versioning, in short, means the major version number should increase when custom content <i>has</i> to be ported manually, the minor number should increase when custom content still works the same and new features were added, and the revision number should increase when the update only fixes bugs without breaking compatibility. While I think it's a great system, I don't want to follow that because:</dd>
+      <dd>
+        <ol>
+          <li>Since I prefer to avoid technical debt (see above), most updates to the engine end up breaking compatibility with <i>something</i>. I do try to keep those changes to a minimum, and I try to deprecate things instead of outright breaking compatibility, but it often can't be helped. If I used semantic versioning, almost every release of the engine would be a major number increase.</li>
+          <li>I prefer a versioning system that's more excitement-focused. Something along the lines of: a revision number changing meaning there's nothing to talk about other than bug fixes; a minor number changing meaning a collection of interesting new things; a major number changing meaning it's a must-get for anyone that hasn't played since the previous version, given it'll have big and special additions.</li>
+          <li>It's a bit late to adopt semantic versioning now.</li>
+        </ol>
+      </dd>
     </dl>
     
     <h2 id="base-content">Base content</h2>

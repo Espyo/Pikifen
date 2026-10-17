@@ -174,7 +174,7 @@ OnionMenu::OnionMenu(
             changeTen ?
             game.sysContent.bmpOnionMenu10 :
             game.sysContent.bmpOnionMenu1,
-            draw.center, (draw.size * (0.8f + juicyGrowAmount)), true,
+            draw.center, (draw.size * (0.8f + juicyGrowAmount)), true, true,
             0.0f, draw.tint
         );
         changeTenButton->defDrawCode(draw);
@@ -219,7 +219,7 @@ OnionMenu::OnionMenu(
             selectAll ?
             game.sysContent.bmpOnionMenuAll :
             game.sysContent.bmpOnionMenuSingle,
-            draw.center, (draw.size * (0.8f + juicyGrowAmount)), true,
+            draw.center, (draw.size * (0.8f + juicyGrowAmount)), true, true,
             0.0f, draw.tint
         );
         selectAllButton->defDrawCode(draw);
@@ -275,7 +275,7 @@ OnionMenu::OnionMenu(
                 float juicyGrowAmount = onionIcon->getJuiceValue();
                 drawBitmapInBox(
                     nPtr->nestType->bmpIcon, draw.center,
-                    (draw.size * 0.8f) + juicyGrowAmount, true,
+                    (draw.size * 0.8f) + juicyGrowAmount, true, true,
                     0.0f, draw.tint
                 );
             }
@@ -372,7 +372,8 @@ OnionMenu::OnionMenu(
             if(tPtr->pikType->bmpIcon) {
                 drawBitmapInBox(
                     tPtr->pikType->bmpIcon, draw.center,
-                    (draw.size * 0.8f) + juicyGrowAmount, true, 0.0f, draw.tint
+                    (draw.size * 0.8f) + juicyGrowAmount, true, true,
+                    0.0f, draw.tint
                 );
             }
         };

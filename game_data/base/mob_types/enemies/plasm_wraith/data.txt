@@ -119,7 +119,17 @@ spawns {
     }
 }
 
+vulnerabilities {
+    ice_pikmin = 0
+}
+
+spike_damage_vulnerabilities {
+    ice = 0
+}
+
 status_vulnerabilities {
+    frozen_enemy = 0
+    petrified = 1
     white_pikmin_poison = 0
 }
 

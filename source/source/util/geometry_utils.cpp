@@ -1594,8 +1594,9 @@ float inchTowardsAngle(float start, float target, float maxStep) {
 
 
 /**
- * @brief Returns the interpolation between two angles, given a number
- * in an interval.
+ * @brief Returns the linear interpolation between two angles,
+ * given a number in an interval. If the input value falls outside,
+ * it will do an extrapolation.
  *
  * @param input The input number.
  * @param inputStart Start of the interval the input number falls on,
@@ -1624,8 +1625,9 @@ float interpolateAngle(
 
 
 /**
- * @brief Returns the interpolation between two points, given a number
- * in an interval.
+ * @brief Returns the linear interpolation between two points,
+ * given a number in an interval. If the input value falls outside,
+ * it will do an extrapolation.
  *
  * @param input The input number.
  * @param inputStart Start of the interval the input number falls on,

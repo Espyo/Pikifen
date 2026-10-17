@@ -610,6 +610,9 @@ struct MouseCursor {
     //Timer that keeps track of how long the cursor's been stopped for.
     float stoppedTimer = MOUSE_CURSOR::HIDE_TIMER_DURATION;
     
+    //Is the cursor's alpha being purposely set to 0?
+    bool purposely0Alpha = false;
+    
     //Spots the cursor has been through, in window coordinates.
     //Used for the faint trail left behind.
     vector<Point> history;
@@ -1183,6 +1186,9 @@ struct SystemContentList {
     //"Go!" big message.
     ALLEGRO_SAMPLE* sndGo = nullptr;
     
+    //Healing at a ship.
+    ALLEGRO_SAMPLE* sndHeal = nullptr;
+    
     //"Got it!" medal blurb.
     ALLEGRO_SAMPLE* sndMedalGotIt = nullptr;
     
@@ -1489,6 +1495,9 @@ struct SystemContentNames {
     
     //"Go!" big message.
     string sndGo = "gui/go";
+    
+    //Healing at a ship.
+    string sndHeal = "effects/heal";
     
     //"Got it!" medal blurb.
     string sndMedalGotIt = "gui/medal_got_it";

@@ -82,6 +82,7 @@ sounds {
     frozen_liquid_crack = nature/frozen_liquid_crack
     frozen_liquid_thaw = nature/frozen_liquid_thaw
     go = gui/go
+    heal = effects/heal
     medal_got_it = gui/medal_got_it
     menu_activate = gui/menu_activate
     menu_back = gui/menu_back

@@ -105,6 +105,9 @@ enum MENU_ICON {
 };
 
 
+void drawAreaBackgroundTexture(
+    const Viewport& view, float alpha, ALLEGRO_BITMAP* bmpOutput
+);
 void drawBackgroundLogos(
     float timeSpent, size_t rows, size_t cols,
     const Point& logoSize, const ALLEGRO_COLOR& tint,

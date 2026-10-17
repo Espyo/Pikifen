@@ -343,6 +343,9 @@ struct MakerTools {
     //Use the performance monitor?
     bool usePerfMon = false;
     
+    //Output warnings?
+    bool useWarnings = true;
+    
     //Has the player made use of any tools that could help them play?
     bool usedHelpingTools = false;
     

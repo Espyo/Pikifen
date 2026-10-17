@@ -1,5 +1,5 @@
 name=Margaret animations
-description=Animations for the Margaret.
+description=Animations for the margaret.
 maker=Espyo
 version=1.0.0
 engine_version=1.0.0

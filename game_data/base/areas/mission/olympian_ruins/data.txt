@@ -2,15 +2,18 @@ name=Olympian Ruins
 description=Legend has it this was a site for Olympian prowesses! Why don't you channel some of that spirit with a fast collectathon? Think of it like an obstacle course.
 tags=Short and sweet; Garden
 maker=Espyo
-version=1.2.0
+version=1.2.2
 engine_version=1.2.0
 notes=This stage was inspired by Super Smash Bros.'s Break the Targets.
 subtitle=Collect treasures
 difficulty=4
+bg_angle=0.0000
 bg_bmp=textures/grass_light
 bg_color=0 0 0
 bg_dist=1.0000
-bg_zoom=1.0000
+bg_offset=0.0000 0.0000
+bg_scale=1.0000 1.0000
+bg_tint=255 255 255
 song=areas/trials_and_tribulations
 boss_song
 boss_victory_song
@@ -100,5 +103,6 @@ mission_score_criteria{
 		index_param=0
 		points=-10
 		affects_hud=true
+		custom_name
 	}
 }

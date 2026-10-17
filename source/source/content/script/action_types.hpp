@@ -41,6 +41,9 @@ enum SCRIPT_ACTION {
     //Add item to a list (split string).
     SCRIPT_ACTION_ADD_LIST_ITEM,
     
+    //Add a numeric value as an int to a string.
+    SCRIPT_ACTION_ADD_INT_TO_STRING,
+    
     //Add a string to another string.
     SCRIPT_ACTION_ADD_TO_STRING,
     
@@ -151,6 +154,9 @@ enum SCRIPT_ACTION {
     
     //Get a script variable's value from the focused mob.
     SCRIPT_ACTION_GET_FOCUS_VAR,
+    
+    //Get whether a leader is currently active.
+    SCRIPT_ACTION_GET_LEADER_ACTIVITY,
     
     //Get how many Pikmin a leader has, optionally of a given type.
     SCRIPT_ACTION_GET_LEADER_PIKMIN_COUNT,
@@ -541,6 +547,9 @@ enum SCRIPT_ACTION_MOB_TARGET_TYPE {
     //Targets the parent mob, if any.
     SCRIPT_ACTION_MOB_TARGET_TYPE_PARENT,
     
+    //Targets the mob this one is following, if any.
+    SCRIPT_ACTION_MOB_TARGET_TYPE_LEADER,
+    
 };
 
 
@@ -551,6 +560,7 @@ buildEnumNames(scriptActionMobTargetTypeINames, SCRIPT_ACTION_MOB_TARGET_TYPE)({
     { SCRIPT_ACTION_MOB_TARGET_TYPE_TRIGGER, "trigger" },
     { SCRIPT_ACTION_MOB_TARGET_TYPE_LINK, "link" },
     { SCRIPT_ACTION_MOB_TARGET_TYPE_PARENT, "parent" },
+    { SCRIPT_ACTION_MOB_TARGET_TYPE_LEADER, "leader" },
 });
 
 
@@ -597,6 +607,9 @@ enum SCRIPT_ACTION_GET_EV_INFO_TYPE {
     //Get the other body part that triggered the event.
     SCRIPT_ACTION_GET_EV_INFO_TYPE_OTHER_BODY_PART,
     
+    //Get the amount of damage dealt.
+    SCRIPT_ACTION_GET_EV_INFO_TYPE_DAMAGE,
+    
 };
 
 
@@ -609,6 +622,7 @@ buildEnumNames(scriptActionGetEvInfoTypeINames, SCRIPT_ACTION_GET_EV_INFO_TYPE)(
     { SCRIPT_ACTION_GET_EV_INFO_TYPE_INPUT_VALUE, "input_value" },
     { SCRIPT_ACTION_GET_EV_INFO_TYPE_SCRIPT_MESSAGE, "message" },
     { SCRIPT_ACTION_GET_EV_INFO_TYPE_OTHER_BODY_PART, "other_body_part" },
+    { SCRIPT_ACTION_GET_EV_INFO_TYPE_DAMAGE, "damage" },
 });
 
 
@@ -899,6 +913,9 @@ struct ScriptActionType {
     //Flags for the contexts in which it can be run. Use SCRIPT_CONTEXT.
     Bitmask8 contexts = 0;
     
+    //If this action is deprecated, this is the replacement's name.
+    string deprecationReplacement;
+    
 };
 
 
@@ -910,6 +927,7 @@ namespace ScriptActionRunners {
 void absoluteNumber(ScriptActionInstRunData& data);
 void addHealth(ScriptActionInstRunData& data);
 void addListItem(ScriptActionInstRunData& data);
+void addIntToString(ScriptActionInstRunData& data);
 void addToString(ScriptActionInstRunData& data);
 void arachnorbPlanLogic(ScriptActionInstRunData& data);
 void beChomped(ScriptActionInstRunData& data);
@@ -939,6 +957,7 @@ void getDistance(ScriptActionInstRunData& data);
 void getEventInfo(ScriptActionInstRunData& data);
 void getFloorZ(ScriptActionInstRunData& data);
 void getFocusVar(ScriptActionInstRunData& data);
+void getLeaderActivity(ScriptActionInstRunData& data);
 void getLeaderPikminCount(ScriptActionInstRunData& data);
 void getListItem(ScriptActionInstRunData& data);
 void getListItemNumber(ScriptActionInstRunData& data);
@@ -1040,6 +1059,7 @@ namespace ScriptActionUtils {
 bool doScriptCondition(
     const string& lhs, SCRIPT_ACTION_IF_OP op, const string& rhs
 );
+string getNodePath(const ScriptActionInstRunData& data);
 SCRIPT_ACTION_MOB_TARGET_TYPE getMobTargetType(
     const ScriptActionInstRunData& data, const string& name
 );

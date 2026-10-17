@@ -996,8 +996,8 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
             return;
         } else {
             registerChange("Object link deletion");
-            mPtr->links.erase(mPtr->links.begin() + linkI);
-            mPtr->linkIdxs.erase(mPtr->linkIdxs.begin() + linkI);
+            eraseInVector(mPtr->links, linkI);
+            eraseInVector(mPtr->linkIdxs, linkI);
         }
         
         homogenizeSelectedMobs();

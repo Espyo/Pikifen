@@ -1,8 +1,8 @@
 name=Common Glowcap animations
-description=Animations for the Common Glowcap.
+description=Animations for the common glowcap.
 maker=Espyo
-version=1.0.0
-engine_version=1.0.0
+version=1.0.1
+engine_version=1.2.0
 animations{
 	bumped{
 		frames{
@@ -11,6 +11,7 @@ animations{
 			}
 			bumped_02{
 				duration=0.1000
+				sound=boing
 			}
 			bumped_01{
 				duration=0.1000

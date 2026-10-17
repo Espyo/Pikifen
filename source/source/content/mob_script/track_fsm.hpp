@@ -19,6 +19,6 @@
 namespace TrackFsm {
 void createFsm(MobType* typ);
 
-void onTouched(ScriptVM* scriptVM, void* info1, void* info2);
+void beTouched(ScriptVM* scriptVM, void* info1, void* info2);
 void spawn(ScriptVM* scriptVM, void* info1, void* info2);
 }

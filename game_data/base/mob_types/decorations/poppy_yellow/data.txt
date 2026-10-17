@@ -1,0 +1,24 @@
+name = Poppy (yellow)
+description = Two stalks of a yellow poppy.
+
+height = 120
+peek_underneath_opacity = 50
+radius = 40
+random_animation_delay = true
+rotation_random_variation = 360
+scale_random_variation = 0.15
+tint_random_maximum = 246 210 170
+
+sounds {
+    bumped {
+        sound = nature/foliage_long
+        volume = 40
+        speed_deviation = 40
+        volume_deviation = 10
+        random_delay = 0.1
+    }
+}
+
+maker = Espyo
+version = 1.0.0
+engine_version = 1.2.0

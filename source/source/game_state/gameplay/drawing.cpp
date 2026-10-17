@@ -140,13 +140,13 @@ void GameplayState::doGameDrawing(
     
     forIdx(p, players) {
         Player& player = players[p];
-        al_clear_to_color(game.curArea->bgColor);
+        al_clear_to_color(changeAlpha(game.curArea->bgVoidColor, 255));
         
         //Layer 1 -- Background.
         if(game.perfMon) {
             game.perfMon->startMeasurement("Drawing -- Background");
         }
-        drawBackground(player.view, bmpOutput);
+        drawAreaBackgroundTexture(player.view, 1.0f, bmpOutput);
         if(game.perfMon) {
             game.perfMon->finishMeasurement();
         }
@@ -277,76 +277,6 @@ void GameplayState::doGameDrawing(
 
 
 #pragma warning(default: 4701)
-
-
-/**
- * @brief Draws the area background.
- *
- * @param view Viewport to draw to.
- * @param bmpOutput If not nullptr, draw the background onto this.
- */
-void GameplayState::drawBackground(
-    const Viewport& view, ALLEGRO_BITMAP* bmpOutput
-) {
-    if(!game.curArea->bgBmp) return;
-    
-    ALLEGRO_VERTEX bgV[4];
-    for(unsigned char v = 0; v < 4; v++) {
-        bgV[v].color = COLOR_WHITE;
-        bgV[v].z = 0;
-    }
-    
-    //Not gonna lie, this uses some fancy-shmancy numbers.
-    //I mostly got here via trial and error.
-    //I apologize if you're trying to understand what it means.
-    int bmpW =
-        bmpOutput ? al_get_bitmap_width(bmpOutput) : view.windowRect.size.x;
-    int bmpH =
-        bmpOutput ? al_get_bitmap_height(bmpOutput) : view.windowRect.size.y;
-    float zoomToUse = bmpOutput ? 0.5 : view.cam.zoom;
-    Point finalZoom(
-        bmpW * 0.5 * game.curArea->bgDist / zoomToUse,
-        bmpH * 0.5 * game.curArea->bgDist / zoomToUse
-    );
-    
-    bgV[0].x =
-        0;
-    bgV[0].y =
-        0;
-    bgV[0].u =
-        (view.cam.center.x - finalZoom.x) / game.curArea->bgBmpZoom;
-    bgV[0].v =
-        (view.cam.center.y - finalZoom.y) / game.curArea->bgBmpZoom;
-    bgV[1].x =
-        bmpW;
-    bgV[1].y =
-        0;
-    bgV[1].u =
-        (view.cam.center.x + finalZoom.x) / game.curArea->bgBmpZoom;
-    bgV[1].v =
-        (view.cam.center.y - finalZoom.y) / game.curArea->bgBmpZoom;
-    bgV[2].x =
-        bmpW;
-    bgV[2].y =
-        bmpH;
-    bgV[2].u =
-        (view.cam.center.x + finalZoom.x) / game.curArea->bgBmpZoom;
-    bgV[2].v =
-        (view.cam.center.y + finalZoom.y) / game.curArea->bgBmpZoom;
-    bgV[3].x =
-        0;
-    bgV[3].y =
-        bmpH;
-    bgV[3].u =
-        (view.cam.center.x - finalZoom.x) / game.curArea->bgBmpZoom;
-    bgV[3].v =
-        (view.cam.center.y + finalZoom.y) / game.curArea->bgBmpZoom;
-        
-    al_draw_prim(
-        bgV, nullptr, game.curArea->bgBmp,
-        0, 4, ALLEGRO_PRIM_TRIANGLE_FAN
-    );
-}
 
 
 /**
