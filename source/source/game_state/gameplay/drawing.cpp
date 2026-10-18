@@ -1469,7 +1469,7 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
             game.curArea->weatherCondition.getDaylightColor();
     if(daylightC.a > 0) {
         //Setup the shader.
-        ALLEGRO_SHADER* blackoutShader = game.shaders.getShader(SHADER_TYPE_BLACKOUT);
+        ALLEGRO_SHADER* blackoutShader = game.shaders.getShader(SHADER_TYPE_LIGHTING);
         al_use_shader(blackoutShader);
         al_set_shader_float("alpha", daylightC.a);
         BindLightsToShader(view);
@@ -2149,7 +2149,7 @@ void GameplayState::drawWorldComponents(
     }
 
     //Set shader options
-    ALLEGRO_SHADER* blackoutShader = game.shaders.getShader(SHADER_TYPE_BLACKOUT);
+    ALLEGRO_SHADER* blackoutShader = game.shaders.getShader(SHADER_TYPE_LIGHTING);
     al_use_shader(blackoutShader);
     BindLightsToShader(view);
     //Even though we set the shader null here, it'll retain these

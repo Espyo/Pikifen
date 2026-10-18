@@ -45,8 +45,8 @@ void ShaderManager::compileShader(
 void ShaderManager::compileShaders() {
     //Blackout.
     compileShader(
-        SHADER_TYPE_BLACKOUT,
-        SHADER_SOURCES::BLACKOUT_FRAG_SHADER,
+        SHADER_TYPE_LIGHTING,
+        SHADER_SOURCES::LIGHTING_FRAG_SHADER,
         SHADER_SOURCES::DEFAULT_VERT_SHADER
     );
 

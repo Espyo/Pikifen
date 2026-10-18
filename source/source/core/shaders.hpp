@@ -15,7 +15,7 @@
 #include <allegro5/allegro_primitives.h>
 
 namespace SHADER_SOURCES {
-extern const char* BLACKOUT_FRAG_SHADER;
+extern const char* LIGHTING_FRAG_SHADER;
 extern const char* COLORIZER_FRAG_SHADER;
 extern const char* DEFAULT_VERT_SHADER;
 extern const char* LIQUID_FRAG_SHADER;
@@ -26,11 +26,11 @@ extern const char* ONION_FRAG_SHADER;
 //Types of shaders.
 enum SHADER_TYPE {
 
-    //Blackout lights, used for blackout weather
-    SHADER_TYPE_BLACKOUT,
-
     //Colorizer. Blends between the input and a solid color.
     SHADER_TYPE_COLORIZER,
+
+    //Lighting. Colors areas around lights in the world.
+    SHADER_TYPE_LIGHTING,
     
     //Liquid sectors, like bodies of water.
     SHADER_TYPE_LIQUID,
