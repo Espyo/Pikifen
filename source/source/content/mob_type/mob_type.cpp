@@ -296,8 +296,11 @@ void MobType::loadFromDataNode(
         areaEditorRecommendLinksTo
     );
     tRS.set("area_editor_tips", areaEditorTips, &areaEditorTipsNode);
-    //TODO: have this set light radius (throw deprecated warning)
-    //tRS.set("blackout_radius", blackoutRadius);
+    //DEPRECATED in 1.3.0 by "light_radius".
+        deprecatedReaderSetter(
+            tRS, "blackout_radius", "use \"light_radius\"",
+            lightRadius
+        );
     tRS.set("light_radius", lightRadius);
     tRS.set("light_color", lightColor);
     tRS.set("can_block_paths", canBlockPaths);

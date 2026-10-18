@@ -105,11 +105,26 @@ void LeaderType::loadCatProperties(DataNode* file) {
     
     lRS.set("knocked_down_duration", knockedDownDuration);
     lRS.set("knocked_down_whistle_bonus", knockedDownWhistleBonus);
-    //TODO: Deprecate these
-    //lRS.set("light", lightStr, &lightNode);
-    //lRS.set("light_color", antennaLightBmpTint);
-    //lRS.set("light_particle_color", antennaParticleTint);
-    //lRS.set("light_particle_generator", antennaParticleGenIName, &lightPGNode);
+    //DEPRECATED in 1.3.0 by "antenna_light".
+        deprecatedReaderSetter(
+            lRS, "light", "use \"antenna_light\"",
+            lightStr, &lightNode
+        );
+    //DEPRECATED in 1.3.0 by "antenna_light_color".
+        deprecatedReaderSetter(
+            lRS, "light_color", "use \"antenna_light_color\"",
+            antennaLightBmpTint
+        );
+    //DEPRECATED in 1.3.0 by "antenna_light_particle_color".
+        deprecatedReaderSetter(
+            lRS, "light_particle_color", "use \"antenna_light_particle_color\"",
+            antennaParticleTint
+        );
+    //DEPRECATED in 1.3.0 by "antenna_light_particle_generator".
+        deprecatedReaderSetter(
+            lRS, "light_particle_generator", "use \"antenna_light_particle_generator\"",
+            antennaParticleGenIName, &lightPGNode
+        );
     lRS.set("antenna_light", lightStr, &lightNode);
     lRS.set("antenna_light_color", antennaLightBmpTint);
     lRS.set("antenna_light_particle_color", antennaParticleTint);
