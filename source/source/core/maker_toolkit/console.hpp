@@ -22,6 +22,7 @@ using std::vector;
 
 
 namespace CONSOLE {
+extern const float CARET_BLINK_INTERVAL;
 extern const ALLEGRO_COLOR COLOR_BG;
 extern const ALLEGRO_COLOR COLOR_DECOR_DARK;
 extern const ALLEGRO_COLOR COLOR_DECOR_LIGHT;
@@ -29,7 +30,8 @@ extern const ALLEGRO_COLOR COLOR_ERROR;
 extern const ALLEGRO_COLOR COLOR_MAIN;
 extern const ALLEGRO_COLOR COLOR_MUTED;
 extern const ALLEGRO_COLOR COLOR_WARNING;
-extern const float INPUT_SIZE;
+extern const float INPUT_ICON_SIZE;
+extern const size_t INPUT_TEXT_MAX_SIZE;
 extern const int LINE_PADDING;
 extern const size_t OUTPUT_INDENT;
 extern const size_t OUTPUT_MAX_CHARS_PER_LINE;
@@ -48,6 +50,7 @@ struct MakerConsoleTerminal {
 
     //--- Public function declarations ---
     
+    MakerConsoleTerminal();
     void clear();
     int draw(int y) const;
     void handleAllegroEvent(const ALLEGRO_EVENT& ev);
@@ -83,7 +86,7 @@ struct MakerConsoleTerminal {
     vector<LOG_LEVEL> outputLevels;
     
     //Currently written input text.
-    string input;
+    TextInput input;
     
 };
 
