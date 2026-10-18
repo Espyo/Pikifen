@@ -10,12 +10,8 @@
 
 #include <algorithm>
 
-#if !defined(ALLEGRO_UNSTABLE)
-    //ALLEGRO_UNSTABLE is defined in the compile flags,
-    //but vscode thinks the functions are undefined unless
-    //we ALSO define it here.
-    #define ALLEGRO_UNSTABLE
-#endif
+//For openGL functions
+#define ALLEGRO_UNSTABLE
 
 #if defined(_WINDOWS)
     //We need to define windows.h so gl.h can compile on windows
