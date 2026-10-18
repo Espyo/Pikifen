@@ -2557,6 +2557,49 @@ void ScriptActionRunners::setHuntable(ScriptActionInstRunData& data) {
 
 
 /**
+ * @brief Code for the light setting script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::setLight(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& typeArg = data.args[0];
+    const string& valueArg = data.args[1];
+    
+    //Main logic.
+    string result;
+    bool typeFound;
+    SCRIPT_ACTION_SET_LIGHT_TYPE type =
+        enumGetValue(scriptActionSetLightTypeINames, typeArg, &typeFound);
+    if(!typeFound) {
+        ScriptActionUtils::reportActionError(
+            data,
+            "Unknown light component \"" + typeArg + "\"!"
+        );
+        return;
+    }
+    
+    //Main logic.
+    int val = s2i(valueArg);
+    switch(type) {
+        case SCRIPT_ACTION_SET_LIGHT_TYPE_RADIUS:
+            data.scriptVM->getRunnerMob()->lightRadius = val;
+        break;
+        case SCRIPT_ACTION_SET_LIGHT_TYPE_RED:
+            data.scriptVM->getRunnerMob()->lightColor.r = val;
+        break;
+        case SCRIPT_ACTION_SET_LIGHT_TYPE_GREEN:
+            data.scriptVM->getRunnerMob()->lightColor.g = val;
+        break;
+        case SCRIPT_ACTION_SET_LIGHT_TYPE_BLUE:
+            data.scriptVM->getRunnerMob()->lightColor.b = val;
+        break;
+    }
+    
+}
+
+
+/**
  * @brief Code for the limb animation setting script action type.
  *
  * @param data Data about the action call.

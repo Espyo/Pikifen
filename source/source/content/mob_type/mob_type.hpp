@@ -293,9 +293,11 @@ public:
     bool useDamageSquashAndStretch = false;
     
     //Radius of the light cast in dark sectors. <0 to use the mob's radius.
+    //Can be overriden on a per mob basis
     float lightRadius = -1.0f;
 
     //Color of light to cast in dark sectors. COLOR_BLACK to disable.
+    //Can be overriden on a per mob basis
     ALLEGRO_COLOR lightColor = COLOR_BLACK;
     
     //List of sounds it can play.

@@ -1435,17 +1435,18 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
     for(size_t m = 0; m < mobs.all.size(); m++) {
         Mob* mPtr = mobs.all[m];
 
+        ALLEGRO_COLOR lightColor = mPtr->lightColor;
+        //Use mob's radius if <= 0
+        float finalRadius = mPtr->lightRadius < 0.0f ? 
+            mPtr->radius * 2.0f : mPtr->lightRadius;
         //Only draw mobs that have a light that'll render
         if(
             hasFlag(mPtr->flags, MOB_FLAG_HIDDEN) ||
-            mPtr->type->lightColor == COLOR_BLACK
+            lightColor == COLOR_BLACK ||
+            finalRadius <= 0.0f
         ) {
             continue;
         }
-
-        //Use mob's radius if <= 0
-        float finalRadius = sign(mPtr->type->lightRadius) == 1 ? 
-            mPtr->type->lightRadius : mPtr->radius;
 
         if(bBoxCheck(view.worldCorners, mPtr->center, finalRadius)) {
             float x = mPtr->center.x;
@@ -1458,9 +1459,9 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
             lightData.push_back(finalRadius * 2 * view.cam.zoom);
 
             //Light color
-            lightData.push_back(mPtr->type->lightColor.r);
-            lightData.push_back(mPtr->type->lightColor.g);
-            lightData.push_back(mPtr->type->lightColor.b);
+            lightData.push_back(lightColor.r);
+            lightData.push_back(lightColor.g);
+            lightData.push_back(lightColor.b);
             lightCount++;
         }
     }

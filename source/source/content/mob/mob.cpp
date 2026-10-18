@@ -179,7 +179,9 @@ Mob::Mob(const Point& center, MobType* type, float angle) :
     itchTime(type->itchTime),
     statuses(this),
     anim(type->animDb),
-    physicalSpan(type->physicalSpan) {
+    physicalSpan(type->physicalSpan),
+    lightColor(type->lightColor),
+    lightRadius(type->lightRadius) {
     
     game.states.gameplay->nextMobId++;
     

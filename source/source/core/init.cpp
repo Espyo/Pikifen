@@ -2808,6 +2808,15 @@ void initScriptActionTypes() {
         "set_holdable",
         ScriptActionRunners::setHoldable
     );
+
+    //Set light.
+    queueParam("component", ptEnum);
+    queueParam("value", ptFloat);
+    commitAction(
+        SCRIPT_ACTION_SET_LIGHT,
+        "set_light",
+        ScriptActionRunners::setLight
+    );
     
     //Set limb animation.
     queueParam("animation name", ptString);

@@ -311,6 +311,9 @@ enum SCRIPT_ACTION {
     //Set whether it is huntable.
     SCRIPT_ACTION_SET_HUNTABLE,
     
+    //Set light parameter.
+    SCRIPT_ACTION_SET_LIGHT,
+
     //Set limb animation.
     SCRIPT_ACTION_SET_LIMB_ANIMATION,
     
@@ -762,6 +765,33 @@ buildEnumNames(scriptActionGetMobInfoTypeINames, SCRIPT_ACTION_GET_MOB_INFO_TYPE
 });
 
 
+//Get area info action info types.
+enum SCRIPT_ACTION_SET_LIGHT_TYPE {
+
+    //Get time of day, in minutes.
+    SCRIPT_ACTION_SET_LIGHT_TYPE_RADIUS,
+    
+    //Get number of Pikmin on the field.
+    SCRIPT_ACTION_SET_LIGHT_TYPE_RED,
+
+    //Get number of Pikmin on the field.
+    SCRIPT_ACTION_SET_LIGHT_TYPE_GREEN,
+
+    //Get number of Pikmin on the field.
+    SCRIPT_ACTION_SET_LIGHT_TYPE_BLUE,
+    
+};
+
+
+//Script action get area info type enum naming (internal names).
+buildEnumNames(scriptActionSetLightTypeINames, SCRIPT_ACTION_SET_LIGHT_TYPE)({
+    { SCRIPT_ACTION_SET_LIGHT_TYPE_RADIUS, "radius" },
+    { SCRIPT_ACTION_SET_LIGHT_TYPE_RED, "red" },
+    { SCRIPT_ACTION_SET_LIGHT_TYPE_GREEN, "green" },
+    { SCRIPT_ACTION_SET_LIGHT_TYPE_BLUE, "blue" },
+});
+
+
 //Moving action sub-types.
 enum SCRIPT_ACTION_MOVE_TYPE {
 
@@ -1010,6 +1040,7 @@ void setHeight(ScriptActionInstRunData& data);
 void setHiding(ScriptActionInstRunData& data);
 void setHoldable(ScriptActionInstRunData& data);
 void setHuntable(ScriptActionInstRunData& data);
+void setLight(ScriptActionInstRunData& data);
 void setLimbAnimation(ScriptActionInstRunData& data);
 void setListItem(ScriptActionInstRunData& data);
 void setMissionMetricScriptSlot(ScriptActionInstRunData& data);
