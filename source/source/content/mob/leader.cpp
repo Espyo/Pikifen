@@ -212,16 +212,16 @@ Leader::Leader(const Point& center, LeaderType* type, float angle) :
     
     ParticleGenerator antennaPG =
         standardParticleGenSetup(
-            leaType->lightParticleGenIName, nullptr
+            leaType->antennaParticleGenIName, nullptr
         );
     adjustKeyframeInterpolatorValues<ALLEGRO_COLOR>(
         antennaPG.baseParticle.color,
     [ this ] (const ALLEGRO_COLOR & c) {
         ALLEGRO_COLOR newColor = c;
-        newColor.r *= leaType->lightParticleTint.r;
-        newColor.g *= leaType->lightParticleTint.g;
-        newColor.b *= leaType->lightParticleTint.b;
-        newColor.a *= leaType->lightParticleTint.a;
+        newColor.r *= leaType->antennaParticleTint.r;
+        newColor.g *= leaType->antennaParticleTint.g;
+        newColor.b *= leaType->antennaParticleTint.b;
+        newColor.a *= leaType->antennaParticleTint.a;
         return newColor;
     }
     );
@@ -775,12 +775,12 @@ void Leader::drawMob() {
         antennaPG->canEmit = false;
     }
     
-    if(curSPtr->topVisible && leaType->bmpLight && isGenerallyVisible()) {
+    if(curSPtr->topVisible && leaType->bmpAntennaLight && isGenerallyVisible()) {
         Point lightCoords;
         float lightAngle;
         Point lightSize;
         BitmapEffect lightEff = mobEff;
-        ALLEGRO_BITMAP* lightBmp = leaType->bmpLight;
+        ALLEGRO_BITMAP* lightBmp = leaType->bmpAntennaLight;
         
         forIdx(s, statuses.getList()) {
             if(statuses.getList()[s].type->topReplacementBmp) {
@@ -805,7 +805,7 @@ void Leader::drawMob() {
             center + rotatePoint(lightCoords, angle) * avgScale;
         lightEff.tf.scale *= lightSize / topBmpSize;
         lightEff.tf.rot += angle + lightAngle;
-        lightEff.tintColor = leaType->lightBmpTint;
+        lightEff.tintColor = leaType->antennaLightBmpTint;
         
         drawBitmapWithEffects(lightBmp, lightEff);
         

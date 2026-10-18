@@ -105,10 +105,15 @@ void LeaderType::loadCatProperties(DataNode* file) {
     
     lRS.set("knocked_down_duration", knockedDownDuration);
     lRS.set("knocked_down_whistle_bonus", knockedDownWhistleBonus);
-    lRS.set("light", lightStr, &lightNode);
-    lRS.set("light_color", lightBmpTint);
-    lRS.set("light_particle_color", lightParticleTint);
-    lRS.set("light_particle_generator", lightParticleGenIName, &lightPGNode);
+    //TODO: Deprecate these
+    //lRS.set("light", lightStr, &lightNode);
+    //lRS.set("light_color", antennaLightBmpTint);
+    //lRS.set("light_particle_color", antennaParticleTint);
+    //lRS.set("light_particle_generator", antennaParticleGenIName, &lightPGNode);
+    lRS.set("antenna_light", lightStr, &lightNode);
+    lRS.set("antenna_light_color", antennaLightBmpTint);
+    lRS.set("antenna_light_particle_color", antennaParticleTint);
+    lRS.set("antenna_light_particle_generator", antennaParticleGenIName, &lightPGNode);
     lRS.set("max_throw_height", maxThrowHeight);
     lRS.set("sleeping_status", sleepingStatusStr, &sleepingStatusNode);
     lRS.set("whistle_range", whistleRange);
@@ -137,11 +142,11 @@ void LeaderType::loadCatProperties(DataNode* file) {
     
     if(lightPGNode) {
         if(
-            game.content.particleGens.list.find(lightParticleGenIName) ==
+            game.content.particleGens.list.find(antennaParticleGenIName) ==
             game.content.particleGens.list.end()
         ) {
             game.errors.report(
-                "Unknown particle generator \"" + lightParticleGenIName + "\"!",
+                "Unknown particle generator \"" + antennaParticleGenIName + "\"!",
                 lightPGNode
             );
         }
@@ -149,7 +154,7 @@ void LeaderType::loadCatProperties(DataNode* file) {
     
     //Always load this since it's necessary for the animation editor.
     if(lightNode) {
-        bmpLight = game.content.bitmaps.list.get(lightStr, lightNode);
+        bmpAntennaLight = game.content.bitmaps.list.get(lightStr, lightNode);
     }
 }
 
@@ -176,5 +181,5 @@ void LeaderType::loadCatResources(DataNode* file) {
  */
 void LeaderType::unloadResources() {
     game.content.bitmaps.list.free(bmpIcon);
-    game.content.bitmaps.list.free(bmpLight);
+    game.content.bitmaps.list.free(bmpAntennaLight);
 }
