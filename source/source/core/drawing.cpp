@@ -1567,8 +1567,7 @@ void drawSectorTexture(
 
 
 /**
- * @brief Draws the lighting of a sector. This is intended to be multiplied
- * on the base sector.
+ * @brief Draws the lighting of a sector.
  *
  * @param sPtr Pointer to the sector.
  * @param where X and Y offset.
@@ -1650,7 +1649,7 @@ void drawSectorLighting(
         av[v].v = vy;
         av[v].z = 0;
         //Incrementing the rgb 
-        av[v].color = mapGray(brightness + 255 * (1 - alpha));
+        av[v].color = mapGray(brightness + (255 - brightness) * (1 - alpha));
     }
     
     for(size_t v = 0; v < nVertexes; v++) {

@@ -1405,11 +1405,6 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
     baseColor.a = 1;
     al_clear_to_color(baseColor);
     
-    //Set the multiply blender
-    AllegroBlenderState prevState;
-    prevState.save();
-    al_set_blender(ALLEGRO_ADD, ALLEGRO_DEST_COLOR, ALLEGRO_ZERO);
-
     //Draw sector lighting.
     al_use_transform(&view.worldToWindowTransform);
     forIdx(s, game.curArea->sectors) {
@@ -1511,6 +1506,12 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
     }
     al_set_shader_int("light_count", lightCount);
 
+    //Set the multiply blender
+    AllegroBlenderState prevState;
+    prevState.save();
+    al_set_blender(ALLEGRO_ADD, ALLEGRO_DEST_COLOR, ALLEGRO_ZERO);
+
+    
     //Draw the buffer onto the main output.
     drawBitmap(lightingBuffer, Point(game.winW / 2, game.winH / 2), Point(game.winW, game.winH));
 
