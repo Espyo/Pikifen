@@ -18,6 +18,9 @@
 
 namespace CONSOLE {
 
+//Blink interval for the text input caret.
+const float CARET_BLINK_INTERVAL = 0.8f;
+
 //Background color of the console, alpha included.
 const ALLEGRO_COLOR COLOR_BG = al_map_rgba(0, 0, 0, 160);
 
@@ -40,7 +43,10 @@ const ALLEGRO_COLOR COLOR_MUTED = al_map_rgba(255, 255, 255, 128);
 const ALLEGRO_COLOR COLOR_WARNING = al_map_rgba(255, 255, 128, 192);
 
 //Size of the control bind icon.
-const float INPUT_SIZE = 24.0f;
+const float INPUT_ICON_SIZE = 24.0f;
+
+//Maximum size of the text input.
+const size_t INPUT_TEXT_MAX_SIZE = 80;
 
 //Padding between each line.
 const int LINE_PADDING = 2;
@@ -253,18 +259,18 @@ int MakerConsoleNotifier::draw(int y) const {
         lines.size() * fontHeight +
         (lines.size() - 1) * CONSOLE::LINE_PADDING;
     int boxW =
-        CONSOLE::PADDING + CONSOLE::INPUT_SIZE + CONSOLE::PADDING +
+        CONSOLE::PADDING + CONSOLE::INPUT_ICON_SIZE + CONSOLE::PADDING +
         textW + CONSOLE::PADDING;
     boxW = std::max(boxW, (int) (game.winW / 2.0f) - CONSOLE::PADDING * 2);
     int boxH =
         std::max(
-            CONSOLE::PADDING + (int) CONSOLE::INPUT_SIZE + CONSOLE::PADDING,
+            CONSOLE::PADDING + (int) CONSOLE::INPUT_ICON_SIZE + CONSOLE::PADDING,
             CONSOLE::PADDING + textH + CONSOLE::PADDING
         );
     int boxX = CONSOLE::PADDING;
     int boxY = y;
     int textX =
-        boxX + CONSOLE::PADDING + CONSOLE::INPUT_SIZE + CONSOLE::PADDING;
+        boxX + CONSOLE::PADDING + CONSOLE::INPUT_ICON_SIZE + CONSOLE::PADDING;
     int textY = (boxY + boxH / 2.0f) - textH / 2.0f;
     
     float alpha = visibility;
@@ -312,10 +318,10 @@ int MakerConsoleNotifier::draw(int y) const {
     drawPlayerActionInputSourceIcon(
         PLAYER_ACTION_TYPE_MT_CONSOLE,
         Point(
-            boxX + CONSOLE::PADDING + (CONSOLE::INPUT_SIZE / 2.0f),
+            boxX + CONSOLE::PADDING + (CONSOLE::INPUT_ICON_SIZE / 2.0f),
             boxY + (boxH / 2.0f)
         ),
-        Point(CONSOLE::INPUT_SIZE),
+        Point(CONSOLE::INPUT_ICON_SIZE),
         true, game.sysContent.fntSlim, mapAlpha(alpha * 255)
     );
     
@@ -420,6 +426,12 @@ void MakerConsoleNotifier::write(
 #pragma region Maker console terminal
 
 
+MakerConsoleTerminal::MakerConsoleTerminal() {
+    input.maxSize = CONSOLE::INPUT_TEXT_MAX_SIZE;
+}
+
+
+
 /**
  * @brief Clears the list of output lines.
  */
@@ -428,7 +440,7 @@ void MakerConsoleTerminal::clear() {
     outputTimestamps.clear();
     outputLevels.clear();
     scroll = 0;
-    input.clear();
+    input.reset();
     visibilityState = OPEN_CLOSE_STATE_CLOSED;
     visibility = 0.0f;
 }
@@ -470,7 +482,8 @@ int MakerConsoleTerminal::draw(int y) const {
     
     //Setup.
     const ALLEGRO_FONT* FONT = game.sysContent.fntBuiltin;
-    const size_t nLines = CONSOLE::OUTPUT_MAX_VISIBLE_LINES;
+    const string INPUT_LINE_PREFIX = "> ";
+    const size_t nLines = CONSOLE::OUTPUT_MAX_VISIBLE_LINES + 2;
     const int fontHeight = al_get_font_line_height(FONT);
     
     int textW = game.winW - CONSOLE::PADDING * 2;
@@ -620,8 +633,6 @@ int MakerConsoleTerminal::draw(int y) const {
         );
     }
     
-    //TODO
-    /*
     //Divisor line between output and input.
     int lineY = getLineY(CONSOLE::OUTPUT_MAX_VISIBLE_LINES) + fontHeight / 2.0f;
     al_draw_line(
@@ -630,14 +641,32 @@ int MakerConsoleTerminal::draw(int y) const {
     );
     
     //Input text.
+    string inputLineFullText = INPUT_LINE_PREFIX + input.getString();
+    int inputLineTextY = getLineY(CONSOLE::OUTPUT_MAX_VISIBLE_LINES + 1);
     drawText(
-        "> " + input, FONT,
-        Point(textX, getLineY(CONSOLE::OUTPUT_MAX_VISIBLE_LINES + 1)),
+        inputLineFullText, FONT,
+        Point(textX, inputLineTextY),
         Point(textW, fontHeight),
         CONSOLE::COLOR_MAIN, ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
         TEXT_SETTING_FLAG_CANT_GROW | TEXT_SETTING_FLAG_CANT_SHRINK
     );
-    */
+    
+    //Input text caret.
+    float caretT = fmod(game.timePassed, CONSOLE::CARET_BLINK_INTERVAL);
+    if(caretT < CONSOLE::CARET_BLINK_INTERVAL / 2.0f) {
+        int prefixWidth = al_get_text_width(FONT, INPUT_LINE_PREFIX.c_str());
+        string inputPreCaretText =
+            input.getString().substr(0, input.getCaretPos());
+        int inputPreCaretTextWidth =
+            al_get_text_width(FONT, inputPreCaretText.c_str());
+        int caretX = textX + prefixWidth + inputPreCaretTextWidth;
+        
+        al_draw_line(
+            caretX, inputLineTextY,
+            caretX, inputLineTextY + fontHeight,
+            CONSOLE::COLOR_MAIN, 2.0f
+        );
+    }
     
     //Decor.
     al_draw_line(
@@ -680,6 +709,8 @@ void MakerConsoleTerminal::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
             if(output.size() > 1 && scroll > 0) scroll--;
         }
     }
+    
+    input.handleAllegroEvent(ev);
 }
 
 
