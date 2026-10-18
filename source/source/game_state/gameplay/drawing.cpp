@@ -46,82 +46,6 @@
 
 
 /**
- * @brief Binds all visible lights in the scene to a shader SSBO.
- * Lights are bound to binding 3, and the total count
- * is bound to "light_count".
- *
- * @param view The view that the lights will be rendered to.
- */
-void GameplayState::BindLightsToShader(const Viewport& view) {
-    vector<float> lightData;
-    int lightCount = 0;
-    for(size_t m = 0; m < mobs.all.size(); m++) {
-        Mob* mPtr = mobs.all[m];
-
-        //Only draw mobs that have a light that'll render
-        if(
-            hasFlag(mPtr->flags, MOB_FLAG_HIDDEN) ||
-            mPtr->type->lightColor == COLOR_BLACK
-        ) {
-            continue;
-        }
-
-        //Use mob's radius if <= 0
-        float finalRadius = sign(mPtr->type->lightRadius) == 1 ? 
-            mPtr->type->lightRadius : mPtr->radius;
-
-        if(bBoxCheck(view.worldCorners, mPtr->center, finalRadius)) {
-            lightData.push_back(mPtr->center.x);
-            lightData.push_back(mPtr->center.y);
-            //Light's aren't very visible past half of its
-            //distance, so this makes lights "seem" scaled properly
-            lightData.push_back(finalRadius * 2);
-
-            //Light color
-            lightData.push_back(mPtr->type->lightColor.r);
-            lightData.push_back(mPtr->type->lightColor.g);
-            lightData.push_back(mPtr->type->lightColor.b);
-            lightCount++;
-        }
-    }
-    vector<WorldComponent> allParts;
-    particles.fillComponentList(allParts, view.worldCorners);
-    for(size_t p = 0; p < allParts.size(); p++) {
-        Particle* pPtr = allParts[p].particlePtr;
-        if(pPtr->blendType != PARTICLE_BLEND_TYPE_ADDITIVE) continue;
-        float t = 1.0f - pPtr->time / pPtr->duration;
-        ALLEGRO_COLOR finalColor = pPtr->color.get(t);
-        if(finalColor.a < 0.05f) continue;
-        float finalSize = pPtr->size.get(t);
-        if(finalSize <= 0.0f) continue;
-
-        lightData.push_back(pPtr->center.x);
-        lightData.push_back(pPtr->center.y);
-        lightData.push_back(finalSize * 3);
-
-        //Light color
-        lightData.push_back(finalColor.a * finalColor.r / 20);
-        lightData.push_back(finalColor.a * finalColor.g / 20);
-        lightData.push_back(finalColor.a * finalColor.b / 20);
-        lightCount++;
-    }
-
-    //Bind the SSBO to the shader.
-    if(lightCount > 0) {
-        GLuint ssbo = 0;     
-        glGenBuffers(1, &ssbo);
-        glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
-        glBufferData(
-            GL_SHADER_STORAGE_BUFFER, sizeof(float) * lightData.size(),
-            &lightData[0], GL_STREAM_READ
-        );
-        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, ssbo);
-        glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
-    }
-    al_set_shader_int("light_count", lightCount);
-}
-
-/**
  * @brief Does the drawing for the main game loop.
  *
  * @param bmpOutput If not nullptr, draw the area onto this.
@@ -1466,30 +1390,134 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
         );
         
     }
-    //Draw the daylight.
-    ALLEGRO_COLOR daylightC =
-        game.curArea->weatherCondition.getDaylightColor();
-    if(daylightC.a > 0) {
-        //Setup the shader.
-        ALLEGRO_SHADER* blackoutShader = game.shaders.getShader(SHADER_TYPE_LIGHTING);
-        al_use_shader(blackoutShader);
-        al_set_shader_float("alpha", daylightC.a);
-        BindLightsToShader(view);
+    
+    ALLEGRO_BITMAP* oldBitmap = al_get_target_bitmap();
 
-        //Set the blender
-        AllegroBlenderState prevState;
-        prevState.save();
-        al_set_blender(ALLEGRO_ADD, ALLEGRO_DEST_COLOR, ALLEGRO_ZERO);
+    ALLEGRO_BITMAP* lightingBuffer = 
+        al_create_bitmap(game.winW, game.winH);
+    al_set_target_bitmap(lightingBuffer);
+    
+    //Clear to daylight Color
+    ALLEGRO_COLOR baseColor = game.curArea->weatherCondition.getDaylightColor();
+    baseColor.r += (1 - baseColor.a);
+    baseColor.g += (1 - baseColor.a);
+    baseColor.b += (1 - baseColor.a);
+    baseColor.a = 1;
+    al_clear_to_color(baseColor);
+    
+    //Set the multiply blender
+    AllegroBlenderState prevState;
+    prevState.save();
+    al_set_blender(ALLEGRO_ADD, ALLEGRO_DEST_COLOR, ALLEGRO_ZERO);
 
-        //Draw the blackout effect. Map world coordinates to the UV
-        RectCorners camCorners = view.worldCorners;
-        camCorners.tl += view.boxMargin;
-        camCorners.br -= view.boxMargin;
-        drawPrimRect(Point(), Point(game.winW, game.winH), daylightC, nullptr, camCorners);
-
-        prevState.load();
-        al_use_shader(nullptr);
+    //Draw sector lighting.
+    al_use_transform(&view.worldToWindowTransform);
+    forIdx(s, game.curArea->sectors) {
+        Sector* sPtr = game.curArea->sectors[s];
+        
+        if(
+            !rectanglesIntersect(sPtr->bBox, view.worldCorners)
+        ) {
+            //Off-camera.
+            continue;
+        }
+        drawSectorLighting(sPtr, Point(), 1.0f, 1.0f);
     }
+    al_use_transform(&game.identityTransform);
+    al_set_target_bitmap(oldBitmap);
+
+    //Setup the shader.
+    ALLEGRO_SHADER* blackoutShader = game.shaders.getShader(SHADER_TYPE_LIGHTING);
+    al_use_shader(blackoutShader);
+    al_set_shader_float("alpha", 1.0f);
+    int bmp_size[2] = {
+        al_get_bitmap_width(lightingBuffer),
+        al_get_bitmap_height(lightingBuffer)
+    };
+    al_set_shader_int_vector("lightmap_size", 2, &bmp_size[0], 1);
+
+    //Bind the lights 
+    vector<float> lightData;
+    int lightCount = 0;
+    
+    //Mob lights
+    for(size_t m = 0; m < mobs.all.size(); m++) {
+        Mob* mPtr = mobs.all[m];
+
+        //Only draw mobs that have a light that'll render
+        if(
+            hasFlag(mPtr->flags, MOB_FLAG_HIDDEN) ||
+            mPtr->type->lightColor == COLOR_BLACK
+        ) {
+            continue;
+        }
+
+        //Use mob's radius if <= 0
+        float finalRadius = sign(mPtr->type->lightRadius) == 1 ? 
+            mPtr->type->lightRadius : mPtr->radius;
+
+        if(bBoxCheck(view.worldCorners, mPtr->center, finalRadius)) {
+            float x = mPtr->center.x;
+            float y = mPtr->center.y;
+            al_transform_coordinates(&view.worldToWindowTransform, &x, &y);
+            lightData.push_back(x);
+            lightData.push_back(y);
+            //Light's aren't very visible past half of its
+            //distance, so this makes lights "seem" scaled properly
+            lightData.push_back(finalRadius * 2 * view.cam.zoom);
+
+            //Light color
+            lightData.push_back(mPtr->type->lightColor.r);
+            lightData.push_back(mPtr->type->lightColor.g);
+            lightData.push_back(mPtr->type->lightColor.b);
+            lightCount++;
+        }
+    }
+    
+    //Particle Lights
+    vector<WorldComponent> allParts;
+    particles.fillComponentList(allParts, view.worldCorners);
+    for(size_t p = 0; p < allParts.size(); p++) {
+        Particle* pPtr = allParts[p].particlePtr;
+        if(pPtr->blendType != PARTICLE_BLEND_TYPE_ADDITIVE) continue;
+        float t = 1.0f - pPtr->time / pPtr->duration;
+        ALLEGRO_COLOR finalColor = pPtr->color.get(t);
+        if(finalColor.a < 0.05f) continue;
+        float finalSize = pPtr->size.get(t);
+        if(finalSize <= 0.0f) continue;
+
+        lightData.push_back(pPtr->center.x);
+        lightData.push_back(pPtr->center.y);
+        lightData.push_back(finalSize * 3);
+
+        //Light color
+        lightData.push_back(finalColor.a * finalColor.r / 20);
+        lightData.push_back(finalColor.a * finalColor.g / 20);
+        lightData.push_back(finalColor.a * finalColor.b / 20);
+        lightCount++;
+    }
+
+    //Bind the SSBO to the shader.
+    if(lightCount > 0) {
+        GLuint ssbo = 0;     
+        glGenBuffers(1, &ssbo);
+        glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+        glBufferData(
+            GL_SHADER_STORAGE_BUFFER, sizeof(float) * lightData.size(),
+            &lightData[0], GL_STREAM_READ
+        );
+        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, ssbo);
+        glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+    }
+    al_set_shader_int("light_count", lightCount);
+
+    //Draw the buffer onto the main output.
+    drawBitmap(lightingBuffer, Point(game.winW / 2, game.winH / 2), Point(game.winW, game.winH));
+
+    //Cleanup
+    al_destroy_bitmap(lightingBuffer);
+    prevState.load();
+    al_use_shader(nullptr);
     
 }
 
@@ -2013,7 +2041,6 @@ void GameplayState::drawWorldComponents(
     //but this is a nice estimate.
     components.reserve(
         game.curArea->sectors.size() + //Sectors.
-        game.curArea->sectors.size() + //Sector lighting.
         mobs.all.size() + //Mob shadows.
         mobs.all.size() + //Mobs.
         particles.getCount() //Particles.
@@ -2035,11 +2062,6 @@ void GameplayState::drawWorldComponents(
         c.sectorPtr = sPtr;
         c.z = sPtr->floorZ;
         components.push_back(c);
-
-        WorldComponent c2;
-        c2.sectorLightingPtr = sPtr;
-        c2.z = 2000000; //Some arbitrary height ABOVE mob max draw height
-        components.push_back(c2);
     }
     
     //Particles.
@@ -2149,15 +2171,6 @@ void GameplayState::drawWorldComponents(
     } else {
         mobShadowStretch = (dayMinutes - 60 * 12) / (60 * 20 - 60 * 12);
     }
-    
-    //Set shader options
-    ALLEGRO_SHADER* blackoutShader = game.shaders.getShader(SHADER_TYPE_LIGHTING);
-    al_use_shader(blackoutShader);
-    BindLightsToShader(view);
-    al_set_shader_float("alpha", 1.0f);
-    //Even though we set the shader null here, it'll retain these
-    //values because we set them while the shader was active.
-    al_use_shader(nullptr);
 
     forIdx(c, components) {
         WorldComponent* cPtr = &components[c];
@@ -2226,12 +2239,6 @@ void GameplayState::drawWorldComponents(
                 1.0f, view
             );
             
-        } else if(cPtr->sectorLightingPtr) {
-
-            al_use_shader(blackoutShader);
-            drawSectorLighting(cPtr->sectorLightingPtr, Point(), 1.0f, 1.0f);
-            al_use_shader(nullptr);
-
         } else if(cPtr->mobShadowPtr) {
             float deltaZ = 0;
             if(!cPtr->mobShadowPtr->standingOnMob) {
