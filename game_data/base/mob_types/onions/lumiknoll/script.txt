@@ -64,6 +64,23 @@ script {
         }
     }
 
+    received {
+        on_enter {
+            custom_actions_after
+            get_mob_info temp self health_ratio
+                
+            if $temp < 0.1
+                set_animation received_low
+            else_if $temp < 0.5
+                set_animation received_mid
+            else_if $temp < 0.95
+                set_animation received_high
+            else
+                set_animation received_full
+            end_if
+        }
+    }
+
     dead {
         on_enter {
             custom_actions_after

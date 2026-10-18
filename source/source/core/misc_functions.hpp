@@ -292,8 +292,7 @@ void monoText(Args_t && ...args) {
  * @param name Property value, i.e. enum value name, in the data file.
  * @param outVar The variable that will receive the enum value. If the name is
  * not found, the variable will remain unchanged.
- * @param errorThing What kind of thing this is. This is written to the
- * error log.
+ * @param errorThing What kind of thing this is. This is written to the log.
  * @param errorNode Data node this name was read from, if any. Used when
  * reporting an error.
  * @return Whether the name matched any of the possible names.
@@ -313,8 +312,8 @@ bool readEnumProp(
         return true;
     }
     
-    game.errors.report(
-        "Unknown " + errorThing + " \"" + name + "\"!",
+    game.log.report(
+        LOG_LEVEL_ERROR, "Unknown " + errorThing + " \"" + name + "\"!",
         errorNode
     );
     return false;
@@ -341,8 +340,9 @@ void deprecatedReaderSetter(
 ) {
     DataNode* childNode = nullptr;
     rs.set(childName, var, &childNode);
-    if(childNode && game.makerTools.useWarnings) {
-        game.errors.report(
+    if(childNode) {
+        game.log.report(
+            LOG_LEVEL_WARNING,
             "The property \"" + childName + "\" is deprecated and may be "
             "removed in the future! Please " + replacement + " instead.",
             childNode

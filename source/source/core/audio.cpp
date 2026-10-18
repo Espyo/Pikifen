@@ -1379,7 +1379,8 @@ void Song::loadFromDataNode(DataNode* node) {
         if(mixTrackNode->name == "enemy") {
             trigger = MIX_TRACK_TYPE_ENEMY;
         } else {
-            game.errors.report(
+            game.log.report(
+                LOG_LEVEL_ERROR,
                 "Unknown mix track trigger \"" +
                 mixTrackNode->name +
                 "\"!", mixTrackNode

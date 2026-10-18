@@ -16,6 +16,18 @@ animations{
 			}
 		}
 	}
+	received{
+		frames{
+			idling_01{
+				duration=0.1000
+				interpolate=true
+			}
+			received{
+				duration=0.1000
+				interpolate=true
+			}
+		}
+	}
 }
 sprites{
 	idling_01{
@@ -31,6 +43,13 @@ sprites{
 		file_size=156.0000 152.0000
 		offset=1.0000 0.0000
 		scale=0.5200 0.5200
+	}
+	received{
+		file=other_mobs/ss_beagle
+		file_pos=0.0000 0.0000
+		file_size=156.0000 152.0000
+		offset=1.0000 0.0000
+		scale=0.5300 0.5300
 	}
 }
 body_parts

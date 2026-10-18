@@ -1187,7 +1187,7 @@ void GameplayState::load() {
     }
     
     loading = true;
-    game.errors.prepareAreaLoad();
+    game.log.startBundle();
     wentToResults = false;
     
     drawLoadingScreen("", "", "", 1.0f);
@@ -1268,7 +1268,8 @@ void GameplayState::load() {
             game.sysContentNames.anmSparks
         );
     if(sparkAnimDbIt == game.content.globalAnimDbs.list.end()) {
-        game.errors.report(
+        game.log.report(
+            LOG_LEVEL_ERROR,
             "Unknown global animation \"" + game.sysContentNames.anmSparks +
             "\" when trying to load the leader damage sparks!"
         );
@@ -1498,7 +1499,8 @@ void GameplayState::load() {
             }
         }
         if(sprayIdx == game.content.sprayTypes.list.size()) {
-            game.errors.report(
+            game.log.report(
+                LOG_LEVEL_ERROR,
                 "Unknown spray type \"" + s.first + "\", "
                 "while trying to set the starting number of sprays for "
                 "area \"" + game.curArea->name + "\"!", nullptr
@@ -1595,14 +1597,15 @@ void GameplayState::load() {
     replayTimer.start();
     gameplayReplay.clear();*/
     
-    //Report any errors with the loading process.
-    game.errors.reportAreaLoadErrors();
+    //Report any errors or warnings with the loading process.
+    game.log.stopAndReportBundle();
     
     if(game.perfMon) {
         game.perfMon->setAreaName(game.curArea->name);
         game.perfMon->leaveState();
         game.console.write(
-            "Note: the performance monitor maker tool is running.", false
+            LOG_LEVEL_INFO,
+            "Note: the performance monitor maker tool is running."
         );
     }
     

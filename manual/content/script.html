@@ -618,6 +618,7 @@ reaches {
       </li>
       <li>The built-in script timer feature only keeps track of one timer. But you can create custom hand-made timers to keep track of multiple things. Have a variable store the time left for the timer to trigger, in seconds. Then, in a state (or better yet, the <a href="#global-events">global events</a> block), listen for the <a href="events.html#on-tick"><code>on_tick</code></a> event, and use the <a href="actions.html#get-misc-info"><code>get_misc_info</code></a> action, with the <code>delta_t</code> data, in order to know how many seconds to decrease the timer variable by. Once it reaches 0 or below, the timer has just triggered!</li>
       <li>To help debug the script, use the <a href="maker_toolkit.html#mob-inspector">mob inspector</a> or <a href="maker_toolkit.html#area-inspector">area inspector</a> maker tools.</li>
+      <li>You should enable warnings (check <a href="options.html">the options page</a>), so that you can be notified in case you use some scripting feature that you are not supposed to use.</li>
     </ul>
 
     <h2 id="see-also">See also</h2>

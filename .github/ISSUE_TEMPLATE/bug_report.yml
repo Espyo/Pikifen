@@ -28,8 +28,8 @@ body:
   - type: textarea
     id: log
     attributes:
-      label: "Error log"
-      description: "Especially important for crashes, you should share the contents of your error log file. A screenshot may have also been created in the `user_data` folder, so share that too."
+      label: "Log"
+      description: "Especially important for crashes, you should share the contents of your log file in the `user_data` folder. A screenshot may have also been created in that folder, so share that too."
     validations:
       required: false
   - type: input

@@ -16,6 +16,18 @@ animations{
 			}
 		}
 	}
+	received{
+		frames{
+			idling_01{
+				duration=0.1000
+				interpolate=true
+			}
+			idling_02{
+				duration=0.1000
+				interpolate=true
+			}
+		}
+	}
 }
 sprites{
 	idling_01{

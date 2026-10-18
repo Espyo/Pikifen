@@ -60,7 +60,7 @@ const float INVULN_PERIOD = 0.7f;
 const float LEADER_CHASE_MAX_DIST = 500.0f;
 
 //If the leader's group spot is this far away, tick the timeout for giving up.
-const float LEADER_CHASE_TIMER_DIST = 100.0f;
+const float LEADER_CHASE_TIMER_DIST = 250.0f;
 
 //If the leader's group spot is far enough away, give up after this long.
 const float LEADER_CHASE_TIMER_DURATION = 4.0f;

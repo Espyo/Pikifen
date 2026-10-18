@@ -173,8 +173,8 @@ void crash(const string& reason, const string& info, int exitStatus) {
         "  Reason: " + reason + ".\n"
         "  Info: " + info + "\n"
         "  Time: " + getCurrentTime(false) + ".\n";
-    if(game.errors.sessionHasErrors()) {
-        errorStr += "  Error log has messages!\n";
+    if(game.log.getSessionHasMessages()) {
+        errorStr += "  Log has messages!\n";
     }
     errorStr +=
         "  Game state: " + game.getCurStateName() + ". deltaT: " +
@@ -241,7 +241,7 @@ void crash(const string& reason, const string& info, int exitStatus) {
         errorStr += "none.";
     }
     
-    game.errors.report(errorStr);
+    game.log.report(LOG_LEVEL_ERROR, errorStr);
     
     showOSMessageBox(
         nullptr, "Program crash!",
@@ -1201,7 +1201,7 @@ bool openManual(const string& page) {
  * @param dn File to log the error into, if any.
  */
 void reportFatalError(const string& s, const DataNode* dn) {
-    game.errors.report(s, dn);
+    game.log.report(LOG_LEVEL_ERROR, s, dn);
     
     showOSMessageBox(
         nullptr, "Fatal error!",

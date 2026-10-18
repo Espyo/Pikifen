@@ -52,6 +52,9 @@ const ALLEGRO_COLOR COLOR_MAIN = al_map_rgba(255, 255, 255, 192);
 //Muted text color, alpha included.
 const ALLEGRO_COLOR COLOR_MUTED = al_map_rgba(255, 255, 255, 128);
 
+//Warning text color, alpha included.
+const ALLEGRO_COLOR COLOR_WARNING = al_map_rgba(255, 255, 128, 192);
+
 //Size of the control bind icon.
 const float INPUT_SIZE = 24.0f;
 
@@ -409,48 +412,74 @@ CommandParam::CommandParam(
 
 
 #pragma endregion
-#pragma region Error manager
+#pragma region Log manager
 
 
 /**
- * @brief Emits an error in the maker console.
+ * @brief Emits a log message in the maker console.
  *
- * @param s Full error description.
+ * @param level Log level.
+ * @param message Message to log.
  */
-void ErrorManager::emitInConsole(const string& s) {
+void LogManager::emitInConsole(LOG_LEVEL level, const string& text) {
     string infoStr =
-        s + "\n(Saved to \"" + FILE_PATHS_FROM_ROOT::ERROR_LOG + "\".)";
+        text + "\n(Saved to \"" + FILE_PATHS_FROM_ROOT::LOG + "\".)";
         
-    game.console.write(infoStr, true);
+    game.console.write(level, infoStr);
 }
 
 
 /**
- * @brief Logs an error to the log file.
+ * @brief Returns the name of a log level.
  *
- * @param s Full error description.
+ * @param level The level.
+ * @return The name.
  */
-void ErrorManager::logToFile(const string& s) {
-    string prevErrorLog;
+string LogManager::getLevelName(LOG_LEVEL level) const {
+    switch(level) {
+    case LOG_LEVEL_INFO: {
+        return "INFO";
+        break;
+    } case LOG_LEVEL_WARNING: {
+        return "WARNING";
+        break;
+    } case LOG_LEVEL_ERROR: {
+        return "ERROR";
+        break;
+    }
+    }
+    
+    return "";
+}
+
+
+/**
+ * @brief Logs a message to the log file.
+ *
+ * @param level Log level.
+ * @param text Message to log.
+ */
+void LogManager::logToFile(LOG_LEVEL level, const string& text) {
+    string prevLog;
     string output = "";
     
     //Get the previous contents of the log file, if any.
     ALLEGRO_FILE* fileI =
-        al_fopen(FILE_PATHS_FROM_ROOT::ERROR_LOG.c_str(), "r");
+        al_fopen(FILE_PATHS_FROM_ROOT::LOG.c_str(), "r");
     if(fileI) {
         while(!al_feof(fileI)) {
             string line;
             getline(fileI, line);
-            prevErrorLog += line + "\n";
+            prevLog += line + "\n";
         }
-        prevErrorLog.erase(prevErrorLog.size() - 1);
+        prevLog.erase(prevLog.size() - 1);
         al_fclose(fileI);
     }
     
     //Write this session's header, if necessary.
-    if(nrSessionErrors == 0) {
+    if(nrSessionMessages == 0) {
         string header;
-        if(!prevErrorLog.empty()) {
+        if(!prevLog.empty()) {
             header += "\n\n";
         }
         header += "Pikifen version " + getEngineVersionString(true, true);
@@ -463,118 +492,144 @@ void ErrorManager::logToFile(const string& s) {
         output += header;
     }
     
-    //Log this error.
-    vector<string> lines = split(s, "\n");
-    output += "  " + getCurrentTime(false) + ": " + lines[0] + "\n";
+    //Log this message.
+    vector<string> lines = split(text, "\n");
+    output +=
+        "  " + getCurrentTime(false) + " " +
+        getLevelName(level) + ": " + lines[0] + "\n";
     for(size_t l = 1; l < lines.size(); l++) {
         output += "  " + lines[l] + "\n";
     }
     
     //Save it.
     ALLEGRO_FILE* fileO =
-        al_fopen(FILE_PATHS_FROM_ROOT::ERROR_LOG.c_str(), "w");
+        al_fopen(FILE_PATHS_FROM_ROOT::LOG.c_str(), "w");
     if(fileO) {
-        al_fwrite(fileO, prevErrorLog + output);
+        al_fwrite(fileO, prevLog + output);
         al_fclose(fileO);
     }
 }
 
 
 /**
- * @brief Logs an error to stdout.
+ * @brief Logs a message to stdout.
  *
- * @param s Full error description.
+ * @param level Log level.
+ * @param s Message to log.
  */
-void ErrorManager::logToStdOut(const string& s) {
-    std::cout << s << std::endl;
+void LogManager::logToStdOut(LOG_LEVEL level, const string& text) {
+    std::cout << "[" << getLevelName(level) << "] " << text << std::endl;
 }
 
 
 /**
- * @brief Prepares everything for an area load.
+ * @brief Starts bundling the next messages from here on out.
+ * They will still be emitted like normal, but when the bundling stops,
+ * a message will be output with the total amount found, if any.
  */
-void ErrorManager::prepareAreaLoad() {
-    nrErrorsOnAreaLoad = nrSessionErrors;
-    firstAreaLoadError.clear();
+void LogManager::startBundle() {
+    inBundle = true;
+    nrBundleWarnings = 0;
+    nrBundleErrors = 0;
 }
 
 
 /**
- * @brief Reports an error to the user and logs it.
+ * @brief Reports a log message to the user.
  *
- * @param text Text that represents the error.
- * @param filePath If not empty, this will be reported as the data file in
- * which the error was found.
+ * @param level Log level.
+ * @param text Text that explains the situation.
+ * @param filePath If not empty, this will be reported as the data file from
+ * which the log message originated.
  * @param fileLineNr If not 0, this will be reported as the data file's
- * line number in which the error was found.
+ * line number.
  */
-void ErrorManager::report(
-    const string& text, const string& filePath, size_t fileLineNr
+void LogManager::report(
+    LOG_LEVEL level, const string& text,
+    const string& filePath, size_t fileLineNr
 ) {
-    string fullError = text;
+    switch(level) {
+    case LOG_LEVEL_INFO: {
+        return;
+        break;
+    } case LOG_LEVEL_WARNING: {
+        if(!game.options.misc.showWarnings) return;
+        if(inBundle) nrBundleWarnings++;
+        break;
+    } case LOG_LEVEL_ERROR: {
+        if(inBundle) nrBundleErrors++;
+        break;
+    }
+    }
+    
+    string fullText = text;
     if(!filePath.empty()) {
-        fullError += " (" + filePath;
-        if(fileLineNr != 0) fullError += " line " + i2s(fileLineNr);
-        fullError += ")";
+        fullText += " (" + filePath;
+        if(fileLineNr != 0) fullText += " line " + i2s(fileLineNr);
+        fullText += ")";
     }
     
-    if(firstAreaLoadError.empty()) firstAreaLoadError = fullError;
+    logToStdOut(level, fullText);
+    logToFile(level, fullText);
+    emitInConsole(level, fullText);
     
-    logToStdOut(fullError);
-    logToFile(fullError);
-    emitInConsole(fullError);
-    
-    nrSessionErrors++;
+    nrSessionMessages++;
 }
 
 
 /**
- * @brief Reports an error to the user and logs it.
+ * @brief Reports a log message to the user.
  *
- * @param text Text that represents the error.
+ * @param level Log level.
+ * @param text Text that explains the situation.
  * @param dataNode If not null, this will be used to obtain the file path
- * and line in which the error was found.
+ * and line from which the log message originated.
  */
-void ErrorManager::report(const string& text, const DataNode* dataNode) {
+void LogManager::report(
+    LOG_LEVEL level, const string& text,
+    const DataNode* dataNode
+) {
     if(!dataNode) {
-        report(text, "", 0);
+        report(level, text, "", 0);
     } else {
-        report(text, dataNode->filePath, dataNode->lineNr);
+        report(level, text, dataNode->filePath, dataNode->lineNr);
     }
 }
 
 
 /**
- * @brief Reports to the gameplay "info" window if any errors happened during
- * area load.
- * This will override whatever is in the "info" window, which is likely
- * the latest error, but that's okay since this information is more important.
+ * @brief Stops bundling messages and reports how many were in the bundle,
+ * if any.
  */
-void ErrorManager::reportAreaLoadErrors() {
-    if(nrSessionErrors <= nrErrorsOnAreaLoad) return;
+void LogManager::stopAndReportBundle() {
+    inBundle = false;
+    if(nrBundleWarnings == 0 && nrBundleErrors == 0) return;
     
-    size_t nrErrorsFound =
-        nrSessionErrors - nrErrorsOnAreaLoad;
-        
-    string infoStr =
-        firstAreaLoadError + "\n";
-    if(nrErrorsFound > 1) {
-        infoStr += "(+" + i2s(nrErrorsFound - 1) + " more) ";
+    string infoStr;
+    if(nrBundleErrors > 0) {
+        infoStr += amountStr(nrBundleErrors, "error");
+        if(nrBundleWarnings > 0) {
+            infoStr += " and ";
+        }
     }
-    infoStr +=
-        "(Saved to \"" + FILE_PATHS_FROM_ROOT::ERROR_LOG + "\".)";
-        
-    game.console.write(infoStr, true);
+    if(nrBundleWarnings > 0) {
+        infoStr += amountStr(nrBundleWarnings, "warning");
+    }
+    infoStr += " found! (Saved to \"" + FILE_PATHS_FROM_ROOT::LOG + "\".)";
+    
+    game.console.write(
+        nrBundleErrors > 0 ? LOG_LEVEL_ERROR : LOG_LEVEL_WARNING, infoStr
+    );
 }
 
 
 /**
- * @brief Returns whether this session has had any error reports.
+ * @brief Returns whether this session has had any log messages.
  *
- * @return Whether it had errors.
+ * @return Whether it had messages.
  */
-bool ErrorManager::sessionHasErrors() {
-    return nrSessionErrors > 0;
+bool LogManager::getSessionHasMessages() {
+    return nrSessionMessages > 0;
 }
 
 
@@ -1268,15 +1323,15 @@ void MakerConsole::toggleTerminal(bool instant) {
 /**
  * @brief Writes a line of output.
  *
+ * @param level Log level.
  * @param text The line of text.
- * @param error Whether it is an error output.
  * @param notificationDuration If a notification is meant to appear
  * in the notifier, specify the duration here. Otherwise, this should be 0.
  */
 void MakerConsole::write(
-    const string& text, bool error, float notificationDuration
+    LOG_LEVEL level, const string& text, float notificationDuration
 ) {
-    terminal.write(text, error);
+    terminal.write(level, text);
     
     OPEN_CLOSE_STATE terminalVisibilityState = terminal.getVisibilityState();
     bool isTerminalVisible =
@@ -1284,7 +1339,7 @@ void MakerConsole::write(
         terminalVisibilityState == OPEN_CLOSE_STATE_OPENING;
         
     if(notificationDuration > 0.0f && !isTerminalVisible) {
-        notifier.write(text, error, notificationDuration);
+        notifier.write(level, text, notificationDuration);
     }
 }
 
@@ -1387,15 +1442,26 @@ int MakerConsoleNotifier::draw(int y) const {
     //Text lines.
     forIdx(l, lines) {
         int lineY = getLineY(l);
+        ALLEGRO_COLOR color = COLOR_WHITE;
+        
+        switch(level) {
+        case LOG_LEVEL_INFO: {
+            color = CONSOLE::COLOR_MAIN;
+            break;
+        } case LOG_LEVEL_WARNING: {
+            color = CONSOLE::COLOR_WARNING;
+            break;
+        } case LOG_LEVEL_ERROR: {
+            color = CONSOLE::COLOR_ERROR;
+            break;
+        }
+        }
         
         drawText(
             lines[l], FONT,
             Point(textX, lineY),
             Point(textW, fontHeight),
-            multAlpha(
-                error ? CONSOLE::COLOR_ERROR : CONSOLE::COLOR_MAIN,
-                alpha
-            ),
+            multAlpha(color, alpha),
             ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
             TEXT_SETTING_FLAG_CANT_GROW | TEXT_SETTING_FLAG_CANT_SHRINK
         );
@@ -1495,15 +1561,15 @@ void MakerConsoleNotifier::tick(float deltaT) {
 /**
  * @brief Sets the text to show on the notifier.
  *
+ * @param level Log level.
  * @param text Text to show.
- * @param error Whether it is an error output.
  * @param duration How long to show the notification for.
  */
 void MakerConsoleNotifier::write(
-    const string& text, bool error, float duration
+    LOG_LEVEL level, const string& text, float duration
 ) {
     this->text = text;
-    this->error = error;
+    this->level = level;
     timeLeft = duration;
     open();
 }
@@ -1515,7 +1581,7 @@ void MakerConsoleNotifier::write(
 void MakerConsoleTerminal::clear() {
     output.clear();
     outputTimestamps.clear();
-    outputErrors.clear();
+    outputLevels.clear();
     input.clear();
     visibilityState = OPEN_CLOSE_STATE_CLOSED;
     visibility = 0.0f;
@@ -1590,7 +1656,7 @@ int MakerConsoleTerminal::draw(int y) const {
     //Calculate the lines to show.
     vector<string> lines;
     vector<float> lineTimestamps;
-    vector<bool> lineErrors;
+    vector<LOG_LEVEL> lineLevels;
     size_t entryIt = 0;
     
     while(true) {
@@ -1617,7 +1683,7 @@ int MakerConsoleTerminal::draw(int y) const {
             } else {
                 lineTimestamps.push_back(-1.0f);
             }
-            lineErrors.push_back(outputErrors[entryIdx]);
+            lineLevels.push_back(outputLevels[entryIdx]);
             
             if(lines.size() >= CONSOLE::OUTPUT_MAX_VISIBLE_LINES) {
                 done = true;
@@ -1653,11 +1719,24 @@ int MakerConsoleTerminal::draw(int y) const {
         );
         
         //Text.
+        ALLEGRO_COLOR color = COLOR_WHITE;
+        switch(lineLevels[l]) {
+        case LOG_LEVEL_INFO: {
+            color = CONSOLE::COLOR_MAIN;
+            break;
+        } case LOG_LEVEL_WARNING: {
+            color = CONSOLE::COLOR_WARNING;
+            break;
+        } case LOG_LEVEL_ERROR: {
+            color = CONSOLE::COLOR_ERROR;
+            break;
+        }
+        }
+        
         drawText(
             lines[l], FONT,
             Point(textX + timestampWidth, entryY),
-            Point(textW - timestampWidth, fontHeight),
-            lineErrors[l] ? CONSOLE::COLOR_ERROR : CONSOLE::COLOR_MAIN,
+            Point(textW - timestampWidth, fontHeight), color,
             ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP,
             TEXT_SETTING_FLAG_CANT_GROW | TEXT_SETTING_FLAG_CANT_SHRINK
         );
@@ -1788,16 +1867,16 @@ void MakerConsoleTerminal::toggle(bool instant) {
 /**
  * @brief Adds an output line.
  *
+ * @param level Log level.
  * @param text Text to add. It can have line breaks, in which case it's split
  * into different output lines.
- * @param error Whether it is an error output.
  */
-void MakerConsoleTerminal::write(const string& text, bool error) {
+void MakerConsoleTerminal::write(LOG_LEVEL level, const string& text) {
     vector<string> lines = split(text, "\n", true);
     forIdx(l, lines) {
         output.push_back(lines[l]);
         outputTimestamps.push_back(game.timePassed);
-        outputErrors.push_back(error);
+        outputLevels.push_back(level);
     }
 }
 

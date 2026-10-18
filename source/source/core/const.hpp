@@ -219,8 +219,8 @@ const string SYSTEM_CONTENT_NAMES = "system_content_names.txt";
 //Debug config file.
 const string DEBUG_CONFIG = "debug.txt";
 
-//Error log file.
-const string ERROR_LOG = "error_log.txt";
+//Log file.
+const string LOG = "log.txt";
 
 //Maker tools file.
 const string MAKER_TOOLS = "tools.txt";
@@ -280,9 +280,9 @@ namespace FILE_PATHS_FROM_ROOT {
 const string DEBUG_CONFIG =
     FOLDER_PATHS_FROM_ROOT::USER_DATA + "/" + FILE_NAMES::DEBUG_CONFIG;
     
-//Error log.
-const string ERROR_LOG =
-    FOLDER_PATHS_FROM_ROOT::USER_DATA + "/" + FILE_NAMES::ERROR_LOG;
+//Log.
+const string LOG =
+    FOLDER_PATHS_FROM_ROOT::USER_DATA + "/" + FILE_NAMES::LOG;
     
 //Mission records.
 const string MISSION_RECORDS =

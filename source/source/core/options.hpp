@@ -161,6 +161,7 @@ extern const float PIKMIN_BUMP_DIST;
 extern const bool SHOW_CONTROL_GUIDE;
 extern const bool SHOW_GUI_INPUT_ICONS;
 extern const bool SHOW_LEADER_CURSOR_COUNTER;
+extern const bool SHOW_WARNINGS;
 }
 
 
@@ -444,15 +445,18 @@ struct Options {
         //Idle Pikmin leader bumping distance.
         float pikminBumpDist = OPTIONS::MISC_D::PIKMIN_BUMP_DIST;
         
-        //Show a standby type counter on the leader cursor?
-        bool showLeaderCursorCounter =
-            OPTIONS::MISC_D::SHOW_LEADER_CURSOR_COUNTER;
-            
         //Show a control guide when idling?
         bool showControlGuide = OPTIONS::MISC_D::SHOW_CONTROL_GUIDE;
         
         //Show control bind icons on top of GUI elements?
         bool showGuiInputIcons = OPTIONS::MISC_D::SHOW_GUI_INPUT_ICONS;
+        
+        //Show a standby type counter on the leader cursor?
+        bool showLeaderCursorCounter =
+            OPTIONS::MISC_D::SHOW_LEADER_CURSOR_COUNTER;
+            
+        //Show warnings in the console?
+        bool showWarnings = OPTIONS::MISC_D::SHOW_WARNINGS;
         
     } misc;
     

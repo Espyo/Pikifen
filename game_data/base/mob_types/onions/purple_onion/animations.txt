@@ -2,7 +2,7 @@ name=Purple Onion animations
 description=Animations for the Purple Onion.
 maker=Espyo
 version=1.0.0
-engine_version=1.0.0
+engine_version=1.2.0
 animations{
 	generating{
 		loop_frame=6
@@ -81,6 +81,18 @@ animations{
 			}
 			idling_08{
 				duration=0.1100
+				interpolate=true
+			}
+		}
+	}
+	received{
+		frames{
+			idling_01{
+				duration=0.1000
+				interpolate=true
+			}
+			received{
+				duration=0.1000
 				interpolate=true
 			}
 		}
@@ -490,6 +502,57 @@ sprites{
 		file_size=280.0000 320.0000
 		offset=22.1000 0.0000
 		scale=0.5030 0.5030
+		hitboxes{
+			hole_1{
+				coords=28.0000 0.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_1{
+				coords=91.0000 0.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_2{
+				coords=-14.0000 25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_2{
+				coords=-46.0000 79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			hole_3{
+				coords=-14.0000 -25.0000 170.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+			foot_3{
+				coords=-46.0000 -79.0000 0.0000
+				height=16.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	received{
+		file=onions/purple
+		file_pos=0.0000 0.0000
+		file_size=280.0000 320.0000
+		offset=24.0000 0.0000
+		scale=0.5500 0.5500
 		hitboxes{
 			hole_1{
 				coords=28.0000 0.0000 170.0000

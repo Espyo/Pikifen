@@ -39,6 +39,9 @@ void ShipFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_FINISHED_RECEIVING_DELIVERY); {
             efc.run(ShipFsm::receiveMob);
         }
+        efc.newEvent(FSM_EV_ANIMATION_END); {
+            efc.run(ShipFsm::setAnim);
+        }
     }
     
     typ->scriptDef.fsm.states = efc.finish();
@@ -133,6 +136,11 @@ void ShipFsm::receiveMob(ScriptVM* scriptVM, void* info1, void* info2) {
     
     shiPtr->mobsBeingBeamed--;
     
+    if(!shiPtr->inReceivedAnimation) {
+        shiPtr->inReceivedAnimation = true;
+        shiPtr->setAnimation(SHIP_ANIM_RECEIVED);
+    }
+    
     if(shiPtr->mobsBeingBeamed == 0 && shiPtr->soundBeamId != 0) {
         game.audio.destroySoundSource(shiPtr->soundBeamId);
         shiPtr->soundBeamId = 0;
@@ -163,6 +171,7 @@ void ShipFsm::setAnim(ScriptVM* scriptVM, void* info1, void* info2) {
     shiPtr->setAnimation(
         SHIP_ANIM_IDLING, START_ANIM_OPTION_RANDOM_TIME_ON_SPAWN, true
     );
+    shiPtr->inReceivedAnimation = false;
 }
 
 

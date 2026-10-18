@@ -84,7 +84,8 @@ void BouncerFsm::handleMob(ScriptVM* scriptVM, void* info1, void* info2) {
     }
     
     if(!targetMob) {
-        game.errors.report(
+        game.log.report(
+            LOG_LEVEL_ERROR,
             "A bouncer (" + getErrorMessageMobInfo(bouPtr) +
             ") tried to bounce something, but it has no "
             "linked mob to serve as a target!"

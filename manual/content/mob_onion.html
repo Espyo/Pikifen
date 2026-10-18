@@ -130,6 +130,7 @@
     <ul>
       <li><b><code>generating</code></b>: When its petals start spinning quickly and stay that way, since it is actively generating Pikmin.</li>
       <li><b><code>idling</code></b>: Idling.</li>
+      <li><b><code>received</code></b>: Recoil due to having just received a delivery.</li>
       <li><b><code>stopping_generation</code></b>: When its petals start slowing down, since it has stopped generating Pikmin.</li>
     </ul>
 
@@ -152,6 +153,8 @@
     <p>Onion types have hardcoded <a href="script.html">scripts</a>, so the only thing you can do is enhance them.</p>
 
     <p>Some <a href="script.html#vars">script variables</a> control special behavior, like the Onion's starting Pikmin count. To know which ones exist, you can go to the area editor, select an Onion, and read the tooltip of each variable.</p>
+
+    <p>If you want to customize when an Onion becomes activated or deactivated, use the <code>set_onion_activity</code> <a href="actions.html">script action</a>.</p>
 
   </div>
 </body>

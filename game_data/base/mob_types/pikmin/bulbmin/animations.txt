@@ -965,7 +965,7 @@ sprites{
 				height=24.0000
 				radius=8.0000
 				type=1
-				value=12.0000
+				value=10.0000
 				hazard=pikmin_attack
 				knockback_type=0
 			}
@@ -995,7 +995,7 @@ sprites{
 				height=24.0000
 				radius=8.0000
 				type=1
-				value=12.0000
+				value=10.0000
 				hazard=pikmin_attack
 				knockback_type=0
 			}

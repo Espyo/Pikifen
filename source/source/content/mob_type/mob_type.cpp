@@ -194,7 +194,8 @@ void MobType::loadCatScriptDataPos(DataNode* file) {
             }
         }
         if(dyingStateIdx == INVALID) {
-            game.errors.report(
+            game.log.report(
+                LOG_LEVEL_ERROR,
                 "Unknown state \"" + dyingStateName + "\" "
                 "to set as the death state!",
                 file->getChildByName("death_state")
@@ -214,7 +215,8 @@ void MobType::loadCatScriptDataPos(DataNode* file) {
             }
         }
         if(reviveStateIdx == INVALID) {
-            game.errors.report(
+            game.log.report(
+                LOG_LEVEL_ERROR,
                 "Unknown state \"" + reviveStateName + "\" "
                 "to set as the revive state!",
                 reviveStateNameNode
@@ -352,7 +354,8 @@ void MobType::loadFromDataNode(
         vector<string> points =
             semicolonListToVector(customCarrySpotsStr);
         if(points.size() != maxCarriers) {
-            game.errors.report(
+            game.log.report(
+                LOG_LEVEL_ERROR,
                 "The number of custom carry spots (" + i2s(points.size()) +
                 ") does not match the number of max carriers (" +
                 i2s(maxCarriers) + ")!",
@@ -395,7 +398,8 @@ void MobType::loadFromDataNode(
         auto statusIt = game.content.statusTypes.list.find(statusName);
         
         if(hazardIt == game.content.hazards.list.end()) {
-            game.errors.report(
+            game.log.report(
+                LOG_LEVEL_ERROR,
                 "Unknown hazard \"" + vulnNode->name + "\"!",
                 vulnNode
             );
@@ -404,7 +408,8 @@ void MobType::loadFromDataNode(
             !statusName.empty() &&
             statusIt == game.content.statusTypes.list.end()
         ) {
-            game.errors.report(
+            game.log.report(
+                LOG_LEVEL_ERROR,
                 "Unknown status type \"" + statusName + "\"!",
                 vulnNode
             );
@@ -425,7 +430,8 @@ void MobType::loadFromDataNode(
     auto sdIt = game.content.spikeDamageTypes.list.find(spikeDamageStr);
     if(spikeDamageNode) {
         if(sdIt == game.content.spikeDamageTypes.list.end()) {
-            game.errors.report(
+            game.log.report(
+                LOG_LEVEL_ERROR,
                 "Unknown spike damage type \"" + spikeDamageStr + "\"!",
                 spikeDamageNode
             );
@@ -457,7 +463,8 @@ void MobType::loadFromDataNode(
             inactiveLogic =
                 INACTIVE_LOGIC_FLAG_TICKS | INACTIVE_LOGIC_FLAG_INTERACTIONS;
         } else {
-            game.errors.report(
+            game.log.report(
+                LOG_LEVEL_ERROR,
                 "Invalid inactive logic \"" + inactiveLogicStr + "\"!",
                 inactiveLogicNode
             );
@@ -484,7 +491,8 @@ void MobType::loadFromDataNode(
         auto statusOverrideIt = game.content.statusTypes.list.find(statusName);
         
         if(sdvIt == game.content.spikeDamageTypes.list.end()) {
-            game.errors.report(
+            game.log.report(
+                LOG_LEVEL_ERROR,
                 "Unknown spike damage type \"" + vulNode->name + "\"!",
                 vulNode
             );
@@ -493,7 +501,8 @@ void MobType::loadFromDataNode(
             !statusName.empty() &&
             statusOverrideIt == game.content.statusTypes.list.end()
         ) {
-            game.errors.report(
+            game.log.report(
+                LOG_LEVEL_ERROR,
                 "Unknown status type \"" + statusName + "\"!",
                 vulNode
             );
@@ -528,7 +537,8 @@ void MobType::loadFromDataNode(
             game.content.statusTypes.list.find(statusOverrideName);
             
         if(svIt == game.content.statusTypes.list.end()) {
-            game.errors.report(
+            game.log.report(
+                LOG_LEVEL_ERROR,
                 "Unknown status type \"" + vulNode->name + "\"!",
                 vulNode
             );
@@ -537,7 +547,8 @@ void MobType::loadFromDataNode(
             !statusOverrideName.empty() &&
             statusOverrideIt == game.content.statusTypes.list.end()
         ) {
-            game.errors.report(
+            game.log.report(
+                LOG_LEVEL_ERROR,
                 "Unknown status type \"" + statusOverrideName + "\"!",
                 vulNode
             );
@@ -563,7 +574,8 @@ void MobType::loadFromDataNode(
         vector<string> rStrings = split(reachNode->value);
         
         if(rStrings.size() != 2 && rStrings.size() != 4) {
-            game.errors.report(
+            game.log.report(
+                LOG_LEVEL_ERROR,
                 "Reach \"" + newReach.name +
                 "\" isn't made up of 2 or 4 words!",
                 reachNode
@@ -704,7 +716,8 @@ void MobType::loadFromDataNode(
         pRS.set("tooltip", newProp.tooltip);
         
         if(newProp.var.empty()) {
-            game.errors.report(
+            game.log.report(
+                LOG_LEVEL_ERROR,
                 "You need to specify the area editor property's name!",
                 propNode
             );
@@ -726,7 +739,8 @@ void MobType::loadFromDataNode(
             newProp.type == AEMP_TYPE_NR_LIST
         ) {
             if(listStr.empty() && listInternalStr.empty()) {
-                game.errors.report(
+                game.log.report(
+                    LOG_LEVEL_ERROR,
                     "For this area editor property type, you need to specify "
                     "a list of values!", propNode
                 );
@@ -748,7 +762,8 @@ void MobType::loadFromDataNode(
                 newProp.displayValueList.size() !=
                 newProp.internalValueList.size()
             ) {
-                game.errors.report(
+                game.log.report(
+                    LOG_LEVEL_ERROR,
                     "The list of display values and the list of internal "
                     "values are different sizes!", propNode
                 );
@@ -801,7 +816,7 @@ void MobType::loadFromDataNode(
             hurtableTargets |= (Bitmask16) tt;
         }
     }
-
+    
     if(peekNode) {
         peekUnderneathAlpha = peekUnderneathAlphaC / 255.0f;
     }

@@ -183,7 +183,7 @@
     </dl>
     <dl id="error">
       <dt>Error</dt>
-      <dd>If something goes wrong when loading or during gameplay, the engine will write an error on the error log file in <code>user_data/error_log.txt</code>. Not all errors will result in a crash, but ideally, one should aim to resolve all of them.</dd>
+      <dd>If something goes wrong when loading or during gameplay, the engine will write an error in the log file in <code>user_data/log.txt</code>. Not all errors will result in a crash, but ideally, you should still aim to resolve all of them.</dd>
     </dl>
     <dl id="event">
       <dt>Event</dt>
@@ -292,7 +292,7 @@
     </dl>
     <dl id="infinite-loop">
       <dt>Infinite loop</dt>
-      <dd>While a script is running actions, it may go back and forth on purpose. Either due to a loop like <code>do_while</code>, a jump like <code>goto</code>, or simply by swapping back and forth between states like <code>set_state</code>. If it's been running actions in a row seemingly infinitely, <i>Pikifen</i> will detect that it's not going anywhere and will eventually force the script to stop, with an error in the error log about how it found an <a href="https://en.wikipedia.org/wiki/Loop_(statement)#Infinite_loop">infinite loop</a>.</dd>
+      <dd>While a script is running actions, it may go back and forth on purpose. Either due to a loop like <code>do_while</code>, a jump like <code>goto</code>, or simply by swapping back and forth between states like <code>set_state</code>. If it's been running actions in a row seemingly infinitely, <i>Pikifen</i> will detect that it's not going anywhere and will eventually force the script to stop, with an error in the log about how it found an <a href="https://en.wikipedia.org/wiki/Loop_(statement)#Infinite_loop">infinite loop</a>.</dd>
     </dl>
     <dl id="ingredient">
       <dt>Ingredient</dt>
@@ -391,7 +391,7 @@
       <dt>Message</dt>
       <dd>a) Big message: Large gameplay text that appears on the GUI for a bit, like the "Ready..." text.</dd>
       <dd>b) Cutscene message: A message that shows up during gameplay on the GUI, pausing the action in the process. e.g. When you read a sign.</dd>
-      <dd>c) Error message: A line of text in the error log.</dd>
+      <dd>c) Log message: A line of text in the log with an error or warning, or some other information.</dd>
       <dd>d) Operative system message: A message box dialog window, from your operative system, that informs you of something important in <i>Pikifen</i>.</dd>
       <dd>e) Script message: One of the object <a href="#action">actions</a> involves sending a script message to other objects. This message is in plain text, and could be whatever you want. The receivers can either be objects that have an <a href="#object-link">object link</a>, or all nearby objects, up to a specified distance.</dd>
       <dd>See also: <a href="#notification">Notification</a>.</dd>
@@ -675,6 +675,10 @@
     <dl id="wall">
       <dt>Wall</dt>
       <dd>An edge where the sector on one side is higher than the other, to the point where objects can't walk from one to the other.</dd>
+    </dl>
+    <dl id="warning">
+      <dt>Warning</dt>
+      <dd>If while loading something or during gameplay, the engine detects something that should seriously be improved, it will write a warning in the log file in <code>user_data/log.txt</code>. The game should still work just fine with the warnings, but they are still things you should aim to resolve. Warnings will only be written if they are currently enabled in the <a href="options.html">options</a>.</dd>
     </dl>
     <dl id="weather">
       <dt>Weather</dt>

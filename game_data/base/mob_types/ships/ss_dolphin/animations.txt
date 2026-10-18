@@ -24,6 +24,18 @@ animations{
 			}
 		}
 	}
+	received{
+		frames{
+			idling_02{
+				duration=0.1000
+				interpolate=true
+			}
+			received{
+				duration=0.1000
+				interpolate=true
+			}
+		}
+	}
 }
 sprites{
 	antenna_limb{
@@ -75,6 +87,22 @@ sprites{
 		file_pos=682.0000 0.0000
 		file_size=340.0000 376.0000
 		scale=0.5000 0.5000
+		hitboxes{
+			antenna_attach{
+				coords=-38.0000 51.0000 0.0000
+				height=200.0000
+				radius=8.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	received{
+		file=other_mobs/ss_dolphin
+		file_pos=682.0000 0.0000
+		file_size=340.0000 376.0000
+		offset=-3.2500 0.0000
+		scale=0.4809 0.5199
 		hitboxes{
 			antenna_attach{
 				coords=-38.0000 51.0000 0.0000

@@ -87,7 +87,8 @@ void PileType::loadCatProperties(DataNode* file) {
         }
         
         if(contentsSpawnIdx == INVALID) {
-            game.errors.report(
+            game.log.report(
+                LOG_LEVEL_ERROR,
                 "The contents to spawn should come from a \"contents\" spawn "
                 "block, but no such block exists!", file
             );
@@ -98,7 +99,8 @@ void PileType::loadCatProperties(DataNode* file) {
         if(resType != game.content.mobTypes.list.resource.end()) {
             contentsResource = resType->second;
         } else {
-            game.errors.report(
+            game.log.report(
+                LOG_LEVEL_ERROR,
                 "Unknown resource type \"" + contentsStr + "\"!", contentsNode
             );
         }

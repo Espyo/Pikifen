@@ -52,6 +52,7 @@ extern const ALLEGRO_COLOR COLOR_DECOR_LIGHT;
 extern const ALLEGRO_COLOR COLOR_ERROR;
 extern const ALLEGRO_COLOR COLOR_MAIN;
 extern const ALLEGRO_COLOR COLOR_MUTED;
+extern const ALLEGRO_COLOR COLOR_WARNING;
 extern const float INPUT_SIZE;
 extern const int LINE_PADDING;
 extern const size_t OUTPUT_INDENT;
@@ -199,6 +200,22 @@ buildEnumNames(engineFontINames, ENGINE_FONT)({
     { ENGINE_FONT_STANDARD, "standard" },
     { ENGINE_FONT_VALUE, "value" },
 });
+
+
+//Types of severity for log messages.
+enum LOG_LEVEL {
+
+    //Something that is an unimportant and merely informational.
+    LOG_LEVEL_INFO,
+    
+    //Something that should ideally be addressed,
+    //even if everything still works.
+    LOG_LEVEL_WARNING,
+    
+    //Something that went wrong.
+    LOG_LEVEL_ERROR,
+    
+};
 
 
 //Possible states for something that opens and closes gradually.
@@ -388,7 +405,7 @@ struct MakerConsoleTerminal {
     void clear();
     int draw(int y) const;
     void tick(float deltaT);
-    void write(const string& text, bool error);
+    void write(LOG_LEVEL level, const string& text);
     void open(bool instant = false);
     void close(bool instant = false);
     void toggle(bool instant = false);
@@ -412,8 +429,8 @@ struct MakerConsoleTerminal {
     //Timestamp for each output line.
     vector<float> outputTimestamps;
     
-    //Whether each output line is an error or just informational.
-    vector<bool> outputErrors;
+    //Log level of each output line.
+    vector<LOG_LEVEL> outputLevels;
     
     //Currently written input text.
     string input;
@@ -433,7 +450,7 @@ struct MakerConsoleNotifier {
     void clear();
     int draw(int y) const;
     void tick(float deltaT);
-    void write(const string& text, bool error, float duration);
+    void write(LOG_LEVEL level, const string& text, float duration);
     void open(bool instant = false);
     void close(bool instant = false);
     
@@ -452,8 +469,8 @@ struct MakerConsoleNotifier {
     //Text that is currently being shown.
     string text;
     
-    //Whether the current text is an error or just informational.
-    bool error = false;
+    //Log level of the current text.
+    LOG_LEVEL level = LOG_LEVEL_INFO;
     
     //How long until the notifier is closed automatically.
     float timeLeft = 0.0f;
@@ -473,7 +490,7 @@ struct MakerConsole {
     int draw(int y) const;
     void tick(float deltaT);
     void write(
-        const string& text, bool error,
+        LOG_LEVEL level, const string& text,
         float notificationDuration = 10.0f
     );
     void openTerminal(bool instant = false);
@@ -531,37 +548,49 @@ struct MakerDisplay {
 
 
 /**
- * @brief Manages any errors that occur with the engine's content or logic.
+ * @brief Manages any important log messages that occur with the engine's
+ * content or logic.
  */
-struct ErrorManager {
+struct LogManager {
 
     //--- Public function declarations ---
     
-    void report(const string& text, const string& filePath, size_t fileLineNr);
-    void report(const string& text, const DataNode* dataNode = nullptr);
-    void reportAreaLoadErrors();
-    void prepareAreaLoad();
-    bool sessionHasErrors();
+    void report(
+        LOG_LEVEL level, const string& text,
+        const string& filePath, size_t fileLineNr
+    );
+    void report(
+        LOG_LEVEL level, const string& text,
+        const DataNode* dataNode = nullptr
+    );
+    void startBundle();
+    void stopAndReportBundle();
+    bool getSessionHasMessages();
+    
     
     private:
     
     //--- Private members ---
     
-    //How many errors have been reported this application session.
-    size_t nrSessionErrors = 0;
+    //How many messages have been reported this application session.
+    size_t nrSessionMessages = 0;
     
-    //Errors reported by the time the area load started.
-    size_t nrErrorsOnAreaLoad = 0;
+    //Number of warning messages reported in the bundle.
+    size_t nrBundleWarnings = 0;
     
-    //First error reported during area load.
-    string firstAreaLoadError;
+    //Number of error messages reported in the bundle.
+    size_t nrBundleErrors = 0;
+    
+    //Are we currently in a bundle?
+    bool inBundle = false;
     
     
     //--- Private function declarations ---
     
-    void emitInConsole(const string& s);
-    void logToStdOut(const string& s);
-    void logToFile(const string& s);
+    void emitInConsole(LOG_LEVEL level, const string& message);
+    void logToFile(LOG_LEVEL level, const string& message);
+    void logToStdOut(LOG_LEVEL level, const string& message);
+    string getLevelName(LOG_LEVEL level) const;
     
 };
 

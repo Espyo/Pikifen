@@ -102,6 +102,7 @@
           <li><span class="cl-c">Changed</span> the hot water geyser to be an air geyser. It's otherwise the same.</li>
           <li><span class="cl-c">Changed</span> the ultra-bitter spray's effects. Now it lasts longer (8 seconds) but substantially increase the enemy's defense (20&times;). The Ice Pikmin's freezing ability now takes the role of a short-but-combat-effective stasis effect.</li>
           <li><span class="cl-c">Changed</span> the logo for a nicer look.</li>
+          <li><span class="cl-f">Fixed</span> Bulbmin causing 12 points of damage instead of 10. (Thanks Helodity)</li>
         </ul>
       </li>
       <li>
@@ -137,7 +138,7 @@
           <li><span class="cl-a">Added</span> actions for mission management: <code>get_mission_metric</code>, <code>set_mission_metric_script_slot</code>.</li>
           <li><span class="cl-a">Added</span> actions for loops: <code>do_while</code>, <code>for</code>, <code>for_each</code>, <code>while_do</code> (and the equivalent <code>end_</code> actions).</li>
           <li><span class="cl-a">Added</span> actions for mathematics operations: <code>clamp_number</code>, <code>max_number</code>, <code>min_number</code>, <code>sign_number</code>, <code>truncate_number</code>.</li>
-          <li><span class="cl-a">Added</span> other actions: <code>focus_on_id</code>, <code>follow_mob_as_leader</code>, <code>get_leader_activity</code>, <code>get_leader_pikmin_count</code>, <code>get_misc_info</code>, <code>get_mob_ids_in_region</code>, <code>get_mob_ids_with_var</code>, <code>run_next_action_as</code>, <code>send_message_to_all_mobs</code>, <code>send_message_to_area</code>, <code>unfocus</code>.</li>
+          <li><span class="cl-a">Added</span> other actions: <code>focus_on_id</code>, <code>follow_mob_as_leader</code>, <code>get_leader_activity</code>, <code>get_leader_pikmin_count</code>, <code>get_misc_info</code>, <code>get_mob_ids_in_region</code>, <code>get_mob_ids_with_var</code>, <code>run_next_action_as</code>, <code>send_message_to_all_mobs</code>, <code>send_message_to_area</code>, <code>set_onion_activity</code>, <code>unfocus</code>.</li>
           <li><span class="cl-a">Added</span> data to the <code>get_event_info</code> action: <code>damage</code>. (Thanks Neo)</li>
           <li><span class="cl-a">Added</span> data to the <code>get_mob_info</code> action: <code>animation</code>, <code>link_ids</code>, <code>max_health</code>, <code>team</code>.</li>
           <li><span class="cl-a">Added</span> an argument to the <code>hold_focused_mob</code> action: rotation method. Also added missing manual documentation on the argument that controls drawing above the holder.</li>
@@ -153,7 +154,9 @@
           <li><span class="cl-a">Added</span> a mob type vulnerability data entry word that controls sector blocking.</li>
           <li><span class="cl-a">Added</span> a property to entries in the <code>area_editor_properties</code> block: <code>list_internal</code>. (Thanks Piksol)</li>
           <li><span class="cl-a">Added</span> some <a href="mob_onion.html">Onion type</a> properties: <code>auto_eject</code>, <code>delivery_animation</code>, <code>eject_grown_pikmin</code>, <code>has_nest_menu</code>, <code>icon</code>, <code>nutrient_families</code>, <code>nutrients_per_seed</code>, <code>pikmin_exit_spat</code>, <code>send_nutrients_to_link</code>. Most of these are useful for Lumiknolls.</li>
+          <li><span class="cl-a">Added</span> an <a href="mob_onion.html">Onion type</a> animation: <code>received</code>.</li>
           <li><span class="cl-a">Added</span> some <a href="mob_ship.html">ship type</a> properties: <code>has_nest_menu</code>, <code>icon</code>, <code>pikmin_exit_spat</code>.</li>
+          <li><span class="cl-a">Added</span> a <a href="mob_ship.html">ship type</a> animation: <code>received</code>.</li>
           <li><span class="cl-a">Added</span> some <a href="mob_pellet.html">pellet type</a> properties: <code>draw_number</code>, <code>nutrient_family</code>.</li>
           <li><span class="cl-a">Added</span> some <a href="mob_pikmin.html">Pikmin type</a> properties: <code>auto_maturate_interval</code>, <code>can_lose_maturity</code>, <code>chills_liquids</code>.</li>
           <li><span class="cl-a">Added</span> a <a href="mob_pile.html">pile type</a> property: <code>contents_from_spawn_data</code>. This allows piles to spawn any object, not just resources.</li>
@@ -191,7 +194,8 @@
       <li>
         <a href="maker_toolkit.html">Maker tools</a>:
         <ul>
-          <li><span class="cl-a">Added</span> a maker console. This is where errors get written to, and can be pulled down from the top of the screen with a key press. This also revamps the existing content error notification logic.</li>
+          <li><span class="cl-a">Added</span> a maker console. This is where log messages like errors get written to, and can be pulled down from the top of the screen with a key press. This also revamps the existing content error notification logic.</li>
+          <li><span class="cl-a">Added</span> warnings to the maker console. If enabled in the options (<code>misc</code> &gt; <code>show_warnings</code>), you'll receive warnings, like making use of deprecated properties. Make sure to enable this if you make content, so you can do so as optimally as possible!</li>
           <li><span class="cl-a">Added</span> some maker tools: area inspector, free camera, delete mob, fill inventory, new reminder. The area inspector inspects data about the current area like the mob inspector tool. The free camera allows control of the camera's position. The mob deletion deletes the inspected object. The inventory filler sets the number of all sprays to 99 (or 0). The reminder creator saves a reminder for the area's maker, in the spot where the cursor is located.</li>
           <li><span class="cl-a">Added</span> information to the mob inspector maker tool: angle. In addition, the states and script vars are more organized.</li>
           <li><span class="cl-a">Added</span> information to the geometry info maker tool: index numbers of the sector, edge, and vertex near the mouse cursor, as well as the distance and angle from the mouse cursor to the cursor's original spot when the tool was opened.</li>
@@ -212,6 +216,7 @@
           <li><span class="cl-a">Added</span> <a href="spike_damage.html">spike damage</a> properties: <code>status_buildup_amount</code>.</li>
           <li><span class="cl-a">Added</span> <a href="hazard.html">liquid type</a> properties: <code>can_freeze</code>.</li>
           <li><span class="cl-a">Added</span> some <a href="game_config.html">game config</a> properties: <code>aesthetic_general</code> &gt; <code>title_screen_bg_final_zoom</code>, and <code>aesthetic_general</code> &gt; <code>title_screen_gui_fade_delay</code>.</li>
+          <li><span class="cl-c">Changed</span> the location of the log file from <code>user_data/error_log.txt</code> to <code>user_data/log.txt</code>.</li>
           <li><span class="cl-c">Changed</span> an <a href="area.html">area</a> tree shadow property: instead of just opacity, you can now control a tree shadow's entire tint color.</li>
           <li><span class="cl-c">Changed</span> an <a href="area.html">area</a> reference image property: instead of just opacity, you can now control a reference image's entire tint color.</li>
         </ul>

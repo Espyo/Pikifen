@@ -143,8 +143,8 @@ public:
     //Auxiliary data used by the current script that is running.
     ScriptExecutionAuxData scriptExecAuxData;
     
-    //Error manager.
-    ErrorManager errors;
+    //Log manager.
+    LogManager log;
     
     //Shader manager.
     ShaderManager shaders;

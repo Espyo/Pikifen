@@ -272,16 +272,18 @@ void AnimationDatabase::createConversions(
         size_t aPos = findAnimation(conversions[c].second);
         if(aPos == INVALID) {
             //Use the default.
-            if(game.makerTools.useWarnings) {
-                game.errors.report(
-                    "The engine expected an animation called "
-                    "\"" + conversions[c].second + "\", but it doesn't exist. "
-                    "Using the default animation "
-                    "(\"" + conversions[0].second + "\") "
-                    "instead as a fail-safe.",
-                    file
-                );
-            }
+            game.log.report(
+                LOG_LEVEL_WARNING,
+                "The engine expected an animation called "
+                "\"" + conversions[c].second + "\", but it doesn't exist. "
+                "Using the default animation "
+                "(\"" + conversions[0].second + "\") "
+                "instead as a fail-safe. If you actually want that animation "
+                "to be the same as the default one, you should create the "
+                "animation manually anyway and duplicate the data "
+                "from the default one purposely.",
+                file
+            );
             aPos = findAnimation(conversions[0].second);
         }
         preNamedConversions[conversions[c].first] = aPos;
@@ -532,7 +534,8 @@ void AnimationDatabase::loadFromDataNode(DataNode* node) {
                 if(hazardIt != game.content.hazards.list.end()) {
                     newHitbox.hazard = &(hazardIt->second);
                 } else {
-                    game.errors.report(
+                    game.log.report(
+                        LOG_LEVEL_ERROR,
                         "Unknown hazard \"" + hazardStr + "\"!",
                         hazardNode
                     );

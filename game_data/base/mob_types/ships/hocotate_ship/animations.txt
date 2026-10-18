@@ -12,6 +12,18 @@ animations{
 			}
 		}
 	}
+	received{
+		frames{
+			idling{
+				duration=0.1000
+				interpolate=true
+			}
+			received{
+				duration=0.1000
+				interpolate=true
+			}
+		}
+	}
 }
 sprites{
 	idling{
@@ -20,6 +32,42 @@ sprites{
 		file_size=298.0000 278.0000
 		offset=2.0000 0.0000
 		scale=0.5000 0.5000
+		hitboxes{
+			hole_1{
+				coords=53.0000 -51.0000 0.0000
+				height=16.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+			foot_1{
+				coords=80.0000 -72.0000 0.0000
+				height=16.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+			hole_2{
+				coords=53.0000 51.0000 0.0000
+				height=16.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+			foot_2{
+				coords=80.0000 72.0000 0.0000
+				height=16.0000
+				radius=16.0000
+				type=2
+				value=1.0000
+			}
+		}
+	}
+	received{
+		file=other_mobs/hocotate_ship
+		file_pos=0.0000 0.0000
+		file_size=298.0000 278.0000
+		scale=0.4799 0.5210
 		hitboxes{
 			hole_1{
 				coords=53.0000 -51.0000 0.0000

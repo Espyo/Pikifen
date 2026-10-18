@@ -2008,7 +2008,7 @@ void ScriptActionRunners::print(ScriptActionInstRunData& data) {
     string line =
         "(" + speaker + " said:) " + textArg;
         
-    game.console.write(line, false);
+    game.console.write(LOG_LEVEL_INFO, line);
 }
 
 
@@ -2675,6 +2675,23 @@ void ScriptActionRunners::setNearReach(ScriptActionInstRunData& data) {
     
     data.scriptVM->getRunnerMob()->nearReach = reachIdx;
     data.scriptVM->getRunnerMob()->updateInteractionSpan();
+}
+
+
+/**
+ * @brief Code for the Onion activity setting script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::setOnionActivity(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& valueArg = data.args[0];
+    
+    //Main logic.
+    Mob* mPtr = data.scriptVM->getRunnerMob();
+    if(mPtr->type->category->id != MOB_CATEGORY_ONIONS) return;
+    Onion* oPtr = (Onion*) mPtr;
+    oPtr->activated = s2b(valueArg);
 }
 
 
@@ -3690,9 +3707,11 @@ void ScriptActionUtils::reportActionError(
     string filePath = getNodePath(data);
     
     if(filePath.empty()) {
-        game.errors.report(info);
+        game.log.report(LOG_LEVEL_ERROR, info);
     } else {
-        game.errors.report(info, filePath, data.actionDef->dataFileLine);
+        game.log.report(
+            LOG_LEVEL_ERROR, info, filePath, data.actionDef->dataFileLine
+        );
     }
 }
 

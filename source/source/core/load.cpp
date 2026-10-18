@@ -45,7 +45,8 @@ ALLEGRO_AUDIO_STREAM* loadAudioStream(
         al_load_audio_stream((filePath).c_str(), 4, 2048);
         
     if(!stream && reportErrors) {
-        game.errors.report(
+        game.log.report(
+            LOG_LEVEL_ERROR,
             "Could not open audio stream file \"" + filePath + "\"!",
             node
         );
@@ -84,7 +85,8 @@ ALLEGRO_BITMAP* loadBmp(
     
     if(!b) {
         if(reportError) {
-            game.errors.report(
+            game.log.report(
+                LOG_LEVEL_ERROR,
                 "Could not open image file \"" + filePath + "\"!",
                 node
             );
@@ -109,7 +111,8 @@ DataNode loadDataFile(const string& filePath, bool* outSuccess) {
     bool fileWasOpened = false;
     DataNode node = DataNode(filePath, &fileWasOpened);
     if(!fileWasOpened) {
-        game.errors.report(
+        game.log.report(
+            LOG_LEVEL_ERROR,
             "Could not open data file \"" + filePath + "\"!"
         );
     }
@@ -514,7 +517,8 @@ ALLEGRO_SAMPLE* loadSample(
     ALLEGRO_SAMPLE* sample = al_load_sample((filePath).c_str());
     
     if(!sample && reportErrors) {
-        game.errors.report(
+        game.log.report(
+            LOG_LEVEL_ERROR,
             "Could not open audio sample file \"" + filePath + "\"!",
             node
         );
