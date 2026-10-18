@@ -1421,10 +1421,7 @@ void drawSectorIce(
             av[v].v = vy;
             av[v].z = 0;
             av[v].color =
-                changeAlpha(
-                    COLOR_WHITE,
-                    alpha * flashEffectAlpha * 255
-                );
+                mapAlpha(alpha * flashEffectAlpha * 255);
         }
         
         for(size_t v = 0; v < nVertexes; v++) {
@@ -1538,10 +1535,7 @@ void drawSectorTexture(
             av[v].z = 0;
             av[v].color =
                 multAlpha(
-                    tintColor(
-                        textureSector[t]->textureInfo.tint,
-                        COLOR_WHITE
-                    ),
+                    textureSector[t]->textureInfo.tint,
                     alphaMult * alpha
                 );
         }
