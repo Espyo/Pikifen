@@ -2531,7 +2531,7 @@ void Mob::getSpriteBitmapEffects(
             }
         }
     }
-
+    
     //Height effect.
     if(hasFlag(effects, SPRITE_BMP_EFFECT_FLAG_HEIGHT)) {
         if(heightEffectPivot != LARGE_FLOAT) {

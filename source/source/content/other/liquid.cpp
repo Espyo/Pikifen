@@ -129,6 +129,9 @@ void Liquid::changeSectorsHazard(Hazard* hPtr) {
 }
 
 
+/**
+ * @brief Returns the alpha the liquid should render at.
+ */
 float Liquid::getDrainAlpha() {
     switch(state) {
         case LIQUID_STATE_DRAINING:

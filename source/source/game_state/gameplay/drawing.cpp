@@ -2154,6 +2154,7 @@ void GameplayState::drawWorldComponents(
     ALLEGRO_SHADER* blackoutShader = game.shaders.getShader(SHADER_TYPE_LIGHTING);
     al_use_shader(blackoutShader);
     BindLightsToShader(view);
+    al_set_shader_float("alpha", 1.0f);
     //Even though we set the shader null here, it'll retain these
     //values because we set them while the shader was active.
     al_use_shader(nullptr);
@@ -2216,7 +2217,7 @@ void GameplayState::drawWorldComponents(
                     frozenThawEffectAlpha, frozenFlashEffectAlpha, cracked
                 );
             }
-
+            
             drawSectorEdgeOffsets(
                 cPtr->sectorPtr,
                 bmpOutput ?
@@ -2224,6 +2225,7 @@ void GameplayState::drawWorldComponents(
                 game.wallOffsetEffectBuffer,
                 1.0f, view
             );
+            
         } else if(cPtr->sectorLightingPtr) {
 
             al_use_shader(blackoutShader);

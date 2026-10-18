@@ -43,7 +43,7 @@ void ShaderManager::compileShader(
  * @brief Compiles all shaders from their source.
  */
 void ShaderManager::compileShaders() {
-    //Blackout.
+    //Lighting.
     compileShader(
         SHADER_TYPE_LIGHTING,
         SHADER_SOURCES::LIGHTING_FRAG_SHADER,
