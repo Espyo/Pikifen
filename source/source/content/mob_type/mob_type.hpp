@@ -292,7 +292,7 @@ public:
     //Whether to use the damage squash-and-stretch effect.
     bool useDamageSquashAndStretch = false;
     
-    //Radius of the light cast in dark sectors. <0 to use mob radius
+    //Radius of the light cast in dark sectors. <0 to use the mob's radius.
     float lightRadius = -1.0f;
 
     //Color of light to cast in dark sectors. COLOR_BLACK to disable.

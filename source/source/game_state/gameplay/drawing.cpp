@@ -1467,8 +1467,8 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
         
     }
     //Draw the daylight.
-        ALLEGRO_COLOR daylightC =
-            game.curArea->weatherCondition.getDaylightColor();
+    ALLEGRO_COLOR daylightC =
+        game.curArea->weatherCondition.getDaylightColor();
     if(daylightC.a > 0) {
         //Setup the shader.
         ALLEGRO_SHADER* blackoutShader = game.shaders.getShader(SHADER_TYPE_LIGHTING);
@@ -2149,7 +2149,7 @@ void GameplayState::drawWorldComponents(
     } else {
         mobShadowStretch = (dayMinutes - 60 * 12) / (60 * 20 - 60 * 12);
     }
-
+    
     //Set shader options
     ALLEGRO_SHADER* blackoutShader = game.shaders.getShader(SHADER_TYPE_LIGHTING);
     al_use_shader(blackoutShader);
