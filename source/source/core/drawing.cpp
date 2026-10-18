@@ -1656,7 +1656,6 @@ void drawSectorLighting(
         av[v].y *= scale;
     }
     al_set_shader_float("alpha", 1.0f);
-    al_set_shader_bool("convert_to_world_coords", false);
     al_draw_prim(
         av, nullptr, nullptr,
         0, (int) nVertexes, ALLEGRO_PRIM_TRIANGLE_LIST

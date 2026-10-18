@@ -47,25 +47,19 @@ const char* BLACKOUT_FRAG_SHADER = R"(
 #version 430
 #extension GL_ARB_shader_storage_buffer_object: enable
 
+//Length of a single entry. Used for indexing.
 const int lightBufferSize = 6;
 
 readonly layout(std430, binding = 3) buffer mobLayout
 {
     //Formatted in (x, y, radius, r, g, b)
-    readonly float mobEntries[];
+    readonly float light_entries[];
 };
 
-uniform int mob_count;
-
-//Top left position of the camera
-uniform vec2 cam_pos;
-
-//Size of the camera
-uniform vec2 cam_size;
-
-uniform bool convert_to_world_coords;
+uniform int light_count;
 
 //Fragment shader input for texture coordinates.
+//This should be given in world coordinates.
 in vec2 varying_texcoord;
 
 //Fragment shader input for the tint.
@@ -76,40 +70,33 @@ out vec4 fragColor;
 //Alpha of the blackout effect [0 - 1].
 uniform float alpha;
 
-bool alpha_test_func(float x, int op, float compare);
-
 vec4 getColor(vec2 xy) {
     vec4 fadeVal = varying_color;
-    for(int i = 0; i < mob_count; i++) {
-        vec2 mobPos = vec2(mobEntries[lightBufferSize * i], mobEntries[(lightBufferSize * i) + 1]);
+    for(int i = 0; i < light_count; i++) {
+        vec2 light_pos = vec2(light_entries[lightBufferSize * i], light_entries[(lightBufferSize * i) + 1]);
 
-        float dist = sqrt(pow(mobPos.x - xy.x, 2.0) + pow(mobPos.y - xy.y, 2.0));
+        float dist = sqrt(pow(light_pos.x - xy.x, 2.0) + pow(light_pos.y - xy.y, 2.0));
 
         float trans = smoothstep(
             0, 
-            mobEntries[(lightBufferSize * i) + 2], 
+            light_entries[(lightBufferSize * i) + 2], 
             dist
         );
-        fadeVal.r += (1 - trans) * mobEntries[(lightBufferSize * i) + 3];
-        fadeVal.g += (1 - trans) * mobEntries[(lightBufferSize * i) + 4];
-        fadeVal.b += (1 - trans) * mobEntries[(lightBufferSize * i) + 5];
+        fadeVal.r += (1 - trans) * light_entries[(lightBufferSize * i) + 3];
+        fadeVal.g += (1 - trans) * light_entries[(lightBufferSize * i) + 4];
+        fadeVal.b += (1 - trans) * light_entries[(lightBufferSize * i) + 5];
     }
     return fadeVal;
 }
 
-vec2 toWorldCoords(vec2 texcoord){
-    return cam_pos + vec2(cam_size.x * texcoord.x, cam_size.y * texcoord.y);
-}
-
-
 void main() {
 
+    //Get the base color
     vec4 finalColor = getColor(varying_texcoord);
 
-    if(convert_to_world_coords) {
-        finalColor = getColor(toWorldCoords(varying_texcoord));
-    }
-
+    //Brighten the image by the alpha.
+    //Since this shader should use multiplicative blending,
+    //This has the same effect as setting alpha.
     finalColor.r += 1 - alpha;
     finalColor.g += 1 - alpha;
     finalColor.b += 1 - alpha;

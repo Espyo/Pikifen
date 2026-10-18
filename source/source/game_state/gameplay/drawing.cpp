@@ -8,11 +8,14 @@
  * Main gameplay drawing functions.
  */
 
-
 #include <algorithm>
 
-//Required for OpenGL extensions
-#define ALLEGRO_UNSTABLE
+#if !defined(ALLEGRO_UNSTABLE)
+    //ALLEGRO_UNSTABLE is defined in the compile flags,
+    //but vscode thinks the functions are undefined unless
+    //we ALSO define it here.
+    #define ALLEGRO_UNSTABLE
+#endif
 
 #if defined(_WINDOWS)
     //We need to define windows.h so gl.h can compile on windows
@@ -42,30 +45,41 @@
 #pragma warning(disable: 4701)
 
 
+/**
+ * @brief Binds all visible lights in the scene to a shader SSBO.
+ * Lights are bound to binding 3, and the total count
+ * is bound to "light_count".
+ *
+ * @param view The view that the lights will be rendered to.
+ */
 void GameplayState::BindLightsToShader(const Viewport& view) {
     vector<float> lightData;
-    int mobCount = 0;
+    int lightCount = 0;
     for(size_t m = 0; m < mobs.all.size(); m++) {
         Mob* mPtr = mobs.all[m];
 
-        //Make sure the mob will render
+        //Only draw mobs that have a light that'll render
         if(
             hasFlag(mPtr->flags, MOB_FLAG_HIDDEN) ||
-            mPtr->type->lightRadius <= 0.0f
+            mPtr->type->lightColor == COLOR_BLACK
         ) {
             continue;
         }
 
-        if(bBoxCheck(view.worldCorners, mPtr->center, mPtr->type->lightRadius)) {
+        //Use mob's radius if <= 0
+        float finalRadius = sign(mPtr->type->lightRadius) == 1 ? 
+            mPtr->type->lightRadius : mPtr->radius;
+
+        if(bBoxCheck(view.worldCorners, mPtr->center, finalRadius)) {
             lightData.push_back(mPtr->center.x);
             lightData.push_back(mPtr->center.y);
-            lightData.push_back(mPtr->type->lightRadius);
+            lightData.push_back(finalRadius);
 
             //Light color
             lightData.push_back(mPtr->type->lightColor.r);
             lightData.push_back(mPtr->type->lightColor.g);
             lightData.push_back(mPtr->type->lightColor.b);
-            mobCount++;
+            lightCount++;
         }
     }
     vector<WorldComponent> allParts;
@@ -87,11 +101,11 @@ void GameplayState::BindLightsToShader(const Viewport& view) {
         lightData.push_back(finalColor.a * finalColor.r / 20);
         lightData.push_back(finalColor.a * finalColor.g / 20);
         lightData.push_back(finalColor.a * finalColor.b / 20);
-        mobCount++;
+        lightCount++;
     }
 
     //Bind the SSBO to the shader.
-    if(mobCount > 0) {
+    if(lightCount > 0) {
         GLuint ssbo = 0;     
         glGenBuffers(1, &ssbo);
         glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
@@ -102,7 +116,7 @@ void GameplayState::BindLightsToShader(const Viewport& view) {
         glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, ssbo);
         glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
     }
-    al_set_shader_int("mob_count", mobCount);
+    al_set_shader_int("light_count", lightCount);
 }
 
 /**
@@ -1450,46 +1464,30 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
         );
         
     }
-
-    //Get the viewport's settings to pass to the shader
-    float camPos[2] = {
-        view.windowRect.center.x - (view.windowRect.size.x / 2), 
-        view.windowRect.center.y - (view.windowRect.size.y / 2)
-    };
-    al_transform_coordinates(&view.windowToWorldTransform, &camPos[0], &camPos[1]);
-
-    float camSize[2] = {
-        view.windowRect.size.x / view.cam.zoom, 
-        view.windowRect.size.y / view.cam.zoom
-    };
-
-    //Set shader options
-    ALLEGRO_SHADER* blackoutShader = game.shaders.getShader(SHADER_TYPE_BLACKOUT);
-    al_use_shader(blackoutShader);
-    al_set_shader_float_vector("cam_pos", 2, &camPos[0], 1);
-    al_set_shader_float_vector("cam_size", 2, &camSize[0], 1);
-    al_set_shader_bool("convert_to_world_coords", true);
-
-    AllegroBlenderState prevState;
-    prevState.save();
-    al_set_blender(ALLEGRO_ADD, ALLEGRO_DEST_COLOR, ALLEGRO_ZERO);
-
     //Draw the daylight.
-    ALLEGRO_COLOR daylightC =
-        game.curArea->weatherCondition.getDaylightColor();
+        ALLEGRO_COLOR daylightC =
+            game.curArea->weatherCondition.getDaylightColor();
     if(daylightC.a > 0) {
-        //Set the remaining shader options
+        //Setup the shader.
+        ALLEGRO_SHADER* blackoutShader = game.shaders.getShader(SHADER_TYPE_BLACKOUT);
+        al_use_shader(blackoutShader);
         al_set_shader_float("alpha", daylightC.a);
-
         BindLightsToShader(view);
 
-        //Draw the blackout effect.
-        drawPrimRect(Point(), Point(game.winW, game.winH), daylightC);
+        //Set the blender
+        AllegroBlenderState prevState;
+        prevState.save();
+        al_set_blender(ALLEGRO_ADD, ALLEGRO_DEST_COLOR, ALLEGRO_ZERO);
 
+        //Draw the blackout effect. Map world coordinates to the UV
+        RectCorners camCorners = view.worldCorners;
+        camCorners.tl += view.boxMargin;
+        camCorners.br -= view.boxMargin;
+        drawPrimRect(Point(), Point(game.winW, game.winH), daylightC, nullptr, camCorners);
+
+        prevState.load();
+        al_use_shader(nullptr);
     }
-
-    prevState.load();
-    al_use_shader(nullptr);
     
 }
 
@@ -2149,25 +2147,10 @@ void GameplayState::drawWorldComponents(
     } else {
         mobShadowStretch = (dayMinutes - 60 * 12) / (60 * 20 - 60 * 12);
     }
-    
-    //Setup the lighting shader for use later
-    float camPos[2] = {
-        view.windowRect.center.x - (view.windowRect.size.x / 2), 
-        view.windowRect.center.y - (view.windowRect.size.y / 2)
-    };
-    al_transform_coordinates(&view.windowToWorldTransform, &camPos[0], &camPos[1]);
-
-    float camSize[2] = {
-        view.windowRect.size.x / view.cam.zoom, 
-        view.windowRect.size.y / view.cam.zoom
-    };
 
     //Set shader options
     ALLEGRO_SHADER* blackoutShader = game.shaders.getShader(SHADER_TYPE_BLACKOUT);
     al_use_shader(blackoutShader);
-    al_set_shader_float_vector("cam_pos", 2, &camPos[0], 1);
-    al_set_shader_float_vector("cam_size", 2, &camSize[0], 1);
-
     BindLightsToShader(view);
     //Even though we set the shader null here, it'll retain these
     //values because we set them while the shader was active.
