@@ -18,7 +18,7 @@
 #include "../../content/mob/ship.hpp"
 #include "../../content/other/gui.hpp"
 #include "../../core/controls_mediator.hpp"
-#include "../../core/maker_tools.hpp"
+#include "../../core/maker_toolkit/tools.hpp"
 #include "../../core/player.hpp"
 #include "../../core/replay.hpp"
 #include "../../util/general_utils.hpp"
