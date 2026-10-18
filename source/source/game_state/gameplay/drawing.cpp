@@ -73,7 +73,9 @@ void GameplayState::BindLightsToShader(const Viewport& view) {
         if(bBoxCheck(view.worldCorners, mPtr->center, finalRadius)) {
             lightData.push_back(mPtr->center.x);
             lightData.push_back(mPtr->center.y);
-            lightData.push_back(finalRadius);
+            //Light's aren't very visible past half of its
+            //distance, so this makes lights "seem" scaled properly
+            lightData.push_back(finalRadius * 2);
 
             //Light color
             lightData.push_back(mPtr->type->lightColor.r);
