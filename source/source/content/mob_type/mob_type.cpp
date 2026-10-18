@@ -294,7 +294,8 @@ void MobType::loadFromDataNode(
         areaEditorRecommendLinksTo
     );
     tRS.set("area_editor_tips", areaEditorTips, &areaEditorTipsNode);
-    tRS.set("blackout_radius", blackoutRadius);
+    //TODO: have this set light radius (throw deprecated warning)
+    //tRS.set("blackout_radius", blackoutRadius);
     tRS.set("light_radius", lightRadius);
     tRS.set("light_color", lightColor);
     tRS.set("can_block_paths", canBlockPaths);
@@ -898,7 +899,6 @@ void createSpecialMobTypes() {
         
     MobType* bridgeComponentType = customCategory->createType();
     bridgeComponentType->name = "Bridge component";
-    bridgeComponentType->blackoutRadius = 0;
     bridgeComponentType->peekUnderneathAlpha = 0.4f;
     bridgeComponentType->appearsInAreaEditor = false;
     bridgeComponentType->castsShadow = false;
