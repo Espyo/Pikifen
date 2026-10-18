@@ -16,9 +16,9 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_font.h>
 
-#include "../content/mob/mob.hpp"
-#include "../lib/data_file/data_file.hpp"
-#include "controls_mediator.hpp"
+#include "../../content/mob/mob.hpp"
+#include "../../lib/data_file/data_file.hpp"
+#include "../controls_mediator.hpp"
 
 
 using std::vector;
