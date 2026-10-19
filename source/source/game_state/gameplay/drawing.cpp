@@ -1471,21 +1471,21 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
     particles.fillComponentList(allParts, view.worldCorners);
     for(size_t p = 0; p < allParts.size(); p++) {
         Particle* pPtr = allParts[p].particlePtr;
-        if(pPtr->blendType != PARTICLE_BLEND_TYPE_ADDITIVE) continue;
         float t = 1.0f - pPtr->time / pPtr->duration;
-        ALLEGRO_COLOR finalColor = pPtr->color.get(t);
+        ALLEGRO_COLOR finalColor = pPtr->lightColor.get(t);
+        if(finalColor != COLOR_BLACK) continue;
+
+        //Dont render barely visible particles
         if(finalColor.a < 0.05f) continue;
-        float finalSize = pPtr->size.get(t);
-        if(finalSize <= 0.0f) continue;
 
         lightData.push_back(pPtr->center.x);
         lightData.push_back(pPtr->center.y);
-        lightData.push_back(finalSize * 3);
+        lightData.push_back(pPtr->size.get(t));
 
         //Light color
-        lightData.push_back(finalColor.a * finalColor.r / 20);
-        lightData.push_back(finalColor.a * finalColor.g / 20);
-        lightData.push_back(finalColor.a * finalColor.b / 20);
+        lightData.push_back(finalColor.r);
+        lightData.push_back(finalColor.g);
+        lightData.push_back(finalColor.b);
         lightCount++;
     }
 

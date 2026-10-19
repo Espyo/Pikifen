@@ -1152,7 +1152,43 @@ void ParticleEditor::processGuiPanelGeneratorAppearance() {
         );
         loadedGen.baseParticle.blendType =
             (PARTICLE_BLEND_TYPE) blendInt;
-            
+
+        bool lightNode =
+            saveableTreeNode("light", "Lighting");
+        if(lightNode) {
+            if(ImGui::Checkbox(
+                "Use light", &loadedGen.baseParticle.emitsLight
+            )){
+                changesMgr.markAsChanged();
+            }
+
+            if(loadedGen.baseParticle.emitsLight) {
+                //Light Color keyframe editor.
+                if(
+                    keyframeEditor(
+                        "Light Color", loadedGen.baseParticle.lightColor,
+                        selectedLightColorKeyframe
+                    )
+                ) {
+                    changesMgr.markAsChanged();
+                }
+
+                //Light Size keyframe editor.
+                if(
+                    keyframeEditor(
+                        "Light Size", loadedGen.baseParticle.lightSize,
+                        selectedLightSizeKeyframe
+                    )
+                ) {
+                    changesMgr.markAsChanged();
+                }
+            }
+            ImGui::TreePop();
+        }
+        
+        //Blend mode text.
+        ImGui::Spacer();
+
         ImGui::TreePop();
         
     }
