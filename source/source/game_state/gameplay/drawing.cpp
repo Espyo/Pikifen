@@ -97,18 +97,7 @@ void GameplayState::doGameDrawing(
             game.perfMon->finishMeasurement();
         }
         
-        //Layer 3 -- In-game text.
-        if(game.perfMon) {
-            game.perfMon->startMeasurement("Drawing -- In-game text");
-        }
-        if(!bmpOutput && game.makerTools.hud) {
-            drawInGameText(&player);
-        }
-        if(game.perfMon) {
-            game.perfMon->finishMeasurement();
-        }
-        
-        //Layer 4 -- Precipitation.
+        //Layer 3 -- Precipitation.
         if(game.perfMon) {
             game.perfMon->startMeasurement("Drawing -- precipitation");
         }
@@ -119,7 +108,7 @@ void GameplayState::doGameDrawing(
             game.perfMon->finishMeasurement();
         }
         
-        //Layer 5 -- Tree shadows.
+        //Layer 4 -- Tree shadows.
         if(game.perfMon) {
             game.perfMon->startMeasurement("Drawing -- Tree shadows");
         }
@@ -138,7 +127,7 @@ void GameplayState::doGameDrawing(
             return;
         }
         
-        //Layer 6 -- Lighting filter.
+        //Layer 5 -- Lighting filter.
         if(game.perfMon) {
             game.perfMon->startMeasurement("Drawing -- Lighting");
         }
@@ -147,8 +136,19 @@ void GameplayState::doGameDrawing(
             game.perfMon->finishMeasurement();
         }
         
-        //Layer 7 -- Leader cursor.
+        //Layer 6 -- In-game text.
         al_use_transform(&player.view.worldToWindowTransform);
+        if(game.perfMon) {
+            game.perfMon->startMeasurement("Drawing -- In-game text");
+        }
+        if(game.makerTools.hud) {
+            drawInGameText(&player);
+        }
+        if(game.perfMon) {
+            game.perfMon->finishMeasurement();
+        }
+        
+        //Layer 7 -- Leader cursor.
         ALLEGRO_COLOR cursorColor = game.config.aestheticGen.noPikminColor;
         if(player.closestGroupMember[BUBBLE_RELATION_CURRENT]) {
             cursorColor =
