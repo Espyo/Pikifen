@@ -3260,6 +3260,14 @@ void Mob::readScriptVars(const ScriptVarManager& varsMgr) {
     if(varsMgr.getValue("health", health)) {
         health = std::min(health, maxHealth);
     }
+
+    bool isLit;
+    if(varsMgr.getValue("lit", isLit) && isLit) {
+        if(lightColor == COLOR_BLACK) {
+            lightColor = COLOR_WHITE;
+            lightRadius = -1.0f;
+        }
+    }
 }
 
 

@@ -379,7 +379,7 @@ bool MakerToolRunners::newPikmin(
         game.mobCategories.get(MOB_CATEGORY_PIKMIN),
         game.states.gameplay->players[0].view.mouseCursorWorldPos,
         newPikminType, 0,
-        "maturity=" + i2s(maturity)
+        "maturity=" + i2s(maturity) + ";lit=true"
     );
     
     return true;

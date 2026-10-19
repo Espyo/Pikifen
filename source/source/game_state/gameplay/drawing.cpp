@@ -1438,7 +1438,7 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
         ALLEGRO_COLOR lightColor = mPtr->lightColor;
         //Use mob's radius if <= 0
         float finalRadius = mPtr->lightRadius < 0.0f ? 
-            mPtr->radius * 2.0f : mPtr->lightRadius;
+            mPtr->radius * 4.0f : mPtr->lightRadius;
         //Only draw mobs that have a light that'll render
         if(
             hasFlag(mPtr->flags, MOB_FLAG_HIDDEN) ||
