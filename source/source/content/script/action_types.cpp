@@ -2561,40 +2561,30 @@ void ScriptActionRunners::setHuntable(ScriptActionInstRunData& data) {
  *
  * @param data Data about the action call.
  */
-void ScriptActionRunners::setLight(ScriptActionInstRunData& data) {
+void ScriptActionRunners::setLightColor(ScriptActionInstRunData& data) {
     //Get the arguments.
-    const string& typeArg = data.args[0];
-    const string& valueArg = data.args[1];
+    const string& redArg = data.args[0];
+    const string& greenArg = data.args[1];
+    const string& blueArg = data.args[2];
     
     //Main logic.
-    string result;
-    bool typeFound;
-    SCRIPT_ACTION_SET_LIGHT_TYPE type =
-        enumGetValue(scriptActionSetLightTypeINames, typeArg, &typeFound);
-    if(!typeFound) {
-        ScriptActionUtils::reportActionError(
-            data,
-            "Unknown light component \"" + typeArg + "\"!"
-        );
-        return;
-    }
+    ALLEGRO_COLOR c = al_map_rgb(s2i(redArg), s2i(greenArg),s2i(blueArg));
+    data.scriptVM->getRunnerMob()->lightColor = c;
+    
+}
+
+
+/**
+ * @brief Code for the light setting script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::setLightRadius(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& radiusArg = data.args[0];
     
     //Main logic.
-    int val = s2i(valueArg);
-    switch(type) {
-        case SCRIPT_ACTION_SET_LIGHT_TYPE_RADIUS:
-            data.scriptVM->getRunnerMob()->lightRadius = val;
-        break;
-        case SCRIPT_ACTION_SET_LIGHT_TYPE_RED:
-            data.scriptVM->getRunnerMob()->lightColor.r = val / 255.0f;
-        break;
-        case SCRIPT_ACTION_SET_LIGHT_TYPE_GREEN:
-            data.scriptVM->getRunnerMob()->lightColor.g = val / 255.0f;
-        break;
-        case SCRIPT_ACTION_SET_LIGHT_TYPE_BLUE:
-            data.scriptVM->getRunnerMob()->lightColor.b = val / 255.0f;
-        break;
-    }
+    data.scriptVM->getRunnerMob()->lightRadius = s2i(radiusArg);
     
 }
 

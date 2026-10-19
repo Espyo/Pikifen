@@ -2809,13 +2809,21 @@ void initScriptActionTypes() {
         ScriptActionRunners::setHoldable
     );
 
-    //Set light.
-    queueParam("component", ptEnum);
-    queueParam("value", ptFloat);
+    //Set light color.
+    queueParam("red", ptInt);
+    queueParam("green", ptInt);
+    queueParam("blue", ptInt);
     commitAction(
-        SCRIPT_ACTION_SET_LIGHT,
-        "set_light",
-        ScriptActionRunners::setLight
+        SCRIPT_ACTION_SET_LIGHT_COLOR,
+        "set_light_color",
+        ScriptActionRunners::setLightColor
+    );
+
+    queueParam("radius", ptFloat);
+    commitAction(
+        SCRIPT_ACTION_SET_LIGHT_RADIUS,
+        "set_light_radius",
+        ScriptActionRunners::setLightRadius
     );
     
     //Set limb animation.

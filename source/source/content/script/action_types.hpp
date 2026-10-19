@@ -311,8 +311,11 @@ enum SCRIPT_ACTION {
     //Set whether it is huntable.
     SCRIPT_ACTION_SET_HUNTABLE,
     
-    //Set light parameter.
-    SCRIPT_ACTION_SET_LIGHT,
+    //Set light color.
+    SCRIPT_ACTION_SET_LIGHT_COLOR,
+
+    //Set light radius.
+    SCRIPT_ACTION_SET_LIGHT_RADIUS,
 
     //Set limb animation.
     SCRIPT_ACTION_SET_LIMB_ANIMATION,
@@ -765,33 +768,6 @@ buildEnumNames(scriptActionGetMobInfoTypeINames, SCRIPT_ACTION_GET_MOB_INFO_TYPE
 });
 
 
-//Set light action component types.
-enum SCRIPT_ACTION_SET_LIGHT_TYPE {
-
-    //Set the light's radius
-    SCRIPT_ACTION_SET_LIGHT_TYPE_RADIUS,
-    
-    //Set the light's red value
-    SCRIPT_ACTION_SET_LIGHT_TYPE_RED,
-
-    //Set the light's green value
-    SCRIPT_ACTION_SET_LIGHT_TYPE_GREEN,
-
-    //Set the light's green value
-    SCRIPT_ACTION_SET_LIGHT_TYPE_BLUE,
-    
-};
-
-
-//Script action get area info type enum naming (internal names).
-buildEnumNames(scriptActionSetLightTypeINames, SCRIPT_ACTION_SET_LIGHT_TYPE)({
-    { SCRIPT_ACTION_SET_LIGHT_TYPE_RADIUS, "radius" },
-    { SCRIPT_ACTION_SET_LIGHT_TYPE_RED, "red" },
-    { SCRIPT_ACTION_SET_LIGHT_TYPE_GREEN, "green" },
-    { SCRIPT_ACTION_SET_LIGHT_TYPE_BLUE, "blue" },
-});
-
-
 //Moving action sub-types.
 enum SCRIPT_ACTION_MOVE_TYPE {
 
@@ -1040,7 +1016,8 @@ void setHeight(ScriptActionInstRunData& data);
 void setHiding(ScriptActionInstRunData& data);
 void setHoldable(ScriptActionInstRunData& data);
 void setHuntable(ScriptActionInstRunData& data);
-void setLight(ScriptActionInstRunData& data);
+void setLightColor(ScriptActionInstRunData& data);
+void setLightRadius(ScriptActionInstRunData& data);
 void setLimbAnimation(ScriptActionInstRunData& data);
 void setListItem(ScriptActionInstRunData& data);
 void setMissionMetricScriptSlot(ScriptActionInstRunData& data);
