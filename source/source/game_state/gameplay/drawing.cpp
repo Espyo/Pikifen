@@ -1456,7 +1456,7 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
             lightData.push_back(y);
             //Light's aren't very visible past half of its
             //distance, so this makes lights "seem" scaled properly
-            lightData.push_back(finalRadius * 2 * view.cam.zoom);
+            lightData.push_back(finalRadius * view.cam.zoom);
 
             //Light color
             lightData.push_back(lightColor.r);
@@ -1471,21 +1471,21 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
     particles.fillComponentList(allParts, view.worldCorners);
     for(size_t p = 0; p < allParts.size(); p++) {
         Particle* pPtr = allParts[p].particlePtr;
+        if(!pPtr->emitsLight) continue;
         float t = 1.0f - pPtr->time / pPtr->duration;
         ALLEGRO_COLOR finalColor = pPtr->lightColor.get(t);
-        if(finalColor != COLOR_BLACK) continue;
 
-        //Dont render barely visible particles
-        if(finalColor.a < 0.05f) continue;
-
-        lightData.push_back(pPtr->center.x);
-        lightData.push_back(pPtr->center.y);
-        lightData.push_back(pPtr->size.get(t));
+        float x = pPtr->center.x;
+        float y = pPtr->center.y;
+        al_transform_coordinates(&view.worldToWindowTransform, &x, &y);
+        lightData.push_back(x);
+        lightData.push_back(y);
+        lightData.push_back(pPtr->lightSize.get(t) * view.cam.zoom);
 
         //Light color
-        lightData.push_back(finalColor.r);
-        lightData.push_back(finalColor.g);
-        lightData.push_back(finalColor.b);
+        lightData.push_back(finalColor.r * finalColor.a);
+        lightData.push_back(finalColor.g * finalColor.a);
+        lightData.push_back(finalColor.b * finalColor.a);
         lightCount++;
     }
 
