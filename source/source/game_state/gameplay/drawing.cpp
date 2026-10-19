@@ -1454,14 +1454,12 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
             al_transform_coordinates(&view.worldToWindowTransform, &x, &y);
             lightData.push_back(x);
             lightData.push_back(y);
-            //Light's aren't very visible past half of its
-            //distance, so this makes lights "seem" scaled properly
             lightData.push_back(finalRadius * view.cam.zoom);
 
             //Light color
-            lightData.push_back(lightColor.r);
-            lightData.push_back(lightColor.g);
-            lightData.push_back(lightColor.b);
+            lightData.push_back(lightColor.r * lightColor.a);
+            lightData.push_back(lightColor.g * lightColor.a);
+            lightData.push_back(lightColor.b * lightColor.a);
             lightCount++;
         }
     }
