@@ -25,6 +25,15 @@ terrain_radius = 64
 territory_radius = 300
 weight = 7
 
+area_editor_properties {
+	Bulbmin Amount {
+		var = followers
+		type = int
+		def_value = 10
+		tooltip = The minimum amount of Bulbmin followers this spawns with.
+	}
+}
+
 children {
     stem {
         spawn = stem
