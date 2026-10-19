@@ -22,6 +22,16 @@ base{
 	duration=1.5000
 	friction=0.0000
 	blend_type=1
+	emits_light=true
+	light_size{
+		0.0000=0.0000
+		0.1200=10.0000
+		1.0000=0.0000
+	}
+	light_color{
+		0.0000=59 124 28 24
+		1.0000=59 124 28 0
+	}
 	color{
 		0.0000=59 124 28
 		1.0000=100 210 48 0

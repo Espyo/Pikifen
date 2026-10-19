@@ -2586,13 +2586,13 @@ void ScriptActionRunners::setLight(ScriptActionInstRunData& data) {
             data.scriptVM->getRunnerMob()->lightRadius = val;
         break;
         case SCRIPT_ACTION_SET_LIGHT_TYPE_RED:
-            data.scriptVM->getRunnerMob()->lightColor.r = val;
+            data.scriptVM->getRunnerMob()->lightColor.r = val / 255.0f;
         break;
         case SCRIPT_ACTION_SET_LIGHT_TYPE_GREEN:
-            data.scriptVM->getRunnerMob()->lightColor.g = val;
+            data.scriptVM->getRunnerMob()->lightColor.g = val / 255.0f;
         break;
         case SCRIPT_ACTION_SET_LIGHT_TYPE_BLUE:
-            data.scriptVM->getRunnerMob()->lightColor.b = val;
+            data.scriptVM->getRunnerMob()->lightColor.b = val / 255.0f;
         break;
     }
     

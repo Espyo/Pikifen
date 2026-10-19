@@ -765,19 +765,19 @@ buildEnumNames(scriptActionGetMobInfoTypeINames, SCRIPT_ACTION_GET_MOB_INFO_TYPE
 });
 
 
-//Get area info action info types.
+//Set light action component types.
 enum SCRIPT_ACTION_SET_LIGHT_TYPE {
 
-    //Get time of day, in minutes.
+    //Set the light's radius
     SCRIPT_ACTION_SET_LIGHT_TYPE_RADIUS,
     
-    //Get number of Pikmin on the field.
+    //Set the light's red value
     SCRIPT_ACTION_SET_LIGHT_TYPE_RED,
 
-    //Get number of Pikmin on the field.
+    //Set the light's green value
     SCRIPT_ACTION_SET_LIGHT_TYPE_GREEN,
 
-    //Get number of Pikmin on the field.
+    //Set the light's green value
     SCRIPT_ACTION_SET_LIGHT_TYPE_BLUE,
     
 };
