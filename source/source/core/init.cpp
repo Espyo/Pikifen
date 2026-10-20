@@ -1451,9 +1451,9 @@ void initMakerToolTypes() {
         "either dimension. e.g. 32 means 16 area pixels above "
         "the area and 16 area pixels below the area will be "
         "included; same for 16 pixels to the left and 16 to the right.";
-    queueParam("shadows", ptBool, pfOpt, "true");
+    queueParam("lighting", ptBool, pfOpt, "true");
     params.back().description =
-        "Whether you want to see tree shadows.";
+        "Whether you want to see lighting.";
     commitTool(
         MAKER_TOOL_TYPE_AREA_IMAGE,
         "area_image", true,

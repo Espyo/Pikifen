@@ -45,13 +45,12 @@
  * @brief Does the drawing for the main game loop.
  *
  * @param bmpOutput If not nullptr, draw the area onto this.
- * @param bmpTransform Transformation to use when drawing to a bitmap.
- * @param treeShadows Whether to draw tree shadows. Only applicable when
- * drawing to a bitmap.
+ * @param bmpView Viewport to use when drawing to a bitmap.
+ * @param drawLighting Whether to draw lighting.
  */
 void GameplayState::doGameDrawing(
-    ALLEGRO_BITMAP* bmpOutput, const ALLEGRO_TRANSFORM* bmpTransform,
-    bool treeShadows
+    ALLEGRO_BITMAP* bmpOutput, const Viewport* bmpView,
+    bool drawLighting
 ) {
     /*  ***************************************
       *** |  |                           |  | ***
@@ -59,12 +58,12 @@ void GameplayState::doGameDrawing(
       ***  \/                             \/  ***
         ***************************************/
     
-    ALLEGRO_TRANSFORM prevWorldToWindowTransform;
+    Viewport prevViewport;
     AllegroBlenderState prevBlender;
     
     if(bmpOutput) {
-        prevWorldToWindowTransform = players[0].view.worldToWindowTransform;
-        players[0].view.worldToWindowTransform = *bmpTransform;
+        prevViewport = players[0].view;
+        players[0].view = *bmpView;
         al_set_target_bitmap(bmpOutput);
         prevBlender.save();
         al_set_separate_blender(
@@ -108,35 +107,26 @@ void GameplayState::doGameDrawing(
             game.perfMon->finishMeasurement();
         }
         
-        //Layer 4 -- Tree shadows.
+        //Layer 4 -- Lighting filter.
         if(game.perfMon) {
-            game.perfMon->startMeasurement("Drawing -- Tree shadows");
+            game.perfMon->startMeasurement("Drawing -- Lighting");
         }
-        if(!(bmpOutput && !treeShadows)) {
-            drawTreeShadows();
+        if(drawLighting) {
+            drawLightingFilter(player.view);
         }
         if(game.perfMon) {
             game.perfMon->finishMeasurement();
         }
-        
+
         //Finish dumping to a bitmap image here.
         if(bmpOutput) {
             prevBlender.load();
-            players[0].view.worldToWindowTransform = prevWorldToWindowTransform;
+            players[0].view = prevViewport;
             al_set_target_backbuffer(game.display);
             return;
         }
         
-        //Layer 5 -- Lighting filter.
-        if(game.perfMon) {
-            game.perfMon->startMeasurement("Drawing -- Lighting");
-        }
-        drawLightingFilter(player.view);
-        if(game.perfMon) {
-            game.perfMon->finishMeasurement();
-        }
-        
-        //Layer 6 -- In-game text.
+        //Layer 5 -- In-game text.
         al_use_transform(&player.view.worldToWindowTransform);
         if(game.perfMon) {
             game.perfMon->startMeasurement("Drawing -- In-game text");
@@ -148,7 +138,7 @@ void GameplayState::doGameDrawing(
             game.perfMon->finishMeasurement();
         }
         
-        //Layer 7 -- Leader cursor.
+        //Layer 6 -- Leader cursor.
         ALLEGRO_COLOR cursorColor = game.config.aestheticGen.noPikminColor;
         if(player.closestGroupMember[BUBBLE_RELATION_CURRENT]) {
             cursorColor =
@@ -1390,7 +1380,7 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
     ALLEGRO_BITMAP* oldBitmap = al_get_target_bitmap();
 
     ALLEGRO_BITMAP* lightingBuffer = 
-        al_create_bitmap(game.winW, game.winH);
+        al_create_bitmap(view.windowRect.size.x, view.windowRect.size.y);
     al_set_target_bitmap(lightingBuffer);
     
     //Clear to daylight Color
@@ -1401,8 +1391,12 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
     baseColor.a = 1;
     al_clear_to_color(baseColor);
     
-    //Draw sector lighting.
+
     al_use_transform(&view.worldToWindowTransform);
+    //Draw Tree shadows
+    drawTreeShadows();
+
+    //Draw sector lighting.
     forIdx(s, game.curArea->sectors) {
         Sector* sPtr = game.curArea->sectors[s];
         
@@ -1508,7 +1502,7 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
 
     
     //Draw the buffer onto the main output.
-    drawBitmap(lightingBuffer, Point(game.winW / 2, game.winH / 2), Point(game.winW, game.winH));
+    drawBitmap(lightingBuffer, view.windowRect.center, view.windowRect.size);
 
     //Cleanup
     al_destroy_bitmap(lightingBuffer);
@@ -1896,11 +1890,11 @@ void GameplayState::drawThrowPreview(Player* player) {
  * @param size Maximum image width or height, in pixels.
  * @param padding Padding around the actual area, in area pixels. Each side
  * of the area receives these many pixels divided by two.
- * @param treeShadows Whether to draw tree shadows.
+ * @param drawLighting Whether to draw lighting.
  * @return The bitmap.
  */
 ALLEGRO_BITMAP* GameplayState::drawToBitmap(
-    int size, int padding, bool treeShadows
+    int size, int padding, bool drawLighting
 ) {
     //First, get the full dimensions of the map.
     RectCorners corners = RectCorners::readyForSearch;
@@ -1909,7 +1903,7 @@ ALLEGRO_BITMAP* GameplayState::drawToBitmap(
         Vertex* vPtr = game.curArea->vertexes[v];
         updateMinMaxCoords(corners, v2p(vPtr));
     }
-    
+
     //Figure out the scale that will fit on the image.
     float areaW = corners.br.x - corners.tl.x + padding;
     float areaH = corners.br.y - corners.tl.y + padding;
@@ -1927,7 +1921,7 @@ ALLEGRO_BITMAP* GameplayState::drawToBitmap(
     
     //Create the bitmap.
     ALLEGRO_BITMAP* bmp = al_create_bitmap(finalBmpW, finalBmpH);
-    
+
     ALLEGRO_TRANSFORM t;
     al_identity_transform(&t);
     al_translate_transform(
@@ -1936,9 +1930,15 @@ ALLEGRO_BITMAP* GameplayState::drawToBitmap(
         -corners.tl.y + padding / 2.0f
     );
     al_scale_transform(&t, scale, scale);
-    
+    Viewport v = Viewport();
+    v.windowRect.size = Point(finalBmpW, finalBmpH);
+    v.windowRect.center = v.windowRect.size / 2;
+    v.worldCorners = corners;
+    v.worldToWindowTransform = t;
+    v.cam.zoom = scale;
+
     //Begin drawing!
-    doGameDrawing(bmp, &t, treeShadows);
+    doGameDrawing(bmp, &v, drawLighting);
     
     return bmp;
 }
