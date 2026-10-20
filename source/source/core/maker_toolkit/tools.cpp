@@ -820,10 +820,7 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
     }
     
     if(toolToRun != MAKER_TOOL_TYPE_NONE) {
-        types[toolToRun].code(*this, args);
-        if(types[toolToRun].helpful) {
-            usedHelpingTools = true;
-        }
+        runTool(toolToRun, args);
     }
     
     return true;
@@ -994,6 +991,21 @@ void MakerTools::resetForGameplay() {
     allowedInPlayNow = false;
     playConfirmationPresses = 0;
     playConfirmationTimer = 0.0f;
+}
+
+
+/**
+ * @brief Runs a specific tool.
+ *
+ * @param type The tool type.
+ * @param args Arguments.
+ */
+void MakerTools::runTool(MAKER_TOOL_TYPE type, const vector<string>& args) {
+    types[type].code(*this, args);
+    
+    if(types[type].helpful) {
+        usedHelpingTools = true;
+    }
 }
 
 
