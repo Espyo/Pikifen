@@ -707,6 +707,8 @@ void MakerConsoleTerminal::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
             if(output.size() > 1 && scroll < output.size() - 1) scroll++;
         } else if(ev.keyboard.keycode == ALLEGRO_KEY_PGDN) {
             if(output.size() > 1 && scroll > 0) scroll--;
+        } else if(ev.keyboard.keycode == ALLEGRO_KEY_ENTER) {
+            if(input.getString().size() > 0) submitCommand();
         }
     }
     
@@ -735,6 +737,32 @@ void MakerConsoleTerminal::open(bool instant) {
         }
         break;
     }
+    }
+}
+
+
+/**
+ * @brief Submits the currently written command in the input.
+ */
+void MakerConsoleTerminal::submitCommand() {
+    MAKER_TOOL_TYPE toolToRun = MAKER_TOOL_TYPE_NONE;
+    vector<string> args;
+    vector<string> inputParts = split(input.getString());
+    
+    if(!game.makerTools.checkMakerToolsAllowed(1.0f)) return;
+    if(inputParts.empty()) return;
+    
+    forIdx(t, game.makerTools.types) {
+        const MakerToolType& type = game.makerTools.types[t];
+        if(type.name == inputParts[0]) {
+            toolToRun = type.type;
+        }
+    }
+    
+    if(toolToRun != MAKER_TOOL_TYPE_NONE) {
+        args = inputParts;
+        args.erase(args.begin());
+        game.makerTools.runTool(toolToRun, args);
     }
 }
 

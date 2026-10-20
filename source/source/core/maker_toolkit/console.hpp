@@ -88,6 +88,11 @@ struct MakerConsoleTerminal {
     //Currently written input text.
     TextInput input;
     
+    
+    //--- Private function declarations ---
+    
+    void submitCommand();
+    
 };
 
 

@@ -354,6 +354,7 @@ struct MakerTools {
     bool handleGeneralPlayerAction(const Inpution::Action& action);
     void loadFromDataNode(DataNode* node);
     void resetForGameplay();
+    void runTool(MAKER_TOOL_TYPE type, const vector<string>& args);
     void saveToDataNode(DataNode* node);
     void tick(float deltaT);
     unsigned char getMakerToolSettingIdx() const;
