@@ -310,11 +310,11 @@ void InWorldFraction::tick(float deltaT) {
  *
  * @param m Mob it belongs to.
  */
-InWorldHealthWheel::InWorldHealthWheel(Mob* m) :
+InWorldMobStatus::InWorldMobStatus(Mob* m) :
     InWorldHudItem(m) {
     
     if(m->maxHealth > 0.0f) {
-        visibleRatio = m->health / m->maxHealth;
+        healthVisibleRatio = m->health / m->maxHealth;
     }
     transitionTimer = IN_WORLD_HEALTH_WHEEL::TRANSITION_IN_DURATION;
 }
@@ -323,7 +323,7 @@ InWorldHealthWheel::InWorldHealthWheel(Mob* m) :
 /**
  * @brief Aborts the fading away process.
  */
-void InWorldHealthWheel::abortFadeOut() {
+void InWorldMobStatus::abortFadeOut() {
     if(transition != IN_WORLD_HUD_TRANSITION_OUT) {
         return;
     }
@@ -338,7 +338,7 @@ void InWorldHealthWheel::abortFadeOut() {
 /**
  * @brief Draws an in-world health wheel, and any status buildup bars.
  */
-void InWorldHealthWheel::draw() {
+void InWorldMobStatus::draw() {
     //Setup.
     float alphaMult = 1.0f;
     float sizeMult = 1.0f;
@@ -363,74 +363,133 @@ void InWorldHealthWheel::draw() {
     }
     
     float wheelRadius = DRAWING::DEF_HEALTH_WHEEL_RADIUS * sizeMult;
+    float curYOffset = m->radius + IN_WORLD_HEALTH_WHEEL::PADDING + wheelRadius;
+    
+    drawHealthWheel(wheelRadius, curYOffset, alphaMult);
+    
+    //Draw status bars.
     Point buildupBarSize =
         Point(
             IN_WORLD_STATUS_BUILDUP::WIDTH, IN_WORLD_STATUS_BUILDUP::HEIGHT
         ) * sizeMult;
-    float curYOffset = m->radius + IN_WORLD_HEALTH_WHEEL::PADDING + wheelRadius;
-    
-    //Draw the health wheel.
-    drawHealth(
-        Point(m->center.x, m->center.y - curYOffset),
-        visibleRatio,
-        IN_WORLD_HEALTH_WHEEL::ALPHA * alphaMult,
-        wheelRadius
+    curYOffset += wheelRadius + IN_WORLD_STATUS_BUILDUP::PADDING;  
+    drawStatuses(buildupBarSize, curYOffset, alphaMult);
+
+}
+
+
+/**
+ * @brief Draws an in-world health wheel.
+ * 
+ * @param radius Radius to draw the wheel.
+ * @param yOffset Offset to draw the wheel from the mob.
+ * @param alpha Opacity to draw the wheel.
+ */
+void InWorldMobStatus::drawHealthWheel(float radius, float yOffset, float alpha) {
+    Point center = Point(m->center.x, m->center.y - yOffset);
+    const ALLEGRO_COLOR CHART_COLOR = al_map_rgb(10, 25, 35);
+
+    ALLEGRO_SHADER* healthShader = game.shaders.getShader(SHADER_TYPE_SCANLINE);
+    if(healthShader) {
+        al_use_shader(healthShader);
+        al_set_shader_float("image_height", 1.0); //Pieslice prims map UV to [-r, r], so we don't need to scale based on image size
+        al_set_shader_float("area_time", game.timePassed * 2);
+        al_set_shader_float("intensity", 0.2f);
+        al_set_shader_float("frequency", 2.0f);
+    }
+
+    //Backing of the wheel
+    al_draw_filled_circle(
+        center.x, center.y, radius, multAlpha(CHART_COLOR, 0.5f * alpha)
     );
-    
-    //Draw status bars.
-    curYOffset += wheelRadius + IN_WORLD_STATUS_BUILDUP::PADDING;
-    
+
+    //Draw pieslice
+    drawHealthFill(
+        Point(center.x, center.y),
+        healthVisibleRatio,
+        IN_WORLD_HEALTH_WHEEL::ALPHA * alpha,
+        radius
+    );
+
+    //Additive glow
+    AllegroBlenderState prevBlender;
+    prevBlender.save();
+    al_set_blender(ALLEGRO_ADD, ALLEGRO_ALPHA, ALLEGRO_ONE);
+    drawBitmapInBox(
+        game.sysContent.bmpHealthGlow,
+        Point(center.x, center.y),
+        Point(radius * 2, radius * 2),
+        true, true, 0.0f,
+        multAlpha(COLOR_WHITE, alpha)
+    );
+    prevBlender.loadIfHasData();
+
+    //Don't use a shader for the border.
+    al_use_shader(nullptr);
+    al_draw_circle(
+        center.x, center.y, radius + 1, multAlpha(CHART_COLOR, alpha), 2
+    );
+}
+
+/**
+ * @brief Draws in-world status buildup bars.
+ * 
+ * @param barSize Size of the bar, including the outline.
+ * @param yOffset Offset to draw the bar from the mob.
+ * @param alpha Opacity to draw the wheel.
+ */
+void InWorldMobStatus::drawStatuses(Point barSize, float yOffset, float alpha) {
     const auto drawNextBar =
-        [this, &curYOffset, &alphaMult, &buildupBarSize, &sizeMult]
+        [this, &yOffset, &alpha, &barSize]
     (float fillRatio, const ALLEGRO_COLOR & color, bool drawCross) {
         if(fillRatio <= 0.0f) return;
         
-        curYOffset +=
+        yOffset +=
             IN_WORLD_STATUS_BUILDUP::PADDING + IN_WORLD_STATUS_BUILDUP::HEIGHT;
-        Point buildupBarCenter(m->center.x, m->center.y - curYOffset);
+        Point buildupBarCenter(m->center.x, m->center.y - yOffset);
         
         drawFilledRoundedRatioRectangle(
             buildupBarCenter,
-            buildupBarSize,
+            barSize,
             IN_WORLD_STATUS_BUILDUP::CORNER_RADIUS,
             changeAlpha(
-                COLOR_BLACK, 255 * IN_WORLD_STATUS_BUILDUP::ALPHA * alphaMult
+                COLOR_BLACK, 255 * IN_WORLD_STATUS_BUILDUP::ALPHA * alpha
             )
         );
         
-        float filledWidth = IN_WORLD_STATUS_BUILDUP::WIDTH * fillRatio;
-        Point filledBarCenter(
-            m->center.x - IN_WORLD_STATUS_BUILDUP::WIDTH / 2.0f +
-            filledWidth / 2.0f,
-            m->center.y - curYOffset
-        );
         Point filledBarSize =
             Point(
-                filledWidth, IN_WORLD_STATUS_BUILDUP::HEIGHT
-            ) - IN_WORLD_STATUS_BUILDUP::OUTLINE_SIZE * 2.0f
-            * sizeMult;
+                barSize.x, barSize.y
+            ) - IN_WORLD_STATUS_BUILDUP::OUTLINE_SIZE * 2.0f;
+        filledBarSize.x *= fillRatio;
         filledBarSize.x = std::max(0.0f, filledBarSize.x);
+
+        Point filledBarCenter(
+            m->center.x - (barSize.x / 2.0f - IN_WORLD_STATUS_BUILDUP::OUTLINE_SIZE) +
+            filledBarSize.x / 2.0f,
+            m->center.y - yOffset
+        );
         drawFilledRoundedRatioRectangle(
             filledBarCenter, filledBarSize,
             IN_WORLD_STATUS_BUILDUP::CORNER_RADIUS,
             changeAlpha(
-                color, 255 * IN_WORLD_STATUS_BUILDUP::ALPHA * alphaMult
+                color, 255 * IN_WORLD_STATUS_BUILDUP::ALPHA * alpha
             )
         );
         
         if(drawCross) {
             al_draw_line(
-                buildupBarCenter.x - buildupBarSize.x / 2.0f,
-                buildupBarCenter.y - buildupBarSize.y / 2.0f,
-                buildupBarCenter.x + buildupBarSize.x / 2.0f,
-                buildupBarCenter.y + buildupBarSize.y / 2.0f,
+                buildupBarCenter.x - barSize.x / 2.0f,
+                buildupBarCenter.y - barSize.y / 2.0f,
+                buildupBarCenter.x + barSize.x / 2.0f,
+                buildupBarCenter.y + barSize.y / 2.0f,
                 al_map_rgb(128, 64, 32), 2.0f
             );
             al_draw_line(
-                buildupBarCenter.x + buildupBarSize.x / 2.0f,
-                buildupBarCenter.y - buildupBarSize.y / 2.0f,
-                buildupBarCenter.x - buildupBarSize.x / 2.0f,
-                buildupBarCenter.y + buildupBarSize.y / 2.0f,
+                buildupBarCenter.x + barSize.x / 2.0f,
+                buildupBarCenter.y - barSize.y / 2.0f,
+                buildupBarCenter.x - barSize.x / 2.0f,
+                buildupBarCenter.y + barSize.y / 2.0f,
                 al_map_rgb(128, 64, 32), 2.0f
             );
         }
@@ -459,7 +518,7 @@ void InWorldHealthWheel::draw() {
 /**
  * @brief Starts fading away.
  */
-void InWorldHealthWheel::startFadingOut() {
+void InWorldMobStatus::startFadingOut() {
     if(transition == IN_WORLD_HUD_TRANSITION_OUT) {
         return;
     }
@@ -473,13 +532,13 @@ void InWorldHealthWheel::startFadingOut() {
  *
  * @param deltaT How long the frame's tick is, in seconds.
  */
-void InWorldHealthWheel::tick(float deltaT) {
+void InWorldMobStatus::tick(float deltaT) {
     InWorldHudItem::tick(deltaT);
     
     if(m->maxHealth == 0.0f) return;
     
-    visibleRatio +=
-        ((m->health / m->maxHealth) - visibleRatio) *
+    healthVisibleRatio +=
+        ((m->health / m->maxHealth) - healthVisibleRatio) *
         (IN_WORLD_HEALTH_WHEEL::SMOOTHNESS_MULT * deltaT);
 }
 
