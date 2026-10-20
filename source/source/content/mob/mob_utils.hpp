@@ -812,7 +812,7 @@ Mob* createMob(
     MobCategory* category, const Point& pos, MobType* type,
     float angle, const string& varsStr,
     std::function<void(Mob*)> codeAfterCreation = nullptr,
-    size_t firstStateOverride = INVALID
+    size_t firstStateOverride = INVALID, const float z = INVALID
 );
 Mob* createMob(MobGen* gen);
 void deleteMob(Mob* m, bool completeDestruction = false);
