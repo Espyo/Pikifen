@@ -126,8 +126,8 @@ private:
     //Comparison sprite to use in sprite comparison mode.
     Sprite* comparisonSprite = nullptr;
     
-    //Is the comparison sprite mode tinting the sprites?
-    bool comparisonTint = true;
+    //Is the comparison sprite mode colorizing the sprites?
+    bool comparisonColorize = true;
     
     //Animation instance, for when the user is editing animations.
     AnimationInstance curAnimInst;

@@ -353,17 +353,19 @@ void AnimationEditor::drawCanvas() {
  * @brief Draws the comparison sprite on the canvas, all tinted and everything.
  */
 void AnimationEditor::drawComparison() {
-    const ALLEGRO_COLOR COMPARISON_TINT = al_map_rgb(255, 128, 0);
+    const ALLEGRO_COLOR COMPARING_COMPARISON_COLOR =
+        al_map_rgba(255, 128, 0, 128);
     if(
         comparison && comparisonBlinkShow &&
         comparisonSprite && comparisonSprite->bitmap
     ) {
-        ALLEGRO_COLOR tint;
-        if(comparisonTint) {
-            tint = COMPARISON_TINT;
-        } else {
-            tint = comparisonSprite->tint;
+        if(comparisonColorize) {
+            al_use_shader(game.shaders.getShader(SHADER_TYPE_COLORIZER));
+            al_set_shader_float_vector(
+                "colorizer_color", 4, (float*) &COMPARING_COMPARISON_COLOR, 1
+            );
         }
+        
         drawBitmap(
             comparisonSprite->bitmap,
             comparisonSprite->tf.trans,
@@ -371,8 +373,12 @@ void AnimationEditor::drawComparison() {
                 comparisonSprite->bmpSize.x * comparisonSprite->tf.scale.x,
                 comparisonSprite->bmpSize.y * comparisonSprite->tf.scale.y
             ),
-            comparisonSprite->tf.rot, tint
+            comparisonSprite->tf.rot, comparisonSprite->tint
         );
+        
+        if(comparisonColorize) {
+            al_use_shader(nullptr);
+        }
     }
 }
 
@@ -709,8 +715,9 @@ void AnimationEditor::drawTopDownViewMobRadius(MobType* mt) {
  * @param s Sprite to draw.
  */
 void AnimationEditor::drawTopDownViewSprite(Sprite* s) {
-    const ALLEGRO_COLOR COMPARISON_TINT = al_map_rgb(240, 240, 240);
-    
+    const ALLEGRO_COLOR COMPARING_WORKING_COLOR =
+        al_map_rgba(0, 128, 255, 128);
+        
     if(!comparisonAbove) {
         drawComparison();
     }
@@ -728,20 +735,24 @@ void AnimationEditor::drawTopDownViewSprite(Sprite* s) {
         float angle;
         Point scale;
         ALLEGRO_COLOR tint;
-        
+        bool doingComparisonColoring =
+            state == EDITOR_STATE_SPRITE_TRANSFORM &&
+            comparison && comparisonColorize &&
+            comparisonSprite && comparisonSprite->bitmap;
+            
         getSpriteBasicEffects(
             Point(), 0, LARGE_FLOAT, LARGE_FLOAT,
             s, nextS, interpolationFactor,
             &coords, &angle, &scale, &tint
         );
         
-        if(
-            state == EDITOR_STATE_SPRITE_TRANSFORM &&
-            comparison && comparisonTint &&
-            comparisonSprite && comparisonSprite->bitmap
-        ) {
-            tint = COMPARISON_TINT;
+        if(doingComparisonColoring) {
+            al_use_shader(game.shaders.getShader(SHADER_TYPE_COLORIZER));
+            al_set_shader_float_vector(
+                "colorizer_color", 4, (float*) &COMPARING_WORKING_COLOR, 1
+            );
         }
+        
         drawBitmap(
             s->bitmap, coords,
             Point(
@@ -750,6 +761,10 @@ void AnimationEditor::drawTopDownViewSprite(Sprite* s) {
             ),
             angle, tint
         );
+        
+        if(doingComparisonColoring) {
+            al_use_shader(nullptr);
+        }
     }
     
     if(
