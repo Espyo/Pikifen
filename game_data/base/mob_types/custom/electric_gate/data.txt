@@ -5,6 +5,7 @@ can_block_paths = true
 can_hurt = player
 custom_category_name = Gate
 height = 0
+light_color = 255 255 196 128
 max_health = 2000
 pushable = false
 pushes = true
