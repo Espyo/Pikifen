@@ -74,6 +74,16 @@ script {
             be_chomped
             set_state held_by_enemy
         }
+        on_tick {
+            get_mob_info ratio self health_ratio
+            calculate ratio 1 - $ratio
+            calculate radius $ratio * 64
+            calculate radius $radius + 28
+            set_light_radius $radius
+            calculate colorR 255 * $ratio
+            calculate colorG $colorR / 2
+            set_light_color $colorR $colorG 0
+        }
         on_land {
             stop
         }
