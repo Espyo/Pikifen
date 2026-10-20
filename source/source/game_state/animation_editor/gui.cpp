@@ -3235,10 +3235,10 @@ void AnimationEditor::processGuiPanelSpriteTransform() {
                     "sprite?"
                 );
                 
-                //Tint both checkbox.
-                ImGui::Checkbox("Tint both", &comparisonTint);
+                //Color both checkbox.
+                ImGui::Checkbox("Color both", &comparisonColorize);
                 setTooltip(
-                    "Tint the working sprite blue, and the comparison "
+                    "Color the working sprite blue, and the comparison "
                     "sprite orange."
                 );
                 
