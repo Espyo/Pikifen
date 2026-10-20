@@ -5,13 +5,14 @@ init {
     set_var ignoring false
     get_mob_info home_x self x
     get_mob_info home_y self y
+	set_var followers 10
 }
 
 ready {
     //We could have spawned the young in the init block, but that would make
     //the engine spawn the enemy and the young right away, taking up
     //slots that may need to be used by the player's Pikmin.
-    for temp 10
+    for temp $followers
         spawn young
     end_for
 }
