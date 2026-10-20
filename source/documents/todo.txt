@@ -2,7 +2,9 @@
 
 
 Current tasks (tasks being worked on, but not yet committed)
-    
+    Maker console
+        Inputs shouldn't bleed outside of the console into gameplay and menus
+        Arguments need to be parsed -- default values, correct value types, error if something's wrong, etc.
 
 Next tasks (roughly sorted most important first)
     --- Problems to fix ---
