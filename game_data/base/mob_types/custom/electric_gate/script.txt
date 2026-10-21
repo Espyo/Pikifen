@@ -102,6 +102,8 @@ script {
             play_sound obstacle_cleared
             set_tangible false
             set_shadow_visibility false
+            set_light_radius 0
+            set_light_color 0 0 0
             send_message_to_links destroy
             //Set height to 1 so the debris show below the leaders.
             set_height 1
