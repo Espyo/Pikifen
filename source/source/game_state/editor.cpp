@@ -1477,7 +1477,7 @@ bool Editor::keyframeEditor(
     if(interpolator.getKeyframeCount() > 1) {
         //Time value.
         float time = interpolator.getKeyframe(selKeyframeIdx).first;
-        if(ImGui::SliderFloat("Time", &time, 0.0f, 1.0f)) {
+        if(ImGui::SliderFloat((label + "Time").c_str(), &time, 0.0f, 1.0f)) {
             interpolator.setKeyframeTime(
                 selKeyframeIdx, time, &selKeyframeIdx
             );

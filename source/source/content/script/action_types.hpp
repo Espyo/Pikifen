@@ -311,6 +311,12 @@ enum SCRIPT_ACTION {
     //Set whether it is huntable.
     SCRIPT_ACTION_SET_HUNTABLE,
     
+    //Set light color.
+    SCRIPT_ACTION_SET_LIGHT_COLOR,
+
+    //Set light radius.
+    SCRIPT_ACTION_SET_LIGHT_RADIUS,
+
     //Set limb animation.
     SCRIPT_ACTION_SET_LIMB_ANIMATION,
     
@@ -1010,6 +1016,8 @@ void setHeight(ScriptActionInstRunData& data);
 void setHiding(ScriptActionInstRunData& data);
 void setHoldable(ScriptActionInstRunData& data);
 void setHuntable(ScriptActionInstRunData& data);
+void setLightColor(ScriptActionInstRunData& data);
+void setLightRadius(ScriptActionInstRunData& data);
 void setLimbAnimation(ScriptActionInstRunData& data);
 void setListItem(ScriptActionInstRunData& data);
 void setMissionMetricScriptSlot(ScriptActionInstRunData& data);

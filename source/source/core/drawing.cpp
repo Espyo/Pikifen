@@ -636,7 +636,6 @@ void drawLiquid(
     if(!sPtr) return;
     if(sPtr->isBottomlessPit) return;
     
-    float brightnessMult = sPtr->brightness / 255.0f;
     float sectorScroll[2] = {
         sPtr->scroll.x,
         sPtr->scroll.y
@@ -722,7 +721,7 @@ void drawLiquid(
     al_use_shader(liqShader);
     al_set_shader_float("area_time", time * lPtr->animSpeed);
     al_set_shader_float("alpha", drainAlpha);
-    al_set_shader_float("sector_brightness", brightnessMult);
+    al_set_shader_float("sector_brightness", 1.0f);
     al_set_shader_float_vector("sector_scroll", 2, &sectorScroll[0], 1);
     al_set_shader_float("shine_min_threshold", lPtr->shineMinThreshold);
     al_set_shader_float("shine_max_threshold", lPtr->shineMaxThreshold);
@@ -1387,15 +1386,13 @@ void drawSectorIce(
         Vertex* vPtr = tPtr->points[v % 3];
         float vx = vPtr->x;
         float vy = vPtr->y;
-        float brightnessMult = sPtr->brightness / 255.0f;
         
         av[v].x = vx - where.x;
         av[v].y = vy - where.y;
         av[v].u = vx;
         av[v].v = vy;
         av[v].z = 0;
-        av[v].color =
-            changeAlpha(mapGray(brightnessMult * 255), alpha * 255);
+        av[v].color = COLOR_WHITE;
     }
     
     for(size_t v = 0; v < nVertexes; v++) {
@@ -1417,7 +1414,6 @@ void drawSectorIce(
             Vertex* vPtr = tPtr->points[v % 3];
             float vx = vPtr->x;
             float vy = vPtr->y;
-            float brightnessMult = sPtr->brightness / 255.0f;
             
             av[v].x = vx - where.x;
             av[v].y = vy - where.y;
@@ -1425,10 +1421,7 @@ void drawSectorIce(
             av[v].v = vy;
             av[v].z = 0;
             av[v].color =
-                changeAlpha(
-                    mapGray(brightnessMult * 255),
-                    alpha * flashEffectAlpha * 255
-                );
+                mapAlpha(alpha * flashEffectAlpha * 255);
         }
         
         for(size_t v = 0; v < nVertexes; v++) {
@@ -1510,7 +1503,6 @@ void drawSectorTexture(
             float vy = vPtr->y;
             
             float alphaMult = 1;
-            float brightnessMult = textureSector[t]->brightness / 255.0f;
             
             if(t == 1) {
                 if(!drawSector0) {
@@ -1543,10 +1535,7 @@ void drawSectorTexture(
             av[v].z = 0;
             av[v].color =
                 multAlpha(
-                    tintColor(
-                        textureSector[t]->textureInfo.tint,
-                        mapGray(brightnessMult * 255)
-                    ),
+                    textureSector[t]->textureInfo.tint,
                     alphaMult * alpha
                 );
         }
@@ -1568,6 +1557,107 @@ void drawSectorTexture(
         
         delete[] av;
     }
+}
+
+
+/**
+ * @brief Draws the lighting of a sector.
+ *
+ * @param sPtr Pointer to the sector.
+ * @param where X and Y offset.
+ * @param scale Scale the sector by this much.
+ * @param alpha Draw the lighting at this alpha [0 - 1].
+ */
+void drawSectorLighting(
+    Sector* sPtr, const Point& where, float scale, float alpha
+) {
+    if(!sPtr) return;
+    if(sPtr->isBottomlessPit) return;
+
+    AllegroBlenderState prevState;
+    prevState.save();
+    al_set_blender(ALLEGRO_ADD, ALLEGRO_DEST_COLOR, ALLEGRO_ZERO); 
+
+    Sector* sourceSector[2] = {nullptr, nullptr};
+    
+    if(sPtr->fade) {
+        sPtr->getTextureMergeSectors(
+            &sourceSector[0], &sourceSector[1]
+        );
+        if(!sourceSector[0] && !sourceSector[1]) {
+            //Can't draw this sector's lighting.
+            return;
+        }
+    } else {
+        sourceSector[0] = sPtr;
+    }
+    
+    bool drawSector0 = true;
+    if(!sourceSector[0]) drawSector0 = false;
+    else if(sourceSector[0]->isBottomlessPit) {
+        drawSector0 = false;
+    }
+
+    size_t nVertexes = sPtr->triangles.size() * 3;
+    ALLEGRO_VERTEX* av = new ALLEGRO_VERTEX[nVertexes];
+
+    for(size_t v = 0; v < nVertexes; v++) {
+        const Triangle* tPtr = &sPtr->triangles[floor(v / 3.0)];
+        Vertex* vPtr = tPtr->points[v % 3];
+        float vx = vPtr->x;
+        float vy = vPtr->y;
+        unsigned char brightness = 255;
+        if(drawSector0) {
+            brightness = sourceSector[0]->brightness;
+            if(sourceSector[1]) {
+                forIdx(e, sourceSector[1]->edges) {
+                    if(
+                        sourceSector[1]->edges[e]->vertexes[0] == vPtr ||
+                        sourceSector[1]->edges[e]->vertexes[1] == vPtr
+                    ) {
+                        brightness = sourceSector[1]->brightness;
+                    }
+                }
+            }
+        } else {
+            if(sourceSector[0] && sourceSector[0]->isBottomlessPit) {
+                brightness = 0;
+                if(sourceSector[1]) {
+                    forIdx(e, sourceSector[1]->edges) {
+                        if(
+                            sourceSector[1]->edges[e]->vertexes[0] == vPtr ||
+                            sourceSector[1]->edges[e]->vertexes[1] == vPtr
+                        ) {
+                            brightness = sourceSector[1]->brightness;
+                        }
+                    }
+                }
+            } else {
+                brightness = sourceSector[1]->brightness;
+            }
+        }
+
+        av[v].x = vx - where.x;
+        av[v].y = vy - where.y;
+        av[v].u = vx;
+        av[v].v = vy;
+        av[v].z = 0;
+        //Incrementing the rgb 
+        av[v].color = mapGray(brightness + (255 - brightness) * (1 - alpha));
+    }
+    
+    for(size_t v = 0; v < nVertexes; v++) {
+        av[v].x *= scale;
+        av[v].y *= scale;
+    }
+    al_draw_prim(
+        av, nullptr, nullptr,
+        0, (int) nVertexes, ALLEGRO_PRIM_TRIANGLE_LIST
+    );
+    
+    delete[] av;
+
+    prevState.load();
 }
 
 

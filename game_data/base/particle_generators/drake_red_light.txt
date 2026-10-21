@@ -2,7 +2,7 @@ name=S.S. Drake red light
 description=The red light under the S.S. Drake's lower windows.
 maker=Espyo
 version=1.0.0
-engine_version=1.0.0
+engine_version=1.2.0
 emission{
 	number=1
 	number_deviation=0
@@ -22,6 +22,17 @@ base{
 	duration=2.0000
 	friction=0.0000
 	blend_type=1
+	emits_light=true
+	light_size{
+		0.0000=24.0000
+	}
+	light_color{
+		0.0000=255 0 0 0
+		0.2500=255 0 0 64
+		0.5000=255 0 0 64
+		0.7500=253 0 0 0
+		1.0000=255 0 0 0
+	}
 	color{
 		0.0000=255 0 0 0
 		0.2500=255 0 0 224

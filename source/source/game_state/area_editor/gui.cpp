@@ -1285,6 +1285,28 @@ void AreaEditor::processGuiMobScriptVars(MobGen* mPtr) {
         vars.setValue("max_health", maxHealth);
     }
     varsInWidgets["max_health"] = true;
+
+    //Lighting properties
+    bool lit = false;
+    vars.getValue("lit", lit);
+    if(ImGui::Checkbox("Lit ", &lit)) {
+        registerChange("script vars change");
+    }
+    setTooltip(
+        "Whether this object is lit.\n"
+        "This has no effect if the mob already emits a light.\n"
+        "(Variable name: \"lit\".)",
+        "",
+        WIDGET_EXPLANATION_DRAG
+    );
+    
+    if(!lit) {
+        vars.erase("lit");
+    } else {
+        vars.setValue("lit", lit);
+    }
+    varsInWidgets["lit"] = true;
+
     
     //Now, dynamically create widgets for all properties this mob type has.
     

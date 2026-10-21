@@ -2557,6 +2557,39 @@ void ScriptActionRunners::setHuntable(ScriptActionInstRunData& data) {
 
 
 /**
+ * @brief Code for the light setting script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::setLightColor(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& redArg = data.args[0];
+    const string& greenArg = data.args[1];
+    const string& blueArg = data.args[2];
+    
+    //Main logic.
+    ALLEGRO_COLOR c = al_map_rgb(s2i(redArg), s2i(greenArg),s2i(blueArg));
+    data.scriptVM->getRunnerMob()->lightColor = c;
+    
+}
+
+
+/**
+ * @brief Code for the light setting script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::setLightRadius(ScriptActionInstRunData& data) {
+    //Get the arguments.
+    const string& radiusArg = data.args[0];
+    
+    //Main logic.
+    data.scriptVM->getRunnerMob()->lightRadius = s2i(radiusArg);
+    
+}
+
+
+/**
  * @brief Code for the limb animation setting script action type.
  *
  * @param data Data about the action call.

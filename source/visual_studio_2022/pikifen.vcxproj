@@ -138,6 +138,7 @@
       <CompileAs>CompileAsCpp</CompileAs>
       <DisableSpecificWarnings>4100;4458;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard_C>stdclatest</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -196,7 +197,7 @@
     <ClInclude Include="..\source\*\*.hpp" />
     <ClInclude Include="..\source\*\*\*.hpp" />
     <ClInclude Include="..\source\*\*\*\*.hpp" />
-	<ClInclude Include="..\source\*.h" />
+    <ClInclude Include="..\source\*.h" />
     <ClInclude Include="..\source\*\*.h" />
     <ClInclude Include="..\source\*\*\*.h" />
     <ClInclude Include="..\source\*\*\*\*.h" />
