@@ -429,15 +429,18 @@ void Area::clone(Area& other) {
     other.mission.preset = mission.preset;
     other.mission.endConds = mission.endConds;
     other.mission.mobGroups = mission.mobGroups;
-    other.mission.hudItems = mission.hudItems;
-    other.mission.timeLimit = mission.timeLimit;
     other.mission.medalAwardMode = mission.medalAwardMode;
+    other.mission.timeLimit = mission.timeLimit;
+    other.mission.hudItems = mission.hudItems;
+    other.mission.scoreCriteria = mission.scoreCriteria;
     other.mission.startingPoints = mission.startingPoints;
     other.mission.pointsCanBeNegative = mission.pointsCanBeNegative;
     other.mission.bronzeReq = mission.bronzeReq;
     other.mission.silverReq = mission.silverReq;
     other.mission.goldReq = mission.goldReq;
     other.mission.platinumReq = mission.platinumReq;
+    other.mission.briefingObjective = mission.briefingObjective;
+    other.mission.briefingNotes = mission.briefingNotes;
     other.mission.makerRecord = mission.makerRecord;
     other.mission.makerRecordDate = mission.makerRecordDate;
     
