@@ -8,6 +8,7 @@ Next tasks (roughly sorted most important first)
     --- Problems to fix ---
 
     --- 1.2.0 ---
+    Options should not receive the deprecated property warning, since opening Pikifen in the first place already ports them automatically, and people will just be confused
     Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
     
     --- 1.3.0 ---
@@ -764,6 +765,7 @@ Misc. things (to be implemented whenever)
             Calling ImGui::CloseCurrentPopup(); doesn't seem to work...
         Specific, niche tools for editors?
             For the animation editor: reverse frames
+        Generic tools, accessible in all editors, like a distance visualizer (which just shows a texture, a leader silhouette, and a circle around it controlled by a slider)?
         Resizable text inputs? https://github.com/ocornut/imgui/issues/7081#issuecomment-2081167909
         An option to toggle the grid visibility
         Smooth scrolling in Dear ImGui https://github.com/ocornut/imgui/issues/2462 (thanks Nataly171)

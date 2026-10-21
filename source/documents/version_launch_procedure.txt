@@ -1,4 +1,6 @@
 1. Before everything
+    Last minute bug tests
+        Area cloning -- Enter the area editor, choose an area, make one change, undo, then save. Check the area's files in git to make sure nothing broke
     Confirm that there are no more tasks in the todo document, open bug reports, etc.
     Confirm that there are no staged or unstaged changes on git
     Make sure the documentation is up-to-date, especially the following:
