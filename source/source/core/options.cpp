@@ -299,6 +299,9 @@ vector<pair<string, string> > Options::loadEditorHistory(
 
 /**
  * @brief Loads the player options from a file.
+ * Most deprecated options are loaded too, but are not reported, since
+ * loading Pikifen in the first place already ports them to the new
+ * properties, unless specified otherwise.
  *
  * @param file File to read from.
  */
@@ -309,10 +312,8 @@ void Options::loadFromDataNode(DataNode* file) {
         
         //DEPRECATED in 1.1.0 by "controls" > "p*_mouse_moves_leader_cursor".
         for(unsigned char p = 0; p < MAX_PLAYERS; p++) {
-            deprecatedReaderSetter(
-                aRS,
+            aRS.set(
                 "p" + i2s(p + 1) + "_mouse_moves_cursor",
-                "p" + i2s(p + 1) + "_mouse_moves_leader_cursor",
                 controls.mouseMovesLeaderCursor[p]
             );
         }
@@ -434,10 +435,7 @@ void Options::loadFromDataNode(DataNode* file) {
         unsigned char autoThrowModeChar = controls.autoThrowMode;
         
         //DEPRECATED in 1.1.0 by "leader_cursor_speed".
-        deprecatedReaderSetter(
-            cRS, "cursor_speed", "leader_cursor_speed",
-            controls.leaderCursorSpeed
-        );
+        cRS.set("cursor_speed", controls.leaderCursorSpeed);
         
         cRS.set("auto_throw_mode", autoThrowModeChar);
         cRS.set("fast_inventory", controls.fastInventory);
@@ -542,20 +540,11 @@ void Options::loadFromDataNode(DataNode* file) {
         unsigned char leavingConfModeChar = misc.leavingConfMode;
         
         //DEPRECATED in 1.1.0 by "leader_cursor_cam_weight".
-        deprecatedReaderSetter(
-            mRS, "cursor_cam_weight", "leader_cursor_cam_weight",
-            misc.leaderCursorCamWeight
-        );
+        mRS.set("cursor_cam_weight", misc.leaderCursorCamWeight);
         //DEPRECATED in 1.1.0 by "show_leader_cursor_counter".
-        deprecatedReaderSetter(
-            mRS, "show_counter_on_cursor", "show_leader_cursor_counter",
-            misc.showLeaderCursorCounter
-        );
+        mRS.set("show_counter_on_cursor", misc.showLeaderCursorCounter);
         //DEPRECATED in 1.2.0 by "show_gui_input_icons".
-        deprecatedReaderSetter(
-            mRS, "show_hud_input_icons", "show_gui_input_icons",
-            misc.showGuiInputIcons
-        );
+        mRS.set("show_hud_input_icons", misc.showGuiInputIcons);
         
         mRS.set("dismiss_all", misc.dismissAll);
         mRS.set("leader_cursor_cam_weight", misc.leaderCursorCamWeight);

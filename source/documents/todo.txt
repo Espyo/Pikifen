@@ -8,8 +8,6 @@ Next tasks (roughly sorted most important first)
     --- Problems to fix ---
 
     --- 1.2.0 ---
-    Options should not receive the deprecated property warning, since opening Pikifen in the first place already ports them automatically, and people will just be confused
-    Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
     
     --- 1.3.0 ---
     Create an area that's good for people to pick up and play
@@ -150,6 +148,7 @@ Next tasks (roughly sorted most important first)
     The camera (at least for editors and radar) should control where it wants to go based on the specified rectangle corners. Then, every frame, it interpolates between the currently-visible corners and the intended corners and change the X, Y, and zoom to match. This should allow smoothly zooming in and out in editors while keeping the point under the mouse fixed
         Also add logic to release the mouse while moving the camera to make it slide and lose speed over time
     Maybe the signs in Tutorial Meadow could have a preview that is just a summary of what it teaches, half a dozen of words, and if you interact it shows the whole thing
+    Dwarf Red Bulborbs should scream to wake up nearby Red Bulborbs
 
     --- 2.0.0 ---
     Multiplayer co-op
