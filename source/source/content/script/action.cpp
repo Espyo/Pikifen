@@ -12,6 +12,7 @@
 #include "action.hpp"
 
 #include "../../core/game.hpp"
+#include "../../core/misc_functions.hpp"
 #include "script_utils.hpp"
 
 
@@ -131,107 +132,12 @@ bool ScriptActionDef::loadFromDataNode(
             return false;
         }
     }
-    
-    //Check if there are too many or too few arguments.
-    size_t nMandatoryParams = 0;
-    size_t nFixedParams = 0;
-    bool hasVectorParam = false;
-    forIdx(p, actionType->parameters) {
-        CommandParam* pPtr = &actionType->parameters[p];
-        if(hasFlag(pPtr->flags, COMMAND_PARAM_FLAG_VECTOR)) {
-            hasVectorParam = true;
-        } else {
-            nFixedParams++;
-        }
-        if(!hasFlag(pPtr->flags, COMMAND_PARAM_FLAG_OPTIONAL)) {
-            nMandatoryParams++;
-        }
-    }
-    
-    if(words.size() < nMandatoryParams) {
-        game.log.report(
-            LOG_LEVEL_ERROR,
-            "The \"" + actionType->name + "\" action needs " +
-            i2s(nMandatoryParams) + " arguments, but this call only "
-            "has " + i2s(words.size()) + "! You're missing the \"" +
-            actionType->parameters[words.size()].name + "\" parameter.",
-            node
-        );
-        return false;
-    }
-    
-    if(!hasVectorParam) {
-        if(words.size() > nFixedParams) {
-            game.log.report(
-                LOG_LEVEL_ERROR,
-                "The \"" + actionType->name + "\" action only needs " +
-                i2s(actionType->parameters.size()) + " arguments, "
-                "but this call has " + i2s(words.size()) + "!",
-                node
-            );
-            return false;
-        }
-    }
-    
-    //Fetch the arguments, and check if any of them are not allowed.
-    forIdx(w, words) {
-        size_t paramIdx = w;
-        if(hasVectorParam && w > actionType->parameters.size() - 1) {
-            //This word just belongs to the final parameter.
-            paramIdx = actionType->parameters.size() - 1;
-        }
-        bool isVar = (words[w][0] == '$' && words[w].size() > 1);
-        
-        if(isVar && words[w].size() >= 2 && words[w][1] == '$') {
-            //Two '$' in a row means it's meant to use a literal '$'.
-            isVar = false;
-            words[w].erase(words[w].begin());
-        }
-        
-        if(isVar) {
-            if(
-                hasFlag(
-                    actionType->parameters[paramIdx].flags,
-                    COMMAND_PARAM_FLAG_CONST
-                )
-            ) {
-                game.log.report(
-                    LOG_LEVEL_ERROR,
-                    "Argument #" + i2s(w + 1) + " (\"" + words[w] + "\") is a "
-                    "variable, but the parameter \"" +
-                    actionType->parameters[paramIdx].name + "\" can only be "
-                    "constant!",
-                    node
-                );
-                return false;
-            }
-            
-            words[w].erase(words[w].begin()); //Remove the '$'.
-            
-            if(words[w].empty()) {
-                game.log.report(
-                    LOG_LEVEL_ERROR,
-                    "Argument #" + i2s(w) + " is trying to use a variable "
-                    "with no name!",
-                    node
-                );
-                return false;
-            }
-        }
-        
-        args.push_back(words[w]);
-        argIsVar.push_back(isVar);
-    }
-    
-    //Check if any optional parameters were left out.
-    while(words.size() < nFixedParams) {
-        size_t paramIdx = words.size();
-        words.push_back(actionType->parameters[paramIdx].defValue);
-        args.push_back(words.back());
-        argIsVar.push_back(false);
-    }
-    
-    return true;
+
+    return compileCommandArgs(
+        actionType->parameters, words,
+        "The \"" + actionType->name + "\" action", true,
+        &args, &argIsVar, node
+    );
 }
 
 

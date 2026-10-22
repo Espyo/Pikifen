@@ -745,25 +745,28 @@ void MakerConsoleTerminal::open(bool instant) {
  * @brief Submits the currently written command in the input.
  */
 void MakerConsoleTerminal::submitCommand() {
-    MAKER_TOOL_TYPE toolToRun = MAKER_TOOL_TYPE_NONE;
-    vector<string> args;
-    vector<string> inputParts = split(input.getString());
+    //Initial parsing and checks.
+    string inputString = trimSpaces(input.getString());
     
+    if(inputString.empty()) return;
+
+    //Acknowledge the submission.
+    write(LOG_LEVEL_INFO, "> " + inputString);
+    input.reset();
+
+    //Check if maker tools are not allowed right now.
     if(!game.makerTools.checkMakerToolsAllowed(1.0f)) return;
-    if(inputParts.empty()) return;
-    
-    forIdx(t, game.makerTools.types) {
-        const MakerToolType& type = game.makerTools.types[t];
-        if(type.name == inputParts[0]) {
-            toolToRun = type.type;
-        }
+
+    //Further cleanup.
+    vector<string> inputWords = split(inputString);
+    forIdx(w, inputWords) {
+        inputWords[w] = trimSpaces(inputWords[w]);
     }
     
-    if(toolToRun != MAKER_TOOL_TYPE_NONE) {
-        args = inputParts;
-        args.erase(args.begin());
-        game.makerTools.runTool(toolToRun, args);
-    }
+    //Run!
+    string toolName = inputWords[0];
+    eraseInVector(inputWords, 0);
+    game.makerTools.runTool(toolName, inputWords);
 }
 
 

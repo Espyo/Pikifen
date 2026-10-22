@@ -32,6 +32,7 @@ const float PLAY_CONFIRMATION_TIMER = 1.0f;
  *
  * @param mgr Maker tool manager.
  * @param args Arguments passed to the command.
+ * @return Whether it succeeded.
  */
 bool MakerToolRunners::areaImage(
     MakerTools& mgr, const vector<string>& args
@@ -71,6 +72,7 @@ bool MakerToolRunners::areaImage(
  *
  * @param mgr Maker tool manager.
  * @param args Arguments passed to the command.
+ * @return Whether it succeeded.
  */
 bool MakerToolRunners::areaInspector(
     MakerTools& mgr, const vector<string>& args
@@ -89,6 +91,7 @@ bool MakerToolRunners::areaInspector(
  *
  * @param mgr Maker tool manager.
  * @param args Arguments passed to the command.
+ * @return Whether it succeeded.
  */
 bool MakerToolRunners::changeSpeed(
     MakerTools& mgr, const vector<string>& args
@@ -123,6 +126,7 @@ bool MakerToolRunners::changeSpeed(
  *
  * @param mgr Maker tool manager.
  * @param args Arguments passed to the command.
+ * @return Whether it succeeded.
  */
 bool MakerToolRunners::deleteMob(
     MakerTools& mgr, const vector<string>& args
@@ -143,6 +147,7 @@ bool MakerToolRunners::deleteMob(
  *
  * @param mgr Maker tool manager.
  * @param args Arguments passed to the command.
+ * @return Whether it succeeded.
  */
 bool MakerToolRunners::fillInventory(
     MakerTools& mgr, const vector<string>& args
@@ -165,6 +170,7 @@ bool MakerToolRunners::fillInventory(
  *
  * @param mgr Maker tool manager.
  * @param args Arguments passed to the command.
+ * @return Whether it succeeded.
  */
 bool MakerToolRunners::frameAdvance(
     MakerTools& mgr, const vector<string>& args
@@ -196,6 +202,7 @@ bool MakerToolRunners::frameAdvance(
  *
  * @param mgr Maker tool manager.
  * @param args Arguments passed to the command.
+ * @return Whether it succeeded.
  */
 bool MakerToolRunners::freeCam(
     MakerTools& mgr, const vector<string>& args
@@ -236,6 +243,7 @@ bool MakerToolRunners::freeCam(
  *
  * @param mgr Maker tool manager.
  * @param args Arguments passed to the command.
+ * @return Whether it succeeded.
  */
 bool MakerToolRunners::geometryInfo(
     MakerTools& mgr, const vector<string>& args
@@ -255,6 +263,7 @@ bool MakerToolRunners::geometryInfo(
  *
  * @param mgr Maker tool manager.
  * @param args Arguments passed to the command.
+ * @return Whether it succeeded.
  */
 bool MakerToolRunners::hideHud(
     MakerTools& mgr, const vector<string>& args
@@ -270,6 +279,7 @@ bool MakerToolRunners::hideHud(
  *
  * @param mgr Maker tool manager.
  * @param args Arguments passed to the command.
+ * @return Whether it succeeded.
  */
 bool MakerToolRunners::hurtMob(
     MakerTools& mgr, const vector<string>& args
@@ -294,6 +304,7 @@ bool MakerToolRunners::hurtMob(
  *
  * @param mgr Maker tool manager.
  * @param args Arguments passed to the command.
+ * @return Whether it succeeded.
  */
 bool MakerToolRunners::mobInspector(
     MakerTools& mgr, const vector<string>& args
@@ -340,6 +351,7 @@ bool MakerToolRunners::mobInspector(
  *
  * @param mgr Maker tool manager.
  * @param args Arguments passed to the command.
+ * @return Whether it succeeded.
  */
 bool MakerToolRunners::newPikmin(
     MakerTools& mgr, const vector<string>& args
@@ -391,6 +403,7 @@ bool MakerToolRunners::newPikmin(
  *
  * @param mgr Maker tool manager.
  * @param args Arguments passed to the command.
+ * @return Whether it succeeded.
  */
 bool MakerToolRunners::newReminder(
     MakerTools& mgr, const vector<string>& args
@@ -444,6 +457,7 @@ bool MakerToolRunners::newReminder(
  *
  * @param mgr Maker tool manager.
  * @param args Arguments passed to the command.
+ * @return Whether it succeeded.
  */
 bool MakerToolRunners::pathInfo(
     MakerTools& mgr, const vector<string>& args
@@ -459,6 +473,7 @@ bool MakerToolRunners::pathInfo(
  *
  * @param mgr Maker tool manager.
  * @param args Arguments passed to the command.
+ * @return Whether it succeeded.
  */
 bool MakerToolRunners::setAutoStart(
     MakerTools& mgr, const vector<string>& args
@@ -516,6 +531,7 @@ bool MakerToolRunners::setAutoStart(
  *
  * @param mgr Maker tool manager.
  * @param args Arguments passed to the command.
+ * @return Whether it succeeded.
  */
 bool MakerToolRunners::setSongPosNearLoop(
     MakerTools& mgr, const vector<string>& args
@@ -531,6 +547,7 @@ bool MakerToolRunners::setSongPosNearLoop(
  *
  * @param mgr Maker tool manager.
  * @param args Arguments passed to the command.
+ * @return Whether it succeeded.
  */
 bool MakerToolRunners::showCollision(
     MakerTools& mgr, const vector<string>& args
@@ -546,6 +563,7 @@ bool MakerToolRunners::showCollision(
  *
  * @param mgr Maker tool manager.
  * @param args Arguments passed to the command.
+ * @return Whether it succeeded.
  */
 bool MakerToolRunners::showHitboxes(
     MakerTools& mgr, const vector<string>& args
@@ -561,6 +579,7 @@ bool MakerToolRunners::showHitboxes(
  *
  * @param mgr Maker tool manager.
  * @param args Arguments passed to the command.
+ * @return Whether it succeeded.
  */
 bool MakerToolRunners::showReaches(
     MakerTools& mgr, const vector<string>& args
@@ -576,6 +595,7 @@ bool MakerToolRunners::showReaches(
  *
  * @param mgr Maker tool manager.
  * @param args Arguments passed to the command.
+ * @return Whether it succeeded.
  */
 bool MakerToolRunners::teleport(
     MakerTools& mgr, const vector<string>& args
@@ -629,6 +649,19 @@ bool MakerToolRunners::teleport(
 
 
 /**
+ * @brief Returns whether the current context is valid for the given
+ * context flags.
+ *
+ * @param flags The flags.
+ * @return Whether it is valid.
+ */
+bool MakerTools::checkContextFlags(Bitmask8 flags) const {
+    int flagBitmask = getIdxBitmask(getContext());
+    return hasFlag(flags, flagBitmask);
+}
+
+
+/**
  * @brief Checks whether maker tools are allowed, and if not, sets up
  * code to warn the player and let them allow it, if applicable.
  *
@@ -649,8 +682,7 @@ bool MakerTools::checkMakerToolsAllowed(float inputValue) {
             string info =
                 "You've tried to use a maker tool, which isn't fit for "
                 "normal gameplay.\n"
-                "Are you sure? Quickly press a maker tool button three times "
-                "to confirm.";
+                "Are you sure? Try again three times in a row to confirm.";
             game.console.write(LOG_LEVEL_INFO, info);
             playConfirmationTimer = MAKER_TOOLS::PLAY_CONFIRMATION_TIMER;
             playConfirmationPresses++;
@@ -672,6 +704,38 @@ bool MakerTools::checkMakerToolsAllowed(float inputValue) {
         }
     }
     return true;
+}
+
+
+/**
+ * @brief Returns what the current context is.
+ *
+ * @return The context.
+ */
+MAKER_TOOL_CONTEXT MakerTools::getContext() const {
+    return
+        game.getCurStateName() == game.states.gameplay->getName() ?
+        MAKER_TOOL_CONTEXT_GAMEPLAY :
+        MAKER_TOOL_CONTEXT_OUT_OF_GAMEPLAY;
+}
+
+
+/**
+ * @brief Returns the name of the current context, in lowercase.
+ *
+ * @return The name.
+ */
+string MakerTools::getContextName() const {
+    switch(getContext()) {
+    case MAKER_TOOL_CONTEXT_OUT_OF_GAMEPLAY: {
+        return "out-of-gameplay";
+        break;
+    } case MAKER_TOOL_CONTEXT_GAMEPLAY: {
+        return "gameplay";
+        break;
+    }
+    }
+    return "";
 }
 
 
@@ -995,17 +1059,77 @@ void MakerTools::resetForGameplay() {
 
 
 /**
+ * @brief Runs a specific tool, given its name.
+ *
+ * @param typeName Internal name of the tool type.
+ * @param args Arguments.
+ * @return Whether it succeeded.
+ */
+bool MakerTools::runTool(const string& typeName, const vector<string>& args) {
+    MAKER_TOOL_TYPE typeToRun = MAKER_TOOL_TYPE_NONE;
+    
+    forIdx(t, types) {
+        const MakerToolType& type = game.makerTools.types[t];
+        if(type.type == MAKER_TOOL_TYPE_NONE) continue;
+        if(type.name == typeName) {
+            typeToRun = type.type;
+            break;
+        }
+    }
+    
+    //Check if it is recognized.
+    if(typeToRun == MAKER_TOOL_TYPE_NONE) {
+        game.log.report(
+            LOG_LEVEL_ERROR, "Unknown maker tool name \"" + typeName + "\"!"
+        );
+        return false;
+    }
+    
+    return runTool(typeToRun, args);
+}
+
+
+/**
  * @brief Runs a specific tool.
  *
  * @param type The tool type.
- * @param args Arguments.
+ * @param inputArgs Arguments.
+ * @return Whether it succeeded.
  */
-void MakerTools::runTool(MAKER_TOOL_TYPE type, const vector<string>& args) {
-    types[type].code(*this, args);
+bool MakerTools::runTool(
+    MAKER_TOOL_TYPE type, const vector<string>& inputArgs
+) {
+    MakerToolType* typePtr = &types[type];
+    
+    //Check if this action is allowed in the current context.
+    if(!checkContextFlags(typePtr->contexts)) {
+        game.log.report(
+            LOG_LEVEL_ERROR,
+            "The maker tool \"" + typePtr->name + "\" can't be used in " +
+            aAn(getContextName()) + " context!"
+        );
+        return false;
+    }
+    
+    vector<string> args;
+    vector<bool> dummyArgIsVar;
+    if(
+        !compileCommandArgs(
+            typePtr->parameters, inputArgs,
+            "The \"" + typePtr->name + "\" maker tool", false,
+            &args, &dummyArgIsVar
+        )
+    ) {
+        return false;
+    }
+    
+    bool success = types[type].code(*this, args);
     
     if(types[type].helpful) {
         usedHelpingTools = true;
     }
+    
+    return success;
 }
 
 
