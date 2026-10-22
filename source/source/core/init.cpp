@@ -1412,7 +1412,7 @@ void initMakerToolTypes() {
     
     //-Anywhere tools-
     contexts =
-        getIdxBitmask(MAKER_TOOL_CONTEXT_ANYWHERE) |
+        getIdxBitmask(MAKER_TOOL_CONTEXT_OUT_OF_GAMEPLAY) |
         getIdxBitmask(MAKER_TOOL_CONTEXT_GAMEPLAY);
         
     //Unknown.

@@ -146,6 +146,128 @@ void clearAreaTextures() {
 
 
 /**
+ * @brief Given a list of arguments, it validates them against the given
+ * command-like parameter data, and treats it, like adding default values
+ * to the optional missing arguments.
+ *
+ * @param params Command parameter data.
+ * @param inputArgs The arguments that were input.
+ * @param context Description for the context of what is holding
+ * these parameters, to show in the error message.
+ * @param allowVars Whether arguments are allowed to be variables.
+ * @param outArgs If not nullptr, the final list of arguments is returned here.
+ * @param outArgIsVar If not nullptr, the final list of what
+ * arguments are variables is returned here.
+ * @param node Data node, if any, used to report errors with.
+ * @return Whether it succeeded.
+ */
+bool compileCommandArgs(
+    const vector<CommandParam>& params, const vector<string>& inputArgs,
+    const string& context, bool allowVars,
+    vector<string>* outArgs, vector<bool>* outArgIsVar,
+    DataNode* node
+) {
+    //Check if there are too many or too few arguments.
+    size_t nMandatoryParams = 0;
+    size_t nFixedParams = 0;
+    bool hasVectorParam = false;
+    forIdx(p, params) {
+        const CommandParam& param = params[p];
+        if(hasFlag(param.flags, COMMAND_PARAM_FLAG_VECTOR)) {
+            hasVectorParam = true;
+        } else {
+            nFixedParams++;
+        }
+        if(!hasFlag(param.flags, COMMAND_PARAM_FLAG_OPTIONAL)) {
+            nMandatoryParams++;
+        }
+    }
+    
+    if(inputArgs.size() < nMandatoryParams) {
+        game.log.report(
+            LOG_LEVEL_ERROR,
+            context + " needs " +
+            i2s(nMandatoryParams) + " arguments, but this call only "
+            "has " + i2s(inputArgs.size()) + "! You're missing the \"" +
+            params[inputArgs.size()].name + "\" parameter.",
+            node
+        );
+        return false;
+    }
+    
+    if(!hasVectorParam) {
+        if(inputArgs.size() > nFixedParams) {
+            game.log.report(
+                LOG_LEVEL_ERROR,
+                context + " only needs " + i2s(params.size()) + " arguments, "
+                "but this call has " + i2s(inputArgs.size()) + "!",
+                node
+            );
+            return false;
+        }
+    }
+    
+    //Fetch the arguments, and check if any of them are not allowed.
+    forIdx(a, inputArgs) {
+        size_t paramIdx = a;
+        if(hasVectorParam && a > params.size() - 1) {
+            //This word just belongs to the final parameter.
+            paramIdx = params.size() - 1;
+        }
+        string finalWord = inputArgs[a];
+        bool isVar =
+            allowVars && (finalWord[0] == '$' && finalWord.size() > 1);
+            
+        if(isVar && finalWord.size() >= 2 && finalWord[1] == '$') {
+            //Two '$' in a row means it's meant to use a literal '$'.
+            isVar = false;
+            finalWord.erase(finalWord.begin());
+        }
+        
+        if(isVar) {
+            if(hasFlag(params[paramIdx].flags, COMMAND_PARAM_FLAG_CONST)) {
+                game.log.report(
+                    LOG_LEVEL_ERROR,
+                    "Argument #" + i2s(a + 1) + " (\"" + inputArgs[a] +
+                    "\") is a variable, but the parameter \"" +
+                    params[paramIdx].name + "\" can only be "
+                    "constant!",
+                    node
+                );
+                return false;
+            }
+            
+            finalWord.erase(finalWord.begin()); //Remove the '$'.
+            
+            if(finalWord.empty()) {
+                game.log.report(
+                    LOG_LEVEL_ERROR,
+                    "Argument #" + i2s(a) + " is trying to use a variable "
+                    "with no name!",
+                    node
+                );
+                return false;
+            }
+        }
+        
+        if(outArgs) outArgs->push_back(finalWord);
+        if(outArgIsVar) outArgIsVar->push_back(isVar);
+    }
+    
+    //Check if any optional parameters were left out.
+    if(outArgs) {
+        while(outArgs->size() < nFixedParams) {
+            size_t paramIdx = outArgs->size();
+            if(outArgs) outArgs->push_back(params[paramIdx].defValue);
+            if(outArgIsVar) outArgIsVar->push_back(false);
+        }
+    }
+    
+    return true;
+}
+
+
+/**
  * @brief Purposely crashes the engine, reporting as much information
  * as possible to the logs. Used when a fatal problem occurs.
  *
