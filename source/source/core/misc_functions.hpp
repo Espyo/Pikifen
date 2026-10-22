@@ -78,6 +78,12 @@ bool areWallsBetween(
 );
 ALLEGRO_TRANSFORM buildTransform2d(const Transform2d& data);
 void clearAreaTextures();
+bool compileCommandArgs(
+    const vector<CommandParam>& params, const vector<string>& inputArgs,
+    const string& context, bool allowVars,
+    vector<string>* outArgs, vector<bool>* outArgIsVar,
+    DataNode* node = nullptr
+);
 void crash(const string& reason, const string& info, int exitStatus);
 bool doesEdgeHaveLedgeSmoothing(
     Edge* ePtr, Sector** outAffectedSector, Sector** outUnaffectedSector

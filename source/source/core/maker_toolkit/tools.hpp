@@ -105,8 +105,8 @@ enum MAKER_TOOL_TYPE {
 //Contexts in which a maker tool's command can run.
 enum MAKER_TOOL_CONTEXT {
 
-    //Anywhere.
-    MAKER_TOOL_CONTEXT_ANYWHERE,
+    //Out of gameplay.
+    MAKER_TOOL_CONTEXT_OUT_OF_GAMEPLAY,
     
     //Mid gameplay.
     MAKER_TOOL_CONTEXT_GAMEPLAY,
@@ -354,10 +354,20 @@ struct MakerTools {
     bool handleGeneralPlayerAction(const Inpution::Action& action);
     void loadFromDataNode(DataNode* node);
     void resetForGameplay();
-    void runTool(MAKER_TOOL_TYPE type, const vector<string>& args);
+    bool runTool(const string& typeName, const vector<string>& args);
+    bool runTool(MAKER_TOOL_TYPE type, const vector<string>& args);
     void saveToDataNode(DataNode* node);
     void tick(float deltaT);
     unsigned char getMakerToolSettingIdx() const;
+    
+    
+private:
+
+    //--- Private function declarations ---
+    
+    bool checkContextFlags(Bitmask8 flags) const;
+    MAKER_TOOL_CONTEXT getContext() const;
+    string getContextName() const;
     
 };
 
