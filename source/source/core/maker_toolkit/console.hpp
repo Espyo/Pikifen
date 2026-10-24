@@ -53,7 +53,7 @@ struct MakerConsoleTerminal {
     MakerConsoleTerminal();
     void clear();
     int draw(int y) const;
-    void handleAllegroEvent(const ALLEGRO_EVENT& ev);
+    bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
     void tick(float deltaT);
     void write(LOG_LEVEL level, const string& text);
     void open(bool instant = false);
@@ -146,7 +146,7 @@ struct MakerConsole {
     
     void clear();
     int draw(int y) const;
-    void handleAllegroEvent(const ALLEGRO_EVENT& ev);
+    bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
     void tick(float deltaT);
     void write(
         LOG_LEVEL level, const string& text,

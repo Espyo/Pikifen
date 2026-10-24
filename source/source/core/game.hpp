@@ -343,6 +343,9 @@ private:
     
     //Is deltaT meant to be reset for the next frame?
     bool resetDeltaT = true;
+
+    //Is the control mediator meant to ignore the next Allegro event?
+    bool skipEventForControlMediator = false;
     
     
     //--- Private function declarations ---

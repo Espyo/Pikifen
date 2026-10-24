@@ -113,9 +113,10 @@ int MakerConsole::draw(int y) const {
  * @brief Handles an Allegro event.
  *
  * @param ev The event.
+ * @return Whether it was handled.
  */
-void MakerConsole::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
-    terminal.handleAllegroEvent(ev);
+bool MakerConsole::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
+    return terminal.handleAllegroEvent(ev);
 }
 
 
@@ -453,6 +454,7 @@ void MakerConsoleTerminal::clear() {
  * @param instant Whether to close it instantaneously.
  */
 void MakerConsoleTerminal::close(bool instant) {
+    game.controls.releaseAll();
     switch(visibilityState) {
     case OPEN_CLOSE_STATE_CLOSED:
     case OPEN_CLOSE_STATE_CLOSING: {
@@ -698,21 +700,44 @@ OPEN_CLOSE_STATE MakerConsoleTerminal::getVisibilityState() const {
  * @brief Handles an Allegro event.
  *
  * @param ev The event.
+ * @return Whether it was handled.
  */
-void MakerConsoleTerminal::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
-    if(visibility == 0.0f) return;
+bool MakerConsoleTerminal::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
+    if(visibilityState == OPEN_CLOSE_STATE_CLOSED) return false;
     
     if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {
-        if(ev.keyboard.keycode == ALLEGRO_KEY_PGUP) {
+        if(
+            game.controls.getInputSourceIsBoundToActionType(
+                game.controls.allegroCharEventToInput(ev).source,
+                PLAYER_ACTION_TYPE_MT_CONSOLE
+            )
+        ) {
+            //The user probably wants to toggle the console, not type
+            //whatever character it matches.
+            close();
+            return true;
+        }
+        
+        switch(ev.keyboard.keycode) {
+        case ALLEGRO_KEY_PGUP: {
             if(output.size() > 1 && scroll < output.size() - 1) scroll++;
-        } else if(ev.keyboard.keycode == ALLEGRO_KEY_PGDN) {
+            break;
+        } case ALLEGRO_KEY_PGDN: {
             if(output.size() > 1 && scroll > 0) scroll--;
-        } else if(ev.keyboard.keycode == ALLEGRO_KEY_ENTER) {
+            break;
+        } case ALLEGRO_KEY_ENTER: {
             if(input.getString().size() > 0) submitCommand();
+            break;
+        } case ALLEGRO_KEY_ESCAPE: {
+            close();
+            break;
+        }
         }
     }
     
     input.handleAllegroEvent(ev);
+    
+    return true;
 }
 
 
@@ -723,6 +748,7 @@ void MakerConsoleTerminal::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
  * @param instant Whether to open it instantaneously.
  */
 void MakerConsoleTerminal::open(bool instant) {
+    game.controls.releaseAll();
     switch(visibilityState) {
     case OPEN_CLOSE_STATE_OPEN:
     case OPEN_CLOSE_STATE_OPENING: {
