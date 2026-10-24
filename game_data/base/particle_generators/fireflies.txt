@@ -2,24 +2,43 @@ name=Fireflies
 description=Small fireflies flying in place that fade in and out.
 maker=Helodity
 version=1.0.0
-engine_version=1.0.0
+engine_version=1.2.0
 emission{
 	number=1
 	number_deviation=0
-	interval=0.5000
+	interval=0.6000
 	interval_deviation=0.0000
 	shape=0
 	circle_outer_dist=300.0000
 	circle_inner_dist=0.0000
 	circle_arc=6.2832
 	circle_arc_rot=0.0000
+	evenly_spread=false
 }
 base{
 	bitmap=effects/sparkle
 	bitmap_angle=0.0000
+	bitmap_angle_type=0
 	duration=10.0000
 	friction=0.0000
 	blend_type=1
+	emits_light=true
+	light_size{
+		0.0000=24.0000
+	}
+	light_color{
+		0.0000=255 255 0 0
+		0.1000=255 255 0 64
+		0.2000=255 255 0 0
+		0.3000=255 255 0 64
+		0.4000=255 255 0 0
+		0.5000=255 255 0 64
+		0.6000=255 255 0 0
+		0.7000=255 255 0 64
+		0.8000=255 255 0 0
+		0.9000=255 255 0 64
+		1.0000=254 255 0 0
+	}
 	color{
 		0.0000=255 255 0 0
 		0.1000=255 255 0

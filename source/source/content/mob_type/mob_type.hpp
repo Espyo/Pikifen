@@ -292,8 +292,13 @@ public:
     //Whether to use the damage squash-and-stretch effect.
     bool useDamageSquashAndStretch = false;
     
-    //How much light does it cast in a blackout? <0 to use the mob's radius.
-    float blackoutRadius = -1.0f;
+    //Radius of the light cast in dark sectors. <0 to use the mob's radius.
+    //Can be overriden on a per mob basis
+    float lightRadius = -1.0f;
+
+    //Color of light to cast in dark sectors. COLOR_BLACK to disable.
+    //Can be overriden on a per mob basis
+    ALLEGRO_COLOR lightColor = COLOR_BLACK;
     
     //List of sounds it can play.
     vector<Sound> sounds;

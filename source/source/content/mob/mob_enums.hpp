@@ -494,9 +494,6 @@ enum SPRITE_BMP_EFFECT_FLAG {
     //Effects from status effects.
     SPRITE_BMP_EFFECT_FLAG_STATUS = 1 << 1,
     
-    //Darkening from the sector brightness.
-    SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS = 1 << 2,
-    
     //Height effect, both from being in the air and from falling into a pit.
     SPRITE_BMP_EFFECT_FLAG_HEIGHT = 1 << 3,
     

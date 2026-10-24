@@ -1451,9 +1451,9 @@ void initMakerToolTypes() {
         "either dimension. e.g. 32 means 16 area pixels above "
         "the area and 16 area pixels below the area will be "
         "included; same for 16 pixels to the left and 16 to the right.";
-    queueParam("shadows", ptBool, pfOpt, "true");
+    queueParam("lighting", ptBool, pfOpt, "true");
     params.back().description =
-        "Whether you want to see tree shadows.";
+        "Whether you want to see lighting.";
     commitTool(
         MAKER_TOOL_TYPE_AREA_IMAGE,
         "area_image", true,
@@ -2807,6 +2807,23 @@ void initScriptActionTypes() {
         SCRIPT_ACTION_SET_HOLDABLE,
         "set_holdable",
         ScriptActionRunners::setHoldable
+    );
+
+    //Set light color.
+    queueParam("red", ptInt);
+    queueParam("green", ptInt);
+    queueParam("blue", ptInt);
+    commitAction(
+        SCRIPT_ACTION_SET_LIGHT_COLOR,
+        "set_light_color",
+        ScriptActionRunners::setLightColor
+    );
+
+    queueParam("radius", ptFloat);
+    commitAction(
+        SCRIPT_ACTION_SET_LIGHT_RADIUS,
+        "set_light_radius",
+        ScriptActionRunners::setLightRadius
     );
     
     //Set limb animation.
