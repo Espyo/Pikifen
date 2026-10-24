@@ -30,6 +30,7 @@ extern const ALLEGRO_COLOR COLOR_ERROR;
 extern const ALLEGRO_COLOR COLOR_MAIN;
 extern const ALLEGRO_COLOR COLOR_MUTED;
 extern const ALLEGRO_COLOR COLOR_WARNING;
+extern const size_t INPUT_HISTORY_MAX_SIZE;
 extern const float INPUT_ICON_SIZE;
 extern const size_t INPUT_TEXT_MAX_SIZE;
 extern const int LINE_PADDING;
@@ -88,9 +89,17 @@ struct MakerConsoleTerminal {
     //Currently written input text.
     TextInput input;
     
+    //Previously submitted commands by the user. 0 is the text
+    //currently being written. 1 is the first submitted entry. And so on.
+    vector<string> commandHistory;
+    
+    //Index of the history item currently being seen.
+    size_t commandHistoryIndex = 0;
+    
     
     //--- Private function declarations ---
     
+    void browseCommandHistory(int offset);
     void submitCommand();
     
 };

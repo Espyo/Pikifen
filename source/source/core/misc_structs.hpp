@@ -1592,6 +1592,7 @@ struct TextInput {
     string getString() const;
     size_t getCaretPos() const;
     bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
+    void setString(const string& newString, bool caretAtEnd = false);
     
     
     private:

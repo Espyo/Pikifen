@@ -42,6 +42,10 @@ const ALLEGRO_COLOR COLOR_MUTED = al_map_rgba(255, 255, 255, 128);
 //Warning text color, alpha included.
 const ALLEGRO_COLOR COLOR_WARNING = al_map_rgba(255, 255, 128, 192);
 
+//Maximum number of entries in the command history,
+//currently-written text included.
+const size_t INPUT_HISTORY_MAX_SIZE = 30;
+
 //Size of the control bind icon.
 const float INPUT_ICON_SIZE = 24.0f;
 
@@ -429,8 +433,30 @@ void MakerConsoleNotifier::write(
 
 MakerConsoleTerminal::MakerConsoleTerminal() {
     input.maxSize = CONSOLE::INPUT_TEXT_MAX_SIZE;
+    commandHistory.assign(1, ""); //The currently-written text.
 }
 
+
+/**
+ * @brief Browses to a point of the command history, if possible.
+ *
+ * @param offset Offset compared to the current point of the command history.
+ */
+void MakerConsoleTerminal::browseCommandHistory(int offset) {
+    int oldIdxInt = commandHistoryIndex;
+    int newIdxInt = commandHistoryIndex + offset;
+    newIdxInt = std::clamp(newIdxInt, 0, (int) commandHistory.size() - 1);
+    
+    if(newIdxInt == oldIdxInt) return;
+    
+    if(oldIdxInt == 0 && newIdxInt != 0) {
+        commandHistory[0] = input.getString();
+    }
+    
+    commandHistoryIndex = newIdxInt;
+    
+    input.setString(commandHistory[newIdxInt], true);
+}
 
 
 /**
@@ -719,7 +745,13 @@ bool MakerConsoleTerminal::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
         }
         
         switch(ev.keyboard.keycode) {
-        case ALLEGRO_KEY_PGUP: {
+        case ALLEGRO_KEY_UP: {
+            browseCommandHistory(+1);
+            break;
+        } case ALLEGRO_KEY_DOWN: {
+            browseCommandHistory(-1);
+            break;
+        } case ALLEGRO_KEY_PGUP: {
             if(output.size() > 1 && scroll < output.size() - 1) scroll++;
             break;
         } case ALLEGRO_KEY_PGDN: {
@@ -735,7 +767,14 @@ bool MakerConsoleTerminal::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
         }
     }
     
-    input.handleAllegroEvent(ev);
+    if(input.handleAllegroEvent(ev)) {
+        if(commandHistoryIndex != 0) {
+            //We're showing a history item, but the user edited it, so
+            //reset and make it seem like this is what the user's writing.
+            commandHistoryIndex = 0;
+            commandHistory[0] = input.getString();
+        }
+    }
     
     return true;
 }
@@ -775,14 +814,19 @@ void MakerConsoleTerminal::submitCommand() {
     string inputString = trimSpaces(input.getString());
     
     if(inputString.empty()) return;
-
+    
     //Acknowledge the submission.
     write(LOG_LEVEL_INFO, "> " + inputString);
+    commandHistory[0] = input.getString();
+    commandHistory.insert(commandHistory.begin(), "");
+    if(commandHistory.size() > CONSOLE::INPUT_HISTORY_MAX_SIZE) {
+        commandHistory.pop_back();
+    }
     input.reset();
-
+    
     //Check if maker tools are not allowed right now.
     if(!game.makerTools.checkMakerToolsAllowed(1.0f)) return;
-
+    
     //Further cleanup.
     vector<string> inputWords = split(inputString);
     forIdx(w, inputWords) {
