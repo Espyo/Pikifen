@@ -3707,9 +3707,9 @@ void ScriptActionUtils::reportActionError(
     string filePath = getNodePath(data);
     
     if(filePath.empty()) {
-        game.log.report(LOG_LEVEL_ERROR, info);
+        game.log.write(LOG_LEVEL_ERROR, info);
     } else {
-        game.log.report(
+        game.log.write(
             LOG_LEVEL_ERROR, info, filePath, data.actionDef->dataFileLine
         );
     }

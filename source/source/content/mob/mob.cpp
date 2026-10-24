@@ -3317,7 +3317,7 @@ void Mob::readScriptVars(const ScriptVarManager& varsMgr) {
         bool found;
         setTeam(enumGetValue(mobTeamINames, teamVar, &found));
         if(!found) {
-            game.log.report(
+            game.log.write(
                 LOG_LEVEL_ERROR,
                 "Unknown team name \"" + teamVar +
                 "\", when trying to create mob (" +
@@ -3433,7 +3433,7 @@ void Mob::setAnimation(
     }
     
     if(finalIdx == INVALID) {
-        game.log.report(
+        game.log.write(
             LOG_LEVEL_ERROR,
             "A mob (" + getErrorMessageMobInfo(this) +
             ") tried to switch from " +
@@ -3612,7 +3612,7 @@ Mob* Mob::spawn(const MobType::SpawnInfo* info, MobType* typePtr) {
     }
     
     if(!typePtr) {
-        game.log.report(
+        game.log.write(
             LOG_LEVEL_ERROR,
             "A mob (" + getErrorMessageMobInfo(this) +
             ") tried to spawn an object of the "
@@ -4257,7 +4257,7 @@ void Mob::tickMiscLogic(float deltaT) {
         scriptVM.runReadyActions();
         FsmEventDef* readyEv = scriptVM.fsm.getEvent(FSM_EV_ON_READY);
         if(readyEv) {
-            game.log.report(
+            game.log.write(
                 LOG_LEVEL_ERROR,
                 "A mob (" + getErrorMessageMobInfo(this) + ") just used the "
                 "\"on_ready\" event. That event is deprecated "

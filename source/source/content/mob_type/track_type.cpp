@@ -95,7 +95,7 @@ void TrackType::loadCatResources(DataNode* file) {
     //is run, then the animations are definitely loaded.
     //Now's a good time to check if the track has 2+ checkpoints.
     if(animDb->bodyParts.size() < 2) {
-        game.log.report(
+        game.log.write(
             LOG_LEVEL_ERROR,
             "The track type \"" + name + "\" needs to have at least 2 "
             "checkpoints (body parts), but it only has " +

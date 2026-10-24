@@ -1268,7 +1268,7 @@ void GameplayState::load() {
             game.sysContentNames.anmSparks
         );
     if(sparkAnimDbIt == game.content.globalAnimDbs.list.end()) {
-        game.log.report(
+        game.log.write(
             LOG_LEVEL_ERROR,
             "Unknown global animation \"" + game.sysContentNames.anmSparks +
             "\" when trying to load the leader damage sparks!"
@@ -1499,7 +1499,7 @@ void GameplayState::load() {
             }
         }
         if(sprayIdx == game.content.sprayTypes.list.size()) {
-            game.log.report(
+            game.log.write(
                 LOG_LEVEL_ERROR,
                 "Unknown spray type \"" + s.first + "\", "
                 "while trying to set the starting number of sprays for "

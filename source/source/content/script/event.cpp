@@ -69,7 +69,7 @@ bool FsmEventDef::loadFromDataNode(
     
     //Check if it is recognized.
     if(!evTypePtr) {
-        game.log.report(
+        game.log.write(
             LOG_LEVEL_ERROR,
             "Unknown script FSM event name \"" + node->name + "\"!", node
         );
@@ -78,7 +78,7 @@ bool FsmEventDef::loadFromDataNode(
     
     //Check if this event is allowed in the current context.
     if(!scriptDef->checkContextFlags(evTypePtr->contexts)) {
-        game.log.report(
+        game.log.write(
             LOG_LEVEL_ERROR,
             "The event \"" + node->name + "\" can't be used in an " +
             scriptDef->getContextName() + " script context!", node

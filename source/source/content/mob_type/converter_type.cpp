@@ -78,7 +78,7 @@ void ConverterType::loadCatProperties(DataNode* file) {
         if(typePtr) {
             availablePikminTypes.push_back((PikminType*) typePtr);
         } else {
-            game.log.report(
+            game.log.write(
                 LOG_LEVEL_ERROR,
                 "Unknown Pikmin type \"" + pikminTypesStrs[t] + "\"!",
                 pikminTypesNode
@@ -96,7 +96,7 @@ void ConverterType::loadCatProperties(DataNode* file) {
     }
     
     if(availablePikminTypes.empty()) {
-        game.log.report(
+        game.log.write(
             LOG_LEVEL_ERROR,
             "A converter needs to have at least one available Pikmin type! "
             "Please fill in the \"available_pikmin_types\" property.",
@@ -105,7 +105,7 @@ void ConverterType::loadCatProperties(DataNode* file) {
     }
     
     if(animationGroupSuffixes.size() != availablePikminTypes.size()) {
-        game.log.report(
+        game.log.write(
             LOG_LEVEL_ERROR,
             "The number of animation type suffixes needs to match the "
             "number of available Pikmin types! Did you forget an animation "

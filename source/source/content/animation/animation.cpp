@@ -272,7 +272,7 @@ void AnimationDatabase::createConversions(
         size_t aPos = findAnimation(conversions[c].second);
         if(aPos == INVALID) {
             //Use the default.
-            game.log.report(
+            game.log.write(
                 LOG_LEVEL_WARNING,
                 "The engine expected an animation called "
                 "\"" + conversions[c].second + "\", but it doesn't exist. "
@@ -534,7 +534,7 @@ void AnimationDatabase::loadFromDataNode(DataNode* node) {
                 if(hazardIt != game.content.hazards.list.end()) {
                     newHitbox.hazard = &(hazardIt->second);
                 } else {
-                    game.log.report(
+                    game.log.write(
                         LOG_LEVEL_ERROR,
                         "Unknown hazard \"" + hazardStr + "\"!",
                         hazardNode

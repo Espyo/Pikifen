@@ -383,11 +383,11 @@ struct LogManager {
 
     //--- Public function declarations ---
     
-    void report(
+    void write(
         LOG_LEVEL level, const string& text,
         const string& filePath, size_t fileLineNr
     );
-    void report(
+    void write(
         LOG_LEVEL level, const string& text,
         const DataNode* dataNode = nullptr
     );

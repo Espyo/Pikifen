@@ -318,7 +318,7 @@ bool readEnumProp(
         return true;
     }
     
-    game.log.report(
+    game.log.write(
         LOG_LEVEL_ERROR, "Unknown " + errorThing + " \"" + name + "\"!",
         errorNode
     );
@@ -347,7 +347,7 @@ void deprecatedReaderSetter(
     DataNode* childNode = nullptr;
     rs.set(childName, var, &childNode);
     if(childNode) {
-        game.log.report(
+        game.log.write(
             LOG_LEVEL_WARNING,
             "The property \"" + childName + "\" is deprecated and may be "
             "removed in the future! Please " + replacement + " instead.",
