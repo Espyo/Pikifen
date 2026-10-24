@@ -122,7 +122,36 @@ void ControlsMediator::addNewModifier(
 
 
 /**
+ * @brief Returns the parsed input from an Allegro key char event.
+ * This is not handled in allegroEventToInput since we don't want both a
+ * key down event and a key char event to result in an input.
+ *
+ * @param ev The Allegro event.
+ * @return The input.
+ * If this event does not pertain to any valid input, an input of type
+ * INPUT_SOURCE_TYPE_NONE is returned.
+ */
+Inpution::Input ControlsMediator::allegroCharEventToInput(
+    const ALLEGRO_EVENT& ev
+) const {
+    Inpution::Input input;
+    
+    switch(ev.type) {
+    case ALLEGRO_EVENT_KEY_CHAR: {
+        input.source.type = Inpution::INPUT_SOURCE_TYPE_KEYBOARD_KEY;
+        input.source.buttonNr = ev.keyboard.keycode;
+        input.value = 1;
+        break;
+    }
+    }
+    
+    return input;
+}
+
+
+/**
  * @brief Returns the parsed input from an Allegro event.
+ * For Allegro key char events, see allegroCharEventToInput.
  *
  * @param ev The Allegro event.
  * @return The input.
@@ -339,6 +368,29 @@ PLAYER_ACTION_TYPE ControlsMediator::getActionTypeByIName(
 const vector<PlayerActionType>
 & ControlsMediator::getAllActionTypes() const {
     return playerActionTypes;
+}
+
+
+/**
+ * @brief Returns whether there's any bind where the given input source
+ * is bound to the given action type.
+ *
+ * @param inputSource The input source.
+ * @param actionType The action type.
+ * @return Whether a bind exists.
+ */
+bool ControlsMediator::getInputSourceIsBoundToActionType(
+    const Inpution::InputSource& inputSource, PLAYER_ACTION_TYPE actionType
+) const {
+    forIdx(b, mgr.binds) {
+        if(
+            mgr.binds[b].inputSource == inputSource &&
+            mgr.binds[b].actionTypeId == actionType
+        ) {
+            return true;
+        }
+    }
+    return false;
 }
 
 

@@ -257,7 +257,9 @@ void Game::globalHandleAllegroEvent(const ALLEGRO_EVENT& ev) {
     hardware.handleAllegroEvent(ev);
     
     //Maker console.
-    console.handleAllegroEvent(ev);
+    if(console.handleAllegroEvent(ev)) {
+        skipEventForControlMediator = true;
+    }
     
     //Dear ImGui.
     ImGui_ImplAllegro5_ProcessEvent((ALLEGRO_EVENT*) &ev);
@@ -409,7 +411,11 @@ void Game::mainLoop() {
         
         globalHandleAllegroEvent(ev);
         curState->handleAllegroEvent(ev);
-        controls.handleAllegroEvent(ev);
+        
+        if(!skipEventForControlMediator) {
+            controls.handleAllegroEvent(ev);
+        }
+        skipEventForControlMediator = false;
         
         switch(ev.type) {
         case ALLEGRO_EVENT_TIMER: {
