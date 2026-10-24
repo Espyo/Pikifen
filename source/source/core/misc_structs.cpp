@@ -2887,6 +2887,21 @@ void TextInput::reset() {
 }
 
 
+/**
+ * @brief Forcefully set the string to this new value.
+ *
+ * @param newString The new string.
+ * @param caretAtEnd Whether to place the caret at the end or the beginning.
+ */
+void TextInput::setString(const string& newString, bool caretAtEnd) {
+    reset();
+    text = newString;
+    if(caretAtEnd) {
+        caretPos = newString.size();
+    }
+}
+
+
 #pragma endregion
 #pragma region Viewport
 
