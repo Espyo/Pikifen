@@ -2,8 +2,6 @@
 
 
 Current tasks (tasks being worked on, but not yet committed)
-    Maker console
-        Inputs shouldn't bleed outside of the console into gameplay and menus
 
 Next tasks (roughly sorted most important first)
     --- Problems to fix ---
@@ -70,8 +68,6 @@ Next tasks (roughly sorted most important first)
             Printing something to the console should receive an argument that specifies whether that gets shown in the "console preview" and added to the console's output for later viewing (errors, script prints) or if it is just shown in the preview (mob inspector, area inspector)
             Move somewhere the logic that is common between this system and the existing script action parsing/running system
             Maybe the button-based maker tool activations could be made into commands sent to the console, and the player could add custom binds so they could customize calling the maker tools to be however they want
-            Warnings? For things like leaders needing certain animations, but since they don't exist, the idling animation will be used instead. Or for usages of deprecated stuff
-                Maybe a maker tool that makes it so the next time you reload an area, it checks for warnings and prints those to the console as errors
         A tool to spawn any type of mob?
         New Pikmin maker tool should probably spawn them in Pikmin order, not alphabetical
         The free camera maker tool should definitely be its own item, including the ability to pause and unpause gameplay, control the zoom level, and toggle the HUD
@@ -780,6 +776,7 @@ Misc. things (to be implemented whenever)
         Generic tools, accessible in all editors, like a distance visualizer (which just shows a texture, a leader silhouette, and a circle around it controlled by a slider)?
         Resizable text inputs? https://github.com/ocornut/imgui/issues/7081#issuecomment-2081167909
         An option to toggle the grid visibility
+        All editors should have undo/redo
         Smooth scrolling in Dear ImGui https://github.com/ocornut/imgui/issues/2462 (thanks Nataly171)
         Maybe the color scheme editor can just make use of some dark tones, some light tones, and one accent color, like how MuseScore does it
         Aesthetic

@@ -408,6 +408,7 @@ struct ControlsMediator {
     
     string inputSourceToStr(const Inpution::InputSource& s) const;
     Inpution::InputSource strToInputSource(const string& s) const;
+    Inpution::Input allegroCharEventToInput(const ALLEGRO_EVENT& ev) const;
     Inpution::Input allegroEventToInput(const ALLEGRO_EVENT& ev) const;
     
     bool actionQueueContains(PLAYER_ACTION_TYPE actionTypeId) const;
@@ -431,6 +432,9 @@ struct ControlsMediator {
     bool actionTypesShareInputSource(
         const vector<PLAYER_ACTION_TYPE> actionTypes
     );
+    bool getInputSourceIsBoundToActionType(
+        const Inpution::InputSource& inputSource, PLAYER_ACTION_TYPE actionType
+    ) const;
     
     
     //--- Public members ---
