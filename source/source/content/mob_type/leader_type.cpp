@@ -128,7 +128,7 @@ void LeaderType::loadCatProperties(DataNode* file) {
         if(statusIt != game.content.statusTypes.list.end()) {
             sleepingStatus = statusIt->second;
         } else {
-            game.log.report(
+            game.log.write(
                 LOG_LEVEL_ERROR,
                 "Unknown status type \"" + sleepingStatusStr + "\"!",
                 sleepingStatusNode
@@ -141,7 +141,7 @@ void LeaderType::loadCatProperties(DataNode* file) {
             game.content.particleGens.list.find(lightParticleGenIName) ==
             game.content.particleGens.list.end()
         ) {
-            game.log.report(
+            game.log.write(
                 LOG_LEVEL_ERROR,
                 "Unknown particle generator \"" + lightParticleGenIName + "\"!",
                 lightPGNode

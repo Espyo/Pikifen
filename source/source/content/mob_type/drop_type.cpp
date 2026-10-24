@@ -92,7 +92,7 @@ void DropType::loadCatProperties(DataNode* file) {
             }
         }
         if(sprayTypeToIncrease == INVALID) {
-            game.log.report(
+            game.log.write(
                 LOG_LEVEL_ERROR,
                 "Unknown spray type \"" + sprayNameStr + "\"!",
                 sprayNameNode
@@ -105,7 +105,7 @@ void DropType::loadCatProperties(DataNode* file) {
         if(s != game.content.statusTypes.list.end()) {
             statusToGive = s->second;
         } else {
-            game.log.report(
+            game.log.write(
                 LOG_LEVEL_ERROR,
                 "Unknown status type \"" + statusNameStr + "\"!",
                 statusNameNode
@@ -114,7 +114,7 @@ void DropType::loadCatProperties(DataNode* file) {
     }
     
     if(totalDoses == 0) {
-        game.log.report(
+        game.log.write(
             LOG_LEVEL_ERROR,
             "The number of total doses cannot be zero!", totalDosesNode
         );

@@ -69,7 +69,7 @@ void PelletType::loadCatProperties(DataNode* file) {
     pRS.set("pikmin_type", pikTypeStr, &pikTypeNode);
     
     if(!isInMap(game.content.mobTypes.list.pikmin, pikTypeStr)) {
-        game.log.report(
+        game.log.write(
             LOG_LEVEL_ERROR,
             "Unknown Pikmin type \"" + pikTypeStr + "\"!",
             pikTypeNode
