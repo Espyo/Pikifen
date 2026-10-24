@@ -53,8 +53,14 @@ size_t getSplitCount(
     const string& text, const string& del = " ", bool incEmpty = false,
     bool incDelimiters = false
 );
+vector<string> getStringSubsequenceMatches(
+    const string& search, const vector<string>& items
+);
 size_t getNextWordLimitPos(
     const string& text, bool forward = true, size_t startIdx = 0
+);
+void getWordStartAndEnd(
+    const string& text, size_t position, size_t* outStartIdx, size_t* outEndIdx
 );
 bool isNumber(const string& s);
 bool isVowel(char c);

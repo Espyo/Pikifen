@@ -259,6 +259,7 @@ bool circlesOrRectanglesIntersect(
     const Point& center1, float radius1, const Point& rectSize1, float angle1,
     const Point& center2, float radius2, const Point& rectSize2, float angle2
 );
+Rect clampRectPosToRect(const Rect& inner, const Rect& outer);
 bool collinearLineSegsIntersect(
     const Point& a, const Point& b, const Point& c, const Point& d,
     RectCorners* outIntersection = nullptr

@@ -22,7 +22,7 @@
 
 /**
  * @brief Returns "a term" or "an term", depending on the term.
- * 
+ *
  * @param term The term.
  * @param justArticle If true, it returns just the article ("a" or "an").
  * @return The string.
@@ -186,10 +186,51 @@ size_t getSplitCount(
 
 
 /**
+ * @brief Given a list of items, returns that contain all of the characters
+ * of the input string, in the same order.
+ *
+ * @param search The input string to search with.
+ * @param items All of the possible items to search in.
+ * @return The list of matches.
+ */
+vector<string> getStringSubsequenceMatches(
+    const string& search, const vector<string>& items
+) {
+    vector<string> result;
+    
+    if(search.empty()) return result;
+    
+    for(size_t i = 0; i < items.size(); i++) {
+        const string& item = items[i];
+        size_t lastMatchIdx = string::npos;
+        bool failed = false;
+        
+        for(size_t c = 0; c < search.size(); c++) {
+            lastMatchIdx =
+                item.find(
+                    search[c],
+                    lastMatchIdx == string::npos ? 0 : lastMatchIdx + 1
+                );
+            if(lastMatchIdx == string::npos) {
+                failed = true;
+                break;
+            }
+        }
+        
+        if(!failed) {
+            result.push_back(item);
+        }
+    }
+    
+    return result;
+}
+
+
+/**
  * @brief Returns the character index of the next word limit in a string.
  * This mirrors what happens in most text editors when Ctrl + Right or
  * Ctrl + Left is pressed.
- * 
+ *
  * @param text Text to scan.
  * @param forward Whether we're moving forward or backward.
  * @param startIdx Starting index to scan from.
@@ -215,12 +256,12 @@ size_t getNextWordLimitPos(
             return idx > 0 ? isCharWord(text[idx - 1]) : isCharWord(text[idx]);
         }
     };
-
+    
     if(text.empty()) return 0;
-
+    
     size_t idx = startIdx > text.size() ? text.size() - 1 : startIdx;
     bool hadWord = isRelevantCharWord(idx);
-
+    
     while(true) {
         if(forward) {
             if(idx >= text.size()) return text.size();
@@ -233,8 +274,42 @@ size_t getNextWordLimitPos(
         if(hadWord && !hasWord) return idx;
         hadWord = hasWord;
     }
-
+    
     return idx;
+}
+
+
+/**
+ * @brief Returns the starting index and the end index (+1) of the word
+ * in the given position.
+ *
+ * @param text Text to parse.
+ * @param position The position.
+ * @param outStartIdx If not nullptr, the starting index is returned here.
+ * @param outEndIdx If not nullptr, the ending index is returned here.
+ */
+void getWordStartAndEnd(
+    const string& text, size_t position, size_t* outStartIdx, size_t* outEndIdx
+) {
+    if(outStartIdx) {
+        *outStartIdx = 0;
+        
+        if(position > 0) {
+            *outStartIdx = text.find_last_of(' ', position - 1);
+        }
+        if(*outStartIdx == string::npos) {
+            *outStartIdx = 0;
+        } else {
+            (*outStartIdx)++;
+        }
+    }
+    
+    if(outEndIdx) {
+        *outEndIdx = text.find(' ', position);
+        if(*outEndIdx == string::npos) {
+            *outEndIdx = text.size();
+        }
+    }
 }
 
 
@@ -257,7 +332,7 @@ bool isNumber(const string& s) {
 
 /**
  * @brief Returns whether the given character is a vowel.
- * 
+ *
  * @param c The character.
  * @return Whether it is a vowel.
  */
