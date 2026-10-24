@@ -370,10 +370,7 @@ CommandParam::CommandParam(
  * @param message Message to log.
  */
 void LogManager::emitInConsole(LOG_LEVEL level, const string& text) {
-    string infoStr =
-        text + "\n(Saved to \"" + FILE_PATHS_FROM_ROOT::LOG + "\".)";
-        
-    game.console.write(level, infoStr);
+    game.console.write(level, text);
 }
 
 

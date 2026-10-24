@@ -550,12 +550,15 @@ int MakerConsoleTerminal::draw(int y) const {
         );
         bool hasMoreBelow = scroll > 0;
         drawFilledEquilateralTriangle(
-            Point(boxX + boxW - 8.0f, boxY + boxH - 8.0f),
-            6.0f, TAU / 4.0f,
+            Point(
+                boxX + boxW - 8.0f,
+                getLineY(CONSOLE::OUTPUT_MAX_VISIBLE_LINES) - 8.0f
+            ), 6.0f, TAU / 4.0f,
             multAlpha(CONSOLE::COLOR_MUTED, hasMoreBelow ? 1.0f : 0.3f)
         );
         int scrollZoneY1 = boxY + 18.0f;
-        int scrollZoneY2 = boxY + boxH - 18.0f;
+        int scrollZoneY2 =
+            getLineY(CONSOLE::OUTPUT_MAX_VISIBLE_LINES) - 18.0f;
         float scrollRatio = scroll / (float) (output.size() - 1);
         int scrollY =
             interpolateNumber(
