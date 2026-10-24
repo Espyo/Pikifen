@@ -1079,7 +1079,7 @@ bool MakerTools::runTool(const string& typeName, const vector<string>& args) {
     
     //Check if it is recognized.
     if(typeToRun == MAKER_TOOL_TYPE_NONE) {
-        game.log.report(
+        game.console.write(
             LOG_LEVEL_ERROR, "Unknown maker tool name \"" + typeName + "\"!"
         );
         return false;
