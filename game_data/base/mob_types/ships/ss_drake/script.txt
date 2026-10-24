@@ -5,18 +5,18 @@ script {
             set_timer 0.01
         }
         on_timer {
-            start_particles drake_smoke 92 0 30
-            start_particles drake_smoke 0 92 30
-            start_particles drake_smoke -92 0 30
-            start_particles drake_smoke 0 -92 30
-            start_particles drake_red_light 92 0 192
-            start_particles drake_red_light 0 92 192
-            start_particles drake_red_light -92 0 192
-            start_particles drake_red_light 0 -92 192
-            start_particles drake_green_light 76 -76 250
-            start_particles drake_green_light 76 76 250
-            start_particles drake_green_light -76 76 250
-            start_particles drake_green_light -76 -76 250
+            start_particles ss_drake_smoke 92 0 30
+            start_particles ss_drake_smoke 0 92 30
+            start_particles ss_drake_smoke -92 0 30
+            start_particles ss_drake_smoke 0 -92 30
+            start_particles ss_drake_red_light 92 0 192
+            start_particles ss_drake_red_light 0 92 192
+            start_particles ss_drake_red_light -92 0 192
+            start_particles ss_drake_red_light 0 -92 192
+            start_particles ss_drake_green_light 76 -76 250
+            start_particles ss_drake_green_light 76 76 250
+            start_particles ss_drake_green_light -76 76 250
+            start_particles ss_drake_green_light -76 -76 250
             play_sound steam
             set_timer 2
         }
