@@ -10,6 +10,7 @@
 
 #pragma once
 
+#define ALLEGRO_UNSTABLE
 #include <allegro5/allegro.h>
 
 #include "../game_state/game_state.hpp"
