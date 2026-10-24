@@ -2885,6 +2885,17 @@ void TextInput::reset() {
 
 
 /**
+ * @brief Forcefully set the caret to this new position.
+ *
+ * @param newPos The new position.
+ */
+void TextInput::setCaretPos(size_t newPos) {
+    caretPos = newPos;
+    caretPos = std::min(caretPos, text.size());
+}
+
+
+/**
  * @brief Forcefully set the string to this new value.
  *
  * @param newString The new string.

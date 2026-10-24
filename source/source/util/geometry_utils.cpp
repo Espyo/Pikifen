@@ -968,6 +968,45 @@ bool circlesOrRectanglesIntersect(
 
 
 /**
+ * @brief Given an inner rectangle, checks if it'd go off an outer rectangle,
+ * and positions it such that it stays inside the window, if needed.
+ * This keeps its dimensions, and only optionally changes its center.
+ *
+ * @param rect The initial rectangle.
+ * @return The final rectangle.
+ */
+Rect clampRectPosToRect(const Rect& inner, const Rect& outer) {
+    RectCorners innerCorners = rectToRectCorners(inner);
+    RectCorners outerCorners = rectToRectCorners(outer);
+    
+    float overlapLeft = outerCorners.tl.x - innerCorners.tl.x;
+    float overlapRight = innerCorners.br.x - outerCorners.br.x;
+    float overlapUp = outerCorners.tl.y - innerCorners.tl.y;
+    float overlapDown = innerCorners.br.y - outerCorners.br.y;
+    
+    Rect result = inner;
+    
+    if(overlapLeft > 0 && overlapRight > 0) {
+        result.center.x = outer.center.x;
+    } else if(overlapLeft > 0) {
+        result.center.x += overlapLeft;
+    } else if(overlapRight > 0) {
+        result.center.x -= overlapRight;
+    }
+    
+    if(overlapUp > 0 && overlapDown > 0) {
+        result.center.x = outer.center.x;
+    } else if(overlapUp > 0) {
+        result.center.x += overlapUp;
+    } else if(overlapDown > 0) {
+        result.center.x -= overlapDown;
+    }
+    
+    return result;
+}
+
+
+/**
  * @brief Returns whether the two line segments, which are known to be
  * collinear, are intersecting.
  *

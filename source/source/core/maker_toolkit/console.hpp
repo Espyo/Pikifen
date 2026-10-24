@@ -29,6 +29,7 @@ extern const ALLEGRO_COLOR COLOR_DECOR_LIGHT;
 extern const ALLEGRO_COLOR COLOR_ERROR;
 extern const ALLEGRO_COLOR COLOR_MAIN;
 extern const ALLEGRO_COLOR COLOR_MUTED;
+extern const ALLEGRO_COLOR COLOR_SUGGESTION;
 extern const ALLEGRO_COLOR COLOR_WARNING;
 extern const size_t INPUT_HISTORY_MAX_SIZE;
 extern const float INPUT_ICON_SIZE;
@@ -99,7 +100,9 @@ struct MakerConsoleTerminal {
     
     //--- Private function declarations ---
     
+    void acceptSuggestion();
     void browseCommandHistory(int offset);
+    string getSuggestion() const;
     void submitCommand();
     
 };
