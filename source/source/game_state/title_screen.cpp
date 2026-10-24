@@ -1095,7 +1095,7 @@ void TitleScreen::load() {
             if(row[c] == '.') continue;
             if(!isInMap(wordmarkTypeBitmaps, row[c])) {
                 mapOk = false;
-                game.log.report(
+                game.log.write(
                     LOG_LEVEL_ERROR,
                     "Title screen Pikmin logo map has an unknown character \"" +
                     string(1, row[c]) + "\" on row " + i2s(r + 1) +

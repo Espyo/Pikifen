@@ -489,7 +489,7 @@ void LogManager::startBundle() {
  * @param fileLineNr If not 0, this will be reported as the data file's
  * line number.
  */
-void LogManager::report(
+void LogManager::write(
     LOG_LEVEL level, const string& text,
     const string& filePath, size_t fileLineNr
 ) {
@@ -530,14 +530,14 @@ void LogManager::report(
  * @param dataNode If not null, this will be used to obtain the file path
  * and line from which the log message originated.
  */
-void LogManager::report(
+void LogManager::write(
     LOG_LEVEL level, const string& text,
     const DataNode* dataNode
 ) {
     if(!dataNode) {
-        report(level, text, "", 0);
+        write(level, text, "", 0);
     } else {
-        report(level, text, dataNode->filePath, dataNode->lineNr);
+        write(level, text, dataNode->filePath, dataNode->lineNr);
     }
 }
 

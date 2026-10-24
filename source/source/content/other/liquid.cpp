@@ -518,7 +518,7 @@ void LiquidType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
         if(s != game.content.statusTypes.list.end()) {
             freezeMobStatus = s->second;
         } else {
-            game.log.report(
+            game.log.write(
                 LOG_LEVEL_ERROR,
                 "Unknown status type \"" + freezeMobStatusStr + "\"!",
                 freezeMobStatusNode

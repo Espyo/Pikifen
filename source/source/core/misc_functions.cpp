@@ -184,7 +184,7 @@ bool compileCommandArgs(
     }
     
     if(inputArgs.size() < nMandatoryParams) {
-        game.log.report(
+        game.log.write(
             LOG_LEVEL_ERROR,
             context + " needs " +
             i2s(nMandatoryParams) + " arguments, but this call only "
@@ -197,7 +197,7 @@ bool compileCommandArgs(
     
     if(!hasVectorParam) {
         if(inputArgs.size() > nFixedParams) {
-            game.log.report(
+            game.log.write(
                 LOG_LEVEL_ERROR,
                 context + " only needs " + i2s(params.size()) + " arguments, "
                 "but this call has " + i2s(inputArgs.size()) + "!",
@@ -226,7 +226,7 @@ bool compileCommandArgs(
         
         if(isVar) {
             if(hasFlag(params[paramIdx].flags, COMMAND_PARAM_FLAG_CONST)) {
-                game.log.report(
+                game.log.write(
                     LOG_LEVEL_ERROR,
                     "Argument #" + i2s(a + 1) + " (\"" + inputArgs[a] +
                     "\") is a variable, but the parameter \"" +
@@ -240,7 +240,7 @@ bool compileCommandArgs(
             finalWord.erase(finalWord.begin()); //Remove the '$'.
             
             if(finalWord.empty()) {
-                game.log.report(
+                game.log.write(
                     LOG_LEVEL_ERROR,
                     "Argument #" + i2s(a) + " is trying to use a variable "
                     "with no name!",
@@ -363,7 +363,7 @@ void crash(const string& reason, const string& info, int exitStatus) {
         errorStr += "none.";
     }
     
-    game.log.report(LOG_LEVEL_ERROR, errorStr);
+    game.log.write(LOG_LEVEL_ERROR, errorStr);
     
     showOSMessageBox(
         nullptr, "Program crash!",
@@ -1323,7 +1323,7 @@ bool openManual(const string& page) {
  * @param dn File to log the error into, if any.
  */
 void reportFatalError(const string& s, const DataNode* dn) {
-    game.log.report(LOG_LEVEL_ERROR, s, dn);
+    game.log.write(LOG_LEVEL_ERROR, s, dn);
     
     showOSMessageBox(
         nullptr, "Fatal error!",

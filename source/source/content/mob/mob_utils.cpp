@@ -1227,13 +1227,13 @@ void PikminNestType::loadProperties(DataNode* file, MobType* mobType) {
     
     legBodyParts = semicolonListToVector(legsStr);
     if(pikTypesNode && legBodyParts.empty()) {
-        game.log.report(
+        game.log.write(
             LOG_LEVEL_ERROR,
             "A nest-like object type needs a list of leg body parts!",
             file
         );
     } else if(legsNode && legBodyParts.size() % 2 == 1) {
-        game.log.report(
+        game.log.write(
             LOG_LEVEL_ERROR,
             "A nest-like object type needs an even number of leg body parts!",
             legsNode
@@ -1244,7 +1244,7 @@ void PikminNestType::loadProperties(DataNode* file, MobType* mobType) {
     forIdx(t, pikTypesStrs) {
         string& str = pikTypesStrs[t];
         if(!isInMap(game.content.mobTypes.list.pikmin, str)) {
-            game.log.report(
+            game.log.write(
                 LOG_LEVEL_ERROR,
                 "Unknown Pikmin type \"" + str + "\"!",
                 pikTypesNode
@@ -1375,7 +1375,7 @@ Mob* createMob(
             getSpawnInfoFromChildInfo(mPtr->type, &type->children[c]);
             
         if(!spawnInfo) {
-            game.log.report(
+            game.log.write(
                 LOG_LEVEL_ERROR,
                 "Object \"" + type->name + "\" tried to spawn a child with the "
                 "spawn name \"" + childInfo->spawnName + "\", but that name "
@@ -1412,7 +1412,7 @@ Mob* createMob(
                 pInfo->limbAnim.curAnim = animToUse;
                 pInfo->limbAnim.toStart();
             } else {
-                game.log.report(
+                game.log.write(
                     LOG_LEVEL_ERROR,
                     "Object \"" + newMob->type->name + "\", child object of "
                     "object \"" + type->name + "\", tried to use animation \"" +

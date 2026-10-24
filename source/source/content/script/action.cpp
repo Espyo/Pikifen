@@ -92,7 +92,7 @@ bool ScriptActionDef::loadFromDataNode(
     
     //Check if it is recognized.
     if(!actionType) {
-        game.log.report(
+        game.log.write(
             LOG_LEVEL_ERROR,
             "Unknown script action name \"" + name + "\"!", node
         );
@@ -101,7 +101,7 @@ bool ScriptActionDef::loadFromDataNode(
     
     //Check if it's deprecated.
     if(!actionType->deprecationReplacement.empty()) {
-        game.log.report(
+        game.log.write(
             LOG_LEVEL_WARNING,
             "The action \"" + actionType->name + "\" is deprecated "
             "and may be removed in the future! Please use \"" +
@@ -124,7 +124,7 @@ bool ScriptActionDef::loadFromDataNode(
             }
         }
         if(!canUse) {
-            game.log.report(
+            game.log.write(
                 LOG_LEVEL_ERROR,
                 "The action \"" + name + "\" can't be used in an " +
                 scriptDef->getContextName() + " script context!", node
@@ -132,12 +132,12 @@ bool ScriptActionDef::loadFromDataNode(
             return false;
         }
     }
-
+    
     return compileCommandArgs(
-        actionType->parameters, words,
-        "The \"" + actionType->name + "\" action", true,
-        &args, &argIsVar, node
-    );
+               actionType->parameters, words,
+               "The \"" + actionType->name + "\" action", true,
+               &args, &argIsVar, node
+           );
 }
 
 
@@ -225,7 +225,7 @@ bool ScriptActionListDef::compile(DataNode* dn) {
                     enumGetName(
                         constructTypeActionNames, curExpectedConstruct
                     );
-                game.log.report(
+                game.log.write(
                     LOG_LEVEL_ERROR,
                     "Found " + aAn(foundActionStr, true) + " \"" +
                     foundActionStr + "\" action outside of " +
@@ -268,7 +268,7 @@ bool ScriptActionListDef::compile(DataNode* dn) {
         case SCRIPT_ACTION_ELSE_IF: {
             assertStack(SCRIPT_CONSTRUCT_TYPE_IF);
             if(seenElseStack.back()) {
-                game.log.report(
+                game.log.write(
                     LOG_LEVEL_ERROR,
                     "Found an \"else_if\" action after an \"else\" action!",
                     dn
@@ -324,7 +324,7 @@ bool ScriptActionListDef::compile(DataNode* dn) {
             enumGetName(
                 constructTypeActionNames, constructStack.back()
             );
-        game.log.report(
+        game.log.write(
             LOG_LEVEL_ERROR,
             "Found " + aAn(foundBlockStr, true) + " \"" +
             foundBlockStr + "\" block that has no end!",
@@ -344,7 +344,7 @@ bool ScriptActionListDef::compile(DataNode* dn) {
             break;
         } case SCRIPT_ACTION_ELSE: {
             if(depth == 0) {
-                game.log.report(
+                game.log.write(
                     LOG_LEVEL_ERROR,
                     "Found an \"else\" action without a matching "
                     "\"if\" action!", dn
@@ -355,7 +355,7 @@ bool ScriptActionListDef::compile(DataNode* dn) {
             break;
         } case SCRIPT_ACTION_ELSE_IF: {
             if(depth == 0) {
-                game.log.report(
+                game.log.write(
                     LOG_LEVEL_ERROR,
                     "Found an \"else_if\" action without a matching "
                     "\"if\" action!", dn
@@ -363,7 +363,7 @@ bool ScriptActionListDef::compile(DataNode* dn) {
                 return false;
             }
             if(seenElseAction.back()) {
-                game.log.report(
+                game.log.write(
                     LOG_LEVEL_ERROR,
                     "Found an \"else_if\" action after an \"else\" action!",
                     dn
@@ -373,7 +373,7 @@ bool ScriptActionListDef::compile(DataNode* dn) {
             break;
         } case SCRIPT_ACTION_END_IF: {
             if(depth == 0) {
-                game.log.report(
+                game.log.write(
                     LOG_LEVEL_ERROR,
                     "Found an \"end_if\" action without a matching "
                     "\"if\" action!", dn
@@ -389,7 +389,7 @@ bool ScriptActionListDef::compile(DataNode* dn) {
         }
     }
     if(depth > 0) {
-        game.log.report(
+        game.log.write(
             LOG_LEVEL_ERROR,
             "Some \"if\" actions don't have a matching \"end_if\" action!",
             dn
@@ -403,7 +403,7 @@ bool ScriptActionListDef::compile(DataNode* dn) {
         if(list[a]->actionType->type == SCRIPT_ACTION_LABEL) {
             const string& name = list[a]->args[0];
             if(isInContainer(labels, name)) {
-                game.log.report(
+                game.log.write(
                     LOG_LEVEL_ERROR,
                     "There are multiple labels called \"" + name + "\"!", dn
                 );
@@ -416,7 +416,7 @@ bool ScriptActionListDef::compile(DataNode* dn) {
         if(list[a]->actionType->type == SCRIPT_ACTION_GOTO) {
             const string& name = list[a]->args[0];
             if(!isInContainer(labels, name)) {
-                game.log.report(
+                game.log.write(
                     LOG_LEVEL_ERROR,
                     "There is no label called \"" + name + "\", even though "
                     "there are \"goto\" actions that need it!", dn
@@ -459,7 +459,7 @@ bool ScriptActionListDef::compile(DataNode* dn) {
             break;
         } default: {
             if(passedSetState) {
-                game.log.report(
+                game.log.write(
                     LOG_LEVEL_ERROR,
                     "There is an action \"" + list[a]->actionType->name + "\" "
                     "placed after a \"set_state\" action, which means it will "
@@ -477,7 +477,7 @@ bool ScriptActionListDef::compile(DataNode* dn) {
     forIdx(a, list) {
         if(list[a]->actionType->type == SCRIPT_ACTION_RUN_NEXT_ACTION_AS) {
             if(a == list.size() - 1) {
-                game.log.report(
+                game.log.write(
                     LOG_LEVEL_ERROR,
                     "There is a \"" + list[a]->actionType->name + "\" "
                     "with no other action after it!", dn

@@ -619,7 +619,7 @@ void StatusType::loadFromDataNode(DataNode* node, CONTENT_LOAD_LEVEL level) {
     [this] (DataNode * node, const string& str, ParticleGenerator** pg) {
         if(node) {
             if(!isInMap(game.content.particleGens.list, str)) {
-                game.log.report(
+                game.log.write(
                     LOG_LEVEL_ERROR,
                     "Unknown particle generator \"" +
                     str + "\"!", node

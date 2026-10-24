@@ -51,7 +51,7 @@ bool MakerToolRunners::areaImage(
         "_" + getCurrentTime(true) + ".png";
         
     if(!al_save_bitmap(fileName.c_str(), bmp)) {
-        game.log.report(
+        game.log.write(
             LOG_LEVEL_ERROR,
             "Could not save the area onto an image,"
             " with the name \"" + fileName + "\"!"
@@ -1103,7 +1103,7 @@ bool MakerTools::runTool(
     
     //Check if this action is allowed in the current context.
     if(!checkContextFlags(typePtr->contexts)) {
-        game.log.report(
+        game.log.write(
             LOG_LEVEL_ERROR,
             "The maker tool \"" + typePtr->name + "\" can't be used in " +
             aAn(getContextName()) + " context!"

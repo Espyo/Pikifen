@@ -54,7 +54,7 @@ void SprayType::loadFromDataNode(
         forIdx(e, effectsStrs) {
             string effectName = effectsStrs[e];
             if(!isInMap(game.content.statusTypes.list, effectName)) {
-                game.log.report(
+                game.log.write(
                     LOG_LEVEL_ERROR,
                     "Unknown status effect \"" + effectName + "\"!",
                     effectsNode
