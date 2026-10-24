@@ -1441,19 +1441,17 @@ void initMakerToolTypes() {
     params.back().minValue = 1.0f;
     params.back().description =
         "Maximum image width or height, in pixels. "
-        "2048 is a good size for medium or large areas, "
-        "otherwise 1024 works fine.";
+        "2048 is suggested for medium or large areas, 1024 otherwise.";
     queueParam("padding", ptInt, pfOpt, "32");
     params.back().minValue = 0.0f;
     params.back().description =
-        "Padding around the actual area. "
-        "This is measured in area pixels, and is the total for "
-        "either dimension. e.g. 32 means 16 area pixels above "
-        "the area and 16 area pixels below the area will be "
-        "included; same for 16 pixels to the left and 16 to the right.";
+        "Padding around the actual area, in area pixels. "
+        "e.g. 32 means 16 area pixels above, 16 below, 16 to the left, "
+        "and 16 to the right.";
     queueParam("shadows", ptBool, pfOpt, "true");
     params.back().description =
-        "Whether you want to see tree shadows.";
+        "Whether to draw tree shadows.";
+        
     commitTool(
         MAKER_TOOL_TYPE_AREA_IMAGE,
         "area_image", true,
@@ -1475,6 +1473,7 @@ void initMakerToolTypes() {
     params.back().description =
         "Game speed multiplier. "
         "1 is normal speed, 0.5 is half speed, 2.0 is double speed, etc.";
+        
     commitTool(
         MAKER_TOOL_TYPE_CHANGE_SPEED,
         "change_speed", true,
@@ -1495,6 +1494,7 @@ void initMakerToolTypes() {
     params.back().minValue = 0.0f;
     params.back().description =
         "Amount to set all inventory items to.";
+        
     commitTool(
         MAKER_TOOL_TYPE_FILL_INVENTORY,
         "fill_inventory", true,
@@ -1508,6 +1508,7 @@ void initMakerToolTypes() {
     params.back().description =
         "Action to perform. \"advance\" pauses gameplay if unpaused, otherwise "
         "advances one frame. \"resume\" resumes normal gameplay.";
+        
     commitTool(
         MAKER_TOOL_TYPE_FRAME_ADVANCE,
         "frame_advance", true,
@@ -1523,6 +1524,7 @@ void initMakerToolTypes() {
         "\"freeze\" toggles whether the free camera is frozen "
         "(player controls the leader) or mobile "
         "(player controls the camera).";
+        
     commitTool(
         MAKER_TOOL_TYPE_FREE_CAM,
         "free_cam", true,
@@ -1554,6 +1556,7 @@ void initMakerToolTypes() {
         "Ratio of damage. 0.5 means it loses 50% of its max health. "
         "1.0 means it loses all its health, -0.2 means it regains 20% of its "
         "max health, etc.";
+        
     commitTool(
         MAKER_TOOL_TYPE_HURT_MOB,
         "hurt_mob", true,
@@ -1569,6 +1572,7 @@ void initMakerToolTypes() {
         "to the mouse cursor. \"iterate\" makes it detect mobs near the "
         "mouse cursor or swap to the next one in that list. \"stop\" makes "
         "it stop inspecting.";
+        
     commitTool(
         MAKER_TOOL_TYPE_MOB_INSPECTOR,
         "mob_inspector", true,
@@ -1584,6 +1588,7 @@ void initMakerToolTypes() {
         "or \"same\" to spawn one of the same type as the last spawned one.";
     queueParam("maturity", ptEnum, pfOpt, "flower");
     params.back().enumValues = enumGetNames(maturityINames);
+    
     commitTool(
         MAKER_TOOL_TYPE_NEW_PIKMIN,
         "new_pikmin", true,
@@ -1644,6 +1649,7 @@ void initMakerToolTypes() {
     params.back().description =
         "Whether to teleport the target mob and its group, or to "
         "instead leave the group members behind.";
+        
     commitTool(
         MAKER_TOOL_TYPE_TELEPORT,
         "teleport", true,
