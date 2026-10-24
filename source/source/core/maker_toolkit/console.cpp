@@ -40,7 +40,7 @@ const ALLEGRO_COLOR COLOR_MAIN = al_map_rgba(255, 255, 255, 192);
 const ALLEGRO_COLOR COLOR_MUTED = al_map_rgba(255, 255, 255, 128);
 
 //Suggestion text color, alpha included.
-const ALLEGRO_COLOR COLOR_SUGGESTION = al_map_rgba(208, 208, 224, 192);
+const ALLEGRO_COLOR COLOR_SUGGESTION = al_map_rgba(208, 208, 255, 192);
 
 //Warning text color, alpha included.
 const ALLEGRO_COLOR COLOR_WARNING = al_map_rgba(255, 255, 128, 192);
@@ -722,14 +722,10 @@ int MakerConsoleTerminal::draw(int y) const {
         );
     }
     
-    //Suggestion.
-    string suggestion = getSuggestion();
-    if(!suggestion.empty()) {
-        int suggestionW = al_get_text_width(FONT, suggestion.c_str());
-        Rect suggestionRect(
-            Point(caretX, getLineY(CONSOLE::OUTPUT_MAX_VISIBLE_LINES) - 8.0f),
-            Point(suggestionW + 6.0f, fontHeight + 6.0f)
-        );
+    const auto drawSuggestionText =
+    [FONT, fontHeight] (const string& text, const Point & pos) {
+        int suggestionW = al_get_text_width(FONT, text.c_str());
+        Rect suggestionRect(pos, Point(suggestionW + 6.0f, fontHeight + 6.0f));
         suggestionRect =
             clampRectPosToRect(
                 suggestionRect,
@@ -752,10 +748,34 @@ int MakerConsoleTerminal::draw(int y) const {
             CONSOLE::COLOR_SUGGESTION, 1.0f
         );
         drawText(
-            suggestion, FONT, suggestionRect.center, suggestionRect.size,
+            text, FONT, suggestionRect.center, suggestionRect.size,
             CONSOLE::COLOR_SUGGESTION,
             ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
             TEXT_SETTING_FLAG_FIXED_SIZE
+        );
+    };
+    
+    //Suggestion.
+    string suggestionNotes;
+    string suggestion = getSuggestion(&suggestionNotes);
+    if(!suggestion.empty()) {
+        drawSuggestionText(
+            suggestion,
+            Point(
+                caretX,
+                getLineY(CONSOLE::OUTPUT_MAX_VISIBLE_LINES) - fontHeight / 2.0f
+            )
+        );
+    }
+    
+    if(!suggestionNotes.empty()) {
+        drawSuggestionText(
+            suggestionNotes,
+            Point(
+                caretX,
+                getLineY(CONSOLE::OUTPUT_MAX_VISIBLE_LINES - 2) -
+                fontHeight / 2.0f
+            )
         );
     }
     
@@ -778,12 +798,24 @@ int MakerConsoleTerminal::draw(int y) const {
 /**
  * @brief Returns a suggestion for the word the user is currently typing.
  *
+ * @param outNotes If not nullptr, any additional notes are returned here.
  * @return The suggestion, or an empty string if there is none.
  */
-string MakerConsoleTerminal::getSuggestion() const {
+string MakerConsoleTerminal::getSuggestion(string* outNotes) const {
     string text = input.getString();
-    if(text.empty()) return "";
+    if(trimSpaces(text).empty()) return "";
     string result;
+    string notesResult;
+    
+    const auto findTool = [] (const string& name) -> MakerToolType* {
+        forIdx(t, game.makerTools.types) {
+            MakerToolType* tPtr = &game.makerTools.types[t];
+            if(tPtr->name == name) {
+                return tPtr;
+            }
+        }
+        return nullptr;
+    };
     
     //Figure out the word.
     size_t wordStart, wordEnd;
@@ -803,6 +835,7 @@ string MakerConsoleTerminal::getSuggestion() const {
     
     //Figure out what to suggest with.
     if(wordIdx == 0) {
+        //Tool name.
         vector<string> possibleItems;
         forIdx(t, game.makerTools.types) {
             MakerToolType* tPtr = &game.makerTools.types[t];
@@ -812,9 +845,27 @@ string MakerConsoleTerminal::getSuggestion() const {
         
         possibleItems = getStringSubsequenceMatches(word, possibleItems);
         
-        if(!possibleItems.empty()) result = possibleItems[0];
+        if(!possibleItems.empty()) {
+            result = possibleItems[0];
+            if(outNotes) {
+                notesResult = findTool(result)->description;
+            }
+        }
+        
+    } else {
+        //Tool parameter.
+        MakerToolType* tPtr = findTool(split(text)[0]);
+        if(tPtr) {
+            size_t paramIdx = wordIdx - 1;
+            
+            if(paramIdx < tPtr->parameters.size()) {
+                result = tPtr->parameters[paramIdx].defValue;
+                notesResult = tPtr->parameters[paramIdx].description;
+            }
+        }
     }
     
+    if(outNotes) *outNotes = notesResult;
     if(word == result) {
         //Already the result.
         return "";

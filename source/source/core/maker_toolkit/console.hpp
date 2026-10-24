@@ -102,7 +102,7 @@ struct MakerConsoleTerminal {
     
     void acceptSuggestion();
     void browseCommandHistory(int offset);
-    string getSuggestion() const;
+    string getSuggestion(string* outNotes = nullptr) const;
     void submitCommand();
     
 };
