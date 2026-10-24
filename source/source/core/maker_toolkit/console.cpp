@@ -39,6 +39,9 @@ const ALLEGRO_COLOR COLOR_MAIN = al_map_rgba(255, 255, 255, 192);
 //Muted text color, alpha included.
 const ALLEGRO_COLOR COLOR_MUTED = al_map_rgba(255, 255, 255, 128);
 
+//Suggestion text color, alpha included.
+const ALLEGRO_COLOR COLOR_SUGGESTION = al_map_rgba(208, 208, 224, 192);
+
 //Warning text color, alpha included.
 const ALLEGRO_COLOR COLOR_WARNING = al_map_rgba(255, 255, 128, 192);
 
@@ -438,6 +441,25 @@ MakerConsoleTerminal::MakerConsoleTerminal() {
 
 
 /**
+ * @brief Accepts the current suggestion.
+ */
+void MakerConsoleTerminal::acceptSuggestion() {
+    string suggestion = getSuggestion();
+    if(suggestion.empty()) return;
+    
+    string text = input.getString();
+    size_t wordStart, wordEnd;
+    getWordStartAndEnd(text, input.getCaretPos(), &wordStart, &wordEnd);
+    
+    text.replace(wordStart, wordEnd - wordStart, suggestion);
+    if(text.back() != ' ') text.push_back(' ');
+    
+    input.setString(text);
+    input.setCaretPos(wordStart + suggestion.size() + 1);
+}
+
+
+/**
  * @brief Browses to a point of the command history, if possible.
  *
  * @param offset Offset compared to the current point of the command history.
@@ -684,18 +706,56 @@ int MakerConsoleTerminal::draw(int y) const {
     
     //Input text caret.
     float caretT = fmod(game.timePassed, CONSOLE::CARET_BLINK_INTERVAL);
+    int caretX = 0;
+    int prefixWidth = al_get_text_width(FONT, INPUT_LINE_PREFIX.c_str());
+    string inputPreCaretText =
+        input.getString().substr(0, input.getCaretPos());
+    int inputPreCaretTextWidth =
+        al_get_text_width(FONT, inputPreCaretText.c_str());
+    caretX = textX + prefixWidth + inputPreCaretTextWidth;
+    
     if(caretT < CONSOLE::CARET_BLINK_INTERVAL / 2.0f) {
-        int prefixWidth = al_get_text_width(FONT, INPUT_LINE_PREFIX.c_str());
-        string inputPreCaretText =
-            input.getString().substr(0, input.getCaretPos());
-        int inputPreCaretTextWidth =
-            al_get_text_width(FONT, inputPreCaretText.c_str());
-        int caretX = textX + prefixWidth + inputPreCaretTextWidth;
-        
         al_draw_line(
             caretX, inputLineTextY,
             caretX, inputLineTextY + fontHeight,
             CONSOLE::COLOR_MAIN, 2.0f
+        );
+    }
+    
+    //Suggestion.
+    string suggestion = getSuggestion();
+    if(!suggestion.empty()) {
+        int suggestionW = al_get_text_width(FONT, suggestion.c_str());
+        Rect suggestionRect(
+            Point(caretX, getLineY(CONSOLE::OUTPUT_MAX_VISIBLE_LINES) - 8.0f),
+            Point(suggestionW + 6.0f, fontHeight + 6.0f)
+        );
+        suggestionRect =
+            clampRectPosToRect(
+                suggestionRect,
+                rectCornersToRect(
+                    RectCorners(Point(0.0f), Point(game.winW, game.winH))
+                )
+            );
+        al_draw_filled_rectangle(
+            suggestionRect.center.x - suggestionRect.size.x / 2.0f,
+            suggestionRect.center.y - suggestionRect.size.y / 2.0f,
+            suggestionRect.center.x + suggestionRect.size.x / 2.0f,
+            suggestionRect.center.y + suggestionRect.size.y / 2.0f,
+            CONSOLE::COLOR_BG
+        );
+        al_draw_rectangle(
+            suggestionRect.center.x - suggestionRect.size.x / 2.0f,
+            suggestionRect.center.y - suggestionRect.size.y / 2.0f,
+            suggestionRect.center.x + suggestionRect.size.x / 2.0f,
+            suggestionRect.center.y + suggestionRect.size.y / 2.0f,
+            CONSOLE::COLOR_SUGGESTION, 1.0f
+        );
+        drawText(
+            suggestion, FONT, suggestionRect.center, suggestionRect.size,
+            CONSOLE::COLOR_SUGGESTION,
+            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
+            TEXT_SETTING_FLAG_FIXED_SIZE
         );
     }
     
@@ -712,6 +772,55 @@ int MakerConsoleTerminal::draw(int y) const {
     );
     
     return boxH + yOffset;
+}
+
+
+/**
+ * @brief Returns a suggestion for the word the user is currently typing.
+ *
+ * @return The suggestion, or an empty string if there is none.
+ */
+string MakerConsoleTerminal::getSuggestion() const {
+    string text = input.getString();
+    if(text.empty()) return "";
+    string result;
+    
+    //Figure out the word.
+    size_t wordStart, wordEnd;
+    getWordStartAndEnd(text, input.getCaretPos(), &wordStart, &wordEnd);
+    string word = text.substr(wordStart, wordEnd - wordStart);
+    
+    size_t wordIdx = 0;
+    size_t prevSpaceIdx = string::npos;
+    while(true) {
+        prevSpaceIdx =
+            text.find(' ', prevSpaceIdx == string::npos ? 0 : prevSpaceIdx + 1);
+        if(prevSpaceIdx >= wordEnd) {
+            break;
+        }
+        wordIdx++;
+    }
+    
+    //Figure out what to suggest with.
+    if(wordIdx == 0) {
+        vector<string> possibleItems;
+        forIdx(t, game.makerTools.types) {
+            MakerToolType* tPtr = &game.makerTools.types[t];
+            if(tPtr->type == MAKER_TOOL_TYPE_NONE) continue;
+            possibleItems.push_back(tPtr->name);
+        }
+        
+        possibleItems = getStringSubsequenceMatches(word, possibleItems);
+        
+        if(!possibleItems.empty()) result = possibleItems[0];
+    }
+    
+    if(word == result) {
+        //Already the result.
+        return "";
+    }
+    
+    return result;
 }
 
 
@@ -762,6 +871,9 @@ bool MakerConsoleTerminal::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
             break;
         } case ALLEGRO_KEY_ENTER: {
             if(input.getString().size() > 0) submitCommand();
+            break;
+        } case ALLEGRO_KEY_TAB: {
+            if(input.getString().size() > 0) acceptSuggestion();
             break;
         } case ALLEGRO_KEY_ESCAPE: {
             close();
