@@ -746,7 +746,7 @@ void GameplayState::handlePlayerAction(const Inpution::Action& action) {
  */
 bool GameplayState::shouldIgnorePlayerAction(const Inpution::Action& action) {
     if(game.modal.responsive) return true;
-    if(game.makerTools.freeCamMode && !game.makerTools.freeCamFrozen) {
+    if(game.makerTools.inControlCam && !game.makerTools.controlCamFrozen) {
         return true;
     }
     
