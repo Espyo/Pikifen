@@ -1860,8 +1860,8 @@ void GameplayState::unload() {
         delete pauseMenu;
         pauseMenu = nullptr;
     }
-    game.console.clear();
-    game.makerDisplay.clear();
+    game.console.reset();
+    game.makerDisplay.reset();
     
     unloading = false;
 }

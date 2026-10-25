@@ -53,6 +53,7 @@ struct MakerConsoleTerminal {
     //--- Public function declarations ---
     
     MakerConsoleTerminal();
+    void reset();
     void clear();
     int draw(int y) const;
     bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
@@ -117,12 +118,12 @@ struct MakerConsoleNotifier {
 
     //--- Public function declarations ---
     
-    void clear();
     int draw(int y) const;
     void tick(float deltaT);
     void write(LOG_LEVEL level, const string& text, float duration);
     void open(bool instant = false);
     void close(bool instant = false);
+    void reset();
     
     
     private:
@@ -156,7 +157,6 @@ struct MakerConsole {
 
     //--- Public function declarations ---
     
-    void clear();
     int draw(int y) const;
     bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
     void tick(float deltaT);
@@ -164,9 +164,11 @@ struct MakerConsole {
         LOG_LEVEL level, const string& text,
         float notificationDuration = 10.0f
     );
+    void reset();
     void openTerminal(bool instant = false);
     void closeTerminal(bool instant = false);
     void toggleTerminal(bool instant = false);
+    void clearTerminal(bool instant = false);
     
     
     private:

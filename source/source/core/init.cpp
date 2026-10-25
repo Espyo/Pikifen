@@ -1481,6 +1481,14 @@ void initMakerToolTypes() {
         "Changes the gameplay speed."
     );
     
+    //Clear terminal output.
+    commitTool(
+        MAKER_TOOL_TYPE_CLEAR,
+        "clear", false,
+        MakerToolRunners::clear,
+        "Clears the console's output."
+    );
+    
     //Delete mob.
     commitTool(
         MAKER_TOOL_TYPE_DELETE_MOB,
@@ -1540,6 +1548,14 @@ void initMakerToolTypes() {
         MakerToolRunners::geometryInfo,
         "Toggles showing information about the area layout data under "
         "the mouse cursor, as well as information about the cursor proper."
+    );
+    
+    //Help.
+    commitTool(
+        MAKER_TOOL_TYPE_HELP,
+        "help", false,
+        MakerToolRunners::help,
+        "Shows some basic help and a list of maker tools."
     );
     
     //Hide HUD.
