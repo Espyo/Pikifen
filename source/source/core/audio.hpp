@@ -429,7 +429,7 @@ public:
         const string& name, bool fromStart = true, bool fadeIn = true,
         bool loop = true
     );
-    void setSongPosNearLoop();
+    void setSongPosNearLoop(float seconds = 4.0f);
     bool setSoundSourcePos(size_t sourceId, const Point& pos);
     void stopAllPlaybacks(const ALLEGRO_SAMPLE* filter = nullptr);
     void tick(float deltaT);
