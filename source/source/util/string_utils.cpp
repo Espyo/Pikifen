@@ -191,12 +191,17 @@ size_t getSplitCount(
  *
  * @param search The input string to search with.
  * @param items All of the possible items to search in.
+ * @param outDistanceSums If not nullptr, the sum of the distances between
+ * each search term character and the match character, for each resulting
+ * item, are returned here.
  * @return The list of matches.
  */
 vector<string> getStringSubsequenceMatches(
-    const string& search, const vector<string>& items
+    const string& search, const vector<string>& items,
+    vector<size_t>* outDistanceSums
 ) {
     vector<string> result;
+    if(outDistanceSums) outDistanceSums->clear();
     
     if(search.empty()) return result;
     
@@ -204,6 +209,8 @@ vector<string> getStringSubsequenceMatches(
         const string& item = items[i];
         size_t lastMatchIdx = string::npos;
         bool failed = false;
+        size_t firstCharDiff = 0;
+        size_t distanceSum = 0;
         
         for(size_t c = 0; c < search.size(); c++) {
             lastMatchIdx =
@@ -215,10 +222,16 @@ vector<string> getStringSubsequenceMatches(
                 failed = true;
                 break;
             }
+            if(c == 0) {
+                firstCharDiff = lastMatchIdx;
+            } else {
+                distanceSum += (lastMatchIdx - c) - firstCharDiff;
+            }
         }
         
         if(!failed) {
             result.push_back(item);
+            if(outDistanceSums) outDistanceSums->push_back(distanceSum);
         }
     }
     

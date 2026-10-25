@@ -847,10 +847,28 @@ string MakerConsoleTerminal::getSuggestion(string* outNotes) const {
             possibleItems.push_back(tPtr->name);
         }
         
-        possibleItems = getStringSubsequenceMatches(word, possibleItems);
-        
+        vector<size_t> possibleItemScores;
+        possibleItems =
+            getStringSubsequenceMatches(
+                word, possibleItems, &possibleItemScores
+            );
+            
         if(!possibleItems.empty()) {
-            result = possibleItems[0];
+            vector<size_t> possibleItemIndexes;
+            for(size_t i = 0; i < possibleItems.size(); i++) {
+                possibleItemIndexes.push_back(i);
+            }
+            std::sort(
+                possibleItemIndexes.begin(), possibleItemIndexes.end(),
+            [&possibleItemScores] (size_t i1, size_t i2) {
+                size_t score1 = possibleItemScores[i1];
+                size_t score2 = possibleItemScores[i2];
+                if(score1 == score2) return i1 < i2;
+                return score1 < score2;
+            }
+            );
+            
+            result = possibleItems[possibleItemIndexes[0]];
             if(outNotes) {
                 notesResult = findTool(result)->description;
             }
