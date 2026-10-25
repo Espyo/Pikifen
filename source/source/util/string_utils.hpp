@@ -54,7 +54,8 @@ size_t getSplitCount(
     bool incDelimiters = false
 );
 vector<string> getStringSubsequenceMatches(
-    const string& search, const vector<string>& items
+    const string& search, const vector<string>& items,
+    vector<size_t>* outDistanceSums
 );
 size_t getNextWordLimitPos(
     const string& text, bool forward = true, size_t startIdx = 0
