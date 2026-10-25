@@ -45,6 +45,9 @@ public:
     
     //Type of Pikmin it will convert to right now.
     PikminType* currentType = nullptr;
+
+    //Type of Pikmin it will accept as input.
+    vector<PikminType*> acceptedTypes;
     
     //If it cycles between types, this is the index of the current type.
     size_t currentTypeIdx = 0;
