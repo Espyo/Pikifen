@@ -96,6 +96,9 @@ enum MAKER_TOOL_TYPE {
     //Show reaches.
     MAKER_TOOL_TYPE_SHOW_REACHES,
     
+    //Spawn a new mob underneath the mouse cursor.
+    MAKER_TOOL_TYPE_SPAWN_MOB,
+    
     //Spawn a new Pikmin underneath the mouse cursor.
     MAKER_TOOL_TYPE_SPAWN_PIKMIN,
     
@@ -403,6 +406,7 @@ bool showGeometryInfo(MakerTools& mgr, const vector<string>& args);
 bool showHitboxes(MakerTools& mgr, const vector<string>& args);
 bool showPathInfo(MakerTools& mgr, const vector<string>& args);
 bool showReaches(MakerTools& mgr, const vector<string>& args);
+bool spawnMob(MakerTools& mgr, const vector<string>& args);
 bool spawnPikmin(MakerTools& mgr, const vector<string>& args);
 bool teleport(MakerTools& mgr, const vector<string>& args);
 }
