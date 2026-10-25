@@ -1432,6 +1432,11 @@ void initMakerToolTypes() {
     );
     
     //Set song position near loop point.
+    queueParam("seconds", ptFloat, pfOpt, "4");
+    params.back().minValue = 0.0f;
+    params.back().description =
+        "How many seconds before the loop point.";
+        
     commitTool(
         MAKER_TOOL_TYPE_SET_SONG_POS_NEAR_LOOP,
         "set_song_pos_near_loop", false,
@@ -1652,12 +1657,18 @@ void initMakerToolTypes() {
     //Spawn Pikmin.
     queueParam("type", ptString, pfOpt, "next");
     params.back().description =
-        "Type of Pikmin to spawn. This can be a proper type's internal name, "
-        "or \"next\" to spawn one of the next type from the last spawned one, "
-        "or \"same\" to spawn one of the same type as the last spawned one.";
+        "Type of Pikmin to spawn. A proper type's internal name, "
+        "or \"next\" to use the same type as the last spawned, "
+        "or \"same\" to use the same type as the last spawned.";
+    queueParam("amount", ptInt, pfOpt, "1");
+    params.back().minValue = 1.0f;
+    params.back().description =
+        "Amount to spawn.";
     queueParam("maturity", ptEnum, pfOpt, "flower");
     params.back().enumValues = enumGetNames(maturityINames);
-    
+    params.back().description =
+        "The Pikmin's maturity.";
+        
     commitTool(
         MAKER_TOOL_TYPE_SPAWN_PIKMIN,
         "spawn_pikmin", true,
