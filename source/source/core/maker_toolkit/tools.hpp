@@ -36,17 +36,14 @@ enum MAKER_TOOL_TYPE {
     //None.
     MAKER_TOOL_TYPE_NONE,
     
-    //Create an image of the whole area.
-    MAKER_TOOL_TYPE_AREA_IMAGE,
-    
-    //Get info on the current area.
-    MAKER_TOOL_TYPE_AREA_INSPECTOR,
-    
-    //Change gameplay speed.
-    MAKER_TOOL_TYPE_CHANGE_SPEED,
-    
     //Clear the terminal's output.
     MAKER_TOOL_TYPE_CLEAR,
+    
+    //Control camera.
+    MAKER_TOOL_TYPE_CONTROL_CAM,
+    
+    //Create an area maker reminder beneath the cursor.
+    MAKER_TOOL_TYPE_CREATE_REMINDER,
     
     //Delete mob.
     MAKER_TOOL_TYPE_DELETE_MOB,
@@ -57,32 +54,23 @@ enum MAKER_TOOL_TYPE {
     //Frame advance.
     MAKER_TOOL_TYPE_FRAME_ADVANCE,
     
-    //Free camera.
-    MAKER_TOOL_TYPE_FREE_CAM,
-    
     //Help.
     MAKER_TOOL_TYPE_HELP,
     
-    //Geometry info beneath mouse cursor.
-    MAKER_TOOL_TYPE_GEOMETRY_INFO,
-    
-    //Toggle HUD visibility.
+    //Hide HUD.
     MAKER_TOOL_TYPE_HIDE_HUD,
     
     //Hurt mob beneath mouse cursor.
     MAKER_TOOL_TYPE_HURT_MOB,
     
+    //Get info on the current area.
+    MAKER_TOOL_TYPE_INSPECT_AREA,
+    
     //Get info on the mob beneath mouse cursor.
-    MAKER_TOOL_TYPE_MOB_INSPECTOR,
+    MAKER_TOOL_TYPE_INSPECT_MOB,
     
-    //Create a new Pikmin beneath mouse cursor.
-    MAKER_TOOL_TYPE_NEW_PIKMIN,
-    
-    //Create an area maker reminder beneath the cursor.
-    MAKER_TOOL_TYPE_NEW_REMINDER,
-    
-    //Show path info.
-    MAKER_TOOL_TYPE_PATH_INFO,
+    //Create and save an image of the whole area.
+    MAKER_TOOL_TYPE_SAVE_AREA_IMAGE,
     
     //Set auto-start data.
     MAKER_TOOL_TYPE_SET_AUTO_START,
@@ -90,14 +78,26 @@ enum MAKER_TOOL_TYPE {
     //Set song position near loop.
     MAKER_TOOL_TYPE_SET_SONG_POS_NEAR_LOOP,
     
+    //Set gameplay speed.
+    MAKER_TOOL_TYPE_SET_SPEED,
+    
     //Show collision box.
     MAKER_TOOL_TYPE_SHOW_COLLISION,
+    
+    //Show geometry info underneath the mouse cursor.
+    MAKER_TOOL_TYPE_SHOW_GEOMETRY_INFO,
     
     //Show hitboxes.
     MAKER_TOOL_TYPE_SHOW_HITBOXES,
     
+    //Show path info.
+    MAKER_TOOL_TYPE_SHOW_PATH_INFO,
+    
     //Show reaches.
     MAKER_TOOL_TYPE_SHOW_REACHES,
+    
+    //Spawn a new Pikmin underneath the mouse cursor.
+    MAKER_TOOL_TYPE_SPAWN_PIKMIN,
     
     //Teleport to mouse cursor.
     MAKER_TOOL_TYPE_TELEPORT,
@@ -118,6 +118,27 @@ enum MAKER_TOOL_CONTEXT {
     MAKER_TOOL_CONTEXT_GAMEPLAY,
     
 };
+
+
+//Possible actions to take when activating the control cam maker tool command.
+enum MAKER_TOOL_CONTROL_CAM_ACTION {
+
+    //Toggle camera control mode.
+    MAKER_TOOL_CONTROL_CAM_ACTION_MODE,
+    
+    //Toggle freezing the camera's position.
+    MAKER_TOOL_CONTROL_CAM_ACTION_FREEZE,
+    
+};
+
+
+//Control camera maker tool command action enum naming (internal names).
+buildEnumNames(
+    makerToolControlCamActionINames, MAKER_TOOL_CONTROL_CAM_ACTION
+)({
+    { MAKER_TOOL_CONTROL_CAM_ACTION_MODE, "mode" },
+    { MAKER_TOOL_CONTROL_CAM_ACTION_FREEZE, "freeze" },
+});
 
 
 //Possible actions to take when activating the frame advance maker tool command.
@@ -141,49 +162,28 @@ buildEnumNames(
 });
 
 
-//Possible actions to take when activating the free cam maker tool command.
-enum MAKER_TOOL_FREE_CAM_ACTION {
-
-    //Toggle free cam mode.
-    MAKER_TOOL_FREE_CAM_ACTION_MODE,
-    
-    //Toggle freezing the camera's position.
-    MAKER_TOOL_FREE_CAM_ACTION_FREEZE,
-    
-};
-
-
-//Frame advance maker tool command action enum naming (internal names).
-buildEnumNames(
-    makerToolFreeCamActionINames, MAKER_TOOL_FREE_CAM_ACTION
-)({
-    { MAKER_TOOL_FREE_CAM_ACTION_MODE, "mode" },
-    { MAKER_TOOL_FREE_CAM_ACTION_FREEZE, "freeze" },
-});
-
-
-//Possible actions to take when activating the mob inspector maker tool command.
-enum MAKER_TOOL_MOB_INSPECTOR_ACTION {
+//Possible actions to take when activating the inspect maker tool command.
+enum MAKER_TOOL_INSPECT_MOB_ACTION {
 
     //Detect the closest to the mouse cursor.
-    MAKER_TOOL_MOB_INSPECTOR_ACTION_GET_CLOSEST,
+    MAKER_TOOL_INSPECT_MOB_ACTION_GET_CLOSEST,
     
     //Detect all around the mouse cursor and iterate between that list.
-    MAKER_TOOL_MOB_INSPECTOR_ACTION_ITERATE,
+    MAKER_TOOL_INSPECT_MOB_ACTION_ITERATE,
     
     //Act as if no mob was detected.
-    MAKER_TOOL_MOB_INSPECTOR_ACTION_STOP,
+    MAKER_TOOL_INSPECT_MOB_ACTION_STOP,
     
 };
 
 
-//Frame advance maker tool command action enum naming (internal names).
+//Inspect mob maker tool command action enum naming (internal names).
 buildEnumNames(
-    makerToolMobInspectorActionINames, MAKER_TOOL_MOB_INSPECTOR_ACTION
+    makerToolInspectMobActionINames, MAKER_TOOL_INSPECT_MOB_ACTION
 )({
-    { MAKER_TOOL_MOB_INSPECTOR_ACTION_GET_CLOSEST, "get_closest" },
-    { MAKER_TOOL_MOB_INSPECTOR_ACTION_ITERATE, "iterate" },
-    { MAKER_TOOL_MOB_INSPECTOR_ACTION_STOP, "stop" },
+    { MAKER_TOOL_INSPECT_MOB_ACTION_GET_CLOSEST, "get_closest" },
+    { MAKER_TOOL_INSPECT_MOB_ACTION_ITERATE, "iterate" },
+    { MAKER_TOOL_INSPECT_MOB_ACTION_STOP, "stop" },
 });
 
 
@@ -269,76 +269,6 @@ struct MakerTools {
     //If maker tools are limited in play mode, are they allowed now?
     bool allowedInPlayNow = false;
     
-    //Different area image settings.
-    AreaImageSettings areaImageSettings[3];
-    
-    //Automatically pick this from the list of the selected auto-entry mode.
-    string autoStartOption;
-    
-    //Automatically enter this game mode when the game boots.
-    string autoStartState;
-    
-    //Are we currently changing the game speed?
-    bool changeSpeed = false;
-    
-    //Which game speed change multiplier to use.
-    float changeSpeedMultiplier = 2.0f;
-    
-    //Are we currently paused for frame advance?
-    bool frameAdvanceMode = false;
-    
-    //Whether the free camera is frozen (player controls leader)
-    //or mobile (player controls camera).
-    bool freeCamFrozen = false;
-    
-    //Whether free camera mode is active.
-    bool freeCamMode = false;
-    
-    //Do we have to advance one game frame on the next processing frame?
-    bool mustAdvanceOneFrame = false;
-    
-    //Different game speed change settings. These are multipliers to change by.
-    float changeSpeedSettings[3] = { 2.0f, 0.5f, 1.0f };
-    
-    //Are collision boxes visible in-game?
-    bool collision = false;
-    
-    //Is the geometry information tool enabled?
-    bool geometryInfo = false;
-    
-    //Are hitboxes visible in-game?
-    bool hitboxes = false;
-    
-    //Is the HUD visible?
-    bool hud = true;
-    
-    //Are we inspecting the current area?
-    bool inspectingArea = false;
-    
-    //Mob currently being inspected. nullptr if none.
-    Mob* inspectedMob = nullptr;
-    
-    //When we last spawned a Pikmin, what was its type?
-    PikminType* lastPikminType = nullptr;
-    
-    //Different mob hurting settings. When used, dock this much of its max HP.
-    float mobHurtingSettings[3] = { 0.75f, 1.0f, -1.0f };
-    
-    //Whether the first modifier input is held down.
-    bool mod1 = false;
-    
-    //Whether the second modifier input is held down.
-    bool mod2 = false;
-    
-    //Show path info of the currently inspected mob?
-    bool pathInfo = false;
-    
-    //Show the reaches of the currently inspected mob?
-    bool reaches = false;
-    
-    //Mouse cursor world coordinates when the latest maker tool was started.
-    Point toolStartCursor;
-    
     //How many times the player has pressed a maker tool button to confirm,
     //when tools are limited in play mode.
     unsigned char playConfirmationPresses = 0;
@@ -346,11 +276,81 @@ struct MakerTools {
     //Time left to confirm, when tools are limited in play mode.
     float playConfirmationTimer = 0.0f;
     
-    //Use the performance monitor?
-    bool usePerfMon = false;
+    //Whether the first modifier input is held down.
+    bool mod1 = false;
+    
+    //Whether the second modifier input is held down.
+    bool mod2 = false;
+    
+    //Mouse cursor world coordinates when the latest maker tool was started.
+    Point toolStartCursor;
     
     //Has the player made use of any tools that could help them play?
     bool usedHelpingTools = false;
+    
+    //Settings for the hurt mob tool. When used, dock this much of its max HP.
+    float hurtMobSettings[3] = { 0.75f, 1.0f, -1.0f };
+    
+    //Settings for the save area image tool.
+    AreaImageSettings saveAreaImageSettings[3];
+    
+    //Settings for the set speed tool. These are multipliers to change by.
+    float setSpeedSettings[3] = { 2.0f, 0.5f, 1.0f };
+    
+    //Automatically pick this from the list of the selected auto-entry mode.
+    string autoStartOption;
+    
+    //Automatically enter this game mode when the game boots.
+    string autoStartState;
+    
+    //Whether control camera mode is active.
+    bool inControlCam = false;
+    
+    //Whether the control camera is frozen (player controls leader)
+    //or mobile (player controls camera).
+    bool controlCamFrozen = false;
+    
+    //Are we currently paused for frame advance?
+    bool inFrameAdvanceMode = false;
+    
+    //Do we have to advance one game frame on the next processing frame?
+    bool mustAdvanceOneFrame = false;
+    
+    //Are we inspecting the current area?
+    bool inspectingArea = false;
+    
+    //Mob currently being inspected. nullptr if none.
+    Mob* inspectedMob = nullptr;
+    
+    //Are we currently changing the game speed?
+    bool changingSpeed = false;
+    
+    //Which game speed change multiplier to use.
+    float changedSpeedMultiplier = 2.0f;
+    
+    //Are collision boxes visible in-game?
+    bool showingCollision = false;
+    
+    //Is the geometry information tool enabled?
+    bool showingGeometryInfo = false;
+    
+    //Are hitboxes visible in-game?
+    bool showingHitboxes = false;
+    
+    //Is the HUD visible?
+    bool showingHud = true;
+    
+    //Show path info of the currently inspected mob?
+    bool showingPathInfo = false;
+    
+    //Show the reaches of the currently inspected mob?
+    bool showingReaches = false;
+    
+    //When we last spawned a Pikmin, what was its type?
+    PikminType* lastPikminType = nullptr;
+    
+    //Use the performance monitor?
+    bool usePerfMon = false;
     
     
     //--- Public function declarations ---
@@ -383,27 +383,27 @@ private:
 
 
 namespace MakerToolRunners {
-bool areaImage(MakerTools& mgr, const vector<string>& args);
-bool areaInspector(MakerTools& mgr, const vector<string>& args);
-bool changeSpeed(MakerTools& mgr, const vector<string>& args);
 bool clear(MakerTools& mgr, const vector<string>& args);
+bool controlCam(MakerTools& mgr, const vector<string>& args);
+bool createReminder(MakerTools& mgr, const vector<string>& args);
 bool deleteMob(MakerTools& mgr, const vector<string>& args);
 bool fillInventory(MakerTools& mgr, const vector<string>& args);
 bool frameAdvance(MakerTools& mgr, const vector<string>& args);
-bool freeCam(MakerTools& mgr, const vector<string>& args);
-bool geometryInfo(MakerTools& mgr, const vector<string>& args);
 bool help(MakerTools& mgr, const vector<string>& args);
 bool hideHud(MakerTools& mgr, const vector<string>& args);
 bool hurtMob(MakerTools& mgr, const vector<string>& args);
-bool mobInspector(MakerTools& mgr, const vector<string>& args);
-bool newPikmin(MakerTools& mgr, const vector<string>& args);
-bool newReminder(MakerTools& mgr, const vector<string>& args);
-bool pathInfo(MakerTools& mgr, const vector<string>& args);
+bool inspectArea(MakerTools& mgr, const vector<string>& args);
+bool inspectMob(MakerTools& mgr, const vector<string>& args);
+bool saveAreaImage(MakerTools& mgr, const vector<string>& args);
 bool setAutoStart(MakerTools& mgr, const vector<string>& args);
 bool setSongPosNearLoop(MakerTools& mgr, const vector<string>& args);
+bool setSpeed(MakerTools& mgr, const vector<string>& args);
 bool showCollision(MakerTools& mgr, const vector<string>& args);
+bool showGeometryInfo(MakerTools& mgr, const vector<string>& args);
 bool showHitboxes(MakerTools& mgr, const vector<string>& args);
+bool showPathInfo(MakerTools& mgr, const vector<string>& args);
 bool showReaches(MakerTools& mgr, const vector<string>& args);
+bool spawnPikmin(MakerTools& mgr, const vector<string>& args);
 bool teleport(MakerTools& mgr, const vector<string>& args);
 }
 

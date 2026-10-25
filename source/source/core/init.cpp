@@ -601,11 +601,11 @@ void initControls() {
         0.0f, 0.0f, false, false
     );
     game.controls.addNewActionType(
-        PLAYER_ACTION_TYPE_MT_AUTO_START,
+        PLAYER_ACTION_TYPE_MT_SET_AUTO_START,
         PLAYER_ACTION_CAT_GENERAL_MAKER_TOOLS,
-        "Auto-start",
+        "Set auto-start",
         "Make the game auto-start on the current state (and content).",
-        "mt_auto_start", "k_56", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        "mt_set_auto_start", "k_56", Inpution::ACTION_VALUE_TYPE_DIGITAL,
         0.0f, 0.0f, false, false
     );
     game.controls.addNewActionType(
@@ -635,28 +635,21 @@ void initControls() {
     
     //Gameplay maker tools.
     game.controls.addNewActionType(
-        PLAYER_ACTION_TYPE_MT_AREA_IMAGE,
+        PLAYER_ACTION_TYPE_MT_CONTROL_CAM,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
-        "Area image",
-        "Save an image of the current area.",
-        "mt_area_image", "k_36", Inpution::ACTION_VALUE_TYPE_DIGITAL,
-        0.0f, 0.0f, false, false
-    );
-    game.controls.addNewActionType(
-        PLAYER_ACTION_TYPE_MT_AREA_INSPECTOR,
-        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
-        "Area inspector",
-        "Toggle info about the current area.",
-        "mt_area_inspector", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        "Control camera",
+        "Allows control of the camera. "
+        "Use \"modifier 1\" to fix the camera and keep playing.",
+        "mt_control_cam", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
         0.5f, 0.0f, false, false
     );
     game.controls.addNewActionType(
-        PLAYER_ACTION_TYPE_MT_CHANGE_SPEED,
+        PLAYER_ACTION_TYPE_MT_CREATE_REMINDER,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
-        "Change speed",
-        "Change the gameplay speed.",
-        "mt_change_speed", "k_28", Inpution::ACTION_VALUE_TYPE_DIGITAL,
-        0.0f, 0.0f, false, false
+        "Crate reminder",
+        "Create a new area maker reminder under the mouse cursor.",
+        "mt_create_reminder", "k_35", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.5f, 0.0f, false, false
     );
     game.controls.addNewActionType(
         PLAYER_ACTION_TYPE_MT_DELETE_MOB,
@@ -685,28 +678,11 @@ void initControls() {
         0.5f, 0.0f, false, false
     );
     game.controls.addNewActionType(
-        PLAYER_ACTION_TYPE_MT_FREE_CAM,
-        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
-        "Free camera",
-        "Allows control of the camera. "
-        "Use \"modifier 1\" to fix the camera and keep playing.",
-        "mt_free_cam", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
-        0.5f, 0.0f, false, false
-    );
-    game.controls.addNewActionType(
-        PLAYER_ACTION_TYPE_MT_GEOMETRY_INFO,
-        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
-        "Geometry info",
-        "Toggle info about the geometry under the mouse cursor.",
-        "mt_geometry_info", "k_33", Inpution::ACTION_VALUE_TYPE_DIGITAL,
-        0.0f, 0.0f, false, false
-    );
-    game.controls.addNewActionType(
         PLAYER_ACTION_TYPE_MT_HIDE_HUD,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Hide HUD",
         "Toggle the visibility of the HUD.",
-        "mt_hud", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        "mt_hide_hud", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
         0.0f, 0.0f, false, false
     );
     game.controls.addNewActionType(
@@ -718,35 +694,35 @@ void initControls() {
         0.5f, 0.0f, false, false
     );
     game.controls.addNewActionType(
-        PLAYER_ACTION_TYPE_MT_MOB_INSPECTOR,
+        PLAYER_ACTION_TYPE_MT_INSPECT_AREA,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
-        "Mob inspector",
+        "Inspect area",
+        "Toggle info about the current area.",
+        "mt_inspect_area", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.5f, 0.0f, false, false
+    );
+    game.controls.addNewActionType(
+        PLAYER_ACTION_TYPE_MT_INSPECT_MOB,
+        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
+        "Inspect mob",
         "Toggle info about the mob under the mouse cursor.",
-        "mt_mob_inspector", "k_32", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        "mt_inspect_mob", "k_32", Inpution::ACTION_VALUE_TYPE_DIGITAL,
         0.5f, 0.0f, false, false
     );
     game.controls.addNewActionType(
-        PLAYER_ACTION_TYPE_MT_NEW_PIKMIN,
+        PLAYER_ACTION_TYPE_MT_SAVE_AREA_IMAGE,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
-        "New Pikmin",
-        "Create a new Pikmin under the mouse cursor.",
-        "mt_new_pikmin", "k_31", Inpution::ACTION_VALUE_TYPE_DIGITAL,
-        0.5f, 0.0f, false, false
+        "Save area image",
+        "Save an image of the current area.",
+        "mt_save_area_image", "k_36", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, false, false
     );
     game.controls.addNewActionType(
-        PLAYER_ACTION_TYPE_MT_NEW_REMINDER,
+        PLAYER_ACTION_TYPE_MT_SET_SPEED,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
-        "New reminder",
-        "Create a new area maker reminder under the mouse cursor.",
-        "mt_new_reminder", "k_35", Inpution::ACTION_VALUE_TYPE_DIGITAL,
-        0.5f, 0.0f, false, false
-    );
-    game.controls.addNewActionType(
-        PLAYER_ACTION_TYPE_MT_PATH_INFO,
-        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
-        "Path info",
-        "Toggle info about paths the inspected mob is taking.",
-        "mt_path_info", "k_34", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        "Set speed",
+        "Change the gameplay speed.",
+        "mt_set_speed", "k_28", Inpution::ACTION_VALUE_TYPE_DIGITAL,
         0.0f, 0.0f, false, false
     );
     game.controls.addNewActionType(
@@ -758,11 +734,27 @@ void initControls() {
         0.0f, 0.0f, false, false
     );
     game.controls.addNewActionType(
+        PLAYER_ACTION_TYPE_MT_SHOW_GEOMETRY_INFO,
+        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
+        "Show geometry info",
+        "Toggle info about the geometry under the mouse cursor.",
+        "mt_show_geometry_info", "k_33", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, false, false
+    );
+    game.controls.addNewActionType(
         PLAYER_ACTION_TYPE_MT_SHOW_HITBOXES,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Show hitboxes",
         "Toggle drawing each mob's hitboxes.",
         "mt_show_hitboxes", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.0f, 0.0f, false, false
+    );
+    game.controls.addNewActionType(
+        PLAYER_ACTION_TYPE_MT_SHOW_PATH_INFO,
+        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
+        "Show path info",
+        "Toggle info about paths the inspected mob is taking.",
+        "mt_show_path_info", "k_34", Inpution::ACTION_VALUE_TYPE_DIGITAL,
         0.0f, 0.0f, false, false
     );
     game.controls.addNewActionType(
@@ -772,6 +764,14 @@ void initControls() {
         "Toggle drawing the inspected mob's reaches.",
         "mt_show_reaches", "", Inpution::ACTION_VALUE_TYPE_DIGITAL,
         0.0f, 0.0f, false, false
+    );
+    game.controls.addNewActionType(
+        PLAYER_ACTION_TYPE_MT_SPAWN_PIKMIN,
+        PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
+        "Spawn Pikmin",
+        "Create a new Pikmin under the mouse cursor.",
+        "mt_spawn_pikmin", "k_31", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        0.5f, 0.0f, false, false
     );
     game.controls.addNewActionType(
         PLAYER_ACTION_TYPE_MT_TELEPORT,
@@ -1431,62 +1431,53 @@ void initMakerToolTypes() {
         "currently on."
     );
     
+    //Set song position near loop point.
+    commitTool(
+        MAKER_TOOL_TYPE_SET_SONG_POS_NEAR_LOOP,
+        "set_song_pos_near_loop", false,
+        MakerToolRunners::setSongPosNearLoop,
+        "Sets the position of the song that's currently playing to be "
+        "a few seconds before the loop point."
+    );
+    
     
     //-Gameplay tools-
     contexts =
         getIdxBitmask(MAKER_TOOL_CONTEXT_GAMEPLAY);
         
-    //Area image.
-    queueParam("size", ptInt, pfOpt, "2048");
-    params.back().minValue = 1.0f;
-    params.back().description =
-        "Maximum image width or height, in pixels. "
-        "2048 is suggested for medium or large areas, 1024 otherwise.";
-    queueParam("padding", ptInt, pfOpt, "32");
-    params.back().minValue = 0.0f;
-    params.back().description =
-        "Padding around the actual area, in area pixels. "
-        "e.g. 32 means 16 area pixels above, 16 below, 16 to the left, "
-        "and 16 to the right.";
-    queueParam("shadows", ptBool, pfOpt, "true");
-    params.back().description =
-        "Whether to draw tree shadows.";
-        
-    commitTool(
-        MAKER_TOOL_TYPE_AREA_IMAGE,
-        "area_image", true,
-        MakerToolRunners::areaImage,
-        "Creates an image of the entire area."
-    );
-    
-    //Area inspector.
-    commitTool(
-        MAKER_TOOL_TYPE_AREA_INSPECTOR,
-        "area_inspector", true,
-        MakerToolRunners::areaInspector,
-        "Toggles showing information about the current area and its script."
-    );
-    
-    //Change speed.
-    queueParam("multiplier", ptFloat, pfOpt, "2");
-    params.back().minValue = 0.001f;
-    params.back().description =
-        "Game speed multiplier. "
-        "1 is normal speed, 0.5 is half speed, 2.0 is double speed, etc.";
-        
-    commitTool(
-        MAKER_TOOL_TYPE_CHANGE_SPEED,
-        "change_speed", true,
-        MakerToolRunners::changeSpeed,
-        "Changes the gameplay speed."
-    );
-    
     //Clear terminal output.
     commitTool(
         MAKER_TOOL_TYPE_CLEAR,
         "clear", false,
         MakerToolRunners::clear,
         "Clears the console's output."
+    );
+    
+    //Control cam.
+    queueParam("action", ptEnum, pfOpt, "control");
+    params.back().enumValues = enumGetNames(makerToolControlCamActionINames);
+    params.back().description =
+        "Action to perform. \"mode\" toggles the entire mode. "
+        "\"freeze\" toggles whether the camera is frozen "
+        "(player controls the leader) or mobile "
+        "(player controls the camera).";
+        
+    commitTool(
+        MAKER_TOOL_TYPE_CONTROL_CAM,
+        "control_cam", true,
+        MakerToolRunners::controlCam,
+        "Allows control of the camera. Includes freezing it in place as "
+        "the player controls the leader."
+    );
+    
+    //Create reminder.
+    commitTool(
+        MAKER_TOOL_TYPE_CREATE_REMINDER,
+        "create_reminder", false,
+        MakerToolRunners::createReminder,
+        "Creates a new reminder for the area maker, using the mouse "
+        "cursor's position as its position. You are then asked to "
+        "fill in the reminder's data."
     );
     
     //Delete mob.
@@ -1524,32 +1515,6 @@ void initMakerToolTypes() {
         "Pauses gameplay and advances only one frame at a time."
     );
     
-    //Free cam.
-    queueParam("action", ptEnum, pfOpt, "control");
-    params.back().enumValues = enumGetNames(makerToolFreeCamActionINames);
-    params.back().description =
-        "Action to perform. \"mode\" toggles free cam mode. "
-        "\"freeze\" toggles whether the free camera is frozen "
-        "(player controls the leader) or mobile "
-        "(player controls the camera).";
-        
-    commitTool(
-        MAKER_TOOL_TYPE_FREE_CAM,
-        "free_cam", true,
-        MakerToolRunners::freeCam,
-        "Allows control of the camera. Includes freezing it in place as "
-        "the player controls the leader."
-    );
-    
-    //Geometry info.
-    commitTool(
-        MAKER_TOOL_TYPE_GEOMETRY_INFO,
-        "geometry_info", true,
-        MakerToolRunners::geometryInfo,
-        "Toggles showing information about the area layout data under "
-        "the mouse cursor, as well as information about the cursor proper."
-    );
-    
     //Help.
     commitTool(
         MAKER_TOOL_TYPE_HELP,
@@ -1580,9 +1545,17 @@ void initMakerToolTypes() {
         "Hurts or heals the mob closest to the mouse cursor."
     );
     
-    //Mob inspector.
+    //Inspect area.
+    commitTool(
+        MAKER_TOOL_TYPE_INSPECT_AREA,
+        "inspect_area", true,
+        MakerToolRunners::inspectArea,
+        "Toggles showing information about the current area and its script."
+    );
+    
+    //Inspect mob.
     queueParam("action", ptEnum, pfOpt, "closest");
-    params.back().enumValues = enumGetNames(makerToolMobInspectorActionINames);
+    params.back().enumValues = enumGetNames(makerToolInspectMobActionINames);
     params.back().description =
         "Action to perform. \"closest\" makes it detect the mob closest "
         "to the mouse cursor. \"iterate\" makes it detect mobs near the "
@@ -1590,45 +1563,47 @@ void initMakerToolTypes() {
         "it stop inspecting.";
         
     commitTool(
-        MAKER_TOOL_TYPE_MOB_INSPECTOR,
-        "mob_inspector", true,
-        MakerToolRunners::mobInspector,
+        MAKER_TOOL_TYPE_INSPECT_MOB,
+        "inspect_mob", true,
+        MakerToolRunners::inspectMob,
         "Inspects a mob, showing information about itself and its script."
     );
     
-    //New Pikmin.
-    queueParam("type", ptString, pfOpt, "next");
+    //Save area image.
+    queueParam("size", ptInt, pfOpt, "2048");
+    params.back().minValue = 1.0f;
     params.back().description =
-        "Type of Pikmin to spawn. This can be a proper type's internal name, "
-        "or \"next\" to spawn one of the next type from the last spawned one, "
-        "or \"same\" to spawn one of the same type as the last spawned one.";
-    queueParam("maturity", ptEnum, pfOpt, "flower");
-    params.back().enumValues = enumGetNames(maturityINames);
-    
+        "Maximum image width or height, in pixels. "
+        "2048 is suggested for medium or large areas, 1024 otherwise.";
+    queueParam("padding", ptInt, pfOpt, "32");
+    params.back().minValue = 0.0f;
+    params.back().description =
+        "Padding around the actual area, in area pixels. "
+        "e.g. 32 means 16 area pixels above, 16 below, 16 to the left, "
+        "and 16 to the right.";
+    queueParam("shadows", ptBool, pfOpt, "true");
+    params.back().description =
+        "Whether to draw tree shadows.";
+        
     commitTool(
-        MAKER_TOOL_TYPE_NEW_PIKMIN,
-        "new_pikmin", true,
-        MakerToolRunners::newPikmin,
-        "Spawns a new idle Pikmin under the mouse cursor."
+        MAKER_TOOL_TYPE_SAVE_AREA_IMAGE,
+        "save_area_image", true,
+        MakerToolRunners::saveAreaImage,
+        "Creates and saves an image of the entire area."
     );
     
-    //New reminder.
+    //Set gameplay speed.
+    queueParam("multiplier", ptFloat, pfOpt, "2");
+    params.back().minValue = 0.001f;
+    params.back().description =
+        "Game speed multiplier. "
+        "1 is normal speed, 0.5 is half speed, 2.0 is double speed, etc.";
+        
     commitTool(
-        MAKER_TOOL_TYPE_NEW_REMINDER,
-        "new_reminder", false,
-        MakerToolRunners::newReminder,
-        "Creates a new reminder for the area maker, using the mouse "
-        "cursor's position as its position. You are then asked to "
-        "fill in the reminder's data."
-    );
-    
-    //Path info.
-    commitTool(
-        MAKER_TOOL_TYPE_PATH_INFO,
-        "path_info", true,
-        MakerToolRunners::pathInfo,
-        "Toggles showing information about the path that the inspected mob "
-        "is taking, if any."
+        MAKER_TOOL_TYPE_SET_SPEED,
+        "set_speed", true,
+        MakerToolRunners::setSpeed,
+        "Changes the gameplay speed."
     );
     
     //Show collision.
@@ -1639,12 +1614,30 @@ void initMakerToolTypes() {
         "Toggles visibility of mob collision boxes and bubbles."
     );
     
+    //Show geometry info.
+    commitTool(
+        MAKER_TOOL_TYPE_SHOW_GEOMETRY_INFO,
+        "show_geometry_info", true,
+        MakerToolRunners::showGeometryInfo,
+        "Toggles showing information about the area layout data under "
+        "the mouse cursor, as well as information about the cursor proper."
+    );
+    
     //Show hitboxes.
     commitTool(
         MAKER_TOOL_TYPE_SHOW_HITBOXES,
         "show_hitboxes", true,
         MakerToolRunners::showHitboxes,
         "Toggles visibility of mob hitboxes."
+    );
+    
+    //Show path info.
+    commitTool(
+        MAKER_TOOL_TYPE_SHOW_PATH_INFO,
+        "show_path_info", true,
+        MakerToolRunners::showPathInfo,
+        "Toggles showing information about the path that the inspected mob "
+        "is taking, if any."
     );
     
     //Show reaches.
@@ -1654,6 +1647,22 @@ void initMakerToolTypes() {
         MakerToolRunners::showReaches,
         "Toggles visibility of mob reach circles and pie-slices for the "
         "inspected mob."
+    );
+    
+    //Spawn Pikmin.
+    queueParam("type", ptString, pfOpt, "next");
+    params.back().description =
+        "Type of Pikmin to spawn. This can be a proper type's internal name, "
+        "or \"next\" to spawn one of the next type from the last spawned one, "
+        "or \"same\" to spawn one of the same type as the last spawned one.";
+    queueParam("maturity", ptEnum, pfOpt, "flower");
+    params.back().enumValues = enumGetNames(maturityINames);
+    
+    commitTool(
+        MAKER_TOOL_TYPE_SPAWN_PIKMIN,
+        "spawn_pikmin", true,
+        MakerToolRunners::spawnPikmin,
+        "Spawns a new idle Pikmin under the mouse cursor."
     );
     
     //Teleport.

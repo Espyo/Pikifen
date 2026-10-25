@@ -896,7 +896,12 @@ OPEN_CLOSE_STATE MakerConsoleTerminal::getVisibilityState() const {
  * @return Whether it was handled.
  */
 bool MakerConsoleTerminal::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
-    if(visibilityState == OPEN_CLOSE_STATE_CLOSED) return false;
+    if(
+        visibilityState == OPEN_CLOSE_STATE_CLOSED ||
+        visibilityState == OPEN_CLOSE_STATE_CLOSING
+    ) {
+        return false;
+    }
     
     if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {
         if(

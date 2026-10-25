@@ -760,20 +760,20 @@ void GameplayState::doGameplayLogic(float deltaT) {
     forIdx(p, players) {
         Player& player = players[p];
         
-        //Free camera movement.
-        bool freeCamMode =
-            !player.leaderPtr || game.makerTools.freeCamMode;
-        bool freeCamControllable =
-            freeCamMode && !game.makerTools.freeCamFrozen;
+        //Control camera movement.
+        bool controlCamMode =
+            !player.leaderPtr || game.makerTools.inControlCam;
+        bool controlCamControllable =
+            controlCamMode && !game.makerTools.controlCamFrozen;
             
-        if(freeCamMode) {
+        if(controlCamMode) {
             player.view.cam.centerSpeedMode = CAMERA_SPEED_MODE_LINEAR;
         } else {
             player.view.cam.centerSpeedMode = CAMERA_SPEED_MODE_EXP_SMOOTH;
             player.view.cam.centerSpeed = Point(0.0f);
         }
         
-        if(freeCamControllable) {
+        if(controlCamControllable) {
             //Get movement info.
             MovementInfo mov;
             mov.right =
@@ -793,21 +793,21 @@ void GameplayState::doGameplayLogic(float deltaT) {
             
             //Figure out the movement speed.
             Point targetSpeed(
-                GAMEPLAY::FREE_CAM_MAX_SPEED*
+                GAMEPLAY::CONTROL_CAM_MAX_SPEED*
                 movCoords.x / player.view.cam.zoom,
-                GAMEPLAY::FREE_CAM_MAX_SPEED*
+                GAMEPLAY::CONTROL_CAM_MAX_SPEED*
                 movCoords.y / player.view.cam.zoom
             );
             player.view.cam.centerSpeed.x =
                 inchTowards(
                     player.view.cam.centerSpeed.x, targetSpeed.x,
-                    GAMEPLAY::FREE_CAM_ACCELERATION / player.view.cam.zoom *
+                    GAMEPLAY::CONTROL_CAM_ACCELERATION / player.view.cam.zoom *
                     deltaT
                 );
             player.view.cam.centerSpeed.y =
                 inchTowards(
                     player.view.cam.centerSpeed.y, targetSpeed.y,
-                    GAMEPLAY::FREE_CAM_ACCELERATION / player.view.cam.zoom *
+                    GAMEPLAY::CONTROL_CAM_ACCELERATION / player.view.cam.zoom *
                     deltaT
                 );
                 
@@ -1313,7 +1313,7 @@ void GameplayState::doMenuLogic() {
     }
     
     //Print path info.
-    if(game.makerTools.inspectedMob && game.makerTools.pathInfo) {
+    if(game.makerTools.inspectedMob && game.makerTools.showingPathInfo) {
         if(game.makerTools.inspectedMob->pathInfo) {
             Path* path = game.makerTools.inspectedMob->pathInfo;
             string resultStr = pathResultToString(path->result);
@@ -1379,7 +1379,7 @@ void GameplayState::doMenuLogic() {
     }
     
     //Geometry info.
-    if(game.makerTools.geometryInfo) {
+    if(game.makerTools.showingGeometryInfo) {
         Sector* mouseSector =
             getSector(
                 players[0].view.mouseCursorWorldPos, nullptr, true
@@ -1740,7 +1740,7 @@ void GameplayState::markAreaCellsActive(
  * @param deltaT How long the frame's tick is, in seconds.
  */
 void GameplayState::processLeaderCursor(Player* player, float deltaT) {
-    if(game.makerTools.freeCamMode && !game.makerTools.freeCamFrozen) return;
+    if(game.makerTools.inControlCam && !game.makerTools.controlCamFrozen) return;
     
     //Move the leader cursor freely, using the current control scheme.
     if(game.options.controls.mouseMovesLeaderCursor[player->playerNr - 1]) {

@@ -39,11 +39,118 @@
 
     <h2 id="key-tools">Key tools</h2>
     
-    <h3 id="area-image">Area image</h3>
+    <h3 id="control-cam">Control camera</h3>
+    
+    <p>Lets you take control of the camera, allowing you to move it wherever you want. If you were holding "modifier 1", the camera will still use the custom control camera logic, but you will toggle whether to control your leader or control the camera. This allows you to fix it in place as you keep playing.</p>
+    
+    <p><b>Tool internal name</b>: <code>control_cam</code>.</p>
+
+    <p><b>Properties</b>: none.</p>
+
+    <h3 id="create-reminder">Create reminder</h3>
+    
+    <p>Creates a new reminder for the area's maker on the spot that the cursor is at. This pauses gameplay and shows a window where the player can write down what the reminder should say, if anything.</p>
+    
+    <p><b>Tool internal name</b>: <code>create_reminder</code>.</p>
+
+    <p><b>Properties</b>: none.</p>
+    
+    <h3 id="delete-mob">Delete mob</h3>
+    
+    <p>Deletes the <a href="#inspect-mob">inspected mob</a>.</p>
+
+    <p><b>Tool internal name</b>: <code>delete_mob</code>.</p>
+
+    <p><b>Properties</b>: none.</p>
+
+    <h3 id="fill-inventory">Fill inventory</h3>
+    
+    <p>Sets the amount of all sprays in the inventory to 99. If you were holding "modifier 1", it will instead set the amounts to 0.</p>
+
+    <p><b>Tool internal name</b>: <code>fill_inventory</code>.</p>
+
+    <p><b>Properties</b>: none.</p>
+
+    <h3 id="frame-advance">Frame advance</h3>
+    
+    <p>When initially activated, it enters frame advance mode, which pauses gameplay. Then, any subsequent activation will advance gameplay by one frame. How much one frame is worth here depends on the framerate specified in the <a href="options.html">options</a>. If you were holding "modifier 1", it will leave frame advance mode and return to normal. It will also return to normal if you <a href="#set-speed">change the game speed</a>.</p>
+    <p>Some things, like cursor control, happen independently of the framerate, so expect to still see some stuff moving. Also, internally, it's not actually freezing one frame forever, but setting the game speed to an ultra-slow speed. This simplifies a lot of internal logic (by avoiding divisions by 0!), but it works more than well for practical use.</p>
+
+    <p><b>Tool internal name</b>: <code>frame_advance</code>.</p>
+
+    <p><b>Properties</b>: none.</p>
+
+    <h3 id="hide-hud">Hide HUD</h3>
+    
+    <p>Toggles the HUD's visibility on or off. Good for taking screenshots with.</p>
+    
+    <p><b>Tool internal name</b>: <code>hide_hud</code>.</p>
+
+    <p><b>Properties</b>: none.</p>
+
+    <h3 id="hurt-mob">Hurt mob</h3>
+    
+    <p>Hurts the mob closest to the cursor. It uses the mouse cursor for this, not the leader's cursor. It saps away half of its health every time you press it, meaning you can kill anything with just two presses (or more, if it regenerates). It's useful to kill troublesome enemies or boring obstacles without having to deal with them. Note that if you hold down the key, you'll be able to kill several mobs quickly, but if you don't pay attention, you could end up killing an object you didn't mean to, like your leader. To note also is that the mob does not receive any damage-related event with this, so it will never react to having lost health, even if its script says it should. It will die normally, however.</p>
+    
+    <p><b>Tool internal name</b>: <code>hurt_mob</code>.</p>
+
+    <p><b>Properties</b>:</p>
+
+    <p>Each of the <code>normal_settings</code>, <code>mod_1_settings</code>, and <code>mod_2_settings</code> blocks have these properties:</p>
+
+    <table class="props-t props-t-o">
+      <tr>
+        <td>percentage</td>
+        <td>How much of the mob's total health should be lost each time. 50 is 50%, 100 will kill any mob instantly, etc. Negative numbers will heal the mob for that percentage.</td>
+        <td>Number</td>
+        <td>50</td>
+      </tr>
+    </table>
+
+    <h3 id="inspect-area">Inspect area</h3>
+    
+    <p>Prints out important information about the current area, on the top of the game window. If pressed again it stops inspecting the area. The information shown is:</p>
+    
+    <ul>
+      <li><b>Timer</b>: Time left on the currently running script timer, if any.</li>
+      <li><b>State</b>: Name of the current script FSM state.</li>
+      <li><b>Prev. states</b>: Name of the previous script FSM states (up to 4). Sorted most recent to oldest.</li>
+      <li><b>Vars</b>: Name and value of all script variables.</li>
+    </ul>
+
+    <p>As such, the information shown is mostly useful to debug area scripts. </p>
+    
+    <p><b>Tool internal name</b>: <code>inspect_area</code>.</p>
+
+    <p><b>Properties</b>: none.</p>
+    
+    <h3 id="inspect-mob">Inspect mob</h3>
+    
+    <p>Prints out important information about the mob closest to the cursor, on the top of the game window. It uses the mouse cursor for this, not the leader's cursor. When you press the button, it starts inspecting that mob, and only stops inspecting if the mob is deleted or if you press the button again while pointing to the same mob. Pointing to a different mob will inspect that one instead. Some other maker tools may also need that a mob is currently being inspected. If you were holding "modifier 1", it will instead scan for mobs whose centers are around the cursor, and iterate between them; this is useful if multiple mobs are bundled in the same spot. If you were holding "modifier 2", it will stop inspecting no matter what. The information shown is:</p>
+    
+    <ul>
+      <li><b>Mob</b>: The numeric ID and the name of the type of mob this is (e.g. Red Bulborb, Olimar).</li>
+      <li><b>Coords</b>: The mob's current coordinates, separated by space. The third coordinate is the Z, which means its vertical position.</li>
+      <li><b>Angle</b>: The mob's current angle.</li>
+      <li><b>Health</b>: Current health amount.</li>
+      <li><b>Animation</b>: Name of the current playing animation, if any.</li>
+      <li><b>Timer</b>: Time left on the currently running script timer, if any.</li>
+      <li><b>State</b>: Name of the current script FSM state.</li>
+      <li><b>Prev. states</b>: Name of the previous script FSM states (up to 4). Sorted most recent to oldest.</li>
+      <li><b>Vars</b>: Name and value of all script variables.</li>
+    </ul>
+
+    <p>As such, the information shown is mostly useful to debug scripts and animations. </p>
+    
+    <p><b>Tool internal name</b>: <code>inspect_mob</code>.</p>
+
+    <p><b>Properties</b>: none.</p>
+
+    <h3 id="save-area-image">Save area image</h3>
     
     <p>Creates an image of the entire area and saves it in the <code>user_data</code> folder. This is a great way to show other people what your area is like. This draws the area just as it appears in-game, so with the objects and shadows and everything. The HUD won't be visible, though. How zoomed in or out the area is when compared to how it looks in-game depends on the size of the image. It is recommended that you don't try to aim for a 1:1 zoom level, but instead focus on having an image big enough for people to understand what is happening, but not so big that it is a pain to open.</p>
 
-    <p><b>Tool internal name</b>: <code>area_image</code>.</p>
+    <p><b>Tool internal name</b>: <code>save_area_image</code>.</p>
 
     <p><b>Properties</b>:</p>
 
@@ -70,28 +177,11 @@
       </tr>
     </table>
 
-    <h3 id="area-inspector">Area inspector</h3>
-    
-    <p>Prints out important information about the current area, on the top of the game window. If pressed again it stops inspecting the area. The information shown is:</p>
-    
-    <ul>
-      <li><b>Timer</b>: Time left on the currently running script timer, if any.</li>
-      <li><b>State</b>: Name of the current script FSM state.</li>
-      <li><b>Prev. states</b>: Name of the previous script FSM states (up to 4). Sorted most recent to oldest.</li>
-      <li><b>Vars</b>: Name and value of all script variables.</li>
-    </ul>
-
-    <p>As such, the information shown is mostly useful to debug area scripts. </p>
-    
-    <p><b>Tool internal name</b>: <code>area_inspector</code>.</p>
-
-    <p><b>Properties</b>: none.</p>
-    
-    <h3 id="auto-start">Auto start</h3>
+    <h3 id="set-auto-start">Set auto-start</h3>
     
     <p>If you find yourself opening the engine, going to the same game mode, menu, or area every time, closing down, and repeating the process over and over, you can use this tool to avoid going through the long way. It makes the engine start on something other than the title screen automatically, and also optionally automatically open a specific area, animation, etc. Press its input to set the current game state and the current content as the new auto-start point. To make it start at the title screen like normal, well, just press the input on the title screen!</p>
 
-    <p><b>Tool internal name</b>: <code>auto_start</code>.</p>
+    <p><b>Tool internal name</b>: <code>set_auto_start</code>.</p>
 
     <p><b>Properties</b>:</p>
 
@@ -110,11 +200,19 @@
       </tr>
     </table>
 
-    <h3 id="speed">Change speed</h3>
+    <h3 id="set-song-pos-near-loop">Set song position near loop</h3>
+    
+    <p>Changes the current position of all songs to be just a few seconds before their loop point. This is useful when you want to test the loop points and don't want to wait until the song gets there normally.</p>
+    
+    <p><b>Tool internal name</b>: <code>set_song_pos_near_loop</code>.</p>
+
+    <p><b>Properties</b>: none.</p>
+
+    <h3 id="set-speed">Set speed</h3>
     
     <p>Changes the game's flow of time, making it faster or slower. Press the tool's key while playing to switch from normal speed to the set speed, and then press again to return to normal. If you're testing something tedious, speeding up the gameplay means you have to wait less, and if you're trying to understand what is happening in a scenario that goes by too quickly, you can slow the game down. Note that the engine wasn't meant to run at these speeds, so some behaviors might not work properly, like objects being able to clip through walls they normally wouldn't.</p>
 
-    <p><b>Tool internal name</b>: <code>change_speed</code>.</p>
+    <p><b>Tool internal name</b>: <code>set_speed</code>.</p>
 
     <p><b>Properties</b>:</p>
 
@@ -129,115 +227,33 @@
       </tr>
     </table>
 
-    <h3 id="delete-mob">Delete mob</h3>
+    <h3 id="collision">Show collision</h3>
     
-    <p>Deletes the <a href="#mob-inspector">inspected mob</a>.</p>
+    <p>Toggles visibility of mob collision boxes/bubbles. This is just a simple unfilled circle or rectangle, and for objects that push with their hitboxes, each hitbox's bubble will be shown too.</p>
 
-    <p><b>Tool internal name</b>: <code>delete_mob</code>.</p>
+    <p><b>Tool internal name</b>: <code>show_collision</code>.</p>
 
     <p><b>Properties</b>: none.</p>
 
-    <h3 id="fill-inventory">Fill inventory</h3>
-    
-    <p>Sets the amount of all sprays in the inventory to 99. If you were holding "modifier 1", it will instead set the amounts to 0.</p>
-
-    <p><b>Tool internal name</b>: <code>fill_inventory</code>.</p>
-
-    <p><b>Properties</b>: none.</p>
-
-    <h3 id="frame-advance">Frame advance</h3>
-    
-    <p>When initially activated, it enters frame advance mode, which pauses gameplay. Then, any subsequent activation will advance gameplay by one frame. How much one frame is worth here depends on the framerate specified in the <a href="options.html">options</a>. If you were holding "modifier 1", it will leave frame advance mode and return to normal. It will also return to normal if you <a href="#speed">change the game speed</a>.</p>
-    <p>Some things, like cursor control, happen independently of the framerate, so expect to still see some stuff moving. Also, internally, it's not actually freezing one frame forever, but setting the game speed to an ultra-slow speed. This simplifies a lot of internal logic (by avoiding divisions by 0!), but it works more than well for practical use.</p>
-
-    <p><b>Tool internal name</b>: <code>frame_advance</code>.</p>
-
-    <p><b>Properties</b>: none.</p>
-
-    <h3 id="free-cam">Free camera</h3>
-    
-    <p>Lets you take control of the camera, allowing you to move it wherever you want. If you were holding "modifier 1", the camera will still use the free camera logic, but you will toggle whether to control your leader or control the camera. This allows you to fix it in place as you keep playing.</p>
-    
-    <p><b>Tool internal name</b>: <code>free_cam</code>.</p>
-
-    <p><b>Properties</b>: none.</p>
-
-    <h3 id="geometry-info">Geometry info</h3>
+    <h3 id="show-geometry-info">Show geometry info</h3>
     
     <p>Prints out geometry info about what's under the mouse cursor (or stops if pressed again), on the top of the game window. It uses the mouse cursor for this, not the leader's cursor. This prints out the cursor's coordinates, as well as some basic info about the sector that the cursor is on: its height and texture.</p>
     
-    <p><b>Tool internal name</b>: <code>geometry_info</code>.</p>
+    <p><b>Tool internal name</b>: <code>show_geometry_info</code>.</p>
 
     <p><b>Properties</b>: none.</p>
 
-    <h3 id="hud">HUD</h3>
+    <h3 id="show-hitboxes">Show hitboxes</h3>
     
-    <p>Toggles the HUD's visibility on or off. Good for taking screenshots with.</p>
-    
-    <p><b>Tool internal name</b>: <code>hud</code>.</p>
+    <p>Toggles visibility of mob hitboxes in-game. For each mob that has hitboxes, they will appear overlaid on top of it, and with a color scheme similar to the animation editor (green for hitboxes that can be damaged, red for those currently causing damage, and yellow for ignored ones).</p>
+
+    <p><b>Tool internal name</b>: <code>show_hitboxes</code>.</p>
 
     <p><b>Properties</b>: none.</p>
 
-    <h3 id="hurt-mob">Hurt mob</h3>
+    <h3 id="show-path-info">Show path info</h3>
     
-    <p>Hurts the mob closest to the cursor. It uses the mouse cursor for this, not the leader's cursor. It saps away half of its health every time you press it, meaning you can kill anything with just two presses (or more, if it regenerates). It's useful to kill troublesome enemies or boring obstacles without having to deal with them. Note that if you hold down the key, you'll be able to kill several mobs quickly, but if you don't pay attention, you could end up killing an object you didn't mean to, like your leader. To note also is that the mob does not receive any damage-related event with this, so it will never react to having lost health, even if its script says it should. It will die normally, however.</p>
-    
-    <p><b>Tool internal name</b>: <code>hurt_mob</code>.</p>
-
-    <p><b>Properties</b>:</p>
-
-    <p>Each of the <code>normal_settings</code>, <code>mod_1_settings</code>, and <code>mod_2_settings</code> blocks have these properties:</p>
-
-    <table class="props-t props-t-o">
-      <tr>
-        <td>percentage</td>
-        <td>How much of the mob's total health should be lost each time. 50 is 50%, 100 will kill any mob instantly, etc. Negative numbers will heal the mob for that percentage.</td>
-        <td>Number</td>
-        <td>50</td>
-      </tr>
-    </table>
-
-    <h3 id="mob-inspector">Mob inspector</h3>
-    
-    <p>Prints out important information about the mob closest to the cursor, on the top of the game window. It uses the mouse cursor for this, not the leader's cursor. When you press the button, it starts inspecting that mob, and only stops inspecting if the mob is deleted or if you press the button again while pointing to the same mob. Pointing to a different mob will inspect that one instead. Some other maker tools may also need that a mob is currently being inspected. If you were holding "modifier 1", it will instead scan for mobs whose centers are around the cursor, and iterate between them; this is useful if multiple mobs are bundled in the same spot. If you were holding "modifier 2", it will stop inspecting no matter what. The information shown is:</p>
-    
-    <ul>
-      <li><b>Mob</b>: The numeric ID and the name of the type of mob this is (e.g. Red Bulborb, Olimar).</li>
-      <li><b>Coords</b>: The mob's current coordinates, separated by space. The third coordinate is the Z, which means its vertical position.</li>
-      <li><b>Angle</b>: The mob's current angle.</li>
-      <li><b>Health</b>: Current health amount.</li>
-      <li><b>Animation</b>: Name of the current playing animation, if any.</li>
-      <li><b>Timer</b>: Time left on the currently running script timer, if any.</li>
-      <li><b>State</b>: Name of the current script FSM state.</li>
-      <li><b>Prev. states</b>: Name of the previous script FSM states (up to 4). Sorted most recent to oldest.</li>
-      <li><b>Vars</b>: Name and value of all script variables.</li>
-    </ul>
-
-    <p>As such, the information shown is mostly useful to debug scripts and animations. </p>
-    
-    <p><b>Tool internal name</b>: <code>mob_inspector</code>.</p>
-
-    <p><b>Properties</b>: none.</p>
-
-    <h3 id="new-pikmin">New Pikmin</h3>
-    
-    <p>Creates a new flower Pikmin where the cursor is, in the idle state. This uses the mouse cursor, not the leader's cursor. The type of the Pikmin created depends on the previous Pikmin created this way, in that it follows a cycle, alphabetically going through all Pikmin types declared in the engine. This tool is very useful if you need more Pikmin with you instantly. You can hold down the key to create a large army of Pikmin in a short time. If you were holding "modifier 1", it will spawn a Pikmin of the same type as the previous. If you were holding "modifier 2", the Pikmin will be a leaf Pikmin.</p>
-    
-    <p><b>Tool internal name</b>: <code>new_pikmin</code>.</p>
-
-    <p><b>Properties</b>: none.</p>
-    
-    <h3 id="new-pikmin">New reminder</h3>
-    
-    <p>Creates a new reminder for the area's maker on the spot that the cursor is at. This pauses gameplay and shows a window where the player can write down what the reminder should say, if anything.</p>
-    
-    <p><b>Tool internal name</b>: <code>new_reminder</code>.</p>
-
-    <p><b>Properties</b>: none.</p>
-    
-    <h3 id="path-info">Path info</h3>
-    
-    <p>When on, prints out important information about the path that the <a href="#mob-inspector">inspected mob</a> is taking. It also draws its path on the area. Pressing the button toggles the feature on and off.</p>
+    <p>When on, prints out important information about the path that the <a href="#inspect-mob">inspected mob</a> is taking. It also draws its path on the area. Pressing the button toggles the feature on and off.</p>
 
     <p>The information at the top is:</p>
 
@@ -261,45 +277,29 @@
 
     <p>If an object is not following a path like you expect it to, using this tool will help you figure out why.</p>
     
-    <p><b>Tool internal name</b>: <code>path_info</code>.</p>
-
-    <p><b>Properties</b>: none.</p>
-
-    <h3 id="set-song-pos-near-loop">Set song position near loop</h3>
-    
-    <p>Changes the current position of all songs to be just a few seconds before their loop point. This is useful when you want to test the loop points and don't want to wait until the song gets there normally.</p>
-    
-    <p><b>Tool internal name</b>: <code>set_song_pos_near_loop</code>.</p>
-
-    <p><b>Properties</b>: none.</p>
-
-    <h3 id="collision">Show collision</h3>
-    
-    <p>Toggles visibility of mob collision boxes/bubbles. This is just a simple unfilled circle or rectangle, and for objects that push with their hitboxes, each hitbox's bubble will be shown too.</p>
-
-    <p><b>Tool internal name</b>: <code>collision</code>.</p>
-
-    <p><b>Properties</b>: none.</p>
-
-    <h3 id="hitboxes">Show hitboxes</h3>
-    
-    <p>Toggles visibility of mob hitboxes in-game. For each mob that has hitboxes, they will appear overlaid on top of it, and with a color scheme similar to the animation editor (green for hitboxes that can be damaged, red for those currently causing damage, and yellow for ignored ones).</p>
-
-    <p><b>Tool internal name</b>: <code>hitboxes</code>.</p>
+    <p><b>Tool internal name</b>: <code>show_path_info</code>.</p>
 
     <p><b>Properties</b>: none.</p>
 
     <h3 id="reaches">Show reaches</h3>
     
-    <p>Toggles visibility of mob reaches in-game. This only affects the <a href="#mob-inspector">inspected mob</a>. It will show pie-slices or circles for the current far reach in red, and for the current near reach in green.</p>
+    <p>Toggles visibility of mob reaches in-game. This only affects the <a href="#inspect-mob">inspected mob</a>. It will show pie-slices or circles for the current far reach in red, and for the current near reach in green.</p>
 
-    <p><b>Tool internal name</b>: <code>reaches</code>.</p>
+    <p><b>Tool internal name</b>: <code>show_reaches</code>.</p>
 
     <p><b>Properties</b>: none.</p>
 
+    <h3 id="spawn-pikmin">Spawn Pikmin</h3>
+    
+    <p>Creates a new flower Pikmin where the cursor is, in the idle state. This uses the mouse cursor, not the leader's cursor. The type of the Pikmin created depends on the previous Pikmin created this way, in that it follows a cycle, alphabetically going through all Pikmin types declared in the engine. This tool is very useful if you need more Pikmin with you instantly. You can hold down the key to create a large army of Pikmin in a short time. If you were holding "modifier 1", it will spawn a Pikmin of the same type as the previous. If you were holding "modifier 2", the Pikmin will be a leaf Pikmin.</p>
+    
+    <p><b>Tool internal name</b>: <code>spawn_pikmin</code>.</p>
+
+    <p><b>Properties</b>: none.</p>
+    
     <h3 id="teleport">Teleport</h3>
     
-    <p>Teleports the current leader to the cursor's position. This uses the mouse cursor, not the leader's cursor. Use this to go somewhere instantly or to move around the area quickly. Pikmin and leaders in your party will teleport with you. You can also hold down the input bound to this maker tool to repeatedly go to the cursor, which updates with the leader, meaning that this allows you to quickly move through everything in the direction the cursor is. This is however very hard to control. If you were holding "modifier 1", it will instead teleport the mob that's <a href="#mob-inspector">being inspected</a>. If you were holding "modifier 2", the Pikmin and leaders in your group will not teleport with you.</p>
+    <p>Teleports the current leader to the cursor's position. This uses the mouse cursor, not the leader's cursor. Use this to go somewhere instantly or to move around the area quickly. Pikmin and leaders in your party will teleport with you. You can also hold down the input bound to this maker tool to repeatedly go to the cursor, which updates with the leader, meaning that this allows you to quickly move through everything in the direction the cursor is. This is however very hard to control. If you were holding "modifier 1", it will instead teleport the mob that's <a href="#inspect-mob">being inspected</a>. If you were holding "modifier 2", the Pikmin and leaders in your group will not teleport with you.</p>
 
     <p><b>Tool internal name</b>: <code>teleport</code>.</p>
 
