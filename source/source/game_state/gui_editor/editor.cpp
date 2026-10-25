@@ -963,7 +963,7 @@ void GuiEditor::setupForNewGuiDef() {
     state = EDITOR_STATE_MAIN;
     
     //We could reset the camera directly, but if the player enters the editor
-    //via the auto start maker tool, processGui() won't have a chance
+    //via the auto-start maker tool, processGui() won't have a chance
     //to run before we load the file, and that function is what gives
     //us the canvas coordinates necessary for camera centering.
     //Let's flag the need for re-centering so it gets handled when possible.

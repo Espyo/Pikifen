@@ -202,10 +202,10 @@ enum PLAYER_ACTION_TYPE {
     //Toggle maker console.
     PLAYER_ACTION_TYPE_MT_CONSOLE,
     
-    //Auto-start.
-    PLAYER_ACTION_TYPE_MT_AUTO_START,
+    //Set auto-start data.
+    PLAYER_ACTION_TYPE_MT_SET_AUTO_START,
     
-    //Set song position near loop.
+    //Set song position near loop point.
     PLAYER_ACTION_TYPE_MT_SET_SONG_POS_NEAR_LOOP,
     
     //Maker tool modifier 1.
@@ -216,14 +216,11 @@ enum PLAYER_ACTION_TYPE {
     
     //Gameplay maker tools.
     
-    //Area image.
-    PLAYER_ACTION_TYPE_MT_AREA_IMAGE,
+    //Control camera.
+    PLAYER_ACTION_TYPE_MT_CONTROL_CAM,
     
-    //Area inspector.
-    PLAYER_ACTION_TYPE_MT_AREA_INSPECTOR,
-    
-    //Change speed.
-    PLAYER_ACTION_TYPE_MT_CHANGE_SPEED,
+    //Create an area maker reminder.
+    PLAYER_ACTION_TYPE_MT_CREATE_REMINDER,
     
     //Delete mob.
     PLAYER_ACTION_TYPE_MT_DELETE_MOB,
@@ -234,38 +231,41 @@ enum PLAYER_ACTION_TYPE {
     //Frame advance.
     PLAYER_ACTION_TYPE_MT_FRAME_ADVANCE,
     
-    //Free camera.
-    PLAYER_ACTION_TYPE_MT_FREE_CAM,
-    
-    //Geometry info.
-    PLAYER_ACTION_TYPE_MT_GEOMETRY_INFO,
-    
     //Hide HUD.
     PLAYER_ACTION_TYPE_MT_HIDE_HUD,
     
     //Hurt mob.
     PLAYER_ACTION_TYPE_MT_HURT_MOB,
     
-    //Mob inspector.
-    PLAYER_ACTION_TYPE_MT_MOB_INSPECTOR,
+    //Inspect area.
+    PLAYER_ACTION_TYPE_MT_INSPECT_AREA,
     
-    //New Pikmin.
-    PLAYER_ACTION_TYPE_MT_NEW_PIKMIN,
+    //Inspect mob.
+    PLAYER_ACTION_TYPE_MT_INSPECT_MOB,
     
-    //New area maker reminder.
-    PLAYER_ACTION_TYPE_MT_NEW_REMINDER,
+    //Save area image.
+    PLAYER_ACTION_TYPE_MT_SAVE_AREA_IMAGE,
     
-    //Path info.
-    PLAYER_ACTION_TYPE_MT_PATH_INFO,
+    //Set speed.
+    PLAYER_ACTION_TYPE_MT_SET_SPEED,
     
     //Show collision.
     PLAYER_ACTION_TYPE_MT_SHOW_COLLISION,
     
+    //Show geometry info.
+    PLAYER_ACTION_TYPE_MT_SHOW_GEOMETRY_INFO,
+    
     //Show hitboxes.
     PLAYER_ACTION_TYPE_MT_SHOW_HITBOXES,
     
+    //Show path info.
+    PLAYER_ACTION_TYPE_MT_SHOW_PATH_INFO,
+    
     //Show reaches.
     PLAYER_ACTION_TYPE_MT_SHOW_REACHES,
+    
+    //Spawn Pikmin.
+    PLAYER_ACTION_TYPE_MT_SPAWN_PIKMIN,
     
     //Teleport.
     PLAYER_ACTION_TYPE_MT_TELEPORT,

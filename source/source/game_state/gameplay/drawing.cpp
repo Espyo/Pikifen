@@ -87,7 +87,7 @@ void GameplayState::doGameDrawing(
         if(game.perfMon) {
             game.perfMon->startMeasurement("Drawing -- In-game text");
         }
-        if(!bmpOutput && game.makerTools.hud) {
+        if(!bmpOutput && game.makerTools.showingHud) {
             drawInGameText(&player);
         }
         if(game.perfMon) {
@@ -141,7 +141,7 @@ void GameplayState::doGameDrawing(
                 player.closestGroupMember[BUBBLE_RELATION_CURRENT]->
                 type->mainColor;
         }
-        if(player.leaderPtr && game.makerTools.hud) {
+        if(player.leaderPtr && game.makerTools.showingHud) {
             cursorColor =
                 changeColorLighting(
                     cursorColor, player.leaderCursorHeightDiffLight
@@ -156,7 +156,7 @@ void GameplayState::doGameDrawing(
             game.perfMon->startMeasurement("Drawing -- HUD");
         }
         
-        if(game.makerTools.hud) {
+        if(game.makerTools.showingHud) {
             player.hud->gui.draw();
             player.inventory->gui.draw();
             
@@ -184,7 +184,7 @@ void GameplayState::doGameDrawing(
     }
     
     //Layer 9 -- System stuff.
-    if(game.makerTools.hud) {
+    if(game.makerTools.showingHud) {
         if(areaTitleFadeTimer.timeLeft > 0) {
             drawLoadingScreen(
                 game.curArea->name, game.curArea->subtitle,
@@ -856,7 +856,7 @@ void GameplayState::drawInGameText(Player* player) {
         }
         
         //Maker tool -- draw hitboxes.
-        if(game.makerTools.hitboxes) {
+        if(game.makerTools.showingHitboxes) {
             Sprite* s;
             mobPtr->getSpriteData(&s, nullptr, nullptr);
             if(s) {
@@ -886,7 +886,7 @@ void GameplayState::drawInGameText(Player* player) {
         }
         
         //Maker tool -- draw collision.
-        if(game.makerTools.collision) {
+        if(game.makerTools.showingCollision) {
             if(mobPtr->type->pushesWithHitboxes) {
                 Sprite* s;
                 mobPtr->getSpriteData(&s, nullptr, nullptr);
@@ -943,7 +943,7 @@ void GameplayState::drawInGameText(Player* player) {
     //Maker tool -- draw path info.
     if(
         game.makerTools.inspectedMob &&
-        game.makerTools.pathInfo &&
+        game.makerTools.showingPathInfo &&
         game.makerTools.inspectedMob->pathInfo
     ) {
         const ALLEGRO_COLOR BLOCKED_LINE_COLOR = al_map_rgba(255, 0, 0, 200);
@@ -1060,7 +1060,7 @@ void GameplayState::drawInGameText(Player* player) {
     }
     
     //Maker tool -- draw reaches.
-    if(game.makerTools.inspectedMob && game.makerTools.reaches) {
+    if(game.makerTools.inspectedMob && game.makerTools.showingReaches) {
         const ALLEGRO_COLOR FAR_REACH_COLOR = al_map_rgba(192, 64, 64, 192);
         const ALLEGRO_COLOR NEAR_REACH_COLOR = al_map_rgba(64, 192, 64, 192);
         
@@ -1273,7 +1273,7 @@ void GameplayState::drawLeaderCursor(
     if(
         game.options.misc.showLeaderCursorCounter &&
         player->leaderPtr->group->curStandbyType &&
-        !(game.makerTools.freeCamMode && !game.makerTools.freeCamFrozen)
+        !(game.makerTools.inControlCam && !game.makerTools.controlCamFrozen)
     ) {
         forIdx(m, player->leaderPtr->group->members) {
             Mob* mPtr = player->leaderPtr->group->members[m];

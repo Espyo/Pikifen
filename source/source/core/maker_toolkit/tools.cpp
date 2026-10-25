@@ -28,107 +28,6 @@ const float PLAY_CONFIRMATION_TIMER = 1.0f;
 
 
 /**
- * @brief Code for the area image maker tool command.
- *
- * @param mgr Maker tool manager.
- * @param args Arguments passed to the command.
- * @return Whether it succeeded.
- */
-bool MakerToolRunners::areaImage(
-    MakerTools& mgr, const vector<string>& args
-) {
-    //Get the arguments.
-    const string& sizeArg = args[0];
-    const string& paddingArg = args[1];
-    const string& shadowsArg = args[2];
-    
-    //Main logic.
-    ALLEGRO_BITMAP* bmp =
-        game.states.gameplay->drawToBitmap(
-            s2i(sizeArg), s2i(paddingArg), s2b(shadowsArg)
-        );
-    string fileName =
-        FOLDER_PATHS_FROM_ROOT::USER_DATA + "/area_" +
-        game.curArea->manifest->internalName +
-        "_" + getCurrentTime(true) + ".png";
-        
-    if(!bmp || !al_save_bitmap(fileName.c_str(), bmp)) {
-        game.log.write(
-            LOG_LEVEL_ERROR,
-            "Could not save the area onto an image,"
-            " with the name \"" + fileName + "\"!"
-        );
-    } else {
-        game.console.write(
-            LOG_LEVEL_INFO,
-            "Saved area image \"" + fileName + "\".", 5.0f
-        );
-    }
-    
-    return true;
-}
-
-
-/**
- * @brief Code for the area inspector maker tool command.
- *
- * @param mgr Maker tool manager.
- * @param args Arguments passed to the command.
- * @return Whether it succeeded.
- */
-bool MakerToolRunners::areaInspector(
-    MakerTools& mgr, const vector<string>& args
-) {
-    //Main logic.
-    mgr.inspectingArea = !mgr.inspectingArea;
-    if(!mgr.inspectingArea) {
-        game.makerDisplay.write("No longer inspecting area.", 5.0f);
-    }
-    
-    return true;
-}
-
-
-/**
- * @brief Code for the change speed maker tool command.
- *
- * @param mgr Maker tool manager.
- * @param args Arguments passed to the command.
- * @return Whether it succeeded.
- */
-bool MakerToolRunners::changeSpeed(
-    MakerTools& mgr, const vector<string>& args
-) {
-    //Get the arguments.
-    const string& multArg = args[0];
-    
-    //Main logic.
-    float newMultiplier = std::clamp((float) s2f(multArg), 0.001f, 100.0f);
-    
-    if(mgr.frameAdvanceMode) {
-        mgr.frameAdvanceMode = false;
-        mgr.mustAdvanceOneFrame = false;
-    } else {
-        bool finalState = false;
-        if(!mgr.changeSpeed) {
-            finalState = true;
-        } else {
-            if(mgr.changeSpeedMultiplier != newMultiplier) {
-                finalState = true;
-            }
-        }
-        
-        if(finalState) {
-            mgr.changeSpeedMultiplier = newMultiplier;
-        }
-        mgr.changeSpeed = finalState;
-    }
-    
-    return true;
-}
-
-
-/**
  * @brief Code for the clear terminal output maker tool command.
  *
  * @param mgr Maker tool manager.
@@ -140,6 +39,115 @@ bool MakerToolRunners::clear(
 ) {
     //Main logic.
     game.console.clearTerminal();
+    
+    return true;
+}
+
+
+/**
+ * @brief Code for the control camera maker tool command.
+ *
+ * @param mgr Maker tool manager.
+ * @param args Arguments passed to the command.
+ * @return Whether it succeeded.
+ */
+bool MakerToolRunners::controlCam(
+    MakerTools& mgr, const vector<string>& args
+) {
+    //Get the arguments.
+    const string& actionArg = args[0];
+    
+    //Main logic.
+    bool actionFound = false;
+    MAKER_TOOL_CONTROL_CAM_ACTION action =
+        enumGetValue(makerToolControlCamActionINames, actionArg, &actionFound);
+        
+    if(!actionFound) {
+        game.console.write(
+            LOG_LEVEL_ERROR,
+            "Unknown action type \"" + actionArg + "\"!"
+        );
+        return false;
+    }
+    
+    bool wasControllingLeader = !mgr.inControlCam || mgr.controlCamFrozen;
+    
+    switch(action) {
+    case MAKER_TOOL_CONTROL_CAM_ACTION_MODE: {
+        mgr.inControlCam = !mgr.inControlCam;
+        mgr.controlCamFrozen = false;
+        break;
+    } case MAKER_TOOL_CONTROL_CAM_ACTION_FREEZE: {
+        if(!mgr.inControlCam) mgr.inControlCam = true;
+        mgr.controlCamFrozen = !mgr.controlCamFrozen;
+        break;
+    }
+    }
+    
+    bool isControllingLeader = !mgr.inControlCam || mgr.controlCamFrozen;
+    
+    if(wasControllingLeader && !isControllingLeader) {
+        //Stop the leaders, otherwise they'll keep moving out of control.
+        game.states.gameplay->stopAllLeaders();
+    } else if(!wasControllingLeader && isControllingLeader) {
+        //Stop the camera, otherwise it'll keep moving out of control.
+        game.states.gameplay->players[0].view.cam.centerSpeed = Point(0.0f);
+    }
+    
+    return true;
+}
+
+
+/**
+ * @brief Code for the create reminder maker tool command.
+ *
+ * @param mgr Maker tool manager.
+ * @param args Arguments passed to the command.
+ * @return Whether it succeeded.
+ */
+bool MakerToolRunners::createReminder(
+    MakerTools& mgr, const vector<string>& args
+) {
+    //Main logic.
+    if(game.states.gameplay->isPaused()) return false;
+    
+    mgr.toolStartCursor =
+        game.states.gameplay->players[0].view.mouseCursorWorldPos;
+    game.modal.reset();
+    game.modal.title = "New reminder";
+    game.modal.prompt =
+        "Creating a new reminder for the area maker at " +
+        i2s(mgr.toolStartCursor.x) + "," + i2s(mgr.toolStartCursor.y) +
+        ".\n"
+        "What should the reminder say?\n"
+        "\n\n\n\n\n\n";
+    game.modal.back = "Cancel";
+    game.modal.onBack =
+    [] () {
+        game.controls.ignoreMenuCloseActions();
+        game.console.write(LOG_LEVEL_INFO, "Canceled reminder.", 5.0f);
+    };
+    game.modal.extraButtons.push_back(
+    ModalGuiManager::Button {
+        .text = "Create",
+        .tooltip = "Create the reminder.",
+        .onActivate = [mgr] (const Point&) {
+            AreaMakerReminder newReminder;
+            newReminder.center = mgr.toolStartCursor;
+            newReminder.text = game.modal.textInput.getString();
+            game.curArea->reminders.push_back(newReminder);
+            game.content.areas.saveAreaReminders(game.curArea);
+            game.modal.close();
+            game.controls.ignoreMenuCloseActions();
+            game.console.write(LOG_LEVEL_INFO, "Created reminder!", 5.0f);
+        }
+    }
+    );
+    game.modal.defaultFocusButtonIdx = 1;
+    game.modal.textInputEnterButtonIdx = 1;
+    game.modal.useTextInput = true;
+    game.modal.updateItems();
+    game.modal.open();
     
     return true;
 }
@@ -224,92 +232,17 @@ bool MakerToolRunners::frameAdvance(
     
     switch(action) {
     case MAKER_TOOL_FRAME_ADVANCE_ACTION_ADVANCE: {
-        if(!mgr.frameAdvanceMode) {
-            mgr.frameAdvanceMode = true;
+        if(!mgr.inFrameAdvanceMode) {
+            mgr.inFrameAdvanceMode = true;
         } else {
             mgr.mustAdvanceOneFrame = true;
         }
         break;
     } case MAKER_TOOL_FRAME_ADVANCE_ACTION_RESUME: {
-        mgr.frameAdvanceMode = false;
+        mgr.inFrameAdvanceMode = false;
         mgr.mustAdvanceOneFrame = false;
         break;
     }
-    }
-    
-    return true;
-}
-
-
-/**
- * @brief Code for the free camera maker tool command.
- *
- * @param mgr Maker tool manager.
- * @param args Arguments passed to the command.
- * @return Whether it succeeded.
- */
-bool MakerToolRunners::freeCam(
-    MakerTools& mgr, const vector<string>& args
-) {
-    //Get the arguments.
-    const string& actionArg = args[0];
-    
-    //Main logic.
-    bool actionFound = false;
-    MAKER_TOOL_FREE_CAM_ACTION action =
-        enumGetValue(makerToolFreeCamActionINames, actionArg, &actionFound);
-        
-    if(!actionFound) {
-        game.console.write(
-            LOG_LEVEL_ERROR,
-            "Unknown action type \"" + actionArg + "\"!"
-        );
-        return false;
-    }
-    
-    bool wasControllingLeader = !mgr.freeCamMode || mgr.freeCamFrozen;
-    
-    switch(action) {
-    case MAKER_TOOL_FREE_CAM_ACTION_MODE: {
-        mgr.freeCamMode = !mgr.freeCamMode;
-        mgr.freeCamFrozen = false;
-        break;
-    } case MAKER_TOOL_FREE_CAM_ACTION_FREEZE: {
-        if(!mgr.freeCamMode) mgr.freeCamMode = true;
-        mgr.freeCamFrozen = !mgr.freeCamFrozen;
-        break;
-    }
-    }
-    
-    bool isControllingLeader = !mgr.freeCamMode || mgr.freeCamFrozen;
-    
-    if(wasControllingLeader && !isControllingLeader) {
-        //Stop the leaders, otherwise they'll keep moving out of control.
-        game.states.gameplay->stopAllLeaders();
-    } else if(!wasControllingLeader && isControllingLeader) {
-        //Stop the camera, otherwise it'll keep moving out of control.
-        game.states.gameplay->players[0].view.cam.centerSpeed = Point(0.0f);
-    }
-    
-    return true;
-}
-
-
-/**
- * @brief Code for the geometry info maker tool command.
- *
- * @param mgr Maker tool manager.
- * @param args Arguments passed to the command.
- * @return Whether it succeeded.
- */
-bool MakerToolRunners::geometryInfo(
-    MakerTools& mgr, const vector<string>& args
-) {
-    //Main logic.
-    mgr.geometryInfo = !mgr.geometryInfo;
-    if(mgr.geometryInfo) {
-        mgr.toolStartCursor =
-            game.states.gameplay->players[0].view.mouseCursorWorldPos;
     }
     
     return true;
@@ -355,7 +288,7 @@ bool MakerToolRunners::hideHud(
     MakerTools& mgr, const vector<string>& args
 ) {
     //Main logic.
-    mgr.hud = !mgr.hud;
+    mgr.showingHud = !mgr.showingHud;
     
     return true;
 }
@@ -389,13 +322,33 @@ bool MakerToolRunners::hurtMob(
 
 
 /**
- * @brief Code for the mob inspector maker tool command.
+ * @brief Code for the inspect area maker tool command.
  *
  * @param mgr Maker tool manager.
  * @param args Arguments passed to the command.
  * @return Whether it succeeded.
  */
-bool MakerToolRunners::mobInspector(
+bool MakerToolRunners::inspectArea(
+    MakerTools& mgr, const vector<string>& args
+) {
+    //Main logic.
+    mgr.inspectingArea = !mgr.inspectingArea;
+    if(!mgr.inspectingArea) {
+        game.makerDisplay.write("No longer inspecting area.", 5.0f);
+    }
+    
+    return true;
+}
+
+
+/**
+ * @brief Code for the inspect mob maker tool command.
+ *
+ * @param mgr Maker tool manager.
+ * @param args Arguments passed to the command.
+ * @return Whether it succeeded.
+ */
+bool MakerToolRunners::inspectMob(
     MakerTools& mgr, const vector<string>& args
 ) {
     //Get the arguments.
@@ -403,9 +356,9 @@ bool MakerToolRunners::mobInspector(
     
     //Main logic.
     bool actionFound = false;
-    MAKER_TOOL_MOB_INSPECTOR_ACTION action =
+    MAKER_TOOL_INSPECT_MOB_ACTION action =
         enumGetValue(
-            makerToolMobInspectorActionINames, actionArg, &actionFound
+            makerToolInspectMobActionINames, actionArg, &actionFound
         );
         
     if(!actionFound) {
@@ -420,20 +373,20 @@ bool MakerToolRunners::mobInspector(
     Mob* m = nullptr;
     
     switch(action) {
-    case MAKER_TOOL_MOB_INSPECTOR_ACTION_GET_CLOSEST: {
+    case MAKER_TOOL_INSPECT_MOB_ACTION_GET_CLOSEST: {
         m =
             getClosestMobToMouseCursor(
                 game.states.gameplay->players[0].view, false
             );
         break;
-    } case MAKER_TOOL_MOB_INSPECTOR_ACTION_ITERATE: {
+    } case MAKER_TOOL_INSPECT_MOB_ACTION_ITERATE: {
         m =
             getNextMobNearCursor(
                 game.states.gameplay->players[0].view,
                 prevInspectedMob, false
             );
         break;
-    } case MAKER_TOOL_MOB_INSPECTOR_ACTION_STOP: {
+    } case MAKER_TOOL_INSPECT_MOB_ACTION_STOP: {
         break;
     }
     }
@@ -451,145 +404,49 @@ bool MakerToolRunners::mobInspector(
 
 
 /**
- * @brief Code for the new Pikmin maker tool command.
+ * @brief Code for the save area image maker tool command.
  *
  * @param mgr Maker tool manager.
  * @param args Arguments passed to the command.
  * @return Whether it succeeded.
  */
-bool MakerToolRunners::newPikmin(
+bool MakerToolRunners::saveAreaImage(
     MakerTools& mgr, const vector<string>& args
 ) {
     //Get the arguments.
-    const string& typeArg = args[0];
-    const string& maturityArg = args[1];
+    const string& sizeArg = args[0];
+    const string& paddingArg = args[1];
+    const string& shadowsArg = args[2];
     
     //Main logic.
-    bool maturityFound = false;
-    MATURITY maturity =
-        enumGetValue(maturityINames, maturityArg, &maturityFound);
-        
-    if(!maturityFound) {
-        game.console.write(
-            LOG_LEVEL_ERROR,
-            "Unknown maturity \"" + maturityArg + "\"!"
+    ALLEGRO_BITMAP* bmp =
+        game.states.gameplay->drawToBitmap(
+            s2i(sizeArg), s2i(paddingArg), s2b(shadowsArg)
         );
-        return false;
-    }
-    
-    if(
-        game.states.gameplay->mobs.pikmin.size() >=
-        game.curArea->getMaxPikminInField()
-    ) {
-        return false;
-    }
-    
-    PikminType* newPikminType = nullptr;
-    
-    if(typeArg == "same" && mgr.lastPikminType) {
-        newPikminType = mgr.lastPikminType;
+    string fileName =
+        FOLDER_PATHS_FROM_ROOT::USER_DATA + "/area_" +
+        game.curArea->manifest->internalName +
+        "_" + getCurrentTime(true) + ".png";
+        
+    if(!bmp || !al_save_bitmap(fileName.c_str(), bmp)) {
+        game.log.write(
+            LOG_LEVEL_ERROR,
+            "Could not save the area onto an image,"
+            " with the name \"" + fileName + "\"!"
+        );
     } else {
-        newPikminType =
-            game.content.mobTypes.list.pikmin.begin()->second;
-            
-        auto p = game.content.mobTypes.list.pikmin.begin();
-        for(; p != game.content.mobTypes.list.pikmin.end(); ++p) {
-            if(p->second == mgr.lastPikminType) {
-                ++p;
-                if(p != game.content.mobTypes.list.pikmin.end()) {
-                    newPikminType = p->second;
-                }
-                break;
-            }
-        }
-        mgr.lastPikminType = newPikminType;
+        game.console.write(
+            LOG_LEVEL_INFO,
+            "Saved area image \"" + fileName + "\".", 5.0f
+        );
     }
     
-    createMob(
-        game.mobCategories.get(MOB_CATEGORY_PIKMIN),
-        game.states.gameplay->players[0].view.mouseCursorWorldPos,
-        newPikminType, 0,
-        "maturity=" + i2s(maturity)
-    );
-    
     return true;
 }
 
 
 /**
- * @brief Code for the new reminder maker tool command.
- *
- * @param mgr Maker tool manager.
- * @param args Arguments passed to the command.
- * @return Whether it succeeded.
- */
-bool MakerToolRunners::newReminder(
-    MakerTools& mgr, const vector<string>& args
-) {
-    //Main logic.
-    if(game.states.gameplay->isPaused()) return false;
-    
-    mgr.toolStartCursor =
-        game.states.gameplay->players[0].view.mouseCursorWorldPos;
-    game.modal.reset();
-    game.modal.title = "New reminder";
-    game.modal.prompt =
-        "Creating a new reminder for the area maker at " +
-        i2s(mgr.toolStartCursor.x) + "," + i2s(mgr.toolStartCursor.y) +
-        ".\n"
-        "What should the reminder say?\n"
-        "\n\n\n\n\n\n";
-    game.modal.back = "Cancel";
-    game.modal.onBack =
-    [] () {
-        game.controls.ignoreMenuCloseActions();
-        game.console.write(LOG_LEVEL_INFO, "Canceled reminder.", 5.0f);
-    };
-    game.modal.extraButtons.push_back(
-    ModalGuiManager::Button {
-        .text = "Create",
-        .tooltip = "Create the reminder.",
-        .onActivate = [mgr] (const Point&) {
-            AreaMakerReminder newReminder;
-            newReminder.center = mgr.toolStartCursor;
-            newReminder.text = game.modal.textInput.getString();
-            game.curArea->reminders.push_back(newReminder);
-            game.content.areas.saveAreaReminders(game.curArea);
-            game.modal.close();
-            game.controls.ignoreMenuCloseActions();
-            game.console.write(LOG_LEVEL_INFO, "Created reminder!", 5.0f);
-        }
-    }
-    );
-    game.modal.defaultFocusButtonIdx = 1;
-    game.modal.textInputEnterButtonIdx = 1;
-    game.modal.useTextInput = true;
-    game.modal.updateItems();
-    game.modal.open();
-    
-    return true;
-}
-
-
-/**
- * @brief Code for the path info maker tool command.
- *
- * @param mgr Maker tool manager.
- * @param args Arguments passed to the command.
- * @return Whether it succeeded.
- */
-bool MakerToolRunners::pathInfo(
-    MakerTools& mgr, const vector<string>& args
-) {
-    //Main logic.
-    mgr.pathInfo = !mgr.pathInfo;
-    
-    return true;
-}
-
-
-/**
- * @brief Code for the set auto start maker tool command.
+ * @brief Code for the set auto-start maker tool command.
  *
  * @param mgr Maker tool manager.
  * @param args Arguments passed to the command.
@@ -648,7 +505,7 @@ bool MakerToolRunners::setAutoStart(
 
 
 /**
- * @brief Code for the set song near loop maker tool command.
+ * @brief Code for the set song position near loop maker tool command.
  *
  * @param mgr Maker tool manager.
  * @param args Arguments passed to the command.
@@ -665,6 +522,46 @@ bool MakerToolRunners::setSongPosNearLoop(
 
 
 /**
+ * @brief Code for the set speed maker tool command.
+ *
+ * @param mgr Maker tool manager.
+ * @param args Arguments passed to the command.
+ * @return Whether it succeeded.
+ */
+bool MakerToolRunners::setSpeed(
+    MakerTools& mgr, const vector<string>& args
+) {
+    //Get the arguments.
+    const string& multArg = args[0];
+    
+    //Main logic.
+    float newMultiplier = std::clamp((float) s2f(multArg), 0.001f, 100.0f);
+    
+    if(mgr.inFrameAdvanceMode) {
+        mgr.inFrameAdvanceMode = false;
+        mgr.mustAdvanceOneFrame = false;
+    } else {
+        bool finalState = false;
+        if(!mgr.changingSpeed) {
+            finalState = true;
+        } else {
+            if(mgr.changedSpeedMultiplier != newMultiplier) {
+                finalState = true;
+            }
+        }
+        
+        if(finalState) {
+            mgr.changedSpeedMultiplier = newMultiplier;
+        }
+        if(mgr.changedSpeedMultiplier == 1.0f) finalState = false;
+        mgr.changingSpeed = finalState;
+    }
+    
+    return true;
+}
+
+
+/**
  * @brief Code for the show collision maker tool command.
  *
  * @param mgr Maker tool manager.
@@ -675,7 +572,28 @@ bool MakerToolRunners::showCollision(
     MakerTools& mgr, const vector<string>& args
 ) {
     //Main logic.
-    mgr.collision = !mgr.collision;
+    mgr.showingCollision = !mgr.showingCollision;
+    
+    return true;
+}
+
+
+/**
+ * @brief Code for the show geometry info maker tool command.
+ *
+ * @param mgr Maker tool manager.
+ * @param args Arguments passed to the command.
+ * @return Whether it succeeded.
+ */
+bool MakerToolRunners::showGeometryInfo(
+    MakerTools& mgr, const vector<string>& args
+) {
+    //Main logic.
+    mgr.showingGeometryInfo = !mgr.showingGeometryInfo;
+    if(mgr.showingGeometryInfo) {
+        mgr.toolStartCursor =
+            game.states.gameplay->players[0].view.mouseCursorWorldPos;
+    }
     
     return true;
 }
@@ -692,7 +610,24 @@ bool MakerToolRunners::showHitboxes(
     MakerTools& mgr, const vector<string>& args
 ) {
     //Main logic.
-    mgr.hitboxes = !mgr.hitboxes;
+    mgr.showingHitboxes = !mgr.showingHitboxes;
+    
+    return true;
+}
+
+
+/**
+ * @brief Code for the show path info maker tool command.
+ *
+ * @param mgr Maker tool manager.
+ * @param args Arguments passed to the command.
+ * @return Whether it succeeded.
+ */
+bool MakerToolRunners::showPathInfo(
+    MakerTools& mgr, const vector<string>& args
+) {
+    //Main logic.
+    mgr.showingPathInfo = !mgr.showingPathInfo;
     
     return true;
 }
@@ -709,7 +644,73 @@ bool MakerToolRunners::showReaches(
     MakerTools& mgr, const vector<string>& args
 ) {
     //Main logic.
-    mgr.reaches = !mgr.reaches;
+    mgr.showingReaches = !mgr.showingReaches;
+    
+    return true;
+}
+
+
+/**
+ * @brief Code for the spawn Pikmin maker tool command.
+ *
+ * @param mgr Maker tool manager.
+ * @param args Arguments passed to the command.
+ * @return Whether it succeeded.
+ */
+bool MakerToolRunners::spawnPikmin(
+    MakerTools& mgr, const vector<string>& args
+) {
+    //Get the arguments.
+    const string& typeArg = args[0];
+    const string& maturityArg = args[1];
+    
+    //Main logic.
+    bool maturityFound = false;
+    MATURITY maturity =
+        enumGetValue(maturityINames, maturityArg, &maturityFound);
+        
+    if(!maturityFound) {
+        game.console.write(
+            LOG_LEVEL_ERROR,
+            "Unknown maturity \"" + maturityArg + "\"!"
+        );
+        return false;
+    }
+    
+    if(
+        game.states.gameplay->mobs.pikmin.size() >=
+        game.curArea->getMaxPikminInField()
+    ) {
+        return false;
+    }
+    
+    PikminType* newPikminType = nullptr;
+    
+    if(typeArg == "same" && mgr.lastPikminType) {
+        newPikminType = mgr.lastPikminType;
+    } else {
+        newPikminType =
+            game.content.mobTypes.list.pikmin.begin()->second;
+            
+        auto p = game.content.mobTypes.list.pikmin.begin();
+        for(; p != game.content.mobTypes.list.pikmin.end(); ++p) {
+            if(p->second == mgr.lastPikminType) {
+                ++p;
+                if(p != game.content.mobTypes.list.pikmin.end()) {
+                    newPikminType = p->second;
+                }
+                break;
+            }
+        }
+        mgr.lastPikminType = newPikminType;
+    }
+    
+    createMob(
+        game.mobCategories.get(MOB_CATEGORY_PIKMIN),
+        game.states.gameplay->players[0].view.mouseCursorWorldPos,
+        newPikminType, 0,
+        "maturity=" + i2s(maturity)
+    );
     
     return true;
 }
@@ -898,20 +899,22 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
     vector<string> args;
     
     switch(action.actionTypeId) {
-    case PLAYER_ACTION_TYPE_MT_AREA_IMAGE: {
-        toolToRun = MAKER_TOOL_TYPE_AREA_IMAGE;
-        unsigned char settingIdx = getMakerToolSettingIdx();
-        args.push_back(i2s(areaImageSettings[settingIdx].size));
-        args.push_back(i2s(areaImageSettings[settingIdx].padding));
-        args.push_back(b2s(areaImageSettings[settingIdx].shadows));
+    case PLAYER_ACTION_TYPE_MT_CREATE_REMINDER: {
+        toolToRun = MAKER_TOOL_TYPE_CREATE_REMINDER;
         break;
-    } case PLAYER_ACTION_TYPE_MT_AREA_INSPECTOR: {
-        toolToRun = MAKER_TOOL_TYPE_AREA_INSPECTOR;
-        break;
-    } case PLAYER_ACTION_TYPE_MT_CHANGE_SPEED: {
-        toolToRun = MAKER_TOOL_TYPE_CHANGE_SPEED;
-        unsigned char settingIdx = getMakerToolSettingIdx();
-        args.push_back(f2s(changeSpeedSettings[settingIdx]));
+    } case PLAYER_ACTION_TYPE_MT_CONTROL_CAM: {
+        toolToRun = MAKER_TOOL_TYPE_CONTROL_CAM;
+        args.push_back(
+            mod1 ?
+            enumGetName(
+                makerToolControlCamActionINames,
+                MAKER_TOOL_CONTROL_CAM_ACTION_FREEZE
+            ) :
+            enumGetName(
+                makerToolControlCamActionINames,
+                MAKER_TOOL_CONTROL_CAM_ACTION_MODE
+            )
+        );
         break;
     } case PLAYER_ACTION_TYPE_MT_DELETE_MOB: {
         toolToRun = MAKER_TOOL_TYPE_DELETE_MOB;
@@ -934,73 +937,71 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
             )
         );
         break;
-    } case PLAYER_ACTION_TYPE_MT_FREE_CAM: {
-        toolToRun = MAKER_TOOL_TYPE_FREE_CAM;
-        args.push_back(
-            mod1 ?
-            enumGetName(
-                makerToolFreeCamActionINames,
-                MAKER_TOOL_FREE_CAM_ACTION_FREEZE
-            ) :
-            enumGetName(
-                makerToolFreeCamActionINames,
-                MAKER_TOOL_FREE_CAM_ACTION_MODE
-            )
-        );
-        break;
-    } case PLAYER_ACTION_TYPE_MT_GEOMETRY_INFO: {
-        toolToRun = MAKER_TOOL_TYPE_GEOMETRY_INFO;
-        break;
     } case PLAYER_ACTION_TYPE_MT_HIDE_HUD: {
         toolToRun = MAKER_TOOL_TYPE_HIDE_HUD;
         break;
     } case PLAYER_ACTION_TYPE_MT_HURT_MOB: {
         toolToRun = MAKER_TOOL_TYPE_HURT_MOB;
         unsigned char settingIdx = getMakerToolSettingIdx();
-        args.push_back(f2s(mobHurtingSettings[settingIdx]));
+        args.push_back(f2s(hurtMobSettings[settingIdx]));
         break;
-    } case PLAYER_ACTION_TYPE_MT_MOB_INSPECTOR: {
-        toolToRun = MAKER_TOOL_TYPE_MOB_INSPECTOR;
+    } case PLAYER_ACTION_TYPE_MT_INSPECT_AREA: {
+        toolToRun = MAKER_TOOL_TYPE_INSPECT_AREA;
+        break;
+    } case PLAYER_ACTION_TYPE_MT_INSPECT_MOB: {
+        toolToRun = MAKER_TOOL_TYPE_INSPECT_MOB;
         args.push_back(
             mod1 ?
             enumGetName(
-                makerToolMobInspectorActionINames,
-                MAKER_TOOL_MOB_INSPECTOR_ACTION_ITERATE
+                makerToolInspectMobActionINames,
+                MAKER_TOOL_INSPECT_MOB_ACTION_ITERATE
             ) :
             mod2 ?
             enumGetName(
-                makerToolMobInspectorActionINames,
-                MAKER_TOOL_MOB_INSPECTOR_ACTION_STOP
+                makerToolInspectMobActionINames,
+                MAKER_TOOL_INSPECT_MOB_ACTION_STOP
             ) :
             enumGetName(
-                makerToolMobInspectorActionINames,
-                MAKER_TOOL_MOB_INSPECTOR_ACTION_GET_CLOSEST
+                makerToolInspectMobActionINames,
+                MAKER_TOOL_INSPECT_MOB_ACTION_GET_CLOSEST
             )
         );
         break;
-    } case PLAYER_ACTION_TYPE_MT_NEW_PIKMIN: {
-        toolToRun = MAKER_TOOL_TYPE_NEW_PIKMIN;
+    } case PLAYER_ACTION_TYPE_MT_SAVE_AREA_IMAGE: {
+        toolToRun = MAKER_TOOL_TYPE_SAVE_AREA_IMAGE;
+        unsigned char settingIdx = getMakerToolSettingIdx();
+        args.push_back(i2s(saveAreaImageSettings[settingIdx].size));
+        args.push_back(i2s(saveAreaImageSettings[settingIdx].padding));
+        args.push_back(b2s(saveAreaImageSettings[settingIdx].shadows));
+        break;
+    } case PLAYER_ACTION_TYPE_MT_SET_SPEED: {
+        toolToRun = MAKER_TOOL_TYPE_SET_SPEED;
+        unsigned char settingIdx = getMakerToolSettingIdx();
+        args.push_back(f2s(setSpeedSettings[settingIdx]));
+        break;
+    } case PLAYER_ACTION_TYPE_MT_SHOW_COLLISION: {
+        toolToRun = MAKER_TOOL_TYPE_SHOW_COLLISION;
+        break;
+    } case PLAYER_ACTION_TYPE_MT_SHOW_GEOMETRY_INFO: {
+        toolToRun = MAKER_TOOL_TYPE_SHOW_GEOMETRY_INFO;
+        break;
+    } case PLAYER_ACTION_TYPE_MT_SHOW_HITBOXES: {
+        toolToRun = MAKER_TOOL_TYPE_SHOW_HITBOXES;
+        break;
+    } case PLAYER_ACTION_TYPE_MT_SHOW_PATH_INFO: {
+        toolToRun = MAKER_TOOL_TYPE_SHOW_PATH_INFO;
+        break;
+    } case PLAYER_ACTION_TYPE_MT_SHOW_REACHES: {
+        toolToRun = MAKER_TOOL_TYPE_SHOW_REACHES;
+        break;
+    } case PLAYER_ACTION_TYPE_MT_SPAWN_PIKMIN: {
+        toolToRun = MAKER_TOOL_TYPE_SPAWN_PIKMIN;
         args.push_back(mod1 ? "same" : "next");
         args.push_back(
             mod2 ?
             enumGetName(maturityINames, MATURITY_LEAF) :
             enumGetName(maturityINames, MATURITY_FLOWER)
         );
-        break;
-    } case PLAYER_ACTION_TYPE_MT_NEW_REMINDER: {
-        toolToRun = MAKER_TOOL_TYPE_NEW_REMINDER;
-        break;
-    } case PLAYER_ACTION_TYPE_MT_PATH_INFO: {
-        toolToRun = MAKER_TOOL_TYPE_PATH_INFO;
-        break;
-    } case PLAYER_ACTION_TYPE_MT_SHOW_COLLISION: {
-        toolToRun = MAKER_TOOL_TYPE_SHOW_COLLISION;
-        break;
-    } case PLAYER_ACTION_TYPE_MT_SHOW_HITBOXES: {
-        toolToRun = MAKER_TOOL_TYPE_SHOW_HITBOXES;
-        break;
-    } case PLAYER_ACTION_TYPE_MT_SHOW_REACHES: {
-        toolToRun = MAKER_TOOL_TYPE_SHOW_REACHES;
         break;
     } case PLAYER_ACTION_TYPE_MT_TELEPORT: {
         toolToRun = MAKER_TOOL_TYPE_TELEPORT;
@@ -1043,7 +1044,7 @@ bool MakerTools::handleGeneralPlayerAction(const Inpution::Action& action) {
         game.console.toggleTerminal();
         break;
         
-    } case PLAYER_ACTION_TYPE_MT_AUTO_START: {
+    } case PLAYER_ACTION_TYPE_MT_SET_AUTO_START: {
 
         if(action.value < 0.5f) return false;
         
@@ -1091,7 +1092,7 @@ void MakerTools::loadFromDataNode(DataNode* node) {
         game.controls.loadBindsFromDataNode(controlsNode, 0);
     }
     
-    //Area image.
+    //Save area image.
     {
         DataNode* areaImageNode = node->getChildByName("area_image");
         DataNode* settingsNodes[3] {
@@ -1102,13 +1103,13 @@ void MakerTools::loadFromDataNode(DataNode* node) {
         for(unsigned char s = 0; s < 3; s++) {
             ReaderSetter aRS(settingsNodes[s]);
             
-            aRS.set("size", areaImageSettings[s].size);
-            aRS.set("padding", areaImageSettings[s].padding);
-            aRS.set("shadows", areaImageSettings[s].shadows);
+            aRS.set("size", saveAreaImageSettings[s].size);
+            aRS.set("padding", saveAreaImageSettings[s].padding);
+            aRS.set("shadows", saveAreaImageSettings[s].shadows);
         }
     }
     
-    //Auto start.
+    //Set auto-start.
     {
         DataNode* autoStartNode = node->getChildByName("auto_start");
         ReaderSetter aRS(autoStartNode);
@@ -1117,7 +1118,7 @@ void MakerTools::loadFromDataNode(DataNode* node) {
         aRS.set("option", autoStartOption);
     }
     
-    //Change speed.
+    //Set speed.
     {
         DataNode* changeSpeedNode = node->getChildByName("change_speed");
         DataNode* settingsNodes[3] {
@@ -1128,7 +1129,7 @@ void MakerTools::loadFromDataNode(DataNode* node) {
         for(unsigned char s = 0; s < 3; s++) {
             ReaderSetter sRS(settingsNodes[s]);
             
-            sRS.set("multiplier", changeSpeedSettings[s]);
+            sRS.set("multiplier", setSpeedSettings[s]);
         }
     }
     
@@ -1144,9 +1145,9 @@ void MakerTools::loadFromDataNode(DataNode* node) {
             ReaderSetter hRS(settingsNodes[s]);
             
             DataNode* percentageNode = nullptr;
-            hRS.set("percentage", mobHurtingSettings[s], &percentageNode);
+            hRS.set("percentage", hurtMobSettings[s], &percentageNode);
             if(percentageNode) {
-                mobHurtingSettings[s] /= 100.0f;
+                hurtMobSettings[s] /= 100.0f;
             }
         }
     }
@@ -1166,17 +1167,17 @@ void MakerTools::loadFromDataNode(DataNode* node) {
  * tool affecting the experience.
  */
 void MakerTools::resetForGameplay() {
-    changeSpeed = false;
-    frameAdvanceMode = false;
-    collision = false;
-    geometryInfo = false;
-    hitboxes = false;
-    hud = true;
+    changingSpeed = false;
+    inFrameAdvanceMode = false;
+    showingCollision = false;
+    showingGeometryInfo = false;
+    showingHitboxes = false;
+    showingHud = true;
     inspectingArea = false;
     inspectedMob = nullptr;
     lastPikminType = nullptr;
-    pathInfo = false;
-    reaches = false;
+    showingPathInfo = false;
+    showingReaches = false;
     
     usedHelpingTools = false;
     allowedInPlayNow = false;
@@ -1271,7 +1272,7 @@ void MakerTools::saveToDataNode(DataNode* node) {
     //General.
     mGW.write("enabled", enabled);
     
-    //Area image.
+    //Save area image.
     {
         DataNode* areaImageNode = node->addNew("area_image");
         DataNode* settingsNodes[3] {
@@ -1282,13 +1283,13 @@ void MakerTools::saveToDataNode(DataNode* node) {
         for(unsigned char s = 0; s < 3; s++) {
             GetterWriter sGW(settingsNodes[s]);
             
-            sGW.write("size", areaImageSettings[s].size);
-            sGW.write("padding", areaImageSettings[s].padding);
-            sGW.write("shadows", areaImageSettings[s].shadows);
+            sGW.write("size", saveAreaImageSettings[s].size);
+            sGW.write("padding", saveAreaImageSettings[s].padding);
+            sGW.write("shadows", saveAreaImageSettings[s].shadows);
         }
     }
     
-    //Auto start.
+    //Set auto-start.
     {
         DataNode* autoStartNode = node->addNew("auto_start");
         GetterWriter aGW(autoStartNode);
@@ -1308,7 +1309,7 @@ void MakerTools::saveToDataNode(DataNode* node) {
         for(unsigned char s = 0; s < 3; s++) {
             GetterWriter sGW(settingsNodes[s]);
             
-            sGW.write("multiplier", changeSpeedSettings[s]);
+            sGW.write("multiplier", setSpeedSettings[s]);
         }
     }
     
@@ -1323,7 +1324,7 @@ void MakerTools::saveToDataNode(DataNode* node) {
         for(unsigned char s = 0; s < 3; s++) {
             GetterWriter sGW(settingsNodes[s]);
             
-            sGW.write("percentage", mobHurtingSettings[s] * 100.0f);
+            sGW.write("percentage", hurtMobSettings[s] * 100.0f);
         }
     }
     

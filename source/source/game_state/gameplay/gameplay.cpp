@@ -93,17 +93,19 @@ const float CAMERA_SMOOTHNESS_FACTOR = 4.5f;
 //Alpha of the collision bubbles in the maker tool [0 - 1].
 const float COLLISION_ALPHA = 0.75f;
 
+//Change in camera speed in control cam mode,
+//in zoom pixels per second per second.
+extern const float CONTROL_CAM_ACCELERATION = 1750.0f;
+
+//Maximum speed the camera can move in control cam mode,
+//in zoom pixels per second.
+extern const float CONTROL_CAM_MAX_SPEED = 500.0f;
+
 //If an enemy is this close to the active leader, turn on the song's enemy mix.
 const float ENEMY_MIX_DISTANCE = 150.0f;
 
 //Width and height of the fog bitmap.
 const int FOG_BITMAP_SIZE = 128;
-
-//Change in camera speed in free cam mode, in zoom pixels per second per second.
-extern const float FREE_CAM_ACCELERATION = 1750.0f;
-
-//Maximum speed the camera can move in free cam mode, in zoom pixels per second.
-extern const float FREE_CAM_MAX_SPEED = 500.0f;
 
 //When a leader lands, this is the maximum size of the particles.
 extern const float LEADER_LAND_PART_MAX_SIZE = 64.0f;
@@ -441,9 +443,9 @@ void GameplayState::doLogic() {
     
     float regularDeltaT = game.deltaT;
     
-    if(game.makerTools.changeSpeed) {
-        game.deltaT *= game.makerTools.changeSpeedMultiplier;
-    } else if(game.makerTools.frameAdvanceMode) {
+    if(game.makerTools.changingSpeed) {
+        game.deltaT *= game.makerTools.changedSpeedMultiplier;
+    } else if(game.makerTools.inFrameAdvanceMode) {
         if(game.makerTools.mustAdvanceOneFrame) {
             game.makerTools.mustAdvanceOneFrame = false;
             game.deltaT = 1.0f / game.options.advanced.targetFps;

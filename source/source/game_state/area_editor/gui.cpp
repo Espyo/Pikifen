@@ -5370,7 +5370,7 @@ void AreaEditor::processGuiPanelReview() {
         }
         setTooltip(
             "Create a new reminder for yourself.\n"
-            "Reminders are saved in your user data, not in the area."
+            "Reminders are saved in your user data, not in the area's data."
         );
         
         //Delete reminder button.
