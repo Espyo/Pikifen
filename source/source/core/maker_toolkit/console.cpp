@@ -82,11 +82,10 @@ const float VISIBILITY_CHANGE_SPEED = 3.5f;
 
 
 /**
- * @brief Clears everything.
+ * @brief Clears the output of the console terminal.
  */
-void MakerConsole::clear() {
+void MakerConsole::clearTerminal(bool instant) {
     terminal.clear();
-    notifier.clear();
 }
 
 
@@ -136,6 +135,15 @@ bool MakerConsole::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
 void MakerConsole::openTerminal(bool instant) {
     terminal.open(instant);
     notifier.close(instant);
+}
+
+
+/**
+ * @brief Reset everything.
+ */
+void MakerConsole::reset() {
+    terminal.reset();
+    notifier.reset();
 }
 
 
@@ -197,17 +205,6 @@ void MakerConsole::write(
 
 #pragma endregion
 #pragma region Maker console notifier
-
-
-/**
- * @brief Clears the data of the notifier.
- */
-void MakerConsoleNotifier::clear() {
-    text.clear();
-    visibilityState = OPEN_CLOSE_STATE_CLOSED;
-    visibility = 0.0f;
-    timeLeft = 0.0f;
-}
 
 
 /**
@@ -375,6 +372,17 @@ void MakerConsoleNotifier::open(bool instant) {
 
 
 /**
+ * @brief Resets the data of the notifier.
+ */
+void MakerConsoleNotifier::reset() {
+    text.clear();
+    visibilityState = OPEN_CLOSE_STATE_CLOSED;
+    visibility = 0.0f;
+    timeLeft = 0.0f;
+}
+
+
+/**
  * @brief Ticks time by one frame of logic.
  *
  * @param deltaT How long the frame's tick is, in seconds.
@@ -488,10 +496,6 @@ void MakerConsoleTerminal::clear() {
     output.clear();
     outputTimestamps.clear();
     outputLevels.clear();
-    scroll = 0;
-    input.reset();
-    visibilityState = OPEN_CLOSE_STATE_CLOSED;
-    visibility = 0.0f;
 }
 
 
@@ -969,6 +973,18 @@ void MakerConsoleTerminal::open(bool instant) {
         break;
     }
     }
+}
+
+
+/**
+ * @brief Resets the terminal.
+ */
+void MakerConsoleTerminal::reset() {
+    scroll = 0;
+    clear();
+    input.reset();
+    visibilityState = OPEN_CLOSE_STATE_CLOSED;
+    visibility = 0.0f;
 }
 
 

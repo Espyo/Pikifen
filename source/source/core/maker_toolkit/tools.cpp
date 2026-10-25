@@ -122,6 +122,22 @@ bool MakerToolRunners::changeSpeed(
 
 
 /**
+ * @brief Code for the clear terminal output maker tool command.
+ *
+ * @param mgr Maker tool manager.
+ * @param args Arguments passed to the command.
+ * @return Whether it succeeded.
+ */
+bool MakerToolRunners::clear(
+    MakerTools& mgr, const vector<string>& args
+) {
+    game.console.clearTerminal();
+    
+    return true;
+}
+
+
+/**
  * @brief Code for the delete mob maker tool command.
  *
  * @param mgr Maker tool manager.
@@ -253,6 +269,33 @@ bool MakerToolRunners::geometryInfo(
         mgr.toolStartCursor =
             game.states.gameplay->players[0].view.mouseCursorWorldPos;
     }
+    
+    return true;
+}
+
+
+/**
+ * @brief Code for the help maker tool command.
+ *
+ * @param mgr Maker tool manager.
+ * @param args Arguments passed to the command.
+ * @return Whether it succeeded.
+ */
+bool MakerToolRunners::help(
+    MakerTools& mgr, const vector<string>& args
+) {
+    string list;
+    forIdx(t, game.makerTools.types) {
+        MakerToolType* tPtr = &game.makerTools.types[t];
+        if(tPtr->type == MAKER_TOOL_TYPE_NONE) continue;
+        if(!list.empty()) list += ", ";
+        list += tPtr->name;
+    }
+    string text =
+        "List of maker tools:\n" +
+        list +
+        "\nFor more information, see the included manual.";
+    game.console.write(LOG_LEVEL_INFO, text);
     
     return true;
 }

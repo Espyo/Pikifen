@@ -45,6 +45,9 @@ enum MAKER_TOOL_TYPE {
     //Change gameplay speed.
     MAKER_TOOL_TYPE_CHANGE_SPEED,
     
+    //Clear the terminal's output.
+    MAKER_TOOL_TYPE_CLEAR,
+    
     //Delete mob.
     MAKER_TOOL_TYPE_DELETE_MOB,
     
@@ -56,6 +59,9 @@ enum MAKER_TOOL_TYPE {
     
     //Free camera.
     MAKER_TOOL_TYPE_FREE_CAM,
+    
+    //Help.
+    MAKER_TOOL_TYPE_HELP,
     
     //Geometry info beneath mouse cursor.
     MAKER_TOOL_TYPE_GEOMETRY_INFO,
@@ -380,11 +386,13 @@ namespace MakerToolRunners {
 bool areaImage(MakerTools& mgr, const vector<string>& args);
 bool areaInspector(MakerTools& mgr, const vector<string>& args);
 bool changeSpeed(MakerTools& mgr, const vector<string>& args);
+bool clear(MakerTools& mgr, const vector<string>& args);
 bool deleteMob(MakerTools& mgr, const vector<string>& args);
 bool fillInventory(MakerTools& mgr, const vector<string>& args);
 bool frameAdvance(MakerTools& mgr, const vector<string>& args);
 bool freeCam(MakerTools& mgr, const vector<string>& args);
 bool geometryInfo(MakerTools& mgr, const vector<string>& args);
+bool help(MakerTools& mgr, const vector<string>& args);
 bool hideHud(MakerTools& mgr, const vector<string>& args);
 bool hurtMob(MakerTools& mgr, const vector<string>& args);
 bool mobInspector(MakerTools& mgr, const vector<string>& args);

@@ -14,17 +14,6 @@
 
 
 /**
- * @brief Clears the data of the display.
- */
-void MakerDisplay::clear() {
-    text.clear();
-    visibilityState = OPEN_CLOSE_STATE_CLOSED;
-    visibility = 0.0f;
-    timeLeft = 0.0f;
-}
-
-
-/**
  * @brief Closes the display,
  * gradually hiding it unless specified otherwise.
  *
@@ -214,6 +203,17 @@ void MakerDisplay::open(bool instant) {
         break;
     }
     }
+}
+
+
+/**
+ * @brief Resets the data of the display.
+ */
+void MakerDisplay::reset() {
+    text.clear();
+    visibilityState = OPEN_CLOSE_STATE_CLOSED;
+    visibility = 0.0f;
+    timeLeft = 0.0f;
 }
 
 
