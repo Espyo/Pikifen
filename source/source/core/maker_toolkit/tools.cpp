@@ -655,6 +655,46 @@ bool MakerToolRunners::showReaches(
 
 
 /**
+ * @brief Code for the spawn mob maker tool command.
+ *
+ * @param mgr Maker tool manager.
+ * @param args Arguments passed to the command.
+ * @return Whether it succeeded.
+ */
+bool MakerToolRunners::spawnMob(
+    MakerTools& mgr, const vector<string>& args
+) {
+    //Get the arguments.
+    const string& typeArg = args[0];
+    const string& amountArg = args[1];
+    
+    //Main logic.
+    size_t amount = std::clamp(s2i(amountArg), 1, 100);
+    
+    for(size_t m = 0; m < amount; m++) {
+        MobType* newMobType = game.mobCategories.findMobType(typeArg);
+        
+        if(!newMobType) {
+            game.console.write(
+                LOG_LEVEL_ERROR,
+                "Unknown mob type \"" + typeArg + "\"!"
+            );
+            return false;
+        }
+        
+        createMob(
+            newMobType->category,
+            game.states.gameplay->players[0].view.mouseCursorWorldPos,
+            newMobType, 0.0f, ""
+        );
+        
+    }
+    
+    return true;
+}
+
+
+/**
  * @brief Code for the spawn Pikmin maker tool command.
  *
  * @param mgr Maker tool manager.

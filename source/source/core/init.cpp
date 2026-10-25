@@ -1654,6 +1654,22 @@ void initMakerToolTypes() {
         "inspected mob."
     );
     
+    //Spawn mob.
+    queueParam("type", ptString, 0, "");
+    params.back().description =
+        "Internal name of the type of mob to spawn.";
+    queueParam("amount", ptInt, pfOpt, "1");
+    params.back().minValue = 1.0f;
+    params.back().description =
+        "Amount to spawn.";
+        
+    commitTool(
+        MAKER_TOOL_TYPE_SPAWN_MOB,
+        "spawn_mob", true,
+        MakerToolRunners::spawnMob,
+        "Spawns a new mob under the mouse cursor."
+    );
+    
     //Spawn Pikmin.
     queueParam("type", ptString, pfOpt, "next");
     params.back().description =
