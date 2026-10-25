@@ -61,6 +61,7 @@ Next tasks (roughly sorted most important first)
             Rename all tools to be verbs
             Maybe the button-based maker tool activations could be made into commands sent to the console, and the player could add custom binds so they could customize calling the maker tools to be however they want
         A tool to spawn any type of mob?
+        Improve the existing tools, like allowing the Pikmin spawner tool to spawn a certain amount of them at once
         New Pikmin maker tool should probably spawn them in Pikmin order, not alphabetical
         The free camera maker tool should definitely be its own item, including the ability to pause and unpause gameplay, control the zoom level, and toggle the HUD
         Add a "log" maker tool, which works just like the "log" (formerly "print") script action. Maybe add other maker tools that are just the same as some of the utility script actions

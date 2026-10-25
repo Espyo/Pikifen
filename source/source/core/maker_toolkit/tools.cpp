@@ -37,20 +37,22 @@ const float PLAY_CONFIRMATION_TIMER = 1.0f;
 bool MakerToolRunners::areaImage(
     MakerTools& mgr, const vector<string>& args
 ) {
-    int size = s2i(args[0]);
-    int padding = s2i(args[1]);
-    bool treeShadows = s2b(args[2]);
+    //Get the arguments.
+    const string& sizeArg = args[0];
+    const string& paddingArg = args[1];
+    const string& shadowsArg = args[2];
     
+    //Main logic.
     ALLEGRO_BITMAP* bmp =
         game.states.gameplay->drawToBitmap(
-            size, padding, treeShadows
+            s2i(sizeArg), s2i(paddingArg), s2b(shadowsArg)
         );
     string fileName =
         FOLDER_PATHS_FROM_ROOT::USER_DATA + "/area_" +
         game.curArea->manifest->internalName +
         "_" + getCurrentTime(true) + ".png";
         
-    if(!al_save_bitmap(fileName.c_str(), bmp)) {
+    if(!bmp || !al_save_bitmap(fileName.c_str(), bmp)) {
         game.log.write(
             LOG_LEVEL_ERROR,
             "Could not save the area onto an image,"
@@ -77,6 +79,7 @@ bool MakerToolRunners::areaImage(
 bool MakerToolRunners::areaInspector(
     MakerTools& mgr, const vector<string>& args
 ) {
+    //Main logic.
     mgr.inspectingArea = !mgr.inspectingArea;
     if(!mgr.inspectingArea) {
         game.makerDisplay.write("No longer inspecting area.", 5.0f);
@@ -96,7 +99,11 @@ bool MakerToolRunners::areaInspector(
 bool MakerToolRunners::changeSpeed(
     MakerTools& mgr, const vector<string>& args
 ) {
-    float newMultiplier = s2f(args[0]);
+    //Get the arguments.
+    const string& multArg = args[0];
+    
+    //Main logic.
+    float newMultiplier = std::clamp((float) s2f(multArg), 0.001f, 100.0f);
     
     if(mgr.frameAdvanceMode) {
         mgr.frameAdvanceMode = false;
@@ -131,6 +138,7 @@ bool MakerToolRunners::changeSpeed(
 bool MakerToolRunners::clear(
     MakerTools& mgr, const vector<string>& args
 ) {
+    //Main logic.
     game.console.clearTerminal();
     
     return true;
@@ -147,6 +155,7 @@ bool MakerToolRunners::clear(
 bool MakerToolRunners::deleteMob(
     MakerTools& mgr, const vector<string>& args
 ) {
+    //Main logic.
     if(mgr.inspectedMob) {
         mgr.inspectedMob->toDelete = true;
     } else {
@@ -168,7 +177,11 @@ bool MakerToolRunners::deleteMob(
 bool MakerToolRunners::fillInventory(
     MakerTools& mgr, const vector<string>& args
 ) {
-    size_t newAmount = s2i(args[0]);
+    //Get the arguments.
+    const string& amountArg = args[0];
+    
+    //Main logic.
+    size_t newAmount = std::min(s2i(amountArg), 9999);
     
     for(size_t t = 0; t < MAX_PLAYER_TEAMS; t++) {
         PlayerTeam* tPtr = &game.states.gameplay->playerTeams[t];
@@ -191,9 +204,24 @@ bool MakerToolRunners::fillInventory(
 bool MakerToolRunners::frameAdvance(
     MakerTools& mgr, const vector<string>& args
 ) {
+    //Get the arguments.
+    const string& actionArg = args[0];
+    
+    //Main logic.
+    bool actionFound = false;
     MAKER_TOOL_FRAME_ADVANCE_ACTION action =
-        enumGetValue(makerToolFrameAdvanceActionINames, args[0]);
+        enumGetValue(
+            makerToolFrameAdvanceActionINames, actionArg, &actionFound
+        );
         
+    if(!actionFound) {
+        game.console.write(
+            LOG_LEVEL_ERROR,
+            "Unknown action type \"" + actionArg + "\"!"
+        );
+        return false;
+    }
+    
     switch(action) {
     case MAKER_TOOL_FRAME_ADVANCE_ACTION_ADVANCE: {
         if(!mgr.frameAdvanceMode) {
@@ -223,9 +251,22 @@ bool MakerToolRunners::frameAdvance(
 bool MakerToolRunners::freeCam(
     MakerTools& mgr, const vector<string>& args
 ) {
+    //Get the arguments.
+    const string& actionArg = args[0];
+    
+    //Main logic.
+    bool actionFound = false;
     MAKER_TOOL_FREE_CAM_ACTION action =
-        enumGetValue(makerToolFreeCamActionINames, args[0]);
+        enumGetValue(makerToolFreeCamActionINames, actionArg, &actionFound);
         
+    if(!actionFound) {
+        game.console.write(
+            LOG_LEVEL_ERROR,
+            "Unknown action type \"" + actionArg + "\"!"
+        );
+        return false;
+    }
+    
     bool wasControllingLeader = !mgr.freeCamMode || mgr.freeCamFrozen;
     
     switch(action) {
@@ -264,6 +305,7 @@ bool MakerToolRunners::freeCam(
 bool MakerToolRunners::geometryInfo(
     MakerTools& mgr, const vector<string>& args
 ) {
+    //Main logic.
     mgr.geometryInfo = !mgr.geometryInfo;
     if(mgr.geometryInfo) {
         mgr.toolStartCursor =
@@ -284,6 +326,7 @@ bool MakerToolRunners::geometryInfo(
 bool MakerToolRunners::help(
     MakerTools& mgr, const vector<string>& args
 ) {
+    //Main logic.
     string list;
     forIdx(t, game.makerTools.types) {
         MakerToolType* tPtr = &game.makerTools.types[t];
@@ -311,6 +354,7 @@ bool MakerToolRunners::help(
 bool MakerToolRunners::hideHud(
     MakerTools& mgr, const vector<string>& args
 ) {
+    //Main logic.
     mgr.hud = !mgr.hud;
     
     return true;
@@ -327,8 +371,10 @@ bool MakerToolRunners::hideHud(
 bool MakerToolRunners::hurtMob(
     MakerTools& mgr, const vector<string>& args
 ) {
-    float ratio = s2f(args[0]);
+    //Get the arguments.
+    const string& ratioArg = args[0];
     
+    //Main logic.
     Mob* m =
         getClosestMobToMouseCursor(
             game.states.gameplay->players[0].view, true
@@ -336,7 +382,7 @@ bool MakerToolRunners::hurtMob(
         
     if(!m) return false;
     
-    m->setHealth(true, true, -ratio);
+    m->setHealth(true, true, -s2f(ratioArg));
     
     return true;
 }
@@ -352,9 +398,24 @@ bool MakerToolRunners::hurtMob(
 bool MakerToolRunners::mobInspector(
     MakerTools& mgr, const vector<string>& args
 ) {
+    //Get the arguments.
+    const string& actionArg = args[0];
+    
+    //Main logic.
+    bool actionFound = false;
     MAKER_TOOL_MOB_INSPECTOR_ACTION action =
-        enumGetValue(makerToolMobInspectorActionINames, args[0]);
+        enumGetValue(
+            makerToolMobInspectorActionINames, actionArg, &actionFound
+        );
         
+    if(!actionFound) {
+        game.console.write(
+            LOG_LEVEL_ERROR,
+            "Unknown action type \"" + actionArg + "\"!"
+        );
+        return false;
+    }
+    
     Mob* prevInspectedMob = mgr.inspectedMob;
     Mob* m = nullptr;
     
@@ -399,8 +460,22 @@ bool MakerToolRunners::mobInspector(
 bool MakerToolRunners::newPikmin(
     MakerTools& mgr, const vector<string>& args
 ) {
-    string type = args[0];
-    MATURITY maturity = enumGetValue(maturityINames, args[1]);
+    //Get the arguments.
+    const string& typeArg = args[0];
+    const string& maturityArg = args[1];
+    
+    //Main logic.
+    bool maturityFound = false;
+    MATURITY maturity =
+        enumGetValue(maturityINames, maturityArg, &maturityFound);
+        
+    if(!maturityFound) {
+        game.console.write(
+            LOG_LEVEL_ERROR,
+            "Unknown maturity \"" + maturityArg + "\"!"
+        );
+        return false;
+    }
     
     if(
         game.states.gameplay->mobs.pikmin.size() >=
@@ -411,7 +486,7 @@ bool MakerToolRunners::newPikmin(
     
     PikminType* newPikminType = nullptr;
     
-    if(type == "same" && mgr.lastPikminType) {
+    if(typeArg == "same" && mgr.lastPikminType) {
         newPikminType = mgr.lastPikminType;
     } else {
         newPikminType =
@@ -451,6 +526,7 @@ bool MakerToolRunners::newPikmin(
 bool MakerToolRunners::newReminder(
     MakerTools& mgr, const vector<string>& args
 ) {
+    //Main logic.
     if(game.states.gameplay->isPaused()) return false;
     
     mgr.toolStartCursor =
@@ -505,6 +581,7 @@ bool MakerToolRunners::newReminder(
 bool MakerToolRunners::pathInfo(
     MakerTools& mgr, const vector<string>& args
 ) {
+    //Main logic.
     mgr.pathInfo = !mgr.pathInfo;
     
     return true;
@@ -521,6 +598,7 @@ bool MakerToolRunners::pathInfo(
 bool MakerToolRunners::setAutoStart(
     MakerTools& mgr, const vector<string>& args
 ) {
+    //Main logic.
     string curStateName = game.getCurStateName();
     
     if(curStateName == game.states.animationEd->getName()) {
@@ -579,6 +657,7 @@ bool MakerToolRunners::setAutoStart(
 bool MakerToolRunners::setSongPosNearLoop(
     MakerTools& mgr, const vector<string>& args
 ) {
+    //Main logic.
     game.audio.setSongPosNearLoop();
     
     return true;
@@ -595,6 +674,7 @@ bool MakerToolRunners::setSongPosNearLoop(
 bool MakerToolRunners::showCollision(
     MakerTools& mgr, const vector<string>& args
 ) {
+    //Main logic.
     mgr.collision = !mgr.collision;
     
     return true;
@@ -611,6 +691,7 @@ bool MakerToolRunners::showCollision(
 bool MakerToolRunners::showHitboxes(
     MakerTools& mgr, const vector<string>& args
 ) {
+    //Main logic.
     mgr.hitboxes = !mgr.hitboxes;
     
     return true;
@@ -627,6 +708,7 @@ bool MakerToolRunners::showHitboxes(
 bool MakerToolRunners::showReaches(
     MakerTools& mgr, const vector<string>& args
 ) {
+    //Main logic.
     mgr.reaches = !mgr.reaches;
     
     return true;
@@ -643,11 +725,13 @@ bool MakerToolRunners::showReaches(
 bool MakerToolRunners::teleport(
     MakerTools& mgr, const vector<string>& args
 ) {
-    bool useInspectedMob = s2b(args[0]);
-    bool leaveGroupMembersBehind = s2b(args[1]);
+    //Get the arguments.
+    const string& inspectedArg = args[0];
+    const string& leaveGroupArg = args[1];
     
+    //Main logic.
     Mob* mobToTeleport =
-        (useInspectedMob && mgr.inspectedMob) ?
+        (s2b(inspectedArg) && mgr.inspectedMob) ?
         mgr.inspectedMob :
         game.states.gameplay->players[0].leaderPtr;
         
@@ -667,7 +751,7 @@ bool MakerToolRunners::teleport(
         game.states.gameplay->players[0].view.cam.setPos(
             game.states.gameplay->players[0].view.mouseCursorWorldPos
         );
-        if(!leaveGroupMembersBehind) {
+        if(!s2b(leaveGroupArg)) {
             forIdx(p, mobToTeleport->group->members) {
                 mobToTeleport->group->members[p]->chase(
                     game.states.gameplay->
