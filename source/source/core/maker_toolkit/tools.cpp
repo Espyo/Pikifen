@@ -189,7 +189,7 @@ bool MakerToolRunners::fillInventory(
     const string& amountArg = args[0];
     
     //Main logic.
-    size_t newAmount = std::min(s2i(amountArg), 9999);
+    size_t newAmount = std::clamp(s2i(amountArg), 0, 9999);
     
     for(size_t t = 0; t < MAX_PLAYER_TEAMS; t++) {
         PlayerTeam* tPtr = &game.states.gameplay->playerTeams[t];
@@ -334,7 +334,7 @@ bool MakerToolRunners::inspectArea(
     //Main logic.
     mgr.inspectingArea = !mgr.inspectingArea;
     if(!mgr.inspectingArea) {
-        game.makerDisplay.write("No longer inspecting area.", 5.0f);
+        game.console.write(LOG_LEVEL_INFO, "No longer inspecting area.", 5.0f);
     }
     
     return true;
@@ -514,8 +514,12 @@ bool MakerToolRunners::setAutoStart(
 bool MakerToolRunners::setSongPosNearLoop(
     MakerTools& mgr, const vector<string>& args
 ) {
+    //Get the arguments.
+    const string& secondsArg = args[0];
+    
     //Main logic.
-    game.audio.setSongPosNearLoop();
+    float seconds = std::clamp((float) s2f(secondsArg), 0.0f, 9999.0f);
+    game.audio.setSongPosNearLoop(seconds);
     
     return true;
 }
@@ -662,9 +666,11 @@ bool MakerToolRunners::spawnPikmin(
 ) {
     //Get the arguments.
     const string& typeArg = args[0];
-    const string& maturityArg = args[1];
+    const string& amountArg = args[1];
+    const string& maturityArg = args[2];
     
     //Main logic.
+    size_t amount = std::clamp(s2i(amountArg), 1, 100);
     bool maturityFound = false;
     MATURITY maturity =
         enumGetValue(maturityINames, maturityArg, &maturityFound);
@@ -677,40 +683,64 @@ bool MakerToolRunners::spawnPikmin(
         return false;
     }
     
-    if(
-        game.states.gameplay->mobs.pikmin.size() >=
-        game.curArea->getMaxPikminInField()
-    ) {
-        return false;
-    }
-    
-    PikminType* newPikminType = nullptr;
-    
-    if(typeArg == "same" && mgr.lastPikminType) {
-        newPikminType = mgr.lastPikminType;
-    } else {
-        newPikminType =
-            game.content.mobTypes.list.pikmin.begin()->second;
-            
-        auto p = game.content.mobTypes.list.pikmin.begin();
-        for(; p != game.content.mobTypes.list.pikmin.end(); ++p) {
-            if(p->second == mgr.lastPikminType) {
-                ++p;
-                if(p != game.content.mobTypes.list.pikmin.end()) {
-                    newPikminType = p->second;
+    for(size_t p = 0; p < amount; p++) {
+        if(
+            game.states.gameplay->mobs.pikmin.size() >=
+            game.curArea->getMaxPikminInField()
+        ) {
+            return true;
+        }
+        
+        const auto getNextType =
+        [&mgr] () {
+            PikminType* result =
+                game.content.mobTypes.list.pikmin.begin()->second;
+            auto p = game.content.mobTypes.list.pikmin.begin();
+            for(; p != game.content.mobTypes.list.pikmin.end(); ++p) {
+                if(p->second == mgr.lastPikminType) {
+                    ++p;
+                    if(p != game.content.mobTypes.list.pikmin.end()) {
+                        result = p->second;
+                    }
+                    break;
                 }
-                break;
+            }
+            return result;
+        };
+        
+        PikminType* newPikminType = nullptr;
+        
+        if(typeArg == "same") {
+            if(mgr.lastPikminType) {
+                newPikminType = mgr.lastPikminType;
+            } else {
+                newPikminType = getNextType();
+            }
+        } else if(typeArg == "next") {
+            newPikminType = getNextType();
+        } else {
+            const auto it = game.content.mobTypes.list.pikmin.find(typeArg);
+            if(it != game.content.mobTypes.list.pikmin.end()) {
+                newPikminType = it->second;
+            } else {
+                game.console.write(
+                    LOG_LEVEL_ERROR,
+                    "Unknown Pikmin type \"" + typeArg + "\"!"
+                );
+                return false;
             }
         }
+        
         mgr.lastPikminType = newPikminType;
+        
+        createMob(
+            game.mobCategories.get(MOB_CATEGORY_PIKMIN),
+            game.states.gameplay->players[0].view.mouseCursorWorldPos,
+            newPikminType, 0,
+            "maturity=" + i2s(maturity)
+        );
+        
     }
-    
-    createMob(
-        game.mobCategories.get(MOB_CATEGORY_PIKMIN),
-        game.states.gameplay->players[0].view.mouseCursorWorldPos,
-        newPikminType, 0,
-        "maturity=" + i2s(maturity)
-    );
     
     return true;
 }
@@ -997,6 +1027,7 @@ bool MakerTools::handleGameplayPlayerAction(const Inpution::Action& action) {
     } case PLAYER_ACTION_TYPE_MT_SPAWN_PIKMIN: {
         toolToRun = MAKER_TOOL_TYPE_SPAWN_PIKMIN;
         args.push_back(mod1 ? "same" : "next");
+        args.push_back("1");
         args.push_back(
             mod2 ?
             enumGetName(maturityINames, MATURITY_LEAF) :

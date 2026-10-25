@@ -807,10 +807,12 @@ bool AudioManager::setCurrentSong(
 /**
  * @brief Sets the current position of all songs to be near the loop point.
  * This is helpful for when you want to test said loop point.
+ *
+ * @param seconds How many seconds before the loop point.
  */
-void AudioManager::setSongPosNearLoop() {
+void AudioManager::setSongPosNearLoop(float seconds) {
     for(auto s : game.content.songs.list) {
-        double pos = std::max(0.0, s.second.loopEnd - 4.0f);
+        double pos = std::max(0.0, s.second.loopEnd - seconds);
         al_seek_audio_stream_secs(s.second.mainTrack, pos);
         for(auto const& m : s.second.mixTracks) {
             al_seek_audio_stream_secs(m.second, pos);
