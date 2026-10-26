@@ -137,7 +137,7 @@ script {
 
     reviving {
         on_enter {
-			set_tangible true
+			set_tangible false
             set_timer $revival_time
         }
         on_timer {
