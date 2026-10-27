@@ -45,6 +45,14 @@ const float EXIT_MIN_SIZE = 32.0f;
 
 
 /**
+ * @brief Creates a mission's data.
+ */
+MissionData::MissionData() {
+    hudItems.insert(hudItems.begin(), 4, MissionHudItem());
+}
+
+
+/**
  * @brief Applies the given preset.
  * Provided it's not a custom preset, this overwrites what was there before.
  *
