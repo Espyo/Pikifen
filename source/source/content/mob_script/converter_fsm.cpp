@@ -199,16 +199,15 @@ void ConverterFsm::handleObjectTouch(
 void ConverterFsm::handlePikmin(ScriptVM* scriptVM, void* info1, void* info2) {
     Converter* conPtr = (Converter*) scriptVM->mob;
     Pikmin* pikPtr = (Pikmin*) info1;
-    
-
-    //Pikmin type checkpoint
-    bool match = (std::find(conPtr->acceptedTypes.begin(), conPtr->acceptedTypes.end(), pikPtr->pikType) != conPtr->acceptedTypes.end());
-    if (!conPtr->acceptedTypes.empty() && !match) return;
 
     if(conPtr->amountInBuffer == conPtr->conType->bufferSize) {
         //A Pikmin tried to sneak in in the middle of a conversion! Denied.
         return;
     }
+
+    //Pikmin type checkpoint.
+    bool match = (std::find(conPtr->conType->acceptedPikminTypes.begin(), conPtr->conType->acceptedPikminTypes.end(), pikPtr->pikType) != conPtr->conType->acceptedPikminTypes.end());
+    if (!conPtr->conType->acceptedPikminTypes.empty() && !match) return;
     
     conPtr->amountInBuffer++;
     if(

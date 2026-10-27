@@ -49,7 +49,6 @@ Converter::Converter(
     conType(type),
     inputPikminLeft(conType->totalInputPikmin),
     currentType(conType->availablePikminTypes[0]),
-    acceptedTypes(conType->acceptedPikminTypes),
     typeChangeTimer(conType->typeChangeInterval),
     autoConversionTimer(conType->autoConversionTimeout) {
     
