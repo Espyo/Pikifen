@@ -53,12 +53,15 @@ void ConverterType::loadCatProperties(DataNode* file) {
     ReaderSetter cRS(file);
     
     string pikminTypesStr;
+    string acceptedTypesStr;
     string typeAnimSuffixesStr;
     DataNode* pikminTypesNode = nullptr;
+    DataNode* acceptedTypesNode = nullptr;
     DataNode* typeAnimSuffixesNode = nullptr;
     
     cRS.set("auto_conversion_timeout", autoConversionTimeout);
     cRS.set("available_pikmin_types", pikminTypesStr, &pikminTypesNode);
+    cRS.set("accepted_pikmin_types", acceptedTypesStr, &acceptedTypesNode);
     cRS.set("buffer_size", bufferSize);
     cRS.set("pikmin_per_conversion", pikminPerConversion);
     cRS.set("same_type_counts_for_output", sameTypeCountsForOutput);
@@ -71,6 +74,9 @@ void ConverterType::loadCatProperties(DataNode* file) {
     MobCategory* pikCat = game.mobCategories.get(MOB_CATEGORY_PIKMIN);
     vector<string> pikminTypesStrs =
         semicolonListToVector(pikminTypesStr);
+
+    vector<string> acceptedTypesStrs =
+        semicolonListToVector(acceptedTypesStr);
         
     forIdx(t, pikminTypesStrs) {
         MobType* typePtr = pikCat->getType(pikminTypesStrs[t]);
@@ -82,6 +88,20 @@ void ConverterType::loadCatProperties(DataNode* file) {
                 LOG_LEVEL_ERROR,
                 "Unknown Pikmin type \"" + pikminTypesStrs[t] + "\"!",
                 pikminTypesNode
+            );
+        }
+    }
+
+    forIdx(t, acceptedTypesStrs) {
+        MobType* typePtr = pikCat->getType(acceptedTypesStrs[t]);
+
+        if (typePtr) {
+            acceptedPikminTypes.push_back((PikminType*)typePtr);
+        } else {
+            game.log.report(
+                LOG_LEVEL_ERROR,
+                "Unknown Pikmin type \"" + acceptedTypesStrs[t] + "\"!",
+                acceptedTypesNode
             );
         }
     }
