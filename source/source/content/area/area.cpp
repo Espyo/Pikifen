@@ -1705,13 +1705,7 @@ void Area::loadMainDataFromDataNode(
  *
  * @param node Data node to load from.
  */
-void Area::loadMissionDataFromDataNode(DataNode* node) {
-    mission.hudItems.clear();
-    mission.hudItems.insert(
-        mission.hudItems.begin(),
-        enumGetCount(missionHudItemIdNames), MissionHudItem()
-    );
-    
+void Area::loadMissionDataFromDataNode(DataNode* node) {  
     ReaderSetter mRS(node);
     string presetStr;
     string medalAwardModeStr;
