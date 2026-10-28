@@ -3274,7 +3274,7 @@ void PikminFsm::forgetGroupTask(ScriptVM* scriptVM, void* info1, void* info2) {
 void PikminFsm::forgetTool(ScriptVM* scriptVM, void* info1, void* info2) {
     if(!scriptVM->focusedMob) return;
     
-    if (scriptVM->focusedMob->type->category == MOB_CATEGORY_TOOLS) {
+    if (scriptVM->focusedMob->type->category->id == MOB_CATEGORY_TOOLS) {
         Tool* tooPtr = (Tool*)(scriptVM->focusedMob);
         tooPtr->reserved = nullptr;
     }
