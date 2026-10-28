@@ -206,7 +206,7 @@ void ConverterFsm::handlePikmin(ScriptVM* scriptVM, void* info1, void* info2) {
     }
 
     //Pikmin type checkpoint.
-    bool match = (std::find(conPtr->conType->acceptedPikminTypes.begin(), conPtr->conType->acceptedPikminTypes.end(), pikPtr->pikType) != conPtr->conType->acceptedPikminTypes.end());
+    bool match = (isInContainer(conPtr->conType->acceptedPikminTypes, pikPtr->pikType));
     if (!conPtr->conType->acceptedPikminTypes.empty() && !match) return;
     
     conPtr->amountInBuffer++;
