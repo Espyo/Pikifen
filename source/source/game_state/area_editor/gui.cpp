@@ -60,6 +60,36 @@ void AreaEditor::openLoadDialog() {
         );
     }
     
+    //Sort the items.
+    std::sort(
+        areas.begin(), areas.end(),
+    [] (const PickerItem & i1, const PickerItem & i2) {
+        if(i1.topCategory != i2.topCategory) {
+            ContentManifest* man1 = (ContentManifest*) i1.info;
+            ContentManifest* man2 = (ContentManifest*) i2.info;
+            //Base category takes priority.
+            //Otherwise sort categories alphabetically.
+            if(man1->pack == "base") {
+                return true;
+            } else if(man2->pack == "Base") {
+                return false;
+            } else {
+                return man1->pack < man2->pack;
+            }
+        } else if(i1.secCategory != i2.secCategory) {
+            //Simple areas take priority.
+            if(i1.secCategory == "Simple") {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            //Sort by name.
+            return i1.name < i2.name;
+        }
+    }
+    );
+    
     loadDialogPicker = Picker(this);
     loadDialogPicker.items = areas;
     loadDialogPicker.pickCallback =
