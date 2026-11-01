@@ -45,10 +45,13 @@ const float EXIT_MIN_SIZE = 32.0f;
 
 
 /**
- * @brief Creates a mission's data.
+ * @brief Constructs a new mission data object.
  */
 MissionData::MissionData() {
-    hudItems.insert(hudItems.begin(), enumGetCount(missionHudItemIdNames), MissionHudItem());
+    hudItems.insert(
+        hudItems.begin(), enumGetCount(missionHudItemIdNames),
+        MissionHudItem()
+    );
 }
 
 
@@ -664,7 +667,10 @@ void MissionData::reset() {
     endConds.clear();
     mobGroups.clear();
     hudItems.clear();
-    hudItems.insert(hudItems.begin(), enumGetCount(missionHudItemIdNames), MissionHudItem());
+    hudItems.insert(
+        hudItems.begin(), enumGetCount(missionHudItemIdNames),
+        MissionHudItem()
+    );
     scoreCriteria.clear();
 }
 

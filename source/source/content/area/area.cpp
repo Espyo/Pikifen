@@ -1705,7 +1705,7 @@ void Area::loadMainDataFromDataNode(
  *
  * @param node Data node to load from.
  */
-void Area::loadMissionDataFromDataNode(DataNode* node) {  
+void Area::loadMissionDataFromDataNode(DataNode* node) {
     ReaderSetter mRS(node);
     string presetStr;
     string medalAwardModeStr;
