@@ -89,6 +89,9 @@ public:
     //List of Pikmin types it can convert to.
     vector<PikminType*> availablePikminTypes;
     
+    //List of Pikmin types it accepts as input.
+    vector<PikminType*> acceptedPikminTypes;
+    
     //How often it changes the current conversion type.
     float typeChangeInterval = 3.0f;
     

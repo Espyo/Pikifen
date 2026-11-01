@@ -199,11 +199,23 @@ void ConverterFsm::handlePikmin(ScriptVM* scriptVM, void* info1, void* info2) {
     Converter* conPtr = (Converter*) scriptVM->mob;
     Pikmin* pikPtr = (Pikmin*) info1;
     
+    //Check if the Pikmin is trying to sneak in in the middle of a conversion.
     if(conPtr->amountInBuffer == conPtr->conType->bufferSize) {
-        //A Pikmin tried to sneak in in the middle of a conversion! Denied.
         return;
     }
     
+    //Check if the converter can accept this type of Pikmin.
+    if(!conPtr->conType->acceptedPikminTypes.empty()) {
+        if(
+            !isInContainer(
+                conPtr->conType->acceptedPikminTypes, pikPtr->pikType
+            )
+        ) {
+            return;
+        }
+    }
+    
+    //Accepted!
     conPtr->amountInBuffer++;
     if(
         conPtr->conType->sameTypeCountsForOutput ||
@@ -216,6 +228,7 @@ void ConverterFsm::handlePikmin(ScriptVM* scriptVM, void* info1, void* info2) {
     
     pikPtr->toDelete = true;
     
+    //Close the converter if needed.
     if(
         conPtr->inputPikminLeft == 0 ||
         conPtr->amountInBuffer == conPtr->conType->bufferSize
@@ -223,6 +236,7 @@ void ConverterFsm::handlePikmin(ScriptVM* scriptVM, void* info1, void* info2) {
         conPtr->close();
     }
     
+    //Details.
     ParticleGenerator pg =
         standardParticleGenSetup(
             game.sysContentNames.parConverterInsertion, conPtr

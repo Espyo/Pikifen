@@ -116,4 +116,19 @@ mission_hud_items{
 		total_amount=-1
 	}
 }
-mission_score_criteria
+mission_score_criteria{
+	criterion{
+		type=Treasure collection points
+		index_param=0
+		points=1
+		affects_hud=true
+		custom_name
+	}
+	criterion{
+		type=Seconds left
+		index_param=0
+		points=10
+		affects_hud=false
+		custom_name
+	}
+}

@@ -52,11 +52,14 @@ AnimConversionVector ConverterType::getAnimConversions() const {
 void ConverterType::loadCatProperties(DataNode* file) {
     ReaderSetter cRS(file);
     
+    string acceptedTypesStr;
     string pikminTypesStr;
     string typeAnimSuffixesStr;
+    DataNode* acceptedTypesNode = nullptr;
     DataNode* pikminTypesNode = nullptr;
     DataNode* typeAnimSuffixesNode = nullptr;
     
+    cRS.set("accepted_pikmin_types", acceptedTypesStr, &acceptedTypesNode);
     cRS.set("auto_conversion_timeout", autoConversionTimeout);
     cRS.set("available_pikmin_types", pikminTypesStr, &pikminTypesNode);
     cRS.set("buffer_size", bufferSize);
@@ -72,6 +75,9 @@ void ConverterType::loadCatProperties(DataNode* file) {
     vector<string> pikminTypesStrs =
         semicolonListToVector(pikminTypesStr);
         
+    vector<string> acceptedTypesStrs =
+        semicolonListToVector(acceptedTypesStr);
+        
     forIdx(t, pikminTypesStrs) {
         MobType* typePtr = pikCat->getType(pikminTypesStrs[t]);
         
@@ -82,6 +88,20 @@ void ConverterType::loadCatProperties(DataNode* file) {
                 LOG_LEVEL_ERROR,
                 "Unknown Pikmin type \"" + pikminTypesStrs[t] + "\"!",
                 pikminTypesNode
+            );
+        }
+    }
+    
+    forIdx(t, acceptedTypesStrs) {
+        MobType* typePtr = pikCat->getType(acceptedTypesStrs[t]);
+        
+        if(typePtr) {
+            acceptedPikminTypes.push_back((PikminType*) typePtr);
+        } else {
+            game.log.report(
+                LOG_LEVEL_ERROR,
+                "Unknown Pikmin type \"" + acceptedTypesStrs[t] + "\"!",
+                acceptedTypesNode
             );
         }
     }

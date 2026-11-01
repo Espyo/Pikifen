@@ -358,6 +358,7 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.run(LeaderFsm::notifyPikminRelease);
             efc.run(LeaderFsm::release);
             efc.run(LeaderFsm::fallDownPit);
+            efc.changeState("active");
         }
     }
     
