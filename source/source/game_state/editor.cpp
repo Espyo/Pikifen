@@ -2203,7 +2203,7 @@ void Editor::openBaseContentWarningDialog(
         "Base pack warning",
         std::bind(&Editor::processGuiDialogBaseContent, this)
     );
-    dialogs.back()->customSize = Point(320, 0);
+    dialogs.back()->customSize = Point(350, 0);
     baseContentWarningDoPickCallback = doPickCallback;
 }
 

@@ -19,7 +19,7 @@ boss_song
 boss_victory_song
 weather=dripping
 day_time_start=990
-day_time_speed=120.0000
+day_time_speed=0.0000
 spray_amounts
 mission_preset=Custom
 mission_time_limit=0
