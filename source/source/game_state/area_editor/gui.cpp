@@ -333,6 +333,7 @@ void AreaEditor::processGuiDialogMissionPreset() {
     
     //New preset combobox.
     int presetInt = missionPresetDialogPreset;
+    ImGui::Spacer();
     if(
         ImGui::Combo(
             "New preset", &presetInt, enumGetNames(missionPresetNames), 15
@@ -341,6 +342,53 @@ void AreaEditor::processGuiDialogMissionPreset() {
         missionPresetDialogPreset = (MISSION_PRESET) presetInt;
     }
     setTooltip("The new preset.");
+    
+    //Preset description text.
+    string descriptionStr;
+    switch(missionPresetDialogPreset) {
+    case MISSION_PRESET_COLLECT_PIKMIN: {
+        descriptionStr =
+            "Collect as many Pikmin as you can within the time limit.\n"
+            "Medal depends on how many you grew.\n"
+            "(Like Pikmin's Challenge Mode.)";
+        break;
+    } case MISSION_PRESET_COLLECT_TREASURE: {
+        descriptionStr =
+            "Collect as many treasures as you can within the time limit.\n"
+            "Medal depends on how many got collected, platinum for all.\n"
+            "(Like Pikmin 3's Mission Mode.)";
+        break;
+    } case MISSION_PRESET_BATTLE_ENEMIES: {
+        descriptionStr =
+            "Defeat as many enemies as you can within the time limit.\n"
+            "Medal depends on how many were defeated, platinum for all.\n"
+            "(Like Pikmin 3's Mission Mode.)";
+        break;
+    } case MISSION_PRESET_DEFEAT_BOSSES: {
+        descriptionStr =
+            "Defeat the boss within the time limit.\n"
+            "Medal depends on time taken.\n"
+            "(Like Pikmin 3's Mission Mode.)";
+        break;
+    } case MISSION_PRESET_COLLECT_EVERYTHING: {
+        descriptionStr =
+            "Collect as many treasures and enemies as "
+            "you can within the time limit.\n"
+            "Medal depends on amount collected.\n"
+            "(Like Pikmin 4's Dandori Challenge.)";
+        break;
+    } case MISSION_PRESET_CUSTOM: {
+        break;
+    }
+    }
+    if(!descriptionStr.empty()) {
+        ImGui::BeginDisabled();
+        ImGui::BeginAlign();
+        ImGui::AlignNextText(descriptionStr.c_str());
+        ImGui::Text("%s", descriptionStr.c_str());
+        ImGui::EndAlign();
+        ImGui::EndDisabled();
+    }
     
     //Cancel button.
     ImGui::Spacer();
@@ -3653,7 +3701,7 @@ void AreaEditor::processGuiPanelMissionEssentials() {
                     &AreaEditor::processGuiDialogMissionPreset, this
                 )
             );
-            dialogs.back()->customSize = Point(400, 0);
+            dialogs.back()->customSize = Point(500, 0);
         }
         setTooltip(
             "Change the mission's preset.\n"
