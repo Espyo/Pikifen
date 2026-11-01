@@ -1128,7 +1128,8 @@ void drawMobShadow(const Mob* m, float deltaZ, float shadowStretch) {
     if(m->rectangularDim.x != 0) {
         shadowSize = m->rectangularDim * 1.1f;
     }
-    
+    float sunStrength = game.curArea->weatherCondition.getSunStrength();
+    if(sunStrength < 0.001f) return;
     if(shadowStretch <= 0) return;
     
     float diameter = shadowSize.x;
@@ -1152,7 +1153,7 @@ void drawMobShadow(const Mob* m, float deltaZ, float shadowStretch) {
             Point(m->center.x + shadowX + shadowW / 2, m->center.y),
             shadowSize,
             m->angle,
-            mapAlpha(255 * (1 - shadowStretch))
+            mapAlpha(255 * (1 - shadowStretch) * sunStrength)
         );
     } else {
         drawBitmap(
@@ -1160,7 +1161,7 @@ void drawMobShadow(const Mob* m, float deltaZ, float shadowStretch) {
             Point(m->center.x + shadowX + shadowW / 2, m->center.y),
             Point(shadowW, diameter),
             0,
-            mapAlpha(255 * (1 - shadowStretch))
+            mapAlpha(255 * (1 - shadowStretch) * sunStrength)
         );
     }
 }
