@@ -373,7 +373,7 @@ void GameplayState::drawCutsceneMessageBox() {
             1.0f -
             cutsceneMsgBox->transitionTimer / GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME
         );
-    int lineHeight = al_get_font_line_height(game.sysContent.fntStandard);
+    int lineHeight = (int)(game.winH * 0.05f);
     float boxHeight = lineHeight * 4;
     float offset =
         boxHeight * ease(transitionRatio, EASE_METHOD_IN);
@@ -450,15 +450,15 @@ void GameplayState::drawCutsceneMessageBox() {
             totalWidth += cutsceneMsgBox->tokensPerLine[lineIdx][t].width;
         }
         const float maxTextWidth =
-            (CUTSCENE_MSG_BOX::MARGIN + CUTSCENE_MSG_BOX::PADDING) * 2;
-        if(totalWidth > game.winW - maxTextWidth) {
-            xScale = (game.winW - maxTextWidth) / totalWidth;
+            game.winW - (CUTSCENE_MSG_BOX::MARGIN + CUTSCENE_MSG_BOX::PADDING) * 2;
+        if(totalWidth > maxTextWidth) {
+            xScale = maxTextWidth / totalWidth;
         }
         
         float caret =
             CUTSCENE_MSG_BOX::MARGIN + CUTSCENE_MSG_BOX::PADDING;
         float startY =
-            game.winH - lineHeight * 4 + CUTSCENE_MSG_BOX::PADDING + offset;
+            game.winH - (boxHeight - caret) + offset;
             
         forIdx(t, cutsceneMsgBox->tokensPerLine[lineIdx]) {
             tokenIdx++;
@@ -519,7 +519,7 @@ void GameplayState::drawCutsceneMessageBox() {
                     Point(x, y),
                     Point(tokenFinalWidth, LARGE_FLOAT),
                     mapAlpha(alpha * 255),
-                    ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_TOP, 0,
+                    ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER, 0,
                     Point(xScale, 1.0f)
                 );
                 break;
@@ -531,7 +531,7 @@ void GameplayState::drawCutsceneMessageBox() {
                     ),
                     Point(
                         x + tokenFinalWidth / 2.0f,
-                        y + lineHeight / 2.0f
+                        y
                     ),
                     Point(tokenFinalWidth, lineHeight),
                     true, game.sysContent.fntSlim, COLOR_WHITE, false

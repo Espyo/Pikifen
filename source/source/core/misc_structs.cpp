@@ -102,7 +102,7 @@ const float MARGIN = 16.0f;
 const float MISINPUT_PROTECTION_DURATION = 0.75f;
 
 //How many pixels of padding between the message box borders and text.
-const float PADDING = 8.0f;
+const float PADDING = 16.0f;
 
 //How long each token animates for when being shown.
 const float TOKEN_ANIM_DURATION = 0.5f;

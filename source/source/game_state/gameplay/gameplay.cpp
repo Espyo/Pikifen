@@ -229,19 +229,10 @@ CutsceneMessageBox::CutsceneMessageBox(
         tokens, game.sysContent.fntStandard, game.sysContent.fntSlim,
         al_get_font_line_height(game.sysContent.fntStandard), true
     );
-    
-    vector<StringToken> line;
-    forIdx(t, tokens) {
-        if(tokens[t].type == STRING_TOKEN_LINE_BREAK) {
-            tokensPerLine.push_back(line);
-            line.clear();
-        } else {
-            line.push_back(tokens[t]);
-        }
-    }
-    if(!line.empty()) {
-        tokensPerLine.push_back(line);
-    }
+    const float maxTextWidth =
+        game.winW - (CUTSCENE_MSG_BOX::MARGIN + CUTSCENE_MSG_BOX::PADDING) * 2;
+
+    tokensPerLine = splitLongStringWithTokens(tokens, maxTextWidth);
 }
 
 
