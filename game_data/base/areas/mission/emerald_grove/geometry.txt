@@ -4309,14 +4309,12 @@ edges{
 	e{
 		s=38 141
 		v=695 696
-		shadow_length=2.0000
 		smoothing_length=20.0000
 	}
 	e{
 		s=36 141
 		v=694 695
 		shadow_length=2.0000
-		smoothing_length=20.0000
 	}
 	e{
 		s=143 142
@@ -4326,14 +4324,12 @@ edges{
 	e{
 		s=44 141
 		v=697 694
-		shadow_length=2.0000
 		smoothing_length=20.0000
 	}
 	e{
 		s=142 141
 		v=696 697
 		shadow_length=2.0000
-		smoothing_length=20.0000
 	}
 	e{
 		s=143 38
@@ -4558,8 +4554,8 @@ sectors{
 	}
 	s{
 		z=250.0000
-		texture=textures/metal_rusted
-		texture_tint=120 155 122
+		texture=textures/metal_clean
+		texture_tint=255 0 0
 	}
 	s{
 		z=300.0000
@@ -5167,8 +5163,9 @@ sectors{
 	}
 	s{
 		z=451.0000
-		texture=textures/metal_rusted
+		texture=textures/metal_clean
 		texture_rotate=1.1395
+		texture_tint=255 0 0
 	}
 	s{
 		z=450.0000
