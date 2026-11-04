@@ -1,6 +1,10 @@
 first_state = hidden
 death_state = dying
 
+init {
+	set_shadow_visibility false
+}
+
 script {
     hidden {
         on_enter {
@@ -19,9 +23,25 @@ script {
     
     emerging {
         on_enter {
+			move_to_relative 20 0 0
+			start_particles sheargrub_digging 0 0 10
             set_animation emerging
         }
+		on_frame_signal {
+			get_event_info sgnl frame_signal
+			
+			if $sgnl = 0
+				set_radius 10
+				set_shadow_visibility true
+			else_if $sgnl = 1
+				set_radius 12
+			else_if $sgnl = 2
+				set_radius 14
+			end_if
+		}
         on_animation_end {
+			stop
+			stop_particles
             set_state examining
         }
     }
@@ -50,9 +70,24 @@ script {
     
     burying {
         on_enter {
+			move_to_relative 20 0 0
+			start_particles sheargrub_digging 12 0 10
             set_animation burying
         }
+		on_frame_signal {
+			get_event_info sgnl frame_signal
+			
+			if $sgnl = 0
+				stop_particles
+				set_shadow_visibility false
+			else_if $sgnl = 1
+				set_radius 12
+			else_if $sgnl = 2
+				set_radius 8
+			end_if
+		}
         on_animation_end {
+			set_radius 14
             set_state hidden
         }
     }
