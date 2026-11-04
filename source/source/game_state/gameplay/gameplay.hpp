@@ -464,7 +464,7 @@ public:
     
     //--- Public function declarations ---
     
-    ALLEGRO_BITMAP* drawToBitmap(int size, int padding, bool treeShadows);
+    ALLEGRO_BITMAP* drawToBitmap(int size, int padding, bool drawLighting);
     void enter();
     void leave(const GAMEPLAY_LEAVE_TARGET target);
     void startLeaving(const GAMEPLAY_LEAVE_TARGET target);
@@ -542,8 +542,8 @@ private:
     void doAestheticLogic(float deltaT);
     void doGameDrawing(
         ALLEGRO_BITMAP* bmpOutput = nullptr,
-        const ALLEGRO_TRANSFORM* bmpTransform = nullptr,
-        bool treeShadows = true
+        const Viewport* bmpView = nullptr,
+        bool drawLighting = true
     );
     void doGameplayLeaderLogic(Player* player, float deltaT);
     void doGameplayLogic(float deltaT);

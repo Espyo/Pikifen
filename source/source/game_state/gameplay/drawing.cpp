@@ -10,6 +10,20 @@
 
 #include <algorithm>
 
+//For openGL functions
+#define ALLEGRO_UNSTABLE
+
+#if defined(_WINDOWS)
+    //We need to define windows.h so gl.h can compile on windows
+    //Of course, for whatever reason, windows.h defines Polygon, which
+    //we use all over in geometry_utils.h
+    //Thankfully, defining NOGDI removes it
+    //https://stackoverflow.com/questions/14846072/include-windows-h-defines-many-symbols-in-the-global-namespace-like-polygon
+    #define NOGDI
+    #include <windows.h>
+#endif
+
+#include <allegro5/allegro_opengl.h>
 #include "gameplay.hpp"
 
 #include "../../content/mob/group_task.hpp"
@@ -31,13 +45,12 @@
  * @brief Does the drawing for the main game loop.
  *
  * @param bmpOutput If not nullptr, draw the area onto this.
- * @param bmpTransform Transformation to use when drawing to a bitmap.
- * @param treeShadows Whether to draw tree shadows. Only applicable when
- * drawing to a bitmap.
+ * @param bmpView Viewport to use when drawing to a bitmap.
+ * @param drawLighting Whether to draw lighting.
  */
 void GameplayState::doGameDrawing(
-    ALLEGRO_BITMAP* bmpOutput, const ALLEGRO_TRANSFORM* bmpTransform,
-    bool treeShadows
+    ALLEGRO_BITMAP* bmpOutput, const Viewport* bmpView,
+    bool drawLighting
 ) {
     /*  ***************************************
       *** |  |                           |  | ***
@@ -45,12 +58,12 @@ void GameplayState::doGameDrawing(
       ***  \/                             \/  ***
         ***************************************/
     
-    ALLEGRO_TRANSFORM prevWorldToWindowTransform;
+    Viewport prevViewport;
     AllegroBlenderState prevBlender;
     
     if(bmpOutput) {
-        prevWorldToWindowTransform = players[0].view.worldToWindowTransform;
-        players[0].view.worldToWindowTransform = *bmpTransform;
+        prevViewport = players[0].view;
+        players[0].view = *bmpView;
         al_set_target_bitmap(bmpOutput);
         prevBlender.save();
         al_set_separate_blender(
@@ -83,18 +96,7 @@ void GameplayState::doGameDrawing(
             game.perfMon->finishMeasurement();
         }
         
-        //Layer 3 -- In-game text.
-        if(game.perfMon) {
-            game.perfMon->startMeasurement("Drawing -- In-game text");
-        }
-        if(!bmpOutput && game.makerTools.hud) {
-            drawInGameText(&player);
-        }
-        if(game.perfMon) {
-            game.perfMon->finishMeasurement();
-        }
-        
-        //Layer 4 -- Precipitation.
+        //Layer 3 -- Precipitation.
         if(game.perfMon) {
             game.perfMon->startMeasurement("Drawing -- precipitation");
         }
@@ -105,36 +107,38 @@ void GameplayState::doGameDrawing(
             game.perfMon->finishMeasurement();
         }
         
-        //Layer 5 -- Tree shadows.
+        //Layer 4 -- Lighting filter.
         if(game.perfMon) {
-            game.perfMon->startMeasurement("Drawing -- Tree shadows");
+            game.perfMon->startMeasurement("Drawing -- Lighting");
         }
-        if(!(bmpOutput && !treeShadows)) {
-            drawTreeShadows();
+        if(drawLighting) {
+            drawLightingFilter(player.view);
         }
         if(game.perfMon) {
             game.perfMon->finishMeasurement();
         }
-        
+
         //Finish dumping to a bitmap image here.
         if(bmpOutput) {
             prevBlender.load();
-            players[0].view.worldToWindowTransform = prevWorldToWindowTransform;
+            players[0].view = prevViewport;
             al_set_target_backbuffer(game.display);
             return;
         }
         
-        //Layer 6 -- Lighting filter.
+        //Layer 5 -- In-game text.
+        al_use_transform(&player.view.worldToWindowTransform);
         if(game.perfMon) {
-            game.perfMon->startMeasurement("Drawing -- Lighting");
+            game.perfMon->startMeasurement("Drawing -- In-game text");
         }
-        drawLightingFilter(player.view);
+        if(game.makerTools.hud) {
+            drawInGameText(&player);
+        }
         if(game.perfMon) {
             game.perfMon->finishMeasurement();
         }
         
-        //Layer 7 -- Leader cursor.
-        al_use_transform(&player.view.worldToWindowTransform);
+        //Layer 6 -- Leader cursor.
         ALLEGRO_COLOR cursorColor = game.config.aestheticGen.noPikminColor;
         if(player.closestGroupMember[BUBBLE_RELATION_CURRENT]) {
             cursorColor =
@@ -1373,76 +1377,137 @@ void GameplayState::drawLightingFilter(const Viewport& view) {
         
     }
     
-    //Draw the daylight.
-    ALLEGRO_COLOR daylightC =
-        game.curArea->weatherCondition.getDaylightColor();
-    if(daylightC.a > 0) {
-        al_draw_filled_rectangle(
-            0, 0, view.windowRect.size.x, view.windowRect.size.y, daylightC
-        );
+    ALLEGRO_BITMAP* oldBitmap = al_get_target_bitmap();
+
+    ALLEGRO_BITMAP* lightingBuffer = 
+        al_create_bitmap(view.windowRect.size.x, view.windowRect.size.y);
+    al_set_target_bitmap(lightingBuffer);
+    
+    //Clear to daylight Color
+    ALLEGRO_COLOR baseColor = game.curArea->weatherCondition.getDaylightColor();
+    baseColor.r += (1 - baseColor.a);
+    baseColor.g += (1 - baseColor.a);
+    baseColor.b += (1 - baseColor.a);
+    baseColor.a = 1;
+    al_clear_to_color(baseColor);
+    
+
+    al_use_transform(&view.worldToWindowTransform);
+    //Draw Tree shadows
+    drawTreeShadows();
+
+    //Draw sector lighting.
+    forIdx(s, game.curArea->sectors) {
+        Sector* sPtr = game.curArea->sectors[s];
+        
+        if(
+            !rectanglesIntersect(sPtr->bBox, view.worldCorners)
+        ) {
+            //Off-camera.
+            continue;
+        }
+        drawSectorLighting(sPtr, Point(), 1.0f, 1.0f);
+    }
+    al_use_transform(&game.identityTransform);
+    al_set_target_bitmap(oldBitmap);
+
+    //Setup the shader.
+    ALLEGRO_SHADER* blackoutShader = game.shaders.getShader(SHADER_TYPE_LIGHTING);
+    al_use_shader(blackoutShader);
+    al_set_shader_float("alpha", 1.0f);
+    int bmp_size[2] = {
+        al_get_bitmap_width(lightingBuffer),
+        al_get_bitmap_height(lightingBuffer)
+    };
+    al_set_shader_int_vector("lightmap_size", 2, &bmp_size[0], 1);
+
+    //Bind the lights 
+    vector<float> lightData;
+    int lightCount = 0;
+    
+    //Mob lights
+    for(size_t m = 0; m < mobs.all.size(); m++) {
+        Mob* mPtr = mobs.all[m];
+
+        ALLEGRO_COLOR lightColor = mPtr->lightColor;
+        //Use mob's radius if <= 0
+        float finalRadius = mPtr->lightRadius < 0.0f ? 
+            mPtr->radius * 4.0f : mPtr->lightRadius;
+        //Only draw mobs that have a light that'll render
+        if(
+            hasFlag(mPtr->flags, MOB_FLAG_HIDDEN) ||
+            lightColor == COLOR_BLACK ||
+            finalRadius <= 0.0f
+        ) {
+            continue;
+        }
+
+        if(bBoxCheck(view.worldCorners, mPtr->center, finalRadius)) {
+            float x = mPtr->center.x;
+            float y = mPtr->center.y;
+            al_transform_coordinates(&view.worldToWindowTransform, &x, &y);
+            lightData.push_back(x);
+            lightData.push_back(y);
+            lightData.push_back(finalRadius * view.cam.zoom);
+
+            //Light color
+            lightData.push_back(lightColor.r * lightColor.a);
+            lightData.push_back(lightColor.g * lightColor.a);
+            lightData.push_back(lightColor.b * lightColor.a);
+            lightCount++;
+        }
     }
     
-    //Draw the blackout effect.
-    unsigned char blackoutS =
-        game.curArea->weatherCondition.getBlackoutStrength();
-    if(blackoutS > 0) {
-        //First, we'll create the lightmap.
-        //This is inverted (white = darkness, black = light), because we'll
-        //apply it to the window using a subtraction operation.
-        al_set_target_bitmap(lightmapBmp);
-        
-        //For starters, the whole window is dark (white in the map).
-        al_clear_to_color(mapGray(blackoutS));
-        
-        AllegroBlenderState prevBlender;
-        prevBlender.save();
-        al_set_separate_blender(
-            ALLEGRO_DEST_MINUS_SRC, ALLEGRO_ONE, ALLEGRO_ONE,
-            ALLEGRO_ADD, ALLEGRO_ONE, ALLEGRO_ONE
-        );
-        
-        //Then, find out spotlights, and draw
-        //their lights on the map (as black).
-        al_hold_bitmap_drawing(true);
-        forIdx(m, mobs.all) {
-            Mob* mPtr = mobs.all[m];
-            if(
-                hasFlag(mPtr->flags, MOB_FLAG_HIDDEN) ||
-                mPtr->type->blackoutRadius == 0.0f
-            ) {
-                continue;
-            }
-            
-            Point center = mPtr->center;
-            al_transform_coordinates(
-                &view.worldToWindowTransform, &center.x, &center.y
-            );
-            float radius = 4.0f * view.cam.zoom;
-            
-            if(mPtr->type->blackoutRadius > 0.0f) {
-                radius *= mPtr->type->blackoutRadius;
-            } else {
-                radius *= mPtr->radius;
-            }
-            
-            al_draw_scaled_bitmap(
-                game.sysContent.bmpSpotlight,
-                0, 0, 64, 64,
-                center.x - radius, center.y - radius,
-                radius * 2.0, radius * 2.0,
-                0
-            );
-        }
-        al_hold_bitmap_drawing(false);
-        
-        //Now, simply darken the window using the map.
-        al_set_target_backbuffer(game.display);
-        
-        al_draw_bitmap(lightmapBmp, 0, 0, 0);
-        
-        prevBlender.load();
-        
+    //Particle Lights
+    vector<WorldComponent> allParts;
+    particles.fillComponentList(allParts, view.worldCorners);
+    for(size_t p = 0; p < allParts.size(); p++) {
+        Particle* pPtr = allParts[p].particlePtr;
+        if(!pPtr->emitsLight) continue;
+        float t = 1.0f - pPtr->time / pPtr->duration;
+        ALLEGRO_COLOR finalColor = pPtr->lightColor.get(t);
+
+        float x = pPtr->center.x;
+        float y = pPtr->center.y;
+        al_transform_coordinates(&view.worldToWindowTransform, &x, &y);
+        lightData.push_back(x);
+        lightData.push_back(y);
+        lightData.push_back(pPtr->lightSize.get(t) * view.cam.zoom);
+
+        //Light color
+        lightData.push_back(finalColor.r * finalColor.a);
+        lightData.push_back(finalColor.g * finalColor.a);
+        lightData.push_back(finalColor.b * finalColor.a);
+        lightCount++;
     }
+
+    //Bind the SSBO to the shader.
+    if(lightCount > 0) {
+        GLuint ssbo = 0;     
+        glGenBuffers(1, &ssbo);
+        glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+        glBufferData(
+            GL_SHADER_STORAGE_BUFFER, sizeof(float) * lightData.size(),
+            &lightData[0], GL_STREAM_READ
+        );
+        glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, ssbo);
+        glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+    }
+    al_set_shader_int("light_count", lightCount);
+
+    //Set the multiply blender
+    AllegroBlenderState prevState;
+    prevState.save();
+    al_set_blender(ALLEGRO_ADD, ALLEGRO_DEST_COLOR, ALLEGRO_ZERO);
+
+    
+    //Draw the buffer onto the main output.
+    drawBitmap(lightingBuffer, view.windowRect.center, view.windowRect.size);
+
+    //Cleanup
+    al_destroy_bitmap(lightingBuffer);
+    prevState.load();
+    al_use_shader(nullptr);
     
 }
 
@@ -1825,11 +1890,11 @@ void GameplayState::drawThrowPreview(Player* player) {
  * @param size Maximum image width or height, in pixels.
  * @param padding Padding around the actual area, in area pixels. Each side
  * of the area receives these many pixels divided by two.
- * @param treeShadows Whether to draw tree shadows.
+ * @param drawLighting Whether to draw lighting.
  * @return The bitmap.
  */
 ALLEGRO_BITMAP* GameplayState::drawToBitmap(
-    int size, int padding, bool treeShadows
+    int size, int padding, bool drawLighting
 ) {
     //First, get the full dimensions of the map.
     RectCorners corners = RectCorners::readyForSearch;
@@ -1838,7 +1903,7 @@ ALLEGRO_BITMAP* GameplayState::drawToBitmap(
         Vertex* vPtr = game.curArea->vertexes[v];
         updateMinMaxCoords(corners, v2p(vPtr));
     }
-    
+
     //Figure out the scale that will fit on the image.
     float areaW = corners.br.x - corners.tl.x + padding;
     float areaH = corners.br.y - corners.tl.y + padding;
@@ -1856,7 +1921,7 @@ ALLEGRO_BITMAP* GameplayState::drawToBitmap(
     
     //Create the bitmap.
     ALLEGRO_BITMAP* bmp = al_create_bitmap(finalBmpW, finalBmpH);
-    
+
     ALLEGRO_TRANSFORM t;
     al_identity_transform(&t);
     al_translate_transform(
@@ -1865,9 +1930,15 @@ ALLEGRO_BITMAP* GameplayState::drawToBitmap(
         -corners.tl.y + padding / 2.0f
     );
     al_scale_transform(&t, scale, scale);
-    
+    Viewport v = Viewport();
+    v.windowRect.size = Point(finalBmpW, finalBmpH);
+    v.windowRect.center = v.windowRect.size / 2;
+    v.worldCorners = corners;
+    v.worldToWindowTransform = t;
+    v.cam.zoom = scale;
+
     //Begin drawing!
-    doGameDrawing(bmp, &t, treeShadows);
+    doGameDrawing(bmp, &v, drawLighting);
     
     return bmp;
 }
@@ -2096,7 +2167,7 @@ void GameplayState::drawWorldComponents(
     } else {
         mobShadowStretch = (dayMinutes - 60 * 12) / (60 * 20 - 60 * 12);
     }
-    
+
     forIdx(c, components) {
         WorldComponent* cPtr = &components[c];
         
@@ -2134,25 +2205,8 @@ void GameplayState::drawWorldComponents(
             if(mustDrawGround) {
                 drawSectorTexture(cPtr->sectorPtr, Point(), 1.0f, 1.0f);
             }
-            if(mustDrawLiquid) {
-                float drainAlpha = 1.0f;
-                if(
-                    cPtr->sectorPtr->liquid &&
-                    cPtr->sectorPtr->liquid->state == LIQUID_STATE_DRAINING
-                ) {
-                    drainAlpha =
-                        (
-                            LIQUID::DRAIN_DURATION -
-                            cPtr->sectorPtr->liquid->stateTime
-                        ) /
-                        LIQUID::DRAIN_DURATION;
-                } else if(
-                    cPtr->sectorPtr->liquid &&
-                    cPtr->sectorPtr->liquid->state == LIQUID_STATE_GONE
-                ) {
-                    drainAlpha = 0.0f;
-                }
-                
+            if(mustDrawLiquid && cPtr->sectorPtr->liquid) {
+                float drainAlpha = cPtr->sectorPtr->liquid->getDrainAlpha();          
                 drawLiquid(
                     cPtr->sectorPtr,
                     cPtr->sectorPtr->liquid->hazard->associatedLiquid,

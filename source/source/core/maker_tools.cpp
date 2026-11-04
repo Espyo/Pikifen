@@ -38,11 +38,11 @@ bool MakerToolRunners::areaImage(
 ) {
     int size = s2i(args[0]);
     int padding = s2i(args[1]);
-    bool treeShadows = s2b(args[2]);
+    bool drawLighting = s2b(args[2]);
     
     ALLEGRO_BITMAP* bmp =
         game.states.gameplay->drawToBitmap(
-            size, padding, treeShadows
+            size, padding, drawLighting
         );
     string fileName =
         FOLDER_PATHS_FROM_ROOT::USER_DATA + "/area_" +
@@ -379,7 +379,7 @@ bool MakerToolRunners::newPikmin(
         game.mobCategories.get(MOB_CATEGORY_PIKMIN),
         game.states.gameplay->players[0].view.mouseCursorWorldPos,
         newPikminType, 0,
-        "maturity=" + i2s(maturity)
+        "maturity=" + i2s(maturity) + ";lit=true"
     );
     
     return true;

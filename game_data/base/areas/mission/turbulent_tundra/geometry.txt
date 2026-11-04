@@ -408,31 +408,6 @@ vertexes{
 	v=889.0243 -642.4090
 	v=1151.3505 -486.0470
 	v=1738.7363 -730.0685
-	v=1785.6000 -288.0000
-	v=1765.2999 -266.3882
-	v=1738.4729 -279.0163
-	v=1742.1929 -308.4326
-	v=1771.3191 -313.9848
-	v=1452.1252 -465.9524
-	v=1433.9780 -444.1824
-	v=1407.6656 -454.7141
-	v=1409.5510 -482.9931
-	v=1437.0284 -489.9388
-	v=1428.8127 -201.8399
-	v=1446.6478 -185.5066
-	v=1436.6252 -163.4972
-	v=1412.5959 -166.2279
-	v=1407.7675 -189.9250
-	v=1477.4078 93.6536
-	v=1496.9207 107.8305
-	v=1489.4674 130.7693
-	v=1465.3483 130.7693
-	v=1457.8950 107.8305
-	v=1733.9792 -46.7535
-	v=1753.4921 -32.5766
-	v=1746.0388 -9.6378
-	v=1721.9197 -9.6378
-	v=1714.4664 -32.5766
 	v=1952.2124 -842.2154
 	v=1703.9862 -627.2958
 	v=1159.1666 2.6132
@@ -508,33 +483,8 @@ vertexes{
 	v=1321.7148 -113.6843
 	v=887.9243 -494.5345
 	v=1108.0645 -413.2730
-	v=1711.1929 -335.6296
-	v=1784.3135 -345.3308
-	v=1824.9830 -280.0113
-	v=1767.6566 -228.3827
-	v=1708.1309 -264.4114
-	v=1362.4210 -437.8242
-	v=1445.0839 -404.2232
-	v=1523.0502 -465.0522
 	v=1405.6964 -507.8759
 	v=1453.8561 -508.9590
-	v=1432.9198 -239.8476
-	v=1485.2483 -194.3022
-	v=1459.8279 -128.7365
-	v=1385.2959 -137.7003
-	v=1367.3313 -205.3697
-	v=1731.8251 -93.7218
-	v=1804.7843 -49.0408
-	v=1774.3524 35.2882
-	v=1691.3969 32.3016
-	v=1671.9844 -53.4155
-	v=1478.5789 46.2123
-	v=1552.4995 91.3663
-	v=1518.8324 182.7830
-	v=1413.6121 78.7936
-	v=1427.1068 179.4531
-	v=1513.8477 -504.1582
-	v=1349.3660 -489.9242
 	v=29.6889 -767.0430
 	v=59.9806 -782.0945
 	v=255.3647 -842.5243
@@ -774,12 +724,12 @@ edges{
 	}
 	e{
 		s=1 0
-		v=3 441
+		v=3 416
 		smoothing_length=5.0000
 	}
 	e{
 		s=0 2
-		v=5 439
+		v=5 414
 	}
 	e{
 		s=1 0
@@ -792,13 +742,13 @@ edges{
 		smoothing_length=5.0000
 	}
 	e{
-		s=115 1
+		s=101 1
 		v=10 11
 		smoothing_length=5.0000
 	}
 	e{
-		s=115 1
-		v=11 634
+		s=101 1
+		v=11 584
 		smoothing_length=5.0000
 	}
 	e{
@@ -808,15 +758,15 @@ edges{
 	}
 	e{
 		s=3 1
-		v=12 442
+		v=12 417
 		smoothing_length=5.0000
 	}
 	e{
-		s=65 3
+		s=60 3
 		v=14 13
 	}
 	e{
-		s=66 3
+		s=61 3
 		v=15 14
 	}
 	e{
@@ -829,7 +779,7 @@ edges{
 		smoothing_length=5.0000
 	}
 	e{
-		s=65 1
+		s=60 1
 		v=13 4
 		smoothing_length=5.0000
 	}
@@ -839,22 +789,22 @@ edges{
 		smoothing_length=5.0000
 	}
 	e{
-		s=90 107
-		v=461 665
+		s=76 93
+		v=436 615
 		smoothing_length=10.0000
 	}
 	e{
-		s=107 110
+		s=93 96
 		v=21 22
 		smoothing_length=10.0000
 	}
 	e{
-		s=107 110
-		v=22 595
+		s=93 96
+		v=22 545
 		smoothing_length=10.0000
 	}
 	e{
-		s=101 4
+		s=87 4
 		v=23 332
 	}
 	e{
@@ -863,36 +813,36 @@ edges{
 		smoothing_length=5.0000
 	}
 	e{
-		s=90 110
+		s=76 96
 		v=26 25
 		smoothing_length=10.0000
 	}
 	e{
-		s=90 110
+		s=76 96
 		v=331 188
 		smoothing_length=10.0000
 	}
 	e{
-		s=90 110
+		s=76 96
 		v=188 26
 		smoothing_length=10.0000
 	}
 	e{
-		s=47 110
+		s=47 96
 		v=187 29
 	}
 	e{
-		s=49 79
+		s=49 74
 		v=87 32
 		smoothing_length=10.0000
 	}
 	e{
-		s=79 49
-		v=436 377
+		s=74 49
+		v=411 377
 		smoothing_length=10.0000
 	}
 	e{
-		s=79 13
+		s=74 13
 		v=95 42
 	}
 	e{
@@ -931,59 +881,59 @@ edges{
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=79 12
+		s=74 12
 		v=96 95
 	}
 	e{
-		s=15 112
+		s=15 98
 		v=45 43
 	}
 	e{
 		s=7 6
-		v=44 462
+		v=44 437
 	}
 	e{
-		s=15 112
+		s=15 98
 		v=43 119
 	}
 	e{
-		s=1 110
-		v=618 8
+		s=1 96
+		v=568 8
 		smoothing_length=5.0000
 	}
 	e{
-		s=75 8
+		s=70 8
 		v=51 50
 		smoothing_length=10.0000
 	}
 	e{
-		s=75 8
+		s=70 8
 		v=52 108
 		smoothing_length=10.0000
 	}
 	e{
-		s=75 8
+		s=70 8
 		v=53 52
 		smoothing_length=10.0000
 	}
 	e{
-		s=75 8
-		v=715 53
+		s=70 8
+		v=665 53
 		smoothing_length=10.0000
 	}
 	e{
-		s=75 71
+		s=70 66
 		v=55 49
 		smoothing_length=10.0000
 	}
 	e{
-		s=8 99
-		v=579 54
+		s=8 85
+		v=529 54
 		smoothing_length=10.0000
 	}
 	e{
-		s=142 143
-		v=721 57
+		s=128 129
+		v=671 57
 	}
 	e{
 		s=5 8
@@ -998,13 +948,13 @@ edges{
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=71 110
+		s=66 96
 		v=60 18
 		smoothing_length=10.0000
 	}
 	e{
-		s=71 110
-		v=495 60
+		s=66 96
+		v=470 60
 		smoothing_length=10.0000
 	}
 	e{
@@ -1020,23 +970,23 @@ edges{
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=107 110
+		s=93 96
 		v=20 358
 		smoothing_length=10.0000
 	}
 	e{
-		s=107 110
+		s=93 96
 		v=123 21
 		smoothing_length=10.0000
 	}
 	e{
-		s=4 90
+		s=4 76
 		v=331 17
 		smoothing_length=10.0000
 	}
 	e{
-		s=10 110
-		v=70 608
+		s=10 96
+		v=70 558
 	}
 	e{
 		s=9 5
@@ -1058,13 +1008,13 @@ edges{
 	}
 	e{
 		s=9 5
-		v=466 67
+		v=441 67
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
 		s=9 5
-		v=68 465
+		v=68 440
 		smoothing_length=10.0000
 	}
 	e{
@@ -1073,13 +1023,13 @@ edges{
 		smoothing_length=10.0000
 	}
 	e{
-		s=8 110
+		s=8 96
 		v=69 70
 		smoothing_length=10.0000
 	}
 	e{
 		s=8 10
-		v=71 437
+		v=71 412
 		smoothing_length=10.0000
 	}
 	e{
@@ -1108,47 +1058,47 @@ edges{
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=78 49
+		s=73 49
 		v=79 78
 		smoothing_length=10.0000
 	}
 	e{
-		s=78 49
+		s=73 49
 		v=80 79
 		smoothing_length=10.0000
 	}
 	e{
-		s=13 118
+		s=13 104
 		v=81 42
 		smoothing_length=10.0000
 	}
 	e{
-		s=78 48
+		s=73 48
 		v=83 82
 		smoothing_length=10.0000
 	}
 	e{
-		s=78 48
-		v=84 518
+		s=73 48
+		v=84 485
 		smoothing_length=10.0000
 	}
 	e{
-		s=78 48
+		s=73 48
 		v=85 84
 		smoothing_length=10.0000
 	}
 	e{
-		s=79 49
-		v=504 436
+		s=74 49
+		v=479 411
 		smoothing_length=10.0000
 	}
 	e{
-		s=79 56
-		v=401 507
+		s=74 56
+		v=401 482
 		smoothing_length=10.0000
 	}
 	e{
-		s=93 57
+		s=79 57
 		v=406 143
 		smoothing_length=10.0000
 	}
@@ -1163,16 +1113,16 @@ edges{
 		smoothing_length=10.0000
 	}
 	e{
-		s=78 49
-		v=97 506
+		s=73 49
+		v=97 481
 		smoothing_length=10.0000
 	}
 	e{
-		s=78 12
+		s=73 12
 		v=94 93
 	}
 	e{
-		s=78 13
+		s=73 13
 		v=81 94
 	}
 	e{
@@ -1189,60 +1139,60 @@ edges{
 		smoothing_length=10.0000
 	}
 	e{
-		s=79 14
+		s=74 14
 		v=33 96
 	}
 	e{
-		s=78 14
+		s=73 14
 		v=93 97
 	}
 	e{
-		s=75 8
+		s=70 8
 		v=99 100
 		smoothing_length=10.0000
 	}
 	e{
-		s=75 8
+		s=70 8
 		v=100 107
 		smoothing_length=10.0000
 	}
 	e{
-		s=75 8
+		s=70 8
 		v=101 106
 		smoothing_length=10.0000
 	}
 	e{
-		s=75 8
+		s=70 8
 		v=102 171
 		smoothing_length=10.0000
 	}
 	e{
-		s=75 8
+		s=70 8
 		v=103 104
 		smoothing_length=10.0000
 	}
 	e{
-		s=75 8
+		s=70 8
 		v=104 102
 		smoothing_length=10.0000
 	}
 	e{
-		s=75 8
+		s=70 8
 		v=105 103
 		smoothing_length=10.0000
 	}
 	e{
-		s=75 8
+		s=70 8
 		v=106 105
 		smoothing_length=10.0000
 	}
 	e{
-		s=75 8
+		s=70 8
 		v=107 101
 		smoothing_length=10.0000
 	}
 	e{
-		s=75 8
+		s=70 8
 		v=108 99
 		smoothing_length=10.0000
 	}
@@ -1259,44 +1209,44 @@ edges{
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=139 69
-		v=113 499
+		s=125 64
+		v=113 474
 	}
 	e{
-		s=69 71
+		s=64 66
 		v=113 166
 		smoothing_length=10.0000
 	}
 	e{
-		s=75 71
-		v=48 713
+		s=70 66
+		v=48 663
 		smoothing_length=10.0000
 	}
 	e{
-		s=15 112
+		s=15 98
 		v=185 45
 	}
 	e{
-		s=15 129
+		s=15 115
 		v=115 114
 	}
 	e{
-		s=15 120
-		v=117 645
+		s=15 106
+		v=117 595
 	}
 	e{
-		s=15 120
+		s=15 106
 		v=119 117
 	}
 	e{
 		s=47 5
-		v=27 497
+		v=27 472
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=78 48
-		v=435 85
+		s=73 48
+		v=410 85
 		smoothing_length=10.0000
 	}
 	e{
@@ -1305,12 +1255,12 @@ edges{
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=107 110
+		s=93 96
 		v=358 123
 		smoothing_length=10.0000
 	}
 	e{
-		s=78 17
+		s=73 17
 		v=146 124
 	}
 	e{
@@ -1318,20 +1268,20 @@ edges{
 		v=129 128
 	}
 	e{
-		s=9 129
-		v=72 751
+		s=9 115
+		v=72 701
 	}
 	e{
-		s=129 16
-		v=127 751
+		s=115 16
+		v=127 701
 	}
 	e{
-		s=93 128
-		v=125 670
+		s=79 114
+		v=125 620
 		smoothing_length=10.0000
 	}
 	e{
-		s=93 6
+		s=79 6
 		v=129 44
 		smoothing_length=10.0000
 	}
@@ -1346,11 +1296,11 @@ edges{
 		v=131 130
 	}
 	e{
-		s=78 17
+		s=73 17
 		v=181 180
 	}
 	e{
-		s=78 17
+		s=73 17
 		v=138 135
 	}
 	e{
@@ -1358,11 +1308,11 @@ edges{
 		v=179 136
 	}
 	e{
-		s=78 17
+		s=73 17
 		v=135 137
 	}
 	e{
-		s=78 17
+		s=73 17
 		v=124 138
 	}
 	e{
@@ -1396,7 +1346,7 @@ edges{
 		smoothing_length=10.0000
 	}
 	e{
-		s=93 57
+		s=79 57
 		v=174 406
 		smoothing_length=10.0000
 	}
@@ -1415,41 +1365,41 @@ edges{
 		v=146 177
 	}
 	e{
-		s=93 58
+		s=79 58
 		v=143 405
 		smoothing_length=10.0000
 	}
 	e{
-		s=93 5
+		s=79 5
 		v=161 147
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=93 58
+		s=79 58
 		v=160 148
 		smoothing_length=10.0000
 	}
 	e{
-		s=93 5
+		s=79 5
 		v=162 149
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=93 5
+		s=79 5
 		v=163 162
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=93 5
+		s=79 5
 		v=368 164
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=93 58
+		s=79 58
 		v=405 151
 		smoothing_length=10.0000
 	}
@@ -1500,83 +1450,83 @@ edges{
 	}
 	e{
 		s=1 0
-		v=2 542
+		v=2 492
 		smoothing_length=5.0000
 	}
 	e{
-		s=129 16
-		v=128 668
+		s=115 16
+		v=128 618
 	}
 	e{
-		s=93 58
+		s=79 58
 		v=151 160
 		smoothing_length=10.0000
 	}
 	e{
-		s=93 58
+		s=79 58
 		v=148 150
 		smoothing_length=10.0000
 	}
 	e{
-		s=93 5
+		s=79 5
 		v=149 161
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=93 5
+		s=79 5
 		v=164 163
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
 		s=5 8
-		v=471 165
+		v=446 165
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=71 110
+		s=66 96
 		v=18 167
 		smoothing_length=10.0000
 	}
 	e{
-		s=71 110
-		v=167 716
+		s=66 96
+		v=167 666
 		smoothing_length=10.0000
 	}
 	e{
-		s=139 8
-		v=168 710
+		s=125 8
+		v=168 660
 		smoothing_length=10.0000
 	}
 	e{
-		s=8 110
+		s=8 96
 		v=169 69
 		smoothing_length=10.0000
 	}
 	e{
-		s=75 8
+		s=70 8
 		v=170 51
 		smoothing_length=10.0000
 	}
 	e{
-		s=75 8
+		s=70 8
 		v=171 98
 		smoothing_length=10.0000
 	}
 	e{
-		s=75 8
+		s=70 8
 		v=98 170
 		smoothing_length=10.0000
 	}
 	e{
-		s=75 8
+		s=70 8
 		v=50 54
 		smoothing_length=10.0000
 	}
 	e{
-		s=75 71
+		s=70 66
 		v=49 48
 		smoothing_length=10.0000
 	}
@@ -1587,8 +1537,8 @@ edges{
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=92 47
-		v=118 476
+		s=78 47
+		v=118 451
 	}
 	e{
 		s=51 57
@@ -1601,17 +1551,17 @@ edges{
 		smoothing_length=10.0000
 	}
 	e{
-		s=93 151
-		v=402 743
+		s=79 137
+		v=402 693
 		smoothing_length=10.0000
 	}
 	e{
-		s=93 79
+		s=79 74
 		v=175 120
 		smoothing_length=10.0000
 	}
 	e{
-		s=93 79
+		s=79 74
 		v=176 175
 		smoothing_length=10.0000
 	}
@@ -1632,15 +1582,15 @@ edges{
 		v=132 180
 	}
 	e{
-		s=78 17
+		s=73 17
 		v=134 133
 	}
 	e{
-		s=78 17
+		s=73 17
 		v=133 181
 	}
 	e{
-		s=78 17
+		s=73 17
 		v=137 134
 	}
 	e{
@@ -1652,50 +1602,50 @@ edges{
 		v=182 136
 	}
 	e{
-		s=115 120
-		v=628 184
+		s=101 106
+		v=578 184
 	}
 	e{
-		s=115 120
+		s=101 106
 		v=184 357
 	}
 	e{
-		s=79 7
-		v=176 438
+		s=74 7
+		v=176 413
 	}
 	e{
-		s=93 7
+		s=79 7
 		v=44 176
 		smoothing_length=10.0000
 	}
 	e{
-		s=129 136
-		v=705 709
+		s=115 122
+		v=655 659
 	}
 	e{
-		s=15 129
+		s=15 115
 		v=114 185
 	}
 	e{
-		s=115 129
-		v=629 121
+		s=101 115
+		v=579 121
 	}
 	e{
-		s=15 129
+		s=15 115
 		v=116 115
 	}
 	e{
-		s=47 110
+		s=47 96
 		v=30 187
 		smoothing_length=10.0000
 	}
 	e{
-		s=89 79
+		s=75 74
 		v=190 189
 	}
 	e{
-		s=146 79
-		v=553 190
+		s=132 74
+		v=503 190
 		smoothing_length=10.0000
 	}
 	e{
@@ -1736,44 +1686,44 @@ edges{
 		v=200 12
 	}
 	e{
-		s=114 1
-		v=63 616
+		s=100 1
+		v=63 566
 		smoothing_length=5.0000
 	}
 	e{
-		s=18 107
+		s=18 93
 		v=202 201
 	}
 	e{
-		s=18 107
+		s=18 93
 		v=203 202
 	}
 	e{
-		s=18 107
+		s=18 93
 		v=204 203
 	}
 	e{
-		s=18 107
+		s=18 93
 		v=205 204
 	}
 	e{
-		s=18 107
+		s=18 93
 		v=206 205
 	}
 	e{
-		s=18 107
+		s=18 93
 		v=207 206
 	}
 	e{
-		s=18 107
+		s=18 93
 		v=208 207
 	}
 	e{
-		s=18 107
+		s=18 93
 		v=209 208
 	}
 	e{
-		s=18 107
+		s=18 93
 		v=19 209
 	}
 	e{
@@ -1893,613 +1843,613 @@ edges{
 		v=228 229
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=235 230
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=230 270
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=232 233
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=233 263
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=234 241
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=236 250
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=237 231
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=231 238
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=238 272
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=239 232
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=240 234
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=241 243
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=242 244
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=243 242
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=244 249
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=245 235
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=246 245
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=247 248
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=248 246
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=249 247
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=250 257
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=251 237
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=252 254
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=253 260
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=254 259
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=255 252
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=257 255
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=256 251
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=258 256
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=259 253
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=260 258
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=261 240
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=262 261
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=263 265
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=264 262
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=265 264
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=266 236
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=267 269
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=268 266
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=269 268
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=270 267
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=271 239
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=272 273
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=273 276
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=274 271
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=275 274
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=276 277
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=277 279
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=278 275
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 31
+		s=96 31
 		v=279 278
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 32
+		s=96 32
 		v=285 291
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 32
+		s=96 32
 		v=280 303
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 32
+		s=96 32
 		v=301 281
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 32
+		s=96 32
 		v=281 282
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 32
+		s=96 32
 		v=282 307
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 32
+		s=96 32
 		v=283 284
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 32
+		s=96 32
 		v=284 285
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 32
+		s=96 32
 		v=286 280
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 32
+		s=96 32
 		v=287 306
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 32
+		s=96 32
 		v=288 299
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 32
+		s=96 32
 		v=289 288
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 32
+		s=96 32
 		v=300 287
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 32
+		s=96 32
 		v=290 289
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 32
+		s=96 32
 		v=291 294
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 32
+		s=96 32
 		v=292 293
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 32
+		s=96 32
 		v=293 297
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 32
+		s=96 32
 		v=294 292
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 32
+		s=96 32
 		v=295 290
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 32
+		s=96 32
 		v=296 298
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 32
+		s=96 32
 		v=297 296
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 32
+		s=96 32
 		v=298 295
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 32
+		s=96 32
 		v=299 300
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 32
+		s=96 32
 		v=302 305
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 32
+		s=96 32
 		v=303 304
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 32
+		s=96 32
 		v=304 302
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 32
+		s=96 32
 		v=305 301
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 32
+		s=96 32
 		v=306 286
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 32
+		s=96 32
 		v=307 308
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 32
+		s=96 32
 		v=308 309
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=110 32
+		s=96 32
 		v=309 283
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=33 110
+		s=33 96
 		v=315 310
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=33 110
+		s=33 96
 		v=310 311
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=33 110
+		s=33 96
 		v=312 313
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=33 110
+		s=33 96
 		v=313 324
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=33 110
+		s=33 96
 		v=314 320
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=33 110
+		s=33 96
 		v=311 327
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=33 110
+		s=33 96
 		v=316 312
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=33 110
+		s=33 96
 		v=317 318
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=33 110
+		s=33 96
 		v=318 316
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=33 110
+		s=33 96
 		v=319 315
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=33 110
+		s=33 96
 		v=320 322
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=33 110
+		s=33 96
 		v=321 319
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=33 110
+		s=33 96
 		v=322 321
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=33 110
+		s=33 96
 		v=323 314
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=33 110
+		s=33 96
 		v=324 326
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=33 110
+		s=33 96
 		v=325 323
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=33 110
+		s=33 96
 		v=326 325
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=33 110
+		s=33 96
 		v=327 329
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=33 110
+		s=33 96
 		v=328 317
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=33 110
+		s=33 96
 		v=329 330
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=33 110
+		s=33 96
 		v=330 328
 		shadow_length=10.0000
 		smoothing_length=5.0000
 	}
 	e{
-		s=4 110
+		s=4 96
 		v=23 331
 	}
 	e{
@@ -2635,8 +2585,8 @@ edges{
 		v=334 353
 	}
 	e{
-		s=107 110
-		v=540 20
+		s=93 96
+		v=490 20
 		smoothing_length=10.0000
 	}
 	e{
@@ -2656,57 +2606,57 @@ edges{
 		v=355 356
 	}
 	e{
-		s=93 78
+		s=79 73
 		v=360 363
 		smoothing_length=10.0000
 	}
 	e{
-		s=93 50
+		s=79 50
 		v=361 400
 		smoothing_length=10.0000
 	}
 	e{
-		s=93 57
-		v=372 434
+		s=79 57
+		v=372 409
 		smoothing_length=10.0000
 	}
 	e{
-		s=93 50
+		s=79 50
 		v=362 361
 		smoothing_length=10.0000
 	}
 	e{
-		s=93 11
+		s=79 11
 		v=374 362
 		smoothing_length=10.0000
 	}
 	e{
-		s=93 78
+		s=79 73
 		v=363 359
 		smoothing_length=10.0000
 	}
 	e{
-		s=78 57
+		s=73 57
 		v=180 86
 		smoothing_length=10.0000
 	}
 	e{
-		s=93 57
+		s=79 57
 		v=365 364
 		smoothing_length=10.0000
 	}
 	e{
-		s=93 57
+		s=79 57
 		v=366 365
 		smoothing_length=10.0000
 	}
 	e{
-		s=78 54
+		s=73 54
 		v=360 146
 	}
 	e{
-		s=78 57
-		v=86 596
+		s=73 57
+		v=86 546
 		smoothing_length=10.0000
 	}
 	e{
@@ -2715,26 +2665,26 @@ edges{
 		smoothing_length=10.0000
 	}
 	e{
-		s=93 5
+		s=79 5
 		v=369 368
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=93 5
+		s=79 5
 		v=370 369
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=93 5
+		s=79 5
 		v=371 370
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=5 147
-		v=733 92
+		s=5 133
+		v=683 92
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
@@ -2748,7 +2698,7 @@ edges{
 		v=136 362
 	}
 	e{
-		s=93 57
+		s=79 57
 		v=375 374
 		smoothing_length=10.0000
 	}
@@ -2757,22 +2707,22 @@ edges{
 		v=179 374
 	}
 	e{
-		s=93 57
+		s=79 57
 		v=376 375
 		smoothing_length=10.0000
 	}
 	e{
-		s=93 57
+		s=79 57
 		v=364 376
 		smoothing_length=10.0000
 	}
 	e{
-		s=79 49
+		s=74 49
 		v=377 33
 		smoothing_length=10.0000
 	}
 	e{
-		s=79 118
+		s=74 104
 		v=42 378
 		smoothing_length=10.0000
 	}
@@ -2867,7 +2817,7 @@ edges{
 		smoothing_length=10.0000
 	}
 	e{
-		s=93 54
+		s=79 54
 		v=400 360
 		smoothing_length=10.0000
 	}
@@ -2876,482 +2826,382 @@ edges{
 		v=177 400
 	}
 	e{
-		s=55 118
-		v=508 638
+		s=55 104
+		v=483 588
 	}
 	e{
-		s=93 56
-		v=507 402
+		s=79 56
+		v=482 402
 		smoothing_length=10.0000
 	}
 	e{
-		s=56 151
+		s=56 137
 		v=403 402
 	}
 	e{
-		s=55 151
-		v=404 749
+		s=55 137
+		v=404 699
 	}
 	e{
 		s=56 55
 		v=401 403
 	}
 	e{
-		s=79 118
-		v=378 508
+		s=74 104
+		v=378 483
 		smoothing_length=10.0000
 	}
 	e{
-		s=93 5
-		v=147 672
+		s=79 5
+		v=147 622
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=93 58
+		s=79 58
 		v=150 173
 		smoothing_length=10.0000
 	}
 	e{
-		s=93 57
+		s=79 57
 		v=173 372
 		smoothing_length=10.0000
 	}
 	e{
-		s=48 153
-		v=407 746
+		s=48 139
+		v=407 696
 		smoothing_length=10.0000
 	}
 	e{
-		s=80 59
-		v=413 409
-	}
-	e{
-		s=80 59
-		v=409 410
-	}
-	e{
-		s=80 59
-		v=410 411
-	}
-	e{
-		s=80 59
-		v=411 412
-	}
-	e{
-		s=59 80
-		v=413 412
-	}
-	e{
-		s=81 60
-		v=418 414
-	}
-	e{
-		s=81 60
-		v=414 415
-	}
-	e{
-		s=81 60
-		v=415 416
-	}
-	e{
-		s=81 60
-		v=416 417
-	}
-	e{
-		s=81 60
-		v=417 418
-	}
-	e{
-		s=82 61
-		v=423 419
-	}
-	e{
-		s=82 61
-		v=419 420
-	}
-	e{
-		s=82 61
-		v=420 421
-	}
-	e{
-		s=82 61
-		v=421 422
-	}
-	e{
-		s=82 61
-		v=422 423
-	}
-	e{
-		s=88 62
-		v=428 424
-	}
-	e{
-		s=62 87
-		v=425 424
-	}
-	e{
-		s=85 62
-		v=425 426
-	}
-	e{
-		s=86 62
-		v=426 427
-	}
-	e{
-		s=84 62
-		v=427 428
-	}
-	e{
-		s=83 63
-		v=433 429
-	}
-	e{
-		s=83 63
-		v=429 430
-	}
-	e{
-		s=83 63
-		v=430 431
-	}
-	e{
-		s=83 63
-		v=431 432
-	}
-	e{
-		s=83 63
-		v=432 433
-	}
-	e{
-		s=93 57
-		v=434 366
+		s=79 57
+		v=409 366
 		smoothing_length=10.0000
 	}
 	e{
 		s=48 57
-		v=435 367
+		v=410 367
 		smoothing_length=10.0000
 	}
 	e{
-		s=64 5
-		v=111 437
+		s=59 5
+		v=111 412
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=64 10
-		v=437 609
+		s=59 10
+		v=412 559
 	}
 	e{
-		s=4 107
+		s=4 93
 		v=17 332
 	}
 	e{
-		s=79 120
-		v=438 183
+		s=74 106
+		v=413 183
 	}
 	e{
-		s=66 0
-		v=440 439
+		s=61 0
+		v=415 414
 	}
 	e{
-		s=65 0
-		v=4 440
+		s=60 0
+		v=4 415
 	}
 	e{
-		s=66 65
-		v=14 440
+		s=61 60
+		v=14 415
 	}
 	e{
-		s=66 2
-		v=439 15
+		s=61 2
+		v=414 15
 	}
 	e{
 		s=1 0
-		v=441 4
+		v=416 4
 		smoothing_length=5.0000
 	}
 	e{
 		s=3 1
-		v=442 13
+		v=417 13
 		smoothing_length=5.0000
 	}
 	e{
-		s=68 67
-		v=451 443
+		s=63 62
+		v=426 418
 	}
 	e{
-		s=68 67
-		v=443 444
+		s=63 62
+		v=418 419
 	}
 	e{
-		s=68 67
-		v=444 445
+		s=63 62
+		v=419 420
 	}
 	e{
-		s=68 67
-		v=445 446
+		s=63 62
+		v=420 421
 	}
 	e{
-		s=68 67
-		v=446 447
+		s=63 62
+		v=421 422
 	}
 	e{
-		s=68 67
-		v=447 448
+		s=63 62
+		v=422 423
 	}
 	e{
-		s=68 67
-		v=448 449
+		s=63 62
+		v=423 424
 	}
 	e{
-		s=68 67
-		v=449 450
+		s=63 62
+		v=424 425
 	}
 	e{
-		s=68 67
-		v=450 451
+		s=63 62
+		v=425 426
 	}
 	e{
-		s=0 68
-		v=460 452
+		s=0 63
+		v=435 427
 	}
 	e{
-		s=0 68
-		v=452 453
+		s=0 63
+		v=427 428
 	}
 	e{
-		s=0 68
-		v=453 454
+		s=0 63
+		v=428 429
 	}
 	e{
-		s=0 68
-		v=454 455
+		s=0 63
+		v=429 430
 	}
 	e{
-		s=0 68
-		v=455 456
+		s=0 63
+		v=430 431
 	}
 	e{
-		s=0 68
-		v=456 457
+		s=0 63
+		v=431 432
 	}
 	e{
-		s=0 68
-		v=457 458
+		s=0 63
+		v=432 433
 	}
 	e{
-		s=0 68
-		v=458 459
+		s=0 63
+		v=433 434
 	}
 	e{
-		s=0 68
-		v=459 460
+		s=0 63
+		v=434 435
 	}
 	e{
-		s=7 120
-		v=462 438
+		s=7 106
+		v=437 413
 	}
 	e{
-		s=9 129
-		v=463 72
+		s=9 115
+		v=438 72
 	}
 	e{
-		s=9 129
-		v=464 463
+		s=9 115
+		v=439 438
 	}
 	e{
 		s=9 5
-		v=465 466
+		v=440 441
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=77 8
+		s=72 8
 		v=169 168
 		smoothing_length=10.0000
 	}
 	e{
-		s=5 98
-		v=469 468
+		s=5 84
+		v=444 443
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=70 71
-		v=472 467
+		s=65 66
+		v=447 442
 		smoothing_length=10.0000
 	}
 	e{
-		s=96 71
-		v=473 582
+		s=82 66
+		v=448 532
 		smoothing_length=10.0000
 	}
 	e{
-		s=71 143
-		v=725 56
+		s=66 129
+		v=675 56
 		smoothing_length=10.0000
 	}
 	e{
-		s=142 8
-		v=57 470
+		s=128 8
+		v=57 445
 		smoothing_length=10.0000
 	}
 	e{
-		s=70 71
-		v=467 56
+		s=65 66
+		v=442 56
 		smoothing_length=10.0000
 	}
 	e{
-		s=47 72
-		v=474 584
+		s=47 67
+		v=449 534
 	}
 	e{
-		s=47 72
-		v=475 755
+		s=47 67
+		v=450 705
 	}
 	e{
-		s=72 98
-		v=478 477
+		s=67 84
+		v=453 452
 	}
 	e{
-		s=72 98
-		v=479 478
+		s=67 84
+		v=454 453
 	}
 	e{
-		s=72 110
-		v=481 31
+		s=67 96
+		v=456 31
 	}
 	e{
-		s=103 110
-		v=602 597
+		s=89 96
+		v=552 547
 		smoothing_length=10.0000
 	}
 	e{
-		s=110 73
-		v=490 482
+		s=96 68
+		v=465 457
 	}
 	e{
-		s=110 73
-		v=482 483
+		s=96 68
+		v=457 458
 	}
 	e{
-		s=110 73
-		v=483 484
+		s=96 68
+		v=458 459
 	}
 	e{
-		s=110 73
-		v=484 485
+		s=96 68
+		v=459 460
 	}
 	e{
-		s=110 73
-		v=485 486
+		s=96 68
+		v=460 461
 	}
 	e{
-		s=110 73
-		v=486 487
+		s=96 68
+		v=461 462
 	}
 	e{
-		s=110 73
-		v=487 488
+		s=96 68
+		v=462 463
 	}
 	e{
-		s=110 73
-		v=488 489
+		s=96 68
+		v=463 464
 	}
 	e{
-		s=110 73
-		v=489 490
+		s=96 68
+		v=464 465
 	}
 	e{
-		s=72 110
-		v=474 481
+		s=67 96
+		v=449 456
 	}
 	e{
-		s=74 103
-		v=599 597
+		s=69 89
+		v=549 547
 	}
 	e{
-		s=94 8
-		v=579 581
+		s=80 8
+		v=529 531
 		smoothing_length=10.0000
 	}
 	e{
-		s=96 8
-		v=491 583
+		s=82 8
+		v=466 533
 		smoothing_length=10.0000
 	}
 	e{
-		s=71 99
-		v=55 492
+		s=66 85
+		v=55 467
 		smoothing_length=10.0000
 	}
 	e{
-		s=5 98
-		v=468 496
-		smoothing_length=10.0000
-		smoothing_color=0 0 0 240
-	}
-	e{
-		s=5 8
-		v=61 493
+		s=5 84
+		v=443 471
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
 		s=5 8
-		v=493 494
+		v=61 468
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
 		s=5 8
-		v=494 58
+		v=468 469
+		smoothing_length=10.0000
+		smoothing_color=0 0 0 240
+	}
+	e{
+		s=5 8
+		v=469 58
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
 		s=8 5
-		v=437 112
+		v=412 112
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=97 8
-		v=583 728
+		s=83 8
+		v=533 678
 		smoothing_length=10.0000
 	}
 	e{
-		s=98 71
-		v=495 472
+		s=84 66
+		v=470 447
 		smoothing_length=10.0000
 	}
 	e{
-		s=112 120
-		v=632 119
+		s=98 106
+		v=582 119
 	}
 	e{
-		s=120 134
-		v=687 46
+		s=106 120
+		v=637 46
 	}
 	e{
-		s=142 5
-		v=470 718
+		s=128 5
+		v=445 668
 		shadow_length=15.8000
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=72 110
-		v=31 480
+		s=67 96
+		v=31 455
 	}
 	e{
-		s=72 98
-		v=480 479
+		s=67 84
+		v=455 454
 	}
 	e{
-		s=98 110
-		v=480 602
+		s=84 96
+		v=455 552
 		smoothing_length=10.0000
 	}
 	e{
@@ -3361,264 +3211,140 @@ edges{
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=77 110
-		v=498 169
+		s=72 96
+		v=473 169
 	}
 	e{
-		s=139 77
-		v=499 168
+		s=125 72
+		v=474 168
 	}
 	e{
-		s=77 69
-		v=499 498
+		s=72 64
+		v=474 473
 	}
 	e{
-		s=79 120
-		v=502 501
+		s=74 106
+		v=477 476
 	}
 	e{
-		s=107 120
-		v=503 651
+		s=93 106
+		v=478 601
 	}
 	e{
-		s=79 120
-		v=183 502
+		s=74 106
+		v=183 477
 	}
 	e{
-		s=107 120
-		v=501 503
+		s=93 106
+		v=476 478
 	}
 	e{
-		s=79 49
-		v=87 504
+		s=74 49
+		v=87 479
 		smoothing_length=10.0000
 	}
 	e{
-		s=89 107
-		v=189 563
+		s=75 93
+		v=189 513
 		smoothing_length=10.0000
 	}
 	e{
-		s=79 107
-		v=505 189
+		s=74 93
+		v=480 189
 		smoothing_length=10.0000
 	}
 	e{
-		s=78 48
-		v=82 637
+		s=73 48
+		v=82 587
 		smoothing_length=10.0000
 	}
 	e{
-		s=78 49
-		v=506 80
+		s=73 49
+		v=481 80
 		smoothing_length=10.0000
 	}
 	e{
-		s=79 107
-		v=501 505
+		s=74 93
+		v=476 480
 		smoothing_length=10.0000
 	}
 	e{
-		s=93 79
-		v=120 507
+		s=79 74
+		v=120 482
 		smoothing_length=10.0000
 	}
 	e{
-		s=79 154
-		v=508 401
+		s=74 140
+		v=483 401
 		smoothing_length=10.0000
 	}
 	e{
-		s=78 80
-		v=513 509
-	}
-	e{
-		s=78 80
-		v=509 510
-	}
-	e{
-		s=78 80
-		v=510 511
-	}
-	e{
-		s=78 80
-		v=511 512
-	}
-	e{
-		s=78 80
-		v=512 513
-	}
-	e{
-		s=81 78
-		v=514 515
-	}
-	e{
-		s=81 78
-		v=515 516
-	}
-	e{
-		s=81 78
-		v=516 534
-	}
-	e{
-		s=81 48
-		v=517 83
+		s=73 48
+		v=484 83
 		smoothing_length=10.0000
 	}
 	e{
-		s=81 48
-		v=518 517
+		s=73 48
+		v=485 484
 		smoothing_length=10.0000
 	}
 	e{
-		s=78 82
-		v=523 519
-	}
-	e{
-		s=78 82
-		v=519 520
-	}
-	e{
-		s=78 82
-		v=520 521
-	}
-	e{
-		s=78 82
-		v=521 522
-	}
-	e{
-		s=78 82
-		v=522 523
-	}
-	e{
-		s=78 83
-		v=528 524
-	}
-	e{
-		s=78 83
-		v=524 525
-	}
-	e{
-		s=78 83
-		v=525 526
-	}
-	e{
-		s=78 83
-		v=526 527
-	}
-	e{
-		s=78 83
-		v=527 528
-	}
-	e{
-		s=88 78
-		v=529 532
-	}
-	e{
-		s=78 87
-		v=529 530
-	}
-	e{
-		s=78 85
-		v=530 531
-	}
-	e{
-		s=86 78
-		v=533 531
-	}
-	e{
-		s=78 84
-		v=533 532
-	}
-	e{
-		s=86 85
-		v=531 426
-	}
-	e{
-		s=85 87
-		v=530 425
-	}
-	e{
-		s=86 84
-		v=427 533
-	}
-	e{
-		s=88 84
-		v=532 428
-	}
-	e{
-		s=88 87
-		v=424 529
-	}
-	e{
-		s=78 49
-		v=78 543
+		s=73 49
+		v=78 493
 		smoothing_length=10.0000
 	}
 	e{
-		s=81 78
-		v=534 518
+		s=115 121
+		v=486 122
 	}
 	e{
-		s=81 78
-		v=535 514
+		s=115 121
+		v=487 486
 	}
 	e{
-		s=81 78
-		v=83 535
+		s=9 115
+		v=488 109
 	}
 	e{
-		s=129 135
-		v=536 122
+		s=9 115
+		v=563 488
 	}
 	e{
-		s=129 135
-		v=537 536
+		s=9 115
+		v=487 565
 	}
 	e{
-		s=9 129
-		v=538 109
+		s=9 115
+		v=109 564
 	}
 	e{
-		s=9 129
-		v=613 538
-	}
-	e{
-		s=9 129
-		v=537 615
-	}
-	e{
-		s=9 129
-		v=109 614
-	}
-	e{
-		s=1 107
-		v=540 19
+		s=1 93
+		v=490 19
 		smoothing_length=5.0000
 	}
 	e{
-		s=1 110
-		v=541 540
+		s=1 96
+		v=491 490
 		smoothing_length=5.0000
 	}
 	e{
-		s=106 1
+		s=92 1
 		v=47 9
 		smoothing_length=5.0000
 	}
 	e{
 		s=1 0
-		v=542 3
+		v=492 3
 		smoothing_length=5.0000
 	}
 	e{
-		s=115 1
+		s=101 1
 		v=9 10
 		smoothing_length=5.0000
 	}
 	e{
-		s=115 106
-		v=625 9
+		s=101 92
+		v=575 9
 		smoothing_length=10.0000
 	}
 	e{
@@ -3627,1292 +3353,1292 @@ edges{
 	}
 	e{
 		s=47 5
-		v=497 558
+		v=472 508
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=78 49
-		v=543 544
+		s=73 49
+		v=493 494
 		smoothing_length=10.0000
 	}
 	e{
-		s=78 49
-		v=544 545
+		s=73 49
+		v=494 495
 		smoothing_length=10.0000
 	}
 	e{
-		s=146 90
-		v=546 547
+		s=132 76
+		v=496 497
 		smoothing_length=10.0000
 	}
 	e{
-		s=146 90
-		v=547 587
+		s=132 76
+		v=497 537
 		smoothing_length=10.0000
 	}
 	e{
-		s=5 147
-		v=92 548
-		smoothing_length=10.0000
-		smoothing_color=0 0 0 240
-	}
-	e{
-		s=5 98
-		v=549 469
+		s=5 133
+		v=92 498
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=5 98
-		v=567 549
+		s=5 84
+		v=499 444
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=146 79
-		v=32 553
-		smoothing_length=10.0000
-	}
-	e{
-		s=5 90
-		v=550 565
+		s=5 84
+		v=517 499
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=5 90
-		v=561 576
+		s=132 74
+		v=32 503
+		smoothing_length=10.0000
+	}
+	e{
+		s=5 76
+		v=500 515
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=146 90
-		v=564 569
+		s=5 76
+		v=511 526
+		smoothing_length=10.0000
+		smoothing_color=0 0 0 240
+	}
+	e{
+		s=132 76
+		v=514 519
 		smoothing_length=10.0000
 	}
 	e{
-		s=47 110
-		v=555 554
+		s=47 96
+		v=505 504
 	}
 	e{
-		s=92 72
-		v=476 585
+		s=78 67
+		v=451 535
 	}
 	e{
-		s=47 110
-		v=29 555
+		s=47 96
+		v=29 505
 	}
 	e{
-		s=47 91
-		v=559 30
+		s=47 77
+		v=509 30
 	}
 	e{
 		s=5 47
-		v=557 558
-		smoothing_length=10.0000
-		smoothing_color=0 0 0 240
-	}
-	e{
-		s=5 47
-		v=556 557
-		smoothing_length=10.0000
-		smoothing_color=0 0 0 240
-	}
-	e{
-		s=5 91
-		v=562 559
+		v=507 508
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
 		s=5 47
-		v=559 556
+		v=506 507
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=5 90
-		v=551 577
+		s=5 77
+		v=512 509
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=91 110
-		v=566 30
-		smoothing_length=10.0000
-	}
-	e{
-		s=5 90
-		v=565 562
+		s=5 47
+		v=509 506
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=90 107
-		v=563 461
-		smoothing_length=10.0000
-	}
-	e{
-		s=146 89
-		v=190 564
-		smoothing_length=10.0000
-	}
-	e{
-		s=89 90
-		v=563 564
-	}
-	e{
-		s=90 110
-		v=25 560
-		smoothing_length=10.0000
-	}
-	e{
-		s=90 110
-		v=560 566
-		smoothing_length=10.0000
-	}
-	e{
-		s=90 91
-		v=566 562
-	}
-	e{
-		s=92 5
-		v=567 118
+		s=5 76
+		v=501 527
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=92 98
-		v=477 567
-	}
-	e{
-		s=146 90
-		v=568 546
+		s=77 96
+		v=516 30
 		smoothing_length=10.0000
 	}
 	e{
-		s=146 90
-		v=569 570
-		smoothing_length=10.0000
-	}
-	e{
-		s=150 49
-		v=545 734
-		smoothing_length=10.0000
-	}
-	e{
-		s=5 147
-		v=548 573
+		s=5 76
+		v=515 512
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=93 148
-		v=735 586
+		s=76 93
+		v=513 436
+		smoothing_length=10.0000
 	}
 	e{
-		s=100 147
-		v=573 572
+		s=132 75
+		v=190 514
+		smoothing_length=10.0000
 	}
 	e{
-		s=90 5
-		v=574 575
+		s=75 76
+		v=513 514
+	}
+	e{
+		s=76 96
+		v=25 510
+		smoothing_length=10.0000
+	}
+	e{
+		s=76 96
+		v=510 516
+		smoothing_length=10.0000
+	}
+	e{
+		s=76 77
+		v=516 512
+	}
+	e{
+		s=78 5
+		v=517 118
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=90 5
-		v=575 740
+		s=78 84
+		v=452 517
+	}
+	e{
+		s=132 76
+		v=518 496
+		smoothing_length=10.0000
+	}
+	e{
+		s=132 76
+		v=519 520
+		smoothing_length=10.0000
+	}
+	e{
+		s=136 49
+		v=495 684
+		smoothing_length=10.0000
+	}
+	e{
+		s=5 133
+		v=498 523
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=5 90
-		v=576 550
+		s=79 134
+		v=685 536
+	}
+	e{
+		s=86 133
+		v=523 522
+	}
+	e{
+		s=76 5
+		v=524 525
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=5 90
-		v=577 561
+		s=76 5
+		v=525 690
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=5 90
-		v=578 551
+		s=5 76
+		v=526 500
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=94 99
-		v=492 579
+		s=5 76
+		v=527 511
+		smoothing_length=10.0000
+		smoothing_color=0 0 0 240
 	}
 	e{
-		s=94 71
-		v=580 492
+		s=5 76
+		v=528 501
+		smoothing_length=10.0000
+		smoothing_color=0 0 0 240
+	}
+	e{
+		s=80 85
+		v=467 529
+	}
+	e{
+		s=80 66
+		v=530 467
 		smoothing_length=10.0000
 	}
 	e{
-		s=95 8
-		v=581 491
+		s=81 8
+		v=531 466
 		smoothing_length=10.0000
 	}
 	e{
-		s=95 94
-		v=580 581
+		s=81 80
+		v=530 531
 	}
 	e{
-		s=95 71
-		v=582 580
+		s=81 66
+		v=532 530
 		smoothing_length=10.0000
 	}
 	e{
-		s=96 95
-		v=582 491
+		s=82 81
+		v=532 466
 	}
 	e{
-		s=97 96
-		v=473 583
+		s=83 82
+		v=448 533
 	}
 	e{
 		s=5 8
-		v=470 471
+		v=445 446
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=47 72
-		v=584 475
+		s=47 67
+		v=534 450
 	}
 	e{
-		s=47 110
-		v=554 474
+		s=47 96
+		v=504 449
 	}
 	e{
-		s=92 72
-		v=585 477
+		s=78 67
+		v=535 452
 	}
 	e{
-		s=75 99
+		s=70 85
 		v=54 55
 	}
 	e{
-		s=148 147
-		v=572 586
+		s=134 133
+		v=522 536
 	}
 	e{
-		s=146 100
-		v=587 571
+		s=132 86
+		v=537 521
 		smoothing_length=10.0000
 	}
 	e{
-		s=78 93
-		v=588 359
+		s=73 79
+		v=538 359
 	}
 	e{
-		s=5 90
-		v=589 578
-		smoothing_length=10.0000
-		smoothing_color=0 0 0 240
-	}
-	e{
-		s=90 5
-		v=552 592
+		s=5 76
+		v=539 528
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=90 5
-		v=590 574
+		s=76 5
+		v=502 542
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=90 5
-		v=591 590
+		s=76 5
+		v=540 524
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=146 90
-		v=570 568
-		smoothing_length=10.0000
-	}
-	e{
-		s=5 90
-		v=552 589
+		s=76 5
+		v=541 540
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=90 5
-		v=592 593
+		s=132 76
+		v=520 518
+		smoothing_length=10.0000
+	}
+	e{
+		s=5 76
+		v=502 539
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=90 5
-		v=593 594
+		s=76 5
+		v=542 543
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=90 5
-		v=594 591
+		s=76 5
+		v=543 544
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=101 107
-		v=332 595
+		s=76 5
+		v=544 541
+		smoothing_length=10.0000
+		smoothing_color=0 0 0 240
 	}
 	e{
-		s=101 110
-		v=595 23
+		s=87 93
+		v=332 545
+	}
+	e{
+		s=87 96
+		v=545 23
 		smoothing_length=10.0000
 	}
 	e{
-		s=1 110
-		v=8 541
+		s=1 96
+		v=8 491
 		smoothing_length=5.0000
 	}
 	e{
-		s=78 57
-		v=596 435
+		s=73 57
+		v=546 410
 		smoothing_length=10.0000
 	}
 	e{
-		s=74 110
-		v=597 600
+		s=69 96
+		v=547 550
 		smoothing_length=10.0000
 	}
 	e{
-		s=98 103
-		v=602 598
+		s=84 89
+		v=552 548
 	}
 	e{
-		s=76 74
-		v=599 600
+		s=71 69
+		v=549 550
 	}
 	e{
-		s=76 110
-		v=600 601
+		s=71 96
+		v=550 551
 		smoothing_length=10.0000
 	}
 	e{
-		s=76 98
-		v=601 598
+		s=71 84
+		v=551 548
 	}
 	e{
-		s=98 110
-		v=601 495
+		s=84 96
+		v=551 470
 		smoothing_length=10.0000
 	}
 	e{
-		s=76 103
-		v=598 599
+		s=71 89
+		v=548 549
 	}
 	e{
-		s=105 104
-		v=611 603
+		s=91 90
+		v=561 553
 	}
 	e{
-		s=104 9
-		v=604 110
+		s=90 9
+		v=554 110
 	}
 	e{
-		s=104 137
-		v=610 706
+		s=90 123
+		v=560 656
 	}
 	e{
-		s=115 104
-		v=619 606
+		s=101 90
+		v=569 556
 	}
 	e{
-		s=104 110
-		v=608 607
+		s=90 96
+		v=558 557
 	}
 	e{
-		s=10 104
-		v=608 609
+		s=10 90
+		v=558 559
 	}
 	e{
-		s=64 104
-		v=609 110
+		s=59 90
+		v=559 110
 	}
 	e{
-		s=115 104
-		v=610 612
+		s=101 90
+		v=560 562
 	}
 	e{
-		s=104 9
-		v=611 604
+		s=90 9
+		v=561 554
 	}
 	e{
-		s=115 104
-		v=612 605
+		s=101 90
+		v=562 555
 	}
 	e{
-		s=115 129
+		s=101 115
 		v=121 186
 	}
 	e{
-		s=64 9
+		s=59 9
 		v=110 111
 	}
 	e{
-		s=9 129
-		v=539 613
+		s=9 115
+		v=489 563
 	}
 	e{
-		s=9 129
-		v=614 464
+		s=9 115
+		v=564 439
 	}
 	e{
-		s=9 129
-		v=615 539
+		s=9 115
+		v=565 489
 	}
 	e{
-		s=1 107
-		v=201 616
+		s=1 93
+		v=201 566
 		smoothing_length=5.0000
 	}
 	e{
-		s=1 116
-		v=635 618
+		s=1 102
+		v=585 568
 		smoothing_length=5.0000
 	}
 	e{
-		s=115 104
-		v=620 619
+		s=101 90
+		v=570 569
 	}
 	e{
-		s=115 104
-		v=605 620
+		s=101 90
+		v=555 570
 	}
 	e{
-		s=104 106
-		v=621 606
+		s=90 92
+		v=571 556
 	}
 	e{
-		s=19 120
-		v=500 628
+		s=19 106
+		v=475 578
 	}
 	e{
-		s=111 116
-		v=617 623
+		s=97 102
+		v=567 573
 	}
 	e{
-		s=106 109
-		v=621 622
+		s=92 95
+		v=571 572
 	}
 	e{
-		s=106 111
-		v=622 623
+		s=92 97
+		v=572 573
 	}
 	e{
-		s=104 109
-		v=607 621
+		s=90 95
+		v=557 571
 	}
 	e{
-		s=109 110
-		v=607 624
+		s=95 96
+		v=557 574
 	}
 	e{
-		s=110 111
-		v=617 624
+		s=96 97
+		v=567 574
 	}
 	e{
-		s=109 111
-		v=624 622
+		s=95 97
+		v=574 572
 	}
 	e{
-		s=115 137
-		v=186 610
+		s=101 123
+		v=186 560
 	}
 	e{
-		s=105 113
-		v=603 702
+		s=91 99
+		v=553 652
 	}
 	e{
-		s=115 106
-		v=606 625
+		s=101 92
+		v=556 575
 		smoothing_length=10.0000
 	}
 	e{
-		s=19 108
-		v=626 500
+		s=19 94
+		v=576 475
 	}
 	e{
-		s=107 114
-		v=627 616
+		s=93 100
+		v=577 566
 	}
 	e{
-		s=108 114
-		v=626 627
+		s=94 100
+		v=576 577
 	}
 	e{
-		s=115 19
-		v=633 628
+		s=101 19
+		v=583 578
 		smoothing_length=10.0000
 	}
 	e{
-		s=112 129
-		v=185 629
+		s=98 115
+		v=185 579
 	}
 	e{
-		s=115 120
-		v=357 632
+		s=101 106
+		v=357 582
 	}
 	e{
-		s=115 112
-		v=630 629
+		s=101 98
+		v=580 579
 	}
 	e{
-		s=115 112
-		v=631 630
+		s=101 98
+		v=581 580
 	}
 	e{
-		s=115 112
-		v=632 631
+		s=101 98
+		v=582 581
 	}
 	e{
 		s=19 1
-		v=634 63
+		v=584 63
 		shadow_length=17.2000
 		smoothing_length=5.0000
 	}
 	e{
-		s=106 1
-		v=635 47
+		s=92 1
+		v=585 47
 		smoothing_length=5.0000
 	}
 	e{
-		s=106 116
-		v=623 635
+		s=92 102
+		v=573 585
 	}
 	e{
-		s=110 116
-		v=618 617
+		s=96 102
+		v=568 567
 	}
 	e{
-		s=78 117
-		v=637 81
+		s=73 103
+		v=587 81
 		smoothing_length=10.0000
 	}
 	e{
-		s=48 117
-		v=404 636
+		s=48 103
+		v=404 586
 	}
 	e{
-		s=48 117
-		v=636 637
+		s=48 103
+		v=586 587
 	}
 	e{
-		s=55 117
-		v=638 404
+		s=55 103
+		v=588 404
 	}
 	e{
-		s=117 118
-		v=638 639
+		s=103 104
+		v=588 589
 	}
 	e{
-		s=117 118
-		v=639 81
+		s=103 104
+		v=589 81
 	}
 	e{
-		s=6 129
-		v=128 685
+		s=6 115
+		v=128 635
 	}
 	e{
-		s=133 129
-		v=641 640
+		s=119 115
+		v=591 590
 	}
 	e{
-		s=133 129
-		v=642 641
+		s=119 115
+		v=592 591
 	}
 	e{
-		s=132 129
-		v=643 696
+		s=118 115
+		v=593 646
 	}
 	e{
-		s=119 129
-		v=644 688
+		s=105 115
+		v=594 638
 	}
 	e{
-		s=130 15
-		v=116 645
+		s=116 15
+		v=116 595
 		smoothing_length=15.0000
 	}
 	e{
-		s=133 120
-		v=680 646
+		s=119 106
+		v=630 596
 	}
 	e{
-		s=133 120
-		v=646 647
+		s=119 106
+		v=596 597
 	}
 	e{
-		s=133 120
-		v=647 648
+		s=119 106
+		v=597 598
 	}
 	e{
-		s=133 120
-		v=648 649
+		s=119 106
+		v=598 599
 	}
 	e{
-		s=133 120
-		v=649 650
+		s=119 106
+		v=599 600
 	}
 	e{
-		s=133 129
-		v=640 683
+		s=119 115
+		v=590 633
 	}
 	e{
-		s=133 120
-		v=650 693
+		s=119 106
+		v=600 643
 	}
 	e{
-		s=107 108
-		v=651 627
+		s=93 94
+		v=601 577
 	}
 	e{
-		s=108 120
-		v=651 500
+		s=94 106
+		v=601 475
 	}
 	e{
-		s=19 114
-		v=63 626
+		s=19 100
+		v=63 576
 	}
 	e{
-		s=115 19
-		v=634 633
+		s=101 19
+		v=584 583
 		shadow_length=20.0000
 		smoothing_length=10.0000
 	}
 	e{
-		s=123 122
-		v=656 652
+		s=109 108
+		v=606 602
 	}
 	e{
-		s=122 125
-		v=653 652
+		s=108 111
+		v=603 602
 	}
 	e{
-		s=122 127
-		v=654 653
+		s=108 113
+		v=604 603
 	}
 	e{
-		s=122 126
-		v=655 654
+		s=108 112
+		v=605 604
 	}
 	e{
-		s=122 124
-		v=656 655
+		s=108 110
+		v=606 605
 	}
 	e{
-		s=9 126
-		v=661 657
+		s=9 112
+		v=611 607
 	}
 	e{
-		s=9 124
-		v=657 658
+		s=9 110
+		v=607 608
 	}
 	e{
-		s=9 123
-		v=658 659
+		s=9 109
+		v=608 609
 	}
 	e{
-		s=9 125
-		v=659 660
+		s=9 111
+		v=609 610
 	}
 	e{
-		s=9 127
-		v=660 661
+		s=9 113
+		v=610 611
 	}
 	e{
-		s=124 126
-		v=657 655
+		s=110 112
+		v=607 605
 	}
 	e{
-		s=123 124
-		v=658 656
+		s=109 110
+		v=608 606
 	}
 	e{
-		s=123 125
-		v=652 659
+		s=109 111
+		v=602 609
 	}
 	e{
-		s=125 127
-		v=653 660
+		s=111 113
+		v=603 610
 	}
 	e{
-		s=126 127
-		v=661 654
+		s=112 113
+		v=611 604
 	}
 	e{
-		s=90 107
-		v=662 17
+		s=76 93
+		v=612 17
 		smoothing_length=10.0000
 	}
 	e{
-		s=90 107
-		v=663 662
+		s=76 93
+		v=613 612
 		smoothing_length=10.0000
 	}
 	e{
-		s=90 107
-		v=664 663
+		s=76 93
+		v=614 613
 		smoothing_length=10.0000
 	}
 	e{
-		s=90 107
-		v=665 664
+		s=76 93
+		v=615 614
 		smoothing_length=10.0000
 	}
 	e{
 		s=9 5
-		v=666 126
+		v=616 126
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
 		s=5 9
-		v=666 667
+		v=616 617
 		shadow_length=30.0000
 		smoothing_length=10.0000
 	}
 	e{
-		s=128 9
-		v=667 677
+		s=114 9
+		v=617 627
 		shadow_length=30.0000
 	}
 	e{
-		s=16 128
-		v=669 753
+		s=16 114
+		v=619 703
 		smoothing_length=10.0000
 	}
 	e{
-		s=129 16
-		v=668 127
+		s=115 16
+		v=618 127
 	}
 	e{
-		s=16 128
-		v=670 669
+		s=16 114
+		v=620 619
 		smoothing_length=10.0000
 	}
 	e{
-		s=9 128
-		v=753 673
+		s=9 114
+		v=703 623
 		shadow_length=29.9520
 	}
 	e{
-		s=93 128
-		v=672 125
+		s=79 114
+		v=622 125
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=5 128
-		v=671 672
+		s=5 114
+		v=621 622
 	}
 	e{
-		s=9 128
-		v=673 677
+		s=9 114
+		v=623 627
 		shadow_length=30.0000
 	}
 	e{
-		s=5 128
-		v=674 671
+		s=5 114
+		v=624 621
 	}
 	e{
-		s=5 128
-		v=675 674
+		s=5 114
+		v=625 624
 	}
 	e{
-		s=5 128
-		v=667 676
+		s=5 114
+		v=617 626
 	}
 	e{
-		s=5 128
-		v=676 675
+		s=5 114
+		v=626 625
 	}
 	e{
-		s=93 16
-		v=670 129
+		s=79 16
+		v=620 129
 		smoothing_length=10.0000
 	}
 	e{
-		s=131 130
-		v=678 645
+		s=117 116
+		v=628 595
 	}
 	e{
-		s=131 130
-		v=679 678
+		s=117 116
+		v=629 628
 	}
 	e{
-		s=131 130
-		v=116 679
+		s=117 116
+		v=116 629
 	}
 	e{
-		s=131 120
-		v=645 680
+		s=117 106
+		v=595 630
 	}
 	e{
-		s=131 129
-		v=683 116
+		s=117 115
+		v=633 116
 	}
 	e{
-		s=133 131
-		v=681 680
+		s=119 117
+		v=631 630
 	}
 	e{
-		s=133 131
-		v=682 681
+		s=119 117
+		v=632 631
 	}
 	e{
-		s=133 131
-		v=683 682
+		s=119 117
+		v=633 632
 	}
 	e{
-		s=6 119
-		v=684 697
+		s=6 105
+		v=634 647
 	}
 	e{
-		s=6 119
-		v=685 684
+		s=6 105
+		v=635 634
 	}
 	e{
-		s=119 129
-		v=685 644
-	}
-	e{
-		s=6 134
-		v=686 687
+		s=105 115
+		v=635 594
 	}
 	e{
 		s=6 120
-		v=687 462
+		v=636 637
 	}
 	e{
-		s=119 121
-		v=688 699
+		s=6 106
+		v=637 437
 	}
 	e{
-		s=121 129
-		v=688 692
+		s=105 107
+		v=638 649
 	}
 	e{
-		s=121 120
-		v=689 46
+		s=107 115
+		v=638 642
 	}
 	e{
-		s=132 129
-		v=692 643
+		s=107 106
+		v=639 46
 	}
 	e{
-		s=132 121
-		v=689 690
+		s=118 115
+		v=642 593
 	}
 	e{
-		s=132 121
-		v=690 691
+		s=118 107
+		v=639 640
 	}
 	e{
-		s=132 121
-		v=691 692
+		s=118 107
+		v=640 641
 	}
 	e{
-		s=132 120
-		v=693 689
+		s=118 107
+		v=641 642
 	}
 	e{
-		s=133 129
-		v=696 642
+		s=118 106
+		v=643 639
 	}
 	e{
-		s=133 132
-		v=693 694
+		s=119 115
+		v=646 592
 	}
 	e{
-		s=133 132
-		v=694 695
+		s=119 118
+		v=643 644
 	}
 	e{
-		s=133 132
-		v=695 696
+		s=119 118
+		v=644 645
 	}
 	e{
-		s=6 134
-		v=697 686
+		s=119 118
+		v=645 646
 	}
 	e{
-		s=121 134
-		v=46 700
+		s=6 120
+		v=647 636
 	}
 	e{
-		s=119 134
-		v=698 697
+		s=107 120
+		v=46 650
 	}
 	e{
-		s=119 121
-		v=699 698
+		s=105 120
+		v=648 647
 	}
 	e{
-		s=121 134
-		v=700 698
+		s=105 107
+		v=649 648
 	}
 	e{
-		s=9 135
-		v=701 537
+		s=107 120
+		v=650 648
 	}
 	e{
-		s=105 9
-		v=701 611
+		s=9 121
+		v=651 487
 	}
 	e{
-		s=113 135
-		v=122 702
+		s=91 9
+		v=651 561
 	}
 	e{
-		s=105 135
-		v=702 701
+		s=99 121
+		v=122 652
 	}
 	e{
-		s=113 129
-		v=705 122
+		s=91 121
+		v=652 651
 	}
 	e{
-		s=113 138
-		v=603 703
+		s=99 115
+		v=655 122
 	}
 	e{
-		s=113 136
-		v=703 704
+		s=99 124
+		v=553 653
 	}
 	e{
-		s=113 136
-		v=704 705
+		s=99 122
+		v=653 654
 	}
 	e{
-		s=104 138
-		v=706 603
+		s=99 122
+		v=654 655
 	}
 	e{
-		s=129 137
-		v=709 186
+		s=90 124
+		v=656 553
 	}
 	e{
-		s=137 138
-		v=707 706
+		s=115 123
+		v=659 186
 	}
 	e{
-		s=136 137
-		v=707 708
+		s=123 124
+		v=657 656
 	}
 	e{
-		s=136 137
-		v=708 709
+		s=122 123
+		v=657 658
 	}
 	e{
-		s=136 138
-		v=703 707
+		s=122 123
+		v=658 659
 	}
 	e{
-		s=8 141
-		v=715 710
+		s=122 124
+		v=653 657
+	}
+	e{
+		s=8 127
+		v=665 660
 		smoothing_length=10.0000
 	}
 	e{
-		s=139 71
-		v=712 113
+		s=125 66
+		v=662 113
 		smoothing_length=10.0000
 	}
 	e{
-		s=139 141
-		v=710 711
+		s=125 127
+		v=660 661
 	}
 	e{
-		s=139 140
-		v=711 712
+		s=125 126
+		v=661 662
 	}
 	e{
-		s=71 140
-		v=712 713
+		s=66 126
+		v=662 663
 		smoothing_length=10.0000
 	}
 	e{
-		s=75 140
-		v=713 714
+		s=70 126
+		v=663 664
 	}
 	e{
-		s=140 141
-		v=711 714
+		s=126 127
+		v=661 664
 	}
 	e{
-		s=75 141
-		v=714 715
+		s=70 127
+		v=664 665
 	}
 	e{
-		s=69 110
-		v=716 498
+		s=64 96
+		v=666 473
 	}
 	e{
-		s=71 69
-		v=716 166
+		s=66 64
+		v=666 166
 		smoothing_length=10.0000
 	}
 	e{
-		s=102 98
-		v=717 472
+		s=88 84
+		v=667 447
 	}
 	e{
-		s=102 98
-		v=496 717
+		s=88 84
+		v=471 667
 	}
 	e{
-		s=102 70
-		v=472 720
+		s=88 65
+		v=447 670
 	}
 	e{
-		s=102 5
-		v=718 496
+		s=88 5
+		v=668 471
 		shadow_length=17.0000
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=97 71
-		v=719 473
+		s=83 66
+		v=669 448
 		smoothing_length=10.0000
 	}
 	e{
-		s=142 102
-		v=718 720
+		s=128 88
+		v=668 670
 	}
 	e{
-		s=70 143
-		v=56 721
+		s=65 129
+		v=56 671
 	}
 	e{
-		s=142 70
-		v=720 721
+		s=128 65
+		v=670 671
 	}
 	e{
-		s=8 143
-		v=57 722
+		s=8 129
+		v=57 672
 		smoothing_length=10.0000
 	}
 	e{
-		s=145 71
-		v=725 719
+		s=131 66
+		v=675 669
 		smoothing_length=10.0000
 	}
 	e{
-		s=144 143
-		v=722 723
+		s=130 129
+		v=672 673
 	}
 	e{
-		s=144 143
-		v=723 724
+		s=130 129
+		v=673 674
 	}
 	e{
-		s=145 143
-		v=724 725
+		s=131 129
+		v=674 675
 	}
 	e{
-		s=144 8
-		v=728 722
+		s=130 8
+		v=678 672
 		smoothing_length=10.0000
 	}
 	e{
-		s=145 97
-		v=719 726
+		s=131 83
+		v=669 676
 	}
 	e{
-		s=144 97
-		v=726 727
+		s=130 83
+		v=676 677
 	}
 	e{
-		s=144 97
-		v=727 728
+		s=130 83
+		v=677 678
 	}
 	e{
-		s=145 144
-		v=726 724
+		s=131 130
+		v=676 674
 	}
 	e{
-		s=146 49
-		v=571 729
+		s=132 49
+		v=521 679
 		smoothing_length=10.0000
 	}
 	e{
-		s=146 49
-		v=729 730
+		s=132 49
+		v=679 680
 		smoothing_length=10.0000
 	}
 	e{
-		s=146 49
-		v=730 32
+		s=132 49
+		v=680 32
 		smoothing_length=10.0000
 	}
 	e{
-		s=93 5
-		v=733 371
-		smoothing_length=10.0000
-		smoothing_color=0 0 0 240
-	}
-	e{
-		s=93 147
-		v=586 731
-		smoothing_length=10.0000
-	}
-	e{
-		s=93 147
-		v=731 732
-		smoothing_length=10.0000
-	}
-	e{
-		s=93 147
-		v=732 733
-		smoothing_length=10.0000
-	}
-	e{
-		s=49 148
-		v=571 734
-		smoothing_length=10.0000
-	}
-	e{
-		s=93 149
-		v=588 735
-	}
-	e{
-		s=150 148
-		v=734 736
-	}
-	e{
-		s=148 149
-		v=737 736
-	}
-	e{
-		s=148 149
-		v=735 737
-	}
-	e{
-		s=150 78
-		v=738 545
-	}
-	e{
-		s=78 149
-		v=738 739
-	}
-	e{
-		s=78 149
-		v=739 588
-	}
-	e{
-		s=150 149
-		v=736 738
-	}
-	e{
-		s=90 100
-		v=740 742
-	}
-	e{
-		s=100 5
-		v=740 573
+		s=79 5
+		v=683 371
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=100 148
-		v=572 741
-	}
-	e{
-		s=100 148
-		v=741 571
-	}
-	e{
-		s=90 100
-		v=742 587
-	}
-	e{
-		s=152 93
-		v=174 743
+		s=79 133
+		v=536 681
 		smoothing_length=10.0000
 	}
 	e{
-		s=48 151
-		v=746 404
+		s=79 133
+		v=681 682
 		smoothing_length=10.0000
 	}
 	e{
-		s=152 151
-		v=743 744
+		s=79 133
+		v=682 683
+		smoothing_length=10.0000
 	}
 	e{
-		s=151 153
-		v=745 744
+		s=49 134
+		v=521 684
+		smoothing_length=10.0000
 	}
 	e{
-		s=151 153
-		v=746 745
+		s=79 135
+		v=538 685
 	}
 	e{
-		s=57 153
-		v=747 407
+		s=136 134
+		v=684 686
 	}
 	e{
-		s=57 153
-		v=748 747
+		s=134 135
+		v=687 686
 	}
 	e{
-		s=152 57
-		v=748 174
+		s=134 135
+		v=685 687
 	}
 	e{
-		s=152 153
-		v=744 748
+		s=136 73
+		v=688 495
 	}
 	e{
-		s=55 151
-		v=749 403
+		s=73 135
+		v=688 689
 	}
 	e{
-		s=55 154
-		v=401 750
+		s=73 135
+		v=689 538
 	}
 	e{
-		s=55 154
-		v=750 508
+		s=136 135
+		v=686 688
+	}
+	e{
+		s=76 86
+		v=690 692
+	}
+	e{
+		s=86 5
+		v=690 523
+		smoothing_length=10.0000
+		smoothing_color=0 0 0 240
+	}
+	e{
+		s=86 134
+		v=522 691
+	}
+	e{
+		s=86 134
+		v=691 521
+	}
+	e{
+		s=76 86
+		v=692 537
+	}
+	e{
+		s=138 79
+		v=174 693
+		smoothing_length=10.0000
+	}
+	e{
+		s=48 137
+		v=696 404
+		smoothing_length=10.0000
+	}
+	e{
+		s=138 137
+		v=693 694
+	}
+	e{
+		s=137 139
+		v=695 694
+	}
+	e{
+		s=137 139
+		v=696 695
+	}
+	e{
+		s=57 139
+		v=697 407
+	}
+	e{
+		s=57 139
+		v=698 697
+	}
+	e{
+		s=138 57
+		v=698 174
+	}
+	e{
+		s=138 139
+		v=694 698
+	}
+	e{
+		s=55 137
+		v=699 403
+	}
+	e{
+		s=55 140
+		v=401 700
+	}
+	e{
+		s=55 140
+		v=700 483
 	}
 	e{
 		s=9 16
-		v=751 752
+		v=701 702
 		shadow_length=30.0820
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
 		s=9 16
-		v=752 754
+		v=702 704
 		shadow_length=30.0820
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
 		s=9 16
-		v=754 753
+		v=704 703
 		shadow_length=30.0820
 		smoothing_length=10.0000
 		smoothing_color=0 0 0 240
 	}
 	e{
-		s=47 72
-		v=755 476
+		s=47 67
+		v=705 451
 	}
 }
 sectors{
@@ -5304,36 +5030,6 @@ sectors{
 		texture_tint=253 255 227
 	}
 	s{
-		z=450.0000
-		texture=textures/dirt
-		texture_scale=0.9000 0.9000
-		texture_tint=175 253 255
-	}
-	s{
-		z=450.0000
-		texture=textures/dirt
-		texture_scale=0.9000 0.9000
-		texture_tint=175 253 255
-	}
-	s{
-		z=450.0000
-		texture=textures/dirt
-		texture_scale=0.9000 0.9000
-		texture_tint=175 252 255
-	}
-	s{
-		z=450.0000
-		texture=textures/dirt
-		texture_scale=0.9000 0.9000
-		texture_tint=175 253 255
-	}
-	s{
-		z=450.0000
-		texture=textures/dirt
-		texture_scale=0.9000 0.9000
-		texture_tint=175 253 255
-	}
-	s{
 		z=0.0000
 		fade=true
 		texture_scale=0.9000 0.9000
@@ -5434,77 +5130,6 @@ sectors{
 		texture=textures/snow_clean
 		texture_scale=0.9000 0.9000
 		texture_tint=255 254 255
-	}
-	s{
-		z=450.0000
-		fade=true
-		texture=textures/dirt
-		texture_scale=0.9000 0.9000
-		texture_tint=255 217 217
-	}
-	s{
-		z=450.0000
-		brightness=131
-		fade=true
-		texture=textures/dirt
-		texture_scale=0.9000 0.9000
-		texture_tint=255 217 217
-	}
-	s{
-		z=450.0000
-		brightness=131
-		fade=true
-		texture=textures/dirt
-		texture_scale=0.9000 0.9000
-		texture_tint=255 217 217
-	}
-	s{
-		z=450.0000
-		brightness=131
-		fade=true
-		texture=textures/dirt
-		texture_scale=0.9000 0.9000
-		texture_tint=255 217 217
-	}
-	s{
-		z=450.0000
-		brightness=131
-		fade=true
-		texture=textures/dirt
-		texture_scale=0.9000 0.9000
-		texture_tint=255 217 217
-	}
-	s{
-		z=450.0000
-		brightness=131
-		fade=true
-		texture=textures/dirt
-		texture_scale=0.9000 0.9000
-		texture_tint=255 217 217
-	}
-	s{
-		z=450.0000
-		brightness=131
-		fade=true
-		texture=textures/dirt
-		texture_scale=0.9000 0.9000
-		texture_tint=255 217 217
-	}
-	s{
-		z=450.0000
-		brightness=131
-		fade=true
-		texture=textures/dirt
-		texture_scale=0.9000 0.9000
-		texture_tint=255 217 217
-	}
-	s{
-		z=450.0000
-		brightness=131
-		fade=true
-		texture=textures/dirt
-		texture_scale=0.9000 0.9000
-		texture_tint=255 217 217
 	}
 	s{
 		z=400.0000

@@ -28,6 +28,8 @@ script {
                 get_mob_info temp trigger mob_category
                 if $temp = leader
                     set_onion_activity true
+                    set_light_radius 100
+                    set_light_color 96 128 96
                     set_var active true
                     start_particles tricknoll_activation 0 0 120
                     play_sound activation

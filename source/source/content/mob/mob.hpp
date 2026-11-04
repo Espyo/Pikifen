@@ -314,6 +314,12 @@ public:
     
     //Current alpha, for peeking underneath [0 - 1].
     float peekUnderneathAlpha = 1.0f;
+
+    //Radius of the light cast in dark sectors. <0 to use the mob's radius.
+    float lightRadius = -1.0f;
+
+    //Color of light to cast in dark sectors. COLOR_BLACK to disable.
+    ALLEGRO_COLOR lightColor = COLOR_BLACK;
     
     //-Caches-
     

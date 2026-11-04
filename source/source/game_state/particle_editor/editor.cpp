@@ -142,6 +142,8 @@ void ParticleEditor::createPartGen(
         KeyframeInterpolator<float>(32);
     loadedGen.baseParticle.color =
         KeyframeInterpolator<ALLEGRO_COLOR>(mapAlpha(255));
+    loadedGen.baseParticle.lightColor =
+        KeyframeInterpolator<ALLEGRO_COLOR>(COLOR_BLACK);
     loadedGen.baseParticle.color.addNew(1, mapAlpha(0));
     
     loadedGen.emission.interval = 0.5f;

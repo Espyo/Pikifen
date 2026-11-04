@@ -43,6 +43,13 @@ void ShaderManager::compileShader(
  * @brief Compiles all shaders from their source.
  */
 void ShaderManager::compileShaders() {
+    //Lighting.
+    compileShader(
+        SHADER_TYPE_LIGHTING,
+        SHADER_SOURCES::LIGHTING_FRAG_SHADER,
+        SHADER_SOURCES::DEFAULT_VERT_SHADER
+    );
+
     //Colorizer.
     compileShader(
         SHADER_TYPE_COLORIZER,

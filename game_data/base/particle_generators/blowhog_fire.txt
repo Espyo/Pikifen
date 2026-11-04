@@ -2,7 +2,7 @@ name=Blowhog fire
 description=Fire blown forward.
 maker=Espyo
 version=1.0.0
-engine_version=1.0.0
+engine_version=1.2.0
 emission{
 	number=5
 	number_deviation=0
@@ -15,9 +15,21 @@ emission{
 base{
 	bitmap=effects/smoke
 	bitmap_angle=0.0000
+	bitmap_angle_type=0
 	duration=0.4000
 	friction=0.0000
 	blend_type=1
+	emits_light=true
+	light_size{
+		0.0000=35.0000
+		1.0000=80.0000
+	}
+	light_color{
+		0.1260=0 37 255 16
+		0.5000=255 255 0 16
+		0.9000=250 0 0 16
+		1.0000=0 0 0 0
+	}
 	color{
 		0.1260=0 37 255
 		0.5000=255 255 0 150
@@ -46,3 +58,4 @@ orbital_speed_deviation=0.0000
 outwards_speed_deviation=0.0000
 angle_deviation=7.0000
 linear_speed_deviation=0.0000 0.0000
+angles_are_absolute=false
