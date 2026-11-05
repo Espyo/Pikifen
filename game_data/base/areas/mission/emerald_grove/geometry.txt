@@ -241,7 +241,7 @@ vertexes{
 	v=-1503.9465 441.8643
 	v=-635.7322 281.4584
 	v=-677.2544 364.5030
-	v=446.7407 1396.4810
+	v=445.0425 1328.2917
 	v=99.4662 1495.2159
 	v=-192.0000 1296.0000
 	v=-165.4957 1153.0402
@@ -265,7 +265,7 @@ vertexes{
 	v=-521.5558 1525.5503
 	v=-390.0904 1512.6895
 	v=-274.3438 1482.6812
-	v=-131.4985 1337.1138
+	v=-148.0906 1359.5620
 	v=-542.0354 849.1742
 	v=-423.4308 820.5948
 	v=-343.4084 829.1686
@@ -575,7 +575,7 @@ vertexes{
 	v=537.5336 -1785.1272
 	v=626.9154 -1778.9202
 	v=157.9531 817.4131
-	v=183.1987 1022.5219
+	v=168.5586 1004.9538
 	v=611.1945 -1580.1853
 	v=580.5944 -1561.5812
 	v=563.5284 -1560.2330
@@ -707,6 +707,9 @@ vertexes{
 	v=702.6374 586.2430
 	v=706.1157 587.5709
 	v=737.6526 583.0291
+	v=-82.6723 1418.6167
+	v=279.1500 1455.8223
+	v=399.9437 1074.7047
 }
 edges{
 	e{
@@ -1717,7 +1720,7 @@ edges{
 	}
 	e{
 		s=42 43
-		v=210 198
+		v=210 710
 		smoothing_length=20.0000
 	}
 	e{
@@ -1962,7 +1965,7 @@ edges{
 	}
 	e{
 		s=100 42
-		v=242 243
+		v=242 709
 		smoothing_length=20.0000
 	}
 	e{
@@ -2055,7 +2058,7 @@ edges{
 	}
 	e{
 		s=100 42
-		v=243 266
+		v=243 708
 		smoothing_length=20.0000
 	}
 	e{
@@ -4396,6 +4399,21 @@ edges{
 		v=707 697
 		shadow_length=2.0000
 	}
+	e{
+		s=100 42
+		v=708 266
+		smoothing_length=20.0000
+	}
+	e{
+		s=100 42
+		v=709 243
+		smoothing_length=20.0000
+	}
+	e{
+		s=42 43
+		v=710 198
+		smoothing_length=20.0000
+	}
 }
 sectors{
 	s{
@@ -4427,7 +4445,7 @@ sectors{
 		texture=textures/stone_2
 	}
 	s{
-		z=-50.0000
+		z=-5.0000
 		texture=textures/dirt
 		texture_tint=170 133 92
 	}
@@ -4448,7 +4466,7 @@ sectors{
 		texture_rotate=-0.3114
 	}
 	s{
-		z=-50.0000
+		z=-5.0000
 		hazard=mud
 		hazards_floor=true
 		texture=textures/dirt
@@ -4607,7 +4625,7 @@ sectors{
 		texture_tint=88 155 92
 	}
 	s{
-		z=250.0000
+		z=240.0000
 		texture=textures/grass_light
 		texture_rotate=3.0491
 		texture_scale=1.0000 0.1000
@@ -4694,7 +4712,7 @@ sectors{
 		texture=textures/wood_bark
 	}
 	s{
-		z=400.0000
+		z=390.0000
 		hazard=mud
 		hazards_floor=true
 		texture=textures/dirt_soft
@@ -4706,14 +4724,14 @@ sectors{
 		texture_tint=94 137 86
 	}
 	s{
-		z=400.0000
+		z=390.0000
 		hazard=mud
 		hazards_floor=true
 		texture=textures/dirt_soft
 		texture_tint=202 179 156
 	}
 	s{
-		z=400.0000
+		z=390.0000
 		hazard=mud
 		hazards_floor=true
 		texture=textures/dirt_soft
@@ -4731,7 +4749,7 @@ sectors{
 		texture_tint=69 123 60
 	}
 	s{
-		z=99.0000
+		z=96.0000
 		hazard=mud
 		hazards_floor=true
 		texture=textures/dirt
@@ -5069,7 +5087,7 @@ sectors{
 		texture_tint=120 155 122
 	}
 	s{
-		z=250.0000
+		z=240.0000
 		hazard=mud
 		hazards_floor=true
 		texture=textures/grass_light
@@ -5230,7 +5248,7 @@ sectors{
 		texture_rotate=1.1395
 	}
 	s{
-		z=250.0000
+		z=240.0000
 		hazard=mud
 		hazards_floor=true
 		texture=textures/grass_light
