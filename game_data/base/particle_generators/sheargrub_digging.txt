@@ -1,4 +1,5 @@
-name=Sheargrub Digging
+name=Sheargrub digging
+description=A small mound, usually made by Sheargrubs digging.
 maker=Neo
 version=1.0.0
 engine_version=1.2.0
