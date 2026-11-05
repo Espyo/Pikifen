@@ -28,14 +28,14 @@ script {
             set_animation emerging
         }
 		on_frame_signal {
-			get_event_info sgnl frame_signal
+			get_event_info temp frame_signal
 			
-			if $sgnl = 0
+			if $temp = 0
 				set_radius 10
 				set_shadow_visibility true
-			else_if $sgnl = 1
+			else_if $temp = 1
 				set_radius 12
-			else_if $sgnl = 2
+			else_if $temp = 2
 				set_radius 14
 			end_if
 		}
@@ -75,13 +75,13 @@ script {
             set_animation burying
         }
 		on_frame_signal {
-			get_event_info sgnl frame_signal
+			get_event_info temp frame_signal
 			
-			if $sgnl = 2
+			if $temp = 2
 				set_radius 12
-			else_if $sgnl = 1
+			else_if $temp = 1
 				set_radius 8
-			else_if $sgnl = 0
+			else_if $temp = 0
 				stop_particles
 				set_shadow_visibility false
 			end_if
