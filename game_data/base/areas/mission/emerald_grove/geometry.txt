@@ -699,6 +699,14 @@ vertexes{
 	v=592.2534 632.2197
 	v=871.2067 561.9620
 	v=871.7955 568.1447
+	v=713.9687 584.9044
+	v=712.2891 582.7684
+	v=708.8145 581.2242
+	v=704.1816 581.4172
+	v=698.9698 583.3475
+	v=702.6374 586.2430
+	v=706.1157 587.5709
+	v=737.6526 583.0291
 }
 edges{
 	e{
@@ -1605,13 +1613,13 @@ edges{
 		smoothing_length=20.0000
 	}
 	e{
-		s=30 36
+		s=30 144
 		v=179 182
 		smoothing_length=20.0000
 	}
 	e{
-		s=36 44
-		v=216 694
+		s=44 144
+		v=694 216
 		smoothing_length=20.0000
 	}
 	e{
@@ -1624,12 +1632,12 @@ edges{
 		smoothing_length=20.0000
 	}
 	e{
-		s=143 36
+		s=143 144
 		v=183 695
 		smoothing_length=20.0000
 	}
 	e{
-		s=35 36
+		s=35 144
 		v=182 183
 	}
 	e{
@@ -1794,7 +1802,7 @@ edges{
 		smoothing_length=20.0000
 	}
 	e{
-		s=39 36
+		s=39 144
 		v=216 179
 		smoothing_length=20.0000
 	}
@@ -4312,8 +4320,8 @@ edges{
 		smoothing_length=20.0000
 	}
 	e{
-		s=36 141
-		v=694 695
+		s=141 144
+		v=706 694
 		shadow_length=2.0000
 	}
 	e{
@@ -4328,7 +4336,7 @@ edges{
 	}
 	e{
 		s=142 141
-		v=696 697
+		v=696 707
 		shadow_length=2.0000
 	}
 	e{
@@ -4342,6 +4350,51 @@ edges{
 	e{
 		s=143 38
 		v=699 696
+	}
+	e{
+		s=141 144
+		v=695 700
+		shadow_length=2.0000
+	}
+	e{
+		s=36 141
+		v=706 700
+		shadow_length=2.0000
+	}
+	e{
+		s=36 144
+		v=700 701
+		shadow_length=2.0000
+	}
+	e{
+		s=36 144
+		v=701 702
+		shadow_length=2.0000
+	}
+	e{
+		s=36 144
+		v=702 703
+		shadow_length=2.0000
+	}
+	e{
+		s=36 144
+		v=703 704
+		shadow_length=2.0000
+	}
+	e{
+		s=36 144
+		v=704 705
+		shadow_length=2.0000
+	}
+	e{
+		s=36 144
+		v=705 706
+		shadow_length=2.0000
+	}
+	e{
+		s=142 141
+		v=707 697
+		shadow_length=2.0000
 	}
 }
 sectors{
@@ -4542,9 +4595,10 @@ sectors{
 		texture_rotate=3.6858
 	}
 	s{
-		z=450.0000
-		texture=textures/wood_bark
+		z=450.5000
+		texture=textures/grass_light
 		texture_rotate=1.1395
+		texture_tint=38 145 0
 	}
 	s{
 		z=250.0000
@@ -4554,8 +4608,10 @@ sectors{
 	}
 	s{
 		z=250.0000
-		texture=textures/metal_clean
-		texture_tint=255 0 0
+		texture=textures/grass_light
+		texture_rotate=3.0491
+		texture_scale=1.0000 0.1000
+		texture_tint=81 196 93
 	}
 	s{
 		z=300.0000
@@ -5163,9 +5219,10 @@ sectors{
 	}
 	s{
 		z=451.0000
-		texture=textures/metal_clean
-		texture_rotate=1.1395
-		texture_tint=255 0 0
+		texture=textures/grass_light
+		texture_rotate=5.9648
+		texture_scale=1.0000 0.1000
+		texture_tint=29 151 48
 	}
 	s{
 		z=450.0000
@@ -5178,6 +5235,11 @@ sectors{
 		hazards_floor=true
 		texture=textures/grass_light
 		texture_tint=120 155 122
+	}
+	s{
+		z=450.0000
+		texture=textures/wood_bark
+		texture_rotate=1.1395
 	}
 }
 mobs{
