@@ -643,7 +643,8 @@ struct MissionData {
     
     
     //--- Public function declarations ---
-    
+    MissionData();
+
     void applyPreset(MISSION_PRESET newPreset);
     void applyPresetBattleEnemies();
     void applyPresetCollectEverything();

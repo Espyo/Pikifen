@@ -45,6 +45,17 @@ const float EXIT_MIN_SIZE = 32.0f;
 
 
 /**
+ * @brief Constructs a new mission data object.
+ */
+MissionData::MissionData() {
+    hudItems.insert(
+        hudItems.begin(), enumGetCount(missionHudItemIdNames),
+        MissionHudItem()
+    );
+}
+
+
+/**
  * @brief Applies the given preset.
  * Provided it's not a custom preset, this overwrites what was there before.
  *
@@ -109,7 +120,7 @@ void MissionData::applyPresetBattleEnemies() {
         .type = MISSION_END_COND_METRIC_OR_MORE,
         .metricType = MISSION_METRIC_MOB_GROUP_CLEARED_MOBS,
         .idxParam = 0,
-        .matchAmount = 0,
+        .matchAmount = INVALID,
         .clear = true,
         .neutralMood = false,
         .reason = "Got all enemies!",
@@ -205,7 +216,7 @@ void MissionData::applyPresetCollectEverything() {
         .type = MISSION_END_COND_METRIC_OR_MORE,
         .metricType = MISSION_METRIC_MOB_GROUP_CLEARED_MOBS,
         .idxParam = 0,
-        .matchAmount = 0,
+        .matchAmount = INVALID,
         .clear = true,
         .neutralMood = false,
         .reason = "Got everything!",
@@ -379,7 +390,7 @@ void MissionData::applyPresetCollectTreasure() {
         .type = MISSION_END_COND_METRIC_OR_MORE,
         .metricType = MISSION_METRIC_MOB_GROUP_CLEARED_MOBS,
         .idxParam = 0,
-        .matchAmount = 0,
+        .matchAmount = INVALID,
         .clear = true,
         .neutralMood = false,
         .reason = "Got all treasures!",
@@ -475,7 +486,7 @@ void MissionData::applyPresetDefeatBosses() {
         .type = MISSION_END_COND_METRIC_OR_MORE,
         .metricType = MISSION_METRIC_MOB_GROUP_CLEARED_MOBS,
         .idxParam = 0,
-        .matchAmount = 0,
+        .matchAmount = INVALID,
         .clear = true,
         .neutralMood = false,
         .reason = "Defeated the boss!",
@@ -656,7 +667,10 @@ void MissionData::reset() {
     endConds.clear();
     mobGroups.clear();
     hudItems.clear();
-    hudItems.insert(hudItems.begin(), 4, MissionHudItem());
+    hudItems.insert(
+        hudItems.begin(), enumGetCount(missionHudItemIdNames),
+        MissionHudItem()
+    );
     scoreCriteria.clear();
 }
 

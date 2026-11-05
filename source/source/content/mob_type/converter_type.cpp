@@ -52,16 +52,16 @@ AnimConversionVector ConverterType::getAnimConversions() const {
 void ConverterType::loadCatProperties(DataNode* file) {
     ReaderSetter cRS(file);
     
-    string pikminTypesStr;
     string acceptedTypesStr;
+    string pikminTypesStr;
     string typeAnimSuffixesStr;
-    DataNode* pikminTypesNode = nullptr;
     DataNode* acceptedTypesNode = nullptr;
+    DataNode* pikminTypesNode = nullptr;
     DataNode* typeAnimSuffixesNode = nullptr;
     
+    cRS.set("accepted_pikmin_types", acceptedTypesStr, &acceptedTypesNode);
     cRS.set("auto_conversion_timeout", autoConversionTimeout);
     cRS.set("available_pikmin_types", pikminTypesStr, &pikminTypesNode);
-    cRS.set("accepted_pikmin_types", acceptedTypesStr, &acceptedTypesNode);
     cRS.set("buffer_size", bufferSize);
     cRS.set("pikmin_per_conversion", pikminPerConversion);
     cRS.set("same_type_counts_for_output", sameTypeCountsForOutput);
@@ -74,7 +74,7 @@ void ConverterType::loadCatProperties(DataNode* file) {
     MobCategory* pikCat = game.mobCategories.get(MOB_CATEGORY_PIKMIN);
     vector<string> pikminTypesStrs =
         semicolonListToVector(pikminTypesStr);
-
+        
     vector<string> acceptedTypesStrs =
         semicolonListToVector(acceptedTypesStr);
         
@@ -91,12 +91,12 @@ void ConverterType::loadCatProperties(DataNode* file) {
             );
         }
     }
-
+    
     forIdx(t, acceptedTypesStrs) {
         MobType* typePtr = pikCat->getType(acceptedTypesStrs[t]);
-
-        if (typePtr) {
-            acceptedPikminTypes.push_back((PikminType*)typePtr);
+        
+        if(typePtr) {
+            acceptedPikminTypes.push_back((PikminType*) typePtr);
         } else {
             game.log.report(
                 LOG_LEVEL_ERROR,
