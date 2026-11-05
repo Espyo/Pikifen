@@ -125,11 +125,10 @@ void drawFraction(
     const Point& bottom, size_t valueNr,
     size_t requirementNr, const ALLEGRO_COLOR& color, float scale
 );
-void drawHealth(
+void drawHealthFill(
     const Point& center, float ratio,
     float alpha = 1.0f,
-    float radius = DRAWING::DEF_HEALTH_WHEEL_RADIUS,
-    bool justChart = false
+    float radius = DRAWING::DEF_HEALTH_WHEEL_RADIUS
 );
 void drawLiquid(
     Sector* sPtr, LiquidType* lPtr, const Point& where, float scale,
@@ -139,6 +138,7 @@ void drawLoadingScreen(
     const string& areaName, const string& subtitle, const string& maker,
     float alpha
 );
+void drawMenuBackground(const float alpha);
 void drawMenuButtonIcon(
     MENU_ICON icon, const Point& buttonCenter, const Point& buttonSize,
     bool leftSide, const ALLEGRO_COLOR& tint

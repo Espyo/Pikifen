@@ -154,25 +154,32 @@ private:
 
 
 /**
- * @brief Info about a health wheel in the game world, placed
+ * @brief Info about a health wheel and status buildup, placed
  * atop an enemy.
  */
-class InWorldHealthWheel : public InWorldHudItem {
+class InWorldMobStatus : public InWorldHudItem {
 
 public:
 
-    //--- Public members ---
-    
-    //How much the health wheel is filled. Gradually moves to the target amount.
-    float visibleRatio = 0.0f;
-    
-    
     //--- Public function declarations ---
     
-    explicit InWorldHealthWheel(Mob* m);
+    explicit InWorldMobStatus(Mob* m);
     void draw() override;
     void startFadingOut() override;
     void tick(float deltaT) override;
     void abortFadeOut();
+
+
+private:
+
+    //--- Private Members ---
+
+    //How much the health wheel is filled. Gradually moves to the target amount.
+    float healthVisibleRatio = 0.0f;
+
+    //--- Private function declarations ---
+
+    void drawHealthWheel(float sizeMult, float alpha, float yOffset);
+    void drawStatuses(Point barSize, float initialYOffset, float alpha);
     
 };

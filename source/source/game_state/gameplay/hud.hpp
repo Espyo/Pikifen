@@ -119,18 +119,6 @@ struct Hud {
     //Bubble graphic, used for the HUD.
     ALLEGRO_BITMAP* bmpBubble = nullptr;
     
-    //Group counter bubble graphic, used for the HUD.
-    ALLEGRO_BITMAP* bmpCounterBubbleGroup = nullptr;
-    
-    //Field counter bubble graphic, used for the HUD.
-    ALLEGRO_BITMAP* bmpCounterBubbleField = nullptr;
-    
-    //Standby counter bubble graphic, used for the HUD.
-    ALLEGRO_BITMAP* bmpCounterBubbleStandby = nullptr;
-    
-    //Total counter bubble graphic, used for the HUD.
-    ALLEGRO_BITMAP* bmpCounterBubbleTotal = nullptr;
-    
     //Day counter bubble graphic, used for the HUD.
     ALLEGRO_BITMAP* bmpDayBubble = nullptr;
     

@@ -126,22 +126,14 @@ Hud::Hud() :
     gui.registerCoords("leader_next_input",         4,   83,  3,  3);
     gui.registerCoords("standby_icon",             50,   91,  8, 10);
     gui.registerCoords("standby_amount",           50,   97,  8,  4);
-    gui.registerCoords("standby_bubble",            0,    0,  0,  0);
     gui.registerCoords("standby_maturity_icon",    54,   88,  4,  8);
     gui.registerCoords("standby_next_icon",        58,   93,  6,  8);
     gui.registerCoords("standby_next_input",       60,   96,  3,  3);
     gui.registerCoords("standby_prev_icon",        42,   93,  6,  8);
     gui.registerCoords("standby_prev_input",       40,   96,  3,  3);
     gui.registerCoords("group_amount",             73,   91, 15, 14);
-    gui.registerCoords("group_bubble",             73,   91, 15, 14);
     gui.registerCoords("field_amount",             91,   91, 15, 14);
-    gui.registerCoords("field_bubble",             91,   91, 15, 14);
     gui.registerCoords("total_amount",              0,    0,  0,  0);
-    gui.registerCoords("total_bubble",              0,    0,  0,  0);
-    gui.registerCoords("counters_x",                0,    0,  0,  0);
-    gui.registerCoords("counters_slash_1",         82,   91,  4,  8);
-    gui.registerCoords("counters_slash_2",          0,    0,  0,  0);
-    gui.registerCoords("counters_slash_3",          0,    0,  0,  0);
     gui.registerCoords("mission_goal",             18,    8, 32, 12);
     gui.registerCoords("mission_score",            18,   20, 32, 10);
     gui.registerCoords("mission_clock",            82,    8, 32, 12);
@@ -165,6 +157,15 @@ Hud::Hud() :
             );
             
             if(!icon.bmp) return;
+            ALLEGRO_SHADER* healthShader = game.shaders.getShader(SHADER_TYPE_SCANLINE);
+            
+            if(healthShader) {
+                al_use_shader(healthShader);
+                al_set_shader_float("image_height", 1.0f); //Pieslice prims map UV to [-r, r], so we don't need to scale based on image size
+                al_set_shader_float("area_time", game.timePassed);
+                al_set_shader_float("intensity", 0.3f);
+                al_set_shader_float("frequency", 0.9f);
+            }
             
             al_draw_filled_circle(
                 finalDraw.center.x, finalDraw.center.y,
@@ -174,9 +175,10 @@ Hud::Hud() :
                     draw.tint
                 )
             );
+            al_use_shader(nullptr);
             drawBitmapInBox(
                 icon.bmp,
-                finalDraw.center, finalDraw.size, true, true, 0.0f, draw.tint
+                finalDraw.center, finalDraw.size * 0.9f, true, true, 0.0f, draw.tint
             );
             drawBitmapInBox(
                 bmpBubble,
@@ -201,13 +203,29 @@ Hud::Hud() :
             
             if(health.ratio <= 0.0f) return;
             
-            drawHealth(
+            ALLEGRO_SHADER* healthShader = game.shaders.getShader(SHADER_TYPE_SCANLINE);
+            
+            if(healthShader) {
+                al_use_shader(healthShader);
+                //Pieslice prims map UV to [-r, r], so we don't need to scale based on image size
+                al_set_shader_float("image_height", 1.0f);
+                al_set_shader_float("area_time", game.timePassed * 2);
+                al_set_shader_float("intensity", 0.13f);
+                al_set_shader_float("frequency", 0.9f);
+            }
+            float radius = std::max(0.0, std::min(finalDraw.size.x, finalDraw.size.y) * 0.5f - 1.0);
+            al_draw_filled_circle(
+                finalDraw.center.x, finalDraw.center.y, radius, multAlpha(mapGray(15), draw.tint.a)
+            );
+            drawHealthFill(
                 finalDraw.center,
                 health.ratio,
                 draw.tint.a,
-                std::min(finalDraw.size.x, finalDraw.size.y) * 0.47f,
-                true
+                radius
             );
+            
+            al_use_shader(nullptr);
+
             drawBitmapInBox(
                 bmpHardBubble,
                 finalDraw.center,
@@ -221,6 +239,7 @@ Hud::Hud() :
                     draw.tint
                 )
             );
+
             
             if(health.cautionTimer > 0.0f) {
                 float animRatio =
@@ -552,20 +571,6 @@ Hud::Hud() :
     gui.addItem(standbyMaturityIcon, "standby_maturity_icon");
     
     
-    //Standby subgroup member amount bubble.
-    GuiItem* standbyBubble = new GuiItem();
-    standbyBubble->onDraw =
-    [this] (const DrawInfo & draw) {
-        drawBitmap(
-            bmpCounterBubbleStandby,
-            draw.center, draw.size,
-            0.0f,
-            tintColor(mapAlpha(this->standbyItemsAlpha * 255), draw.tint)
-        );
-    };
-    gui.addItem(standbyBubble, "standby_bubble");
-    
-    
     //Standby subgroup member amount.
     standbyAmount = new GuiItem();
     standbyAmount->onDraw =
@@ -600,19 +605,6 @@ Hud::Hud() :
     gui.addItem(standbyAmount, "standby_amount");
     
     
-    //Group Pikmin amount bubble.
-    GuiItem* groupBubble = new GuiItem();
-    groupBubble->onDraw =
-    [this] (const DrawInfo & draw) {
-        if(!player->leaderPtr) return;
-        drawBitmap(
-            bmpCounterBubbleGroup,
-            draw.center, draw.size, 0.0f, draw.tint
-        );
-    };
-    gui.addItem(groupBubble, "group_bubble");
-    
-    
     //Group Pikmin amount.
     groupAmount = new GuiItem();
     groupAmount->onDraw =
@@ -629,25 +621,12 @@ Hud::Hud() :
         
         drawText(
             i2s(curAmount), game.sysContent.fntCounter,
-            draw.center,
-            Point(draw.size.x * 0.70f, draw.size.y * 0.50f), draw.tint,
+            draw.center, draw.size, draw.tint,
             ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
             Point(1.0f + groupAmount->getJuiceValue())
         );
     };
     gui.addItem(groupAmount, "group_amount");
-    
-    
-    //Field Pikmin amount bubble.
-    GuiItem* fieldBubble = new GuiItem();
-    fieldBubble->onDraw =
-    [this] (const DrawInfo & draw) {
-        drawBitmap(
-            bmpCounterBubbleField,
-            draw.center, draw.size, 0.0f, draw.tint
-        );
-    };
-    gui.addItem(fieldBubble, "field_bubble");
     
     
     //Field Pikmin amount.
@@ -665,25 +644,12 @@ Hud::Hud() :
         
         drawText(
             i2s(curAmount), game.sysContent.fntCounter,
-            draw.center,
-            Point(draw.size.x * 0.70f, draw.size.y * 0.50f), draw.tint,
+            draw.center, draw.size, draw.tint,
             ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
             Point(1.0f + fieldAmount->getJuiceValue())
         );
     };
     gui.addItem(fieldAmount, "field_amount");
-    
-    
-    //Total Pikmin amount bubble.
-    GuiItem* totalBubble = new GuiItem();
-    totalBubble->onDraw =
-    [this] (const DrawInfo & draw) {
-        drawBitmap(
-            bmpCounterBubbleTotal,
-            draw.center, draw.size, 0.0f, draw.tint
-        );
-    };
-    gui.addItem(totalBubble, "total_bubble");
     
     
     //Total Pikmin amount.
@@ -701,40 +667,12 @@ Hud::Hud() :
         
         drawText(
             i2s(totalCountNr), game.sysContent.fntCounter,
-            draw.center,
-            Point(draw.size.x * 0.70f, draw.size.y * 0.50f), draw.tint,
+            draw.center, draw.size, draw.tint,
             ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER, 0,
             Point(1.0f + totalAmount->getJuiceValue())
         );
     };
     gui.addItem(totalAmount, "total_amount");
-    
-    
-    //Pikmin counter "x".
-    GuiItem* countersX = new GuiItem();
-    countersX->onDraw =
-    [this] (const DrawInfo & draw) {
-        drawText(
-            "x", game.sysContent.fntCounter, draw.center, draw.size,
-            tintColor(mapAlpha(this->standbyItemsAlpha * 255), draw.tint)
-        );
-    };
-    gui.addItem(countersX, "counters_x");
-    
-    
-    //Pikmin counter slashes.
-    for(size_t s = 0; s < 3; s++) {
-        GuiItem* counterSlash = new GuiItem();
-        counterSlash->onDraw =
-        [this] (const DrawInfo & draw) {
-            if(!player->leaderPtr) return;
-            drawText(
-                "/", game.sysContent.fntCounter, draw.center, draw.size,
-                draw.tint
-            );
-        };
-        gui.addItem(counterSlash, "counters_slash_" + i2s(s + 1));
-    }
     
     
     if(game.curArea->type == AREA_TYPE_MISSION) {
@@ -881,10 +819,6 @@ Hud::Hud() :
     };
     
     loader(bmpBubble,               "bubble");
-    loader(bmpCounterBubbleField,   "counter_bubble_field");
-    loader(bmpCounterBubbleGroup,   "counter_bubble_group");
-    loader(bmpCounterBubbleStandby, "counter_bubble_standby");
-    loader(bmpCounterBubbleTotal,   "counter_bubble_total");
     loader(bmpDayBubble,            "dayBubble");
     loader(bmpDistantPikminMarker,  "distant_pikmin_marker");
     loader(bmpHardBubble,           "hard_bubble");
@@ -906,10 +840,6 @@ Hud::Hud() :
  */
 Hud::~Hud() {
     game.content.bitmaps.list.free(bmpBubble);
-    game.content.bitmaps.list.free(bmpCounterBubbleField);
-    game.content.bitmaps.list.free(bmpCounterBubbleGroup);
-    game.content.bitmaps.list.free(bmpCounterBubbleStandby);
-    game.content.bitmaps.list.free(bmpCounterBubbleTotal);
     game.content.bitmaps.list.free(bmpDayBubble);
     game.content.bitmaps.list.free(bmpDistantPikminMarker);
     game.content.bitmaps.list.free(bmpHardBubble);
