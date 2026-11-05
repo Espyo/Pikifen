@@ -7993,7 +7993,7 @@ sectors{
 	s{
 		type=blocking
 		z=50.0000
-		brightness=60
+		brightness=18
 		texture=textures/stone
 		texture_scale=0.2000 0.2000
 	}
@@ -8006,7 +8006,7 @@ sectors{
 	s{
 		type=blocking
 		z=5.0000
-		brightness=60
+		brightness=18
 		texture=textures/stone
 		texture_scale=0.2000 0.2000
 	}
@@ -8085,7 +8085,7 @@ sectors{
 	s{
 		type=blocking
 		z=5.0000
-		brightness=60
+		brightness=18
 		texture=textures/stone
 		texture_scale=0.2000 0.2000
 	}
