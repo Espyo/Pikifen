@@ -21,12 +21,12 @@ animations{
 			burying_03{
 				duration=0.1500
 				interpolate=true
-				signal=1
+				signal=2
 			}
 			burying_04{
 				duration=0.1500
 				interpolate=true
-				signal=2
+				signal=1
 			}
 			underground{
 				duration=0.5000

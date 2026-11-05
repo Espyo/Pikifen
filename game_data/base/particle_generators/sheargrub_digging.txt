@@ -1,4 +1,4 @@
-name=sheargrub_digging
+name=Sheargrub Digging
 maker=Neo
 version=1.0.0
 engine_version=1.2.0

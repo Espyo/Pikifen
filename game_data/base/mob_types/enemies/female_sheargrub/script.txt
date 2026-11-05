@@ -77,13 +77,13 @@ script {
 		on_frame_signal {
 			get_event_info sgnl frame_signal
 			
-			if $sgnl = 0
+			if $sgnl = 2
+				set_radius 12
+			else_if $sgnl = 1
+				set_radius 8
+			else_if $sgnl = 0
 				stop_particles
 				set_shadow_visibility false
-			else_if $sgnl = 1
-				set_radius 12
-			else_if $sgnl = 2
-				set_radius 8
 			end_if
 		}
         on_animation_end {
