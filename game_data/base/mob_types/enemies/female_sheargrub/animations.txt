@@ -1,29 +1,36 @@
 name=Female Sheargrub animations
 description=Animations for the Female Sheargrub.
 maker=Espyo
-version=1.1.0
+version=1.2.0
 engine_version=1.2.0
 animations{
 	burying{
 		frames{
-			idling{
+			idling_01{
 				duration=0.3000
 			}
 			burying_01{
 				duration=0.1500
+				interpolate=true
 				sound=burying
 			}
 			burying_02{
 				duration=0.1500
+				interpolate=true
 			}
 			burying_03{
 				duration=0.1500
+				interpolate=true
+				signal=2
 			}
 			burying_04{
 				duration=0.1500
+				interpolate=true
+				signal=1
 			}
 			underground{
 				duration=0.5000
+				signal=0
 			}
 		}
 	}
@@ -52,28 +59,43 @@ animations{
 	}
 	emerging{
 		frames{
+			underground{
+				duration=0.1000
+			}
 			emerging_01{
 				duration=0.1500
+				interpolate=true
+				signal=0
+				sound=burying
 			}
 			emerging_02{
 				duration=0.1500
-				sound=burying
+				interpolate=true
+				signal=1
 			}
 			emerging_03{
 				duration=0.1500
+				interpolate=true
+				signal=2
 			}
 			emerging_04{
 				duration=0.1500
+				interpolate=true
 			}
-			idling{
+			idling_01{
 				duration=0.3000
 			}
 		}
 	}
 	examining{
 		frames{
-			idling{
-				duration=0.5000
+			idling_01{
+				duration=0.2500
+				interpolate=true
+			}
+			idling_02{
+				duration=0.2500
+				interpolate=true
 			}
 		}
 	}
@@ -86,7 +108,7 @@ animations{
 	}
 	moving{
 		frames{
-			idling{
+			idling_01{
 				duration=0.1000
 			}
 			moving_01{
@@ -107,7 +129,6 @@ sprites{
 		file=enemies/female_sheargrub
 		file_pos=55.0000 0.0000
 		file_size=36.0000 31.0000
-		offset=4.5000 0.0000
 		hitboxes{
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -123,8 +144,7 @@ sprites{
 		file=enemies/female_sheargrub
 		file_pos=55.0000 0.0000
 		file_size=36.0000 31.0000
-		offset=4.5000 0.0000
-		scale=1.0000 -1.0000
+		angle=5.2360
 		hitboxes{
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -140,7 +160,6 @@ sprites{
 		file=enemies/female_sheargrub
 		file_pos=92.0000 3.0000
 		file_size=26.0000 28.0000
-		offset=9.0000 0.0000
 		hitboxes{
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -156,8 +175,9 @@ sprites{
 		file=enemies/female_sheargrub
 		file_pos=92.0000 3.0000
 		file_size=26.0000 28.0000
-		offset=9.0000 0.0000
-		scale=1.0000 -1.0000
+		offset=0.0000 -1.0000
+		scale=0.7000 0.7000
+		angle=5.2360
 		hitboxes{
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -245,6 +265,8 @@ sprites{
 		file_pos=0.0000 4.0000
 		file_size=20.0000 27.0000
 		offset=-9.0000 0.0000
+		scale=0.4000 0.4000
+		tint=255 255 255 128
 		hitboxes{
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -261,7 +283,8 @@ sprites{
 		file_pos=0.0000 4.0000
 		file_size=20.0000 27.0000
 		offset=-9.0000 0.0000
-		scale=1.0000 -1.0000
+		scale=0.8000 0.8000
+		angle=5.3233
 		hitboxes{
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -294,7 +317,7 @@ sprites{
 		file_pos=21.0000 2.0000
 		file_size=33.0000 29.0000
 		offset=-4.5000 0.0000
-		scale=1.0000 -1.0000
+		angle=5.2360
 		hitboxes{
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -306,10 +329,26 @@ sprites{
 			}
 		}
 	}
-	idling{
+	idling_01{
 		file=enemies/female_sheargrub
 		file_pos=0.0000 32.0000
 		file_size=38.0000 28.0000
+		hitboxes{
+			body{
+				coords=0.0000 0.0000 0.0000
+				height=32.0000
+				radius=12.0000
+				type=0
+				value=1.0000
+				surface_type=0
+			}
+		}
+	}
+	idling_02{
+		file=enemies/female_sheargrub
+		file_pos=0.0000 32.0000
+		file_size=38.0000 28.0000
+		scale=1.0500 1.1000
 		hitboxes{
 			body{
 				coords=0.0000 0.0000 0.0000
@@ -357,6 +396,7 @@ sprites{
 		file=enemies/female_sheargrub
 		file_pos=0.0000 0.0000
 		file_size=0.0000 0.0000
+		scale=0.1000 0.1111
 		hitboxes{
 			body{
 				coords=0.0000 0.0000 0.0000
