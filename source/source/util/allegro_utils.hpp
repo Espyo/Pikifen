@@ -113,6 +113,7 @@ string c2s(const ALLEGRO_COLOR& c);
 ALLEGRO_COLOR changeAlpha(const ALLEGRO_COLOR& c, unsigned char a);
 ALLEGRO_COLOR changeColorLighting(const ALLEGRO_COLOR& c, float l);
 FS_DELETE_RESULT deleteFile(const string& filePath);
+string getAllegroKeyName(int keycode);
 Point getBitmapDimensions(ALLEGRO_BITMAP* bmp);
 void getShiftCtrlAltState(
     bool* outShiftState, bool* outCtrlState, bool* outAltState

@@ -371,7 +371,7 @@ void HardwareMediator::getIconInfoFromScratch(
     } else if(
         source.type == Inpution::INPUT_SOURCE_TYPE_KEYBOARD_KEY
     ) {
-        string name = al_keycode_to_name(source.buttonNr);
+        string name = getAllegroKeyName(source.buttonNr);
         forIdx(c, name) {
             if(name[c] == '_') name[c] = ' ';
         }

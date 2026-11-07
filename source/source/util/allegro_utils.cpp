@@ -309,6 +309,24 @@ vector<string> folderToVectorRecursively(
 
 
 /**
+ * @brief Returns names for Allegro keyboard keycodes.
+ * Mostly calls al_keycode_to_name, but has some special cases
+ * altered to make more sense.
+ *
+ * @param keycode The Allegro keycode.
+ * @return The name.
+ */
+string getAllegroKeyName(int keycode) {
+    switch(keycode) {
+    case ALLEGRO_KEY_TILDE: {
+        return "`";
+    }
+    }
+    return al_keycode_to_name(keycode);
+}
+
+
+/**
  * @brief Returns the width and height of an Allegro bitmap in a
  * point structure.
  *

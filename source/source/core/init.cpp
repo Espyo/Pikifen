@@ -597,7 +597,7 @@ void initControls() {
         PLAYER_ACTION_CAT_GENERAL_MAKER_TOOLS,
         "Console",
         "Open or close the maker toolkit's console.",
-        "mt_console", "k_70", Inpution::ACTION_VALUE_TYPE_DIGITAL,
+        "mt_console", "k_60", Inpution::ACTION_VALUE_TYPE_DIGITAL,
         0.0f, 0.0f, false, false
     );
     game.controls.addNewActionType(
