@@ -1309,10 +1309,6 @@ void LeaderFsm::beAttacked(ScriptVM* scriptVM, void* info1, void* info2) {
         return;
     }
     
-    //Behavior changes.
-    leaPtr->stopChasing();
-    leaPtr->leaveGroup();
-    
     //Damage.
     leaPtr->applyAttackDamage(info->mob2, info->h2, info->h1, damage);
     
@@ -1342,6 +1338,10 @@ void LeaderFsm::beAttacked(ScriptVM* scriptVM, void* info1, void* info2) {
     
     //Next state.
     if(knockbackExists) {
+        //Behavior changes.
+        leaPtr->stopChasing();
+        leaPtr->leaveGroup();
+        
         if(knockbackStrength > 0) {
             leaPtr->invulnPeriod.start(LEADER::INVULN_PERIOD_KB);
             if(leaPtr->player) {
