@@ -416,6 +416,12 @@ void PikminFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_HITBOX_TOUCH_N_N); {
             efc.run(PikminFsm::landOnMob);
         }
+        efc.newEvent(FSM_EV_HITBOX_TOUCH_N_A); {
+            efc.run(PikminFsm::checkIncomingAttack);
+        }
+        efc.newEvent(FSM_EV_PIKMIN_DAMAGE_CONFIRMED); {
+            efc.run(PikminFsm::beAttacked);
+        }
         efc.newEvent(FSM_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::touchedEatHitbox);
         }
@@ -1869,6 +1875,12 @@ void PikminFsm::createFsm(MobType* typ) {
         }
         efc.newEvent(FSM_EV_HITBOX_TOUCH_N_N); {
             efc.run(PikminFsm::landOnMobWhileHolding);
+        }
+        efc.newEvent(FSM_EV_HITBOX_TOUCH_N_A); {
+            efc.run(PikminFsm::checkIncomingAttack);
+        }
+        efc.newEvent(FSM_EV_PIKMIN_DAMAGE_CONFIRMED); {
+            efc.run(PikminFsm::beAttacked);
         }
         efc.newEvent(FSM_EV_HITBOX_TOUCH_EAT); {
             efc.run(PikminFsm::tryHeldItemHotswap);

@@ -1,4 +1,4 @@
-states_ignoring_hazard = teleporting_to_leader; teleported_to_leader
+states_ignoring_hazard = teleporting_to_leader; teleported_to_leader; dying; knocked_down_dying; crushed
 
 init {
     set_var on_idle_enter wait_search
