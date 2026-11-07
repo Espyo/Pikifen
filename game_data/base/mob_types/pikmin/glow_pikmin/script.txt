@@ -121,6 +121,7 @@ script {
 
     teleporting_to_leader {
         on_enter {
+            leave_leader_group
             set_shadow_visibility false
             set_animation teleport_start
             stop_particles

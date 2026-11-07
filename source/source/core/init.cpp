@@ -2609,6 +2609,13 @@ void initScriptActionTypes() {
         ScriptActionRunners::holdFocus
     );
     
+    //Leave leader's group.
+    commitAction(
+        SCRIPT_ACTION_LEAVE_LEADER_GROUP,
+        "leave_leader_group",
+        ScriptActionRunners::leaveLeaderGroup
+    );
+    
     //Link with focused mob.
     commitAction(
         SCRIPT_ACTION_LINK_WITH_FOCUS,

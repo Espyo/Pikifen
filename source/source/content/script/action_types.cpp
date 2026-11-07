@@ -1708,6 +1708,17 @@ void ScriptActionRunners::interpolateNumber(ScriptActionInstRunData& data) {
 
 
 /**
+ * @brief Code for the leave leader group script action type.
+ *
+ * @param data Data about the action call.
+ */
+void ScriptActionRunners::leaveLeaderGroup(ScriptActionInstRunData& data) {
+    //Main logic.
+    data.scriptVM->getRunnerMob()->leaveGroup();
+}
+
+
+/**
  * @brief Code for the link with focus script action type.
  *
  * @param data Data about the action call.

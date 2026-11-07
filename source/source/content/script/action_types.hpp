@@ -209,6 +209,9 @@ enum SCRIPT_ACTION {
     //Label for use with "goto".
     SCRIPT_ACTION_LABEL,
     
+    //Leave the leader's group.
+    SCRIPT_ACTION_LEAVE_LEADER_GROUP,
+    
     //Create a link with the focused mob.
     SCRIPT_ACTION_LINK_WITH_FOCUS,
     
@@ -976,6 +979,7 @@ void getVarPresence(ScriptActionInstRunData& data);
 void holdFocus(ScriptActionInstRunData& data);
 void ifAction(ScriptActionInstRunData& data);
 void interpolateNumber(ScriptActionInstRunData& data);
+void leaveLeaderGroup(ScriptActionInstRunData& data);
 void linkWithFocus(ScriptActionInstRunData& data);
 void loadFocusMemory(ScriptActionInstRunData& data);
 void maxNumber(ScriptActionInstRunData& data);
