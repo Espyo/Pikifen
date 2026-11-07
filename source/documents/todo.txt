@@ -2,6 +2,14 @@
 
 
 Current tasks (tasks being worked on, but not yet committed)
+    Console
+        Suggestions
+            Multiple suggestions -- If you press up and down with an empty field it scrolls through the history, otherwise it cycles through the suggestions
+            Show them below the input line, not above
+            If a parameter has the enum type, the suggestions should cycle between them
+            Typing "s" is suggesting "inspect" first, when it should suggest "set_auto_start" or something
+            Suggestion descriptions need to word wrap
+        Wrong commands shouldn't go in the error log
 
 Next tasks (roughly sorted most important first)
     --- Problems to fix ---
@@ -9,6 +17,7 @@ Next tasks (roughly sorted most important first)
     --- 1.2.0 ---
     
     --- 1.3.0 ---
+    Ditch Tutorial Meadow and create a series of one minute short and sweet tutorial stages, like the training stages in Dandori Academy
     Create an area that's good for people to pick up and play
         It should be easy to play in, and showcase a lot of action right off the bat
             You start with 30 or so Pikmin, and there are many nearby harmless and easy enemies
@@ -46,11 +55,16 @@ Next tasks (roughly sorted most important first)
             Have a bomb rock tucked in the corner?
             Have a climbing stick somewhere?
             Enemies: Crumbugs, Dwarf Reds, loads of Female Sheargrubs, Puffy Blowhog?, White Spectralids
+    Winged Pikmin can fly over walls, and when they need to descend they can ignore collision
+        This is because getMovementEdgeIntersections is what's responsible for returning the edges that are being touched, which is important to figure out tallestSector, but ignores edges if they're underneath the mob. Without tallestSector, Winged Pikmin can go through walls so long as it's not at the mob's center. This may be fixed by having getMovementEdgeIntersections always return the intersections, use those to update tallestSector, and then have the rest of the logic that checks proper edge COLLISION and does stepping and whatnot be its own thing
+        Also, Winged Pikmin can sometimes get stuck because of this, like when trying to deliver to a ship that's a bit higher than the reception point. Adding a step-worth bit of leeway to maxVertDistDiff might solve it, or it might break things
+    Expo mode should ask if the user wants to play the tutorial stages when they hit Play on the main menu, just like if an options file is not detected
     Update Dear ImGui to 1.93.0
         > Made AddCallback() user data default to Null for convenience.
         > DragXXX, SliderXXX, InputScalar: with ImGuiItemFlags_LiveEditOnInputScalar now defaulting to being disabled: inputting a value with the keyboard doesn't write intermediate values to the backing variable.
         > Windows/Tables settings entries can now record the last used date in YYYYMMDD format, allowing tools to run to e.g. delete entries that haven't been used in X months. (#9460) / Added bool io.ConfigIniSettingsSaveLastUsedDate to disable saving that info
         AddPrimitiveNameHere() functions now render slightly differently, but it should be fine
+    Replace the quick start guides in the manual with an "In a nutshell" box at the start of each article
     https://github.com/Espyo/Pikifen/compare/master...Helodity:Pikifen:pack-loading-restart
     Maker tool improvements
         Add a proper maker console
@@ -73,6 +87,8 @@ Next tasks (roughly sorted most important first)
                 https://github.com/Helodity/Pikifen/commit/e2a5e3b982142474ff55ca60cc36fab21605115d
             Area names and subtitles could have custom colors like https://cdn.discordapp.com/attachments/212795100818833408/1095572527583080488/image.png (thanks Captain Salty)
         https://github.com/Helodity/Pikifen/tree/button-revamp
+        The main menu's Play menu should have the missions button be larger, and the simple areas button be smaller. The latter should also be renamed to something like free roam or something
+        Make the OK button on Onion menus larger, and the cancel button smaller
     Editor improvements
         The grid options in editors should go in the menu, not the options dialog (thanks Neo)
         Add a shortcut for toggling the transformation widget (thanks Neo)
@@ -80,6 +96,7 @@ Next tasks (roughly sorted most important first)
     Controls improvements
         Info
             Gotta make a list of what problems I've found + what problems Inpution solves, in order to really understand what kind of solution to build
+                If the terminal is open, other systems shouldn't get events, otherwise you get the player moving whenever you type W. But...if they don't, they for instance don't receive a "button up" event for when the player releases W (which the player was holding when they opened the terminal)
             Hierarchy:
                 Game
                     Hardware mediator
@@ -87,6 +104,9 @@ Next tasks (roughly sorted most important first)
                     Current state
                         Menu
                             Its GUIs
+            Maybe: Have an input manager, and all things that want to read inputs subscribe to it. The input manager then sends or does not send the data to the different subscribers based on each one's event propagation rules
+            What if I make Inpution work via polling only? You could ask like inputionManager.wasActionPressedThisFrame(ACTION_JUMP)
+            I'll have to most certainly split handleAllegroEvent between handleAllegroInputEvent and handleAllegroOtherEvent
         Consider having different control managers, one for the system things, one for gameplay, one for editor shortcuts
         Controls should support multiple players, including a "none" player for things like maker tools, screenshot, etc.
         Controls menus
@@ -131,10 +151,12 @@ Next tasks (roughly sorted most important first)
             Pikmin and enemy spirits shouldn't be hardcoded; also maybe add a way for different types to use different generators?
         Sprites need more shading for more depth; highlights help too (thanks Neo)
         God rays -- beams of light shining between the leaves; they should spin with the sun, and sometimes fade out to non-existence
+        A better standard font?
         Mob shadows should depend on the mob's radius AND height
         Upscale fonts and other things that are really crusty and low-res
             Currently, text in buttons and such does not grow past its font size. This makes it look small if the window is a large resolution
         Upon taking damage, the screen should shake and temporarily turn red (thanks Neo)
+        Make it so fullscreen makes the window resolution become the fullscreen resolution
     Update the inhale sound https://freesound.org/people/Sadiquecat/sounds/817257/ (thanks Neo)
     Areas should be able to include "decals", in the same vein as tree shadows. These are a lightweight way to add leaves, rocks, pebbles, sticks, small plants, cobwebs, etc. to the area's terrain without using sectors or objects
         Add the previously mentioned ones to the base content
@@ -494,6 +516,7 @@ Next tasks (roughly sorted most important first)
                     Is given a number, and they can only advance forward
                     Has rules for what makes it advance forward, like if the player got 1000 Sparklium, or if flag abc_def is true, etc.
                     Specifies what happens when this moment is reached, like playing a cutscene, setting a flag, etc.
+                    Maybe a summary of how the story is at that point? Good for if you drop the game, come back after some weeks, and can't remember the story beats; they'd show in a pause menu or the save file selection menu or something
             Catalogs (e.g. Piklopedia, Treasure Hoard)
                 A file, likely game_data/<pack>/misc/catalogs.txt is responsible for:
                     Which catalogs exist, as well as their icons, unlock criteria, etc.
@@ -697,6 +720,7 @@ Misc. things (to be implemented whenever)
         All of these can be toggled on or off in a mission, and can be unlocked in Story Mode
             In the mission select menu, probably show this as icons, and only for the collected ones, so it's not a wall of text
             In Story Mode, allow players to turn any one off
+            Napsack should probably be off by default
         A way to increase the Pikmin limit, like flarlic [PIKMIN 4]
         The ability for leaders to throw other leaders
         Call all idle Pikmin to you [PIKMIN 4]
@@ -906,6 +930,10 @@ Small tasks (for when I'm feeling lazy)
         Prettier switch cases -- contiguous cases should still have the opening and closing braces for consistency, and the break;s of each case should be outside their braces
         Organize named enums better. Maybe using some smart macros. Some use EnumNameDatabase, some use readEnumProp, some do things their own way by themselves
             Largely fixed in Feb 06, but ideally there'd be a function or macro or something for custom enums, like those needed when iterating through a mob type's sounds to match string names, or the custom inactive logic property enum in MobType::loadFromDataNode. Basically, search the project for '== "' and see what could be improved
+        Replace usages of std::find with findInContainer and isInContainer
+    Make use of the fmt library?
+    String util ideas from https://docs.godotengine.org/en/stable/classes/class_string.html
+    Replace the lambda in timers with if(tick())
     Add GDB pretty printers for things other than mobs?
     
     
@@ -925,6 +953,7 @@ Tasks for later on (I might never implement these)
         The ability for players 2 - 4 to hop in and out of gameplay at will. Probably only for Story Mode?
         The ability to play with 0 players, so you can just spectate the area. Might be a bit weird to be able to control the camera and open the pause menu to leave when there technically shouldn't be any player available for those inputs
         The ability for Blue Pikmin to rescue drowning Pikmin
+        The ability for Pikmin to carry something towards a leader marked with a flag icon on them. If the carrier Pikmin are within X units of the final destination (Onion, ship, whatever), they'd stop following the leader and go there instead
         Nighttime (what enemies can spawn at night, their changes, etc.)
             Change the HUD icon to a moon
         Random enemy spawning
@@ -957,6 +986,7 @@ Tasks for later on (I might never implement these)
     Petrified enemies should break open when defeated
         Maybe define loot tables somewhere, like "standard", "boss", "weakling", etc. Enemy types use the "standard" one by default (which one is the default should be specified somewhere), but can choose a different one
             Maybe individual enemy instances in an area can also specify their own loot table?
+    Story mode save files and/or missions could have small badges near them if you managed to complete them with 0 Pikmin throws, or 0 damage, or 0 retries from the pause menu, etc. These would have no impact whatsoever, and would just serve as confirmation of self-imposed challenges. A bit like A Hat in Time's badges in the PC version. Might be irrelevant if these can just be kept track of and compared against in the lifetime statistics
     Editors
         Area editor
             [NEEDS BRAINSTORMING] Instead of a single-click selecting a sector, make it a double-click? This way you can still create a selection rectangle when you're inside the sector
