@@ -42,7 +42,7 @@ enum MAKER_TOOL_TYPE {
     //Control camera.
     MAKER_TOOL_TYPE_CONTROL_CAM,
     
-    //Create an area maker reminder beneath the cursor.
+    //Create an area maker reminder under the cursor.
     MAKER_TOOL_TYPE_CREATE_REMINDER,
     
     //Delete mob.
@@ -60,13 +60,13 @@ enum MAKER_TOOL_TYPE {
     //Hide HUD.
     MAKER_TOOL_TYPE_HIDE_HUD,
     
-    //Hurt mob beneath mouse cursor.
+    //Hurt mob under mouse cursor.
     MAKER_TOOL_TYPE_HURT_MOB,
     
     //Get info on the current area.
     MAKER_TOOL_TYPE_INSPECT_AREA,
     
-    //Get info on the mob beneath mouse cursor.
+    //Get info on the mob under mouse cursor.
     MAKER_TOOL_TYPE_INSPECT_MOB,
     
     //Create and save an image of the whole area.
@@ -84,7 +84,7 @@ enum MAKER_TOOL_TYPE {
     //Show collision box.
     MAKER_TOOL_TYPE_SHOW_COLLISION,
     
-    //Show geometry info underneath the mouse cursor.
+    //Show geometry info under the mouse cursor.
     MAKER_TOOL_TYPE_SHOW_GEOMETRY_INFO,
     
     //Show hitboxes.
@@ -96,10 +96,10 @@ enum MAKER_TOOL_TYPE {
     //Show reaches.
     MAKER_TOOL_TYPE_SHOW_REACHES,
     
-    //Spawn a new mob underneath the mouse cursor.
+    //Spawn a new mob under the mouse cursor.
     MAKER_TOOL_TYPE_SPAWN_MOB,
     
-    //Spawn a new Pikmin underneath the mouse cursor.
+    //Spawn a new Pikmin under the mouse cursor.
     MAKER_TOOL_TYPE_SPAWN_PIKMIN,
     
     //Teleport to mouse cursor.

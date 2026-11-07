@@ -705,7 +705,7 @@ void initControls() {
         PLAYER_ACTION_TYPE_MT_INSPECT_MOB,
         PLAYER_ACTION_CAT_GAMEPLAY_MAKER_TOOLS,
         "Inspect mob",
-        "Toggle info about the mob under the mouse cursor.",
+        "Toggle info about the object under the mouse cursor.",
         "mt_inspect_mob", "k_32", Inpution::ACTION_VALUE_TYPE_DIGITAL,
         0.5f, 0.0f, false, false
     );
@@ -1422,6 +1422,14 @@ void initMakerToolTypes() {
         nullptr, ""
     );
     
+    //Help.
+    commitTool(
+        MAKER_TOOL_TYPE_HELP,
+        "help", false,
+        MakerToolRunners::help,
+        "Shows some basic help and a list of maker tools."
+    );
+    
     //Set auto-start data.
     commitTool(
         MAKER_TOOL_TYPE_SET_AUTO_START,
@@ -1520,14 +1528,6 @@ void initMakerToolTypes() {
         "Pauses gameplay and advances only one frame at a time."
     );
     
-    //Help.
-    commitTool(
-        MAKER_TOOL_TYPE_HELP,
-        "help", false,
-        MakerToolRunners::help,
-        "Shows some basic help and a list of maker tools."
-    );
-    
     //Hide HUD.
     commitTool(
         MAKER_TOOL_TYPE_HIDE_HUD,
@@ -1571,7 +1571,8 @@ void initMakerToolTypes() {
         MAKER_TOOL_TYPE_INSPECT_MOB,
         "inspect_mob", true,
         MakerToolRunners::inspectMob,
-        "Inspects a mob, showing information about itself and its script."
+        "Toggles showing information about an object mob, "
+        "showing information about itself and its script."
     );
     
     //Save area image.
@@ -1674,7 +1675,7 @@ void initMakerToolTypes() {
     queueParam("type", ptString, pfOpt, "next");
     params.back().description =
         "Type of Pikmin to spawn. A proper type's internal name, "
-        "or \"next\" to use the same type as the last spawned, "
+        "or \"next\" to use the next type from the last spawned, "
         "or \"same\" to use the same type as the last spawned.";
     queueParam("amount", ptInt, pfOpt, "1");
     params.back().minValue = 1.0f;
