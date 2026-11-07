@@ -98,7 +98,7 @@ void ConverterType::loadCatProperties(DataNode* file) {
         if(typePtr) {
             acceptedPikminTypes.push_back((PikminType*) typePtr);
         } else {
-            game.log.report(
+            game.log.write(
                 LOG_LEVEL_ERROR,
                 "Unknown Pikmin type \"" + acceptedTypesStrs[t] + "\"!",
                 acceptedTypesNode

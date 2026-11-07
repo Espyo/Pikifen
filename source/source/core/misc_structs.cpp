@@ -2808,12 +2808,12 @@ bool TextInput::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
     if(ev.type == ALLEGRO_EVENT_KEY_CHAR) {
         if(ev.keyboard.keycode == ALLEGRO_KEY_BACKSPACE) {
             if(!text.empty() && caretPos > 0) {
-                size_t start = caretPos - 1;
+                size_t start = caretPos;
                 size_t end = string::npos;
                 if(hasFlag(ev.keyboard.modifiers, ALLEGRO_KEYMOD_CTRL)) {
                     end = getNextWordLimitPos(text, false, caretPos);
                 } else {
-                    end = caretPos;
+                    end = caretPos - 1;
                 }
                 caretPos -= eraseChars(start, end);
             }
