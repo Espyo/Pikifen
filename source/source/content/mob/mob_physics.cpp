@@ -45,6 +45,11 @@ Mob* Mob::getMobToWalkOn() const {
         if(bestCandidate && mPtr->bottomZ <= bestCandidate->bottomZ) {
             continue;
         }
+        if(type->category->id == MOB_CATEGORY_PIKMIN) {
+            if(((Pikmin*) this)->carryingMob == mPtr) {
+                continue;
+            }
+        }
         
         //Check if they collide on X+Y.
         if(
