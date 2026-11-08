@@ -1405,7 +1405,6 @@ void initMakerToolTypes() {
     const COMMAND_PARAM_TYPE ptInt = COMMAND_PARAM_TYPE_INT;
     const COMMAND_PARAM_TYPE ptFloat = COMMAND_PARAM_TYPE_FLOAT;
     const COMMAND_PARAM_TYPE ptBool = COMMAND_PARAM_TYPE_BOOL;
-    const COMMAND_PARAM_TYPE ptString = COMMAND_PARAM_TYPE_STRING;
     const COMMAND_PARAM_TYPE ptEnum = COMMAND_PARAM_TYPE_ENUM;
     const COMMAND_PARAM_FLAG pfOpt = COMMAND_PARAM_FLAG_OPTIONAL;
     
@@ -1656,7 +1655,7 @@ void initMakerToolTypes() {
     );
     
     //Spawn mob.
-    queueParam("type", ptString, 0, "");
+    queueParam("type", ptEnum, 0, "");
     params.back().description =
         "Internal name of the type of mob to spawn.";
     queueParam("amount", ptInt, pfOpt, "1");
@@ -1672,7 +1671,7 @@ void initMakerToolTypes() {
     );
     
     //Spawn Pikmin.
-    queueParam("type", ptString, pfOpt, "next");
+    queueParam("type", ptEnum, pfOpt, "next");
     params.back().description =
         "Type of Pikmin to spawn. A proper type's internal name, "
         "or \"next\" to use the next type from the last spawned, "
@@ -1710,6 +1709,8 @@ void initMakerToolTypes() {
         "Teleports the current leader or inspected mob to where the mouse "
         "cursor is."
     );
+    
+    game.makerTools.update();
 }
 
 

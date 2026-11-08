@@ -1423,3 +1423,30 @@ void MakerTools::tick(float deltaT) {
         }
     }
 }
+
+
+/**
+ * @brief Updates some things, like the suggestions for Pikmin spawn types
+ * (for use in the terminal).
+ */
+void MakerTools::update() {
+    MakerToolType& spawnPikTool = types[MAKER_TOOL_TYPE_SPAWN_PIKMIN];
+    CommandParam& pikTypeParam = spawnPikTool.parameters[0];
+    pikTypeParam.enumValues.clear();
+    game.mobCategories.get(MOB_CATEGORY_PIKMIN)->getTypeNames(
+        pikTypeParam.enumValues
+    );
+    pikTypeParam.enumValues.insert(pikTypeParam.enumValues.begin(), "same");
+    pikTypeParam.enumValues.insert(pikTypeParam.enumValues.begin(), "next");
+    
+    MakerToolType& spawnMobTool = types[MAKER_TOOL_TYPE_SPAWN_MOB];
+    CommandParam& mobTypeParam = spawnMobTool.parameters[0];
+    mobTypeParam.enumValues.clear();
+    for(size_t c = 0; c < N_MOB_CATEGORIES; c++) {
+        vector<string> catNames;
+        game.mobCategories.get((MOB_CATEGORY) c)->getTypeNames(catNames);
+        mobTypeParam.enumValues.insert(
+            mobTypeParam.enumValues.end(), catNames.begin(), catNames.end()
+        );
+    }
+}

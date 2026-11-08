@@ -951,11 +951,12 @@ string MakerConsoleTerminal::getSuggestion(string* outNotes) const {
         
         if(tPtr && paramIdx < tPtr->parameters.size()) {
             const CommandParam& param = tPtr->parameters[paramIdx];
-            vector<string> possibleItems = getParamAllSuggestions(param);
+            vector<string> possibleItems;
             vector<size_t> possibleItemScores;
             vector<size_t> possibleItemSortIdxs;
             
             if(!word.empty()) {
+                possibleItems = getParamAllSuggestions(param);
                 possibleItems =
                     getStringSubsequenceMatches(
                         word, possibleItems, &possibleItemScores
