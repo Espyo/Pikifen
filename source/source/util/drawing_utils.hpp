@@ -153,7 +153,7 @@ void drawTexturedBox(
 );
 void getMultilineTextDimensions(
     const vector<string>& lines, const ALLEGRO_FONT* const font,
-    int* outWidth, int* outHeight, int* outLineHeight
+    int* outWidth, int* outHeight, int* outLineHeight = nullptr
 );
 void getTextDrawingTransforms(
     const Point& where, const Point& scale,
