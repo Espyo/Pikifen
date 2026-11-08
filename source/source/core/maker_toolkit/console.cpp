@@ -815,6 +815,93 @@ int MakerConsoleTerminal::draw(int y) const {
 
 
 /**
+ * @brief Returns the maker tool that matches the given name.
+ *
+ * @param name The name.
+ * @return The tool, or nullptr if none.
+ */
+MakerToolType* MakerConsoleTerminal::findTool(const string& name) const {
+    forIdx(t, game.makerTools.types) {
+        MakerToolType* tPtr = &game.makerTools.types[t];
+        if(tPtr->type == MAKER_TOOL_TYPE_NONE) continue;
+        if(tPtr->name != name) continue;
+        return tPtr;
+    }
+    return nullptr;
+}
+
+
+/**
+ * @brief Returns the word that is at the given caret position.
+ *
+ * @param text The full text.
+ * @param caretPos The caret position.
+ * @param outWordIdx If not nullptr, the index of the word is returned here.
+ * @param outWord If not nullptr, the word is returned here.
+ */
+void MakerConsoleTerminal::getCaretWord(
+    const string& text, size_t caretPos,
+    size_t* outWordIdx, string* outWord
+) const {
+    //Figure out the word index.
+    size_t wordStart, wordEnd;
+    size_t wordIdx = 0;
+    
+    getWordStartAndEnd(text, caretPos, &wordStart, &wordEnd);
+    string word = text.substr(wordStart, wordEnd - wordStart);
+    size_t prevSpaceIdx = string::npos;
+    
+    while(true) {
+        prevSpaceIdx =
+            text.find(' ', prevSpaceIdx == string::npos ? 0 : prevSpaceIdx + 1);
+        if(prevSpaceIdx >= wordEnd) {
+            break;
+        }
+        wordIdx++;
+    }
+    
+    //Return the result.
+    if(outWordIdx) *outWordIdx = wordIdx;
+    if(outWord) *outWord = word;
+}
+
+
+/**
+ * @brief Returns all of the possible values that can be used for suggestions
+ * for a given parameter.
+ *
+ * @param param The parameter.
+ * @return The suggestions.
+ */
+vector<string> MakerConsoleTerminal::getParamAllSuggestions(
+    const CommandParam& param
+) const {
+    vector<string> result;
+    
+    switch(param.type) {
+    case COMMAND_PARAM_TYPE_BOOL: {
+        result.push_back("true");
+        result.push_back("false");
+        break;
+    } case COMMAND_PARAM_TYPE_ENUM: {
+        result = param.enumValues;
+        break;
+    } default: {
+        break;
+    }
+    }
+    
+    if(!param.defValue.empty()) {
+        if(!isInContainer(result, param.defValue)) {
+            result.push_back(param.defValue);
+        }
+    }
+    
+    return result;
+}
+
+
+/**
  * @brief Returns a suggestion for the word the user is currently typing.
  *
  * @param outNotes If not nullptr, any additional notes are returned here.
@@ -826,64 +913,32 @@ string MakerConsoleTerminal::getSuggestion(string* outNotes) const {
     string result;
     string notesResult;
     
-    const auto findTool = [] (const string& name) -> MakerToolType* {
-        forIdx(t, game.makerTools.types) {
-            MakerToolType* tPtr = &game.makerTools.types[t];
-            if(tPtr->name == name) {
-                return tPtr;
-            }
-        }
-        return nullptr;
-    };
-    
-    //Figure out the word.
-    size_t wordStart, wordEnd;
-    getWordStartAndEnd(text, input.getCaretPos(), &wordStart, &wordEnd);
-    string word = text.substr(wordStart, wordEnd - wordStart);
-    
     size_t wordIdx = 0;
-    size_t prevSpaceIdx = string::npos;
-    while(true) {
-        prevSpaceIdx =
-            text.find(' ', prevSpaceIdx == string::npos ? 0 : prevSpaceIdx + 1);
-        if(prevSpaceIdx >= wordEnd) {
-            break;
-        }
-        wordIdx++;
-    }
+    string word;
+    getCaretWord(
+        text, input.getCaretPos(), &wordIdx, &word
+    );
     
     //Figure out what to suggest with.
     if(wordIdx == 0) {
         //Tool name.
         vector<string> possibleItems;
+        vector<size_t> possibleItemScores;
         forIdx(t, game.makerTools.types) {
             MakerToolType* tPtr = &game.makerTools.types[t];
             if(tPtr->type == MAKER_TOOL_TYPE_NONE) continue;
             possibleItems.push_back(tPtr->name);
         }
         
-        vector<size_t> possibleItemScores;
         possibleItems =
             getStringSubsequenceMatches(
                 word, possibleItems, &possibleItemScores
             );
+        vector<size_t> possibleItemSortIdxs =
+            sortSuggestionPossibleItems(possibleItems, possibleItemScores);
             
         if(!possibleItems.empty()) {
-            vector<size_t> possibleItemIndexes;
-            for(size_t i = 0; i < possibleItems.size(); i++) {
-                possibleItemIndexes.push_back(i);
-            }
-            std::sort(
-                possibleItemIndexes.begin(), possibleItemIndexes.end(),
-            [&possibleItemScores] (size_t i1, size_t i2) {
-                size_t score1 = possibleItemScores[i1];
-                size_t score2 = possibleItemScores[i2];
-                if(score1 == score2) return i1 < i2;
-                return score1 < score2;
-            }
-            );
-            
-            result = possibleItems[possibleItemIndexes[0]];
+            result = possibleItems[possibleItemSortIdxs[0]];
             if(outNotes) {
                 notesResult = findTool(result)->description;
             }
@@ -892,14 +947,36 @@ string MakerConsoleTerminal::getSuggestion(string* outNotes) const {
     } else {
         //Tool parameter.
         MakerToolType* tPtr = findTool(split(text)[0]);
-        if(tPtr) {
-            size_t paramIdx = wordIdx - 1;
+        size_t paramIdx = wordIdx - 1;
+        
+        if(tPtr && paramIdx < tPtr->parameters.size()) {
+            const CommandParam& param = tPtr->parameters[paramIdx];
+            vector<string> possibleItems = getParamAllSuggestions(param);
+            vector<size_t> possibleItemScores;
+            vector<size_t> possibleItemSortIdxs;
             
-            if(paramIdx < tPtr->parameters.size()) {
-                result = tPtr->parameters[paramIdx].defValue;
-                notesResult = tPtr->parameters[paramIdx].description;
+            if(!word.empty()) {
+                possibleItems =
+                    getStringSubsequenceMatches(
+                        word, possibleItems, &possibleItemScores
+                    );
+                possibleItemSortIdxs =
+                    sortSuggestionPossibleItems(
+                        possibleItems, possibleItemScores
+                    );
+                    
+            } else if(!param.defValue.empty()) {
+                possibleItems.push_back(param.defValue);
+                possibleItemSortIdxs.push_back(0);
+                
             }
+            
+            if(!possibleItems.empty()) {
+                result = possibleItems[possibleItemSortIdxs[0]];
+            }
+            notesResult = tPtr->parameters[paramIdx].description;
         }
+        
     }
     
     if(outNotes) *outNotes = notesResult;
@@ -1023,6 +1100,40 @@ void MakerConsoleTerminal::reset() {
     input.reset();
     visibilityState = OPEN_CLOSE_STATE_CLOSED;
     visibility = 0.0f;
+}
+
+
+/**
+ * @brief Sorts a list of possible items to use in the suggestion, based
+ * on their scores.
+ *
+ * @param possibleItems The possible items.
+ * @param possibleItemScores Their scores.
+ * @return A vector that lists the indexes of the possible items to use,
+ * in order, for a sorted result.
+ */
+vector<size_t> MakerConsoleTerminal::sortSuggestionPossibleItems(
+    const vector<string>& possibleItems,
+    const vector<size_t>& possibleItemScores
+) const {
+    if(possibleItems.empty()) return vector<size_t>();
+    
+    vector<size_t> result;
+    for(size_t i = 0; i < possibleItems.size(); i++) {
+        result.push_back(i);
+    }
+    
+    std::sort(
+        result.begin(), result.end(),
+    [&possibleItemScores] (size_t i1, size_t i2) {
+        size_t score1 = possibleItemScores[i1];
+        size_t score2 = possibleItemScores[i2];
+        if(score1 == score2) return i1 < i2;
+        return score1 < score2;
+    }
+    );
+    
+    return result;
 }
 
 

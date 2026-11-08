@@ -16,6 +16,7 @@
 #include <allegro5/allegro.h>
 
 #include "../misc_structs.hpp"
+#include "tools.hpp"
 
 using std::string;
 using std::vector;
@@ -103,7 +104,17 @@ struct MakerConsoleTerminal {
     
     void acceptSuggestion();
     void browseCommandHistory(int offset);
+    MakerToolType* findTool(const string& name) const;
+    void getCaretWord(
+        const string& text, size_t caretPos,
+        size_t* outWordIdx, string* outWord
+    ) const;
+    vector<string> getParamAllSuggestions(const CommandParam& param) const;
     string getSuggestion(string* outNotes = nullptr) const;
+    vector<size_t> sortSuggestionPossibleItems(
+        const vector<string>& possibleItems,
+        const vector<size_t>& possibleItemScores
+    ) const;
     void submitCommand();
     
 };

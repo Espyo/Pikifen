@@ -224,6 +224,7 @@ vector<string> getStringSubsequenceMatches(
             }
             if(c == 0) {
                 firstCharDiff = lastMatchIdx;
+                distanceSum += firstCharDiff;
             } else {
                 distanceSum += (lastMatchIdx - c) - firstCharDiff;
             }
