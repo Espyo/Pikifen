@@ -368,6 +368,7 @@ struct MakerTools {
     void saveToDataNode(DataNode* node);
     void tick(float deltaT);
     unsigned char getMakerToolSettingIdx() const;
+    void update();
     
     
 private:

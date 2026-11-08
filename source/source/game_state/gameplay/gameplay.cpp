@@ -1217,6 +1217,7 @@ void GameplayState::load() {
     areaTimePassed = 0.0f;
     gameplayTimePassed = 0.0f;
     game.makerTools.resetForGameplay();
+    game.makerTools.update();
     
     afterHours = false;
     pikminBorn = 0;
