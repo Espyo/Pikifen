@@ -5,9 +5,6 @@ Current tasks (tasks being worked on, but not yet committed)
     Console
         Suggestions
             Multiple suggestions -- If you press up and down with an empty field it scrolls through the history, otherwise it cycles through the suggestions
-            If a parameter has the enum type, the suggestions should cycle between them
-            Typing "s" is suggesting "inspect" first, when it should suggest "set_auto_start" or something
-            Suggestion descriptions need to word wrap
         Wrong commands shouldn't go in the error log
 
 Next tasks (roughly sorted most important first)
