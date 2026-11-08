@@ -215,10 +215,11 @@ void drawFilledRoundedRectangle(
  * @param size Width and height.
  * @param color Color of the rectangle.
  * @param texture Texture, if any.
+ * @param uv UV mapping to give the rectangle
  */
 void drawPrimRect(
     const Point& tl, const Point& size, const ALLEGRO_COLOR color,
-    ALLEGRO_BITMAP* texture
+    ALLEGRO_BITMAP* texture, const RectCorners& uv
 ) {
     ALLEGRO_VERTEX vertexes[4];
     for(unsigned char v = 0; v < 4; v++) {
@@ -228,20 +229,20 @@ void drawPrimRect(
     
     vertexes[0].x = tl.x;
     vertexes[0].y = tl.y;
-    vertexes[0].u = 0.0f;
-    vertexes[0].v = 0.0f;
+    vertexes[0].u = uv.tl.x;
+    vertexes[0].v = uv.tl.y;
     vertexes[1].x = tl.x + size.x;
     vertexes[1].y = tl.y;
-    vertexes[1].u = 1.0f;
-    vertexes[1].v = 0.0f;
+    vertexes[1].u = uv.br.x;
+    vertexes[1].v = uv.tl.y;
     vertexes[2].x = tl.x;
     vertexes[2].y = tl.y + size.y;
-    vertexes[2].u = 0.0f;
-    vertexes[2].v = 1.0f;
+    vertexes[2].u = uv.tl.x;
+    vertexes[2].v = uv.br.y;
     vertexes[3].x = tl.x + size.x;
     vertexes[3].y = tl.y + size.y;
-    vertexes[3].u = 1.0f;
-    vertexes[3].v = 1.0f;
+    vertexes[3].u = uv.br.x;
+    vertexes[3].v = uv.br.y;
     
     al_draw_prim(
         vertexes, nullptr, texture, 0, 4, ALLEGRO_PRIM_TRIANGLE_STRIP

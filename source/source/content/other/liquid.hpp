@@ -108,6 +108,7 @@ struct Liquid {
     
     Liquid(Hazard* hazard, const vector<Sector*>& sectors);
     ~Liquid();
+    float getDrainAlpha();
     bool isFrozen(float* thawAlpha, float* flashAlpha, bool* cracked) const;
     bool startDraining();
     void tick(float deltaT);

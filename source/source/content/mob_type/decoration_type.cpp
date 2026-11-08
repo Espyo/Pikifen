@@ -64,8 +64,6 @@ DecorationType::DecorationType() :
         "Random rotations actually rotate the mob.";
     areaEditorProps.push_back(aepRandomRotation);
     
-    blackoutRadius = 0.0f;
-    
     DecorationFsm::createFsm(this);
 }
 

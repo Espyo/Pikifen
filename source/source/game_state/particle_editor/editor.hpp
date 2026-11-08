@@ -88,6 +88,12 @@ private:
     
     //Selected color keyframe.
     size_t selectedColorKeyframe = 0;
+
+    //Selected color keyframe.
+    size_t selectedLightColorKeyframe = 0;
+
+    //Selected color keyframe.
+    size_t selectedLightSizeKeyframe = 0;
     
     //Selected size keyframe.
     size_t selectedSizeKeyframe = 0;

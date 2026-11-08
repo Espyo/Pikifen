@@ -38,7 +38,8 @@
 Particle::Particle(
     const Point& center, const float z,
     const float initialSize, const float duration,
-    const PARTICLE_PRIORITY priority, const ALLEGRO_COLOR initialColor
+    const PARTICLE_PRIORITY priority, const ALLEGRO_COLOR initialColor,
+    const ALLEGRO_COLOR initialLightColor
 ) :
     duration(duration),
     time(duration),
@@ -46,7 +47,8 @@ Particle::Particle(
     z(z),
     size(initialSize),
     color(initialColor),
-    priority(priority) {
+    priority(priority),
+    lightColor(initialLightColor) {
 }
 
 
@@ -433,7 +435,16 @@ void ParticleGenerator::loadFromDataNode(
     pRS.set("duration", baseParticle.duration);
     pRS.set("friction", baseParticle.friction);
     pRS.set("blend_type", blendInt);
-    
+    pRS.set("emits_light", baseParticle.emitsLight);
+    if(baseParticle.emitsLight) {
+        baseParticle.lightSize.loadFromDataNode(
+            baseParticleNode->getChildByName("light_size")
+        );
+        baseParticle.lightColor.loadFromDataNode(
+            baseParticleNode->getChildByName("light_color")
+        );
+    }
+
     baseParticle.bmpAngleType = (PARTICLE_ANGLE_TYPE) angleTypeInt;
     baseParticle.blendType = (PARTICLE_BLEND_TYPE) blendInt;
     baseParticle.bmpAngle = degToRad(baseParticle.bmpAngle);
@@ -551,6 +562,25 @@ void ParticleGenerator::saveToDataNode(DataNode* node) {
     pGW.write("duration", baseParticle.duration);
     pGW.write("friction", baseParticle.friction);
     pGW.write("blend_type", baseParticle.blendType);
+    pGW.write("emits_light", baseParticle.emitsLight);
+
+    if(baseParticle.emitsLight) {
+        DataNode* lightSizeNode = baseParticleNode->addNew("light_size");
+        GetterWriter plrGW(lightSizeNode);
+        
+        for(size_t c = 0; c < baseParticle.lightSize.getKeyframeCount(); c++) {
+            auto keyframe = baseParticle.lightSize.getKeyframe(c);
+            plrGW.write(f2s(keyframe.first), keyframe.second);
+        }
+
+        DataNode* lightColorNode = baseParticleNode->addNew("light_color");
+        GetterWriter plcGW(lightColorNode);
+        
+        for(size_t c = 0; c < baseParticle.lightColor.getKeyframeCount(); c++) {
+            auto keyframe = baseParticle.lightColor.getKeyframe(c);
+            plcGW.write(f2s(keyframe.first), keyframe.second);
+        }
+    }
     
     DataNode* colorNode = baseParticleNode->addNew("color");
     GetterWriter pcGW(colorNode);

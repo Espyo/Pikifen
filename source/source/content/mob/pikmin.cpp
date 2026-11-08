@@ -150,7 +150,6 @@ void Pikmin::drawMob() {
         curSPtr, nextSPtr, interpolationFactor,
         &mobEff,
         SPRITE_BMP_EFFECT_FLAG_STATUS |
-        SPRITE_BMP_EFFECT_FLAG_SECTOR_BRIGHTNESS |
         SPRITE_BMP_EFFECT_FLAG_HEIGHT |
         SPRITE_BMP_EFFECT_FLAG_DELIVERY |
         SPRITE_BMP_EFFECT_FLAG_PEEK_UNDERNEATH |

@@ -225,11 +225,20 @@ struct Particle {
     //Orbital velocity over time.
     KeyframeInterpolator<float> orbitalSpeed;
     
+    //Friction.
+    float friction = 0.0f;
+
     //Current color.
     KeyframeInterpolator<ALLEGRO_COLOR> color;
     
-    //Friction.
-    float friction = 0.0f;
+    //Should this particle emit light?
+    bool emitsLight = false;
+
+    //Current light size, in diameter.
+    KeyframeInterpolator<float> lightSize;
+
+    //Current light color. COLOR_BLACK for no light
+    KeyframeInterpolator<ALLEGRO_COLOR> lightColor;
     
     //How much the particle has been slowed since being created.
     Point totalFrictionApplied = Point(0.0f);
@@ -251,7 +260,8 @@ struct Particle {
         const float initialSize = 0.0f,
         const float duration = 0.0f, const PARTICLE_PRIORITY priority =
             PARTICLE_PRIORITY_MEDIUM,
-        const ALLEGRO_COLOR initialColor = COLOR_WHITE
+        const ALLEGRO_COLOR initialColor = COLOR_WHITE,
+        const ALLEGRO_COLOR initialLightColor = COLOR_BLACK
     );
     void draw();
     void setBitmap(

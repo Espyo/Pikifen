@@ -100,6 +100,88 @@ bool alpha_test_func(float x, int op, float compare)
 
 
 #pragma endregion
+#pragma region Lighting fragment shader
+
+
+const char* LIGHTING_FRAG_SHADER = R"(
+
+#version 330
+#extension GL_ARB_shader_storage_buffer_object: enable
+
+uniform sampler2D al_tex;
+uniform bool al_use_tex;
+
+//Length of a single entry. Used for indexing.
+const int lightBufferSize = 6;
+
+readonly layout(std430, binding = 3) buffer mobLayout
+{
+    //Formatted in (x, y, radius, r, g, b)
+    readonly float light_entries[];
+};
+
+uniform int light_count;
+
+//Fragment shader input for texture coordinates.
+in vec2 varying_texcoord;
+
+//Fragment shader input for the tint.
+in vec4 varying_color;
+
+out vec4 fragColor;
+
+//Alpha of the blackout effect [0 - 1].
+uniform float alpha;
+
+//Dimensions of the lightmap texture.
+uniform ivec2 lightmap_size;
+
+vec4 getColor(vec2 xy) {
+    //Standard vertex tinting.
+    vec4 fadeVal;
+    if(al_use_tex) {
+        fadeVal = varying_color * texture2D(al_tex, varying_texcoord);
+        xy.x *= lightmap_size.x;
+        xy.y = (1 - xy.y) * lightmap_size.y;
+    } else {
+        fadeVal = varying_color;
+    }
+    for(int i = 0; i < light_count; i++) {
+        vec2 light_pos = vec2(light_entries[lightBufferSize * i], light_entries[(lightBufferSize * i) + 1]);
+
+        float dist = sqrt(pow(light_pos.x - xy.x, 2.0) + pow(light_pos.y - xy.y, 2.0));
+
+        float trans = smoothstep(
+            0, 
+            light_entries[(lightBufferSize * i) + 2], 
+            dist
+        );
+        fadeVal.r += (1 - trans) * light_entries[(lightBufferSize * i) + 3];
+        fadeVal.g += (1 - trans) * light_entries[(lightBufferSize * i) + 4];
+        fadeVal.b += (1 - trans) * light_entries[(lightBufferSize * i) + 5];
+    }
+    return fadeVal;
+}
+
+void main() {
+
+    //Get the base color
+    vec4 finalColor = getColor(varying_texcoord);
+
+    //Brighten the image by the alpha.
+    //Since this shader should use multiplicative blending,
+    //This has the same effect as setting alpha.
+    finalColor.r += 1 - alpha;
+    finalColor.g += 1 - alpha;
+    finalColor.b += 1 - alpha;
+
+    fragColor = finalColor;
+}
+
+    )";
+
+
+#pragma endregion
 #pragma region Liquid fragment shader
 
 

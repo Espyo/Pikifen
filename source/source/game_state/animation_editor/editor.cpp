@@ -1761,8 +1761,8 @@ void AnimationEditor::setupForNewAnimDbPost() {
         loadedMobType &&
         loadedMobType->category->id == MOB_CATEGORY_LEADERS
     ) {
-        topBmp[0] = ((LeaderType*) loadedMobType)->bmpLight;
-        topTint = ((LeaderType*) loadedMobType)->lightBmpTint;
+        topBmp[0] = ((LeaderType*) loadedMobType)->bmpAntennaLight;
+        topTint = ((LeaderType*) loadedMobType)->antennaLightBmpTint;
         curMaturity = MATURITY_LEAF;
     }
     
