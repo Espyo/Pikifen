@@ -727,16 +727,24 @@ int MakerConsoleTerminal::draw(int y) const {
     }
     
     const auto drawSuggestionText =
-    [FONT, fontHeight] (const string& text, const Point & pos) {
-        int suggestionW = al_get_text_width(FONT, text.c_str());
-        Rect suggestionRect(pos, Point(suggestionW + 6.0f, fontHeight + 6.0f));
+        [FONT, fontHeight]
+    (const string& text, const Point & pos, size_t screenHalf) {
+        int suggestionW, suggestionH;
+        getMultilineTextDimensions(
+            split(text, "\n", true), FONT, &suggestionW, &suggestionH
+        );
+        int rectY1 = pos.y - fontHeight / 2.0f;
+        Rect suggestionRect(
+            Point(pos.x, rectY1 + (suggestionH + 6.0f) / 2.0f),
+            Point(suggestionW + 6.0f, suggestionH + 6.0f)
+        );
+        RectCorners limits(
+            Point(game.winW * 0.5 * screenHalf, 0.0f),
+            Point(game.winW * 0.5 * (screenHalf + 1), game.winH)
+        );
+        
         suggestionRect =
-            clampRectPosToRect(
-                suggestionRect,
-                rectCornersToRect(
-                    RectCorners(Point(0.0f), Point(game.winW, game.winH))
-                )
-            );
+            clampRectPosToRect(suggestionRect, rectCornersToRect(limits));
         al_draw_filled_rectangle(
             suggestionRect.center.x - suggestionRect.size.x / 2.0f,
             suggestionRect.center.y - suggestionRect.size.y / 2.0f,
@@ -751,10 +759,13 @@ int MakerConsoleTerminal::draw(int y) const {
             suggestionRect.center.y + suggestionRect.size.y / 2.0f,
             CONSOLE::COLOR_SUGGESTION, 1.0f
         );
-        drawText(
-            text, FONT, suggestionRect.center, suggestionRect.size,
+        int textX1 =
+            suggestionRect.center.x - suggestionRect.size.x / 2.0f + 3.0f;
+        drawTextLines(
+            text, FONT,
+            Point(textX1, suggestionRect.center.y), suggestionRect.size,
             CONSOLE::COLOR_SUGGESTION,
-            ALLEGRO_ALIGN_CENTER, V_ALIGN_MODE_CENTER,
+            ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
             TEXT_SETTING_FLAG_FIXED_SIZE
         );
     };
@@ -767,19 +778,23 @@ int MakerConsoleTerminal::draw(int y) const {
             suggestion,
             Point(
                 caretX,
-                getLineY(CONSOLE::OUTPUT_MAX_VISIBLE_LINES) - fontHeight / 2.0f
-            )
+                getLineY(CONSOLE::OUTPUT_MAX_VISIBLE_LINES + 4) -
+                fontHeight / 2.0f
+            ),
+            0
         );
     }
     
     if(!suggestionNotes.empty()) {
+        string finalNotes = wordWrap(suggestionNotes, 45);
         drawSuggestionText(
-            suggestionNotes,
+            finalNotes,
             Point(
                 caretX,
-                getLineY(CONSOLE::OUTPUT_MAX_VISIBLE_LINES - 2) -
+                getLineY(CONSOLE::OUTPUT_MAX_VISIBLE_LINES + 4) -
                 fontHeight / 2.0f
-            )
+            ),
+            1
         );
     }
     
