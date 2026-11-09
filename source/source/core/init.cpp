@@ -1558,7 +1558,7 @@ void initMakerToolTypes() {
     );
     
     //Inspect mob.
-    queueParam("action", ptEnum, pfOpt, "closest");
+    queueParam("action", ptEnum, pfOpt, "get_closest");
     params.back().enumValues = enumGetNames(makerToolInspectMobActionINames);
     params.back().description =
         "Action to perform. \"get_closest\" makes it detect the mob closest "

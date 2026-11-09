@@ -40,7 +40,7 @@ const ALLEGRO_COLOR COLOR_MAIN = al_map_rgba(255, 255, 255, 192);
 const ALLEGRO_COLOR COLOR_MUTED = al_map_rgba(255, 255, 255, 128);
 
 //Suggestion text color, alpha included.
-const ALLEGRO_COLOR COLOR_SUGGESTION = al_map_rgba(208, 208, 255, 192);
+const ALLEGRO_COLOR COLOR_SUGGESTION = al_map_rgba(192, 255, 255, 192);
 
 //Warning text color, alpha included.
 const ALLEGRO_COLOR COLOR_WARNING = al_map_rgba(255, 255, 128, 192);
@@ -73,6 +73,9 @@ const size_t OUTPUT_MAX_VISIBLE_LINES = 10;
 
 //Padding on all sides.
 const int PADDING = 8;
+
+//Maximum amount of suggestions to show at once.
+const size_t SUGGESTION_MAX_AMOUNT = 10;
 
 //How much the visibility value [0 - 1] changes per second, when opening
 //or closing something from the console.
@@ -449,21 +452,25 @@ MakerConsoleTerminal::MakerConsoleTerminal() {
 
 
 /**
- * @brief Accepts the current suggestion.
+ * @brief Accepts the currently focused suggestion.
  */
 void MakerConsoleTerminal::acceptSuggestion() {
-    string suggestion = getSuggestion();
-    if(suggestion.empty()) return;
+    if(suggestions.empty()) return;
+    
+    string finalSuggestion = suggestions[focusedSuggestionIdx];
+    
+    if(finalSuggestion.empty()) return;
     
     string text = input.getString();
     size_t wordStart, wordEnd;
     getWordStartAndEnd(text, input.getCaretPos(), &wordStart, &wordEnd);
     
-    text.replace(wordStart, wordEnd - wordStart, suggestion);
+    text.replace(wordStart, wordEnd - wordStart, finalSuggestion);
     if(text.back() != ' ') text.push_back(' ');
     
     input.setString(text);
-    input.setCaretPos(wordStart + suggestion.size() + 1);
+    input.setCaretPos(wordStart + finalSuggestion.size() + 1);
+    focusedSuggestionIdx = 0;
 }
 
 
@@ -473,8 +480,8 @@ void MakerConsoleTerminal::acceptSuggestion() {
  * @param offset Offset compared to the current point of the command history.
  */
 void MakerConsoleTerminal::browseCommandHistory(int offset) {
-    int oldIdxInt = commandHistoryIndex;
-    int newIdxInt = commandHistoryIndex + offset;
+    int oldIdxInt = commandHistoryIdx;
+    int newIdxInt = commandHistoryIdx + offset;
     newIdxInt = std::clamp(newIdxInt, 0, (int) commandHistory.size() - 1);
     
     if(newIdxInt == oldIdxInt) return;
@@ -483,9 +490,129 @@ void MakerConsoleTerminal::browseCommandHistory(int offset) {
         commandHistory[0] = input.getString();
     }
     
-    commandHistoryIndex = newIdxInt;
+    commandHistoryIdx = newIdxInt;
     
     input.setString(commandHistory[newIdxInt], true);
+    focusedSuggestionIdx = 0;
+}
+
+
+/**
+ * @brief Browses to a different suggestion in the list of suggestions,
+ * if possible.
+ *
+ * @param offset Offset compared to the currently focused suggestion.
+ */
+void MakerConsoleTerminal::browseSuggestions(int offset) {
+    int newIdxInt = focusedSuggestionIdx + offset;
+    newIdxInt = std::clamp(newIdxInt, 0, (int) suggestions.size() - 1);
+    focusedSuggestionIdx = newIdxInt;
+}
+
+
+/**
+ * @brief Calculates the list of suggestions for the word the user
+ * is currently typing. Saves the result in the various suggestion-related
+ * class members.
+ */
+void MakerConsoleTerminal::calculateSuggestions() {
+    suggestions.clear();
+    wordDocumentation.clear();
+    
+    if(commandHistoryIdx > 0) return;
+    
+    string text = input.getString();
+    if(trimSpaces(text).empty()) return;
+    
+    size_t wordIdx = 0;
+    string word;
+    getCaretWord(
+        text, input.getCaretPos(), &wordIdx, &word
+    );
+    
+    //Figure out what to suggest with.
+    if(wordIdx == 0) {
+        //Tool name.
+        vector<string> possibleItems;
+        forIdx(t, game.makerTools.types) {
+            MakerToolType* tPtr = &game.makerTools.types[t];
+            if(tPtr->type == MAKER_TOOL_TYPE_NONE) continue;
+            possibleItems.push_back(tPtr->name);
+        }
+        
+        calculateSuggestionsFromPossibleItems(possibleItems, word);
+        
+        if(!suggestions.empty()) {
+            MakerToolType* toolPtr =
+                findTool(suggestions[focusedSuggestionIdx]);
+            wordDocumentation =
+                "Tool: \"" + toolPtr->name + "\"\n" +
+                toolPtr->description;
+        }
+        
+    } else {
+        //Tool parameter.
+        MakerToolType* tPtr = findTool(split(text)[0]);
+        size_t paramIdx = wordIdx - 1;
+        
+        if(tPtr && paramIdx < tPtr->parameters.size()) {
+            const CommandParam& param = tPtr->parameters[paramIdx];
+            
+            vector<string> possibleItems = getParamAllSuggestions(param);
+            if(!word.empty()) {
+                calculateSuggestionsFromPossibleItems(possibleItems, word);
+            } else {
+                suggestions = possibleItems;
+                focusedSuggestionIdx =
+                    std::min(focusedSuggestionIdx, suggestions.size() - 1);
+            }
+            
+            wordDocumentation =
+                "Parameter: \"" + param.name + "\"" +
+                (
+                    hasFlag(param.flags, COMMAND_PARAM_FLAG_OPTIONAL) ?
+                    " (optional)" :
+                    ""
+                ) +
+                "\n" + param.description;
+        }
+        
+    }
+    
+    while(suggestions.size() > CONSOLE::SUGGESTION_MAX_AMOUNT) {
+        suggestions.pop_back();
+    }
+}
+
+
+/**
+ * @brief Calculates the list of suggestions, given a list of possible
+ * items to use as suggestions for the current word. The result is saved into
+ * the "suggestions" member variable.
+ *
+ * @param possibleItems The possible items.
+ * @param word The word the user is typing.
+ */
+void MakerConsoleTerminal::calculateSuggestionsFromPossibleItems(
+    const vector<string>& possibleItems, const string& word
+) {
+    vector<size_t> filteredItemScores;
+    vector<string> filteredItems =
+        getStringSubsequenceMatches(
+            word, possibleItems, &filteredItemScores
+        );
+    vector<size_t> filteredItemSortIdxs =
+        sortSuggestionPossibleItems(filteredItems, filteredItemScores);
+        
+    if(!filteredItems.empty()) {
+        forIdx(f, filteredItemSortIdxs) {
+            suggestions.push_back(filteredItems[filteredItemSortIdxs[f]]);
+        }
+        focusedSuggestionIdx =
+            std::min(focusedSuggestionIdx, suggestions.size() - 1);
+    } else {
+        focusedSuggestionIdx = 0;
+    }
 }
 
 
@@ -726,13 +853,14 @@ int MakerConsoleTerminal::draw(int y) const {
         );
     }
     
-    const auto drawSuggestionText =
+    const auto drawHelpText =
         [FONT, fontHeight]
-    (const string& text, const Point & pos, size_t screenHalf) {
+        (
+            const vector<string>& lines, const Point & pos,
+            size_t focusedLineIdx, size_t screenHalf
+    ) {
         int suggestionW, suggestionH;
-        getMultilineTextDimensions(
-            split(text, "\n", true), FONT, &suggestionW, &suggestionH
-        );
+        getMultilineTextDimensions(lines, FONT, &suggestionW, &suggestionH);
         int rectY1 = pos.y - fontHeight / 2.0f;
         Rect suggestionRect(
             Point(pos.x, rectY1 + (suggestionH + 6.0f) / 2.0f),
@@ -759,10 +887,28 @@ int MakerConsoleTerminal::draw(int y) const {
             suggestionRect.center.y + suggestionRect.size.y / 2.0f,
             CONSOLE::COLOR_SUGGESTION, 1.0f
         );
+        
         int textX1 =
             suggestionRect.center.x - suggestionRect.size.x / 2.0f + 3.0f;
+        vector<string> normalLines = lines;
+        vector<string> focusedLines = lines;
+        for(size_t l = 0; l < lines.size(); l++) {
+            if(l == focusedLineIdx) {
+                normalLines[l] = " ";
+            } else {
+                focusedLines[l] = " ";
+            }
+        }
+        
         drawTextLines(
-            text, FONT,
+            join(normalLines, "\n"), FONT,
+            Point(textX1, suggestionRect.center.y), suggestionRect.size,
+            CONSOLE::COLOR_MUTED,
+            ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
+            TEXT_SETTING_FLAG_FIXED_SIZE
+        );
+        drawTextLines(
+            join(focusedLines, "\n"), FONT,
             Point(textX1, suggestionRect.center.y), suggestionRect.size,
             CONSOLE::COLOR_SUGGESTION,
             ALLEGRO_ALIGN_LEFT, V_ALIGN_MODE_CENTER,
@@ -771,30 +917,29 @@ int MakerConsoleTerminal::draw(int y) const {
     };
     
     //Suggestion.
-    string suggestionNotes;
-    string suggestion = getSuggestion(&suggestionNotes);
-    if(!suggestion.empty()) {
-        drawSuggestionText(
-            suggestion,
+    if(!suggestions.empty()) {
+        drawHelpText(
+            suggestions,
             Point(
                 caretX,
                 getLineY(CONSOLE::OUTPUT_MAX_VISIBLE_LINES + 4) -
                 fontHeight / 2.0f
             ),
-            0
+            focusedSuggestionIdx, 0
         );
     }
     
-    if(!suggestionNotes.empty()) {
-        string finalNotes = wordWrap(suggestionNotes, 45);
-        drawSuggestionText(
-            finalNotes,
+    //Word documentation.
+    if(!wordDocumentation.empty()) {
+        string finalNotes = wordWrap(wordDocumentation, 45);
+        drawHelpText(
+            split(finalNotes, "\n", true),
             Point(
                 caretX,
                 getLineY(CONSOLE::OUTPUT_MAX_VISIBLE_LINES + 4) -
                 fontHeight / 2.0f
             ),
-            1
+            INVALID, 1
         );
     }
     
@@ -893,97 +1038,8 @@ vector<string> MakerConsoleTerminal::getParamAllSuggestions(
     
     if(!param.defValue.empty()) {
         if(!isInContainer(result, param.defValue)) {
-            result.push_back(param.defValue);
+            result.insert(result.begin(), param.defValue);
         }
-    }
-    
-    return result;
-}
-
-
-/**
- * @brief Returns a suggestion for the word the user is currently typing.
- *
- * @param outNotes If not nullptr, any additional notes are returned here.
- * @return The suggestion, or an empty string if there is none.
- */
-string MakerConsoleTerminal::getSuggestion(string* outNotes) const {
-    string text = input.getString();
-    if(trimSpaces(text).empty()) return "";
-    string result;
-    string notesResult;
-    
-    size_t wordIdx = 0;
-    string word;
-    getCaretWord(
-        text, input.getCaretPos(), &wordIdx, &word
-    );
-    
-    //Figure out what to suggest with.
-    if(wordIdx == 0) {
-        //Tool name.
-        vector<string> possibleItems;
-        vector<size_t> possibleItemScores;
-        forIdx(t, game.makerTools.types) {
-            MakerToolType* tPtr = &game.makerTools.types[t];
-            if(tPtr->type == MAKER_TOOL_TYPE_NONE) continue;
-            possibleItems.push_back(tPtr->name);
-        }
-        
-        possibleItems =
-            getStringSubsequenceMatches(
-                word, possibleItems, &possibleItemScores
-            );
-        vector<size_t> possibleItemSortIdxs =
-            sortSuggestionPossibleItems(possibleItems, possibleItemScores);
-            
-        if(!possibleItems.empty()) {
-            result = possibleItems[possibleItemSortIdxs[0]];
-            if(outNotes) {
-                notesResult = findTool(result)->description;
-            }
-        }
-        
-    } else {
-        //Tool parameter.
-        MakerToolType* tPtr = findTool(split(text)[0]);
-        size_t paramIdx = wordIdx - 1;
-        
-        if(tPtr && paramIdx < tPtr->parameters.size()) {
-            const CommandParam& param = tPtr->parameters[paramIdx];
-            vector<string> possibleItems;
-            vector<size_t> possibleItemScores;
-            vector<size_t> possibleItemSortIdxs;
-            
-            if(!word.empty()) {
-                possibleItems = getParamAllSuggestions(param);
-                possibleItems =
-                    getStringSubsequenceMatches(
-                        word, possibleItems, &possibleItemScores
-                    );
-                possibleItemSortIdxs =
-                    sortSuggestionPossibleItems(
-                        possibleItems, possibleItemScores
-                    );
-                    
-            } else if(!param.defValue.empty()) {
-                possibleItems.push_back(param.defValue);
-                possibleItemSortIdxs.push_back(0);
-                
-            }
-            
-            if(!possibleItems.empty()) {
-                result = possibleItems[possibleItemSortIdxs[0]];
-            }
-            notesResult = tPtr->parameters[paramIdx].description;
-        }
-        
-    }
-    
-    if(outNotes) *outNotes = notesResult;
-    if(word == result) {
-        //Already the result.
-        return "";
     }
     
     return result;
@@ -1029,10 +1085,18 @@ bool MakerConsoleTerminal::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
         
         switch(ev.keyboard.keycode) {
         case ALLEGRO_KEY_UP: {
-            browseCommandHistory(+1);
+            if(input.getString().empty() || commandHistoryIdx > 0) {
+                browseCommandHistory(+1);
+            } else {
+                browseSuggestions(-1);
+            }
             break;
         } case ALLEGRO_KEY_DOWN: {
-            browseCommandHistory(-1);
+            if(input.getString().empty() || commandHistoryIdx > 0) {
+                browseCommandHistory(-1);
+            } else {
+                browseSuggestions(+1);
+            }
             break;
         } case ALLEGRO_KEY_PGUP: {
             if(output.size() > 1 && scroll < output.size() - 1) scroll++;
@@ -1041,10 +1105,10 @@ bool MakerConsoleTerminal::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
             if(output.size() > 1 && scroll > 0) scroll--;
             break;
         } case ALLEGRO_KEY_ENTER: {
-            if(input.getString().size() > 0) submitCommand();
+            if(!input.getString().empty()) submitCommand();
             break;
         } case ALLEGRO_KEY_TAB: {
-            if(input.getString().size() > 0) acceptSuggestion();
+            if(!input.getString().empty()) acceptSuggestion();
             break;
         } case ALLEGRO_KEY_ESCAPE: {
             close();
@@ -1054,12 +1118,13 @@ bool MakerConsoleTerminal::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
     }
     
     if(input.handleAllegroEvent(ev)) {
-        if(commandHistoryIndex != 0) {
+        if(commandHistoryIdx != 0) {
             //We're showing a history item, but the user edited it, so
             //reset and make it seem like this is what the user's writing.
-            commandHistoryIndex = 0;
+            commandHistoryIdx = 0;
             commandHistory[0] = input.getString();
         }
+        focusedSuggestionIdx = 0;
     }
     
     return true;
@@ -1169,6 +1234,9 @@ void MakerConsoleTerminal::submitCommand() {
     string toolName = inputWords[0];
     eraseInVector(inputWords, 0);
     game.makerTools.runTool(toolName, inputWords);
+    
+    //Final setup.
+    commandHistoryIdx = 0;
 }
 
 
@@ -1178,6 +1246,10 @@ void MakerConsoleTerminal::submitCommand() {
  * @param deltaT How long the frame's tick is, in seconds.
  */
 void MakerConsoleTerminal::tick(float deltaT) {
+    focusedSuggestionIdx =
+        std::min(focusedSuggestionIdx, suggestions.size() - 1);
+    calculateSuggestions();
+    
     switch(visibilityState) {
     case OPEN_CLOSE_STATE_CLOSED:
     case OPEN_CLOSE_STATE_OPEN: {

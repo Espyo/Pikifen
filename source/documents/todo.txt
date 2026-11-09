@@ -63,8 +63,7 @@ Next tasks (roughly sorted most important first)
     Replace the quick start guides in the manual with an "In a nutshell" box at the start of each article
     https://github.com/Espyo/Pikifen/compare/master...Helodity:Pikifen:pack-loading-restart
     Maker tool improvements
-        Add a proper maker console
-            Maybe the button-based maker tool activations could be made into commands sent to the console, and the player could add custom binds so they could customize calling the maker tools to be however they want
+        The button-based maker tool activations could be made into commands sent to the console, and the player could add custom binds so they could customize calling the maker tools to be however they want
         New Pikmin maker tool should probably spawn them in Pikmin order, not alphabetical
         The free camera maker tool should definitely be its own item, including the ability to pause and unpause gameplay, control the zoom level, and toggle the HUD
         Add a "log" maker tool, which works just like the "log" (formerly "print") script action. Maybe add other maker tools that are just the same as some of the utility script actions
@@ -919,6 +918,7 @@ Small tasks (for when I'm feeling lazy)
             Maybe place a public:, protected:, or private: tag before ALL sections of the class as relevant?
             Maybe structs should be POD, everything else should be classes
         Templated function that iterates through a vector's indexes, and if the lambda returns true, deletes the element?
+        Replace instances of "index" with "idx". I think it's a common enough shorthand, and it'd make some lines shorter
     Cleanup
         Remove magic numbers and magic strings (make numbers and strings into constants)
         Try to refactor the mission strategy patterns to also work for the area editor logic

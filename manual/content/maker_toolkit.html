@@ -35,7 +35,11 @@
 
     <h2 id="console">Console</h2>
 
-    <p>Pressing the input bound to the "maker console" will toggle the console on and off. This appears at the top of the screen, and is a great way for you to see any errors, warnings, or other relevant maker-related information. You can press Page Up and Page Down to scroll the output history up and down.</p>
+    <p>Pressing the input bound to the "maker console" will toggle the console's terminal on and off. This appears at the top of the screen, and is your gateway for the maker tools. It is split into two halves, the output and the input.</p>
+    
+    <p>The output is a log of lines, each listing an error, warning, or other relevant maker-related information that the engine feels the need to inform you about. If something goes wrong, check this. You will also receive a notification in case something gets written to this log, plus it'll all be written to the <code>user_data/log.txt</code> file. The most recent lines appear at the bottom, and each line is prefixed with at timestamp &ndash; it's not the real-world clock, but instead the number of seconds since <i>Pikifen</i> was started. You can press <kbd>Page Up</kbd> and <kbd>Page Down</kbd> to scroll the output log up and down.</p>
+
+    <p>The input field, underneath, allows you to write a command. Besides single-button shortcuts, this is how you run maker tools. As you write a command, the left half of the screen, underneath the input line, will show you some suggestions for what you are typing. Press <kbd>Tab</kbd> to accept the focused suggestion, and use the <kbd>&uarr;</kbd> and <kbd>&darr;</kbd> keys to focus on a different one. Plus, if you don't have anything written, <kbd>&uarr;</kbd> and <kbd>&darr;</kbd> will navigate through the input history, allowing you to instantly re-type a command you've submitted before. Use these tricks to save up on typing time! The right half of the screen will show you some documentation on the maker tool or argument you are typing. When you are done, hit <kbd>Enter</kbd> to submit the command and have the maker tool do its thing.</p>
 
     <h2 id="key-tools">Key tools</h2>
     

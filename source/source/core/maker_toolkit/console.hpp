@@ -41,6 +41,7 @@ extern const size_t OUTPUT_MAX_CHARS_PER_LINE;
 extern const size_t OUTPUT_MAX_SIZE;
 extern const size_t OUTPUT_MAX_VISIBLE_LINES;
 extern const int PADDING;
+extern const size_t SUGGESTION_MAX_AMOUNT;
 extern const float VISIBILITY_CHANGE_SPEED;
 }
 
@@ -97,20 +98,33 @@ struct MakerConsoleTerminal {
     vector<string> commandHistory;
     
     //Index of the history item currently being seen.
-    size_t commandHistoryIndex = 0;
+    size_t commandHistoryIdx = 0;
+    
+    //Index of the currently focused suggestion in the list of suggestions.
+    size_t focusedSuggestionIdx = 0;
+    
+    //Documentation for the current word, if any.
+    string wordDocumentation;
+    
+    //List of currently suggested words. Cache for convenience.
+    vector<string> suggestions;
     
     
     //--- Private function declarations ---
     
     void acceptSuggestion();
     void browseCommandHistory(int offset);
+    void browseSuggestions(int offset);
+    void calculateSuggestionsFromPossibleItems(
+        const vector<string>& possibleItems, const string& word
+    );
+    void calculateSuggestions();
     MakerToolType* findTool(const string& name) const;
     void getCaretWord(
         const string& text, size_t caretPos,
         size_t* outWordIdx, string* outWord
     ) const;
     vector<string> getParamAllSuggestions(const CommandParam& param) const;
-    string getSuggestion(string* outNotes = nullptr) const;
     vector<size_t> sortSuggestionPossibleItems(
         const vector<string>& possibleItems,
         const vector<size_t>& possibleItemScores
