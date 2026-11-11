@@ -19,29 +19,35 @@ If you make your own code changes to _Pikifen_ and you want them included in the
 
 ### Procedure
 
-1. Contact me on the [Discord server](https://discord.gg/qbhz4u3) first. I may have feedback on how to organize things, or may not even want the changes in the first place.
+1. Contact me on the [Discord server](https://discord.gg/qbhz4u3) before starting. I may have feedback on how to organize things, or may have entirely different plans for those sorts of changes in the first place.
 2. Make your changes (see [Writing code](#writing-code) and [Commits](#commits) below).
 3. Update `source/documents/todo.txt` if necessary.
 4. Update the manual if necessary.
-4. Update the manual's changelog if necessary.
+4. Update the manual's changelog if necessary. (Credit yourself!)
 5. Open a pull request with your changes.
 
 ### Writing code
 
 * Try to make use of existing functions and classes.
 * Try to keep your code simple &ndash; let me worry about optimizations later, if needed.
-* Follow the code style of the code around it as best you can.
+* Follow the code style of the code around it as best as you can.
 * Document any new functions or classes you create in the same way existing functions and classes are documented.
 
 ### Commits
 
 * Try to keep each commit simple and easy to follow, and avoid going back-and-forth.
 * Use only one branch per feature or bug-fix, unless it makes sense to have multiple in one.
-* Follow the style of the commit messages as best as you can.
+* Follow the style of the other commit messages as best as you can.
+* Commits in a PR will be merged into just one, unless there's a good reason to do otherwise.
 
 ### Licensing
 
-* Any commit added to the project is licensed under the project's license, the MIT license.
+* Any commit added to the project is licensed under [the project's license](license.txt), the MIT license.
+
+### Generative AI
+
+* Any usage of generative AI in the creation of a contribution must be disclosed.
+* Any contribution created mostly with the use of generative AI will be automatically rejected.
 
 ## Contributing with content
 
@@ -56,7 +62,7 @@ The content you made, once done, will be officially added to the engine. For the
 3. Over time, I may need to remove problematic parts, make changes to make it compatible from version to version, tweak certain things for quality/balance/diversity reasons as the engine evolves, give it extra content that is currently missing from the engine, remove the content entirely, and so on.
 4. I will always try to keep your original vision intact, and I will make a fair effort to balance out your wishes with the engine's needs.
 5. I will try to talk to you about any changes worth discussing, but if you become unreachable, I will have no choice but to keep messing with the content without your input or knowledge.
-6. If you want to make some change or update to the content, it can be added to a future version of _Pikifen_, but it's best if we talk about it first.
+6. If you want to make some change or update to the content, it can be included in a future version of _Pikifen_, but it's best if we talk about it first.
 7. I won't delete or make massive changes to the content due to anyone's request, unless I have a strong reason to.
 8. You can still create and submit custom content that is about your originally made content, like a "remix" variant, or a "director's cut" edition that has things that had to be removed from the official version.
 9. Content added to the project's base content will be licensed under the project's license, the MIT license, if it wasn't already.
@@ -85,3 +91,4 @@ Content should have a minimum level of quality to make it into _Pikifen_. The id
     * Year
     * Genre: Game
     * Comment: Any comments you can think of, like what you'd put in the song's `notes` property. _Pikifen_ originals use e.g. "Original composition for Pikifen. This is an extra track overlaid on top of the main track."
+* The notes on generative AI [mentioned above](#generative-ai) apply all the same for content.

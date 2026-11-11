@@ -2,7 +2,7 @@
 
 ![Pikifen's wordmark](game_data/base/graphics/gui/wordmark.png)
 
-<img src="game_data/base/graphics/gui/icon.png" alt="drawing" height="16pt"/> _Pikifen_, a _Pikmin_-based game/engine for fan-made content.  
+<img src="game_data/base/graphics/gui/icon.png" alt="drawing" height="16pt"/> _Pikifen_, a _[Pikmin](https://www.pikminwiki.com/Pikmin_series)_-based game/engine for fan-made content.  
 Made with ♡ by Espyo.
 
 > **[⤓ Download for Windows! ⤓](#get-the-latest-version)**
@@ -49,8 +49,9 @@ On top of this readme, the included manual (download _Pikifen_ and open `manual.
 
 ## Overview
 
-* **_Pikifen_** (formerly Pikmin fangame engine) is a game and engine capable of creating and playing _Pikmin_ fan content. Think of it like a "_Pikmin [Maker](https://www.mariowiki.com/Super_Mario_Maker)_".
-* It's a simplified take on the _Pikmin_ games, even being in a 2D [orthographic](https://en.wikipedia.org/wiki/Orthographic_projection) top-down view, but is still very powerful and jam-packed with features.
+* **_Pikifen_** (formerly Pikmin fangame engine) is a game and engine capable of creating and playing _[Pikmin](https://www.pikminwiki.com/Pikmin_series)_ fan content. Think of it like a "_Pikmin [Maker](https://www.mariowiki.com/Super_Mario_Maker)_".
+  * _Pikmin_ is a real-time strategy series where you task groups of small plant-animal creatures with carrying objects, breaking obstacles, or taking down enemies. The gameplay emphasizes time management, task planning, and multi-tasking.
+* It's a simplified take on the _Pikmin_ games, even being in a 2D [orthographic](https://en.wikipedia.org/wiki/Orthographic_projection) top-down view, but keeps the core essence, and is very powerful and jam-packed with features.
 * The idea is for fans to create their own content (enemies, areas, etc.), while the engine itself handles the game logic (physics, scripting, etc.). Still, it comes with some base content so you can experiment with its features right away.
 * It's available for Windows, Linux (plus Steam Deck!), and Mac, and you can use a keyboard, mouse, and/or controller.
 * This project is under constant development, so expect some things to be incomplete! Some things may also be different from the canon games because it's simpler, better for the engine's flexibility, or impossible to fully replicate.
@@ -62,7 +63,7 @@ On top of this readme, the included manual (download _Pikifen_ and open `manual.
 
 * To play...
   * Just double-click `pikifen.exe` (if you can't find it, make sure you followed [the instructions](#get-the-latest-version)), then pick an area and start playing!
-  * While it has no Story Mode support, it has missions, which give you a medal based on your performance!
+  * While it has no Story Mode support yet, it has missions, which give you a medal based on your performance!
 * To make content...
   * Just edit the image, sound, or text files in the `game_data` folder. Some things can also be edited using the built-in editors.
   * Alternatively, you can download some content made by other players (check the [Discord server](https://discord.gg/qbhz4u3)!)
@@ -95,7 +96,7 @@ For more detailed information, including tutorials, please check the included ma
 
 * Highly-customizable control schemes.
 * Filled with quality-of-life features and details, both for gameplay and for content-making.
-* Fairly low system requirements, 60FPS, no special permissions to run, no need to install, and less than 100 MB when extracted.
+* Fairly low system requirements, 60FPS, no special permissions to run, no need to install, and is only a few hundred MB when extracted.
 
 ### Open-source friendly
 
