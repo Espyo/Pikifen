@@ -1610,6 +1610,15 @@ void initMakerToolTypes() {
         "is taking, if any."
     );
     
+    //Set song position near loop.
+    commitTool(
+        MAKER_TOOL_TYPE_SET_SONG_POS_NEAR_LOOP,
+        "set_song_pos_near_loop", true,
+        MakerToolRunners::setSongPosNearLoop,
+        "Changes the current position of all songs to be just a few seconds "
+        "before their loop point."
+    );
+
     //Show collision.
     commitTool(
         MAKER_TOOL_TYPE_SHOW_COLLISION,
