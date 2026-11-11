@@ -13,7 +13,7 @@ bg_dist=1.0000
 bg_offset=0.0000 0.0000
 bg_scale=0.9000 0.9000
 bg_tint=255 255 255
-song=areas/frosty_breath
+song=areas/winter_eclipse
 boss_song
 boss_victory_song
 weather=snowstorm
