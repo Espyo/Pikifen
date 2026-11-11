@@ -1618,7 +1618,7 @@ void initMakerToolTypes() {
         "Changes the current position of all songs to be just a few seconds "
         "before their loop point."
     );
-
+    
     //Show collision.
     commitTool(
         MAKER_TOOL_TYPE_SHOW_COLLISION,
