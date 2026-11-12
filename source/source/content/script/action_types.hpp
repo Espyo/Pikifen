@@ -483,6 +483,9 @@ enum SCRIPT_ACTION_TURN_TYPE {
     
     //Turn towards the focused mob.
     SCRIPT_ACTION_TURN_TYPE_FOCUSED_MOB,
+
+    //Turn towards the focused mob's current position.
+    SCRIPT_ACTION_TURN_TYPE_FOCUSED_MOB_POSITION,
     
     //Turn towards home.
     SCRIPT_ACTION_TURN_TYPE_HOME,
@@ -496,6 +499,7 @@ buildEnumNames(
 )({
     { SCRIPT_ACTION_TURN_TYPE_ARACHNORB_HEAD_LOGIC, "arachnorb_head_logic" },
     { SCRIPT_ACTION_TURN_TYPE_FOCUSED_MOB, "focused_mob" },
+    { SCRIPT_ACTION_TURN_TYPE_FOCUSED_MOB_POSITION, "focused_mob_position" },
     { SCRIPT_ACTION_TURN_TYPE_HOME, "home" },
 });
 

@@ -3457,6 +3457,16 @@ void ScriptActionRunners::turnToTarget(ScriptActionInstRunData& data) {
         }
         break;
         
+    } case SCRIPT_ACTION_TURN_TYPE_FOCUSED_MOB_POSITION: {
+        if(data.scriptVM->getRunnerScriptVM()->focusedMob) {
+            data.scriptVM->getRunnerMob()->face(
+                getAngle(data.scriptVM->getRunnerMob()->center, 
+                        data.scriptVM->getRunnerScriptVM()->focusedMob->center), 
+                nullptr
+            );
+        }
+        break;
+        
     } case SCRIPT_ACTION_TURN_TYPE_HOME: {
         data.scriptVM->getRunnerMob()->face(
             getAngle(data.scriptVM->getRunnerMob()->center,

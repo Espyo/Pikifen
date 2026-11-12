@@ -143,6 +143,7 @@
           <li><span class="cl-a">Added</span> data to the <code>get_mob_info</code> action: <code>animation</code>, <code>link_ids</code>, <code>max_health</code>, <code>team</code>.</li>
           <li><span class="cl-a">Added</span> an argument to the <code>hold_focused_mob</code> action: rotation method. Also added missing manual documentation on the argument that controls drawing above the holder.</li>
           <li><span class="cl-a">Added</span> a type to the "target mob" listing: <code>leader</code>.</li>
+          <li><span class="cl-a">Added</span> a type to the <code>turn_to_target</code> action: <code>focused_mob_position</code>. (Thanks Helodity)</li>
           <li><span class="cl-a">Added</span> the <code>ready</code> block, that works like the <code>init</code> block but only when everything is ready.</li>
           <li><span class="cl-c">Changed</span> how script processing works. Instead of a more <a href="https://en.wikipedia.org/wiki/Compiler">compiler</a>-based approach, the system is now more <a href="https://en.wikipedia.org/wiki/Interpreter_(computing)">interpreter</a>-based. This allows for more powerful scripting logic behind-the-scenes and is necessary for some of the new actions, but now part of an action's data is only processed when it is run. Some data is still processed when the action is loaded, however. So now, if you write a script and want to go in-game to check for all error reports, you should have the object run the relevant actions mid-gameplay, not just load the area the object is in.</li>
         </ul>
