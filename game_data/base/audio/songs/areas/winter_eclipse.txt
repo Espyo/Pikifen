@@ -1,0 +1,14 @@
+name = Winter Eclipse
+description = A strong orchestral theme with a flute and vibraphone lead.
+
+tags = Area; Dark; Cold
+maker = Helodity
+version = 1.0.0
+engine_version = 1.0.0
+notes = This song is an original creation for Pikifen.
+loop_start = 15.36
+
+main_track = areas/winter_eclipse
+mix_tracks {
+    enemy = areas/winter_eclipse_enemy
+}
