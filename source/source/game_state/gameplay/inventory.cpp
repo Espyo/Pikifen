@@ -273,8 +273,9 @@ void Inventory::populateInventoryListGui() {
             new ButtonGuiItem(
             "", game.sysContent.fntStandard
         );
-        button->ratioRect.center = slotCenter;
-        button->ratioRect.size = Point(SLOT_WIDTH, SLOT_HEIGHT);
+        button->setRawRatioRect(
+            Rect(slotCenter, Point(SLOT_WIDTH, SLOT_HEIGHT))
+        );
         button->forceSquare = true;
         button->onDraw =
         [this, button, iPtr] (const DrawInfo & draw) {
@@ -322,8 +323,9 @@ void Inventory::populateInventoryListGui() {
     for(int p = 0; p < placeholdersNeeded; p++) {
         //Item placeholder item.
         GuiItem* placeholder = new GuiItem();
-        placeholder->ratioRect.center = slotCenter;
-        placeholder->ratioRect.size = Point(SLOT_WIDTH, SLOT_HEIGHT);
+        placeholder->setRawRatioRect(
+            Rect(slotCenter, Point(SLOT_WIDTH, SLOT_HEIGHT))
+        );
         placeholder->forceSquare = true;
         placeholder->onDraw =
         [this] (const DrawInfo & draw) {
@@ -339,7 +341,7 @@ void Inventory::populateInventoryListGui() {
     }
     
     if(!itemList->children.empty()) {
-        gui.setFocusedItem(itemList->children[0], true);
+        gui.setFocusedItem(((GuiItem*) itemList->children[0]), true);
     }
 }
 

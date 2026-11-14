@@ -61,8 +61,12 @@ void AreaMenu::addNewBullet(ListGuiItem* list, const string& text) {
         new BulletGuiItem(
         text, game.sysContent.fntStandard, COLOR_WHITE
     );
-    bullet->ratioRect.center = Point(0.50f, bulletCenterY);
-    bullet->ratioRect.size = Point(0.96f, BULLET_HEIGHT);
+    bullet->setRawRatioRect(
+        Rect(
+            Point(0.50f, bulletCenterY),
+            Point(0.96f, BULLET_HEIGHT)
+        )
+    );
     list->addChild(bullet);
     gui.addItem(bullet);
 }
@@ -107,12 +111,12 @@ void AreaMenu::animateInfoAndBriefing() {
             GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
         );
         forIdx(c, noteList->children) {
-            noteList->children[c]->startJuiceAnimation(
+            ((GuiItem*) noteList->children[c])->startJuiceAnimation(
                 GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
             );
         }
         forIdx(c, medalAwardList->children) {
-            medalAwardList->children[c]->startJuiceAnimation(
+            ((GuiItem*) medalAwardList->children[c])->startJuiceAnimation(
                 GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_LOW
             );
         }
@@ -535,16 +539,18 @@ void AreaMenu::initGuiMain() {
             //Area button.
             ButtonGuiItem* areaButton =
                 new ButtonGuiItem(areaPtr->name, game.sysContent.fntStandard);
-            areaButton->ratioRect.center =
-                Point(
-                    areaType == AREA_TYPE_MISSION ? 0.40f : 0.50f,
-                    centerY
-                );
-            areaButton->ratioRect.size =
-                Point(
-                    areaType == AREA_TYPE_MISSION ? 0.80f : 1.00f,
-                    BUTTON_HEIGHT
-                );
+            areaButton->setRawRatioRect(
+                Rect(
+                    Point(
+                        areaType == AREA_TYPE_MISSION ? 0.40f : 0.50f,
+                        centerY
+                    ),
+                    Point(
+                        areaType == AREA_TYPE_MISSION ? 0.80f : 1.00f,
+                        BUTTON_HEIGHT
+                    )
+                )
+            );
             areaButton->onActivate =
             [this, areaPtr] (const Point&) {
                 game.states.gameplay->pathOfAreaToLoad =
@@ -567,10 +573,12 @@ void AreaMenu::initGuiMain() {
             if(areaType == AREA_TYPE_MISSION) {
                 //Medal item.
                 GuiItem* medalItem = new GuiItem();
-                medalItem->ratioRect.center =
-                    Point(0.92f, centerY);
-                medalItem->ratioRect.size =
-                    Point(0.15f, BUTTON_HEIGHT * 0.80f);
+                medalItem->setRawRatioRect(
+                    Rect(
+                        Point(0.92f, centerY),
+                        Point(0.15f, BUTTON_HEIGHT * 0.80f)
+                    )
+                );
                 medalItem->onDraw =
                 [this, areaPtr, a] (const DrawInfo & draw) {
                     ALLEGRO_BITMAP* medalBmp = nullptr;

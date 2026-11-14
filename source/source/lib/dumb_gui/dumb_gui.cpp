@@ -15,6 +15,74 @@
 #pragma region GUI item
 
 
+/**
+ * @brief Returns the reference center coordinates,
+ * i.e. used when not animating.
+ *
+ * @return The center.
+ */
+void DumbGui::Item::getReferenceCenter(float* outX, float* outY) const {
+    if(parent) {
+        float parentWidth, parentHeight;
+        parent->getReferenceSize(&parentWidth, &parentHeight);
+        parentWidth -= parent->paddingPx * 2.0f;
+        parentHeight -= parent->paddingPx * 2.0f;
+        float parentCenterX, parentCenterY;
+        parent->getReferenceCenter(&parentCenterX, &parentCenterY);
+        
+        float resultX = rawCenterRatioX * parentWidth;
+        resultX += parentCenterX - parentWidth / 2.0f;
+        resultX -= parentWidth * parent->offsetRatioX;
+        float resultY = rawCenterRatioY * parentHeight;
+        resultY += parentCenterY - parentHeight / 2.0f;
+        resultY -= parentHeight * parent->offsetRatioY;
+        
+        *outX = resultX;
+        *outY = resultY;
+        
+    } else {
+        float resultX = rawCenterRatioX * manager->getWindowWidth();
+        float resultY = rawCenterRatioY * manager->getWindowHeight();
+        
+        *outX = resultX;
+        *outY = resultY;
+        
+    }
+}
+
+
+/**
+ * @brief Returns the reference width and height, i.e. used when not animating.
+ *
+ * @return The size.
+ */
+void DumbGui::Item::getReferenceSize(float* outWidth, float* outHeight) const {
+    float multX = 0.0f;
+    float multY = 0.0f;
+    
+    if(parent) {
+        float parentWidth, parentHeight;
+        parent->getReferenceSize(&parentWidth, &parentHeight);
+        multX = parentWidth - (parent->paddingPx * 2.0f);
+        multY = parentHeight - (parent->paddingPx * 2.0f);
+    } else {
+        multX = manager->getWindowWidth();
+        multY = manager->getWindowHeight();
+    }
+    
+    float finalWidth = rawWidthRatio * multX;
+    float finalHeight = rawHeightRatio * multY;
+    
+    if(forceSquare) {
+        finalWidth = finalWidth < finalHeight ? finalWidth : finalHeight;
+        finalHeight = finalWidth;
+    }
+    
+    *outWidth = finalWidth;
+    *outHeight = finalHeight;
+}
+
+
 #pragma endregion
 #pragma region GUI manager
 
@@ -32,6 +100,28 @@ bool DumbGui::Manager::addItem(Item* item) {
     item->manager = this;
     
     return true;
+}
+
+
+/**
+ * @brief Returns the current height of the program window.
+ * This should be overridden by a derived class since it does not do anything.
+ *
+ * @return The height.
+ */
+int DumbGui::Manager::getWindowHeight() const {
+    return 100;
+}
+
+
+/**
+ * @brief Returns the current width of the program window.
+ * This should be overridden by a derived class since it does not do anything.
+ *
+ * @return The width.
+ */
+int DumbGui::Manager::getWindowWidth() const {
+    return 100;
 }
 
 

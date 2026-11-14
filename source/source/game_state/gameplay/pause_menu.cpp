@@ -214,8 +214,9 @@ void PauseMenu::addNewBullet(
         new BulletGuiItem(
         text, game.sysContent.fntStandard, color
     );
-    bullet->ratioRect.center = Point(0.50f, bulletCenterY);
-    bullet->ratioRect.size = Point(0.96f, BULLET_HEIGHT);
+    bullet->setRawRatioRect(
+        Rect(Point(0.50f, bulletCenterY), Point(0.96f, BULLET_HEIGHT))
+    );
     list->addChild(bullet);
     missionGui.addItem(bullet);
 }
@@ -395,12 +396,12 @@ void PauseMenu::addNewPikminStatusLine(
                 0.0f, draw.tint
             );
         };
-        typeItem->ratioRect.center =
-            Point(
-                firstX + itemXInterval * 0,
-                itemY
-            );
-        typeItem->ratioRect.size = Point(itemWidth, itemHeight);
+        typeItem->setRawRatioRect(
+            Rect(
+                Point(firstX + itemXInterval * 0, itemY),
+                Point(itemWidth, itemHeight)
+            )
+        );
         list->addChild(typeItem);
         statusGui.addItem(typeItem);
         
@@ -408,12 +409,12 @@ void PauseMenu::addNewPikminStatusLine(
         //Totals header.
         TextGuiItem* totalsHeaderItem =
             new TextGuiItem("Total", game.sysContent.fntAreaName);
-        totalsHeaderItem->ratioRect.center =
-            Point(
-                firstX + itemXInterval * 0,
-                itemY
-            );
-        totalsHeaderItem->ratioRect.size = Point(itemWidth, itemHeight);
+        totalsHeaderItem->setRawRatioRect(
+            Rect(
+                Point(firstX + itemXInterval * 0, itemY),
+                Point(itemWidth, itemHeight)
+            )
+        );
         list->addChild(totalsHeaderItem);
         statusGui.addItem(totalsHeaderItem);
         
@@ -423,12 +424,12 @@ void PauseMenu::addNewPikminStatusLine(
     TextGuiItem* groupTextItem =
         new TextGuiItem(groupText, font);
     groupTextItem->focusable = canFocus;
-    groupTextItem->ratioRect.center =
-        Point(
-            firstX + itemXInterval * 1,
-            itemY
-        );
-    groupTextItem->ratioRect.size = Point(itemWidth, numberItemHeight);
+    groupTextItem->setRawRatioRect(
+        Rect(
+            Point(firstX + itemXInterval * 1, itemY),
+            Point(itemWidth, numberItemHeight)
+        )
+    );
     if(canFocus) {
         groupTextItem->onGetTooltip =
         [tooltipStart] () {
@@ -445,12 +446,12 @@ void PauseMenu::addNewPikminStatusLine(
     TextGuiItem* idleTextItem =
         new TextGuiItem(idleText, font);
     idleTextItem->focusable = canFocus;
-    idleTextItem->ratioRect.center =
-        Point(
-            firstX + itemXInterval * 2,
-            itemY
-        );
-    idleTextItem->ratioRect.size = Point(itemWidth, numberItemHeight);
+    idleTextItem->setRawRatioRect(
+        Rect(
+            Point(firstX + itemXInterval * 2, itemY),
+            Point(itemWidth, numberItemHeight)
+        )
+    );
     if(canFocus) {
         idleTextItem->onGetTooltip =
         [tooltipStart] () {
@@ -467,12 +468,12 @@ void PauseMenu::addNewPikminStatusLine(
     TextGuiItem* fieldTextItem =
         new TextGuiItem(fieldText, font);
     fieldTextItem->focusable = canFocus;
-    fieldTextItem->ratioRect.center =
-        Point(
-            firstX + itemXInterval * 3,
-            itemY
-        );
-    fieldTextItem->ratioRect.size = Point(itemWidth, numberItemHeight);
+    fieldTextItem->setRawRatioRect(
+        Rect(
+            Point(firstX + itemXInterval * 3, itemY),
+            Point(itemWidth, numberItemHeight)
+        )
+    );
     if(canFocus) {
         fieldTextItem->onGetTooltip =
         [tooltipStart] () {
@@ -489,12 +490,12 @@ void PauseMenu::addNewPikminStatusLine(
     TextGuiItem* onionTextItem =
         new TextGuiItem(onionText, font);
     onionTextItem->focusable = canFocus;
-    onionTextItem->ratioRect.center =
-        Point(
-            firstX + itemXInterval * 4,
-            itemY
-        );
-    onionTextItem->ratioRect.size = Point(itemWidth, numberItemHeight);
+    onionTextItem->setRawRatioRect(
+        Rect(
+            Point(firstX + itemXInterval * 4, itemY),
+            Point(itemWidth, numberItemHeight)
+        )
+    );
     if(canFocus) {
         onionTextItem->onGetTooltip =
         [tooltipStart] () {
@@ -511,12 +512,12 @@ void PauseMenu::addNewPikminStatusLine(
     TextGuiItem* totalTextItem =
         new TextGuiItem(totalText, font, game.config.guiColors.gold);
     totalTextItem->focusable = canFocus;
-    totalTextItem->ratioRect.center =
-        Point(
-            firstX + itemXInterval * 5,
-            itemY
-        );
-    totalTextItem->ratioRect.size = Point(itemWidth, numberItemHeight);
+    totalTextItem->setRawRatioRect(
+        Rect(
+            Point(firstX + itemXInterval * 5, itemY),
+            Point(itemWidth, numberItemHeight)
+        )
+    );
     if(canFocus) {
         totalTextItem->onGetTooltip =
         [tooltipStart] () {
@@ -531,9 +532,12 @@ void PauseMenu::addNewPikminStatusLine(
     
     //Separator.
     GuiItem* separatorItem = new GuiItem();
-    separatorItem->ratioRect.center =
-        Point(firstX + itemXInterval * 5.5f, itemY);
-    separatorItem->ratioRect.size = Point(1.0f, itemHeight);
+    separatorItem->setRawRatioRect(
+        Rect(
+            Point(firstX + itemXInterval * 5.5f, itemY),
+            Point(1.0f, itemHeight)
+        )
+    );
     separatorItem->onDraw =
     [] (const DrawInfo & draw) {
         al_draw_line(
@@ -551,12 +555,12 @@ void PauseMenu::addNewPikminStatusLine(
         newText, font, game.config.guiColors.good
     );
     newTextItem->focusable = canFocus;
-    newTextItem->ratioRect.center =
-        Point(
-            firstX + itemXInterval * 6,
-            itemY
-        );
-    newTextItem->ratioRect.size = Point(itemWidth, numberItemHeight);
+    newTextItem->setRawRatioRect(
+        Rect(
+            Point(firstX + itemXInterval * 6, itemY),
+            Point(itemWidth, numberItemHeight)
+        )
+    );
     if(canFocus) {
         newTextItem->onGetTooltip =
         [tooltipStart] () {
@@ -575,12 +579,12 @@ void PauseMenu::addNewPikminStatusLine(
         lostText, font, game.config.guiColors.bad
     );
     lostTextItem->focusable = canFocus;
-    lostTextItem->ratioRect.center =
-        Point(
-            firstX + itemXInterval * 7,
-            itemY
-        );
-    lostTextItem->ratioRect.size = Point(itemWidth, numberItemHeight);
+    lostTextItem->setRawRatioRect(
+        Rect(
+            Point(firstX + itemXInterval * 7, itemY),
+            Point(itemWidth, numberItemHeight)
+        )
+    );
     if(canFocus) {
         lostTextItem->onGetTooltip =
         [tooltipStart] () {

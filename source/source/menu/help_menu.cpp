@@ -372,8 +372,9 @@ void HelpMenu::populateTidbits(const HELP_CATEGORY category) {
             tPtr->name,
             game.sysContent.fntStandard
         );
-        tidbitBullet->ratioRect.center = Point(0.50f, 0.045f + t * 0.10f);
-        tidbitBullet->ratioRect.size = Point(1.0f, 0.09f);
+        tidbitBullet->setRawRatioRect(
+            Rect(Point(0.50f, 0.045f + t * 0.10f), Point(1.0f, 0.09f))
+        );
         tidbitBullet->onGetTooltip = [this, tPtr] () {
             return tPtr->description;
         };

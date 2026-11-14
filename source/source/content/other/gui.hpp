@@ -307,9 +307,6 @@ public:
     
     //--- Public members ---
     
-    //Raw coordinate data, in parent ratio.
-    Rect ratioRect;
-    
     //Is it currently visible?
     bool visible = true;
     
@@ -321,18 +318,6 @@ public:
     
     //Is it currently the focused item?
     bool focused = false;
-    
-    //If it is placed inside of another item, specify it here.
-    GuiItem* parent = nullptr;
-    
-    //List of children items, that are placed inside this one.
-    vector<GuiItem*> children;
-    
-    //Offset (width/height percentage) of the children items, if any.
-    Point offset;
-    
-    //Padding amount, if it has children items.
-    float padding = 0.0f;
     
     //Whether to clip the children items' drawing to the confines of the item.
     bool clipChildren = true;
@@ -348,10 +333,6 @@ public:
     
     //Is this item focusable from spatial navigation?
     bool focusableFromSN = true;
-    
-    //Force its final dimensions to be square, such that they fit inside
-    //the reference dimensions.
-    bool forceSquare = false;
     
     //Type of the current juice animation.
     JUICE_TYPE juiceType = JUICE_TYPE_NONE;
@@ -398,13 +379,16 @@ public:
     
     explicit GuiItem(bool focusable = false);
     virtual ~GuiItem() = default;
+    
+    Rect getRawRatioRect() const;
+    void setRawRatioRect(const Rect& rect);
+    Rect getReferenceRect() const;
+    
     bool activate(const Point& cursorPos = Point());
     bool addChild(GuiItem* item);
     bool deleteAllChildren();
     float getChildrenSpan(bool horizontal = false) const;
     float getJuiceValue() const;
-    Point getReferenceCenter() const;
-    Point getReferenceSize() const;
     bool isMouseOn(const Point& cursorPos) const;
     bool isResponsive() const;
     bool isVisible() const;
@@ -783,6 +767,9 @@ public:
         const vector<CustomGuiItemDef>& customItemDefs
     );
     bool destroy();
+    
+    int getWindowWidth() const override;
+    int getWindowHeight() const override;
     
     
 protected:

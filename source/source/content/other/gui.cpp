@@ -371,7 +371,7 @@ bool GuiItem::addChild(GuiItem* item) {
 bool GuiItem::deleteAllChildren() {
     bool success = true;
     while(!children.empty()) {
-        GuiItem* iPtr = children[0];
+        GuiItem* iPtr = (GuiItem*) children[0];
         removeChild(iPtr);
         success &= manager->removeItem(iPtr);
         delete iPtr;
@@ -392,11 +392,12 @@ bool GuiItem::deleteAllChildren() {
 float GuiItem::getChildrenSpan(bool horizontal) const {
     float span = 0.0f;
     forIdx(c, children) {
-        GuiItem* cPtr = children[c];
+        GuiItem* cPtr = (GuiItem*) children[c];
+        Rect cRect = cPtr->getRawRatioRect();
         float cCoord =
             horizontal ?
-            cPtr->ratioRect.center.x + (cPtr->ratioRect.size.x / 2.0f) :
-            cPtr->ratioRect.center.y + (cPtr->ratioRect.size.y / 2.0f);
+            cRect.center.x + (cRect.size.x / 2.0f) :
+            cRect.center.y + (cRect.size.y / 2.0f);
         span = std::max(span, cCoord);
     }
     return span;
@@ -467,51 +468,31 @@ float GuiItem::getJuiceValue() const {
 
 
 /**
- * @brief Returns the reference center coordinates,
- * i.e. used when not animating.
+ * @brief Returns the raw center coordinates and size, in parent ratio,
+ * as a rectangle.
  *
- * @return The center.
+ * @return The rectangle.
  */
-Point GuiItem::getReferenceCenter() const {
-    if(parent) {
-        Point parentS =
-            parent->getReferenceSize() - (parent->padding * 2.0f);
-        Point parentC =
-            parent->getReferenceCenter();
-        Point result = ratioRect.center * parentS;
-        result.x += parentC.x - parentS.x / 2.0f;
-        result.x -= parentS.x * parent->offset.x;
-        result.y += parentC.y - parentS.y / 2.0f;
-        result.y -= parentS.y * parent->offset.y;
-        return result;
-    } else {
-        return
-            Point(
-                ratioRect.center.x * game.winW, ratioRect.center.y * game.winH
-            );
-    }
+Rect GuiItem::getRawRatioRect() const {
+    return
+        Rect(
+            Point(rawCenterRatioX, rawCenterRatioY),
+            Point(rawWidthRatio, rawHeightRatio)
+        );
 }
 
 
 /**
- * @brief Returns the reference width and height, i.e. used when not animating.
+ * @brief Returns the reference center coordinates and size
+ * (used when not animating), as a rectangle.
  *
- * @return The size.
+ * @return The coordinates.
  */
-Point GuiItem::getReferenceSize() const {
-    Point mult;
-    if(parent) {
-        mult = parent->getReferenceSize() - (parent->padding * 2.0f);
-    } else {
-        mult.x = game.winW;
-        mult.y = game.winH;
-    }
-    Point finalSize = ratioRect.size * mult;
-    if(forceSquare) {
-        finalSize =
-            Point(finalSize.x < finalSize.y ? finalSize.x : finalSize.y);
-    }
-    return finalSize;
+Rect GuiItem::getReferenceRect() const {
+    Rect result;
+    getReferenceCenter(&result.center.x, &result.center.y);
+    getReferenceSize(&result.size.x, &result.size.y);
+    return result;
 }
 
 
@@ -522,18 +503,17 @@ Point GuiItem::getReferenceSize() const {
  * @return Whether the cursor is on top.
  */
 bool GuiItem::isMouseOn(const Point& cursorPos) const {
-    if(parent && !parent->isMouseOn(cursorPos)) {
+    if(parent && !((GuiItem*) parent)->isMouseOn(cursorPos)) {
         return false;
     }
     
-    Point c = getReferenceCenter();
-    Point s = getReferenceSize();
+    Rect ref = getReferenceRect();
     return
         (
-            cursorPos.x >= c.x - s.x * 0.5 &&
-            cursorPos.x <= c.x + s.x * 0.5 &&
-            cursorPos.y >= c.y - s.y * 0.5 &&
-            cursorPos.y <= c.y + s.y * 0.5
+            cursorPos.x >= ref.center.x - ref.size.x * 0.5 &&
+            cursorPos.x <= ref.center.x + ref.size.x * 0.5 &&
+            cursorPos.y >= ref.center.y - ref.size.y * 0.5 &&
+            cursorPos.y <= ref.center.y + ref.size.y * 0.5
         );
 }
 
@@ -545,7 +525,7 @@ bool GuiItem::isMouseOn(const Point& cursorPos) const {
  */
 bool GuiItem::isResponsive() const {
     if(!responsive) return false;
-    if(parent) return parent->isResponsive();
+    if(parent) return ((GuiItem*) parent)->isResponsive();
     return responsive;
 }
 
@@ -557,7 +537,7 @@ bool GuiItem::isResponsive() const {
  */
 bool GuiItem::isVisible() const {
     if(!visible) return false;
-    if(parent) return parent->isVisible();
+    if(parent) return ((GuiItem*) parent)->isVisible();
     return true;
 }
 
@@ -578,6 +558,20 @@ bool GuiItem::removeChild(GuiItem* item) {
         }
     }
     return success;
+}
+
+
+/**
+ * @brief Sets the raw center coordinates and size, in parent ratio,
+ * as a rectangle.
+ *
+ * @param rect The rectangle.
+ */
+void GuiItem::setRawRatioRect(const Rect& rect) {
+    rawCenterRatioX = rect.center.x;
+    rawCenterRatioY = rect.center.y;
+    rawWidthRatio = rect.size.x;
+    rawHeightRatio = rect.size.y;
 }
 
 
@@ -657,14 +651,19 @@ GuiManager::GuiManager() :
 bool GuiManager::addItem(GuiItem* item, const string& id) {
     if(!DumbGui::Manager::addItem(item)) return false;
     
+    Rect finalRect = item->getRawRatioRect();
+    
     auto c = registeredCenters.find(id);
     if(c != registeredCenters.end()) {
-        item->ratioRect.center = c->second;
+        finalRect.center = c->second;
     }
+    
     auto s = registeredSizes.find(id);
     if(s != registeredSizes.end()) {
-        item->ratioRect.size = s->second;
+        finalRect.size = s->second;
     }
+    
+    item->setRawRatioRect(finalRect);
     
     return true;
 }
@@ -701,7 +700,7 @@ void GuiManager::createAndAddCustomItems(
         infoPtr->rect.size /= 100.0f;
         
         GuiItem* guiItem = new GuiItem();
-        guiItem->ratioRect = infoPtr->rect;
+        guiItem->setRawRatioRect(infoPtr->rect);
         guiItem->drawingLayer =
             infoPtr->drawBeforeHardcoded ?
             GUI::DRAWING_LAYER_CUSTOM_BEFORE :
@@ -868,17 +867,18 @@ bool GuiManager::draw() {
         if(!iPtr->onDraw) continue;
         
         DrawInfo draw;
-        draw.center = iPtr->getReferenceCenter();
-        draw.size = iPtr->getReferenceSize();
+        Rect ref = iPtr->getReferenceRect();
+        draw.center = ref.center;
+        draw.size = ref.size;
         
         if(!getItemDrawInfo(iPtr, &draw)) continue;
         
         if(iPtr->parent) {
             DrawInfo parentDraw;
-            if(!getItemDrawInfo(iPtr->parent, &parentDraw)) {
+            if(!getItemDrawInfo(((GuiItem*) iPtr->parent), &parentDraw)) {
                 continue;
             }
-            if(iPtr->parent->clipChildren) {
+            if(((GuiItem*) iPtr->parent)->clipChildren) {
                 al_get_clipping_rectangle(&ocrX, &ocrY, &ocrW, &ocrH);
                 al_set_clipping_rectangle(
                     (parentDraw.center.x - parentDraw.size.x / 2.0f) + 1,
@@ -892,7 +892,7 @@ bool GuiManager::draw() {
         iPtr->onDraw(draw);
         
         if(iPtr->parent) {
-            if(iPtr->parent->clipChildren) {
+            if(((GuiItem*) iPtr->parent)->clipChildren) {
                 al_set_clipping_rectangle(ocrX, ocrY, ocrW, ocrH);
             }
         }
@@ -1101,10 +1101,9 @@ bool GuiManager::getItemDefsFromDataFile(
  */
 bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
     if(!item->isVisible()) return false;
-    if(item->ratioRect.size.x == 0.0f) return false;
+    if(item->getRawRatioRect().size.x == 0.0f) return false;
     
-    Point finalCenter = item->getReferenceCenter();
-    Point finalSize = item->getReferenceSize();
+    Rect finalRect = item->getReferenceRect();
     float finalAlpha = 1.0f;
     
     if(animTimer.timeLeft > 0.0f) {
@@ -1114,20 +1113,20 @@ bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
             float angle =
                 getAngle(
                     Point(game.winW, game.winH) / 2.0f,
-                    finalCenter
+                    finalRect.center
                 );
-            startCenter.x = finalCenter.x + cos(angle) * game.winW;
-            startCenter.y = finalCenter.y + sin(angle) * game.winH;
+            startCenter.x = finalRect.center.x + cos(angle) * game.winW;
+            startCenter.y = finalRect.center.y + sin(angle) * game.winH;
             
-            finalCenter.x =
+            finalRect.center.x =
                 interpolateNumber(
                     ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_OUT),
-                    0.0f, 1.0f, startCenter.x, finalCenter.x
+                    0.0f, 1.0f, startCenter.x, finalRect.center.x
                 );
-            finalCenter.y =
+            finalRect.center.y =
                 interpolateNumber(
                     ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_OUT),
-                    0.0f, 1.0f, startCenter.y, finalCenter.y
+                    0.0f, 1.0f, startCenter.y, finalRect.center.y
                 );
             break;
             
@@ -1136,84 +1135,84 @@ bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
             float angle =
                 getAngle(
                     Point(game.winW, game.winH) / 2.0f,
-                    finalCenter
+                    finalRect.center
                 );
-            endCenter.x = finalCenter.x + cos(angle) * game.winW;
-            endCenter.y = finalCenter.y + sin(angle) * game.winH;
+            endCenter.x = finalRect.center.x + cos(angle) * game.winW;
+            endCenter.y = finalRect.center.y + sin(angle) * game.winH;
             
-            finalCenter.x =
+            finalRect.center.x =
                 interpolateNumber(
                     ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_IN),
-                    0.0f, 1.0f, finalCenter.x, endCenter.x
+                    0.0f, 1.0f, finalRect.center.x, endCenter.x
                 );
-            finalCenter.y =
+            finalRect.center.y =
                 interpolateNumber(
                     ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_IN),
-                    0.0f, 1.0f, finalCenter.y, endCenter.y
+                    0.0f, 1.0f, finalRect.center.y, endCenter.y
                 );
             break;
             
         } case GUI_MANAGER_ANIM_UP_TO_CENTER: {
-            finalCenter.y =
+            finalRect.center.y =
                 interpolateNumber(
                     ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_OUT),
-                    0.0f, 1.0f, finalCenter.y - game.winH, finalCenter.y
+                    0.0f, 1.0f, finalRect.center.y - game.winH, finalRect.center.y
                 );
             break;
             
         } case GUI_MANAGER_ANIM_CENTER_TO_UP: {
-            finalCenter.y =
+            finalRect.center.y =
                 interpolateNumber(
                     ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_OUT),
-                    0.0f, 1.0f, finalCenter.y, finalCenter.y - game.winH
+                    0.0f, 1.0f, finalRect.center.y, finalRect.center.y - game.winH
                 );
             break;
             
         } case GUI_MANAGER_ANIM_DOWN_TO_CENTER: {
-            finalCenter.y =
+            finalRect.center.y =
                 interpolateNumber(
                     ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_OUT),
-                    0.0f, 1.0f, finalCenter.y + game.winH, finalCenter.y
+                    0.0f, 1.0f, finalRect.center.y + game.winH, finalRect.center.y
                 );
             break;
             
         } case GUI_MANAGER_ANIM_CENTER_TO_DOWN: {
-            finalCenter.y =
+            finalRect.center.y =
                 interpolateNumber(
                     ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_OUT),
-                    0.0f, 1.0f, finalCenter.y, finalCenter.y + game.winH
+                    0.0f, 1.0f, finalRect.center.y, finalRect.center.y + game.winH
                 );
             break;
             
         } case GUI_MANAGER_ANIM_LEFT_TO_CENTER: {
-            finalCenter.x =
+            finalRect.center.x =
                 interpolateNumber(
                     ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_OUT),
-                    0.0f, 1.0f, finalCenter.x - game.winW, finalCenter.x
+                    0.0f, 1.0f, finalRect.center.x - game.winW, finalRect.center.x
                 );
             break;
             
         } case GUI_MANAGER_ANIM_CENTER_TO_LEFT: {
-            finalCenter.x =
+            finalRect.center.x =
                 interpolateNumber(
                     ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_OUT),
-                    0.0f, 1.0f, finalCenter.x, finalCenter.x - game.winW
+                    0.0f, 1.0f, finalRect.center.x, finalRect.center.x - game.winW
                 );
             break;
             
         } case GUI_MANAGER_ANIM_RIGHT_TO_CENTER: {
-            finalCenter.x =
+            finalRect.center.x =
                 interpolateNumber(
                     ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_OUT),
-                    0.0f, 1.0f, finalCenter.x + game.winW, finalCenter.x
+                    0.0f, 1.0f, finalRect.center.x + game.winW, finalRect.center.x
                 );
             break;
             
         } case GUI_MANAGER_ANIM_CENTER_TO_RIGHT: {
-            finalCenter.x =
+            finalRect.center.x =
                 interpolateNumber(
                     ease(1.0f - animTimer.getRatioLeft(), EASE_METHOD_OUT),
-                    0.0f, 1.0f, finalCenter.x, finalCenter.x + game.winW
+                    0.0f, 1.0f, finalRect.center.x, finalRect.center.x + game.winW
                 );
             break;
             
@@ -1229,10 +1228,30 @@ bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
         }
     }
     
-    draw->center = finalCenter;
-    draw->size = finalSize;
+    draw->center = finalRect.center;
+    draw->size = finalRect.size;
     draw->tint = mapAlpha(finalAlpha * 255);
     return true;
+}
+
+
+/**
+ * @brief Returns the current height of the program window.
+ *
+ * @return The height.
+ */
+int GuiManager::getWindowHeight() const {
+    return game.winH;
+}
+
+
+/**
+ * @brief Returns the current width of the program window.
+ *
+ * @return The width.
+ */
+int GuiManager::getWindowWidth() const {
+    return game.winW;
 }
 
 
@@ -1400,11 +1419,11 @@ void GuiManager::handleSpatialNavigationAction(const Inpution::Action& action) {
         bool hasChildren = !iPtr->children.empty();
         if(!navigable && !hasChildren) continue;
         
-        Point center = iPtr->getReferenceCenter();
-        Point size = iPtr->getReferenceSize();
+        Rect ref = ((GuiItem*) iPtr)->getReferenceRect();
         
         esnInterface.addNewItem(
-            (EasySpatNav::ItemId) iPtr, center.x, center.y, size.x, size.y
+            (EasySpatNav::ItemId) iPtr,
+            ref.center.x, ref.center.y, ref.size.x, ref.size.y
         );
         if(iPtr->parent) {
             esnInterface.setParentItem(
@@ -1439,9 +1458,9 @@ void GuiManager::handleSpatialNavigationAction(const Inpution::Action& action) {
         setFocusedItem(newFocusablePtr);
         if(
             focusedItem->parent &&
-            focusedItem->parent->onChildFocusedViaSN
+            ((GuiItem*) focusedItem->parent)->onChildFocusedViaSN
         ) {
-            focusedItem->parent->onChildFocusedViaSN(focusedItem);
+            ((GuiItem*) focusedItem->parent)->onChildFocusedViaSN(focusedItem);
         }
     }
 }
@@ -1785,7 +1804,7 @@ bool GuiManager::writeItemDefsToDataFile(
 ListGuiItem::ListGuiItem() :
     GuiItem() {
     
-    padding = 8.0f;
+    paddingPx = 8.0f;
     onDraw =
     [this] (const DrawInfo & draw) {
         this->defDrawCode(draw);
@@ -1813,9 +1832,11 @@ ListGuiItem::ListGuiItem() :
 void ListGuiItem::defChildFocusedViaSNCode(const GuiItem* child) {
     //Try to center the child.
     float childrenSpan = getChildrenSpan(horizontal);
-    float* offsetPtr = !horizontal ? &offset.y : &offset.x;
+    float* offsetPtr = !horizontal ? &offsetRatioY : &offsetRatioX;
     float coord =
-        !horizontal ? child->ratioRect.center.y : child->ratioRect.center.x;
+        !horizontal ?
+        child->getRawRatioRect().center.y :
+        child->getRawRatioRect().center.x;
         
     if(childrenSpan <= 1.0f && *offsetPtr == 0.0f) return;
     targetOffset = std::clamp(coord - 0.5f, 0.0f, childrenSpan - 1.0f);
@@ -1835,7 +1856,7 @@ void ListGuiItem::defDrawCode(const DrawInfo& draw) {
     ALLEGRO_COLOR cOpaque = tintColor(mapAlpha(64), draw.tint);
     ALLEGRO_COLOR cEmpty = COLOR_EMPTY_WHITE;
     
-    if(offset.y > 0.0f && !horizontal) {
+    if(offsetRatioY > 0.0f && !horizontal) {
         //Shade effect at the top.
         ALLEGRO_VERTEX vertexes[8];
         for(size_t v = 0; v < 8; v++) {
@@ -1873,7 +1894,7 @@ void ListGuiItem::defDrawCode(const DrawInfo& draw) {
     }
     float childrenVSpan = getChildrenSpan();
     if(
-        childrenVSpan > 1.0f && offset.y < childrenVSpan - 1.0f && !horizontal
+        childrenVSpan > 1.0f && offsetRatioY < childrenVSpan - 1.0f && !horizontal
     ) {
         //Shade effect at the bottom.
         ALLEGRO_VERTEX vertexes[8];
@@ -1911,7 +1932,7 @@ void ListGuiItem::defDrawCode(const DrawInfo& draw) {
         );
     }
     
-    if(offset.x > 0.0f && horizontal) {
+    if(offsetRatioX > 0.0f && horizontal) {
         //Shade effect at the left.
         ALLEGRO_VERTEX vertexes[8];
         for(size_t v = 0; v < 8; v++) {
@@ -1948,7 +1969,7 @@ void ListGuiItem::defDrawCode(const DrawInfo& draw) {
         );
     }
     float childrenHSpan = getChildrenSpan(true);
-    if(childrenHSpan > 1.0f && offset.x < childrenHSpan - 1.0f && horizontal) {
+    if(childrenHSpan > 1.0f && offsetRatioX < childrenHSpan - 1.0f && horizontal) {
         //Shade effect at the right.
         ALLEGRO_VERTEX vertexes[8];
         for(size_t v = 0; v < 8; v++) {
@@ -1999,7 +2020,7 @@ void ListGuiItem::defEventCode(const ALLEGRO_EVENT& ev) {
         ev.mouse.dz != 0.0f
     ) {
         float childrenSpan = getChildrenSpan(horizontal);
-        if(childrenSpan <= 1.0f && offset.y == 0.0f) {
+        if(childrenSpan <= 1.0f && offsetRatioY == 0.0f) {
             return;
         }
         targetOffset =
@@ -2019,7 +2040,7 @@ void ListGuiItem::defEventCode(const ALLEGRO_EVENT& ev) {
  */
 void ListGuiItem::defTickCode(float deltaT) {
     float childrenSpan = getChildrenSpan(horizontal);
-    float* offsetPtr = !horizontal ? &offset.y : &offset.x;
+    float* offsetPtr = !horizontal ? &offsetRatioY : &offsetRatioX;
     if(childrenSpan < 1.0f) {
         targetOffset = 0.0f;
         *offsetPtr = 0.0f;
@@ -2087,7 +2108,7 @@ PickerGuiItem::PickerGuiItem(
  * @param cursorPos Mouse cursor position.
  */
 void PickerGuiItem::defActivateCode(const Point& cursorPos) {
-    if(cursorPos.x >= getReferenceCenter().x) {
+    if(cursorPos.x >= getReferenceRect().center.x) {
         onNext();
     } else {
         onPrevious();
@@ -2218,7 +2239,7 @@ bool PickerGuiItem::defMenuSNCode(PLAYER_ACTION_TYPE actionId) {
  */
 void PickerGuiItem::defMouseOverCode(const Point& cursorPos) {
     arrowHighlight =
-        cursorPos.x >= getReferenceCenter().x ? 1 : 0;
+        cursorPos.x >= getReferenceRect().center.x ? 1 : 0;
 }
 
 
@@ -2255,7 +2276,7 @@ void ScrollGuiItem::defDrawCode(const DrawInfo& draw) {
         float listBottom = listItem->getChildrenSpan();
         float alpha = 0.20f;
         if(listBottom > 1.0f) {
-            float offset = std::min(listItem->offset.y, listBottom - 1.0f);
+            float offset = std::min(listItem->offsetRatioY, listBottom - 1.0f);
             barY = offset / listBottom;
             barH = 1.0f / listBottom;
             alpha = 0.50f;
@@ -2284,7 +2305,7 @@ void ScrollGuiItem::defDrawCode(const DrawInfo& draw) {
         float listDepth = listItem->getChildrenSpan(true);
         float alpha = 0.20f;
         if(listDepth > 1.0f) {
-            float offset = std::min(listItem->offset.x, listDepth - 1.0f);
+            float offset = std::min(listItem->offsetRatioX, listDepth - 1.0f);
             barX = offset / listDepth;
             barW = 1.0f / listDepth;
             alpha = 0.50f;
@@ -2356,11 +2377,10 @@ void ScrollGuiItem::setOffsetFromMouse(float x, float y) {
             return;
         }
         
-        Point c = getReferenceCenter();
-        Point s = getReferenceSize();
-        float barH = (1.0f / listBottom) * s.y;
-        float y1 = (c.y - s.y / 2.0f) + barH / 2.0f;
-        float y2 = (c.y + s.y / 2.0f) - barH / 2.0f;
+        Rect ref = getReferenceRect();
+        float barH = (1.0f / listBottom) * ref.size.y;
+        float y1 = (ref.center.y - ref.size.y / 2.0f) + barH / 2.0f;
+        float y2 = (ref.center.y + ref.size.y / 2.0f) - barH / 2.0f;
         float click = (y - y1) / (y2 - y1);
         click = std::clamp(click, 0.0f, 1.0f);
         
@@ -2374,11 +2394,10 @@ void ScrollGuiItem::setOffsetFromMouse(float x, float y) {
             return;
         }
         
-        Point c = getReferenceCenter();
-        Point s = getReferenceSize();
-        float barW = (1.0f / listDepth) * s.x;
-        float x1 = (c.x - s.x / 2.0f) + barW / 2.0f;
-        float x2 = (c.x + s.x / 2.0f) - barW / 2.0f;
+        Rect ref = getReferenceRect();
+        float barW = (1.0f / listDepth) * ref.size.x;
+        float x1 = (ref.center.x - ref.size.x / 2.0f) + barW / 2.0f;
+        float x2 = (ref.center.x + ref.size.x / 2.0f) - barW / 2.0f;
         float click = (x - x1) / (x2 - x1);
         click = std::clamp(click, 0.0f, 1.0f);
         

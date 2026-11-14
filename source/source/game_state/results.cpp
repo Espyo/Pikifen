@@ -88,10 +88,9 @@ void Results::addNewBulletPoint(
         new BulletGuiItem(
         label, game.sysContent.fntStandard, color
     );
-    labelBullet->ratioRect.center =
-        Point(0.50f, centerY);
-    labelBullet->ratioRect.size =
-        Point(0.96f, BP_HEIGHT);
+    labelBullet->setRawRatioRect(
+        Rect(Point(0.50f, centerY), Point(0.96f, BP_HEIGHT))
+    );
     list->addChild(labelBullet);
     gui.addItem(labelBullet);
     pageTextToAnimate.push_back(labelBullet);
@@ -100,10 +99,9 @@ void Results::addNewBulletPoint(
         new TextGuiItem(
         value, game.sysContent.fntCounter, color, ALLEGRO_ALIGN_RIGHT
     );
-    valueText->ratioRect.center =
-        Point(0.75f, centerY);
-    valueText->ratioRect.size =
-        Point(0.44f, BP_HEIGHT);
+    valueText->setRawRatioRect(
+        Rect(Point(0.75f, centerY), Point(0.44f, BP_HEIGHT))
+    );
     list->addChild(valueText);
     gui.addItem(valueText);
     pageTextToAnimate.push_back(valueText);
@@ -252,10 +250,9 @@ void Results::addNewScoreMarkerBulletPoint(
         new BulletGuiItem(
         label, game.sysContent.fntStandard, color
     );
-    labelBullet->ratioRect.center =
-        Point(0.50f, bPCenterY);
-    labelBullet->ratioRect.size =
-        Point(0.96f, bPHeight);
+    labelBullet->setRawRatioRect(
+        Rect(Point(0.50f, bPCenterY), Point(0.96f, bPHeight))
+    );
     scoreChartList->addChild(labelBullet);
     gui.addItem(labelBullet);
     pageTextToAnimate.push_back(labelBullet);
@@ -264,10 +261,9 @@ void Results::addNewScoreMarkerBulletPoint(
         new TextGuiItem(
         value, game.sysContent.fntCounter, color, ALLEGRO_ALIGN_RIGHT
     );
-    valueText->ratioRect.center =
-        Point(0.75f, bPCenterY);
-    valueText->ratioRect.size =
-        Point(0.44f, bPHeight);
+    valueText->setRawRatioRect(
+        Rect(Point(0.75f, bPCenterY), Point(0.44f, bPHeight))
+    );
     scoreChartList->addChild(valueText);
     gui.addItem(valueText);
     textToAnimate.push_back(valueText);

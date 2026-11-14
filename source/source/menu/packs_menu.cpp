@@ -148,10 +148,12 @@ void PacksMenu::initGuiMain() {
         new BulletGuiItem(
         "Base", game.sysContent.fntStandard, game.config.guiColors.gold
     );
-    baseBullet->ratioRect.center =
-        Point(0.37f, ITEMS_OFFSET + ITEM_HEIGHT / 2.0f);
-    baseBullet->ratioRect.size =
-        Point(0.70f, ITEM_HEIGHT);
+    baseBullet->setRawRatioRect(
+        Rect(
+            Point(0.37f, ITEMS_OFFSET + ITEM_HEIGHT / 2.0f),
+            Point(0.70f, ITEM_HEIGHT)
+        )
+    );
     baseBullet->onFocused =
     [this] () { changeInfo(-1); };
     packsList->addChild(baseBullet);
@@ -167,8 +169,11 @@ void PacksMenu::initGuiMain() {
             "",
             game.sysContent.fntStandard
         );
-        bullet->ratioRect.center = Point(0.37f, rowCenterY);
-        bullet->ratioRect.size = Point(0.70f, ITEM_HEIGHT);
+        bullet->setRawRatioRect(
+            Rect(
+                Point(0.37f, rowCenterY), Point(0.70f, ITEM_HEIGHT)
+            )
+        );
         bullet->onFocused = [p, this] () { changeInfo((int) p); };
         packsList->addChild(bullet);
         gui.addItem(bullet);
@@ -180,8 +185,11 @@ void PacksMenu::initGuiMain() {
             false, "", game.sysContent.fntStandard
         );
         check->forceSquare = true;
-        check->ratioRect.center = Point(0.78f, rowCenterY);
-        check->ratioRect.size = Point(0.08f, ITEM_HEIGHT);
+        check->setRawRatioRect(
+            Rect(
+                Point(0.78f, rowCenterY), Point(0.08f, ITEM_HEIGHT)
+            )
+        );
         check->onActivate =
         [p, check, this] (const Point & pos) {
             check->defActivateCode();
@@ -211,8 +219,11 @@ void PacksMenu::initGuiMain() {
             ButtonGuiItem* upButton =
                 new ButtonGuiItem("", game.sysContent.fntStandard);
             upButton->forceSquare = true;
-            upButton->ratioRect.center = Point(0.87f, rowCenterY);
-            upButton->ratioRect.size = Point(0.08f, ITEM_HEIGHT) * 0.80f;
+            upButton->setRawRatioRect(
+                Rect(
+                    Point(0.87f, rowCenterY), Point(0.08f, ITEM_HEIGHT) * 0.80f
+                )
+            );
             upButton->onDraw =
             [upButton] (const DrawInfo & draw) {
                 upButton->defDrawCode(draw);
@@ -249,8 +260,11 @@ void PacksMenu::initGuiMain() {
             ButtonGuiItem* downButton =
                 new ButtonGuiItem("", game.sysContent.fntStandard);
             downButton->forceSquare = true;
-            downButton->ratioRect.center = Point(0.95f, rowCenterY);
-            downButton->ratioRect.size = Point(0.08f, ITEM_HEIGHT) * 0.80f;
+            downButton->setRawRatioRect(
+                Rect(
+                    Point(0.95f, rowCenterY), Point(0.08f, ITEM_HEIGHT) * 0.80f
+                )
+            );
             downButton->onDraw =
             [downButton] (const DrawInfo & draw) {
                 downButton->defDrawCode(draw);

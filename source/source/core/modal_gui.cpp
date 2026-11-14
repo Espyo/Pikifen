@@ -299,7 +299,7 @@ void ModalGuiManager::updateItems() {
     addItem(tooltipItem, "tooltip");
     
     //Position the buttons.
-    Rect buttonArea = backItem->ratioRect;
+    Rect buttonArea = backItem->getRawRatioRect();
     const float totalEmptySpace =
         MODAL::BUTTON_MARGIN * (buttonItems.size() - 1);
     const float buttonWidth =
@@ -307,8 +307,10 @@ void ModalGuiManager::updateItems() {
     float curX = buttonArea.center.x - buttonArea.size.x / 2.0f;
     
     forIdx(b, buttonItems) {
-        buttonItems[b]->ratioRect.center.x = curX + buttonWidth / 2.0f;
-        buttonItems[b]->ratioRect.size.x = buttonWidth;
+        Rect rect = buttonItems[b]->getRawRatioRect();
+        rect.center.x = curX + buttonWidth / 2.0f;
+        rect.size.x = buttonWidth;
+        buttonItems[b]->setRawRatioRect(rect);
         curX += buttonWidth + MODAL::BUTTON_MARGIN;
     }
     

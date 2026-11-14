@@ -49,16 +49,45 @@ public:
     Manager* manager = nullptr;
     
     //Raw center X coordinate, in parent ratio.
-    float centerRatioX = 0.0f;
+    float rawCenterRatioX = 0.0f;
     
     //Raw center Y coordinate, in parent ratio.
-    float centerRatioY = 0.0f;
+    float rawCenterRatioY = 0.0f;
     
     //Raw width, in parent ratio.
-    float widthRatio = 0.0f;
+    float rawWidthRatio = 0.0f;
     
     //Raw height, in parent ratio.
-    float heightRatio = 0.0f;
+    float rawHeightRatio = 0.0f;
+    
+    
+    //If it is placed inside of another item, specify it here.
+    Item* parent = nullptr;
+    
+    //List of children items, that are placed inside this one.
+    vector<Item*> children;
+    
+    //Horizontal offset in size ratio of the children items, if any.
+    float offsetRatioX = 0.0f;
+    
+    //Horizontal offset in size ratio of the children items, if any.
+    float offsetRatioY = 0.0f;
+    
+    //Padding amount, if it has children items.
+    float paddingPx = 0.0f;
+    
+    
+    //Force its final dimensions to be square, such that they fit inside
+    //the reference dimensions.
+    bool forceSquare = false;
+    
+    
+    //--- Public function declarations ---
+    
+    virtual ~Item() = default;
+    
+    virtual void getReferenceCenter(float* outX, float* outY) const;
+    virtual void getReferenceSize(float* outWidth, float* outHeight) const;
     
 };
 
@@ -89,8 +118,13 @@ public:
     
     //--- Public function declarations ---
     
+    virtual ~Manager() = default;
+    
     virtual bool addItem(Item* item);
     virtual bool removeItem(Item* item);
+    
+    virtual int getWindowWidth() const;
+    virtual int getWindowHeight() const;
     
 };
 
