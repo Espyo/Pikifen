@@ -2,10 +2,7 @@
 
 
 Current tasks (tasks being worked on, but not yet committed)
-    Console
-        Suggestions
-            Multiple suggestions -- If you press up and down with an empty field it scrolls through the history, otherwise it cycles through the suggestions
-        Wrong commands shouldn't go in the error log
+
 
 Next tasks (roughly sorted most important first)
     --- Problems to fix ---
@@ -14,6 +11,7 @@ Next tasks (roughly sorted most important first)
     
     --- 1.3.0 ---
     Ditch Tutorial Meadow and create a series of one minute short and sweet tutorial stages, like the training stages in Dandori Academy
+        Expo mode should ask if the user wants to play the tutorial stages when they hit Play on the main menu, just like if an options file is not detected
     Create an area that's good for people to pick up and play
         It should be easy to play in, and showcase a lot of action right off the bat
             You start with 30 or so Pikmin, and there are many nearby harmless and easy enemies
@@ -54,7 +52,6 @@ Next tasks (roughly sorted most important first)
     Winged Pikmin can fly over walls, and when they need to descend they can ignore collision
         This is because getMovementEdgeIntersections is what's responsible for returning the edges that are being touched, which is important to figure out tallestSector, but ignores edges if they're underneath the mob. Without tallestSector, Winged Pikmin can go through walls so long as it's not at the mob's center. This may be fixed by having getMovementEdgeIntersections always return the intersections, use those to update tallestSector, and then have the rest of the logic that checks proper edge COLLISION and does stepping and whatnot be its own thing
         Also, Winged Pikmin can sometimes get stuck because of this, like when trying to deliver to a ship that's a bit higher than the reception point. Adding a step-worth bit of leeway to maxVertDistDiff might solve it, or it might break things
-    Expo mode should ask if the user wants to play the tutorial stages when they hit Play on the main menu, just like if an options file is not detected
     Update Dear ImGui to 1.93.0
         > Made AddCallback() user data default to Null for convenience.
         > DragXXX, SliderXXX, InputScalar: with ImGuiItemFlags_LiveEditOnInputScalar now defaulting to being disabled: inputting a value with the keyboard doesn't write intermediate values to the backing variable.
@@ -66,7 +63,6 @@ Next tasks (roughly sorted most important first)
         The button-based maker tool activations could be made into commands sent to the console, and the player could add custom binds so they could customize calling the maker tools to be however they want
         New Pikmin maker tool should probably spawn them in Pikmin order, not alphabetical
         The free camera maker tool should definitely be its own item, including the ability to pause and unpause gameplay, control the zoom level, and toggle the HUD
-        Add a "log" maker tool, which works just like the "log" (formerly "print") script action. Maybe add other maker tools that are just the same as some of the utility script actions
     GUI improvements
         GUI items and GUI manager need to be split into a generic usage library, where the Pikifen variants inherit from them
         Make it possible for GUI items to have children items, or to have a family of group items under a tag. This allows custom items to follow the same alpha, visibility, responsiveness, etc. attributes of the hardcoded ones they're related to
@@ -1017,6 +1013,7 @@ Tasks for later on (I might never implement these)
     Blood (optional, of course)
     HUD element for a digital clock?
     Hidden medallions for story mode campaigns. The maker specifies the requirements for a medallion, like completing with fewer than X throws, fewer than X Pikmin born, etc.
+    Leader data files could have a property where you specify a list of animation names to be used for choosing a boredom animation (suggested by Helodity)
     Pikmin that finish delivering a resource and are thinking of returning to a pile should check if other Pikmin aren't already returning to that pile. If there are already enough to bring the remainder back, this Pikmin shouldn't bother going [PIKMIN 4]
     Aesthetic details
         Enemies should have a cloud of breath in cold areas (GitHub issue #10)
@@ -1088,6 +1085,8 @@ Tasks for later on (I might never implement these)
             Sin, cosine
             Degrees to radians and vice-versa
             Bitmask set, unset, test, and all of the boolean logic operations
+        Maker tools
+            Add a "log" maker tool, which works just like the "log" (formerly "print") script action. Maybe add other maker tools that are just the same as some of the utility script actions
     Specific requested features
         An attribute for Pikmin types that makes it possible to throw them farther/closer than standard
 

@@ -1126,7 +1126,7 @@ bool MakerTools::handleGeneralPlayerAction(const Inpution::Action& action) {
 
         if(action.value < 0.5f) return false;
         
-        types[MAKER_TOOL_TYPE_SET_SONG_POS_NEAR_LOOP].code(*this, {});
+        types[MAKER_TOOL_TYPE_SET_SONG_POS_NEAR_LOOP].code(*this, { "4" });
         break;
         
     } case PLAYER_ACTION_TYPE_MT_MOD_1: {
@@ -1302,7 +1302,7 @@ bool MakerTools::runTool(
     
     //Check if this action is allowed in the current context.
     if(!checkContextFlags(typePtr->contexts)) {
-        game.log.write(
+        game.console.write(
             LOG_LEVEL_ERROR,
             "The maker tool \"" + typePtr->name + "\" can't be used in " +
             aAn(getContextName()) + " context!"
