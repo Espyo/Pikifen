@@ -22,6 +22,7 @@
 #include "../../core/controls_mediator.hpp"
 #include "../../core/misc_structs.hpp"
 #include "../../lib/data_file/data_file.hpp"
+#include "../../lib/dumb_gui/dumb_gui.hpp"
 #include "../../lib/easy_spat_nav/easy_spat_nav.hpp"
 #include "../../util/drawing_utils.hpp"
 #include "../../util/general_utils.hpp"
@@ -254,7 +255,7 @@ struct CustomGuiItemDef : public GuiItemDef {
  * @brief An item in the GUI. This can be a HUD element, a button,
  * some text, etc.
  */
-class GuiItem {
+class GuiItem : public DumbGui::Item {
 
 public:
 
@@ -306,10 +307,7 @@ public:
     
     //--- Public members ---
     
-    //What GUI manager it belongs to, if any.
-    GuiManager* manager = nullptr;
-    
-    //Its raw coordinate data, in window ratio (or parent ratio).
+    //Raw coordinate data, in parent ratio.
     Rect ratioRect;
     
     //Is it currently visible?
@@ -728,14 +726,11 @@ private:
  * heads-up display (HUD) during gameplay, as well as the interactable elements
  * of menus.
  */
-class GuiManager {
+class GuiManager : public DumbGui::Manager {
 
 public:
 
     //--- Public members ---
-    
-    //List of items.
-    vector<GuiItem*> items;
     
     //Item to activate when the user chooses to go back, if any.
     GuiItem* backItem = nullptr;

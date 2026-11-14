@@ -337,7 +337,7 @@ bool GuiItem::activate(const Point& cursorPos) {
     onActivate(cursorPos);
     
     ALLEGRO_SAMPLE* sample =
-        this == manager->backItem ?
+        this == ((GuiManager*) manager)->backItem ?
         game.sysContent.sndMenuBack :
         playFailSound ?
         game.sysContent.sndMenuFail :
@@ -655,7 +655,7 @@ GuiManager::GuiManager() :
  * @return Whether it succeeded.
  */
 bool GuiManager::addItem(GuiItem* item, const string& id) {
-    if(!item) return false;
+    if(!DumbGui::Manager::addItem(item)) return false;
     
     auto c = registeredCenters.find(id);
     if(c != registeredCenters.end()) {
@@ -665,9 +665,6 @@ bool GuiManager::addItem(GuiItem* item, const string& id) {
     if(s != registeredSizes.end()) {
         item->ratioRect.size = s->second;
     }
-    
-    items.push_back(item);
-    item->manager = this;
     
     return true;
 }
@@ -829,7 +826,8 @@ bool GuiManager::destroy() {
     setFocusedItem(nullptr);
     backItem = nullptr;
     forIdx(i, items) {
-        delete items[i];
+        GuiItem* iPtr = (GuiItem*) items[i];
+        delete iPtr;
     }
     items.clear();
     registeredCenters.clear();
@@ -856,16 +854,16 @@ bool GuiManager::draw() {
     int ocrH = 0;
     
     //Sort them by layer.
-    vector<GuiItem*> drawingSortedItems = items;
+    vector<DumbGui::Item*> drawingSortedItems = items;
     std::stable_sort(
         drawingSortedItems.begin(), drawingSortedItems.end(),
-    [] (GuiItem * i1, GuiItem * i2) {
-        return i1->drawingLayer < i2->drawingLayer;
+    [] (DumbGui::Item * i1, DumbGui::Item * i2) {
+        return ((GuiItem*) i1)->drawingLayer < ((GuiItem*) i2)->drawingLayer;
     }
     );
     
     forIdx(i, drawingSortedItems) {
-        GuiItem* iPtr = drawingSortedItems[i];
+        GuiItem* iPtr = (GuiItem*) drawingSortedItems[i];
         
         if(!iPtr->onDraw) continue;
         
@@ -1258,7 +1256,7 @@ bool GuiManager::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
     ) {
         GuiItem* focusResult = nullptr;
         forIdx(i, items) {
-            GuiItem* iPtr = items[i];
+            GuiItem* iPtr = (GuiItem*) items[i];
             if(
                 iPtr->isMouseOn(Point(ev.mouse.x, ev.mouse.y)) &&
                 iPtr->isResponsive() &&
@@ -1292,8 +1290,9 @@ bool GuiManager::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
     }
     
     forIdx(i, items) {
-        if(items[i]->isResponsive() && items[i]->onAllegroEvent) {
-            items[i]->onAllegroEvent(ev);
+        GuiItem* iPtr = (GuiItem*) items[i];
+        if(iPtr->isResponsive() && iPtr->onAllegroEvent) {
+            iPtr->onAllegroEvent(ev);
         }
     }
     
@@ -1394,7 +1393,7 @@ void GuiManager::handleSpatialNavigationAction(const Inpution::Action& action) {
     }
     
     forIdx(i, items) {
-        GuiItem* iPtr = items[i];
+        GuiItem* iPtr = (GuiItem*) items[i];
         if(!iPtr->isResponsive()) continue;
         
         bool navigable = iPtr->focusable && iPtr->focusableFromSN;
@@ -1524,8 +1523,7 @@ bool GuiManager::registerCoords(
  * @return Whether it succeeded.
  */
 bool GuiManager::removeItem(GuiItem* item) {
-    if(!item) return false;
-    bool success = false;
+    if(!DumbGui::Manager::removeItem(item)) return false;
     
     if(focusedItem == item) {
         setFocusedItem(nullptr);
@@ -1534,15 +1532,7 @@ bool GuiManager::removeItem(GuiItem* item) {
         backItem = nullptr;
     }
     
-    forIdx(i, items) {
-        if(items[i] == item) {
-            eraseInVector(items, i);
-            item->manager = nullptr;
-            success = true;
-        }
-    }
-    
-    return success;
+    return true;
 }
 
 
@@ -1640,7 +1630,7 @@ bool GuiManager::tick(float deltaT) {
     
     //Tick all items.
     forIdx(i, items) {
-        GuiItem* iPtr = items[i];
+        GuiItem* iPtr = (GuiItem*) items[i];
         if(iPtr->onTick) {
             iPtr->onTick(deltaT);
         }
@@ -2135,7 +2125,7 @@ void PickerGuiItem::defDrawCode(const DrawInfo& draw) {
     if(
         focused &&
         manager &&
-        manager->wasLastInputMouse()
+        ((GuiManager*) manager)->wasLastInputMouse()
     ) {
         realArrowHighlight = arrowHighlight;
     }
