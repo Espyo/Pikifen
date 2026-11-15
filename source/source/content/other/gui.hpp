@@ -382,7 +382,7 @@ public:
     
     Rect getRawRatioRect() const;
     void setRawRatioRect(const Rect& rect);
-    Rect getReferenceRect() const;
+    Rect getReferencePxRect() const;
     
     bool activate(const Point& cursorPos = Point());
     bool addChild(GuiItem* item);
@@ -768,8 +768,8 @@ public:
     );
     bool destroy();
     
-    int getWindowWidth() const override;
-    int getWindowHeight() const override;
+    int getWindowPxWidth() const override;
+    int getWindowPxHeight() const override;
     
     
 protected:

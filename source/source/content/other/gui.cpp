@@ -477,7 +477,7 @@ Rect GuiItem::getRawRatioRect() const {
     return
         Rect(
             Point(rawCenterRatioX, rawCenterRatioY),
-            Point(rawWidthRatio, rawHeightRatio)
+            Point(rawRatioWidth, rawRatioHeight)
         );
 }
 
@@ -488,10 +488,10 @@ Rect GuiItem::getRawRatioRect() const {
  *
  * @return The coordinates.
  */
-Rect GuiItem::getReferenceRect() const {
+Rect GuiItem::getReferencePxRect() const {
     Rect result;
-    getReferenceCenter(&result.center.x, &result.center.y);
-    getReferenceSize(&result.size.x, &result.size.y);
+    getReferencePxCenter(&result.center.x, &result.center.y);
+    getReferencePxSize(&result.size.x, &result.size.y);
     return result;
 }
 
@@ -507,7 +507,7 @@ bool GuiItem::isMouseOn(const Point& cursorPos) const {
         return false;
     }
     
-    Rect ref = getReferenceRect();
+    Rect ref = getReferencePxRect();
     return
         (
             cursorPos.x >= ref.center.x - ref.size.x * 0.5 &&
@@ -570,8 +570,8 @@ bool GuiItem::removeChild(GuiItem* item) {
 void GuiItem::setRawRatioRect(const Rect& rect) {
     rawCenterRatioX = rect.center.x;
     rawCenterRatioY = rect.center.y;
-    rawWidthRatio = rect.size.x;
-    rawHeightRatio = rect.size.y;
+    rawRatioWidth = rect.size.x;
+    rawRatioHeight = rect.size.y;
 }
 
 
@@ -867,7 +867,7 @@ bool GuiManager::draw() {
         if(!iPtr->onDraw) continue;
         
         DrawInfo draw;
-        Rect ref = iPtr->getReferenceRect();
+        Rect ref = iPtr->getReferencePxRect();
         draw.center = ref.center;
         draw.size = ref.size;
         
@@ -1103,7 +1103,7 @@ bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
     if(!item->isVisible()) return false;
     if(item->getRawRatioRect().size.x == 0.0f) return false;
     
-    Rect finalRect = item->getReferenceRect();
+    Rect finalRect = item->getReferencePxRect();
     float finalAlpha = 1.0f;
     
     if(animTimer.timeLeft > 0.0f) {
@@ -1236,21 +1236,21 @@ bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
 
 
 /**
- * @brief Returns the current height of the program window.
+ * @brief Returns the current height of the program window, in pixels.
  *
  * @return The height.
  */
-int GuiManager::getWindowHeight() const {
+int GuiManager::getWindowPxHeight() const {
     return game.winH;
 }
 
 
 /**
- * @brief Returns the current width of the program window.
+ * @brief Returns the current width of the program window, in pixels.
  *
  * @return The width.
  */
-int GuiManager::getWindowWidth() const {
+int GuiManager::getWindowPxWidth() const {
     return game.winW;
 }
 
@@ -1419,7 +1419,7 @@ void GuiManager::handleSpatialNavigationAction(const Inpution::Action& action) {
         bool hasChildren = !iPtr->children.empty();
         if(!navigable && !hasChildren) continue;
         
-        Rect ref = ((GuiItem*) iPtr)->getReferenceRect();
+        Rect ref = ((GuiItem*) iPtr)->getReferencePxRect();
         
         esnInterface.addNewItem(
             (EasySpatNav::ItemId) iPtr,
@@ -1804,7 +1804,7 @@ bool GuiManager::writeItemDefsToDataFile(
 ListGuiItem::ListGuiItem() :
     GuiItem() {
     
-    paddingPx = 8.0f;
+    pxPadding = 8.0f;
     onDraw =
     [this] (const DrawInfo & draw) {
         this->defDrawCode(draw);
@@ -2108,7 +2108,7 @@ PickerGuiItem::PickerGuiItem(
  * @param cursorPos Mouse cursor position.
  */
 void PickerGuiItem::defActivateCode(const Point& cursorPos) {
-    if(cursorPos.x >= getReferenceRect().center.x) {
+    if(cursorPos.x >= getReferencePxRect().center.x) {
         onNext();
     } else {
         onPrevious();
@@ -2239,7 +2239,7 @@ bool PickerGuiItem::defMenuSNCode(PLAYER_ACTION_TYPE actionId) {
  */
 void PickerGuiItem::defMouseOverCode(const Point& cursorPos) {
     arrowHighlight =
-        cursorPos.x >= getReferenceRect().center.x ? 1 : 0;
+        cursorPos.x >= getReferencePxRect().center.x ? 1 : 0;
 }
 
 
@@ -2377,7 +2377,7 @@ void ScrollGuiItem::setOffsetFromMouse(float x, float y) {
             return;
         }
         
-        Rect ref = getReferenceRect();
+        Rect ref = getReferencePxRect();
         float barH = (1.0f / listBottom) * ref.size.y;
         float y1 = (ref.center.y - ref.size.y / 2.0f) + barH / 2.0f;
         float y2 = (ref.center.y + ref.size.y / 2.0f) - barH / 2.0f;
@@ -2394,7 +2394,7 @@ void ScrollGuiItem::setOffsetFromMouse(float x, float y) {
             return;
         }
         
-        Rect ref = getReferenceRect();
+        Rect ref = getReferencePxRect();
         float barW = (1.0f / listDepth) * ref.size.x;
         float x1 = (ref.center.x - ref.size.x / 2.0f) + barW / 2.0f;
         float x2 = (ref.center.x + ref.size.x / 2.0f) - barW / 2.0f;

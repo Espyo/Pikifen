@@ -16,70 +16,80 @@
 
 
 /**
- * @brief Returns the reference center coordinates,
- * i.e. used when not animating.
+ * @brief Returns the reference center coordinates, in pixels.
+ * These are used, for instance, when not animating.
  *
- * @return The center.
+ * @param outPxX The X coordinate is returned here.
+ * @param outPxY The Y coordinate is returned here.
  */
-void DumbGui::Item::getReferenceCenter(float* outX, float* outY) const {
+void DumbGui::Item::getReferencePxCenter(float* outPxX, float* outPxY) const {
     if(parent) {
-        float parentWidth, parentHeight;
-        parent->getReferenceSize(&parentWidth, &parentHeight);
-        parentWidth -= parent->paddingPx * 2.0f;
-        parentHeight -= parent->paddingPx * 2.0f;
-        float parentCenterX, parentCenterY;
-        parent->getReferenceCenter(&parentCenterX, &parentCenterY);
+        float parentPxWidth, parentPxHeight;
+        parent->getReferencePxSize(&parentPxWidth, &parentPxHeight);
+        parentPxWidth -= parent->pxPadding * 2.0f;
+        parentPxHeight -= parent->pxPadding * 2.0f;
         
-        float resultX = rawCenterRatioX * parentWidth;
-        resultX += parentCenterX - parentWidth / 2.0f;
-        resultX -= parentWidth * parent->offsetRatioX;
-        float resultY = rawCenterRatioY * parentHeight;
-        resultY += parentCenterY - parentHeight / 2.0f;
-        resultY -= parentHeight * parent->offsetRatioY;
+        float parentCenterPxX, parentCenterPxY;
+        parent->getReferencePxCenter(&parentCenterPxX, &parentCenterPxY);
         
-        *outX = resultX;
-        *outY = resultY;
+        float resultPxX = rawCenterRatioX * parentPxWidth;
+        resultPxX += parentCenterPxX - parentPxWidth / 2.0f;
+        resultPxX -= parentPxWidth * parent->offsetRatioX;
+        
+        float resultPxY = rawCenterRatioY * parentPxHeight;
+        resultPxY += parentCenterPxY - parentPxHeight / 2.0f;
+        resultPxY -= parentPxHeight * parent->offsetRatioY;
+        
+        *outPxX = resultPxX;
+        *outPxY = resultPxY;
         
     } else {
-        float resultX = rawCenterRatioX * manager->getWindowWidth();
-        float resultY = rawCenterRatioY * manager->getWindowHeight();
+        float resultPxX = rawCenterRatioX * manager->getWindowPxWidth();
+        float resultPxY = rawCenterRatioY * manager->getWindowPxHeight();
         
-        *outX = resultX;
-        *outY = resultY;
+        *outPxX = resultPxX;
+        *outPxY = resultPxY;
         
     }
 }
 
 
 /**
- * @brief Returns the reference width and height, i.e. used when not animating.
+ * @brief Returns the reference width and height, in pixels.
+ * These are used, for instance, when not animating.
  *
- * @return The size.
+ * @param outPxWidth The width is returned here.
+ * @param outPxHeight The height is returned here.
  */
-void DumbGui::Item::getReferenceSize(float* outWidth, float* outHeight) const {
+void DumbGui::Item::getReferencePxSize(
+    float* outPxWidth, float* outPxHeight
+) const {
     float multX = 0.0f;
     float multY = 0.0f;
     
     if(parent) {
-        float parentWidth, parentHeight;
-        parent->getReferenceSize(&parentWidth, &parentHeight);
-        multX = parentWidth - (parent->paddingPx * 2.0f);
-        multY = parentHeight - (parent->paddingPx * 2.0f);
+        float parentPxWidth, parentPxHeight;
+        parent->getReferencePxSize(&parentPxWidth, &parentPxHeight);
+        multX = parentPxWidth - (parent->pxPadding * 2.0f);
+        multY = parentPxHeight - (parent->pxPadding * 2.0f);
+        
     } else {
-        multX = manager->getWindowWidth();
-        multY = manager->getWindowHeight();
+        multX = manager->getWindowPxWidth();
+        multY = manager->getWindowPxHeight();
+        
     }
     
-    float finalWidth = rawWidthRatio * multX;
-    float finalHeight = rawHeightRatio * multY;
+    float finalPxWidth = rawRatioWidth * multX;
+    float finalPxHeight = rawRatioHeight * multY;
     
     if(forceSquare) {
-        finalWidth = finalWidth < finalHeight ? finalWidth : finalHeight;
-        finalHeight = finalWidth;
+        finalPxWidth =
+            finalPxWidth < finalPxHeight ? finalPxWidth : finalPxHeight;
+        finalPxHeight = finalPxWidth;
     }
     
-    *outWidth = finalWidth;
-    *outHeight = finalHeight;
+    *outPxWidth = finalPxWidth;
+    *outPxHeight = finalPxHeight;
 }
 
 
@@ -104,23 +114,23 @@ bool DumbGui::Manager::addItem(Item* item) {
 
 
 /**
- * @brief Returns the current height of the program window.
+ * @brief Returns the current height of the program window, in pixels.
  * This should be overridden by a derived class since it does not do anything.
  *
  * @return The height.
  */
-int DumbGui::Manager::getWindowHeight() const {
+int DumbGui::Manager::getWindowPxHeight() const {
     return 100;
 }
 
 
 /**
- * @brief Returns the current width of the program window.
+ * @brief Returns the current width of the program window, in pixels.
  * This should be overridden by a derived class since it does not do anything.
  *
  * @return The width.
  */
-int DumbGui::Manager::getWindowWidth() const {
+int DumbGui::Manager::getWindowPxWidth() const {
     return 100;
 }
 

@@ -55,26 +55,26 @@ public:
     float rawCenterRatioY = 0.0f;
     
     //Raw width, in parent ratio.
-    float rawWidthRatio = 0.0f;
+    float rawRatioWidth = 0.0f;
     
     //Raw height, in parent ratio.
-    float rawHeightRatio = 0.0f;
+    float rawRatioHeight = 0.0f;
     
     
-    //If it is placed inside of another item, specify it here.
+    //What item it is placed inside of, if any.
     Item* parent = nullptr;
     
-    //List of children items, that are placed inside this one.
+    //List of children items, that are placed inside this one, if any.
     vector<Item*> children;
     
-    //Horizontal offset in size ratio of the children items, if any.
+    //Horizontal offset of the children items, in size ratio, if any.
     float offsetRatioX = 0.0f;
     
-    //Horizontal offset in size ratio of the children items, if any.
+    //Vertical offset of the children items, in size ratio, if any.
     float offsetRatioY = 0.0f;
     
-    //Padding amount, if it has children items.
-    float paddingPx = 0.0f;
+    //Padding amount around the children items, in pixels.
+    float pxPadding = 0.0f;
     
     
     //Force its final dimensions to be square, such that they fit inside
@@ -86,8 +86,10 @@ public:
     
     virtual ~Item() = default;
     
-    virtual void getReferenceCenter(float* outX, float* outY) const;
-    virtual void getReferenceSize(float* outWidth, float* outHeight) const;
+    virtual void getReferencePxCenter(float* outPxX, float* outPxY) const;
+    virtual void getReferencePxSize(
+        float* outPxWidth, float* outPxHeight
+    ) const;
     
 };
 
@@ -123,8 +125,8 @@ public:
     virtual bool addItem(Item* item);
     virtual bool removeItem(Item* item);
     
-    virtual int getWindowWidth() const;
-    virtual int getWindowHeight() const;
+    virtual int getWindowPxWidth() const;
+    virtual int getWindowPxHeight() const;
     
 };
 
