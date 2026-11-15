@@ -104,6 +104,9 @@ public:
     //What to do when the mouse cursor is on top of it this frame.
     function<void(float cursorPxX, float cursorPxY)> onMouseOver = nullptr;
     
+    //What to do when its tooltip needs to be retrieved.
+    std::function<string()> onGetTooltip = nullptr;
+    
     
     //Is it currently visible?
     bool visible = true;
@@ -201,6 +204,10 @@ public:
     bool responsive = true;
     
     
+    //What to do when the currently focused item changes.
+    std::function<void()> onFocusChanged = nullptr;
+    
+    
     //--- Public function declarations ---
     
     virtual ~Manager() = default;
@@ -209,14 +216,18 @@ public:
     virtual bool removeItem(Item* item);
     
     virtual bool draw();
+    virtual bool tick(float deltaT);
     
     virtual Item* getFocusedItem() const;
     virtual bool setFocusedItem(Item* item, bool silent = false);
+    virtual string getCurrentTooltip() const;
     
     virtual bool hideItems();
     virtual bool showItems();
     
     virtual bool getItemDrawInfo(Item* item, DrawInfo* draw) const;
+    
+    virtual bool destroy();
     
     virtual void getClippingRectangle(
         int* outX1, int* outY1, int* outW, int* outH

@@ -80,6 +80,7 @@ Next tasks (roughly sorted most important first)
         https://github.com/Helodity/Pikifen/tree/button-revamp
         The main menu's Play menu should have the missions button be larger, and the simple areas button be smaller. The latter should also be renamed to something like free roam or something
         Make the OK button on Onion menus larger, and the cancel button smaller
+        Scrollbars need to be able to be grabbed from anywhere, and also dragged instead of just clicked
     Editor improvements
         The grid options in editors should go in the menu, not the options dialog (thanks Neo)
         Add a shortcut for toggling the transformation widget (thanks Neo)

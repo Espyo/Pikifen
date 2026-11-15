@@ -748,19 +748,16 @@ void GuiManager::createAndAddCustomItems(
  * @return Whether it succeeded.
  */
 bool GuiManager::destroy() {
-    setFocusedItem(nullptr);
+    DumbGui::Manager::destroy();
+    
     backItem = nullptr;
-    forIdx(i, items) {
-        GuiItem* iPtr = (GuiItem*) items[i];
-        delete iPtr;
-    }
-    items.clear();
     registeredCenters.clear();
     registeredSizes.clear();
     forIdx(i, customItemDefs) {
         customItemDefs[i].clearBitmap();
     }
     customItemDefs.clear();
+    
     return true;
 }
 
@@ -836,18 +833,6 @@ void GuiManager::getClippingRectangle(
     int* outX1, int* outY1, int* outWidth, int* outHeight
 ) const {
     al_get_clipping_rectangle(outX1, outY1, outWidth, outHeight);
-}
-
-
-/**
- * @brief Returns the currently focused item's tooltip, if any.
- *
- * @return The tooltip.
- */
-string GuiManager::getCurrentTooltip() const {
-    if(!focusedItem) return string();
-    if(!((GuiItem*) focusedItem)->onGetTooltip) return string();
-    return ((GuiItem*) focusedItem)->onGetTooltip();
 }
 
 
@@ -1448,13 +1433,6 @@ bool GuiManager::setFocusedItem(GuiItem* item, bool silent) {
     
     autoRepeater.stop();
     
-    if(onFocusChanged) onFocusChanged();
-    if(focusedItem) {
-        if(((GuiItem*) focusedItem)->onFocused) {
-            ((GuiItem*) focusedItem)->onFocused();
-        }
-    }
-    
     if(focusedItem && !silent) {
         game.audio.addNewUiSoundSource(
             game.sysContent.sndMenuFocus,
@@ -1518,15 +1496,14 @@ void GuiManager::setClippingRectangle(
  * @return Whether it succeeded.
  */
 bool GuiManager::tick(float deltaT) {
+    DumbGui::Manager::tick(deltaT);
+    
     //Tick the animation.
     animTimer.tick(deltaT);
     
-    //Tick all items.
+    //Tick all juices.
     forIdx(i, items) {
         GuiItem* iPtr = (GuiItem*) items[i];
-        if(iPtr->onTick) {
-            iPtr->onTick(deltaT);
-        }
         if(iPtr->juiceTimer > 0) {
             iPtr->juiceTimer =
                 std::max(0.0f, iPtr->juiceTimer - deltaT);

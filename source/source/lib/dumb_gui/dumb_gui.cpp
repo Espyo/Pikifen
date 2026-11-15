@@ -282,6 +282,22 @@ bool DumbGui::Manager::addItem(Item* item) {
 
 
 /**
+ * @brief Destroys and deletes all items and information.
+ *
+ * @return Whether it succeeded.
+ */
+bool DumbGui::Manager::destroy() {
+    setFocusedItem(nullptr);
+    for(size_t i = 0; i < items.size(); i++) {
+        delete items[i];
+    }
+    items.clear();
+    
+    return true;
+}
+
+
+/**
  * @brief Draws all items.
  *
  * @return Whether it succeeded.
@@ -358,6 +374,18 @@ void DumbGui::Manager::getClippingRectangle(
     *outY1 = 0;
     *outW = 0;
     *outH = 0;
+}
+
+
+/**
+ * @brief Returns the currently focused item's tooltip, if any.
+ *
+ * @return The tooltip.
+ */
+string DumbGui::Manager::getCurrentTooltip() const {
+    if(!focusedItem) return string();
+    if(!focusedItem->onGetTooltip) return string();
+    return focusedItem->onGetTooltip();
 }
 
 
@@ -496,6 +524,13 @@ bool DumbGui::Manager::setFocusedItem(Item* item, bool silent) {
         focusedItem->focused = true;
     }
     
+    if(onFocusChanged) onFocusChanged();
+    if(focusedItem) {
+        if(focusedItem->onFocused) {
+            focusedItem->onFocused();
+        }
+    }
+    
     return true;
 }
 
@@ -508,6 +543,25 @@ bool DumbGui::Manager::setFocusedItem(Item* item, bool silent) {
 bool DumbGui::Manager::showItems() {
     if(visible) return false;
     visible = true;
+    return true;
+}
+
+
+/**
+ * @brief Ticks the time of all items by one frame of logic.
+ *
+ * @param deltaT How long the frame's tick is, in seconds.
+ * @return Whether it succeeded.
+ */
+bool DumbGui::Manager::tick(float deltaT) {
+    //Tick all items.
+    for(size_t i = 0; i < items.size(); i++) {
+        Item* iPtr = items[i];
+        if(iPtr->onTick) {
+            iPtr->onTick(deltaT);
+        }
+    }
+    
     return true;
 }
 

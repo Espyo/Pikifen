@@ -339,9 +339,6 @@ public:
     //spatial navigation.
     std::function<void(const GuiItem* child)> onChildFocusedViaSN = nullptr;
     
-    //What to do when its tooltip needs to be retrieved.
-    std::function<string()> onGetTooltip = nullptr;
-    
     //Play a "failure" sound on activation instead, for the next activation.
     bool playFailSound = false;
     
@@ -692,48 +689,48 @@ public:
     //Should it ignore input while animating?
     bool ignoreInputOnAnimation = true;
     
-    //What to do when the currently focused item changes.
-    std::function<void()> onFocusChanged = nullptr;
-    
     
     //--- Public function declarations ---
     
     GuiManager();
-    bool addItem(GuiItem* item, const string& id = "");
-    bool tick(float deltaT);
+    
     void changeCurAnimationDuration(float newDuration);
     GUI_MANAGER_ANIM getAnimation() const;
-    string getCurrentTooltip() const;
-    static bool getItemDefsFromDataFile(
-        DataNode* file,
-        vector<HardcodedGuiItemDef>* outHardcodedItemDefs,
-        vector<CustomGuiItemDef>* outCustomItemDefs
+    bool startAnimation(
+        const GUI_MANAGER_ANIM type, float duration
     );
-    bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
-    bool handlePlayerAction(const Inpution::Action& action);
+    
     bool readDataFile(DataNode* node, GuiItem* customChildrenParent = nullptr);
     bool registerCoords(
         const string& id,
         float cx, float cy, float w, float h
     );
-    bool removeItem(GuiItem* item);
-    bool setFocusedItem(GuiItem* item, bool silent = false);
-    bool shouldHandleEvents();
-    bool startAnimation(
-        const GUI_MANAGER_ANIM type, float duration
+    static bool getItemDefsFromDataFile(
+        DataNode* file,
+        vector<HardcodedGuiItemDef>* outHardcodedItemDefs,
+        vector<CustomGuiItemDef>* outCustomItemDefs
     );
-    bool wasLastInputMouse() const;
     static bool writeItemDefsToDataFile(
         DataNode* file,
         const vector<HardcodedGuiItemDef>& hardcodedItemDefs,
         const vector<CustomGuiItemDef>& customItemDefs
     );
-    bool destroy();
+    
+    bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
+    bool handlePlayerAction(const Inpution::Action& action);
+    bool shouldHandleEvents();
+    bool wasLastInputMouse() const;
+    
+    bool addItem(GuiItem* item, const string& id = "");
+    bool removeItem(GuiItem* item);
+    bool setFocusedItem(GuiItem* item, bool silent = false);
     
     bool draw() override;
+    bool tick(float deltaT) override;
     bool getItemDrawInfo(
         DumbGui::Item* item, DumbGui::DrawInfo* draw
     ) const override;
+    bool destroy() override;
     
     void getClippingRectangle(
         int* outX1, int* outY1, int* outWidth, int* outHeight
