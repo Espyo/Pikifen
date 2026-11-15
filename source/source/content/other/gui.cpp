@@ -373,7 +373,7 @@ DrawInfo GuiItem::fromDumbDrawInfo(const DumbGui::DrawInfo& dumbDraw) {
     GuiItem::DrawInfo result;
     
     result.center = Point(dumbDraw.centerPxX, dumbDraw.centerPxY);
-    result.size = Point(dumbDraw.pxWidth, dumbDraw.pxHeight);
+    result.size = Point(dumbDraw.sizePxW, dumbDraw.sizePxH);
     result.tint =
         al_map_rgba(
             dumbDraw.tint[0], dumbDraw.tint[1], dumbDraw.tint[2],
@@ -457,7 +457,7 @@ Rect GuiItem::getRawRatioRect() const {
     return
         Rect(
             Point(rawCenterRatioX, rawCenterRatioY),
-            Point(rawRatioWidth, rawRatioHeight)
+            Point(rawSizeRatioW, rawSizeRatioH)
         );
 }
 
@@ -496,8 +496,8 @@ bool GuiItem::isMouseOn(const Point& cursorPos) const {
 void GuiItem::setRawRatioRect(const Rect& rect) {
     rawCenterRatioX = rect.center.x;
     rawCenterRatioY = rect.center.y;
-    rawRatioWidth = rect.size.x;
-    rawRatioHeight = rect.size.y;
+    rawSizeRatioW = rect.size.x;
+    rawSizeRatioH = rect.size.y;
 }
 
 
@@ -1111,8 +1111,8 @@ bool GuiManager::getItemDrawInfo(
     
     draw->centerPxX = finalRect.center.x;
     draw->centerPxY = finalRect.center.y;
-    draw->pxWidth = finalRect.size.x;
-    draw->pxHeight = finalRect.size.y;
+    draw->sizePxW = finalRect.size.x;
+    draw->sizePxH = finalRect.size.y;
     draw->tint[0] = 255;
     draw->tint[1] = 255;
     draw->tint[2] = 255;
@@ -1127,7 +1127,7 @@ bool GuiManager::getItemDrawInfo(
  *
  * @return The height.
  */
-int GuiManager::getWindowPxHeight() const {
+int GuiManager::getWindowSizePxH() const {
     return game.winH;
 }
 
@@ -1137,7 +1137,7 @@ int GuiManager::getWindowPxHeight() const {
  *
  * @return The width.
  */
-int GuiManager::getWindowPxWidth() const {
+int GuiManager::getWindowSizePxW() const {
     return game.winW;
 }
 
@@ -1561,7 +1561,7 @@ bool GuiManager::tick(float deltaT) {
         focusCursor.intendedRect.center =
             Point(focusedItemDraw.centerPxX, focusedItemDraw.centerPxY);
         focusCursor.intendedRect.size =
-            Point(focusedItemDraw.pxWidth, focusedItemDraw.pxHeight);
+            Point(focusedItemDraw.sizePxW, focusedItemDraw.sizePxH);
         if(focusCursor.alpha == 0.0f) {
             //Teleport.
             focusCursor.curRect.center = focusCursor.intendedRect.center;

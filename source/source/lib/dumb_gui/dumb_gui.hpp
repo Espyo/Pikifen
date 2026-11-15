@@ -45,10 +45,10 @@ struct DrawInfo {
     float centerPxY = 0.0f;
     
     //Width, in window pixels.
-    float pxWidth = 0.0f;
+    float sizePxW = 0.0f;
     
     //Height, in window pixels.
-    float pxHeight = 0.0f;
+    float sizePxH = 0.0f;
     
     //Angle, in radians.
     float angle = 0.0f;
@@ -83,10 +83,10 @@ public:
     float rawCenterRatioY = 0.0f;
     
     //Raw width, in parent ratio.
-    float rawRatioWidth = 0.0f;
+    float rawSizeRatioW = 0.0f;
     
     //Raw height, in parent ratio.
-    float rawRatioHeight = 0.0f;
+    float rawSizeRatioH = 0.0f;
     
     
     //What to do when it's time to draw it.
@@ -150,9 +150,11 @@ public:
     explicit Item(bool focusable = false);
     virtual ~Item() = default;
     
-    virtual void getReferencePxCenter(float* outPxX, float* outPxY) const;
+    virtual void getReferencePxCenter(
+        float* outCenterPxX, float* outCenterPxY
+    ) const;
     virtual void getReferencePxSize(
-        float* outPxWidth, float* outPxHeight
+        float* outSizePxW, float* outSizePxH
     ) const;
     
     virtual bool activate(float cursorPxX = 0.0f, float cursorPxY = 0.0f);
@@ -217,13 +219,13 @@ public:
     virtual bool getItemDrawInfo(Item* item, DrawInfo* draw) const;
     
     virtual void getClippingRectangle(
-        int* outX1, int* outY1, int* outWidth, int* outHeight
+        int* outX1, int* outY1, int* outW, int* outH
     ) const;
     virtual void setClippingRectangle(
-        int x1, int y1, int width, int height
+        int x1, int y1, int w, int h
     );
-    virtual int getWindowPxWidth() const;
-    virtual int getWindowPxHeight() const;
+    virtual int getWindowSizePxW() const;
+    virtual int getWindowSizePxH() const;
     
     
 protected:

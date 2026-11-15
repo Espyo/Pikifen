@@ -187,7 +187,7 @@ struct HudBubbleManager {
                 hud->getItemDrawInfo(matchPtr, &matchDraw)
             ) {
                 matchPos = Point(matchDraw.centerPxX, matchDraw.centerPxY);
-                matchSize = Point(matchDraw.pxWidth, matchDraw.pxHeight);
+                matchSize = Point(matchDraw.sizePxW, matchDraw.sizePxH);
             } else {
                 matchPtr = nullptr;
             }

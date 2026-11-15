@@ -389,7 +389,7 @@ void Results::drawScoreChartConnections() {
         DumbGui::DrawInfo itemDraw;
         gui.getItemDrawInfo(iPtr, &itemDraw);
         
-        const float x1 = itemDraw.centerPxX + itemDraw.pxWidth / 2.0f;
+        const float x1 = itemDraw.centerPxX + itemDraw.sizePxW / 2.0f;
         const float x2 = x1 + 24.0f;
         const float x3 = chartDraw.centerPxX - 24.0f;
         const float x4 = chartDraw.centerPxX;
@@ -546,9 +546,9 @@ float Results::getScoreChartY(int score) const {
     DumbGui::DrawInfo chartDraw;
     gui.getItemDrawInfo(scoreChartChart, &chartDraw);
     const int chartRange = scoreChartTop - scoreChartBottom;
-    const float chartBottomY = chartDraw.centerPxY + chartDraw.pxHeight / 2.0f;
+    const float chartBottomY = chartDraw.centerPxY + chartDraw.sizePxH / 2.0f;
     return
-        chartBottomY - chartDraw.pxHeight *
+        chartBottomY - chartDraw.sizePxH *
         ((score - scoreChartBottom) / (float) chartRange);
 }
 
@@ -1160,8 +1160,8 @@ void Results::populateScoreChart() {
     const float range = scoreChartTop - scoreChartBottom;
     DumbGui::DrawInfo chartDraw;
     gui.getItemDrawInfo(scoreChartChart, &chartDraw);
-    const float topPaddingHeightRatio = 32.0f / chartDraw.pxHeight;
-    const float bottomPaddingHeightRatio = 4.0f / chartDraw.pxHeight;
+    const float topPaddingHeightRatio = 32.0f / chartDraw.sizePxH;
+    const float bottomPaddingHeightRatio = 4.0f / chartDraw.sizePxH;
     scoreChartTop += std::max(range * topPaddingHeightRatio, 1.0f);
     scoreChartBottom -= std::max(range * bottomPaddingHeightRatio, 1.0f);
     

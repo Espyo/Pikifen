@@ -741,8 +741,8 @@ public:
     void setClippingRectangle(
         int x1, int y1, int width, int height
     ) override;
-    int getWindowPxWidth() const override;
-    int getWindowPxHeight() const override;
+    int getWindowSizePxW() const override;
+    int getWindowSizePxH() const override;
     
     
 protected:

@@ -104,8 +104,8 @@ float DumbGui::Item::getChildrenRatioSpan(bool horizontal) const {
         Item* cPtr = children[c];
         float cCoord =
             horizontal ?
-            cPtr->rawCenterRatioX + (cPtr->rawRatioWidth / 2.0f) :
-            cPtr->rawCenterRatioY + (cPtr->rawRatioHeight / 2.0f);
+            cPtr->rawCenterRatioX + (cPtr->rawSizeRatioW / 2.0f) :
+            cPtr->rawCenterRatioY + (cPtr->rawSizeRatioH / 2.0f);
         span = std::max(span, cCoord);
     }
     return span;
@@ -116,36 +116,38 @@ float DumbGui::Item::getChildrenRatioSpan(bool horizontal) const {
  * @brief Returns the reference center coordinates, in pixels.
  * These are used, for instance, when not animating.
  *
- * @param outPxX The X coordinate is returned here.
- * @param outPxY The Y coordinate is returned here.
+ * @param outCenterPxX The X coordinate is returned here.
+ * @param outCenterPxY The Y coordinate is returned here.
  */
-void DumbGui::Item::getReferencePxCenter(float* outPxX, float* outPxY) const {
+void DumbGui::Item::getReferencePxCenter(
+    float* outCenterPxX, float* outCenterPxY
+) const {
     if(parent) {
-        float parentPxWidth, parentPxHeight;
-        parent->getReferencePxSize(&parentPxWidth, &parentPxHeight);
-        parentPxWidth -= parent->pxPadding * 2.0f;
-        parentPxHeight -= parent->pxPadding * 2.0f;
+        float parentSizePxW, parentSizePxH;
+        parent->getReferencePxSize(&parentSizePxW, &parentSizePxH);
+        parentSizePxW -= parent->pxPadding * 2.0f;
+        parentSizePxH -= parent->pxPadding * 2.0f;
         
         float parentCenterPxX, parentCenterPxY;
         parent->getReferencePxCenter(&parentCenterPxX, &parentCenterPxY);
         
-        float resultPxX = rawCenterRatioX * parentPxWidth;
-        resultPxX += parentCenterPxX - parentPxWidth / 2.0f;
-        resultPxX -= parentPxWidth * parent->offsetRatioX;
+        float resultPxX = rawCenterRatioX * parentSizePxW;
+        resultPxX += parentCenterPxX - parentSizePxW / 2.0f;
+        resultPxX -= parentSizePxW * parent->offsetRatioX;
         
-        float resultPxY = rawCenterRatioY * parentPxHeight;
-        resultPxY += parentCenterPxY - parentPxHeight / 2.0f;
-        resultPxY -= parentPxHeight * parent->offsetRatioY;
+        float resultPxY = rawCenterRatioY * parentSizePxH;
+        resultPxY += parentCenterPxY - parentSizePxH / 2.0f;
+        resultPxY -= parentSizePxH * parent->offsetRatioY;
         
-        *outPxX = resultPxX;
-        *outPxY = resultPxY;
+        *outCenterPxX = resultPxX;
+        *outCenterPxY = resultPxY;
         
     } else {
-        float resultPxX = rawCenterRatioX * manager->getWindowPxWidth();
-        float resultPxY = rawCenterRatioY * manager->getWindowPxHeight();
+        float resultPxX = rawCenterRatioX * manager->getWindowSizePxW();
+        float resultPxY = rawCenterRatioY * manager->getWindowSizePxH();
         
-        *outPxX = resultPxX;
-        *outPxY = resultPxY;
+        *outCenterPxX = resultPxX;
+        *outCenterPxY = resultPxY;
         
     }
 }
@@ -155,38 +157,38 @@ void DumbGui::Item::getReferencePxCenter(float* outPxX, float* outPxY) const {
  * @brief Returns the reference width and height, in pixels.
  * These are used, for instance, when not animating.
  *
- * @param outPxWidth The width is returned here.
- * @param outPxHeight The height is returned here.
+ * @param outSizePxW The width is returned here.
+ * @param outSizePxH The height is returned here.
  */
 void DumbGui::Item::getReferencePxSize(
-    float* outPxWidth, float* outPxHeight
+    float* outSizePxW, float* outSizePxH
 ) const {
     float multX = 0.0f;
     float multY = 0.0f;
     
     if(parent) {
-        float parentPxWidth, parentPxHeight;
-        parent->getReferencePxSize(&parentPxWidth, &parentPxHeight);
-        multX = parentPxWidth - (parent->pxPadding * 2.0f);
-        multY = parentPxHeight - (parent->pxPadding * 2.0f);
+        float parentSizePxW, parentSizePxH;
+        parent->getReferencePxSize(&parentSizePxW, &parentSizePxH);
+        multX = parentSizePxW - (parent->pxPadding * 2.0f);
+        multY = parentSizePxH - (parent->pxPadding * 2.0f);
         
     } else {
-        multX = manager->getWindowPxWidth();
-        multY = manager->getWindowPxHeight();
+        multX = manager->getWindowSizePxW();
+        multY = manager->getWindowSizePxH();
         
     }
     
-    float finalPxWidth = rawRatioWidth * multX;
-    float finalPxHeight = rawRatioHeight * multY;
+    float finalSizePxW = rawSizeRatioW * multX;
+    float finalSizePxH = rawSizeRatioH * multY;
     
     if(forceSquare) {
-        finalPxWidth =
-            finalPxWidth < finalPxHeight ? finalPxWidth : finalPxHeight;
-        finalPxHeight = finalPxWidth;
+        finalSizePxW =
+            finalSizePxW < finalSizePxH ? finalSizePxW : finalSizePxH;
+        finalSizePxH = finalSizePxW;
     }
     
-    *outPxWidth = finalPxWidth;
-    *outPxHeight = finalPxHeight;
+    *outSizePxW = finalSizePxW;
+    *outSizePxH = finalSizePxH;
 }
 
 
@@ -203,15 +205,15 @@ bool DumbGui::Item::isMouseOn(float cursorPxX, float cursorPxY) const {
     }
     
     float refCenterPxX, refCenterPxY;
-    float refPxWidth, refPxHeight;
+    float refSizePxW, refSizePxH;
     getReferencePxCenter(&refCenterPxX, &refCenterPxY);
-    getReferencePxSize(&refPxWidth, &refPxHeight);
+    getReferencePxSize(&refSizePxW, &refSizePxH);
     return
         (
-            cursorPxX >= refCenterPxX - refPxWidth * 0.5f &&
-            cursorPxX <= refCenterPxX + refPxWidth * 0.5f &&
-            cursorPxY >= refCenterPxY - refPxHeight * 0.5f &&
-            cursorPxY <= refCenterPxY + refPxHeight * 0.5f
+            cursorPxX >= refCenterPxX - refSizePxW * 0.5f &&
+            cursorPxX <= refCenterPxX + refSizePxW * 0.5f &&
+            cursorPxY >= refCenterPxY - refSizePxH * 0.5f &&
+            cursorPxY <= refCenterPxY + refSizePxH * 0.5f
         );
 }
 
@@ -307,7 +309,7 @@ bool DumbGui::Manager::draw() {
         
         DrawInfo draw;
         iPtr->getReferencePxCenter(&draw.centerPxX, &draw.centerPxY);
-        iPtr->getReferencePxSize(&draw.pxWidth, &draw.pxHeight);
+        iPtr->getReferencePxSize(&draw.sizePxW, &draw.sizePxH);
         
         if(!getItemDrawInfo(iPtr, &draw)) continue;
         
@@ -319,10 +321,10 @@ bool DumbGui::Manager::draw() {
             if(iPtr->parent->clipChildren) {
                 getClippingRectangle(&ocrX, &ocrY, &ocrW, &ocrH);
                 setClippingRectangle(
-                    (parentDraw.centerPxX - parentDraw.pxWidth / 2.0f) + 1.0f,
-                    (parentDraw.centerPxY - parentDraw.pxHeight / 2.0f) + 1.0f,
-                    parentDraw.pxWidth - 2.0f,
-                    parentDraw.pxHeight - 2.0f
+                    (parentDraw.centerPxX - parentDraw.sizePxW / 2.0f) + 1.0f,
+                    (parentDraw.centerPxY - parentDraw.sizePxH / 2.0f) + 1.0f,
+                    parentDraw.sizePxW - 2.0f,
+                    parentDraw.sizePxH - 2.0f
                 );
             }
         }
@@ -346,16 +348,16 @@ bool DumbGui::Manager::draw() {
  *
  * @param outX1 The top-left corner's X coordinate is returned here.
  * @param outY1 The top-left corner's Y coordinate is returned here.
- * @param outWidth The width is returned here.
- * @param outHeight The height is returned here.
+ * @param outW The width is returned here.
+ * @param outH The height is returned here.
  */
 void DumbGui::Manager::getClippingRectangle(
-    int* outX1, int* outY1, int* outWidth, int* outHeight
+    int* outX1, int* outY1, int* outW, int* outH
 ) const {
     *outX1 = 0;
     *outY1 = 0;
-    *outWidth = 0;
-    *outHeight = 0;
+    *outW = 0;
+    *outH = 0;
 }
 
 
@@ -378,20 +380,20 @@ DumbGui::Item* DumbGui::Manager::getFocusedItem() const {
  */
 bool DumbGui::Manager::getItemDrawInfo(Item* item, DrawInfo* draw) const {
     if(!item->isVisible()) return false;
-    if(item->rawRatioWidth == 0.0f) return false;
+    if(item->rawSizeRatioW == 0.0f) return false;
     
     float finalCenterPxX, finalCenterPxY;
-    float finalPxWidth, finalPxHeight;
+    float finalSizePxW, finalSizePxH;
     float finalAngle = 0.0f;
     float finalAlpha = 1.0f;
     
     item->getReferencePxCenter(&finalCenterPxX, &finalCenterPxY);
-    item->getReferencePxSize(&finalPxWidth, &finalPxHeight);
+    item->getReferencePxSize(&finalSizePxW, &finalSizePxH);
     
     draw->centerPxX = finalCenterPxX;
     draw->centerPxY = finalCenterPxY;
-    draw->pxWidth = finalPxWidth;
-    draw->pxHeight = finalPxHeight;
+    draw->sizePxW = finalSizePxW;
+    draw->sizePxH = finalSizePxH;
     draw->angle = finalAngle;
     draw->tint[0] = 255;
     draw->tint[1] = 255;
@@ -408,7 +410,7 @@ bool DumbGui::Manager::getItemDrawInfo(Item* item, DrawInfo* draw) const {
  *
  * @return The height.
  */
-int DumbGui::Manager::getWindowPxHeight() const {
+int DumbGui::Manager::getWindowSizePxH() const {
     return 100;
 }
 
@@ -419,7 +421,7 @@ int DumbGui::Manager::getWindowPxHeight() const {
  *
  * @return The width.
  */
-int DumbGui::Manager::getWindowPxWidth() const {
+int DumbGui::Manager::getWindowSizePxW() const {
     return 100;
 }
 
@@ -469,7 +471,7 @@ bool DumbGui::Manager::removeItem(Item* item) {
  * @param height The height.
  */
 void DumbGui::Manager::setClippingRectangle(
-    int x1, int y1, int width, int height
+    int x1, int y1, int w, int h
 ) {
 }
 
