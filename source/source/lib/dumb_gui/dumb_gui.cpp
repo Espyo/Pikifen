@@ -27,6 +27,23 @@ DumbGui::Item::Item(bool focusable) :
 
 
 /**
+ * @brief Activates the item.
+ *
+ * @param cursorPxX Mouse cursor X coordinate, if applicable.
+ * @param cursorPxY Mouse cursor Y coordinate, if applicable.
+ * @return Whether it could activate it.
+ */
+bool DumbGui::Item::activate(float cursorPxX, float cursorPxY) {
+    if(!isResponsive()) return false;
+    if(!onActivate) return false;
+    
+    onActivate(cursorPxX, cursorPxY);
+    
+    return true;
+}
+
+
+/**
  * @brief Adds an existing item to the list of children items.
  *
  * @param item Item to add as a child item.
@@ -155,6 +172,56 @@ void DumbGui::Item::getReferencePxSize(
     
     *outPxWidth = finalPxWidth;
     *outPxHeight = finalPxHeight;
+}
+
+
+/**
+ * @brief Returns whether the mouse cursor is on top of it.
+ *
+ * @param cursorPxX Mouse cursor X coordinate.
+ * @param cursorPxY Mouse cursor Y coordinate.
+ * @return Whether the cursor is on top.
+ */
+bool DumbGui::Item::isMouseOn(float cursorPxX, float cursorPxY) const {
+    if(parent && !parent->isMouseOn(cursorPxX, cursorPxY)) {
+        return false;
+    }
+    
+    float refCenterPxX, refCenterPxY;
+    float refPxWidth, refPxHeight;
+    getReferencePxCenter(&refCenterPxX, &refCenterPxY);
+    getReferencePxSize(&refPxWidth, &refPxHeight);
+    return
+        (
+            cursorPxX >= refCenterPxX - refPxWidth * 0.5f &&
+            cursorPxX <= refCenterPxX + refPxWidth * 0.5f &&
+            cursorPxY >= refCenterPxY - refPxHeight * 0.5f &&
+            cursorPxY <= refCenterPxY + refPxHeight * 0.5f
+        );
+}
+
+
+/**
+ * @brief Returns whether or not it is responsive, and also checks the parents.
+ *
+ * @return Whether it is responsive.
+ */
+bool DumbGui::Item::isResponsive() const {
+    if(!responsive) return false;
+    if(parent) return parent->isResponsive();
+    return responsive;
+}
+
+
+/**
+ * @brief Returns whether or not it is visible, and also checks the parents.
+ *
+ * @return Whether it is visible.
+ */
+bool DumbGui::Item::isVisible() const {
+    if(!visible) return false;
+    if(parent) return parent->isVisible();
+    return true;
 }
 
 

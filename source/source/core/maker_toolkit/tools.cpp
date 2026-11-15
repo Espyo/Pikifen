@@ -131,7 +131,7 @@ bool MakerToolRunners::createReminder(
     ModalGuiManager::Button {
         .text = "Create",
         .tooltip = "Create the reminder.",
-        .onActivate = [mgr] (const Point&) {
+        .onActivate = [mgr] (float, float) {
             AreaMakerReminder newReminder;
             newReminder.center = mgr.toolStartCursor;
             newReminder.text = game.modal.textInput.getString();

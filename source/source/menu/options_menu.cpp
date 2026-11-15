@@ -177,7 +177,7 @@ void OptionsMenu::addNewBindEntryItems(
         ButtonGuiItem* moreButton =
             new ButtonGuiItem("...", game.sysContent.fntStandard);
         moreButton->onActivate =
-        [this, actionType] (const Point&) {
+        [this, actionType] (float, float) {
             if(showingBindsMore && actionType.id == curActionType) {
                 showingBindsMore = false;
             } else {
@@ -210,7 +210,7 @@ void OptionsMenu::addNewBindEntryItems(
             ButtonGuiItem* bindButton =
                 new ButtonGuiItem("", game.sysContent.fntStandard);
             bindButton->onActivate =
-            [this, actionType, b] (const Point&) {
+            [this, actionType, b] (float, float) {
                 chooseInput(actionType.id, b);
             };
             bindButton->onDraw =
@@ -247,7 +247,7 @@ void OptionsMenu::addNewBindEntryItems(
                 ButtonGuiItem* deleteBindButton =
                     new ButtonGuiItem("", game.sysContent.fntStandard);
                 deleteBindButton->onActivate =
-                [this, actionType, b] (const Point&) {
+                [this, actionType, b] (float, float) {
                     deleteBind(actionType.id, b);
                 };
                 deleteBindButton->onDraw =
@@ -292,7 +292,7 @@ void OptionsMenu::addNewBindEntryItems(
             ButtonGuiItem* bindButton =
                 new ButtonGuiItem("", game.sysContent.fntStandard);
             bindButton->onActivate =
-            [this, actionType] (const Point&) {
+            [this, actionType] (float, float) {
                 chooseInput(actionType.id, 0);
             };
             bindButton->onDraw =
@@ -334,7 +334,7 @@ void OptionsMenu::addNewBindEntryItems(
                 )
             );
             createButton->onActivate =
-            [this, actionType, aBinds] (const Point&) {
+            [this, actionType, aBinds] (float, float) {
                 chooseInput(actionType.id, aBinds.size());
             };
             createButton->onGetTooltip =
@@ -364,7 +364,7 @@ void OptionsMenu::addNewBindEntryItems(
                 )
             );
             restoreButton->onActivate =
-            [this, actionType] (const Point&) {
+            [this, actionType] (float, float) {
                 restoreDefaultBinds(actionType.id);
             };
             restoreButton->onGetTooltip =
@@ -494,7 +494,7 @@ void OptionsMenu::addNewShortcutItemItems(
         )
     );
     shortcutButton->onActivate =
-    [this, internalName] (const Point&) {
+    [this, internalName] (float, float) {
         if(curShortcutIdx == -1) return;
         game.options.controls.inventoryShortcuts[0][curShortcutIdx] =
             internalName;
@@ -543,7 +543,7 @@ void OptionsMenu::addNewShortcutItems(unsigned char index) {
     //Assignment button.
     ButtonGuiItem* button = new ButtonGuiItem("", game.sysContent.fntStandard);
     button->onActivate =
-    [this, index] (const Point&) {
+    [this, index] (float, float) {
         curShortcutIdx = index;
         updateShortcutsPage();
     };
@@ -745,7 +745,7 @@ void OptionsMenu::initGuiAudioPage() {
         "Back", game.sysContent.fntStandard, game.config.guiColors.back
     );
     audioGui.backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         transitionGuis(
             audioGui, topGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
             OPTIONS_MENU::HUD_MOVE_TIME
@@ -885,7 +885,7 @@ void OptionsMenu::initGuiControlBindsPage() {
         "Back", game.sysContent.fntStandard, game.config.guiColors.back
     );
     bindsGui.backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         saveOptions();
         saveMakerTools();
         transitionGuis(
@@ -921,7 +921,7 @@ void OptionsMenu::initGuiControlBindsPage() {
         );
     };
     bindsWarningButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         game.modal.reset();
         game.modal.title = "Unbound actions";
         game.modal.prompt =
@@ -986,7 +986,7 @@ void OptionsMenu::initGuiControlsPage() {
         "Back", game.sysContent.fntStandard, game.config.guiColors.back
     );
     controlsGui.backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         transitionGuis(
             controlsGui, topGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
             OPTIONS_MENU::HUD_MOVE_TIME
@@ -1005,7 +1005,7 @@ void OptionsMenu::initGuiControlsPage() {
         "Normal control binds...", game.sysContent.fntStandard
     );
     normalBindsButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         bindsMenuType = CONTROL_BINDS_MENU_NORMAL;
         mustPopulateBinds = true;
         transitionGuis(
@@ -1023,7 +1023,7 @@ void OptionsMenu::initGuiControlsPage() {
         "Special control binds...", game.sysContent.fntStandard
     );
     specialBindsButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         bindsMenuType = CONTROL_BINDS_MENU_SPECIAL;
         mustPopulateBinds = true;
         transitionGuis(
@@ -1041,7 +1041,7 @@ void OptionsMenu::initGuiControlsPage() {
         "Inventory shortcuts...", game.sysContent.fntStandard
     );
     inventoryShortcutsButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         transitionGuis(
             controlsGui, shortcutsGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
             OPTIONS_MENU::HUD_MOVE_TIME
@@ -1062,7 +1062,7 @@ void OptionsMenu::initGuiControlsPage() {
         "Leader cursor with mouse", game.sysContent.fntStandard
     );
     leaderCursorMouseCheck->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         leaderCursorMouseCheck->defActivateCode();
         updateControlsPage();
     };
@@ -1164,7 +1164,7 @@ void OptionsMenu::initGuiGraphicsPage() {
         "Back", game.sysContent.fntStandard, game.config.guiColors.back
     );
     graphicsGui.backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         transitionGuis(
             graphicsGui, topGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
             OPTIONS_MENU::HUD_MOVE_TIME
@@ -1184,7 +1184,7 @@ void OptionsMenu::initGuiGraphicsPage() {
         "Fullscreen", game.sysContent.fntStandard
     );
     fullscreenCheck->onActivate =
-    [this, fullscreenCheck] (const Point&) {
+    [this, fullscreenCheck] (float, float) {
         fullscreenCheck->defActivateCode();
         triggerRestartWarning();
     };
@@ -1233,7 +1233,7 @@ void OptionsMenu::initGuiGraphicsPage() {
         "VSync", game.sysContent.fntStandard
     );
     vsyncCheckbox->onActivate =
-    [this, vsyncCheckbox] (const Point&) {
+    [this, vsyncCheckbox] (float, float) {
         vsyncCheckbox->defActivateCode();
         triggerRestartWarning();
     };
@@ -1306,7 +1306,7 @@ void OptionsMenu::initGuiMiscPage() {
         "Back", game.sysContent.fntStandard, game.config.guiColors.back
     );
     miscGui.backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         transitionGuis(
             miscGui, topGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
             OPTIONS_MENU::HUD_MOVE_TIME
@@ -1490,7 +1490,7 @@ void OptionsMenu::initGuiShortcutsPage() {
         "Back", game.sysContent.fntStandard, game.config.guiColors.back
     );
     shortcutsGui.backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         saveOptions(true);
         transitionGuis(
             shortcutsGui, controlsGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
@@ -1575,7 +1575,7 @@ void OptionsMenu::initGuiTopPage() {
         "Back", game.sysContent.fntStandard, game.config.guiColors.back
     );
     topGui.backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         saveOptions(true);
         leave();
     };
@@ -1604,7 +1604,7 @@ void OptionsMenu::initGuiTopPage() {
         );
     };
     controlsButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         transitionGuis(
             topGui, controlsGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
             OPTIONS_MENU::HUD_MOVE_TIME
@@ -1632,7 +1632,7 @@ void OptionsMenu::initGuiTopPage() {
         );
     };
     graphicsButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         transitionGuis(
             topGui, graphicsGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
             OPTIONS_MENU::HUD_MOVE_TIME
@@ -1658,7 +1658,7 @@ void OptionsMenu::initGuiTopPage() {
         );
     };
     audioButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         transitionGuis(
             topGui, audioGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
             OPTIONS_MENU::HUD_MOVE_TIME
@@ -1684,7 +1684,7 @@ void OptionsMenu::initGuiTopPage() {
         );
     };
     packsButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         packsMenu = new PacksMenu();
         packsMenu->leaveCallback = [ this ] () {
             packsMenu->unloadTimer = OPTIONS_MENU::HUD_MOVE_TIME;
@@ -1721,7 +1721,7 @@ void OptionsMenu::initGuiTopPage() {
         );
     };
     miscButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         transitionGuis(
             topGui, miscGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
             OPTIONS_MENU::HUD_MOVE_TIME
@@ -1735,7 +1735,7 @@ void OptionsMenu::initGuiTopPage() {
     ButtonGuiItem* advancedButton =
         new ButtonGuiItem("Advanced...", game.sysContent.fntStandard);
     advancedButton->onActivate =
-    [] (const Point&) {
+    [] (float, float) {
         game.modal.reset();
         game.modal.title = "Advanced options";
         game.modal.prompt =
@@ -1748,7 +1748,7 @@ void OptionsMenu::initGuiTopPage() {
         ModalGuiManager::Button {
             .text = "Open manual",
             .tooltip = "Open the manual in the options page.",
-            .onActivate = [] (const Point&) {
+            .onActivate = [] (float, float) {
                 openManual("options.html");
             }
         }
@@ -1757,7 +1757,7 @@ void OptionsMenu::initGuiTopPage() {
         ModalGuiManager::Button {
             .text = "Open options file",
             .tooltip = "Open the file with all the options.",
-            .onActivate = [] (const Point&) {
+            .onActivate = [] (float, float) {
                 openFileExplorer(FILE_PATHS_FROM_ROOT::OPTIONS);
             }
         }

@@ -328,17 +328,8 @@ public:
     //What to do when it's time to draw it.
     std::function<void(const DrawInfo& draw)> onDraw = nullptr;
     
-    //What to do when it's time to tick one frame.
-    std::function<void(float time)> onTick = nullptr;
-    
     //What to do when it receives any Allegro event.
     std::function<void(const ALLEGRO_EVENT& ev)> onAllegroEvent = nullptr;
-    
-    //What to do when the item is activated.
-    std::function<void(const Point& cursorPos)> onActivate = nullptr;
-    
-    //What to do when the mouse cursor is on top of it this frame.
-    std::function<void(const Point& cursorPos)> onMouseOver = nullptr;
     
     //What to do when a spatial navigation action is performed
     //when the item is focused. The return value is whether the logic
@@ -346,9 +337,6 @@ public:
     std::function<bool(PLAYER_ACTION_TYPE playerActionId)> onMenuSNAction =
         nullptr;
         
-    //What to do when it gets focused.
-    std::function<void()> onFocused = nullptr;
-    
     //What to do when one of its children became the focused item via
     //spatial navigation.
     std::function<void(const GuiItem* child)> onChildFocusedViaSN = nullptr;
@@ -369,12 +357,11 @@ public:
     void setRawRatioRect(const Rect& rect);
     Rect getReferencePxRect() const;
     
-    bool activate(const Point& cursorPos = Point());
     float getJuiceValue() const;
-    bool isMouseOn(const Point& cursorPos) const;
-    bool isResponsive() const;
-    bool isVisible() const;
     bool startJuiceAnimation(JUICE_TYPE type);
+    
+    bool activate(const Point& cursorPos = Point());
+    bool isMouseOn(const Point& cursorPos) const;
     
 };
 

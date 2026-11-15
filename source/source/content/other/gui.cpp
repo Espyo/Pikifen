@@ -223,7 +223,7 @@ CheckGuiItem::CheckGuiItem(
     };
     
     onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         this->defActivateCode();
     };
 }
@@ -332,9 +332,7 @@ GuiItem::GuiItem(bool focusable) :
  * @return Whether it could activate it.
  */
 bool GuiItem::activate(const Point& cursorPos) {
-    if(!onActivate) return false;
-    if(!isResponsive()) return false;
-    onActivate(cursorPos);
+    if(!DumbGui::Item::activate(cursorPos.x, cursorPos.y)) return false;
     
     ALLEGRO_SAMPLE* sample =
         this == ((GuiManager*) manager)->backItem ?
@@ -448,42 +446,7 @@ Rect GuiItem::getReferencePxRect() const {
  * @return Whether the cursor is on top.
  */
 bool GuiItem::isMouseOn(const Point& cursorPos) const {
-    if(parent && !((GuiItem*) parent)->isMouseOn(cursorPos)) {
-        return false;
-    }
-    
-    Rect ref = getReferencePxRect();
-    return
-        (
-            cursorPos.x >= ref.center.x - ref.size.x * 0.5 &&
-            cursorPos.x <= ref.center.x + ref.size.x * 0.5 &&
-            cursorPos.y >= ref.center.y - ref.size.y * 0.5 &&
-            cursorPos.y <= ref.center.y + ref.size.y * 0.5
-        );
-}
-
-
-/**
- * @brief Returns whether or not it is responsive, and also checks the parents.
- *
- * @return Whether it is responsive.
- */
-bool GuiItem::isResponsive() const {
-    if(!responsive) return false;
-    if(parent) return ((GuiItem*) parent)->isResponsive();
-    return responsive;
-}
-
-
-/**
- * @brief Returns whether or not it is visible, and also checks the parents.
- *
- * @return Whether it is visible.
- */
-bool GuiItem::isVisible() const {
-    if(!visible) return false;
-    if(parent) return ((GuiItem*) parent)->isVisible();
-    return true;
+    return DumbGui::Item::isMouseOn(cursorPos.x, cursorPos.y);
 }
 
 
@@ -1199,7 +1162,7 @@ bool GuiManager::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
             ) {
                 focusResult = iPtr;
                 if(iPtr->onMouseOver) {
-                    iPtr->onMouseOver(Point(ev.mouse.x, ev.mouse.y));
+                    iPtr->onMouseOver(ev.mouse.x, ev.mouse.y);
                 }
                 break;
             }
@@ -1976,8 +1939,8 @@ PickerGuiItem::PickerGuiItem(
     };
     
     onActivate =
-    [this] (const Point & cursorPos) {
-        this->defActivateCode(cursorPos);
+    [this] (float cursorPxX, float cursorPxY) {
+        this->defActivateCode(Point(cursorPxX, cursorPxY));
     };
     
     onMenuSNAction =
@@ -1986,8 +1949,8 @@ PickerGuiItem::PickerGuiItem(
     };
     
     onMouseOver =
-    [this] (const Point & cursorPos) {
-        this->defMouseOverCode(cursorPos);
+    [this] (float cursorPxX, float cursorPxY) {
+        this->defMouseOverCode(Point(cursorPxX, cursorPxY));
     };
 }
 

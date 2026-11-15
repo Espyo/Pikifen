@@ -32,6 +32,10 @@ class Manager;
 
 
 #pragma endregion
+#pragma region Misc. structs
+
+
+#pragma endregion
 #pragma region GUI item
 
 
@@ -59,6 +63,19 @@ public:
     
     //Raw height, in parent ratio.
     float rawRatioHeight = 0.0f;
+    
+    
+    //What to do when it's time to tick one frame.
+    function<void(float time)> onTick = nullptr;
+    
+    //What to do when the item is activated.
+    std::function<void(float cursorPxX, float cursorPxY)> onActivate = nullptr;
+    
+    //What to do when it gets focused.
+    function<void()> onFocused = nullptr;
+    
+    //What to do when the mouse cursor is on top of it this frame.
+    function<void(float cursorPxX, float cursorPxY)> onMouseOver = nullptr;
     
     
     //Is it currently visible?
@@ -107,6 +124,13 @@ public:
     virtual void getReferencePxSize(
         float* outPxWidth, float* outPxHeight
     ) const;
+    
+    virtual bool activate(float cursorPxX = 0.0f, float cursorPxY = 0.0f);
+    virtual bool isMouseOn(
+        float cursorPxX = 0.0f, float cursorPxY = 0.0f
+    ) const;
+    virtual bool isResponsive() const;
+    virtual bool isVisible() const;
     
     virtual bool addChild(Item* item);
     virtual bool deleteAllChildren();

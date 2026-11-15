@@ -111,7 +111,7 @@ void MainMenu::initGuiMainPage() {
         );
     };
     playButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         if(game.statistics.areaEntries == 0) {
             game.modal.reset();
             game.modal.title = "Tutorial";
@@ -123,7 +123,7 @@ void MainMenu::initGuiMainPage() {
             ModalGuiManager::Button {
                 .text = "No",
                 .tooltip = "Go to the standard area selection menu.",
-                .onActivate = [this] (const Point&) {
+                .onActivate = [this] (float, float) {
                     transitionGuis(
                         mainGui, playGui,
                         GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
@@ -136,7 +136,7 @@ void MainMenu::initGuiMainPage() {
             ModalGuiManager::Button {
                 .text = "Yes",
                 .tooltip = "Play Tutorial Meadow now.",
-                .onActivate = [] (const Point&) {
+                .onActivate = [] (float, float) {
                     game.states.gameplay->pathOfAreaToLoad =
                     game.content.areas.manifestToPath(
                         ContentManifest(
@@ -183,7 +183,7 @@ void MainMenu::initGuiMainPage() {
         );
     };
     makeButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         transitionGuis(
             mainGui, makeGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
             MAIN_MENU::HUD_MOVE_TIME
@@ -209,7 +209,7 @@ void MainMenu::initGuiMainPage() {
         );
     };
     helpButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         game.fadeMgr.startFade(false, [] () {
             game.changeState(game.states.annexScreen);
         });
@@ -239,7 +239,7 @@ void MainMenu::initGuiMainPage() {
         );
     };
     optionsButton->onActivate =
-    [] (const Point&) {
+    [] (float, float) {
         game.fadeMgr.startFade(false, [] () {
             game.states.annexScreen->menuToLoad =
                 ANNEX_SCREEN_MENU_OPTIONS;
@@ -271,7 +271,7 @@ void MainMenu::initGuiMainPage() {
         );
     };
     statsButton->onActivate =
-    [] (const Point&) {
+    [] (float, float) {
         game.fadeMgr.startFade(false, [] () {
             game.states.annexScreen->menuToLoad =
                 ANNEX_SCREEN_MENU_STATS;
@@ -304,7 +304,7 @@ void MainMenu::initGuiMainPage() {
         );
     };
     discordButton->onActivate =
-    [] (const Point&) {
+    [] (float, float) {
         openWebBrowser(DISCORD_SERVER_URL);
     };
     discordButton->onGetTooltip =
@@ -333,7 +333,7 @@ void MainMenu::initGuiMainPage() {
         );
     };
     githubButton->onActivate =
-    [] (const Point&) {
+    [] (float, float) {
         openWebBrowser(GITHUB_PAGE_URL);
     };
     githubButton->onGetTooltip =
@@ -361,7 +361,7 @@ void MainMenu::initGuiMainPage() {
         );
     };
     mainGui.backItem->onActivate =
-    [] (const Point&) {
+    [] (float, float) {
         saveStatistics();
         game.isGameRunning = false;
     };
@@ -436,7 +436,7 @@ void MainMenu::initGuiMakePage() {
         );
     };
     animEdButton->onActivate =
-    [] (const Point&) {
+    [] (float, float) {
         game.fadeMgr.startFade(false, [] () {
             game.changeState(game.states.animationEd);
         });
@@ -462,7 +462,7 @@ void MainMenu::initGuiMakePage() {
         );
     };
     areaEdButton->onActivate =
-    [] (const Point&) {
+    [] (float, float) {
         game.fadeMgr.startFade(false, [] () {
             game.changeState(game.states.areaEd);
         });
@@ -488,7 +488,7 @@ void MainMenu::initGuiMakePage() {
         );
     };
     partEdButton->onActivate =
-    [](const Point&) {
+    [](float, float) {
         game.fadeMgr.startFade(false, []() {
             game.changeState(game.states.particleEd);
         });
@@ -514,7 +514,7 @@ void MainMenu::initGuiMakePage() {
         );
     };
     guiEdButton->onActivate =
-    [] (const Point&) {
+    [] (float, float) {
         game.fadeMgr.startFade(false, [] () {
             game.changeState(game.states.guiEd);
         });
@@ -529,7 +529,7 @@ void MainMenu::initGuiMakePage() {
         "Back", game.sysContent.fntAreaName, game.config.guiColors.back
     );
     makeGui.backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         transitionGuis(
             makeGui, mainGui, GUI_MANAGER_ANIM_CENTER_TO_RIGHT,
             MAIN_MENU::HUD_MOVE_TIME
@@ -548,7 +548,7 @@ void MainMenu::initGuiMakePage() {
     ButtonGuiItem* moreButton =
         new ButtonGuiItem("Other...", game.sysContent.fntStandard);
     moreButton->onActivate =
-    [] (const Point&) {
+    [] (float, float) {
         game.modal.reset();
         game.modal.title = "Content making";
         game.modal.prompt =
@@ -560,7 +560,7 @@ void MainMenu::initGuiMakePage() {
         ModalGuiManager::Button {
             .text = "Open manual",
             .tooltip = "Open the manual in the content making page.",
-            .onActivate = [] (const Point&) {
+            .onActivate = [] (float, float) {
                 openManual("making.html");
             }
         }
@@ -569,7 +569,7 @@ void MainMenu::initGuiMakePage() {
         ModalGuiManager::Button {
             .text = "Open game folder",
             .tooltip = "Open the folder with the game's content.",
-            .onActivate = [] (const Point&) {
+            .onActivate = [] (float, float) {
                 openFileExplorer(FOLDER_PATHS_FROM_ROOT::GAME_DATA);
             }
         }
@@ -638,7 +638,7 @@ void MainMenu::initGuiPlayPage() {
         );
     };
     simpleButton->onActivate =
-    [] (const Point&) {
+    [] (float, float) {
         game.fadeMgr.startFade(false, [] () {
             game.states.annexScreen->areaMenuAreaType =
                 AREA_TYPE_SIMPLE;
@@ -668,7 +668,7 @@ void MainMenu::initGuiPlayPage() {
         );
     };
     missionButton->onActivate =
-    [] (const Point&) {
+    [] (float, float) {
         game.fadeMgr.startFade(false, [] () {
             game.states.annexScreen->areaMenuAreaType =
                 AREA_TYPE_MISSION;
@@ -691,7 +691,7 @@ void MainMenu::initGuiPlayPage() {
         "Back", game.sysContent.fntAreaName, game.config.guiColors.back
     );
     playGui.backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         transitionGuis(
             playGui, mainGui, GUI_MANAGER_ANIM_CENTER_TO_LEFT,
             MAIN_MENU::HUD_MOVE_TIME

@@ -201,7 +201,7 @@ void Inventory::initGui() {
         "Close", game.sysContent.fntStandard, game.config.guiColors.back
     );
     gui.backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         requestClose();
     };
     gui.backItem->onGetTooltip =
@@ -301,7 +301,7 @@ void Inventory::populateInventoryListGui() {
             }
         };
         button->onActivate =
-        [this, i] (const Point&) {
+        [this, i] (float, float) {
             tryUseItem(i);
         };
         button->onGetTooltip = [iPtr] () { return iPtr->name; };

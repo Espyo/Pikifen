@@ -89,7 +89,7 @@ OnionMenu::OnionMenu(
         "Cancel", game.sysContent.fntStandard, game.config.guiColors.bad
     );
     gui.backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         startClosing();
     };
     gui.backItem->onGetTooltip =
@@ -105,7 +105,7 @@ OnionMenu::OnionMenu(
         "Ok", game.sysContent.fntStandard, game.config.guiColors.good
     );
     okButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         confirm();
     };
     okButton->onGetTooltip =
@@ -164,7 +164,7 @@ OnionMenu::OnionMenu(
     changeTenButton = new ButtonGuiItem("", game.sysContent.fntStandard);
     changeTenButton->forceSquare = true;
     changeTenButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         toggleChangeTen();
     };
     changeTenButton->onDraw =
@@ -209,7 +209,7 @@ OnionMenu::OnionMenu(
     selectAllButton = new ButtonGuiItem("", game.sysContent.fntStandard);
     selectAllButton->forceSquare = true;
     selectAllButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         toggleSelectAll();
     };
     selectAllButton->onDraw =
@@ -299,7 +299,7 @@ OnionMenu::OnionMenu(
             );
         };
         onionButton->onActivate =
-        [this, t, onionButton] (const Point&) {
+        [this, t, onionButton] (float, float) {
             doButtonLogic(false, t, false);
         };
         onionButton->onMenuSNAction =
@@ -396,7 +396,7 @@ OnionMenu::OnionMenu(
             );
         };
         groupButton->onActivate =
-        [this, t, groupButton] (const Point&) {
+        [this, t, groupButton] (float, float) {
             doButtonLogic(true, t, false);
         };
         groupButton->onMenuSNAction =
@@ -492,7 +492,7 @@ OnionMenu::OnionMenu(
         );
     };
     onionAllButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         doButtonLogic(false, 0, false);
     };
     onionAllButton->onMenuSNAction =
@@ -524,7 +524,7 @@ OnionMenu::OnionMenu(
         );
     };
     groupAllButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         doButtonLogic(true, 0, false);
     };
     groupAllButton->onMenuSNAction =

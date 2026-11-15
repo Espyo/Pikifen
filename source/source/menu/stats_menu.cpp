@@ -118,7 +118,7 @@ void StatsMenu::initGuiMain() {
         "Back", game.sysContent.fntStandard, game.config.guiColors.back
     );
     gui.backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         saveStatistics();
         leave();
     };

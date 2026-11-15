@@ -263,7 +263,7 @@ void ModalGuiManager::updateItems() {
         return backTooltip;
     };
     backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         if(onBack) onBack();
         close();
     };
@@ -280,10 +280,10 @@ void ModalGuiManager::updateItems() {
             extraButtons[b].text, game.sysContent.fntStandard,
             extraButtons[b].color
         );
-        button->onActivate = [this, b] (const Point & cursorPos) {
+        button->onActivate = [this, b] (float cursorPxX, float cursorPxY) {
             close();
             if(extraButtons[b].onActivate) {
-                extraButtons[b].onActivate(cursorPos);
+                extraButtons[b].onActivate(cursorPxX, cursorPxY);
             }
         };
         button->onGetTooltip =

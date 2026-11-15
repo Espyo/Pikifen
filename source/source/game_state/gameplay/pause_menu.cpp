@@ -267,7 +267,7 @@ ButtonGuiItem* PauseMenu::addNewPageItem(
         game.config.guiColors.pageChange
     );
     newButton->onActivate =
-    [this, curGui, targetPage, left] (const Point&) {
+    [this, curGui, targetPage, left] (float, float) {
         switchPage(curGui, targetPage, left);
     };
     newButton->onGetTooltip =
@@ -756,7 +756,7 @@ void PauseMenu::confirmOrLeave() {
             .text = "Confirm",
             .tooltip = "Yes, I'm sure.",
             .color = game.config.guiColors.bad,
-            .onActivate = [this] (const Point&) {
+            .onActivate = [this] (float, float) {
                 startLeavingGameplay();
             }
         }
@@ -1757,7 +1757,7 @@ void PauseMenu::initMainPauseMenu() {
         "Continue", game.sysContent.fntStandard, game.config.guiColors.back
     );
     gui.backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         startClosing(&gui);
     };
     gui.backItem->onGetTooltip =
@@ -1776,7 +1776,7 @@ void PauseMenu::initMainPauseMenu() {
         game.sysContent.fntStandard
     );
     retryButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         leaveTarget = GAMEPLAY_LEAVE_TARGET_RETRY;
         confirmOrLeave();
     };
@@ -1798,7 +1798,7 @@ void PauseMenu::initMainPauseMenu() {
         game.sysContent.fntStandard
     );
     endButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         leaveTarget = GAMEPLAY_LEAVE_TARGET_END_EARLY;
         confirmOrLeave();
     };
@@ -1819,7 +1819,7 @@ void PauseMenu::initMainPauseMenu() {
     ButtonGuiItem* helpButton =
         new ButtonGuiItem("Help", game.sysContent.fntStandard);
     helpButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         HelpMenu* helpMenu = new HelpMenu();
         helpMenu->leaveCallback = [this, helpMenu] () {
             helpMenu->unloadTimer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
@@ -1848,7 +1848,7 @@ void PauseMenu::initMainPauseMenu() {
     ButtonGuiItem* optionsButton =
         new ButtonGuiItem("Options", game.sysContent.fntStandard);
     optionsButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         OptionsMenu* optionsMenu = new OptionsMenu();
         optionsMenu->leaveCallback = [this, optionsMenu] () {
             optionsMenu->unloadTimer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
@@ -1877,7 +1877,7 @@ void PauseMenu::initMainPauseMenu() {
     ButtonGuiItem* statsButton =
         new ButtonGuiItem("Statistics", game.sysContent.fntStandard);
     statsButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         StatsMenu* statsMenu = new StatsMenu();
         statsMenu->leaveCallback = [this, statsMenu] () {
             statsMenu->unloadTimer = GAMEPLAY::MENU_EXIT_HUD_MOVE_TIME;
@@ -1911,7 +1911,7 @@ void PauseMenu::initMainPauseMenu() {
         game.sysContent.fntStandard, game.config.guiColors.bad
     );
     quitButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         leaveTarget = GAMEPLAY_LEAVE_TARGET_AREA_SELECT;
         confirmOrLeave();
     };
@@ -1975,7 +1975,7 @@ void PauseMenu::initMissionPage() {
         "Continue", game.sysContent.fntStandard, game.config.guiColors.back
     );
     missionGui.backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         startClosing(&missionGui);
     };
     missionGui.backItem->onGetTooltip =
@@ -2110,7 +2110,7 @@ void PauseMenu::initRadarPage() {
         "Continue", game.sysContent.fntStandard, game.config.guiColors.back
     );
     radarGui.backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         startClosing(&radarGui);
     };
     radarGui.backItem->onGetTooltip =
@@ -2350,7 +2350,7 @@ void PauseMenu::initStatusPage() {
         "Continue", game.sysContent.fntStandard, game.config.guiColors.back
     );
     statusGui.backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         startClosing(&statusGui);
     };
     statusGui.backItem->onGetTooltip =

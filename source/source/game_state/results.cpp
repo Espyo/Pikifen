@@ -149,7 +149,7 @@ ButtonGuiItem* Results::addNewPageItem(
         game.config.guiColors.pageChange
     );
     newButton->onActivate =
-    [this, targetPage] (const Point&) {
+    [this, targetPage] (float, float) {
         switchPage(targetPage);
     };
     newButton->onGetTooltip =
@@ -802,7 +802,7 @@ void Results::initGuiMain() {
     ButtonGuiItem* retryButton =
         new ButtonGuiItem("Retry", game.sysContent.fntStandard);
     retryButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         retryArea();
     };
     retryButton->onGetTooltip =
@@ -826,7 +826,7 @@ void Results::initGuiMain() {
         ButtonGuiItem* continueButton =
             new ButtonGuiItem("Keep playing", game.sysContent.fntStandard);
         continueButton->onActivate =
-        [this] (const Point&) {
+        [this] (float, float) {
             continuePlaying();
         };
         continueButton->onGetTooltip =
@@ -847,7 +847,7 @@ void Results::initGuiMain() {
         game.sysContent.fntStandard
     );
     gui.backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         leave();
     };
     gui.backItem->onGetTooltip =

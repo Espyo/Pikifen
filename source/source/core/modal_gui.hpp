@@ -62,7 +62,7 @@ public:
         ALLEGRO_COLOR color = COLOR_WHITE;
         
         //Code to run on activation.
-        function<void(const Point&)> onActivate = nullptr;
+        function<void(float, float)> onActivate = nullptr;
         
     };
     

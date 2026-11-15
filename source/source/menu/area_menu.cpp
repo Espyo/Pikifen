@@ -510,7 +510,7 @@ void AreaMenu::initGuiMain() {
         "Back", game.sysContent.fntStandard, game.config.guiColors.back
     );
     gui.backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         leave();
     };
     gui.backItem->onGetTooltip =
@@ -552,7 +552,7 @@ void AreaMenu::initGuiMain() {
                 )
             );
             areaButton->onActivate =
-            [this, areaPtr] (const Point&) {
+            [this, areaPtr] (float, float) {
                 game.states.gameplay->pathOfAreaToLoad =
                     areaPtr->manifest->path;
                 game.fadeMgr.startFade(false, [] () {
@@ -655,9 +655,9 @@ void AreaMenu::initGuiMain() {
             );
         };
         randomButton->onActivate =
-        [this] (const Point&) {
+        [this] (float, float) {
             size_t areaIdx = game.rng.i(0, (int) (areaButtons.size() - 1));
-            areaButtons[areaIdx]->onActivate(Point());
+            areaButtons[areaIdx]->onActivate(0.0f, 0.0f);
         };
         randomButton->onGetTooltip =
         [] () { return "Pick a random area."; };
@@ -671,7 +671,7 @@ void AreaMenu::initGuiMain() {
                 game.sysContent.fntStandard
             );
             viewToggleButton->onActivate =
-            [this, viewToggleButton] (const Point&) {
+            [this, viewToggleButton] (float, float) {
                 GuiItem* boxToShow = nullptr;
                 GuiItem* boxToHide = nullptr;
                 if(showMissionBriefing) {

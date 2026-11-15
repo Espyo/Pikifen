@@ -113,7 +113,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
         "Back", game.sysContent.fntStandard, game.config.guiColors.back
     );
     gui.backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         leave();
     };
     gui.backItem->onGetTooltip =
@@ -130,7 +130,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
         game.config.guiColors.smallHeader
     );
     gameplay1Button->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         populateTidbits(HELP_CATEGORY_GAMEPLAY1);
     };
     gameplay1Button->onGetTooltip =
@@ -146,7 +146,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
         game.config.guiColors.smallHeader
     );
     gameplay2Button->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         populateTidbits(HELP_CATEGORY_GAMEPLAY2);
     };
     gameplay2Button->onGetTooltip =
@@ -162,7 +162,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
         game.config.guiColors.smallHeader
     );
     controlsButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         populateTidbits(HELP_CATEGORY_CONTROLS);
     };
     controlsButton->onGetTooltip =
@@ -178,7 +178,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
         game.config.guiColors.smallHeader
     );
     pikminButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         populateTidbits(HELP_CATEGORY_PIKMIN);
     };
     pikminButton->onGetTooltip =
@@ -194,7 +194,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
         game.config.guiColors.smallHeader
     );
     objectsButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         populateTidbits(HELP_CATEGORY_OBJECTS);
     };
     objectsButton->onGetTooltip =
@@ -207,7 +207,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
     ButtonGuiItem* manualButton =
         new ButtonGuiItem("More help...", game.sysContent.fntStandard);
     manualButton->onActivate =
-    [] (const Point&) {
+    [] (float, float) {
         game.modal.reset();
         game.modal.title = "More help";
         game.modal.prompt =
@@ -218,7 +218,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
         ModalGuiManager::Button {
             .text = "Open manual",
             .tooltip = "Open the manual in the home page.",
-            .onActivate = [] (const Point&) {
+            .onActivate = [] (float, float) {
                 openManual("home.html");
             }
         }

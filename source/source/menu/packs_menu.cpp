@@ -122,7 +122,7 @@ void PacksMenu::initGuiMain() {
         "Back", game.sysContent.fntStandard, game.config.guiColors.back
     );
     gui.backItem->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         game.options.packs.order = packOrder;
         game.options.packs.disabled = packsDisabled;
         saveOptions();
@@ -191,7 +191,7 @@ void PacksMenu::initGuiMain() {
             )
         );
         check->onActivate =
-        [p, check, this] (const Point & pos) {
+        [p, check, this] (float, float) {
             check->defActivateCode();
             if(check->value) {
                 packsDisabled.erase(
@@ -233,7 +233,7 @@ void PacksMenu::initGuiMain() {
                 );
             };
             upButton->onActivate =
-            [p, this] (const Point&) {
+            [p, this] (float, float) {
                 std::iter_swap(
                     packOrder.begin() + p, packOrder.begin() + (p - 1)
                 );
@@ -274,7 +274,7 @@ void PacksMenu::initGuiMain() {
                 );
             };
             downButton->onActivate =
-            [p, this] (const Point&) {
+            [p, this] (float, float) {
                 std::iter_swap(
                     packOrder.begin() + p, packOrder.begin() + (p + 1)
                 );
@@ -387,7 +387,7 @@ void PacksMenu::initGuiMain() {
     ButtonGuiItem* openFolderButton =
         new ButtonGuiItem("Open folder", game.sysContent.fntStandard);
     openFolderButton->onActivate =
-    [this] (const Point&) {
+    [this] (float, float) {
         openFileExplorer(FOLDER_PATHS_FROM_ROOT::GAME_DATA);
     };
     openFolderButton->onGetTooltip =
