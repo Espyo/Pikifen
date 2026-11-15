@@ -455,6 +455,58 @@ int DumbGui::Manager::getWindowSizePxW() const {
 
 
 /**
+ * @brief Handles a left mouse button click.
+ *
+ * @param mousePxX Mouse cursor X coordinate when the click happened.
+ * @param mousePxY Mouse cursor Y coordinate when the click happened.
+ * @return Whether the event got handled.
+ */
+bool DumbGui::Manager::handleMouseClick(int mousePxX, int mousePxY) {
+    if(!shouldHandleEvents()) return false;
+    
+    handleMouseMovement(mousePxX, mousePxY);
+    
+    if(focusedItem) {
+        focusedItem->activate(mousePxX, mousePxY);
+    }
+    
+    return true;
+}
+
+
+/**
+ * @brief Handles the mouse cursor having been moved.
+ *
+ * @param mousePxX The mouse cursor's new X coordinate.
+ * @param mousePxY The mouse cursor's new Y coordinate.
+ * @return Whether the event got handled.
+ */
+bool DumbGui::Manager::handleMouseMovement(int mousePxX, int mousePxY) {
+    if(!shouldHandleEvents()) return false;
+    
+    Item* focusResult = nullptr;
+    for(size_t i = 0; i < items.size(); i++ ) {
+        Item* iPtr = items[i];
+        if(
+            iPtr->focusable && iPtr->focusableFromMouse &&
+            iPtr->isMouseOn(mousePxX, mousePxY) &&
+            iPtr->isResponsive()
+        ) {
+            focusResult = iPtr;
+            if(iPtr->onMouseOver) {
+                iPtr->onMouseOver(mousePxX, mousePxY);
+            }
+            break;
+        }
+    }
+    
+    setFocusedItem(focusResult);
+    
+    return true;
+}
+
+
+/**
  * @brief Hides all items until an animation shows them again.
  *
  * @return Whether it succeeded.
@@ -508,12 +560,9 @@ void DumbGui::Manager::setClippingRectangle(
  * @brief Sets the given item as the one that is focused, or none.
  *
  * @param item Item to focus, or nullptr for none.
- * @param silent If true, no sound effect will play.
- * Useful if you want the item to be focused not because of user input,
- * but because it's the default focused item when the GUI loads.
  * @return Whether it succeeded.
  */
-bool DumbGui::Manager::setFocusedItem(Item* item, bool silent) {
+bool DumbGui::Manager::setFocusedItem(Item* item) {
     if(focusedItem == item) return false;
     
     if(focusedItem) {
@@ -531,6 +580,17 @@ bool DumbGui::Manager::setFocusedItem(Item* item, bool silent) {
         }
     }
     
+    return true;
+}
+
+
+/**
+ * @brief Whether it should be handling events right now.
+ *
+ * @return Whether it should.
+ */
+bool DumbGui::Manager::shouldHandleEvents() const {
+    if(!responsive) return false;
     return true;
 }
 

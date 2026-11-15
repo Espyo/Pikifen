@@ -310,9 +310,6 @@ public:
     //Can this item's activation be auto-repeated by holding the button down?
     bool canAutoRepeat = false;
     
-    //Is this item focusable from the mouse?
-    bool focusableFromMouse = true;
-    
     //Is this item focusable from spatial navigation?
     bool focusableFromSN = true;
     
@@ -355,9 +352,7 @@ public:
     float getJuiceValue() const;
     bool startJuiceAnimation(JUICE_TYPE type);
     
-    bool activate(const Point& cursorPos = Point());
-    bool isMouseOn(const Point& cursorPos) const;
-    
+    bool activate(float cursorPxX = 0.0f, float cursorPxY = 0.0f) override;
     bool draw(const DumbGui::DrawInfo& draw) override;
     
     static DrawInfo fromDumbDrawInfo(const DumbGui::DrawInfo& dumbDraw);
@@ -718,18 +713,19 @@ public:
     
     bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
     bool handlePlayerAction(const Inpution::Action& action);
-    bool shouldHandleEvents();
     bool wasLastInputMouse() const;
     
     bool addItem(GuiItem* item, const string& id = "");
     bool removeItem(GuiItem* item);
-    bool setFocusedItem(GuiItem* item, bool silent = false);
+    bool setFocusedItem(GuiItem* item, bool silent);
     
     bool draw() override;
     bool tick(float deltaT) override;
     bool getItemDrawInfo(
         DumbGui::Item* item, DumbGui::DrawInfo* draw
     ) const override;
+    bool setFocusedItem(DumbGui::Item* item) override;
+    bool shouldHandleEvents() const override;
     bool destroy() override;
     
     void getClippingRectangle(

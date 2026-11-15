@@ -328,11 +328,12 @@ GuiItem::GuiItem(bool focusable) :
 /**
  * @brief Activates the item.
  *
- * @param cursorPos Mouse cursor coordinates, if applicable.
+ * @param cursorPxX Mouse cursor X coordinate, if applicable.
+ * @param cursorPxY Mouse cursor Y coordinate, if applicable.
  * @return Whether it could activate it.
  */
-bool GuiItem::activate(const Point& cursorPos) {
-    if(!DumbGui::Item::activate(cursorPos.x, cursorPos.y)) return false;
+bool GuiItem::activate(float cursorPxX, float cursorPxY) {
+    if(!DumbGui::Item::activate(cursorPxX, cursorPxY)) return false;
     
     ALLEGRO_SAMPLE* sample =
         this == ((GuiManager*) manager)->backItem ?
@@ -473,17 +474,6 @@ Rect GuiItem::getReferencePxRect() const {
     getReferencePxCenter(&result.center.x, &result.center.y);
     getReferencePxSize(&result.size.x, &result.size.y);
     return result;
-}
-
-
-/**
- * @brief Returns whether the mouse cursor is on top of it.
- *
- * @param cursorPos Position of the mouse cursor, in window coordinates.
- * @return Whether the cursor is on top.
- */
-bool GuiItem::isMouseOn(const Point& cursorPos) const {
-    return DumbGui::Item::isMouseOn(cursorPos.x, cursorPos.y);
 }
 
 
@@ -1140,46 +1130,37 @@ bool GuiManager::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
     bool handled = false;
     bool mouseMoved = false;
     
-    //Mousing over an item and clicking.
+    //Mousing over an item.
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_AXES ||
-        ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN
+        ev.type == ALLEGRO_EVENT_MOUSE_WARPED
     ) {
-        GuiItem* focusResult = nullptr;
-        forIdx(i, items) {
-            GuiItem* iPtr = (GuiItem*) items[i];
-            if(
-                iPtr->isMouseOn(Point(ev.mouse.x, ev.mouse.y)) &&
-                iPtr->isResponsive() &&
-                iPtr->focusable && iPtr->focusableFromMouse
-            ) {
-                focusResult = iPtr;
-                if(iPtr->onMouseOver) {
-                    iPtr->onMouseOver(ev.mouse.x, ev.mouse.y);
-                }
-                break;
+        handled = handleMouseMovement(ev.mouse.x, ev.mouse.y);
+        if(handled) mouseMoved = true;
+    }
+    
+    //Pressing down the left mouse button.
+    if(
+        ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
+        ev.mouse.button == 1
+    ) {
+        handled = handleMouseClick(ev.mouse.x, ev.mouse.y);
+        if(handled) {
+            mouseMoved = true;
+            if(focusedItem) {
+                autoRepeater.start();
             }
         }
-        setFocusedItem(focusResult);
-        mouseMoved = true;
-        handled = true;
     }
     
-    if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && ev.mouse.button == 1) {
-        if(focusedItem) {
-            ((GuiItem*) focusedItem)->activate(Point(ev.mouse.x, ev.mouse.y));
-            autoRepeater.start();
-        }
-        mouseMoved = true;
-        handled = true;
-    }
-    
+    //Releasing the left mouse button.
     if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP && ev.mouse.button == 1) {
         autoRepeater.stop();
         mouseMoved = true;
         handled = true;
     }
     
+    //Feed the event to the items.
     forIdx(i, items) {
         GuiItem* iPtr = (GuiItem*) items[i];
         if(iPtr->isResponsive() && iPtr->onAllegroEvent) {
@@ -1421,13 +1402,24 @@ bool GuiManager::removeItem(GuiItem* item) {
  * @brief Sets the given item as the one that is focused, or none.
  *
  * @param item Item to focus, or nullptr for none.
+ * @return Whether it succeeded.
+ */
+bool GuiManager::setFocusedItem(DumbGui::Item* item) {
+    return setFocusedItem((GuiItem*) item, false);
+}
+
+
+/**
+ * @brief Sets the given item as the one that is focused, or none.
+ *
+ * @param item Item to focus, or nullptr for none.
  * @param silent If true, no sound effect will play.
  * Useful if you want the item to be focused not because of user input,
  * but because it's the default focused item when the GUI loads.
  * @return Whether it succeeded.
  */
 bool GuiManager::setFocusedItem(GuiItem* item, bool silent) {
-    if(!DumbGui::Manager::setFocusedItem(((DumbGui::Item*) item), silent)) {
+    if(!DumbGui::Manager::setFocusedItem((DumbGui::Item*) item)) {
         return false;
     }
     
@@ -1449,8 +1441,8 @@ bool GuiManager::setFocusedItem(GuiItem* item, bool silent) {
  *
  * @return Whether it should.
  */
-bool GuiManager::shouldHandleEvents() {
-    if(!responsive) return false;
+bool GuiManager::shouldHandleEvents() const {
+    if(!DumbGui::Manager::shouldHandleEvents()) return false;
     if(animTimer.getRatioLeft() > 0.0f && ignoreInputOnAnimation) return false;
     if(game.fadeMgr.isFading()) return false;
     return true;
@@ -1871,7 +1863,7 @@ void ListGuiItem::defDrawCode(const DrawInfo& draw) {
 void ListGuiItem::defEventCode(const ALLEGRO_EVENT& ev) {
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_AXES &&
-        isMouseOn(Point(ev.mouse.x, ev.mouse.y)) &&
+        isMouseOn(ev.mouse.x, ev.mouse.y) &&
         ev.mouse.dz != 0.0f
     ) {
         float childrenSpan = getChildrenRatioSpan(horizontal);
@@ -2196,7 +2188,7 @@ void ScrollGuiItem::defEventCode(const ALLEGRO_EVENT& ev) {
     if(
         ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN &&
         ev.mouse.button == 1 &&
-        isMouseOn(Point(ev.mouse.x, ev.mouse.y))
+        isMouseOn(ev.mouse.x, ev.mouse.y)
     ) {
         isMouseDragging = true;
         setOffsetFromMouse(ev.mouse.x, ev.mouse.y);

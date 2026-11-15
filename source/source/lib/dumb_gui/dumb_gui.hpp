@@ -9,13 +9,11 @@
 #pragma once
 
 #include <functional>
-#include <map>
 #include <string>
 #include <vector>
 
 
 using std::function;
-using std::map;
 using std::string;
 using std::vector;
 
@@ -26,16 +24,10 @@ namespace DumbGui {
 class Manager;
 
 
-#pragma region Constants
-
-
-
-
-#pragma endregion
 #pragma region Misc. structs
 
 
-//Information about how the item should be drawn.
+//Information about how an item should be drawn.
 struct DrawInfo {
 
     //Center X coordinate, in window pixels.
@@ -140,6 +132,9 @@ public:
     bool clipChildren = true;
     
     
+    //Is this item focusable from the mouse?
+    bool focusableFromMouse = true;
+    
     //Drawing layer. The lower the number, the sooner it'll be drawn.
     unsigned char drawingLayer = 127;
     
@@ -218,8 +213,12 @@ public:
     virtual bool draw();
     virtual bool tick(float deltaT);
     
+    virtual bool handleMouseMovement(int mousePxX, int mousePxY);
+    virtual bool handleMouseClick(int mousePxX, int mousePxY);
+    virtual bool shouldHandleEvents() const;
+    
     virtual Item* getFocusedItem() const;
-    virtual bool setFocusedItem(Item* item, bool silent = false);
+    virtual bool setFocusedItem(Item* item);
     virtual string getCurrentTooltip() const;
     
     virtual bool hideItems();
