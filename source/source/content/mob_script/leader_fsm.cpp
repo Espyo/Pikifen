@@ -1047,7 +1047,6 @@ void LeaderFsm::createFsm(MobType* typ) {
     efc.newState("sleeping", LEADER_STATE_SLEEPING); {
         efc.newEvent(LEADER_EV_CANCEL); {
             efc.run(LeaderFsm::startWakingUp);
-            efc.changeState("waking_up");
         }
         efc.newEvent(LEADER_EV_INACTIVATED); {
             efc.run(LeaderFsm::becomeInactive);
@@ -1068,7 +1067,6 @@ void LeaderFsm::createFsm(MobType* typ) {
         }
         efc.newEvent(FSM_EV_ZERO_HEALTH); {
             efc.run(LeaderFsm::startWakingUp);
-            efc.changeState("ko");
         }
     }
     
@@ -1077,7 +1075,6 @@ void LeaderFsm::createFsm(MobType* typ) {
     ); {
         efc.newEvent(LEADER_EV_CANCEL); {
             efc.run(LeaderFsm::startWakingUp);
-            efc.changeState("inactive_waking_up");
         }
         efc.newEvent(LEADER_EV_ACTIVATED); {
             efc.run(LeaderFsm::becomeActive);
@@ -1098,7 +1095,6 @@ void LeaderFsm::createFsm(MobType* typ) {
         }
         efc.newEvent(FSM_EV_ZERO_HEALTH); {
             efc.run(LeaderFsm::startWakingUp);
-            efc.changeState("ko");
         }
     }
     
@@ -1106,11 +1102,17 @@ void LeaderFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_ANIMATION_END); {
             efc.changeState("active");
         }
+        efc.newEvent(FSM_EV_ZERO_HEALTH); {
+            efc.changeState("ko");
+        }
     }
     
     efc.newState("inactive_waking_up", LEADER_STATE_INACTIVE_WAKING_UP); {
         efc.newEvent(FSM_EV_ANIMATION_END); {
             efc.changeState("idling");
+        }
+        efc.newEvent(FSM_EV_ZERO_HEALTH); {
+            efc.changeState("ko");
         }
     }
     
@@ -2830,6 +2832,11 @@ void LeaderFsm::startWakingUp(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->setAnimation(LEADER_ANIM_GETTING_UP);
+    if(leaPtr->isActive) {
+        scriptVM->fsm.setState(LEADER_STATE_WAKING_UP);
+    } else {
+        scriptVM->fsm.setState(LEADER_STATE_INACTIVE_WAKING_UP);
+    }
     
     leaPtr->statuses.handleWakingUp();
 }
