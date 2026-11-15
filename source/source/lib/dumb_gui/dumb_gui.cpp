@@ -75,6 +75,21 @@ bool DumbGui::Item::deleteAllChildren() {
 
 
 /**
+ * @brief Draws the item, by calling its onDraw function.
+ *
+ * @param draw Data to draw with.
+ * @return Whether it succeeded.
+ */
+bool DumbGui::Item::draw(const DrawInfo& draw) {
+    if(!onDraw) return false;
+    
+    onDraw(draw);
+    
+    return true;
+}
+
+
+/**
  * @brief Returns the bottommost Y coordinate (in height ratio),
  * or the rightmost X coordinate (in width ratio),
  * of the item's children items.
@@ -265,12 +280,125 @@ bool DumbGui::Manager::addItem(Item* item) {
 
 
 /**
+ * @brief Draws all items.
+ *
+ * @return Whether it succeeded.
+ */
+bool DumbGui::Manager::draw() {
+    if(!visible) return false;
+    
+    int ocrX = 0;
+    int ocrY = 0;
+    int ocrW = 0;
+    int ocrH = 0;
+    
+    //Sort them by layer.
+    vector<DumbGui::Item*> drawingSortedItems = items;
+    std::stable_sort(
+        drawingSortedItems.begin(), drawingSortedItems.end(),
+    [] (DumbGui::Item * i1, DumbGui::Item * i2) {
+        return i1->drawingLayer < i2->drawingLayer;
+    }
+    );
+    
+    //Draw them.
+    for(size_t i = 0; i < drawingSortedItems.size(); i++) {
+        Item* iPtr = drawingSortedItems[i];
+        
+        DrawInfo draw;
+        iPtr->getReferencePxCenter(&draw.centerPxX, &draw.centerPxY);
+        iPtr->getReferencePxSize(&draw.pxWidth, &draw.pxHeight);
+        
+        if(!getItemDrawInfo(iPtr, &draw)) continue;
+        
+        if(iPtr->parent) {
+            DrawInfo parentDraw;
+            if(!getItemDrawInfo(iPtr->parent, &parentDraw)) {
+                continue;
+            }
+            if(iPtr->parent->clipChildren) {
+                getClippingRectangle(&ocrX, &ocrY, &ocrW, &ocrH);
+                setClippingRectangle(
+                    (parentDraw.centerPxX - parentDraw.pxWidth / 2.0f) + 1.0f,
+                    (parentDraw.centerPxY - parentDraw.pxHeight / 2.0f) + 1.0f,
+                    parentDraw.pxWidth - 2.0f,
+                    parentDraw.pxHeight - 2.0f
+                );
+            }
+        }
+        
+        iPtr->draw(draw);
+        
+        if(iPtr->parent) {
+            if(iPtr->parent->clipChildren) {
+                setClippingRectangle(ocrX, ocrY, ocrW, ocrH);
+            }
+        }
+    }
+    
+    return true;
+}
+
+
+/**
+ * @brief Returns the current clipping rectangle.
+ * This should be overridden by a derived class since it does not do anything.
+ *
+ * @param outX1 The top-left corner's X coordinate is returned here.
+ * @param outY1 The top-left corner's Y coordinate is returned here.
+ * @param outWidth The width is returned here.
+ * @param outHeight The height is returned here.
+ */
+void DumbGui::Manager::getClippingRectangle(
+    int* outX1, int* outY1, int* outWidth, int* outHeight
+) const {
+    *outX1 = 0;
+    *outY1 = 0;
+    *outWidth = 0;
+    *outHeight = 0;
+}
+
+
+/**
  * @brief Returns which item is currently focused.
  *
  * @return The item, or nullptr for none.
  */
 DumbGui::Item* DumbGui::Manager::getFocusedItem() const {
     return focusedItem;
+}
+
+
+/**
+ * @brief Returns a given item's drawing information.
+ *
+ * @param item What item to check.
+ * @param draw The information on how to draw is returned here.
+ * @return True if the item exists and is meant to be drawn, false otherwise.
+ */
+bool DumbGui::Manager::getItemDrawInfo(Item* item, DrawInfo* draw) const {
+    if(!item->isVisible()) return false;
+    if(item->rawRatioWidth == 0.0f) return false;
+    
+    float finalCenterPxX, finalCenterPxY;
+    float finalPxWidth, finalPxHeight;
+    float finalAngle = 0.0f;
+    float finalAlpha = 1.0f;
+    
+    item->getReferencePxCenter(&finalCenterPxX, &finalCenterPxY);
+    item->getReferencePxSize(&finalPxWidth, &finalPxHeight);
+    
+    draw->centerPxX = finalCenterPxX;
+    draw->centerPxY = finalCenterPxY;
+    draw->pxWidth = finalPxWidth;
+    draw->pxHeight = finalPxHeight;
+    draw->angle = finalAngle;
+    draw->tint[0] = 255;
+    draw->tint[1] = 255;
+    draw->tint[2] = 255;
+    draw->tint[3] = finalAlpha * 255;
+    
+    return true;
 }
 
 
@@ -328,6 +456,21 @@ bool DumbGui::Manager::removeItem(Item* item) {
     }
     
     return success;
+}
+
+
+/**
+ * @brief Sets the current clipping rectangle.
+ * This should be overridden by a derived class since it does not do anything.
+ *
+ * @param x1 The top-left corner's X coordinate.
+ * @param y1 The top-left corner's Y coordinate.
+ * @param width The width.
+ * @param height The height.
+ */
+void DumbGui::Manager::setClippingRectangle(
+    int x1, int y1, int width, int height
+) {
 }
 
 

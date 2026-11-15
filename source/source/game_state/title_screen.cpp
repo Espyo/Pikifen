@@ -98,7 +98,7 @@ void MainMenu::initGuiMainPage() {
     //Play button.
     ButtonGuiItem* playButton =
         new ButtonGuiItem("Play", game.sysContent.fntAreaName);
-    playButton->onDraw =
+    playButton->onDrawP =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_PLAY, draw.center, draw.size, playIconLeft, draw.tint
@@ -170,7 +170,7 @@ void MainMenu::initGuiMainPage() {
     //Make button.
     ButtonGuiItem* makeButton =
         new ButtonGuiItem("Make", game.sysContent.fntAreaName);
-    makeButton->onDraw =
+    makeButton->onDrawP =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_MAKE, draw.center, draw.size, makeIconLeft, draw.tint
@@ -196,7 +196,7 @@ void MainMenu::initGuiMainPage() {
     //Help button.
     ButtonGuiItem* helpButton =
         new ButtonGuiItem("Help", game.sysContent.fntAreaName);
-    helpButton->onDraw =
+    helpButton->onDrawP =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_HELP, draw.center, draw.size, helpIconLeft, draw.tint
@@ -225,7 +225,7 @@ void MainMenu::initGuiMainPage() {
     //Options button.
     ButtonGuiItem* optionsButton =
         new ButtonGuiItem("Options", game.sysContent.fntAreaName);
-    optionsButton->onDraw =
+    optionsButton->onDrawP =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_OPTIONS, draw.center, draw.size, optionsIconLeft,
@@ -257,7 +257,7 @@ void MainMenu::initGuiMainPage() {
     //Statistics button.
     ButtonGuiItem* statsButton =
         new ButtonGuiItem("Statistics", game.sysContent.fntAreaName);
-    statsButton->onDraw =
+    statsButton->onDrawP =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_STATISTICS, draw.center, draw.size, statsIconLeft,
@@ -290,7 +290,7 @@ void MainMenu::initGuiMainPage() {
     ButtonGuiItem* discordButton =
         new ButtonGuiItem("", game.sysContent.fntAreaName);
     discordButton->forceSquare = true;
-    discordButton->onDraw =
+    discordButton->onDrawP =
     [ = ] (const DrawInfo & draw) {
         drawBitmapInBox(
             game.sysContent.bmpDiscordIcon, draw.center, draw.size * 0.8f,
@@ -319,7 +319,7 @@ void MainMenu::initGuiMainPage() {
     ButtonGuiItem* githubButton =
         new ButtonGuiItem("", game.sysContent.fntAreaName);
     githubButton->forceSquare = true;
-    githubButton->onDraw =
+    githubButton->onDrawP =
     [ = ] (const DrawInfo & draw) {
         drawBitmapInBox(
             game.sysContent.bmpGithubIcon, draw.center, draw.size * 0.8f,
@@ -345,7 +345,7 @@ void MainMenu::initGuiMainPage() {
         new ButtonGuiItem(
         "Exit", game.sysContent.fntAreaName, game.config.guiColors.bad
     );
-    mainGui.backItem->onDraw =
+    mainGui.backItem->onDrawP =
     [this, quitIconLeft] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_QUIT, draw.center, draw.size, quitIconLeft, draw.tint
@@ -422,7 +422,7 @@ void MainMenu::initGuiMakePage() {
     //Animation editor button.
     ButtonGuiItem* animEdButton =
         new ButtonGuiItem("Animations", game.sysContent.fntAreaName);
-    animEdButton->onDraw =
+    animEdButton->onDrawP =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_ANIM_EDITOR, draw.center, draw.size, animEditorIconLeft,
@@ -448,7 +448,7 @@ void MainMenu::initGuiMakePage() {
     //Area editor button.
     ButtonGuiItem* areaEdButton =
         new ButtonGuiItem("Areas", game.sysContent.fntAreaName);
-    areaEdButton->onDraw =
+    areaEdButton->onDrawP =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_AREA_EDITOR, draw.center, draw.size, areaEditorIconLeft,
@@ -474,7 +474,7 @@ void MainMenu::initGuiMakePage() {
     //Particle editor button.
     ButtonGuiItem* partEdButton =
         new ButtonGuiItem("Particles", game.sysContent.fntAreaName);
-    partEdButton->onDraw =
+    partEdButton->onDrawP =
     [ = ](const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_PARTICLE_EDITOR, draw.center, draw.size,
@@ -500,7 +500,7 @@ void MainMenu::initGuiMakePage() {
     //GUI editor button.
     ButtonGuiItem* guiEdButton =
         new ButtonGuiItem("GUI", game.sysContent.fntAreaName);
-    guiEdButton->onDraw =
+    guiEdButton->onDrawP =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_GUI_EDITOR, draw.center, draw.size, guiEditorIconLeft,
@@ -624,7 +624,7 @@ void MainMenu::initGuiPlayPage() {
     //Play a simple area button.
     ButtonGuiItem* simpleButton =
         new ButtonGuiItem("Simple areas", game.sysContent.fntAreaName);
-    simpleButton->onDraw =
+    simpleButton->onDrawP =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_SIMPLE_AREAS, draw.center, draw.size, simpleAreasIconLeft,
@@ -654,7 +654,7 @@ void MainMenu::initGuiPlayPage() {
     //Play a mission area button.
     ButtonGuiItem* missionButton =
         new ButtonGuiItem("Missions", game.sysContent.fntAreaName);
-    missionButton->onDraw =
+    missionButton->onDrawP =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_MISSIONS, draw.center, draw.size, missionsIconLeft,

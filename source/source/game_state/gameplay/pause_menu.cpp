@@ -304,7 +304,7 @@ void PauseMenu::addNewPageItems(
     
     //Left page input icon.
     GuiItem* leftPageInput = new GuiItem();
-    leftPageInput->onDraw =
+    leftPageInput->onDrawP =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showGuiInputIcons) return;
         drawPlayerActionInputSourceIcon(
@@ -321,7 +321,7 @@ void PauseMenu::addNewPageItems(
     
     //Right page input icon.
     GuiItem* rightPageInput = new GuiItem();
-    rightPageInput->onDraw =
+    rightPageInput->onDrawP =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showGuiInputIcons) return;
         drawPlayerActionInputSourceIcon(
@@ -389,7 +389,7 @@ void PauseMenu::addNewPikminStatusLine(
     if(pikType) {
         //Pikmin type.
         GuiItem* typeItem = new GuiItem();
-        typeItem->onDraw =
+        typeItem->onDrawP =
         [pikType] (const DrawInfo & draw) {
             drawBitmapInBox(
                 pikType->bmpIcon, draw.center, draw.size, true, true,
@@ -538,7 +538,7 @@ void PauseMenu::addNewPikminStatusLine(
             Point(1.0f, itemHeight)
         )
     );
-    separatorItem->onDraw =
+    separatorItem->onDrawP =
     [] (const DrawInfo & draw) {
         al_draw_line(
             draw.center.x, draw.center.y - draw.size.y / 2.0f,
@@ -1487,8 +1487,9 @@ void PauseMenu::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
         if(secondaryMenu) secondaryMenu->handleAllegroEvent(ev);
         
         //Handle some radar logic.
-        DrawInfo radarDraw;
-        radarGui.getItemDrawInfo(radarItem, &radarDraw);
+        DumbGui::DrawInfo dumbRadarDraw;
+        radarGui.getItemDrawInfo(radarItem, &dumbRadarDraw);
+        DrawInfo radarDraw = GuiItem::fromDumbDrawInfo(dumbRadarDraw);
         bool mouseInRadar =
             radarGui.responsive &&
             isPointInRectangle(
@@ -2122,7 +2123,7 @@ void PauseMenu::initRadarPage() {
     
     //Radar item.
     radarItem = new GuiItem();
-    radarItem->onDraw =
+    radarItem->onDrawP =
     [this] (const DrawInfo & draw) {
         drawRadar(draw.center, draw.size);
     };
@@ -2186,7 +2187,7 @@ void PauseMenu::initRadarPage() {
     TextGuiItem* cursorInfoText =
         new TextGuiItem("", game.sysContent.fntStandard);
     cursorInfoText->lineWrap = true;
-    cursorInfoText->onDraw =
+    cursorInfoText->onDrawP =
     [this, cursorInfoText] (const DrawInfo & draw) {
         if(cursorInfoText->text.empty()) return;
         
@@ -2362,7 +2363,7 @@ void PauseMenu::initStatusPage() {
     
     //Pikmin list header box.
     ListGuiItem* listHeader = new ListGuiItem();
-    listHeader->onDraw =
+    listHeader->onDrawP =
     [] (const DrawInfo&) {};
     statusGui.addItem(listHeader, "list_header");
     
@@ -2377,7 +2378,7 @@ void PauseMenu::initStatusPage() {
     
     //Pikmin totals box.
     ListGuiItem* totals = new ListGuiItem();
-    totals->onDraw =
+    totals->onDrawP =
     [] (const DrawInfo&) {};
     statusGui.addItem(totals, "totals");
     
@@ -2664,8 +2665,9 @@ void PauseMenu::tick(float deltaT) {
     }
     
     //Tick radar things.
-    DrawInfo radarDraw;
-    radarGui.getItemDrawInfo(radarItem, &radarDraw);
+    DumbGui::DrawInfo dumbRadarDraw;
+    radarGui.getItemDrawInfo(radarItem, &dumbRadarDraw);
+    DrawInfo radarDraw = GuiItem::fromDumbDrawInfo(dumbRadarDraw);
     radarView.windowRect.center = radarDraw.center;
     radarView.windowRect.size = radarDraw.size;
     radarView.updateTransformations();

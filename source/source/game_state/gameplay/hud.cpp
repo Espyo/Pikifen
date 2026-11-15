@@ -156,7 +156,7 @@ Hud::Hud() :
     for(size_t l = 0; l < 3; l++) {
         //Icon.
         GuiItem* leaderIcon = new GuiItem();
-        leaderIcon->onDraw =
+        leaderIcon->onDrawP =
         [this, l] (const DrawInfo & draw) {
             LeaderIconBubble icon;
             DrawInfo finalDraw;
@@ -189,7 +189,7 @@ Hud::Hud() :
         
         //Health wheel.
         GuiItem* leaderHealth = new GuiItem();
-        leaderHealth->onDraw =
+        leaderHealth->onDrawP =
         [this, l] (const DrawInfo & draw) {
             const ALLEGRO_COLOR DANGER_COLOR = al_map_rgb(255, 0, 0);
             LeaderHealthBubble health;
@@ -261,7 +261,7 @@ Hud::Hud() :
     
     //Next leader input.
     GuiItem* leaderNextInput = new GuiItem();
-    leaderNextInput->onDraw =
+    leaderNextInput->onDrawP =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showGuiInputIcons) return;
         if(game.states.gameplay->availableLeaders.size() < 2) return;
@@ -275,7 +275,7 @@ Hud::Hud() :
     
     //Sun Meter.
     GuiItem* sunMeter = new GuiItem();
-    sunMeter->onDraw =
+    sunMeter->onDrawP =
     [this, sunMeter] (const DrawInfo & draw) {
         const ALLEGRO_COLOR SUN_BUBBLE_COLOR = al_map_rgb(255, 192, 128);
         unsigned char nHours =
@@ -383,7 +383,7 @@ Hud::Hud() :
     
     //Day number bubble.
     GuiItem* dayBubble = new GuiItem();
-    dayBubble->onDraw =
+    dayBubble->onDrawP =
     [this] (const DrawInfo & draw) {
         drawBitmapInBox(
             bmpDayBubble, draw.center, draw.size, true, true, 0.0f, draw.tint
@@ -394,7 +394,7 @@ Hud::Hud() :
     
     //Day number text.
     GuiItem* dayNr = new GuiItem();
-    dayNr->onDraw =
+    dayNr->onDrawP =
     [this] (const DrawInfo & draw) {
         drawText(
             i2s(game.states.gameplay->day),
@@ -407,7 +407,7 @@ Hud::Hud() :
     
     //Standby group member icon.
     GuiItem* standbyIcon = new GuiItem();
-    standbyIcon->onDraw =
+    standbyIcon->onDrawP =
     [this] (const DrawInfo & draw) {
         this->drawStandbyIcon(BUBBLE_RELATION_CURRENT);
     };
@@ -417,7 +417,7 @@ Hud::Hud() :
     
     //Next standby subgroup icon.
     GuiItem* standbyNextIcon = new GuiItem();
-    standbyNextIcon->onDraw =
+    standbyNextIcon->onDrawP =
     [this] (const DrawInfo & draw) {
         this->drawStandbyIcon(BUBBLE_RELATION_NEXT);
     };
@@ -427,7 +427,7 @@ Hud::Hud() :
     
     //Next standby subgroup input.
     GuiItem* standbyNextInput = new GuiItem();
-    standbyNextInput->onDraw =
+    standbyNextInput->onDrawP =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showGuiInputIcons) return;
         if(!player->leaderPtr) return;
@@ -452,7 +452,7 @@ Hud::Hud() :
     
     //Previous standby subgroup icon.
     GuiItem* standbyPrevIcon = new GuiItem();
-    standbyPrevIcon->onDraw =
+    standbyPrevIcon->onDrawP =
     [this] (const DrawInfo & draw) {
         this->drawStandbyIcon(BUBBLE_RELATION_PREVIOUS);
     };
@@ -462,7 +462,7 @@ Hud::Hud() :
     
     //Previous standby subgroup input.
     GuiItem* standbyPrevInput = new GuiItem();
-    standbyPrevInput->onDraw =
+    standbyPrevInput->onDrawP =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showGuiInputIcons) return;
         if(!player->leaderPtr) return;
@@ -492,7 +492,7 @@ Hud::Hud() :
     
     //Standby group member maturity.
     GuiItem* standbyMaturityIcon = new GuiItem();
-    standbyMaturityIcon->onDraw =
+    standbyMaturityIcon->onDrawP =
     [this, standbyMaturityIcon] (const DrawInfo & draw) {
         //Standby group member preparations.
         Leader* lPtr = player->leaderPtr;
@@ -554,7 +554,7 @@ Hud::Hud() :
     
     //Standby subgroup member amount bubble.
     GuiItem* standbyBubble = new GuiItem();
-    standbyBubble->onDraw =
+    standbyBubble->onDrawP =
     [this] (const DrawInfo & draw) {
         drawBitmap(
             bmpCounterBubbleStandby,
@@ -568,7 +568,7 @@ Hud::Hud() :
     
     //Standby subgroup member amount.
     standbyAmount = new GuiItem();
-    standbyAmount->onDraw =
+    standbyAmount->onDrawP =
     [this] (const DrawInfo & draw) {
         size_t nStandbyPikmin = 0;
         Leader* lPtr = player->leaderPtr;
@@ -602,7 +602,7 @@ Hud::Hud() :
     
     //Group Pikmin amount bubble.
     GuiItem* groupBubble = new GuiItem();
-    groupBubble->onDraw =
+    groupBubble->onDrawP =
     [this] (const DrawInfo & draw) {
         if(!player->leaderPtr) return;
         drawBitmap(
@@ -615,7 +615,7 @@ Hud::Hud() :
     
     //Group Pikmin amount.
     groupAmount = new GuiItem();
-    groupAmount->onDraw =
+    groupAmount->onDrawP =
     [this] (const DrawInfo & draw) {
         if(!player->leaderPtr) return;
         size_t curAmount = game.states.gameplay->getAmountOfGroupPikmin(player);
@@ -640,7 +640,7 @@ Hud::Hud() :
     
     //Field Pikmin amount bubble.
     GuiItem* fieldBubble = new GuiItem();
-    fieldBubble->onDraw =
+    fieldBubble->onDrawP =
     [this] (const DrawInfo & draw) {
         drawBitmap(
             bmpCounterBubbleField,
@@ -652,7 +652,7 @@ Hud::Hud() :
     
     //Field Pikmin amount.
     fieldAmount = new GuiItem();
-    fieldAmount->onDraw =
+    fieldAmount->onDrawP =
     [this] (const DrawInfo & draw) {
         size_t curAmount = game.states.gameplay->getAmountOfFieldPikmin();
         
@@ -676,7 +676,7 @@ Hud::Hud() :
     
     //Total Pikmin amount bubble.
     GuiItem* totalBubble = new GuiItem();
-    totalBubble->onDraw =
+    totalBubble->onDrawP =
     [this] (const DrawInfo & draw) {
         drawBitmap(
             bmpCounterBubbleTotal,
@@ -688,7 +688,7 @@ Hud::Hud() :
     
     //Total Pikmin amount.
     totalAmount = new GuiItem();
-    totalAmount->onDraw =
+    totalAmount->onDrawP =
     [this] (const DrawInfo & draw) {
         size_t curAmount = game.states.gameplay->getAmountOfTotalPikmin();
         
@@ -712,7 +712,7 @@ Hud::Hud() :
     
     //Pikmin counter "x".
     GuiItem* countersX = new GuiItem();
-    countersX->onDraw =
+    countersX->onDrawP =
     [this] (const DrawInfo & draw) {
         drawText(
             "x", game.sysContent.fntCounter, draw.center, draw.size,
@@ -725,7 +725,7 @@ Hud::Hud() :
     //Pikmin counter slashes.
     for(size_t s = 0; s < 3; s++) {
         GuiItem* counterSlash = new GuiItem();
-        counterSlash->onDraw =
+        counterSlash->onDrawP =
         [this] (const DrawInfo & draw) {
             if(!player->leaderPtr) return;
             drawText(
@@ -781,7 +781,7 @@ Hud::Hud() :
     controlGuide->flags = ALLEGRO_ALIGN_LEFT;
     controlGuide->lineWrap = true;
     controlGuide->controlCondensed = true;
-    controlGuide->onDraw =
+    controlGuide->onDrawP =
     [this, controlGuide] (const DrawInfo & draw) {
         if(
             !game.options.misc.showControlGuide &&
@@ -804,7 +804,7 @@ Hud::Hud() :
     
     //Inventory update display.
     GuiItem* inventoryUpdate = new GuiItem();
-    inventoryUpdate->onDraw =
+    inventoryUpdate->onDrawP =
     [this] (const DrawInfo & draw) {
         if(!player->inventoryUpdateDisplayIName.empty()) {
             KeyframeInterpolator<float> alphaKI;
@@ -847,7 +847,7 @@ Hud::Hud() :
     if(game.options.advanced.expoMode) {
         //Watermark wordmark.
         GuiItem* watermarkWordmark = new GuiItem();
-        watermarkWordmark->onDraw =
+        watermarkWordmark->onDrawP =
         [this] (const DrawInfo & draw) {
             drawBitmapInBox(
                 game.sysContent.bmpWordmark, draw.center, draw.size,
@@ -858,7 +858,7 @@ Hud::Hud() :
         
         //Watermark logo.
         GuiItem* watermarkLogo = new GuiItem();
-        watermarkLogo->onDraw =
+        watermarkLogo->onDrawP =
         [this] (const DrawInfo & draw) {
             drawBitmapInBox(
                 game.sysContent.bmpIcon, draw.center, draw.size,
@@ -983,7 +983,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         
         //The text.
         GuiItem* text = new GuiItem();
-        text->onDraw =
+        text->onDrawP =
         [itemInfo, this] (const DrawInfo & draw) {
             string str = itemInfo->text;
             if(itemInfo->displayType == MISSION_HUD_ITEM_DISPLAY_SCRIPT_VAR) {
@@ -1014,7 +1014,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         
         //Analog clock.
         GuiItem* analog = new GuiItem();
-        analog->onDraw =
+        analog->onDrawP =
         [itemInfo, this] (const DrawInfo & draw) {
             drawBitmap(
                 game.sysContent.bmpClock,
@@ -1056,7 +1056,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         
         //Digital clock.
         GuiItem* digital = new GuiItem();
-        digital->onDraw =
+        digital->onDrawP =
         [itemInfo, digital, which, this] (const DrawInfo & draw) {
             string text;
             ALLEGRO_FONT* font = game.sysContent.fntCounter;
@@ -1124,7 +1124,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         
         //"Score" label.
         GuiItem* scoreLabel = new GuiItem();
-        scoreLabel->onDraw =
+        scoreLabel->onDrawP =
         [this] (const DrawInfo & draw) {
             drawText(
                 "Score:", game.sysContent.fntStandard,
@@ -1138,7 +1138,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         
         //Score points.
         GuiItem* points = new GuiItem();
-        points->onDraw =
+        points->onDrawP =
             [this, which, points]
         (const DrawInfo & draw) {
             if(
@@ -1164,7 +1164,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         
         //"Points" label.
         GuiItem* pointsLabel = new GuiItem();
-        pointsLabel->onDraw =
+        pointsLabel->onDrawP =
         [this] (const DrawInfo & draw) {
             drawText(
                 "pts", game.sysContent.fntStandard,
@@ -1180,7 +1180,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         
         //Ruler.
         GuiItem* ruler = new GuiItem();
-        ruler->onDraw =
+        ruler->onDrawP =
         [this] (const DrawInfo & draw) {
             const ALLEGRO_COLOR MARKING_COLOR = al_map_rgb(100, 110, 180);
             const ALLEGRO_COLOR FLAPPER_DARK_COLOR = al_map_rgb(64, 186, 64);
@@ -1447,7 +1447,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         
         //Label.
         GuiItem* text = new GuiItem();
-        text->onDraw =
+        text->onDrawP =
         [itemInfo, this] (const DrawInfo & draw) {
             drawText(
                 itemInfo->text, game.sysContent.fntStandard,
@@ -1460,7 +1460,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         
         //Bar proper.
         GuiItem* bar = new GuiItem();
-        bar->onDraw =
+        bar->onDrawP =
         [itemInfo, this] (const DrawInfo & draw) {
             MissionMetricType* metricType =
                 game.missionMetricTypes[itemInfo->metricType];
@@ -1529,7 +1529,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         
         //Label.
         GuiItem* label = new GuiItem();
-        label->onDraw =
+        label->onDrawP =
         [itemInfo, this] (const DrawInfo & draw) {
             drawText(
                 itemInfo->text, game.sysContent.fntStandard,
@@ -1545,7 +1545,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         
         //First amount.
         GuiItem* amt1Text = new GuiItem();
-        amt1Text->onDraw =
+        amt1Text->onDrawP =
         [itemInfo, which, amt1Text] (const DrawInfo & draw) {
             int amt1 = 0;
             MissionMetricType* metricType =
@@ -1596,7 +1596,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         if(!onlyOneAmount) {
             //Second amount.
             GuiItem* amt2Text = new GuiItem();
-            amt2Text->onDraw =
+            amt2Text->onDrawP =
             [itemInfo, which, amt2Text] (const DrawInfo & draw) {
                 int amt2 = 0;
                 

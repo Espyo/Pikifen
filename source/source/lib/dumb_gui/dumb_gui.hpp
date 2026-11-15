@@ -35,6 +35,30 @@ class Manager;
 #pragma region Misc. structs
 
 
+//Information about how the item should be drawn.
+struct DrawInfo {
+
+    //Center X coordinate, in window pixels.
+    float centerPxX = 0.0f;
+    
+    //Center Y coordinate, in window pixels.
+    float centerPxY = 0.0f;
+    
+    //Width, in window pixels.
+    float pxWidth = 0.0f;
+    
+    //Height, in window pixels.
+    float pxHeight = 0.0f;
+    
+    //Angle, in radians.
+    float angle = 0.0f;
+    
+    //Tint color, in RGBA.
+    unsigned char tint[4] = { 255, 255, 255, 255};
+    
+};
+
+
 #pragma endregion
 #pragma region GUI item
 
@@ -64,6 +88,9 @@ public:
     //Raw height, in parent ratio.
     float rawRatioHeight = 0.0f;
     
+    
+    //What to do when it's time to draw it.
+    std::function<void(const DrawInfo& draw)> onDraw = nullptr;
     
     //What to do when it's time to tick one frame.
     function<void(float time)> onTick = nullptr;
@@ -110,6 +137,9 @@ public:
     bool clipChildren = true;
     
     
+    //Drawing layer. The lower the number, the sooner it'll be drawn.
+    unsigned char drawingLayer = 127;
+    
     //Force its final dimensions to be square, such that they fit inside
     //the reference dimensions.
     bool forceSquare = false;
@@ -136,6 +166,8 @@ public:
     virtual bool deleteAllChildren();
     virtual float getChildrenRatioSpan(bool horizontal = false) const;
     virtual bool removeChild(Item* item);
+    
+    virtual bool draw(const DrawInfo& draw);
     
 };
 
@@ -174,12 +206,22 @@ public:
     virtual bool addItem(Item* item);
     virtual bool removeItem(Item* item);
     
+    virtual bool draw();
+    
     virtual Item* getFocusedItem() const;
     virtual bool setFocusedItem(Item* item, bool silent = false);
     
     virtual bool hideItems();
     virtual bool showItems();
     
+    virtual bool getItemDrawInfo(Item* item, DrawInfo* draw) const;
+    
+    virtual void getClippingRectangle(
+        int* outX1, int* outY1, int* outWidth, int* outHeight
+    ) const;
+    virtual void setClippingRectangle(
+        int x1, int y1, int width, int height
+    );
     virtual int getWindowPxWidth() const;
     virtual int getWindowPxHeight() const;
     

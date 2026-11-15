@@ -105,7 +105,7 @@ public:
     
     ModalGuiManager();
     bool isActive() const;
-    void draw();
+    bool draw();
     void open();
     void close();
     void reset();

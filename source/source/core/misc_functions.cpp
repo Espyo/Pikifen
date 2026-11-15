@@ -964,7 +964,7 @@ vector<std::pair<int, string> > getWeatherTable(DataNode* node) {
  */
 void guiCreateBackInputIcon(GuiManager* gui, const string& itemName) {
     GuiItem* backInput = new GuiItem();
-    backInput->onDraw =
+    backInput->onDrawP =
     [] (const GuiItem::DrawInfo & draw) {
         if(!game.options.misc.showGuiInputIcons) return;
         drawPlayerActionInputSourceIcon(

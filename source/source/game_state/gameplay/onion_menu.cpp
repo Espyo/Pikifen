@@ -114,7 +114,7 @@ OnionMenu::OnionMenu(
     
     //Ok input.
     GuiItem* okInput = new GuiItem();
-    okInput->onDraw =
+    okInput->onDrawP =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showGuiInputIcons) return;
         drawPlayerActionInputSourceIcon(
@@ -127,7 +127,7 @@ OnionMenu::OnionMenu(
     //Field amount text.
     fieldAmountText =
         new TextGuiItem("", game.sysContent.fntStandard);
-    fieldAmountText->onDraw =
+    fieldAmountText->onDrawP =
     [this] (const DrawInfo & draw) {
         const ALLEGRO_COLOR TEXT_COLOR = al_map_rgb(188, 230, 230);
         const ALLEGRO_COLOR ERROR_COLOR = al_map_rgb(224, 0, 0);
@@ -167,7 +167,7 @@ OnionMenu::OnionMenu(
     [this] (float, float) {
         toggleChangeTen();
     };
-    changeTenButton->onDraw =
+    changeTenButton->onDrawP =
     [this] (const DrawInfo & draw) {
         float juicyGrowAmount = changeTenButton->getJuiceValue();
         drawBitmapInBox(
@@ -195,7 +195,7 @@ OnionMenu::OnionMenu(
     
     //Change ten at a time input.
     GuiItem* changeTenInput = new GuiItem();
-    changeTenInput->onDraw =
+    changeTenInput->onDrawP =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showGuiInputIcons) return;
         drawPlayerActionInputSourceIcon(
@@ -212,7 +212,7 @@ OnionMenu::OnionMenu(
     [this] (float, float) {
         toggleSelectAll();
     };
-    selectAllButton->onDraw =
+    selectAllButton->onDrawP =
     [this] (const DrawInfo & draw) {
         float juicyGrowAmount = selectAllButton->getJuiceValue();
         drawBitmapInBox(
@@ -242,7 +242,7 @@ OnionMenu::OnionMenu(
     
     //Select all input.
     GuiItem* selectAllInput = new GuiItem();
-    selectAllInput->onDraw =
+    selectAllInput->onDrawP =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showGuiInputIcons) return;
         drawPlayerActionInputSourceIcon(
@@ -269,7 +269,7 @@ OnionMenu::OnionMenu(
         //Onion icon.
         GuiItem* onionIcon = new GuiItem(false);
         onionIcon->forceSquare = true;
-        onionIcon->onDraw =
+        onionIcon->onDrawP =
         [this, nPtr, onionIcon] (const DrawInfo & draw) {
             if(nPtr->nestType->bmpIcon) {
                 float juicyGrowAmount = onionIcon->getJuiceValue();
@@ -288,7 +288,7 @@ OnionMenu::OnionMenu(
         ButtonGuiItem* onionButton =
             new ButtonGuiItem("", game.sysContent.fntStandard);
         onionButton->forceSquare = true;
-        onionButton->onDraw =
+        onionButton->onDrawP =
         [this, onionButton] (const DrawInfo & draw) {
             float juicyGrowAmount = onionButton->getJuiceValue();
             drawButton(
@@ -321,7 +321,7 @@ OnionMenu::OnionMenu(
         
         //Onion amount text.
         GuiItem* onionAmountText = new GuiItem(false);
-        onionAmountText->onDraw =
+        onionAmountText->onDrawP =
             [this, t, onionAmountText]
         (const DrawInfo & draw) {
             const ALLEGRO_COLOR BG_COLOR = al_map_rgba(188, 230, 230, 128);
@@ -365,7 +365,7 @@ OnionMenu::OnionMenu(
         //Group icon.
         GuiItem* groupIcon = new GuiItem(false);
         groupIcon->forceSquare = true;
-        groupIcon->onDraw =
+        groupIcon->onDrawP =
         [this, t, groupIcon] (const DrawInfo & draw) {
             OnionMenuPikminType* tPtr = &this->types[t];
             float juicyGrowAmount = groupIcon->getJuiceValue();
@@ -385,7 +385,7 @@ OnionMenu::OnionMenu(
         ButtonGuiItem* groupButton =
             new ButtonGuiItem("", game.sysContent.fntStandard);
         groupButton->forceSquare = true;
-        groupButton->onDraw =
+        groupButton->onDrawP =
         [this, groupButton] (const DrawInfo & draw) {
             float juicyGrowAmount = groupButton->getJuiceValue();
             drawButton(
@@ -418,7 +418,7 @@ OnionMenu::OnionMenu(
         
         //Group amount text.
         GuiItem* groupAmountText = new GuiItem(false);
-        groupAmountText->onDraw =
+        groupAmountText->onDrawP =
             [this, t, groupAmountText]
         (const DrawInfo & draw) {
             const ALLEGRO_COLOR BG_COLOR = al_map_rgba(188, 230, 230, 128);
@@ -481,7 +481,7 @@ OnionMenu::OnionMenu(
     //Onion's all button.
     onionAllButton =
         new ButtonGuiItem("", game.sysContent.fntStandard);
-    onionAllButton->onDraw =
+    onionAllButton->onDrawP =
     [this] (const DrawInfo & draw) {
         float juicyGrowAmount = onionAllButton->getJuiceValue();
         drawButton(
@@ -513,7 +513,7 @@ OnionMenu::OnionMenu(
     //Group's all button.
     groupAllButton =
         new ButtonGuiItem("", game.sysContent.fntStandard);
-    groupAllButton->onDraw =
+    groupAllButton->onDrawP =
     [this] (const DrawInfo & draw) {
         float juicyGrowAmount = groupAllButton->getJuiceValue();
         drawButton(

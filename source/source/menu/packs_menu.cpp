@@ -224,7 +224,7 @@ void PacksMenu::initGuiMain() {
                     Point(0.87f, rowCenterY), Point(0.08f, ITEM_HEIGHT) * 0.80f
                 )
             );
-            upButton->onDraw =
+            upButton->onDrawP =
             [upButton] (const DrawInfo & draw) {
                 upButton->defDrawCode(draw);
                 drawBitmapInBox(
@@ -265,7 +265,7 @@ void PacksMenu::initGuiMain() {
                     Point(0.95f, rowCenterY), Point(0.08f, ITEM_HEIGHT) * 0.80f
                 )
             );
-            downButton->onDraw =
+            downButton->onDrawP =
             [downButton] (const DrawInfo & draw) {
                 downButton->defDrawCode(draw);
                 drawBitmapInBox(
@@ -304,7 +304,7 @@ void PacksMenu::initGuiMain() {
     
     //Info box item.
     GuiItem* infoBox = new GuiItem();
-    infoBox->onDraw =
+    infoBox->onDrawP =
     [] (const DrawInfo & draw) {
         drawTexturedBox(
             draw.center, draw.size, game.sysContent.bmpFrameBox,
@@ -324,7 +324,7 @@ void PacksMenu::initGuiMain() {
     //Pack thumbnail.
     GuiItem* packThumbItem = new GuiItem();
     packThumbItem->forceSquare = true;
-    packThumbItem->onDraw =
+    packThumbItem->onDrawP =
     [this] (const DrawInfo & draw) {
         //Align it to the top-right corner.
         Point finalCenter(

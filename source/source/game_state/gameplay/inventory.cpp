@@ -168,7 +168,7 @@ void Inventory::initGui() {
     
     //Item info text.
     itemInfoItem = new GuiItem();
-    itemInfoItem->onDraw =
+    itemInfoItem->onDrawP =
     [this] (const DrawInfo & draw) {
         if(focusedItemIdx == INVALID) return;
         InventoryItemInstance* iiPtr = &items[focusedItemIdx];
@@ -277,7 +277,7 @@ void Inventory::populateInventoryListGui() {
             Rect(slotCenter, Point(SLOT_WIDTH, SLOT_HEIGHT))
         );
         button->forceSquare = true;
-        button->onDraw =
+        button->onDrawP =
         [this, button, iPtr] (const DrawInfo & draw) {
             button->defDrawCode(draw);
             ALLEGRO_COLOR bmpTint = draw.tint;
@@ -327,7 +327,7 @@ void Inventory::populateInventoryListGui() {
             Rect(slotCenter, Point(SLOT_WIDTH, SLOT_HEIGHT))
         );
         placeholder->forceSquare = true;
-        placeholder->onDraw =
+        placeholder->onDrawP =
         [this] (const DrawInfo & draw) {
             drawTexturedBox(
                 draw.center, draw.size, game.sysContent.bmpFrameBox,

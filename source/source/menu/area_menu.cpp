@@ -355,7 +355,7 @@ void AreaMenu::initGuiInfoPage() {
         //Thumbnail.
         GuiItem* thumbItem = new GuiItem();
         thumbItem->forceSquare = true;
-        thumbItem->onDraw =
+        thumbItem->onDrawP =
         [this] (const DrawInfo & draw) {
             //Align it to the top-right corner.
             Point finalCenter(
@@ -402,7 +402,7 @@ void AreaMenu::initGuiInfoPage() {
             
             //Record medal.
             GuiItem* recordMedalItem = new GuiItem();
-            recordMedalItem->onDraw =
+            recordMedalItem->onDrawP =
             [this] (const DrawInfo & draw) {
                 if(curMedal) {
                     drawBitmapInBox(
@@ -425,7 +425,7 @@ void AreaMenu::initGuiInfoPage() {
         
         //Difficulty item.
         difficultyItem = new GuiItem();
-        difficultyItem->onDraw = [this] (const DrawInfo & draw) {
+        difficultyItem->onDrawP = [this] (const DrawInfo & draw) {
             Area* areaPtr = game.content.areas.list[areaType][curAreaIdx];
             if(areaPtr->difficulty == 0) return;
             const string difficultyText = "Difficulty: ";
@@ -579,7 +579,7 @@ void AreaMenu::initGuiMain() {
                         Point(0.15f, BUTTON_HEIGHT * 0.80f)
                     )
                 );
-                medalItem->onDraw =
+                medalItem->onDrawP =
                 [this, areaPtr, a] (const DrawInfo & draw) {
                     ALLEGRO_BITMAP* medalBmp = nullptr;
                     if(!areaRecords[a].date.empty()) {
@@ -629,7 +629,7 @@ void AreaMenu::initGuiMain() {
         
         //Info box item.
         infoBox = new GuiItem();
-        infoBox->onDraw =
+        infoBox->onDrawP =
         [] (const DrawInfo & draw) {
             drawTexturedBox(
                 draw.center, draw.size, game.sysContent.bmpFrameBox,
@@ -642,7 +642,7 @@ void AreaMenu::initGuiMain() {
         ButtonGuiItem* randomButton =
             new ButtonGuiItem("", game.sysContent.fntStandard);
         randomButton->forceSquare = true;
-        randomButton->onDraw =
+        randomButton->onDrawP =
         [randomButton] (const DrawInfo & draw) {
             drawButton(
                 draw.center, draw.size, "",
@@ -701,7 +701,7 @@ void AreaMenu::initGuiMain() {
             
             //Briefing box item.
             briefingBox = new GuiItem();
-            briefingBox->onDraw =
+            briefingBox->onDrawP =
             [] (const DrawInfo & draw) {
                 drawTexturedBox(
                     draw.center, draw.size, game.sysContent.bmpFrameBox,

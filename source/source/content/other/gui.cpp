@@ -109,7 +109,7 @@ BulletGuiItem::BulletGuiItem(
     font(font),
     color(color) {
     
-    onDraw =
+    onDrawP =
     [this] (const DrawInfo & draw) {
         this->defDrawCode(draw);
     };
@@ -172,7 +172,7 @@ ButtonGuiItem::ButtonGuiItem(
     font(font),
     color(color) {
     
-    onDraw =
+    onDrawP =
     [this] (const DrawInfo & draw) {
         this->defDrawCode(draw);
     };
@@ -217,7 +217,7 @@ CheckGuiItem::CheckGuiItem(
     font(font),
     color(color) {
     
-    onDraw =
+    onDrawP =
     [this] (const DrawInfo & draw) {
         this->defDrawCode(draw);
     };
@@ -344,6 +344,43 @@ bool GuiItem::activate(const Point& cursorPos) {
     playFailSound = false;
     
     return true;
+}
+
+
+/**
+ * @brief Draws the item, by calling its onDrawP function.
+ *
+ * @param draw Data to draw with.
+ * @return Whether it succeeded.
+ */
+bool GuiItem::draw(const DumbGui::DrawInfo& draw) {
+    if(!onDrawP) return false;
+    
+    GuiItem::DrawInfo drawP = fromDumbDrawInfo(draw);
+    onDrawP(drawP);
+    
+    return true;
+}
+
+
+/**
+ * @brief Converts a DumbGui DrawInfo instance to a GuiItem::DrawInfo instance.
+ *
+ * @param dumbDraw The DumbGui DrawInfo.
+ * @return The GuiItem DrawInfo.
+ */
+DrawInfo GuiItem::fromDumbDrawInfo(const DumbGui::DrawInfo& dumbDraw) {
+    GuiItem::DrawInfo result;
+    
+    result.center = Point(dumbDraw.centerPxX, dumbDraw.centerPxY);
+    result.size = Point(dumbDraw.pxWidth, dumbDraw.pxHeight);
+    result.tint =
+        al_map_rgba(
+            dumbDraw.tint[0], dumbDraw.tint[1], dumbDraw.tint[2],
+            dumbDraw.tint[3]
+        );
+        
+    return result;
 }
 
 
@@ -594,7 +631,7 @@ void GuiManager::createAndAddCustomItems(
             infoPtr->drawBeforeHardcoded ?
             GUI::DRAWING_LAYER_CUSTOM_BEFORE :
             GUI::DRAWING_LAYER_CUSTOM_AFTER;
-        guiItem->onDraw =
+        guiItem->onDrawP =
         [this, i] (const DrawInfo & draw) {
             const CustomGuiItemDef& infoRef = customItemDefs[i];
             const auto getDimensions =
@@ -734,58 +771,7 @@ bool GuiManager::destroy() {
  * @return Whether it succeeded.
  */
 bool GuiManager::draw() {
-    if(!visible) return false;
-    
-    int ocrX = 0;
-    int ocrY = 0;
-    int ocrW = 0;
-    int ocrH = 0;
-    
-    //Sort them by layer.
-    vector<DumbGui::Item*> drawingSortedItems = items;
-    std::stable_sort(
-        drawingSortedItems.begin(), drawingSortedItems.end(),
-    [] (DumbGui::Item * i1, DumbGui::Item * i2) {
-        return ((GuiItem*) i1)->drawingLayer < ((GuiItem*) i2)->drawingLayer;
-    }
-    );
-    
-    forIdx(i, drawingSortedItems) {
-        GuiItem* iPtr = (GuiItem*) drawingSortedItems[i];
-        
-        if(!iPtr->onDraw) continue;
-        
-        DrawInfo draw;
-        Rect ref = iPtr->getReferencePxRect();
-        draw.center = ref.center;
-        draw.size = ref.size;
-        
-        if(!getItemDrawInfo(iPtr, &draw)) continue;
-        
-        if(iPtr->parent) {
-            DrawInfo parentDraw;
-            if(!getItemDrawInfo(((GuiItem*) iPtr->parent), &parentDraw)) {
-                continue;
-            }
-            if(((GuiItem*) iPtr->parent)->clipChildren) {
-                al_get_clipping_rectangle(&ocrX, &ocrY, &ocrW, &ocrH);
-                al_set_clipping_rectangle(
-                    (parentDraw.center.x - parentDraw.size.x / 2.0f) + 1,
-                    (parentDraw.center.y - parentDraw.size.y / 2.0f) + 1,
-                    parentDraw.size.x - 2,
-                    parentDraw.size.y - 2
-                );
-            }
-        }
-        
-        iPtr->onDraw(draw);
-        
-        if(iPtr->parent) {
-            if(((GuiItem*) iPtr->parent)->clipChildren) {
-                al_set_clipping_rectangle(ocrX, ocrY, ocrW, ocrH);
-            }
-        }
-    }
+    if(!DumbGui::Manager::draw()) return false;
     
     if(focusCursor.alpha > 0.0f) {
         float sizeAddition =
@@ -835,6 +821,21 @@ bool GuiManager::draw() {
  */
 GUI_MANAGER_ANIM GuiManager::getAnimation() const {
     return animType;
+}
+
+
+/**
+ * @brief Returns the current clipping rectangle.
+ *
+ * @param outX1 The top-left corner's X coordinate is returned here.
+ * @param outY1 The top-left corner's Y coordinate is returned here.
+ * @param outWidth The width is returned here.
+ * @param outHeight The height is returned here.
+ */
+void GuiManager::getClippingRectangle(
+    int* outX1, int* outY1, int* outWidth, int* outHeight
+) const {
+    al_get_clipping_rectangle(outX1, outY1, outWidth, outHeight);
 }
 
 
@@ -975,14 +976,15 @@ bool GuiManager::getItemDefsFromDataFile(
  * @brief Returns a given item's drawing information.
  *
  * @param item What item to check.
- * @param draw Information on how to draw.
+ * @param draw The information on how to draw is returned here.
  * @return True if the item exists and is meant to be drawn, false otherwise.
  */
-bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
-    if(!item->isVisible()) return false;
-    if(item->getRawRatioRect().size.x == 0.0f) return false;
+bool GuiManager::getItemDrawInfo(
+    DumbGui::Item* item, DumbGui::DrawInfo* draw
+) const {
+    if(!DumbGui::Manager::getItemDrawInfo(item, draw)) return false;
     
-    Rect finalRect = item->getReferencePxRect();
+    Rect finalRect = ((GuiItem*) item)->getReferencePxRect();
     float finalAlpha = 1.0f;
     
     if(animTimer.timeLeft > 0.0f) {
@@ -1107,9 +1109,15 @@ bool GuiManager::getItemDrawInfo(GuiItem* item, DrawInfo* draw) const {
         }
     }
     
-    draw->center = finalRect.center;
-    draw->size = finalRect.size;
-    draw->tint = mapAlpha(finalAlpha * 255);
+    draw->centerPxX = finalRect.center.x;
+    draw->centerPxY = finalRect.center.y;
+    draw->pxWidth = finalRect.size.x;
+    draw->pxHeight = finalRect.size.y;
+    draw->tint[0] = 255;
+    draw->tint[1] = 255;
+    draw->tint[2] = 255;
+    draw->tint[3] = finalAlpha * 255;
+    
     return true;
 }
 
@@ -1489,6 +1497,21 @@ bool GuiManager::startAnimation(
 
 
 /**
+ * @brief Sets the current clipping rectangle.
+ *
+ * @param x1 The top-left corner's X coordinate.
+ * @param y1 The top-left corner's Y coordinate.
+ * @param width The width.
+ * @param height The height.
+ */
+void GuiManager::setClippingRectangle(
+    int x1, int y1, int width, int height
+) {
+    al_set_clipping_rectangle(x1, y1, width, height);
+}
+
+
+/**
  * @brief Ticks the time of all items by one frame of logic.
  *
  * @param deltaT How long the frame's tick is, in seconds.
@@ -1525,7 +1548,7 @@ bool GuiManager::tick(float deltaT) {
     }
     
     //Tick the focus cursor.
-    DrawInfo focusedItemDraw;
+    DumbGui::DrawInfo focusedItemDraw;
     bool mustDrawFocusedItem = false;
     if(focusedItem) {
         mustDrawFocusedItem =
@@ -1535,8 +1558,10 @@ bool GuiManager::tick(float deltaT) {
         focusedItem && mustDrawFocusedItem &&
         focusedItem->focusable
     ) {
-        focusCursor.intendedRect.center = focusedItemDraw.center;
-        focusCursor.intendedRect.size = focusedItemDraw.size;
+        focusCursor.intendedRect.center =
+            Point(focusedItemDraw.centerPxX, focusedItemDraw.centerPxY);
+        focusCursor.intendedRect.size =
+            Point(focusedItemDraw.pxWidth, focusedItemDraw.pxHeight);
         if(focusCursor.alpha == 0.0f) {
             //Teleport.
             focusCursor.curRect.center = focusCursor.intendedRect.center;
@@ -1658,7 +1683,7 @@ ListGuiItem::ListGuiItem() :
     GuiItem() {
     
     pxPadding = 8.0f;
-    onDraw =
+    onDrawP =
     [this] (const DrawInfo & draw) {
         this->defDrawCode(draw);
     };
@@ -1933,7 +1958,7 @@ PickerGuiItem::PickerGuiItem(
     nrOptions(nrOptions),
     curOptionIdx(curOptionIdx) {
     
-    onDraw =
+    onDrawP =
     [this] (const DrawInfo & draw) {
         this->defDrawCode(draw);
     };
@@ -2106,7 +2131,7 @@ void PickerGuiItem::defMouseOverCode(const Point& cursorPos) {
 ScrollGuiItem::ScrollGuiItem() :
     GuiItem() {
     
-    onDraw =
+    onDrawP =
     [this] (const DrawInfo & draw) {
         this->defDrawCode(draw);
     };
@@ -2282,7 +2307,7 @@ TextGuiItem::TextGuiItem(
     color(color),
     flags(flags) {
     
-    onDraw =
+    onDrawP =
     [this] (const DrawInfo & draw) {
         this->defDrawCode(draw);
     };
@@ -2361,7 +2386,7 @@ TooltipGuiItem::TooltipGuiItem(GuiManager* gui) :
     GuiItem(),
     gui(gui) {
     
-    onDraw =
+    onDrawP =
     [this] (const DrawInfo & draw) {
         this->defDrawCode(draw);
     };

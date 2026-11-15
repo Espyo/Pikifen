@@ -64,9 +64,11 @@ void ModalGuiManager::close() {
 
 /**
  * @brief Draws the manager.
+ *
+ * @return Whether it succeeded.
  */
-void ModalGuiManager::draw() {
-    if(!visible) return;
+bool ModalGuiManager::draw() {
+    if(!visible) return false;
     
     float alphaMult;
     if(animType == GUI_MANAGER_ANIM_FADE_OUT) {
@@ -85,7 +87,7 @@ void ModalGuiManager::draw() {
         multAlpha(game.config.guiColors.pauseVignette, alphaMult)
     );
     
-    GuiManager::draw();
+    return GuiManager::draw();
 }
 
 
@@ -212,7 +214,7 @@ void ModalGuiManager::updateItems() {
         TextGuiItem* textInputItem = new TextGuiItem(
             "", game.sysContent.fntStandard, game.config.guiColors.gold
         );
-        textInputItem->onDraw =
+        textInputItem->onDrawP =
         [textInputItem, this] (const DrawInfo & draw) {
             textInputItem->text = textInput.getString();
             textInputItem->defDrawCode(draw);

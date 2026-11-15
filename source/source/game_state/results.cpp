@@ -188,7 +188,7 @@ void Results::addNewPageItems(
     
     //Left page input icon.
     GuiItem* leftPageInput = new GuiItem();
-    leftPageInput->onDraw =
+    leftPageInput->onDrawP =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showGuiInputIcons) return;
         drawPlayerActionInputSourceIcon(
@@ -209,7 +209,7 @@ void Results::addNewPageItems(
     
     //Right page input icon.
     GuiItem* rightPageInput = new GuiItem();
-    rightPageInput->onDraw =
+    rightPageInput->onDrawP =
     [this] (const DrawInfo & draw) {
         if(!game.options.misc.showGuiInputIcons) return;
         drawPlayerActionInputSourceIcon(
@@ -355,10 +355,10 @@ void Results::doLogic() {
     const float oldTimeRatio = oldAnimTime / TEXT_ANIM_FALL_DURATION;
     
     forIdx(t, textToAnimate) {
-        DrawInfo itemDrawInfo;
+        DumbGui::DrawInfo itemDrawInfo;
         bool itemVisible = gui.getItemDrawInfo(textToAnimate[t], &itemDrawInfo);
         if(!itemVisible) continue;
-        const float itemRatioY = itemDrawInfo.center.y / game.winH;
+        const float itemRatioY = itemDrawInfo.centerPxY / game.winH;
         if(passedBy(oldTimeRatio, newTimeRatio, itemRatioY)) {
             textToAnimate[t]->startJuiceAnimation(
                 GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_MEDIUM
@@ -379,21 +379,21 @@ void Results::drawScoreChartConnections() {
     const ALLEGRO_COLOR LINE_COLOR = COLOR_BLACK;
     const ALLEGRO_COLOR SCORE_CIRCLE_COLOR = al_map_rgb(96, 96, 192);
     const ALLEGRO_COLOR MINOR_CIRCLE_COLOR = al_map_rgb(0, 0, 96);
-    DrawInfo chartDraw;
+    DumbGui::DrawInfo chartDraw;
     gui.getItemDrawInfo(scoreChartChart, &chartDraw);
     
     //The connector lines.
     forIdx(i, scoreMarkerGuiItems) {
         GuiItem* iPtr =
             scoreMarkerGuiItems[scoreMarkerGuiItems.size() - (1 + i)];
-        DrawInfo itemDraw;
+        DumbGui::DrawInfo itemDraw;
         gui.getItemDrawInfo(iPtr, &itemDraw);
         
-        const float x1 = itemDraw.center.x + itemDraw.size.x / 2.0f;
+        const float x1 = itemDraw.centerPxX + itemDraw.pxWidth / 2.0f;
         const float x2 = x1 + 24.0f;
-        const float x3 = chartDraw.center.x - 24.0f;
-        const float x4 = chartDraw.center.x;
-        const float y1 = itemDraw.center.y;
+        const float x3 = chartDraw.centerPxX - 24.0f;
+        const float x4 = chartDraw.centerPxX;
+        const float y1 = itemDraw.centerPxY;
         const float y2 = getScoreChartY(scoreMarkers[i].second) - 1.0f;
         const ALLEGRO_COLOR color =
             multAlpha(LINE_COLOR, iPtr->focused ? 0.75f : 0.20f);
@@ -406,7 +406,7 @@ void Results::drawScoreChartConnections() {
     
     //Circle for the player's score.
     al_draw_filled_circle(
-        chartDraw.center.x, getScoreChartY(finalMissionScore),
+        chartDraw.centerPxX, getScoreChartY(finalMissionScore),
         16.0f +
         sin(game.timePassed * RESULTS::CHART_CIRCLE_TIME_SCALE) *
         RESULTS::CHART_CIRCLE_SIZE_OFFSET, SCORE_CIRCLE_COLOR
@@ -415,7 +415,7 @@ void Results::drawScoreChartConnections() {
     //Circle for the old record.
     if(!oldRecord.date.empty()) {
         al_draw_filled_circle(
-            chartDraw.center.x,
+            chartDraw.centerPxX,
             getScoreChartY(oldRecord.score),
             12.0f, MINOR_CIRCLE_COLOR
         );
@@ -424,7 +424,7 @@ void Results::drawScoreChartConnections() {
     //Circle for the maker's record.
     if(!game.curArea->mission.makerRecordDate.empty()) {
         al_draw_filled_circle(
-            chartDraw.center.x,
+            chartDraw.centerPxX,
             getScoreChartY(game.curArea->mission.makerRecord),
             12.0f, MINOR_CIRCLE_COLOR
         );
@@ -543,12 +543,12 @@ string Results::getName() const {
  * @return The Y coordinate.
  */
 float Results::getScoreChartY(int score) const {
-    DrawInfo chartDraw;
+    DumbGui::DrawInfo chartDraw;
     gui.getItemDrawInfo(scoreChartChart, &chartDraw);
     const int chartRange = scoreChartTop - scoreChartBottom;
-    const float chartBottomY = chartDraw.center.y + chartDraw.size.y / 2.0f;
+    const float chartBottomY = chartDraw.centerPxY + chartDraw.pxHeight / 2.0f;
     return
-        chartBottomY - chartDraw.size.y *
+        chartBottomY - chartDraw.pxHeight *
         ((score - scoreChartBottom) / (float) chartRange);
 }
 
@@ -627,7 +627,7 @@ void Results::initGuiMain() {
             finalScoreTextStr, game.sysContent.fntAreaName,
             finalScoreTextColor
         );
-        finalScoreText->onDraw =
+        finalScoreText->onDrawP =
         [finalScoreText] (const DrawInfo & draw) {
             DrawInfo swayDraw = draw;
             swayDraw.center.x +=
@@ -649,7 +649,7 @@ void Results::initGuiMain() {
             new TextGuiItem(
             finalScoreLabelStr, game.sysContent.fntAreaName
         );
-        finalScoreLabelText->onDraw =
+        finalScoreLabelText->onDrawP =
         
         [finalScoreLabelText] (const DrawInfo & draw) {
             DrawInfo swayDraw = draw;
@@ -670,7 +670,7 @@ void Results::initGuiMain() {
     //Medal image.
     if(game.curArea->type == AREA_TYPE_MISSION) {
         GuiItem* medalItem = new GuiItem;
-        medalItem->onDraw =
+        medalItem->onDrawP =
         [this] (const DrawInfo & draw) {
             ALLEGRO_BITMAP* bmp = nullptr;
             switch(medal) {
@@ -894,7 +894,7 @@ void Results::initGuiScoreChart() {
     //Score chart graphic.
     scoreChartChart = new ListGuiItem();
     scoreChartPageBox->addChild(scoreChartChart);
-    scoreChartChart->onDraw =
+    scoreChartChart->onDrawP =
     [this] (const DrawInfo & draw) {
         drawScoreChartGraphic(draw);
         scoreChartChart->defDrawCode(draw);
@@ -1158,10 +1158,10 @@ void Results::populateScoreChart() {
     //Add a bit of padding so the arrow and 0 marker can breathe
     //and so that the platinum region can be more than a few pixels.
     const float range = scoreChartTop - scoreChartBottom;
-    DrawInfo chartDraw;
+    DumbGui::DrawInfo chartDraw;
     gui.getItemDrawInfo(scoreChartChart, &chartDraw);
-    const float topPaddingHeightRatio = 32.0f / chartDraw.size.y;
-    const float bottomPaddingHeightRatio = 4.0f / chartDraw.size.y;
+    const float topPaddingHeightRatio = 32.0f / chartDraw.pxHeight;
+    const float bottomPaddingHeightRatio = 4.0f / chartDraw.pxHeight;
     scoreChartTop += std::max(range * topPaddingHeightRatio, 1.0f);
     scoreChartBottom -= std::max(range * bottomPaddingHeightRatio, 1.0f);
     

@@ -307,9 +307,6 @@ public:
     
     //--- Public members ---
     
-    //Drawing layer. The lower the number, the sooner it'll be drawn.
-    unsigned char drawingLayer = GUI::DRAWING_LAYER_NORMAL;
-    
     //Can this item's activation be auto-repeated by holding the button down?
     bool canAutoRepeat = false;
     
@@ -326,7 +323,8 @@ public:
     float juiceTimer = 0.0f;
     
     //What to do when it's time to draw it.
-    std::function<void(const DrawInfo& draw)> onDraw = nullptr;
+    //Unlike DumbGui::Item::onDraw, this uses Points and ALLEGRO_COLORs.
+    std::function<void(const DrawInfo& draw)> onDrawP = nullptr;
     
     //What to do when it receives any Allegro event.
     std::function<void(const ALLEGRO_EVENT& ev)> onAllegroEvent = nullptr;
@@ -362,6 +360,10 @@ public:
     
     bool activate(const Point& cursorPos = Point());
     bool isMouseOn(const Point& cursorPos) const;
+    
+    bool draw(const DumbGui::DrawInfo& draw) override;
+    
+    static DrawInfo fromDumbDrawInfo(const DumbGui::DrawInfo& dumbDraw);
     
 };
 
@@ -698,7 +700,6 @@ public:
     
     GuiManager();
     bool addItem(GuiItem* item, const string& id = "");
-    bool draw();
     bool tick(float deltaT);
     void changeCurAnimationDuration(float newDuration);
     GUI_MANAGER_ANIM getAnimation() const;
@@ -708,7 +709,6 @@ public:
         vector<HardcodedGuiItemDef>* outHardcodedItemDefs,
         vector<CustomGuiItemDef>* outCustomItemDefs
     );
-    bool getItemDrawInfo(GuiItem* item, GuiItem::DrawInfo* draw) const;
     bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
     bool handlePlayerAction(const Inpution::Action& action);
     bool readDataFile(DataNode* node, GuiItem* customChildrenParent = nullptr);
@@ -730,6 +730,17 @@ public:
     );
     bool destroy();
     
+    bool draw() override;
+    bool getItemDrawInfo(
+        DumbGui::Item* item, DumbGui::DrawInfo* draw
+    ) const override;
+    
+    void getClippingRectangle(
+        int* outX1, int* outY1, int* outWidth, int* outHeight
+    ) const override;
+    void setClippingRectangle(
+        int x1, int y1, int width, int height
+    ) override;
     int getWindowPxWidth() const override;
     int getWindowPxHeight() const override;
     

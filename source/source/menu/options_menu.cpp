@@ -213,7 +213,7 @@ void OptionsMenu::addNewBindEntryItems(
             [this, actionType, b] (float, float) {
                 chooseInput(actionType.id, b);
             };
-            bindButton->onDraw =
+            bindButton->onDrawP =
                 [this, b, aBinds, bindButton]
             (const DrawInfo & draw) {
                 drawInputSourceIcon(
@@ -250,7 +250,7 @@ void OptionsMenu::addNewBindEntryItems(
                 [this, actionType, b] (float, float) {
                     deleteBind(actionType.id, b);
                 };
-                deleteBindButton->onDraw =
+                deleteBindButton->onDrawP =
                     [this, deleteBindButton]
                 (const DrawInfo & draw) {
                     drawButton(
@@ -295,7 +295,7 @@ void OptionsMenu::addNewBindEntryItems(
             [this, actionType] (float, float) {
                 chooseInput(actionType.id, 0);
             };
-            bindButton->onDraw =
+            bindButton->onDrawP =
                 [this, bindButton]
             (const DrawInfo & draw) {
                 drawButton(
@@ -407,7 +407,7 @@ void OptionsMenu::addNewBindEntryItems(
                     Point(0.17f, OPTIONS_MENU::BIND_BUTTON_HEIGHT)
                 )
             );
-            defaultIcon->onDraw =
+            defaultIcon->onDrawP =
             [defInputSource] (const DrawInfo & draw) {
                 drawInputSourceIcon(
                     defInputSource, draw.center, draw.size,
@@ -428,7 +428,7 @@ void OptionsMenu::addNewBindEntryItems(
             Point(0.90f, 0.02f)
         )
     );
-    line->onDraw =
+    line->onDrawP =
     [] (const DrawInfo & draw) {
         al_draw_line(
             draw.center.x - draw.size.x / 2.0f,
@@ -534,7 +534,7 @@ void OptionsMenu::addNewShortcutItems(unsigned char index) {
     
     //Label text.
     GuiItem* text = new GuiItem();
-    text->onDraw =
+    text->onDrawP =
     [this, index] (const DrawInfo & draw) {
         drawShortcutName(draw, index);
     };
@@ -912,7 +912,7 @@ void OptionsMenu::initGuiControlBindsPage() {
     //Controls warning button.
     bindsWarningButton = new ButtonGuiItem("", game.sysContent.fntStandard);
     bindsWarningButton->forceSquare = true;
-    bindsWarningButton->onDraw =
+    bindsWarningButton->onDrawP =
     [this] (const DrawInfo & draw) {
         bindsWarningButton->defDrawCode(draw);
         drawBitmapInBox(
@@ -1084,7 +1084,7 @@ void OptionsMenu::initGuiControlsPage() {
     {"Very slow", "Slow", "Medium", "Fast", "Very fast"},
     "Leader cursor speed, when controlling without buttons/keys."
     );
-    leaderCursorSpeedPicker->onDraw =
+    leaderCursorSpeedPicker->onDrawP =
     [this] (const DrawInfo & draw) {
         DrawInfo newDraw = draw;
         if(game.options.controls.mouseMovesLeaderCursor[0]) {
@@ -1589,7 +1589,7 @@ void OptionsMenu::initGuiTopPage() {
     //Controls options button.
     ButtonGuiItem* controlsButton =
         new ButtonGuiItem("Controls", game.sysContent.fntStandard);
-    controlsButton->onDraw =
+    controlsButton->onDrawP =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_CONTROLS, draw.center, draw.size, controlsIconLeft,
@@ -1617,7 +1617,7 @@ void OptionsMenu::initGuiTopPage() {
     //Graphics options button.
     ButtonGuiItem* graphicsButton =
         new ButtonGuiItem("Graphics", game.sysContent.fntStandard);
-    graphicsButton->onDraw =
+    graphicsButton->onDrawP =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_GRAPHICS, draw.center, draw.size, graphicsIconLeft,
@@ -1645,7 +1645,7 @@ void OptionsMenu::initGuiTopPage() {
     //Audio options button.
     ButtonGuiItem* audioButton =
         new ButtonGuiItem("Audio", game.sysContent.fntStandard);
-    audioButton->onDraw =
+    audioButton->onDrawP =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_AUDIO, draw.center, draw.size, audioIconLeft, draw.tint
@@ -1671,7 +1671,7 @@ void OptionsMenu::initGuiTopPage() {
     //Packs options button.
     ButtonGuiItem* packsButton =
         new ButtonGuiItem("Packs", game.sysContent.fntStandard);
-    packsButton->onDraw =
+    packsButton->onDrawP =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_PACKS, draw.center, draw.size, packsIconLeft, draw.tint
@@ -1707,7 +1707,7 @@ void OptionsMenu::initGuiTopPage() {
     //Misc. options button.
     ButtonGuiItem* miscButton =
         new ButtonGuiItem("Misc.", game.sysContent.fntStandard);
-    miscButton->onDraw =
+    miscButton->onDrawP =
     [ = ] (const DrawInfo & draw) {
         drawMenuButtonIcon(
             MENU_ICON_OPTIONS_MISC, draw.center, draw.size, miscIconLeft,

@@ -136,7 +136,9 @@ struct HudBubbleManager {
             return;
         }
         
-        bool visible = hud->getItemDrawInfo(it->second.bubble, draw);
+        DumbGui::DrawInfo dumbDraw;
+        bool visible = hud->getItemDrawInfo(it->second.bubble, &dumbDraw);
+        *draw = GuiItem::fromDumbDrawInfo(dumbDraw);
         
         if(!visible) {
             *content = ContentT();
@@ -180,12 +182,12 @@ struct HudBubbleManager {
         
         if(matchIt != bubbles.end()) {
             matchPtr = matchIt->second.bubble;
-            DrawInfo matchDraw;
+            DumbGui::DrawInfo matchDraw;
             if(
                 hud->getItemDrawInfo(matchPtr, &matchDraw)
             ) {
-                matchPos = matchDraw.center;
-                matchSize = matchDraw.size;
+                matchPos = Point(matchDraw.centerPxX, matchDraw.centerPxY);
+                matchSize = Point(matchDraw.pxWidth, matchDraw.pxHeight);
             } else {
                 matchPtr = nullptr;
             }

@@ -250,7 +250,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
     
     //Image item.
     GuiItem* imageItem = new GuiItem();
-    imageItem->onDraw =
+    imageItem->onDrawP =
     [this] (const DrawInfo & draw) {
         if(curTidbit == nullptr) return;
         if(curTidbit->image == nullptr) return;
@@ -264,7 +264,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
     //Tooltip text.
     TextGuiItem* tooltipText =
         new TextGuiItem("", game.sysContent.fntStandard);
-    tooltipText->onDraw =
+    tooltipText->onDrawP =
         [this]
     (const DrawInfo & draw) {
         drawTidbit(
