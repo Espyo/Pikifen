@@ -1053,8 +1053,8 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.changeState("inactive_sleeping");
         }
         efc.newEvent(FSM_EV_HITBOX_TOUCH_N_A); {
-            efc.run(LeaderFsm::beAttacked);
             efc.run(LeaderFsm::startWakingUp);
+            efc.run(LeaderFsm::beAttacked);
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
             efc.run(GenMobFsm::touchHazard);
@@ -1081,8 +1081,8 @@ void LeaderFsm::createFsm(MobType* typ) {
             efc.changeState("sleeping");
         }
         efc.newEvent(FSM_EV_HITBOX_TOUCH_N_A); {
-            efc.run(LeaderFsm::beAttacked);
             efc.run(LeaderFsm::startWakingUp);
+            efc.run(LeaderFsm::beAttacked);
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
             efc.run(GenMobFsm::touchHazard);
@@ -1338,7 +1338,7 @@ void LeaderFsm::beAttacked(ScriptVM* scriptVM, void* info1, void* info2) {
         game.statistics.leaderDamageSuffered += healthBefore - leaPtr->health;
     }
     leaPtr->invulnPeriod.start(LEADER::INVULN_PERIOD_NORMAL);
-    
+
     //Next state.
     if(knockbackExists) {
         //Behavior changes.
@@ -2833,7 +2833,7 @@ void LeaderFsm::startWakingUp(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->setAnimation(LEADER_ANIM_GETTING_UP);
-    if(leaPtr->isActive) {
+    if(leaPtr->player) {
         scriptVM->fsm.setState(LEADER_STATE_WAKING_UP);
     } else {
         scriptVM->fsm.setState(LEADER_STATE_INACTIVE_WAKING_UP);
