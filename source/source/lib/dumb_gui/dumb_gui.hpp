@@ -76,6 +76,9 @@ public:
     //Padding amount around the children items, in pixels.
     float pxPadding = 0.0f;
     
+    //Whether to clip the children items' drawing to the confines of the item.
+    bool clipChildren = true;
+    
     
     //Force its final dimensions to be square, such that they fit inside
     //the reference dimensions.
@@ -90,6 +93,11 @@ public:
     virtual void getReferencePxSize(
         float* outPxWidth, float* outPxHeight
     ) const;
+    
+    virtual bool addChild(Item* item);
+    virtual bool deleteAllChildren();
+    virtual float getChildrenRatioSpan(bool horizontal = false) const;
+    virtual bool removeChild(Item* item);
     
 };
 

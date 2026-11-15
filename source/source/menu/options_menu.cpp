@@ -95,7 +95,7 @@ void OptionsMenu::addNewBindEntryItems(
     }
     
     float actionY =
-        bindsListBox->getChildrenSpan() +
+        bindsListBox->getChildrenRatioSpan() +
         OPTIONS_MENU::BIND_BUTTON_PADDING;
         
     if(addSectionHeader) {
@@ -139,7 +139,7 @@ void OptionsMenu::addNewBindEntryItems(
         bindsGui.addItem(sectionText);
         
         actionY =
-            bindsListBox->getChildrenSpan() +
+            bindsListBox->getChildrenRatioSpan() +
             OPTIONS_MENU::BIND_BUTTON_PADDING;
     }
     
@@ -424,7 +424,7 @@ void OptionsMenu::addNewBindEntryItems(
     GuiItem* line = new GuiItem();
     line->setRawRatioRect(
         Rect(
-            Point(0.50f, bindsListBox->getChildrenSpan() + 0.02f),
+            Point(0.50f, bindsListBox->getChildrenRatioSpan() + 0.02f),
             Point(0.90f, 0.02f)
         )
     );
@@ -479,7 +479,7 @@ void OptionsMenu::addNewShortcutItemItems(
     const ALLEGRO_COLOR& textColor
 ) {
     float actionY =
-        shortcutItemsListBox->getChildrenSpan() +
+        shortcutItemsListBox->getChildrenRatioSpan() +
         OPTIONS_MENU::SHORTCUT_BUTTON_PADDING;
         
     float curY = actionY + OPTIONS_MENU::SHORTCUT_BUTTON_HEIGHT / 2.0f;

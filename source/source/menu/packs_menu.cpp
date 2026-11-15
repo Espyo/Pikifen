@@ -160,7 +160,7 @@ void PacksMenu::initGuiMain() {
     gui.addItem(baseBullet);
     
     forIdx(p, packOrder) {
-        float listBottomY = packsList->getChildrenSpan();
+        float listBottomY = packsList->getChildrenRatioSpan();
         float rowCenterY = listBottomY + ITEM_PADDING + ITEM_HEIGHT / 2.0f;
         
         //Pack bullet.

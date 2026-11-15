@@ -16,6 +16,60 @@
 
 
 /**
+ * @brief Adds an existing item to the list of children items.
+ *
+ * @param item Item to add as a child item.
+ * @return Whether it succeeded.
+ */
+bool DumbGui::Item::addChild(Item* item) {
+    if(!item) return false;
+    children.push_back(item);
+    item->parent = this;
+    return true;
+}
+
+
+/**
+ * @brief Removes and deletes all children items.
+ *
+ * @return Whether all of the deletions succeeded.
+ */
+bool DumbGui::Item::deleteAllChildren() {
+    bool success = true;
+    while(!children.empty()) {
+        Item* iPtr = children[0];
+        removeChild(iPtr);
+        success &= manager->removeItem(iPtr);
+        delete iPtr;
+    }
+    return success;
+}
+
+
+/**
+ * @brief Returns the bottommost Y coordinate (in height ratio),
+ * or the rightmost X coordinate (in width ratio),
+ * of the item's children items.
+ *
+ * @param horizontal If true, check the horizontal reach (width). If false,
+ * check the vertical reach (height).
+ * @return The X or Y coordinate.
+ */
+float DumbGui::Item::getChildrenRatioSpan(bool horizontal) const {
+    float span = 0.0f;
+    for(size_t c = 0; c < children.size(); c++) {
+        Item* cPtr = children[c];
+        float cCoord =
+            horizontal ?
+            cPtr->rawCenterRatioX + (cPtr->rawRatioWidth / 2.0f) :
+            cPtr->rawCenterRatioY + (cPtr->rawRatioHeight / 2.0f);
+        span = std::max(span, cCoord);
+    }
+    return span;
+}
+
+
+/**
  * @brief Returns the reference center coordinates, in pixels.
  * These are used, for instance, when not animating.
  *
@@ -90,6 +144,25 @@ void DumbGui::Item::getReferencePxSize(
     
     *outPxWidth = finalPxWidth;
     *outPxHeight = finalPxHeight;
+}
+
+
+/**
+ * @brief Removes an item from the list of children, without deleting it.
+ *
+ * @param item Child item to remove.
+ * @return Whether it succeeded.
+ */
+bool DumbGui::Item::removeChild(Item* item) {
+    for(size_t c = 0; c < children.size(); c++) {
+        if(children[c] == item) {
+            children.erase(children.begin() + c);
+            item->parent = nullptr;
+            return true;
+        }
+    }
+    
+    return false;
 }
 
 

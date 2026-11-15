@@ -319,9 +319,6 @@ public:
     //Is it currently the focused item?
     bool focused = false;
     
-    //Whether to clip the children items' drawing to the confines of the item.
-    bool clipChildren = true;
-    
     //Drawing layer. The lower the number, the sooner it'll be drawn.
     unsigned char drawingLayer = GUI::DRAWING_LAYER_NORMAL;
     
@@ -385,14 +382,10 @@ public:
     Rect getReferencePxRect() const;
     
     bool activate(const Point& cursorPos = Point());
-    bool addChild(GuiItem* item);
-    bool deleteAllChildren();
-    float getChildrenSpan(bool horizontal = false) const;
     float getJuiceValue() const;
     bool isMouseOn(const Point& cursorPos) const;
     bool isResponsive() const;
     bool isVisible() const;
-    bool removeChild(GuiItem* item);
     bool startJuiceAnimation(JUICE_TYPE type);
     
 };

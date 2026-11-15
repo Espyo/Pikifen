@@ -29,7 +29,7 @@ const string GUI_FILE_NAME = "statistics_menu";
  * @param label Name of the header.
  */
 void StatsMenu::addNewHeaderItem(const string& label) {
-    float listBottomY = statsList->getChildrenSpan();
+    float listBottomY = statsList->getChildrenRatioSpan();
     const float HEADER_HEIGHT = 0.09f;
     const float STAT_PADDING = 0.02f;
     const float STATS_OFFSET = 0.01f;
@@ -62,7 +62,7 @@ void StatsMenu::addNewHeaderItem(const string& label) {
 TextGuiItem* StatsMenu::addNewStatItem(
     const string& label, const string& value, const string& description
 ) {
-    float listBottomY = statsList->getChildrenSpan();
+    float listBottomY = statsList->getChildrenRatioSpan();
     const float STAT_HEIGHT = 0.08f;
     const float STAT_PADDING = 0.02f;
     const float STATS_OFFSET = 0.01f;

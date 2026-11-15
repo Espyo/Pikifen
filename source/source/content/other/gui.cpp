@@ -350,61 +350,6 @@ bool GuiItem::activate(const Point& cursorPos) {
 
 
 /**
- * @brief Adds an existing item to the list of children items.
- *
- * @param item Item to add as a child item.
- * @return Whether it succeeded.
- */
-bool GuiItem::addChild(GuiItem* item) {
-    if(!item) return false;
-    children.push_back(item);
-    item->parent = this;
-    return true;
-}
-
-
-/**
- * @brief Removes and deletes all children items.
- *
- * @return Whether all of the deletions succeeded.
- */
-bool GuiItem::deleteAllChildren() {
-    bool success = true;
-    while(!children.empty()) {
-        GuiItem* iPtr = (GuiItem*) children[0];
-        removeChild(iPtr);
-        success &= manager->removeItem(iPtr);
-        delete iPtr;
-    }
-    return success;
-}
-
-
-/**
- * @brief Returns the bottommost Y coordinate (in height ratio),
- * or the rightmost X coordinate (in width ratio),
- * of the item's children items.
- *
- * @param horizontal If true, check the horizontal reach (width). If false,
- * check the vertical reach (height).
- * @return The X or Y coordinate.
- */
-float GuiItem::getChildrenSpan(bool horizontal) const {
-    float span = 0.0f;
-    forIdx(c, children) {
-        GuiItem* cPtr = (GuiItem*) children[c];
-        Rect cRect = cPtr->getRawRatioRect();
-        float cCoord =
-            horizontal ?
-            cRect.center.x + (cRect.size.x / 2.0f) :
-            cRect.center.y + (cRect.size.y / 2.0f);
-        span = std::max(span, cCoord);
-    }
-    return span;
-}
-
-
-/**
  * @brief Returns the value related to the current juice animation.
  *
  * @return The juice value, or 0 if there's no animation.
@@ -539,25 +484,6 @@ bool GuiItem::isVisible() const {
     if(!visible) return false;
     if(parent) return ((GuiItem*) parent)->isVisible();
     return true;
-}
-
-
-/**
- * @brief Removes an item from the list of children, without deleting it.
- *
- * @param item Child item to remove.
- * @return Whether it succeeded.
- */
-bool GuiItem::removeChild(GuiItem* item) {
-    bool success = false;
-    forIdx(c, children) {
-        if(children[c] == item) {
-            eraseInVector(children, c);
-            item->parent = nullptr;
-            success = true;
-        }
-    }
-    return success;
 }
 
 
@@ -1831,7 +1757,7 @@ ListGuiItem::ListGuiItem() :
  */
 void ListGuiItem::defChildFocusedViaSNCode(const GuiItem* child) {
     //Try to center the child.
-    float childrenSpan = getChildrenSpan(horizontal);
+    float childrenSpan = getChildrenRatioSpan(horizontal);
     float* offsetPtr = !horizontal ? &offsetRatioY : &offsetRatioX;
     float coord =
         !horizontal ?
@@ -1892,7 +1818,7 @@ void ListGuiItem::defDrawCode(const DrawInfo& draw) {
             vertexes, nullptr, nullptr, 0, 8, ALLEGRO_PRIM_TRIANGLE_STRIP
         );
     }
-    float childrenVSpan = getChildrenSpan();
+    float childrenVSpan = getChildrenRatioSpan();
     if(
         childrenVSpan > 1.0f && offsetRatioY < childrenVSpan - 1.0f && !horizontal
     ) {
@@ -1968,7 +1894,7 @@ void ListGuiItem::defDrawCode(const DrawInfo& draw) {
             vertexes, nullptr, nullptr, 0, 8, ALLEGRO_PRIM_TRIANGLE_STRIP
         );
     }
-    float childrenHSpan = getChildrenSpan(true);
+    float childrenHSpan = getChildrenRatioSpan(true);
     if(childrenHSpan > 1.0f && offsetRatioX < childrenHSpan - 1.0f && horizontal) {
         //Shade effect at the right.
         ALLEGRO_VERTEX vertexes[8];
@@ -2019,7 +1945,7 @@ void ListGuiItem::defEventCode(const ALLEGRO_EVENT& ev) {
         isMouseOn(Point(ev.mouse.x, ev.mouse.y)) &&
         ev.mouse.dz != 0.0f
     ) {
-        float childrenSpan = getChildrenSpan(horizontal);
+        float childrenSpan = getChildrenRatioSpan(horizontal);
         if(childrenSpan <= 1.0f && offsetRatioY == 0.0f) {
             return;
         }
@@ -2039,7 +1965,7 @@ void ListGuiItem::defEventCode(const ALLEGRO_EVENT& ev) {
  * @param deltaT How long the frame's tick is, in seconds.
  */
 void ListGuiItem::defTickCode(float deltaT) {
-    float childrenSpan = getChildrenSpan(horizontal);
+    float childrenSpan = getChildrenRatioSpan(horizontal);
     float* offsetPtr = !horizontal ? &offsetRatioY : &offsetRatioX;
     if(childrenSpan < 1.0f) {
         targetOffset = 0.0f;
@@ -2273,7 +2199,7 @@ void ScrollGuiItem::defDrawCode(const DrawInfo& draw) {
     if(!horizontal) {
         float barY = 0.0f; //Top, in height ratio.
         float barH = 0.0f; //In height ratio.
-        float listBottom = listItem->getChildrenSpan();
+        float listBottom = listItem->getChildrenRatioSpan();
         float alpha = 0.20f;
         if(listBottom > 1.0f) {
             float offset = std::min(listItem->offsetRatioY, listBottom - 1.0f);
@@ -2302,7 +2228,7 @@ void ScrollGuiItem::defDrawCode(const DrawInfo& draw) {
     } else {
         float barX = 0.0f; //Left, in width ratio.
         float barW = 0.0f; //In width ratio.
-        float listDepth = listItem->getChildrenSpan(true);
+        float listDepth = listItem->getChildrenRatioSpan(true);
         float alpha = 0.20f;
         if(listDepth > 1.0f) {
             float offset = std::min(listItem->offsetRatioX, listDepth - 1.0f);
@@ -2370,7 +2296,7 @@ void ScrollGuiItem::defEventCode(const ALLEGRO_EVENT& ev) {
  */
 void ScrollGuiItem::setOffsetFromMouse(float x, float y) {
     if(!horizontal) {
-        float listBottom = listItem->getChildrenSpan();
+        float listBottom = listItem->getChildrenRatioSpan();
         isMouseDragging = true;
         
         if(listBottom <= 1.0f) {
@@ -2387,7 +2313,7 @@ void ScrollGuiItem::setOffsetFromMouse(float x, float y) {
         listItem->targetOffset = click * (listBottom - 1.0f);
         
     } else {
-        float listDepth = listItem->getChildrenSpan(true);
+        float listDepth = listItem->getChildrenRatioSpan(true);
         isMouseDragging = true;
         
         if(listDepth <= 1.0f) {
