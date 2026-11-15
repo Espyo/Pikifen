@@ -320,7 +320,7 @@ void CustomGuiItemDef::clearBitmap() {
  * @param focusable Can the item be focused by the player?
  */
 GuiItem::GuiItem(bool focusable) :
-    focusable(focusable) {
+    DumbGui::Item(focusable) {
     
 }
 
@@ -882,8 +882,8 @@ GUI_MANAGER_ANIM GuiManager::getAnimation() const {
  */
 string GuiManager::getCurrentTooltip() const {
     if(!focusedItem) return string();
-    if(!focusedItem->onGetTooltip) return string();
-    return focusedItem->onGetTooltip();
+    if(!((GuiItem*) focusedItem)->onGetTooltip) return string();
+    return ((GuiItem*) focusedItem)->onGetTooltip();
 }
 
 
@@ -906,16 +906,6 @@ float GuiManager::getFadeAnimationAlpha() const {
             );
     }
     return 1.0f;
-}
-
-
-/**
- * @brief Returns which item is currently focused.
- *
- * @return The item, or nullptr for none.
- */
-GuiItem* GuiManager::getFocusedItem() const {
-    return focusedItem;
 }
 
 
@@ -1221,7 +1211,7 @@ bool GuiManager::handleAllegroEvent(const ALLEGRO_EVENT& ev) {
     
     if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN && ev.mouse.button == 1) {
         if(focusedItem) {
-            focusedItem->activate(Point(ev.mouse.x, ev.mouse.y));
+            ((GuiItem*) focusedItem)->activate(Point(ev.mouse.x, ev.mouse.y));
             autoRepeater.start();
         }
         mouseMoved = true;
@@ -1271,7 +1261,7 @@ bool GuiManager::handlePlayerAction(const Inpution::Action& action) {
         
     } case PLAYER_ACTION_TYPE_MENU_OK: {
         if(focusedItem && isDown) {
-            focusedItem->activate();
+            ((GuiItem*) focusedItem)->activate();
             autoRepeater.start();
         } else if(!isDown) {
             autoRepeater.stop();
@@ -1306,11 +1296,11 @@ bool GuiManager::handlePlayerAction(const Inpution::Action& action) {
 void GuiManager::handleSpatialNavigationAction(const Inpution::Action& action) {
     //Check if the currently-focused item wants to consume the action.
     if(
-        focusedItem && focusedItem->isResponsive() &&
-        focusedItem->onMenuSNAction
+        focusedItem && ((GuiItem*) focusedItem)->isResponsive() &&
+        ((GuiItem*) focusedItem)->onMenuSNAction
     ) {
         if(
-            focusedItem->onMenuSNAction(
+            ((GuiItem*) focusedItem)->onMenuSNAction(
                 (PLAYER_ACTION_TYPE) action.actionTypeId
             )
         ) {
@@ -1386,21 +1376,11 @@ void GuiManager::handleSpatialNavigationAction(const Inpution::Action& action) {
             focusedItem->parent &&
             ((GuiItem*) focusedItem->parent)->onChildFocusedViaSN
         ) {
-            ((GuiItem*) focusedItem->parent)->onChildFocusedViaSN(focusedItem);
+            ((GuiItem*) focusedItem->parent)->onChildFocusedViaSN(
+                ((GuiItem*) focusedItem)
+            );
         }
     }
-}
-
-
-/**
- * @brief Hides all items until an animation shows them again.
- *
- * @return Whether it succeeded.
- */
-bool GuiManager::hideItems() {
-    if(!visible) return false;
-    visible = false;
-    return true;
 }
 
 
@@ -1491,22 +1471,16 @@ bool GuiManager::removeItem(GuiItem* item) {
  * @return Whether it succeeded.
  */
 bool GuiManager::setFocusedItem(GuiItem* item, bool silent) {
-    if(focusedItem == item) return false;
+    if(!DumbGui::Manager::setFocusedItem(((DumbGui::Item*) item), silent)) {
+        return false;
+    }
     
     autoRepeater.stop();
     
-    if(focusedItem) {
-        focusedItem->focused = false;
-    }
-    focusedItem = item;
-    if(focusedItem) {
-        focusedItem->focused = true;
-    }
-    
     if(onFocusChanged) onFocusChanged();
     if(focusedItem) {
-        if(focusedItem->onFocused) {
-            focusedItem->onFocused();
+        if(((GuiItem*) focusedItem)->onFocused) {
+            ((GuiItem*) focusedItem)->onFocused();
         }
     }
     
@@ -1530,18 +1504,6 @@ bool GuiManager::shouldHandleEvents() {
     if(!responsive) return false;
     if(animTimer.getRatioLeft() > 0.0f && ignoreInputOnAnimation) return false;
     if(game.fadeMgr.isFading()) return false;
-    return true;
-}
-
-
-/**
- * @brief Shows all items, if they were hidden.
- *
- * @return Whether it succeeded.
- */
-bool GuiManager::showItems() {
-    if(visible) return false;
-    visible = true;
     return true;
 }
 
@@ -1591,10 +1553,11 @@ bool GuiManager::tick(float deltaT) {
     size_t autoRepeatTriggers = autoRepeater.tick(deltaT);
     if(
         focusedItem &&
-        focusedItem->canAutoRepeat && focusedItem->onActivate
+        ((GuiItem*) focusedItem)->canAutoRepeat &&
+        ((GuiItem*) focusedItem)->onActivate
     ) {
         for(size_t r = 0; r < autoRepeatTriggers; r++) {
-            focusedItem->activate();
+            ((GuiItem*) focusedItem)->activate();
         }
     }
     
@@ -1602,7 +1565,8 @@ bool GuiManager::tick(float deltaT) {
     DrawInfo focusedItemDraw;
     bool mustDrawFocusedItem = false;
     if(focusedItem) {
-        mustDrawFocusedItem = getItemDrawInfo(focusedItem, &focusedItemDraw);
+        mustDrawFocusedItem =
+            getItemDrawInfo(((GuiItem*) focusedItem), &focusedItemDraw);
     }
     if(
         focusedItem && mustDrawFocusedItem &&

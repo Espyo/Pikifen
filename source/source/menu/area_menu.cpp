@@ -694,7 +694,7 @@ void AreaMenu::initGuiMain() {
             viewToggleButton->onGetTooltip =
             [] () {
                 return
-                    "Toggles between showing basic area info"
+                    "Toggles between showing basic area info "
                     "and mission briefing info.";
             };
             gui.addItem(viewToggleButton, "view_toggle");

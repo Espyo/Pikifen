@@ -61,6 +61,19 @@ public:
     float rawRatioHeight = 0.0f;
     
     
+    //Is it currently visible?
+    bool visible = true;
+    
+    //Is it currently responsive?
+    bool responsive = true;
+    
+    //Can it be focused?
+    bool focusable = false;
+    
+    //Is it currently the focused item?
+    bool focused = false;
+    
+    
     //What item it is placed inside of, if any.
     Item* parent = nullptr;
     
@@ -87,6 +100,7 @@ public:
     
     //--- Public function declarations ---
     
+    explicit Item(bool focusable = false);
     virtual ~Item() = default;
     
     virtual void getReferencePxCenter(float* outPxX, float* outPxY) const;
@@ -125,6 +139,9 @@ public:
     //List of items.
     vector<Item*> items;
     
+    //Is it currently responding to input?
+    bool responsive = true;
+    
     
     //--- Public function declarations ---
     
@@ -133,8 +150,25 @@ public:
     virtual bool addItem(Item* item);
     virtual bool removeItem(Item* item);
     
+    virtual Item* getFocusedItem() const;
+    virtual bool setFocusedItem(Item* item, bool silent = false);
+    
+    virtual bool hideItems();
+    virtual bool showItems();
+    
     virtual int getWindowPxWidth() const;
     virtual int getWindowPxHeight() const;
+    
+    
+protected:
+
+    //--- Protected members ---
+    
+    //Are the items currently visible?
+    bool visible = true;
+    
+    //Which item is currently focused.
+    Item* focusedItem = nullptr;
     
 };
 

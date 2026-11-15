@@ -128,7 +128,7 @@ bool Inventory::handlePlayerAction(const Inpution::Action& action) {
         action.value < 0.5f &&
         (game.options.controls.fastInventory || game.options.advanced.expoMode)
     ) {
-        GuiItem* focusedItem = gui.getFocusedItem();
+        GuiItem* focusedItem = (GuiItem*) gui.getFocusedItem();
         if(focusedItem) {
             focusedItem->activate();
         } else {

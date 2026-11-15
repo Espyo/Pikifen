@@ -16,6 +16,17 @@
 
 
 /**
+ * @brief Constructs a new GUI item object.
+ *
+ * @param focusable Can the item be focused by the user?
+ */
+DumbGui::Item::Item(bool focusable) :
+    focusable(focusable) {
+    
+}
+
+
+/**
  * @brief Adds an existing item to the list of children items.
  *
  * @param item Item to add as a child item.
@@ -187,6 +198,16 @@ bool DumbGui::Manager::addItem(Item* item) {
 
 
 /**
+ * @brief Returns which item is currently focused.
+ *
+ * @return The item, or nullptr for none.
+ */
+DumbGui::Item* DumbGui::Manager::getFocusedItem() const {
+    return focusedItem;
+}
+
+
+/**
  * @brief Returns the current height of the program window, in pixels.
  * This should be overridden by a derived class since it does not do anything.
  *
@@ -205,6 +226,18 @@ int DumbGui::Manager::getWindowPxHeight() const {
  */
 int DumbGui::Manager::getWindowPxWidth() const {
     return 100;
+}
+
+
+/**
+ * @brief Hides all items until an animation shows them again.
+ *
+ * @return Whether it succeeded.
+ */
+bool DumbGui::Manager::hideItems() {
+    if(!visible) return false;
+    visible = false;
+    return true;
 }
 
 
@@ -228,6 +261,42 @@ bool DumbGui::Manager::removeItem(Item* item) {
     }
     
     return success;
+}
+
+
+/**
+ * @brief Sets the given item as the one that is focused, or none.
+ *
+ * @param item Item to focus, or nullptr for none.
+ * @param silent If true, no sound effect will play.
+ * Useful if you want the item to be focused not because of user input,
+ * but because it's the default focused item when the GUI loads.
+ * @return Whether it succeeded.
+ */
+bool DumbGui::Manager::setFocusedItem(Item* item, bool silent) {
+    if(focusedItem == item) return false;
+    
+    if(focusedItem) {
+        focusedItem->focused = false;
+    }
+    focusedItem = item;
+    if(focusedItem) {
+        focusedItem->focused = true;
+    }
+    
+    return true;
+}
+
+
+/**
+ * @brief Shows all items, if they were hidden.
+ *
+ * @return Whether it succeeded.
+ */
+bool DumbGui::Manager::showItems() {
+    if(visible) return false;
+    visible = true;
+    return true;
 }
 
 

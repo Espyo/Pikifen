@@ -307,18 +307,6 @@ public:
     
     //--- Public members ---
     
-    //Is it currently visible?
-    bool visible = true;
-    
-    //Is it currently responsive?
-    bool responsive = true;
-    
-    //Can it be focused?
-    bool focusable = false;
-    
-    //Is it currently the focused item?
-    bool focused = false;
-    
     //Drawing layer. The lower the number, the sooner it'll be drawn.
     unsigned char drawingLayer = GUI::DRAWING_LAYER_NORMAL;
     
@@ -712,9 +700,6 @@ public:
     //Item to activate when the user chooses to go back, if any.
     GuiItem* backItem = nullptr;
     
-    //Is it currently responding to input?
-    bool responsive = true;
-    
     //Should it ignore input while animating?
     bool ignoreInputOnAnimation = true;
     
@@ -737,10 +722,8 @@ public:
         vector<CustomGuiItemDef>* outCustomItemDefs
     );
     bool getItemDrawInfo(GuiItem* item, GuiItem::DrawInfo* draw) const;
-    GuiItem* getFocusedItem() const;
     bool handleAllegroEvent(const ALLEGRO_EVENT& ev);
     bool handlePlayerAction(const Inpution::Action& action);
-    bool hideItems();
     bool readDataFile(DataNode* node, GuiItem* customChildrenParent = nullptr);
     bool registerCoords(
         const string& id,
@@ -749,7 +732,6 @@ public:
     bool removeItem(GuiItem* item);
     bool setFocusedItem(GuiItem* item, bool silent = false);
     bool shouldHandleEvents();
-    bool showItems();
     bool startAnimation(
         const GUI_MANAGER_ANIM type, float duration
     );
@@ -768,9 +750,6 @@ public:
 protected:
 
     //--- Protected members ---
-    
-    //Which item is currently focused.
-    GuiItem* focusedItem = nullptr;
     
     //Registered default centers.
     map<string, Point> registeredCenters;
@@ -801,9 +780,6 @@ protected:
     
     //Timer for the current animation.
     Timer animTimer;
-    
-    //Are the items currently visible?
-    bool visible = true;
     
     //Easy Spatial Navigation interface.
     EasySpatNav::Interface esnInterface;
