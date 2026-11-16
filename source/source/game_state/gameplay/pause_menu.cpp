@@ -370,7 +370,7 @@ void PauseMenu::addNewPikminStatusLine(
     const float firstX = x1 + itemXInterval / 2.0f;
     const float itemWidth = itemXInterval - 0.02f;
     
-    const float y1 = isSingle ? 0.0f : list->getChildrenRatioSpan();
+    const float y1 = isSingle ? 0.0f : list->getChildrenSpanRatio();
     const float itemHeight = isSingle ? 1.0f : 0.17f;
     const float numberItemHeight = isSingle ? itemHeight : itemHeight * 0.60f;
     const float itemYSpacing = isSingle ? 0.0f : 0.03f;

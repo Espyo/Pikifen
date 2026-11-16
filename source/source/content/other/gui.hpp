@@ -728,15 +728,6 @@ public:
     bool shouldHandleEvents() const override;
     bool destroy() override;
     
-    void getClippingRectangle(
-        int* outX1, int* outY1, int* outWidth, int* outHeight
-    ) const override;
-    void setClippingRectangle(
-        int x1, int y1, int width, int height
-    ) override;
-    int getWindowSizePxW() const override;
-    int getWindowSizePxH() const override;
-    
     
 protected:
 

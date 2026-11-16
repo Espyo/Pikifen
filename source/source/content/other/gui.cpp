@@ -533,6 +533,20 @@ bool GuiItem::startJuiceAnimation(JUICE_TYPE type) {
 GuiManager::GuiManager() :
     autoRepeater(&autoRepeaterSettings) {
     
+    onGetClippingRectangle =
+    [] (int* outX1, int* outY1, int* outWidth, int* outHeight) {
+        al_get_clipping_rectangle(outX1, outY1, outWidth, outHeight);
+    };
+    onSetClippingRectangle =
+    [] (int x1, int y1, int width, int height) {
+        al_set_clipping_rectangle(x1, y1, width, height);
+    };
+    onGetWindowSizePx =
+    [] (int* outWindowSizePxX, int* outWindowSizePxY) {
+        *outWindowSizePxX = game.winW;
+        *outWindowSizePxY = game.winH;
+    };
+    
     animTimer =
         Timer(
     0.0f, [this] () {
@@ -812,21 +826,6 @@ GUI_MANAGER_ANIM GuiManager::getAnimation() const {
 
 
 /**
- * @brief Returns the current clipping rectangle.
- *
- * @param outX1 The top-left corner's X coordinate is returned here.
- * @param outY1 The top-left corner's Y coordinate is returned here.
- * @param outWidth The width is returned here.
- * @param outHeight The height is returned here.
- */
-void GuiManager::getClippingRectangle(
-    int* outX1, int* outY1, int* outWidth, int* outHeight
-) const {
-    al_get_clipping_rectangle(outX1, outY1, outWidth, outHeight);
-}
-
-
-/**
  * @brief Returns the alpha that GUI items should have, based on the
  * current animation, if the animation controls alpha.
  *
@@ -960,7 +959,7 @@ bool GuiManager::getItemDrawInfo(
     if(!DumbGui::Manager::getItemDrawInfo(item, draw)) return false;
     
     Rect finalRect = ((GuiItem*) item)->getReferencePxRect();
-    float finalAlpha = 1.0f;
+    float finalAlphaMult = 1.0f;
     
     if(animTimer.timeLeft > 0.0f) {
         switch(animType) {
@@ -1074,7 +1073,7 @@ bool GuiManager::getItemDrawInfo(
             
         } case GUI_MANAGER_ANIM_FADE_IN:
         case GUI_MANAGER_ANIM_FADE_OUT: {
-            finalAlpha = getFadeAnimationAlpha();
+            finalAlphaMult = getFadeAnimationAlpha();
             break;
             
         } default: {
@@ -1091,29 +1090,9 @@ bool GuiManager::getItemDrawInfo(
     draw->tint[0] = 255;
     draw->tint[1] = 255;
     draw->tint[2] = 255;
-    draw->tint[3] = finalAlpha * 255;
+    draw->tint[3] = finalAlphaMult * 255;
     
     return true;
-}
-
-
-/**
- * @brief Returns the current height of the program window, in pixels.
- *
- * @return The height.
- */
-int GuiManager::getWindowSizePxH() const {
-    return game.winH;
-}
-
-
-/**
- * @brief Returns the current width of the program window, in pixels.
- *
- * @return The width.
- */
-int GuiManager::getWindowSizePxW() const {
-    return game.winW;
 }
 
 
@@ -1467,21 +1446,6 @@ bool GuiManager::startAnimation(
 
 
 /**
- * @brief Sets the current clipping rectangle.
- *
- * @param x1 The top-left corner's X coordinate.
- * @param y1 The top-left corner's Y coordinate.
- * @param width The width.
- * @param height The height.
- */
-void GuiManager::setClippingRectangle(
-    int x1, int y1, int width, int height
-) {
-    al_set_clipping_rectangle(x1, y1, width, height);
-}
-
-
-/**
  * @brief Ticks the time of all items by one frame of logic.
  *
  * @param deltaT How long the frame's tick is, in seconds.
@@ -1651,7 +1615,7 @@ bool GuiManager::writeItemDefsToDataFile(
 ListGuiItem::ListGuiItem() :
     GuiItem() {
     
-    pxPadding = 8.0f;
+    edgePaddingPx = 8.0f;
     onDrawP =
     [this] (const DrawInfo & draw) {
         this->defDrawCode(draw);
@@ -1678,7 +1642,7 @@ ListGuiItem::ListGuiItem() :
  */
 void ListGuiItem::defChildFocusedViaSNCode(const GuiItem* child) {
     //Try to center the child.
-    float childrenSpan = getChildrenRatioSpan(horizontal);
+    float childrenSpan = getChildrenSpanRatio(horizontal);
     float* offsetPtr = !horizontal ? &offsetRatioY : &offsetRatioX;
     float coord =
         !horizontal ?
@@ -1739,7 +1703,7 @@ void ListGuiItem::defDrawCode(const DrawInfo& draw) {
             vertexes, nullptr, nullptr, 0, 8, ALLEGRO_PRIM_TRIANGLE_STRIP
         );
     }
-    float childrenVSpan = getChildrenRatioSpan();
+    float childrenVSpan = getChildrenSpanRatio();
     if(
         childrenVSpan > 1.0f && offsetRatioY < childrenVSpan - 1.0f && !horizontal
     ) {
@@ -1815,7 +1779,7 @@ void ListGuiItem::defDrawCode(const DrawInfo& draw) {
             vertexes, nullptr, nullptr, 0, 8, ALLEGRO_PRIM_TRIANGLE_STRIP
         );
     }
-    float childrenHSpan = getChildrenRatioSpan(true);
+    float childrenHSpan = getChildrenSpanRatio(true);
     if(childrenHSpan > 1.0f && offsetRatioX < childrenHSpan - 1.0f && horizontal) {
         //Shade effect at the right.
         ALLEGRO_VERTEX vertexes[8];
@@ -1866,7 +1830,7 @@ void ListGuiItem::defEventCode(const ALLEGRO_EVENT& ev) {
         isMouseOn(ev.mouse.x, ev.mouse.y) &&
         ev.mouse.dz != 0.0f
     ) {
-        float childrenSpan = getChildrenRatioSpan(horizontal);
+        float childrenSpan = getChildrenSpanRatio(horizontal);
         if(childrenSpan <= 1.0f && offsetRatioY == 0.0f) {
             return;
         }
@@ -1886,7 +1850,7 @@ void ListGuiItem::defEventCode(const ALLEGRO_EVENT& ev) {
  * @param deltaT How long the frame's tick is, in seconds.
  */
 void ListGuiItem::defTickCode(float deltaT) {
-    float childrenSpan = getChildrenRatioSpan(horizontal);
+    float childrenSpan = getChildrenSpanRatio(horizontal);
     float* offsetPtr = !horizontal ? &offsetRatioY : &offsetRatioX;
     if(childrenSpan < 1.0f) {
         targetOffset = 0.0f;
@@ -2120,7 +2084,7 @@ void ScrollGuiItem::defDrawCode(const DrawInfo& draw) {
     if(!horizontal) {
         float barY = 0.0f; //Top, in height ratio.
         float barH = 0.0f; //In height ratio.
-        float listBottom = listItem->getChildrenRatioSpan();
+        float listBottom = listItem->getChildrenSpanRatio();
         float alpha = 0.20f;
         if(listBottom > 1.0f) {
             float offset = std::min(listItem->offsetRatioY, listBottom - 1.0f);
@@ -2149,7 +2113,7 @@ void ScrollGuiItem::defDrawCode(const DrawInfo& draw) {
     } else {
         float barX = 0.0f; //Left, in width ratio.
         float barW = 0.0f; //In width ratio.
-        float listDepth = listItem->getChildrenRatioSpan(true);
+        float listDepth = listItem->getChildrenSpanRatio(true);
         float alpha = 0.20f;
         if(listDepth > 1.0f) {
             float offset = std::min(listItem->offsetRatioX, listDepth - 1.0f);
@@ -2217,7 +2181,7 @@ void ScrollGuiItem::defEventCode(const ALLEGRO_EVENT& ev) {
  */
 void ScrollGuiItem::setOffsetFromMouse(float x, float y) {
     if(!horizontal) {
-        float listBottom = listItem->getChildrenRatioSpan();
+        float listBottom = listItem->getChildrenSpanRatio();
         isMouseDragging = true;
         
         if(listBottom <= 1.0f) {
@@ -2234,7 +2198,7 @@ void ScrollGuiItem::setOffsetFromMouse(float x, float y) {
         listItem->targetOffset = click * (listBottom - 1.0f);
         
     } else {
-        float listDepth = listItem->getChildrenRatioSpan(true);
+        float listDepth = listItem->getChildrenSpanRatio(true);
         isMouseDragging = true;
         
         if(listDepth <= 1.0f) {
