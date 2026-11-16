@@ -666,7 +666,8 @@ void GameplayState::enter() {
     
     forIdx(p, players) {
         Player& player = players[p];
-        player.hud->gui.hideItems();
+        player.hud->gui.responsive = false;
+        player.hud->gui.visible = false;
         player.inventory->close();
         player.leaderPrompt.reset();
         if(game.mouseCursor.onWindow) {

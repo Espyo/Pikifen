@@ -48,8 +48,8 @@ const size_t TEXT_INPUT_MAX_SIZE = 80;
 ModalGuiManager::ModalGuiManager() {
     textInput.maxSize = MODAL::TEXT_INPUT_MAX_SIZE;
     reset();
-    hideItems();
     responsive = false;
+    visible = false;
 }
 
 
@@ -152,7 +152,6 @@ bool ModalGuiManager::isActive() const {
  * @brief Opens the modal.
  */
 void ModalGuiManager::open() {
-    showItems();
     startAnimation(GUI_MANAGER_ANIM_FADE_IN, MODAL::FADE_DURATION);
     responsive = true;
 }

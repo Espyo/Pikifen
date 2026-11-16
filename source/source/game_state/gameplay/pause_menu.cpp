@@ -1938,7 +1938,7 @@ void PauseMenu::initMainPauseMenu() {
     //Finishing touches.
     gui.setFocusedItem(gui.backItem, true);
     gui.responsive = false;
-    gui.hideItems();
+    gui.visible = false;
 }
 
 
@@ -2048,7 +2048,7 @@ void PauseMenu::initMissionPage() {
     //Finishing touches.
     missionGui.setFocusedItem(missionGui.backItem, true);
     missionGui.responsive = false;
-    missionGui.hideItems();
+    missionGui.visible = false;
 }
 
 
@@ -2317,7 +2317,7 @@ void PauseMenu::initRadarPage() {
     //Finishing touches.
     radarGui.setFocusedItem(nullptr);
     radarGui.responsive = false;
-    radarGui.hideItems();
+    radarGui.visible = false;
 }
 
 
@@ -2479,7 +2479,7 @@ void PauseMenu::initStatusPage() {
     //Finishing touches.
     statusGui.setFocusedItem(statusGui.backItem, true);
     statusGui.responsive = false;
-    statusGui.hideItems();
+    statusGui.visible = false;
 }
 
 

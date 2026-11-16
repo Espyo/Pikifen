@@ -75,7 +75,7 @@ Next tasks (roughly sorted most important first)
             Animate it
                 When loading stuff, the loading functions could receive a callback as an argument. Then, for every one piece of content they load, they call the callback. The callback would be a function that checks if it's time to draw a frame, and if not, quits out. If it is meant to draw a frame, it just draws it
                 See how Allegro's ex_loading_thread.c does it
-                https://github.com/Helodity/Pikifen/commit/e2a5e3b982142474ff55ca60cc36fab21605115d
+                https://github.com/Helodity/Pikifen/commit/e2a5e3b982142474ff55ca60cc36fab21605115d and https://github.com/Helodity/Pikifen/tree/multithreaded-loading
             Area names and subtitles could have custom colors like https://cdn.discordapp.com/attachments/212795100818833408/1095572527583080488/image.png (thanks Captain Salty)
         https://github.com/Helodity/Pikifen/tree/button-revamp
         The main menu's Play menu should have the missions button be larger, and the simple areas button be smaller. The latter should also be renamed to something like free roam or something
@@ -93,6 +93,7 @@ Next tasks (roughly sorted most important first)
                 Game
                     Hardware mediator
                     Console
+                    Maker tools
                     Current state
                         Menu
                             Its GUIs

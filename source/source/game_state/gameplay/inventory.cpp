@@ -217,7 +217,7 @@ void Inventory::initGui() {
         focusedItemIdx = INVALID;
     };
     gui.responsive = false;
-    gui.hideItems();
+    gui.visible = false;
 }
 
 

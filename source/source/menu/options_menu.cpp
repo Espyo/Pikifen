@@ -860,7 +860,7 @@ void OptionsMenu::initGuiAudioPage() {
     //Finishing touches.
     audioGui.setFocusedItem(masterVolPicker, true);
     audioGui.responsive = false;
-    audioGui.hideItems();
+    audioGui.visible = false;
 }
 
 
@@ -957,7 +957,7 @@ void OptionsMenu::initGuiControlBindsPage() {
     //Finishing touches.
     bindsGui.setFocusedItem(bindsGui.backItem, true);
     bindsGui.responsive = false;
-    bindsGui.hideItems();
+    bindsGui.visible = false;
     game.hardware.updateControllers();
 }
 
@@ -1138,7 +1138,7 @@ void OptionsMenu::initGuiControlsPage() {
     updateControlsPage();
     controlsGui.setFocusedItem(normalBindsButton, true);
     controlsGui.responsive = false;
-    controlsGui.hideItems();
+    controlsGui.visible = false;
 }
 
 
@@ -1277,7 +1277,7 @@ void OptionsMenu::initGuiGraphicsPage() {
     //Finishing touches.
     graphicsGui.setFocusedItem(fullscreenCheck, true);
     graphicsGui.responsive = false;
-    graphicsGui.hideItems();
+    graphicsGui.visible = false;
 }
 
 
@@ -1457,7 +1457,7 @@ void OptionsMenu::initGuiMiscPage() {
     //Finishing touches.
     miscGui.setFocusedItem(leaderCursorCamWeightPicker, true);
     miscGui.responsive = false;
-    miscGui.hideItems();
+    miscGui.visible = false;
 }
 
 
@@ -1533,7 +1533,7 @@ void OptionsMenu::initGuiShortcutsPage() {
     updateShortcutsPage();
     shortcutsGui.setFocusedItem(shortcutsGui.backItem, true);
     shortcutsGui.responsive = false;
-    shortcutsGui.hideItems();
+    shortcutsGui.visible = false;
 }
 
 

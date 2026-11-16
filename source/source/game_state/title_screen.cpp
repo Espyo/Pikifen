@@ -56,8 +56,8 @@ const float ZOOM_DURATION = 3.5f;
 void MainMenu::hide() {
     forIdx(g, guis) {
         GuiManager* gPtr = guis[g];
-        gPtr->hideItems();
         gPtr->responsive = false;
+        gPtr->visible = false;
     }
 }
 
@@ -385,7 +385,7 @@ void MainMenu::initGuiMainPage() {
     //Finishing touches.
     mainGui.setFocusedItem(playButton, true);
     mainGui.responsive = false;
-    mainGui.hideItems();
+    mainGui.visible = false;
 }
 
 
@@ -592,7 +592,7 @@ void MainMenu::initGuiMakePage() {
     //Finishing touches.
     makeGui.setFocusedItem(animEdButton, true);
     makeGui.responsive = false;
-    makeGui.hideItems();
+    makeGui.visible = false;
 }
 
 
@@ -714,7 +714,7 @@ void MainMenu::initGuiPlayPage() {
     //Finishing touches.
     playGui.setFocusedItem(simpleButton, true);
     playGui.responsive = false;
-    playGui.hideItems();
+    playGui.visible = false;
 }
 
 
@@ -729,15 +729,15 @@ void MainMenu::load() {
     switch(pageToLoad) {
     case MAIN_MENU_PAGE_MAIN: {
         mainGui.responsive = true;
-        mainGui.showItems();
+        mainGui.visible = true;
         break;
     } case MAIN_MENU_PAGE_PLAY: {
         playGui.responsive = true;
-        playGui.showItems();
+        playGui.visible = true;
         break;
     } case MAIN_MENU_PAGE_MAKE: {
         makeGui.responsive = true;
-        makeGui.showItems();
+        makeGui.visible = true;
         break;
     }
     }

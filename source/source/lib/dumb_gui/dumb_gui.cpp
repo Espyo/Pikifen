@@ -514,18 +514,6 @@ bool DumbGui::Manager::handleMouseMovement(int mousePxX, int mousePxY) {
 
 
 /**
- * @brief Hides all items until an animation shows them again.
- *
- * @return Whether it succeeded.
- */
-bool DumbGui::Manager::hideItems() {
-    if(!visible) return false;
-    visible = false;
-    return true;
-}
-
-
-/**
  * @brief Removes an item from the list, without deleting it.
  *
  * @param item Item to remove.
@@ -583,18 +571,6 @@ bool DumbGui::Manager::setFocusedItem(Item* item) {
  */
 bool DumbGui::Manager::shouldHandleEvents() const {
     if(!responsive) return false;
-    return true;
-}
-
-
-/**
- * @brief Shows all items, if they were hidden.
- *
- * @return Whether it succeeded.
- */
-bool DumbGui::Manager::showItems() {
-    if(visible) return false;
-    visible = true;
     return true;
 }
 

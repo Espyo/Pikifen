@@ -116,11 +116,11 @@ public:
     std::function<string()> onGetTooltip = nullptr;
     
     
-    //Is it currently visible?
-    bool visible = true;
-    
     //Is it currently responsive?
     bool responsive = true;
+    
+    //Is it currently visible?
+    bool visible = true;
     
     //Can it be focused?
     bool focusable = false;
@@ -215,6 +215,9 @@ public:
     //Is it currently responding to input?
     bool responsive = true;
     
+    //Are the items currently visible?
+    bool visible = true;
+    
     
     //What to do when the currently focused item changes.
     std::function<void()> onFocusChanged = nullptr;
@@ -262,9 +265,6 @@ public:
     virtual bool setFocusedItem(Item* item);
     virtual string getCurrentTooltip() const;
     
-    virtual bool hideItems();
-    virtual bool showItems();
-    
     virtual bool getItemDrawInfo(Item* item, DrawInfo* draw) const;
     
     virtual bool destroy();
@@ -273,9 +273,6 @@ public:
 protected:
 
     //--- Protected members ---
-    
-    //Are the items currently visible?
-    bool visible = true;
     
     //Which item is currently focused.
     Item* focusedItem = nullptr;
