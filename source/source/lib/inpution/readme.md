@@ -16,7 +16,7 @@ _From input to action._
 
 ## Overview
 
-**Inpution** is a source-only C++ piece of middleware that abstracts and simplifies control binds in game development. The way it works is pretty simple:
+**Inpution** is a source-only C++ middleware library that abstracts and simplifies control binds in game development. The way it works is pretty simple:
 
 * ⇥ The game must...
   * _At startup_: Teach Inpution what action types exist in this game.

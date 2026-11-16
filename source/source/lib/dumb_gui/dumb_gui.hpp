@@ -54,7 +54,7 @@ struct DrawInfo {
     //Angle, in radians.
     float angle = 0.0f;
     
-    //Tint color, in RGBA.
+    //Tint color, in RGBA [0 - 255].
     unsigned char tint[4] = { 255, 255, 255, 255};
     
 };
