@@ -1337,7 +1337,6 @@ void LeaderFsm::beAttacked(ScriptVM* scriptVM, void* info1, void* info2) {
         game.states.gameplay->lastHurtLeaderPos = leaPtr->center;
         game.statistics.leaderDamageSuffered += healthBefore - leaPtr->health;
     }
-    leaPtr->invulnPeriod.start(LEADER::INVULN_PERIOD_NORMAL);
 
     //Next state.
     if(knockbackExists) {
@@ -1346,7 +1345,6 @@ void LeaderFsm::beAttacked(ScriptVM* scriptVM, void* info1, void* info2) {
         leaPtr->leaveGroup();
         
         if(knockbackStrength > 0) {
-            //Override invulnerability time
             leaPtr->invulnPeriod.start(LEADER::INVULN_PERIOD_KB);
             if(leaPtr->player) {
                 scriptVM->fsm.setState(LEADER_STATE_KNOCKED_BACK);
@@ -1354,6 +1352,7 @@ void LeaderFsm::beAttacked(ScriptVM* scriptVM, void* info1, void* info2) {
                 scriptVM->fsm.setState(LEADER_STATE_INACTIVE_KNOCKED_BACK);
             }
         } else {
+            leaPtr->invulnPeriod.start(LEADER::INVULN_PERIOD_NORMAL);
             if(leaPtr->player) {
                 scriptVM->fsm.setState(LEADER_STATE_PAIN);
             } else {
