@@ -1047,15 +1047,14 @@ void LeaderFsm::createFsm(MobType* typ) {
     efc.newState("sleeping", LEADER_STATE_SLEEPING); {
         efc.newEvent(LEADER_EV_CANCEL); {
             efc.run(LeaderFsm::startWakingUp);
-            efc.changeState("waking_up");
         }
         efc.newEvent(LEADER_EV_INACTIVATED); {
             efc.run(LeaderFsm::becomeInactive);
             efc.changeState("inactive_sleeping");
         }
         efc.newEvent(FSM_EV_HITBOX_TOUCH_N_A); {
-            efc.run(LeaderFsm::beAttacked);
             efc.run(LeaderFsm::startWakingUp);
+            efc.run(LeaderFsm::beAttacked);
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
             efc.run(GenMobFsm::touchHazard);
@@ -1068,7 +1067,6 @@ void LeaderFsm::createFsm(MobType* typ) {
         }
         efc.newEvent(FSM_EV_ZERO_HEALTH); {
             efc.run(LeaderFsm::startWakingUp);
-            efc.changeState("ko");
         }
     }
     
@@ -1077,15 +1075,14 @@ void LeaderFsm::createFsm(MobType* typ) {
     ); {
         efc.newEvent(LEADER_EV_CANCEL); {
             efc.run(LeaderFsm::startWakingUp);
-            efc.changeState("inactive_waking_up");
         }
         efc.newEvent(LEADER_EV_ACTIVATED); {
             efc.run(LeaderFsm::becomeActive);
             efc.changeState("sleeping");
         }
         efc.newEvent(FSM_EV_HITBOX_TOUCH_N_A); {
-            efc.run(LeaderFsm::beAttacked);
             efc.run(LeaderFsm::startWakingUp);
+            efc.run(LeaderFsm::beAttacked);
         }
         efc.newEvent(FSM_EV_TOUCHED_HAZARD); {
             efc.run(GenMobFsm::touchHazard);
@@ -1098,7 +1095,6 @@ void LeaderFsm::createFsm(MobType* typ) {
         }
         efc.newEvent(FSM_EV_ZERO_HEALTH); {
             efc.run(LeaderFsm::startWakingUp);
-            efc.changeState("ko");
         }
     }
     
@@ -1106,11 +1102,17 @@ void LeaderFsm::createFsm(MobType* typ) {
         efc.newEvent(FSM_EV_ANIMATION_END); {
             efc.changeState("active");
         }
+        efc.newEvent(FSM_EV_ZERO_HEALTH); {
+            efc.changeState("ko");
+        }
     }
     
     efc.newState("inactive_waking_up", LEADER_STATE_INACTIVE_WAKING_UP); {
         efc.newEvent(FSM_EV_ANIMATION_END); {
             efc.changeState("idling");
+        }
+        efc.newEvent(FSM_EV_ZERO_HEALTH); {
+            efc.changeState("ko");
         }
     }
     
@@ -1335,7 +1337,7 @@ void LeaderFsm::beAttacked(ScriptVM* scriptVM, void* info1, void* info2) {
         game.states.gameplay->lastHurtLeaderPos = leaPtr->center;
         game.statistics.leaderDamageSuffered += healthBefore - leaPtr->health;
     }
-    
+
     //Next state.
     if(knockbackExists) {
         //Behavior changes.
@@ -2830,6 +2832,11 @@ void LeaderFsm::startWakingUp(ScriptVM* scriptVM, void* info1, void* info2) {
     Leader* leaPtr = (Leader*) scriptVM->mob;
     
     leaPtr->setAnimation(LEADER_ANIM_GETTING_UP);
+    if(leaPtr->player) {
+        scriptVM->fsm.setState(LEADER_STATE_WAKING_UP);
+    } else {
+        scriptVM->fsm.setState(LEADER_STATE_INACTIVE_WAKING_UP);
+    }
     
     leaPtr->statuses.handleWakingUp();
 }
