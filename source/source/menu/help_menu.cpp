@@ -118,7 +118,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
     };
     gui.backItem->onGetTooltip =
     [] () { return "Return to the previous menu."; };
-    gui.addItem(gui.backItem, "back");
+    gui.addItemP(gui.backItem, "back");
     
     //Back input icon.
     guiCreateBackInputIcon(&gui);
@@ -137,7 +137,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
     [] () {
         return "Show help about basic gameplay features.";
     };
-    gui.addItem(gameplay1Button, "gameplay1");
+    gui.addItemP(gameplay1Button, "gameplay1");
     
     //Gameplay advanced button.
     ButtonGuiItem* gameplay2Button =
@@ -153,7 +153,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
     [] () {
         return "Show advanced gameplay tips.";
     };
-    gui.addItem(gameplay2Button, "gameplay2");
+    gui.addItemP(gameplay2Button, "gameplay2");
     
     //Controls button.
     ButtonGuiItem* controlsButton =
@@ -169,7 +169,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
     [] () {
         return "Show game controls and certain actions you can perform.";
     };
-    gui.addItem(controlsButton, "controls");
+    gui.addItemP(controlsButton, "controls");
     
     //Pikmin button.
     ButtonGuiItem* pikminButton =
@@ -185,7 +185,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
     [] () {
         return "Show a description of each Pikmin type.";
     };
-    gui.addItem(pikminButton, "pikmin");
+    gui.addItemP(pikminButton, "pikmin");
     
     //Objects button.
     ButtonGuiItem* objectsButton =
@@ -201,7 +201,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
     [] () {
         return "Show help about some noteworthy objects you'll find.";
     };
-    gui.addItem(objectsButton, "objects");
+    gui.addItemP(objectsButton, "objects");
     
     //More help button.
     ButtonGuiItem* manualButton =
@@ -230,23 +230,23 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
         return
             "Press here to get more help.";
     };
-    gui.addItem(manualButton, "manual");
+    gui.addItemP(manualButton, "manual");
     
     //Category text.
     categoryText =
         new TextGuiItem(
         "Help", game.sysContent.fntStandard, game.config.guiColors.smallHeader
     );
-    gui.addItem(categoryText, "category");
+    gui.addItemP(categoryText, "category");
     
     //Tidbit list box.
     tidbitList = new ListGuiItem();
-    gui.addItem(tidbitList, "list");
+    gui.addItemP(tidbitList, "list");
     
     //Tidbit list scrollbar.
     ScrollGuiItem* listScroll = new ScrollGuiItem();
     listScroll->listItem = tidbitList;
-    gui.addItem(listScroll, "list_scroll");
+    gui.addItemP(listScroll, "list_scroll");
     
     //Image item.
     GuiItem* imageItem = new GuiItem();
@@ -259,7 +259,7 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
             draw.center, draw.size, false, true, 0.0f, draw.tint
         );
     };
-    gui.addItem(imageItem, "image");
+    gui.addItemP(imageItem, "image");
     
     //Tooltip text.
     TextGuiItem* tooltipText =
@@ -272,10 +272,10 @@ void HelpMenu::initGuiMain(DataNode* guiFile) {
             gui.getCurrentTooltip()
         );
     };
-    gui.addItem(tooltipText, "tooltip");
+    gui.addItemP(tooltipText, "tooltip");
     
     //Finishing touches.
-    gui.setFocusedItem(gui.backItem, true);
+    gui.setFocusedItemP(gui.backItem, true);
     gui.onFocusChanged =
     [this] () {
         curTidbit = nullptr;
@@ -385,7 +385,7 @@ void HelpMenu::populateTidbits(const HELP_CATEGORY category) {
             GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
         );
         tidbitList->addChild(tidbitBullet);
-        gui.addItem(tidbitBullet);
+        gui.addItemP(tidbitBullet);
     }
     
     categoryText->startJuiceAnimation(

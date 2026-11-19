@@ -130,14 +130,14 @@ void PacksMenu::initGuiMain() {
     };
     gui.backItem->onGetTooltip =
     [] () { return "Return to the previous menu."; };
-    gui.addItem(gui.backItem, "back");
+    gui.addItemP(gui.backItem, "back");
     
     //Back input icon.
     guiCreateBackInputIcon(&gui);
     
     //Packs list.
     packsList = new ListGuiItem();
-    gui.addItem(packsList, "list");
+    gui.addItemP(packsList, "list");
     
     const float ITEM_HEIGHT = 0.08f;
     const float ITEM_PADDING = 0.02f;
@@ -157,7 +157,7 @@ void PacksMenu::initGuiMain() {
     baseBullet->onFocused =
     [this] () { changeInfo(-1); };
     packsList->addChild(baseBullet);
-    gui.addItem(baseBullet);
+    gui.addItemP(baseBullet);
     
     forIdx(p, packOrder) {
         float listBottomY = packsList->getChildrenSpanRatio();
@@ -176,7 +176,7 @@ void PacksMenu::initGuiMain() {
         );
         bullet->onFocused = [p, this] () { changeInfo((int) p); };
         packsList->addChild(bullet);
-        gui.addItem(bullet);
+        gui.addItemP(bullet);
         packBullets.push_back(bullet);
         
         //Enable/disable checkbox.
@@ -208,7 +208,7 @@ void PacksMenu::initGuiMain() {
             return "Enable or disable this pack.";
         };
         packsList->addChild(check);
-        gui.addItem(check);
+        gui.addItemP(check);
         packChecks.push_back(check);
         
         //Move up button.
@@ -249,7 +249,7 @@ void PacksMenu::initGuiMain() {
                 return "Move up on the list (make it be loaded earlier).";
             };
             packsList->addChild(upButton);
-            gui.addItem(upButton);
+            gui.addItemP(upButton);
         }
         
         //Move down button.
@@ -290,14 +290,14 @@ void PacksMenu::initGuiMain() {
                 return "Move down on the list (make it be loaded later).";
             };
             packsList->addChild(downButton);
-            gui.addItem(downButton);
+            gui.addItemP(downButton);
         }
     }
     
     //Packs list scrollbar.
     ScrollGuiItem* listScroll = new ScrollGuiItem();
     listScroll->listItem = packsList;
-    gui.addItem(listScroll, "list_scroll");
+    gui.addItemP(listScroll, "list_scroll");
     
     //Info box item.
     GuiItem* infoBox = new GuiItem();
@@ -308,7 +308,7 @@ void PacksMenu::initGuiMain() {
             tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
         );
     };
-    gui.addItem(infoBox, "info_box");
+    gui.addItemP(infoBox, "info_box");
     
     //Pack name text.
     packNameText =
@@ -316,7 +316,7 @@ void PacksMenu::initGuiMain() {
         "", game.sysContent.fntAreaName,
         game.config.guiColors.gold, ALLEGRO_ALIGN_LEFT
     );
-    gui.addItem(packNameText, "pack_name");
+    gui.addItemP(packNameText, "pack_name");
     
     //Pack thumbnail.
     GuiItem* packThumbItem = new GuiItem();
@@ -339,7 +339,7 @@ void PacksMenu::initGuiMain() {
             tintColor(COLOR_TRANSPARENT_WHITE, draw.tint)
         );
     };
-    gui.addItem(packThumbItem, "pack_thumbnail");
+    gui.addItemP(packThumbItem, "pack_thumbnail");
     
     //Pack description text.
     packDescriptionText =
@@ -347,28 +347,28 @@ void PacksMenu::initGuiMain() {
         "", game.sysContent.fntStandard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
     );
     packDescriptionText->lineWrap = true;
-    gui.addItem(packDescriptionText, "pack_description");
+    gui.addItemP(packDescriptionText, "pack_description");
     
     //Pack tags text.
     packTagsText =
         new TextGuiItem(
         "", game.sysContent.fntStandard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
     );
-    gui.addItem(packTagsText, "pack_tags");
+    gui.addItemP(packTagsText, "pack_tags");
     
     //Pack maker text.
     packMakerText =
         new TextGuiItem(
         "", game.sysContent.fntStandard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
     );
-    gui.addItem(packMakerText, "pack_maker");
+    gui.addItemP(packMakerText, "pack_maker");
     
     //Pack version text.
     packVersionText =
         new TextGuiItem(
         "", game.sysContent.fntStandard, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
     );
-    gui.addItem(packVersionText, "pack_version");
+    gui.addItemP(packVersionText, "pack_version");
     
     //Restart warning text.
     warningText =
@@ -378,7 +378,7 @@ void PacksMenu::initGuiMain() {
         game.sysContent.fntStandard, COLOR_WHITE, ALLEGRO_ALIGN_LEFT
     );
     warningText->visible = false;
-    gui.addItem(warningText, "restart_warning");
+    gui.addItemP(warningText, "restart_warning");
     
     //Open folder button.
     ButtonGuiItem* openFolderButton =
@@ -393,17 +393,17 @@ void PacksMenu::initGuiMain() {
             "Opens the packs folder on your operative system. "
             "Place downloaded pack folders here!";
     };
-    gui.addItem(openFolderButton, "open_folder");
+    gui.addItemP(openFolderButton, "open_folder");
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&gui);
-    gui.addItem(tooltipText, "tooltip");
+    gui.addItemP(tooltipText, "tooltip");
     
     populatePacksList();
     
     //Finishing touches.
-    gui.setFocusedItem(gui.backItem, true);
+    gui.setFocusedItemP(gui.backItem, true);
     changeInfo(-1);
 }
 

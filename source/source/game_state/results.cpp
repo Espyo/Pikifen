@@ -92,7 +92,7 @@ void Results::addNewBulletPoint(
         Rect(Point(0.50f, centerY), Point(0.96f, BP_HEIGHT))
     );
     list->addChild(labelBullet);
-    gui.addItem(labelBullet);
+    gui.addItemP(labelBullet);
     pageTextToAnimate.push_back(labelBullet);
     
     TextGuiItem* valueText =
@@ -103,7 +103,7 @@ void Results::addNewBulletPoint(
         Rect(Point(0.75f, centerY), Point(0.44f, BP_HEIGHT))
     );
     list->addChild(valueText);
-    gui.addItem(valueText);
+    gui.addItemP(valueText);
     pageTextToAnimate.push_back(valueText);
     textToAnimate.push_back(valueText);
 }
@@ -182,7 +182,7 @@ void Results::addNewPageItems(
     ButtonGuiItem* leftPageButton =
         addNewPageItem(leftPage, true, curBox);
     curBox->addChild(leftPageButton);
-    gui.addItem(leftPageButton, itemNamePrefix + "_left_page");
+    gui.addItemP(leftPageButton, itemNamePrefix + "_left_page");
     pageTextToAnimate.push_back(leftPageButton);
     leftPageButtons.push_back(leftPageButton);
     
@@ -197,13 +197,13 @@ void Results::addNewPageItems(
         );
     };
     curBox->addChild(leftPageInput);
-    gui.addItem(leftPageInput, itemNamePrefix + "_left_page_input");
+    gui.addItemP(leftPageInput, itemNamePrefix + "_left_page_input");
     
     //Right page button.
     ButtonGuiItem* rightPageButton =
         addNewPageItem(rightPage, false, curBox);
     curBox->addChild(rightPageButton);
-    gui.addItem(rightPageButton, itemNamePrefix + "_right_page");
+    gui.addItemP(rightPageButton, itemNamePrefix + "_right_page");
     pageTextToAnimate.push_back(rightPageButton);
     rightPageButtons.push_back(rightPageButton);
     
@@ -218,7 +218,7 @@ void Results::addNewPageItems(
         );
     };
     curBox->addChild(rightPageInput);
-    gui.addItem(rightPageInput, itemNamePrefix + "_right_page_input");
+    gui.addItemP(rightPageInput, itemNamePrefix + "_right_page_input");
 }
 
 
@@ -254,7 +254,7 @@ void Results::addNewScoreMarkerBulletPoint(
         Rect(Point(0.50f, bPCenterY), Point(0.96f, bPHeight))
     );
     scoreChartList->addChild(labelBullet);
-    gui.addItem(labelBullet);
+    gui.addItemP(labelBullet);
     pageTextToAnimate.push_back(labelBullet);
     
     TextGuiItem* valueText =
@@ -265,7 +265,7 @@ void Results::addNewScoreMarkerBulletPoint(
         Rect(Point(0.75f, bPCenterY), Point(0.44f, bPHeight))
     );
     scoreChartList->addChild(valueText);
-    gui.addItem(valueText);
+    gui.addItemP(valueText);
     textToAnimate.push_back(valueText);
     pageTextToAnimate.push_back(valueText);
     
@@ -594,7 +594,7 @@ void Results::initGuiMain() {
         game.curArea->name, game.sysContent.fntAreaName,
         game.config.guiColors.gold
     );
-    gui.addItem(areaNameText, "area_name");
+    gui.addItemP(areaNameText, "area_name");
     textToAnimate.push_back(areaNameText);
     
     //Area subtitle text.
@@ -603,7 +603,7 @@ void Results::initGuiMain() {
             new TextGuiItem(
             game.curArea->subtitle, game.sysContent.fntAreaName
         );
-        gui.addItem(areaSubtitleText, "area_subtitle");
+        gui.addItemP(areaSubtitleText, "area_subtitle");
         textToAnimate.push_back(areaSubtitleText);
     }
     
@@ -635,7 +635,7 @@ void Results::initGuiMain() {
                 sin(game.timePassed * RESULTS::FINAL_SCORE_SWAY_TIME_SCALE);
             finalScoreText->defDrawCode(swayDraw);
         };
-        gui.addItem(finalScoreText, "final_score");
+        gui.addItemP(finalScoreText, "final_score");
     }
     
     //Final score label text.
@@ -664,7 +664,7 @@ void Results::initGuiMain() {
                 );
             finalScoreLabelText->defDrawCode(swayDraw);
         };
-        gui.addItem(finalScoreLabelText, "final_score_label");
+        gui.addItemP(finalScoreLabelText, "final_score_label");
     }
     
     //Medal image.
@@ -705,7 +705,7 @@ void Results::initGuiMain() {
                 true, true, 0.0f, draw.tint
             );
         };
-        gui.addItem(medalItem, "medal");
+        gui.addItemP(medalItem, "medal");
     }
     
     //End reason text, if any.
@@ -725,7 +725,7 @@ void Results::initGuiMain() {
                 game.config.guiColors.good :
                 game.config.guiColors.bad
             );
-            gui.addItem(endReasonText, "end_reason");
+            gui.addItemP(endReasonText, "end_reason");
             textToAnimate.push_back(endReasonText);
         }
     }
@@ -783,20 +783,20 @@ void Results::initGuiMain() {
     }
     TextGuiItem* conclusionText =
         new TextGuiItem(conclusion, game.sysContent.fntStandard);
-    gui.addItem(conclusionText, "conclusion");
+    gui.addItemP(conclusionText, "conclusion");
     textToAnimate.push_back(conclusionText);
     
     //Stats page box.
     statsPageBox = new GuiItem();
-    gui.addItem(statsPageBox, "stats_page");
+    gui.addItemP(statsPageBox, "stats_page");
     
     //Scoring page box.
     scoringPageBox = new GuiItem();
-    gui.addItem(scoringPageBox, "scoring_page");
+    gui.addItemP(scoringPageBox, "scoring_page");
     
     //Score chart page box.
     scoreChartPageBox = new GuiItem();
-    gui.addItem(scoreChartPageBox, "score_chart_page");
+    gui.addItemP(scoreChartPageBox, "score_chart_page");
     
     //Retry button.
     ButtonGuiItem* retryButton =
@@ -807,7 +807,7 @@ void Results::initGuiMain() {
     };
     retryButton->onGetTooltip =
     [] () { return "Retry the area from the start."; };
-    gui.addItem(retryButton, "retry");
+    gui.addItemP(retryButton, "retry");
     
     //Keep playing button.
     if(
@@ -835,7 +835,7 @@ void Results::initGuiMain() {
                 "Continue playing anyway, from where you left off. "
                 "Your result after this point won't count.";
         };
-        gui.addItem(continueButton, "continue");
+        gui.addItemP(continueButton, "continue");
     }
     
     //Pick an area button.
@@ -857,7 +857,7 @@ void Results::initGuiMain() {
             "Return to the area selection menu." :
             "Return to the editor.";
     };
-    gui.addItem(gui.backItem, "pick_area");
+    gui.addItemP(gui.backItem, "pick_area");
     
     //Pick an area input icon.
     guiCreateBackInputIcon(&gui, "pick_area_input");
@@ -865,10 +865,10 @@ void Results::initGuiMain() {
     //Tooltip text.
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&gui);
-    gui.addItem(tooltipText, "tooltip");
+    gui.addItemP(tooltipText, "tooltip");
     
     //Finishing touches.
-    gui.setFocusedItem(gui.backItem, true);
+    gui.setFocusedItemP(gui.backItem, true);
 }
 
 
@@ -889,7 +889,7 @@ void Results::initGuiScoreChart() {
     //Score chart item list.
     scoreChartList = new ListGuiItem();
     scoreChartPageBox->addChild(scoreChartList);
-    gui.addItem(scoreChartList, "score_chart_list");
+    gui.addItemP(scoreChartList, "score_chart_list");
     
     //Score chart graphic.
     scoreChartChart = new ListGuiItem();
@@ -899,7 +899,7 @@ void Results::initGuiScoreChart() {
         drawScoreChartGraphic(draw);
         scoreChartChart->defDrawCode(draw);
     };
-    gui.addItem(scoreChartChart, "score_chart_chart");
+    gui.addItemP(scoreChartChart, "score_chart_chart");
     
     populateScoreChart();
     
@@ -926,14 +926,14 @@ void Results::initGuiScoring() {
     //Scoring criteria list.
     scoringList = new ListGuiItem();
     scoringPageBox->addChild(scoringList);
-    gui.addItem(scoringList, "scoring_list");
+    gui.addItemP(scoringList, "scoring_list");
     populateScoringList();
     
     //Scoring criteria list scrollbar.
     ScrollGuiItem* scoringScroll = new ScrollGuiItem();
     scoringScroll->listItem = scoringList;
     scoringPageBox->addChild(scoringScroll);
-    gui.addItem(scoringScroll, "scoring_scroll");
+    gui.addItemP(scoringScroll, "scoring_scroll");
     
     addNewPageItems(RESULTS_MENU_PAGE_SCORING, scoringPageBox, "scoring");
 }
@@ -956,14 +956,14 @@ void Results::initGuiStats() {
     //Stats list.
     statsList = new ListGuiItem();
     statsPageBox->addChild(statsList);
-    gui.addItem(statsList, "stats_list");
+    gui.addItemP(statsList, "stats_list");
     populateStatsList();
     
     //Stats list scrollbar.
     ScrollGuiItem* statsScroll = new ScrollGuiItem();
     statsScroll->listItem = statsList;
     statsPageBox->addChild(statsScroll);
-    gui.addItem(statsScroll, "stats_scroll");
+    gui.addItemP(statsScroll, "stats_scroll");
     
     if(
         game.curArea->type == AREA_TYPE_MISSION &&

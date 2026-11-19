@@ -183,7 +183,7 @@ Hud::Hud() :
                 finalDraw.center, finalDraw.size, true, true, 0.0f, draw.tint
             );
         };
-        gui.addItem(leaderIcon, "leader_" + i2s(l + 1) + "_icon");
+        gui.addItemP(leaderIcon, "leader_" + i2s(l + 1) + "_icon");
         leaderIconMgr.registerBubble(l, leaderIcon);
         
         
@@ -253,7 +253,7 @@ Hud::Hud() :
                 );
             }
         };
-        gui.addItem(leaderHealth, "leader_" + i2s(l + 1) + "_health");
+        gui.addItemP(leaderHealth, "leader_" + i2s(l + 1) + "_health");
         leaderHealthMgr.registerBubble(l, leaderHealth);
         
     }
@@ -270,7 +270,7 @@ Hud::Hud() :
             true, game.sysContent.fntSlim, draw.tint
         );
     };
-    gui.addItem(leaderNextInput, "leader_next_input");
+    gui.addItemP(leaderNextInput, "leader_next_input");
     
     
     //Sun Meter.
@@ -378,7 +378,7 @@ Hud::Hud() :
             }
         }
     };
-    gui.addItem(sunMeter, "time");
+    gui.addItemP(sunMeter, "time");
     
     
     //Day number bubble.
@@ -389,7 +389,7 @@ Hud::Hud() :
             bmpDayBubble, draw.center, draw.size, true, true, 0.0f, draw.tint
         );
     };
-    gui.addItem(dayBubble, "day_bubble");
+    gui.addItemP(dayBubble, "day_bubble");
     
     
     //Day number text.
@@ -402,7 +402,7 @@ Hud::Hud() :
             Point(draw.size.x * 0.70f, draw.size.y * 0.50f), draw.tint
         );
     };
-    gui.addItem(dayNr, "day_number");
+    gui.addItemP(dayNr, "day_number");
     
     
     //Standby group member icon.
@@ -411,7 +411,7 @@ Hud::Hud() :
     [this] (const DrawInfo & draw) {
         this->drawStandbyIcon(BUBBLE_RELATION_CURRENT);
     };
-    gui.addItem(standbyIcon, "standby_icon");
+    gui.addItemP(standbyIcon, "standby_icon");
     standbyIconMgr.registerBubble(BUBBLE_RELATION_CURRENT, standbyIcon);
     
     
@@ -421,7 +421,7 @@ Hud::Hud() :
     [this] (const DrawInfo & draw) {
         this->drawStandbyIcon(BUBBLE_RELATION_NEXT);
     };
-    gui.addItem(standbyNextIcon, "standby_next_icon");
+    gui.addItemP(standbyNextIcon, "standby_next_icon");
     standbyIconMgr.registerBubble(BUBBLE_RELATION_NEXT, standbyNextIcon);
     
     
@@ -447,7 +447,7 @@ Hud::Hud() :
             tintColor(mapAlpha(this->standbyItemsAlpha * 255), draw.tint)
         );
     };
-    gui.addItem(standbyNextInput, "standby_next_input");
+    gui.addItemP(standbyNextInput, "standby_next_input");
     
     
     //Previous standby subgroup icon.
@@ -456,7 +456,7 @@ Hud::Hud() :
     [this] (const DrawInfo & draw) {
         this->drawStandbyIcon(BUBBLE_RELATION_PREVIOUS);
     };
-    gui.addItem(standbyPrevIcon, "standby_prev_icon");
+    gui.addItemP(standbyPrevIcon, "standby_prev_icon");
     standbyIconMgr.registerBubble(BUBBLE_RELATION_PREVIOUS, standbyPrevIcon);
     
     
@@ -487,7 +487,7 @@ Hud::Hud() :
             tintColor(mapAlpha(this->standbyItemsAlpha * 255), draw.tint)
         );
     };
-    gui.addItem(standbyPrevInput, "standby_prev_input");
+    gui.addItemP(standbyPrevInput, "standby_prev_input");
     
     
     //Standby group member maturity.
@@ -549,7 +549,7 @@ Hud::Hud() :
             prevMaturityIcon = standbyMatBmp;
         }
     };
-    gui.addItem(standbyMaturityIcon, "standby_maturity_icon");
+    gui.addItemP(standbyMaturityIcon, "standby_maturity_icon");
     
     
     //Standby subgroup member amount bubble.
@@ -563,7 +563,7 @@ Hud::Hud() :
             tintColor(mapAlpha(this->standbyItemsAlpha * 255), draw.tint)
         );
     };
-    gui.addItem(standbyBubble, "standby_bubble");
+    gui.addItemP(standbyBubble, "standby_bubble");
     
     
     //Standby subgroup member amount.
@@ -597,7 +597,7 @@ Hud::Hud() :
             Point(1.0f + standbyAmount->getJuiceValue())
         );
     };
-    gui.addItem(standbyAmount, "standby_amount");
+    gui.addItemP(standbyAmount, "standby_amount");
     
     
     //Group Pikmin amount bubble.
@@ -610,7 +610,7 @@ Hud::Hud() :
             draw.center, draw.size, 0.0f, draw.tint
         );
     };
-    gui.addItem(groupBubble, "group_bubble");
+    gui.addItemP(groupBubble, "group_bubble");
     
     
     //Group Pikmin amount.
@@ -635,7 +635,7 @@ Hud::Hud() :
             Point(1.0f + groupAmount->getJuiceValue())
         );
     };
-    gui.addItem(groupAmount, "group_amount");
+    gui.addItemP(groupAmount, "group_amount");
     
     
     //Field Pikmin amount bubble.
@@ -647,7 +647,7 @@ Hud::Hud() :
             draw.center, draw.size, 0.0f, draw.tint
         );
     };
-    gui.addItem(fieldBubble, "field_bubble");
+    gui.addItemP(fieldBubble, "field_bubble");
     
     
     //Field Pikmin amount.
@@ -671,7 +671,7 @@ Hud::Hud() :
             Point(1.0f + fieldAmount->getJuiceValue())
         );
     };
-    gui.addItem(fieldAmount, "field_amount");
+    gui.addItemP(fieldAmount, "field_amount");
     
     
     //Total Pikmin amount bubble.
@@ -683,7 +683,7 @@ Hud::Hud() :
             draw.center, draw.size, 0.0f, draw.tint
         );
     };
-    gui.addItem(totalBubble, "total_bubble");
+    gui.addItemP(totalBubble, "total_bubble");
     
     
     //Total Pikmin amount.
@@ -707,7 +707,7 @@ Hud::Hud() :
             Point(1.0f + totalAmount->getJuiceValue())
         );
     };
-    gui.addItem(totalAmount, "total_amount");
+    gui.addItemP(totalAmount, "total_amount");
     
     
     //Pikmin counter "x".
@@ -719,7 +719,7 @@ Hud::Hud() :
             tintColor(mapAlpha(this->standbyItemsAlpha * 255), draw.tint)
         );
     };
-    gui.addItem(countersX, "counters_x");
+    gui.addItemP(countersX, "counters_x");
     
     
     //Pikmin counter slashes.
@@ -733,29 +733,29 @@ Hud::Hud() :
                 draw.tint
             );
         };
-        gui.addItem(counterSlash, "counters_slash_" + i2s(s + 1));
+        gui.addItemP(counterSlash, "counters_slash_" + i2s(s + 1));
     }
     
     
     if(game.curArea->type == AREA_TYPE_MISSION) {
         //Mission "goal" item.
         GuiItem* missionGoalItem = new GuiItem();
-        gui.addItem(missionGoalItem, "mission_goal");
+        gui.addItemP(missionGoalItem, "mission_goal");
         setupMissionHudItem(MISSION_HUD_ITEM_ID_GOAL, missionGoalItem);
         
         //Mission "score" item.
         GuiItem* missionScoreItem = new GuiItem();
-        gui.addItem(missionScoreItem, "mission_score");
+        gui.addItemP(missionScoreItem, "mission_score");
         setupMissionHudItem(MISSION_HUD_ITEM_ID_SCORE, missionScoreItem);
         
         //Mission "clock" item.
         GuiItem* missionClockItem = new GuiItem();
-        gui.addItem(missionClockItem, "mission_clock");
+        gui.addItemP(missionClockItem, "mission_clock");
         setupMissionHudItem(MISSION_HUD_ITEM_ID_CLOCK, missionClockItem);
         
         //Mission "misc." item.
         GuiItem* missionMiscItem = new GuiItem();
-        gui.addItem(missionMiscItem, "mission_misc");
+        gui.addItemP(missionMiscItem, "mission_misc");
         setupMissionHudItem(MISSION_HUD_ITEM_ID_MISC, missionMiscItem);
     }
     
@@ -799,7 +799,7 @@ Hud::Hud() :
         drawSmaller.size *= 0.95f;
         controlGuide->defDrawCode(drawSmaller);
     };
-    gui.addItem(controlGuide, "control_guide");
+    gui.addItemP(controlGuide, "control_guide");
     
     
     //Inventory update display.
@@ -842,7 +842,7 @@ Hud::Hud() :
         }
     };
     inventoryUpdate->forceSquare = true;
-    gui.addItem(inventoryUpdate, "inventory_update");
+    gui.addItemP(inventoryUpdate, "inventory_update");
     
     if(game.options.advanced.expoMode) {
         //Watermark wordmark.
@@ -854,7 +854,7 @@ Hud::Hud() :
                 true, true, 0.0f, multAlpha(draw.tint, 0.80f)
             );
         };
-        gui.addItem(watermarkWordmark, "watermark_wordmark");
+        gui.addItemP(watermarkWordmark, "watermark_wordmark");
         
         //Watermark logo.
         GuiItem* watermarkLogo = new GuiItem();
@@ -865,7 +865,7 @@ Hud::Hud() :
                 true, true, 0.0f, multAlpha(draw.tint, 0.80f)
             );
         };
-        gui.addItem(watermarkLogo, "watermark_logo");
+        gui.addItemP(watermarkLogo, "watermark_logo");
     }
     
     
@@ -998,7 +998,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             );
         };
         item->addChild(text);
-        gui.addItem(text, "mission_text_text");
+        gui.addItemP(text, "mission_text_text");
         
         break;
         
@@ -1052,7 +1052,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
         };
         analog->forceSquare = true;
         item->addChild(analog);
-        gui.addItem(analog, "mission_clock_analog");
+        gui.addItemP(analog, "mission_clock_analog");
         
         //Digital clock.
         GuiItem* digital = new GuiItem();
@@ -1107,7 +1107,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             );
         };
         item->addChild(digital);
-        gui.addItem(digital, "mission_clock_digital");
+        gui.addItemP(digital, "mission_clock_digital");
         
         break;
         
@@ -1134,7 +1134,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             );
         };
         item->addChild(scoreLabel);
-        gui.addItem(scoreLabel, "mission_score_label");
+        gui.addItemP(scoreLabel, "mission_score_label");
         
         //Score points.
         GuiItem* points = new GuiItem();
@@ -1160,7 +1160,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             );
         };
         item->addChild(points);
-        gui.addItem(points, "mission_score_points");
+        gui.addItemP(points, "mission_score_points");
         
         //"Points" label.
         GuiItem* pointsLabel = new GuiItem();
@@ -1176,7 +1176,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             );
         };
         item->addChild(pointsLabel);
-        gui.addItem(pointsLabel, "mission_score_points_label");
+        gui.addItemP(pointsLabel, "mission_score_points_label");
         
         //Ruler.
         GuiItem* ruler = new GuiItem();
@@ -1432,7 +1432,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             );
         };
         item->addChild(ruler);
-        gui.addItem(ruler, "mission_score_ruler");
+        gui.addItemP(ruler, "mission_score_ruler");
         
         break;
         
@@ -1456,7 +1456,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             );
         };
         item->addChild(text);
-        gui.addItem(text, "mission_health_label");
+        gui.addItemP(text, "mission_health_label");
         
         //Bar proper.
         GuiItem* bar = new GuiItem();
@@ -1494,7 +1494,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             }
         };
         item->addChild(bar);
-        gui.addItem(bar, "mission_health_bar");
+        gui.addItemP(bar, "mission_health_bar");
         
         break;
         
@@ -1538,7 +1538,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             );
         };
         item->addChild(label);
-        gui.addItem(
+        gui.addItemP(
             label,
             onlyOneAmount ? "mission_amount_1_label" : "mission_amount_2_label"
         );
@@ -1588,7 +1588,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
             );
         };
         item->addChild(amt1Text);
-        gui.addItem(
+        gui.addItemP(
             amt1Text,
             onlyOneAmount ? "mission_amount_1_first" : "mission_amount_2_first"
         );
@@ -1622,7 +1622,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
                 );
             };
             item->addChild(amt2Text);
-            gui.addItem(
+            gui.addItemP(
                 amt2Text, "mission_amount_2_second"
             );
         }

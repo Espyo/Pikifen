@@ -578,7 +578,7 @@ GuiManager::GuiManager() :
  * Empty string if none.
  * @return Whether it succeeded.
  */
-bool GuiManager::addItem(GuiItem* item, const string& id) {
+bool GuiManager::addItemP(GuiItem* item, const string& id) {
     if(!DumbGui::Manager::addItem(item)) return false;
     
     Rect finalRect = item->getRawRatioRect();
@@ -741,7 +741,7 @@ void GuiManager::createAndAddCustomItems(
             }
         };
         if(customChildrenParent) customChildrenParent->addChild(guiItem);
-        addItem(guiItem);
+        addItemP(guiItem);
     }
 }
 
@@ -1363,7 +1363,7 @@ bool GuiManager::registerCoords(
  * @param item Item to remove.
  * @return Whether it succeeded.
  */
-bool GuiManager::removeItem(GuiItem* item) {
+bool GuiManager::removeItemP(GuiItem* item) {
     if(!DumbGui::Manager::removeItem(item)) return false;
     
     if(focusedItem == item) {
@@ -1384,7 +1384,7 @@ bool GuiManager::removeItem(GuiItem* item) {
  * @return Whether it succeeded.
  */
 bool GuiManager::setFocusedItem(DumbGui::Item* item) {
-    return setFocusedItem((GuiItem*) item, false);
+    return setFocusedItemP((GuiItem*) item, false);
 }
 
 
@@ -1397,7 +1397,7 @@ bool GuiManager::setFocusedItem(DumbGui::Item* item) {
  * but because it's the default focused item when the GUI loads.
  * @return Whether it succeeded.
  */
-bool GuiManager::setFocusedItem(GuiItem* item, bool silent) {
+bool GuiManager::setFocusedItemP(GuiItem* item, bool silent) {
     if(!DumbGui::Manager::setFocusedItem((DumbGui::Item*) item)) {
         return false;
     }

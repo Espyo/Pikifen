@@ -715,9 +715,9 @@ public:
     bool handlePlayerAction(const Inpution::Action& action);
     bool wasLastInputMouse() const;
     
-    bool addItem(GuiItem* item, const string& id = "");
-    bool removeItem(GuiItem* item);
-    bool setFocusedItem(GuiItem* item, bool silent);
+    bool addItemP(GuiItem* item, const string& id = "");
+    bool removeItemP(GuiItem* item);
+    bool setFocusedItemP(GuiItem* item, bool silent);
     
     bool draw() override;
     bool tick(float deltaT) override;

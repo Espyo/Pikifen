@@ -120,17 +120,17 @@ int main() {
 
 
 ## Creating derived classes
-While DumbGui works out of the box, you can create classes that derive from `Item` and `Manager` to make your life easier and to further customize your GUIs. Here are some ideas:
+While DumbGui works out of the box, you can create classes that derive from `Manager` and `Item` and make use of class extensions and polymorphism. These can make your life easier and allow you to customize your GUIs in more powerful ways. Here are some ideas:
 
 * For easier development:
-  * Make `Manager` and `Item`'s constructors fill in lambdas that will always be the same (`Manager::onGetWindowSizePx`, `Manager::on*ClippingRectangle`).
-  * Create classes that inherit from your custom `Item` class for different types of widgets, like buttons, sliders, labels, etc. Their class members can include the text to show, and their constructors can automatically fill in lambdas that draw those things.
+  * Create classes that extend `Manager` and `Item`, and make their constructors fill in lambdas that will always be the same (`Manager::onGetWindowSizePx`, `Manager::on*ClippingRectangle`).
+  * Create classes that inherit from your extended `Item` class for different types of widgets, like buttons, sliders, labels, etc. Their class members can include the text to show, and their constructors can automatically fill in lambdas that draw those things.
   * Add wrappers for getting and setting the raw centers (`Item::rawCenterRatio*`), raw sizes (`Item::rawSizeRatio*`), and so on, so you can use your own higher-level structs like a `Point` or a `Rect`.
-  * Create class members that are drawing callbacks, that instead use a custom [`DrawInfo`](#drawinfo) class with higher-level structs, and make the manager's drawing logic (`Item::draw`) call those instead.
+  * Create `Item` class members for drawing callbacks that instead use a custom [`DrawInfo`](#drawinfo) class with higher-level structs. Then, make the manager's drawing logic (`Item::draw`) convert the struct and call those callbacks instead.
   * Have the `Manager` store a pointer to the "back button" or "confirm button", so users can hit their "menu back" or "menu OK" keys/buttons to instantly activate (`Item::activate`) that item.
 * For more interesting GUIs:
-  * Add a menu animation system to `Manager` that can make items slide into view, fade away, etc. (`Manager::getItemDrawInfo`).
-  * Add a juice system that sets a class member that controls the juice timer, and has the drawing callbacks read that value to temporarily change the font size, make it glow white, etc.
+  * Add a menu animation system to `Manager` that can make items slide into view, fade away, etc. When it's time to obtain an item's coordinates for drawing (`Manager::getItemDrawInfo`), the manager can check if it's mid-animation and return the coordinates offset by some amount.
+  * Add a juice system that sets an `Item` class member that controls the juice timer, and has the drawing callbacks read that value to temporarily change the font size, make it glow white, etc.
   * Block input from being received (`Manager::shouldHandleEvents`) if your game has a pop-up in front, or is fading away to a different screen.
   * Add a [spatial navigation](https://en.wikipedia.org/wiki/Spatial_navigation) algorithm that receives each item's on-screen coordinates (`Item::getReferencePx*`) and finds a different item to focus on, as a response to the user hitting a directional key/button.
   * Add `Item` callbacks for things like a hardware event, then have the `Manager` iterate through all items and feed them the event, so you can have things like text input boxes that respond to keyboard presses.

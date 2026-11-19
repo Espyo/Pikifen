@@ -165,7 +165,7 @@ void MainMenu::initGuiMainPage() {
     };
     playButton->onGetTooltip =
     [] () { return "Choose an area to play in."; };
-    mainGui.addItem(playButton, "play");
+    mainGui.addItemP(playButton, "play");
     
     //Make button.
     ButtonGuiItem* makeButton =
@@ -191,7 +191,7 @@ void MainMenu::initGuiMainPage() {
     };
     makeButton->onGetTooltip =
     [] () { return "Make your own content, like areas or animations."; };
-    mainGui.addItem(makeButton, "make");
+    mainGui.addItemP(makeButton, "make");
     
     //Help button.
     ButtonGuiItem* helpButton =
@@ -220,7 +220,7 @@ void MainMenu::initGuiMainPage() {
             "Quick help and tips about how to play. "
             "You can also find this in the pause menu.";
     };
-    mainGui.addItem(helpButton, "help");
+    mainGui.addItemP(helpButton, "help");
     
     //Options button.
     ButtonGuiItem* optionsButton =
@@ -252,7 +252,7 @@ void MainMenu::initGuiMainPage() {
             "Customize your playing experience. "
             "You can also find this in the pause menu.";
     };
-    mainGui.addItem(optionsButton, "options");
+    mainGui.addItemP(optionsButton, "options");
     
     //Statistics button.
     ButtonGuiItem* statsButton =
@@ -284,7 +284,7 @@ void MainMenu::initGuiMainPage() {
             "Check out some fun lifetime statistics. "
             "You can also find this in the pause menu.";
     };
-    mainGui.addItem(statsButton, "stats");
+    mainGui.addItemP(statsButton, "stats");
     
     //Discord server button.
     ButtonGuiItem* discordButton =
@@ -313,7 +313,7 @@ void MainMenu::initGuiMainPage() {
             "Open the project's Discord server! Discussions! Feedback! "
             "Questions! New content!";
     };
-    mainGui.addItem(discordButton, "discord");
+    mainGui.addItemP(discordButton, "discord");
     
     //GitHub page button.
     ButtonGuiItem* githubButton =
@@ -338,7 +338,7 @@ void MainMenu::initGuiMainPage() {
     };
     githubButton->onGetTooltip =
     [] () { return "Open the project's development page on GitHub!"; };
-    mainGui.addItem(githubButton, "github");
+    mainGui.addItemP(githubButton, "github");
     
     //Exit button.
     mainGui.backItem =
@@ -372,7 +372,7 @@ void MainMenu::initGuiMainPage() {
             "Quit Pikifen." :
             "Quit " + game.config.general.name + ".";
     };
-    mainGui.addItem(mainGui.backItem, "exit");
+    mainGui.addItemP(mainGui.backItem, "exit");
     
     //Exit input icon.
     guiCreateBackInputIcon(&mainGui, "exit_input");
@@ -380,10 +380,10 @@ void MainMenu::initGuiMainPage() {
     //Tooltip text.
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&mainGui);
-    mainGui.addItem(tooltipText, "tooltip");
+    mainGui.addItemP(tooltipText, "tooltip");
     
     //Finishing touches.
-    mainGui.setFocusedItem(playButton, true);
+    mainGui.setFocusedItemP(playButton, true);
     mainGui.responsive = false;
     mainGui.visible = false;
 }
@@ -443,7 +443,7 @@ void MainMenu::initGuiMakePage() {
     };
     animEdButton->onGetTooltip =
     [] () { return "Make an animation for any object in the game."; };
-    makeGui.addItem(animEdButton, "animation_editor");
+    makeGui.addItemP(animEdButton, "animation_editor");
     
     //Area editor button.
     ButtonGuiItem* areaEdButton =
@@ -469,7 +469,7 @@ void MainMenu::initGuiMakePage() {
     };
     areaEdButton->onGetTooltip =
     [] () { return "Make an area to play on."; };
-    makeGui.addItem(areaEdButton, "area_editor");
+    makeGui.addItemP(areaEdButton, "area_editor");
     
     //Particle editor button.
     ButtonGuiItem* partEdButton =
@@ -495,7 +495,7 @@ void MainMenu::initGuiMakePage() {
     };
     partEdButton->onGetTooltip =
     []() { return "Make generators that create particles."; };
-    makeGui.addItem(partEdButton, "particle_editor");
+    makeGui.addItemP(partEdButton, "particle_editor");
     
     //GUI editor button.
     ButtonGuiItem* guiEdButton =
@@ -521,7 +521,7 @@ void MainMenu::initGuiMakePage() {
     };
     guiEdButton->onGetTooltip =
     [] () { return "Change the way menus and the gameplay HUD look."; };
-    makeGui.addItem(guiEdButton, "gui_editor");
+    makeGui.addItemP(guiEdButton, "gui_editor");
     
     //Back button.
     makeGui.backItem =
@@ -539,7 +539,7 @@ void MainMenu::initGuiMakePage() {
     [] () {
         return "Return to the main page.";
     };
-    makeGui.addItem(makeGui.backItem, "back");
+    makeGui.addItemP(makeGui.backItem, "back");
     
     //Back input icon.
     guiCreateBackInputIcon(&makeGui);
@@ -582,15 +582,15 @@ void MainMenu::initGuiMakePage() {
         return
             "Information on how to make other content.";
     };
-    makeGui.addItem(moreButton, "more");
+    makeGui.addItemP(moreButton, "more");
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&makeGui);
-    makeGui.addItem(tooltipText, "tooltip");
+    makeGui.addItemP(tooltipText, "tooltip");
     
     //Finishing touches.
-    makeGui.setFocusedItem(animEdButton, true);
+    makeGui.setFocusedItemP(animEdButton, true);
     makeGui.responsive = false;
     makeGui.visible = false;
 }
@@ -649,7 +649,7 @@ void MainMenu::initGuiPlayPage() {
     };
     simpleButton->onGetTooltip =
     [] () { return "Pick a simple area with no goal, and start playing!"; };
-    playGui.addItem(simpleButton, "simple");
+    playGui.addItemP(simpleButton, "simple");
     
     //Play a mission area button.
     ButtonGuiItem* missionButton =
@@ -683,7 +683,7 @@ void MainMenu::initGuiPlayPage() {
             "Pick a mission area with goals and limitations, "
             "and start playing!";
     };
-    playGui.addItem(missionButton, "mission");
+    playGui.addItemP(missionButton, "mission");
     
     //Back button.
     playGui.backItem =
@@ -701,7 +701,7 @@ void MainMenu::initGuiPlayPage() {
     [] () {
         return "Return to the main page.";
     };
-    playGui.addItem(playGui.backItem, "back");
+    playGui.addItemP(playGui.backItem, "back");
     
     //Back input icon.
     guiCreateBackInputIcon(&playGui);
@@ -709,10 +709,10 @@ void MainMenu::initGuiPlayPage() {
     //Tooltip text.
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&playGui);
-    playGui.addItem(tooltipText, "tooltip");
+    playGui.addItemP(tooltipText, "tooltip");
     
     //Finishing touches.
-    playGui.setFocusedItem(simpleButton, true);
+    playGui.setFocusedItemP(simpleButton, true);
     playGui.responsive = false;
     playGui.visible = false;
 }

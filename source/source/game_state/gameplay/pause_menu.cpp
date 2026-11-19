@@ -218,7 +218,7 @@ void PauseMenu::addNewBullet(
         Rect(Point(0.50f, bulletCenterY), Point(0.96f, BULLET_HEIGHT))
     );
     list->addChild(bullet);
-    missionGui.addItem(bullet);
+    missionGui.addItemP(bullet);
 }
 
 
@@ -297,7 +297,7 @@ void PauseMenu::addNewPageItems(
     //Left page button.
     ButtonGuiItem* leftPageButton =
         addNewPageItem(pages[leftPageIdx], true, curGui);
-    curGui->addItem(leftPageButton, "left_page");
+    curGui->addItemP(leftPageButton, "left_page");
     
     //Left page input icon.
     GuiItem* leftPageInput = new GuiItem();
@@ -309,12 +309,12 @@ void PauseMenu::addNewPageItems(
             true, game.sysContent.fntSlim, draw.tint
         );
     };
-    curGui->addItem(leftPageInput, "left_page_input");
+    curGui->addItemP(leftPageInput, "left_page_input");
     
     //Right page button.
     ButtonGuiItem* rightPageButton =
         addNewPageItem(pages[rightPageIdx], false, curGui);
-    curGui->addItem(rightPageButton, "right_page");
+    curGui->addItemP(rightPageButton, "right_page");
     
     //Right page input icon.
     GuiItem* rightPageInput = new GuiItem();
@@ -326,7 +326,7 @@ void PauseMenu::addNewPageItems(
             true, game.sysContent.fntSlim, draw.tint
         );
     };
-    curGui->addItem(rightPageInput, "right_page_input");
+    curGui->addItemP(rightPageInput, "right_page_input");
     
     leftPageButtons[curGui] = leftPageButton;
     rightPageButtons[curGui] = rightPageButton;
@@ -400,7 +400,7 @@ void PauseMenu::addNewPikminStatusLine(
             )
         );
         list->addChild(typeItem);
-        statusGui.addItem(typeItem);
+        statusGui.addItemP(typeItem);
         
     } else if(isTotals) {
         //Totals header.
@@ -413,7 +413,7 @@ void PauseMenu::addNewPikminStatusLine(
             )
         );
         list->addChild(totalsHeaderItem);
-        statusGui.addItem(totalsHeaderItem);
+        statusGui.addItemP(totalsHeaderItem);
         
     }
     
@@ -437,7 +437,7 @@ void PauseMenu::addNewPikminStatusLine(
         groupTextItem->color = changeAlpha(groupTextItem->color, 64);
     }
     list->addChild(groupTextItem);
-    statusGui.addItem(groupTextItem);
+    statusGui.addItemP(groupTextItem);
     
     //Idle Pikmin.
     TextGuiItem* idleTextItem =
@@ -459,7 +459,7 @@ void PauseMenu::addNewPikminStatusLine(
         idleTextItem->color = changeAlpha(idleTextItem->color, 64);
     }
     list->addChild(idleTextItem);
-    statusGui.addItem(idleTextItem);
+    statusGui.addItemP(idleTextItem);
     
     //Field Pikmin.
     TextGuiItem* fieldTextItem =
@@ -481,7 +481,7 @@ void PauseMenu::addNewPikminStatusLine(
         fieldTextItem->color = changeAlpha(fieldTextItem->color, 64);
     }
     list->addChild(fieldTextItem);
-    statusGui.addItem(fieldTextItem);
+    statusGui.addItemP(fieldTextItem);
     
     //Onion Pikmin.
     TextGuiItem* onionTextItem =
@@ -503,7 +503,7 @@ void PauseMenu::addNewPikminStatusLine(
         onionTextItem->color = changeAlpha(onionTextItem->color, 64);
     }
     list->addChild(onionTextItem);
-    statusGui.addItem(onionTextItem);
+    statusGui.addItemP(onionTextItem);
     
     //Total Pikmin.
     TextGuiItem* totalTextItem =
@@ -525,7 +525,7 @@ void PauseMenu::addNewPikminStatusLine(
         totalTextItem->color = changeAlpha(totalTextItem->color, 64);
     }
     list->addChild(totalTextItem);
-    statusGui.addItem(totalTextItem);
+    statusGui.addItemP(totalTextItem);
     
     //Separator.
     GuiItem* separatorItem = new GuiItem();
@@ -544,7 +544,7 @@ void PauseMenu::addNewPikminStatusLine(
         );
     };
     list->addChild(separatorItem);
-    statusGui.addItem(separatorItem);
+    statusGui.addItemP(separatorItem);
     
     //New Pikmin.
     TextGuiItem* newTextItem =
@@ -568,7 +568,7 @@ void PauseMenu::addNewPikminStatusLine(
         newTextItem->color = changeAlpha(newTextItem->color, 64);
     }
     list->addChild(newTextItem);
-    statusGui.addItem(newTextItem);
+    statusGui.addItemP(newTextItem);
     
     //Lost Pikmin.
     TextGuiItem* lostTextItem =
@@ -592,7 +592,7 @@ void PauseMenu::addNewPikminStatusLine(
         lostTextItem->color = changeAlpha(lostTextItem->color, 64);
     }
     list->addChild(lostTextItem);
-    statusGui.addItem(lostTextItem);
+    statusGui.addItemP(lostTextItem);
 }
 
 
@@ -1739,7 +1739,7 @@ void PauseMenu::initMainPauseMenu() {
         game.curArea->name, game.sysContent.fntAreaName,
         changeAlpha(game.config.guiColors.gold, 192)
     );
-    gui.addItem(areaNameText, "area_name");
+    gui.addItemP(areaNameText, "area_name");
     
     //Area subtitle.
     TextGuiItem* areaSubtitleText =
@@ -1747,7 +1747,7 @@ void PauseMenu::initMainPauseMenu() {
         game.curArea->subtitle, game.sysContent.fntAreaName,
         changeAlpha(COLOR_WHITE, 192)
     );
-    gui.addItem(areaSubtitleText, "area_subtitle");
+    gui.addItemP(areaSubtitleText, "area_subtitle");
     
     //Continue playing button.
     gui.backItem =
@@ -1760,7 +1760,7 @@ void PauseMenu::initMainPauseMenu() {
     };
     gui.backItem->onGetTooltip =
     [] () { return "Unpause and continue playing."; };
-    gui.addItem(gui.backItem, "continue");
+    gui.addItemP(gui.backItem, "continue");
     
     //Continue input icon.
     guiCreateBackInputIcon(&gui, "continue_input");
@@ -1785,7 +1785,7 @@ void PauseMenu::initMainPauseMenu() {
             "Restart this area's exploration." :
             "Retry the mission from the start.";
     };
-    gui.addItem(retryButton, "retry");
+    gui.addItemP(retryButton, "retry");
     
     //End button.
     ButtonGuiItem* endButton =
@@ -1811,7 +1811,7 @@ void PauseMenu::initMainPauseMenu() {
             "End the mission early. "
             "This mission doesn't let you receive a medal this way!";
     };
-    gui.addItem(endButton, "end");
+    gui.addItemP(endButton, "end");
     
     //Help button.
     ButtonGuiItem* helpButton =
@@ -1840,7 +1840,7 @@ void PauseMenu::initMainPauseMenu() {
             "Quick help and tips about how to play. "
             "You can also find this in the title screen.";
     };
-    gui.addItem(helpButton, "help");
+    gui.addItemP(helpButton, "help");
     
     //Options button.
     ButtonGuiItem* optionsButton =
@@ -1869,7 +1869,7 @@ void PauseMenu::initMainPauseMenu() {
             "Customize your playing experience. "
             "You can also find this in the title screen.";
     };
-    gui.addItem(optionsButton, "options");
+    gui.addItemP(optionsButton, "options");
     
     //Statistics button.
     ButtonGuiItem* statsButton =
@@ -1898,7 +1898,7 @@ void PauseMenu::initMainPauseMenu() {
             "Check out some fun lifetime statistics. "
             "You can also find this in the title screen.";
     };
-    gui.addItem(statsButton, "stats");
+    gui.addItemP(statsButton, "stats");
     
     //Quit button.
     ButtonGuiItem* quitButton =
@@ -1925,15 +1925,15 @@ void PauseMenu::initMainPauseMenu() {
                 "editor"
             ) + ".";
     };
-    gui.addItem(quitButton, "quit");
+    gui.addItemP(quitButton, "quit");
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&gui);
-    gui.addItem(tooltipText, "tooltip");
+    gui.addItemP(tooltipText, "tooltip");
     
     //Finishing touches.
-    gui.setFocusedItem(gui.backItem, true);
+    gui.setFocusedItemP(gui.backItem, true);
     gui.responsive = false;
     gui.visible = false;
 }
@@ -1978,7 +1978,7 @@ void PauseMenu::initMissionPage() {
     };
     missionGui.backItem->onGetTooltip =
     [] () { return "Unpause and continue playing."; };
-    missionGui.addItem(missionGui.backItem, "continue");
+    missionGui.addItemP(missionGui.backItem, "continue");
     
     //Continue input icon.
     guiCreateBackInputIcon(&missionGui, "continue_input");
@@ -1989,7 +1989,7 @@ void PauseMenu::initMissionPage() {
         "Objective", game.sysContent.fntAreaName,
         game.config.guiColors.smallHeader
     );
-    missionGui.addItem(objectiveHeaderText, "objective_header");
+    missionGui.addItemP(objectiveHeaderText, "objective_header");
     
     //Objective explanation text.
     TextGuiItem* objectiveText =
@@ -1999,7 +1999,7 @@ void PauseMenu::initMissionPage() {
         game.config.guiColors.gold
     );
     objectiveText->lineWrap = true;
-    missionGui.addItem(objectiveText, "objective");
+    missionGui.addItemP(objectiveText, "objective");
     
     //Notes header text.
     TextGuiItem* notesHeaderText =
@@ -2007,17 +2007,17 @@ void PauseMenu::initMissionPage() {
         "Notes", game.sysContent.fntAreaName,
         game.config.guiColors.smallHeader
     );
-    missionGui.addItem(notesHeaderText, "notes_header");
+    missionGui.addItemP(notesHeaderText, "notes_header");
     
     //Notes list.
     ListGuiItem* missionNoteList = new ListGuiItem();
-    missionGui.addItem(missionNoteList, "notes_list");
+    missionGui.addItemP(missionNoteList, "notes_list");
     fillMissionNotesList(missionNoteList);
     
     //Notes scrollbar.
     ScrollGuiItem* notesScroll = new ScrollGuiItem();
     notesScroll->listItem = missionNoteList;
-    missionGui.addItem(notesScroll, "notes_scroll");
+    missionGui.addItemP(notesScroll, "notes_scroll");
     
     //Medal award header text.
     TextGuiItem* medalAwardHeaderText =
@@ -2025,25 +2025,25 @@ void PauseMenu::initMissionPage() {
         "Medal award", game.sysContent.fntAreaName,
         game.config.guiColors.smallHeader
     );
-    missionGui.addItem(medalAwardHeaderText, "medal_award_header");
+    missionGui.addItemP(medalAwardHeaderText, "medal_award_header");
     
     //Medal award explanation list.
     ListGuiItem* missionMedalAwardList = new ListGuiItem();
-    missionGui.addItem(missionMedalAwardList, "medal_award_list");
+    missionGui.addItemP(missionMedalAwardList, "medal_award_list");
     fillMissionMedalAwardList(missionMedalAwardList);
     
     //Medal award explanation scrollbar.
     ScrollGuiItem* medalAwardScroll = new ScrollGuiItem();
     medalAwardScroll->listItem = missionMedalAwardList;
-    missionGui.addItem(medalAwardScroll, "medal_award_scroll");
+    missionGui.addItemP(medalAwardScroll, "medal_award_scroll");
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&missionGui);
-    missionGui.addItem(tooltipText, "tooltip");
+    missionGui.addItemP(tooltipText, "tooltip");
     
     //Finishing touches.
-    missionGui.setFocusedItem(missionGui.backItem, true);
+    missionGui.setFocusedItemP(missionGui.backItem, true);
     missionGui.responsive = false;
     missionGui.visible = false;
 }
@@ -2113,7 +2113,7 @@ void PauseMenu::initRadarPage() {
     };
     radarGui.backItem->onGetTooltip =
     [] () { return "Unpause and continue playing."; };
-    radarGui.addItem(radarGui.backItem, "continue");
+    radarGui.addItemP(radarGui.backItem, "continue");
     
     //Continue input icon.
     guiCreateBackInputIcon(&radarGui, "continue_input");
@@ -2124,7 +2124,7 @@ void PauseMenu::initRadarPage() {
     [this] (const DrawInfo & draw) {
         drawRadar(draw.center, draw.size);
     };
-    radarGui.addItem(radarItem, "radar");
+    radarGui.addItemP(radarItem, "radar");
     
     //Group Pikmin label text.
     TextGuiItem* groupPikLabelText =
@@ -2132,7 +2132,7 @@ void PauseMenu::initRadarPage() {
         "Group Pikmin:", game.sysContent.fntStandard,
         COLOR_WHITE, ALLEGRO_ALIGN_LEFT
     );
-    radarGui.addItem(groupPikLabelText, "group_pikmin_label");
+    radarGui.addItemP(groupPikLabelText, "group_pikmin_label");
     
     //Group Pikmin number text.
     TextGuiItem* groupPikNrText =
@@ -2145,7 +2145,7 @@ void PauseMenu::initRadarPage() {
         game.sysContent.fntCounter,
         COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
     );
-    radarGui.addItem(groupPikNrText, "group_pikmin_number");
+    radarGui.addItemP(groupPikNrText, "group_pikmin_number");
     
     //Idle Pikmin label text.
     TextGuiItem* idlePikLabelText =
@@ -2153,7 +2153,7 @@ void PauseMenu::initRadarPage() {
         "Idle Pikmin:", game.sysContent.fntStandard,
         COLOR_WHITE, ALLEGRO_ALIGN_LEFT
     );
-    radarGui.addItem(idlePikLabelText, "idle_pikmin_label");
+    radarGui.addItemP(idlePikLabelText, "idle_pikmin_label");
     
     //Idle Pikmin number text.
     TextGuiItem* idlePikNrText =
@@ -2162,7 +2162,7 @@ void PauseMenu::initRadarPage() {
         game.sysContent.fntCounter,
         COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
     );
-    radarGui.addItem(idlePikNrText, "idle_pikmin_number");
+    radarGui.addItemP(idlePikNrText, "idle_pikmin_number");
     
     //Field Pikmin label text.
     TextGuiItem* fieldPikLabelText =
@@ -2170,7 +2170,7 @@ void PauseMenu::initRadarPage() {
         "Field Pikmin:", game.sysContent.fntStandard,
         COLOR_WHITE, ALLEGRO_ALIGN_LEFT
     );
-    radarGui.addItem(fieldPikLabelText, "field_pikmin_label");
+    radarGui.addItemP(fieldPikLabelText, "field_pikmin_label");
     
     //Field Pikmin number text.
     TextGuiItem* fieldPikNrText =
@@ -2178,7 +2178,7 @@ void PauseMenu::initRadarPage() {
         i2s(game.states.gameplay->getAmountOfFieldPikmin()),
         game.sysContent.fntCounter, COLOR_WHITE, ALLEGRO_ALIGN_RIGHT
     );
-    radarGui.addItem(fieldPikNrText, "field_pikmin_number");
+    radarGui.addItemP(fieldPikNrText, "field_pikmin_number");
     
     //Cursor info text.
     TextGuiItem* cursorInfoText =
@@ -2289,7 +2289,7 @@ void PauseMenu::initRadarPage() {
             }
         }
     };
-    radarGui.addItem(cursorInfoText, "cursor_info");
+    radarGui.addItemP(cursorInfoText, "cursor_info");
     
     //Instructions text.
     TextGuiItem* instructionsText =
@@ -2304,12 +2304,12 @@ void PauseMenu::initRadarPage() {
         COLOR_TRANSPARENT_WHITE, ALLEGRO_ALIGN_RIGHT
     );
     instructionsText->lineWrap = true;
-    radarGui.addItem(instructionsText, "instructions");
+    radarGui.addItemP(instructionsText, "instructions");
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&radarGui);
-    radarGui.addItem(tooltipText, "tooltip");
+    radarGui.addItemP(tooltipText, "tooltip");
     
     //Finishing touches.
     radarGui.setFocusedItem(nullptr);
@@ -2353,7 +2353,7 @@ void PauseMenu::initStatusPage() {
     };
     statusGui.backItem->onGetTooltip =
     [] () { return "Unpause and continue playing."; };
-    statusGui.addItem(statusGui.backItem, "continue");
+    statusGui.addItemP(statusGui.backItem, "continue");
     
     //Continue input icon.
     guiCreateBackInputIcon(&statusGui, "continue_input");
@@ -2362,27 +2362,27 @@ void PauseMenu::initStatusPage() {
     ListGuiItem* listHeader = new ListGuiItem();
     listHeader->onDrawP =
     [] (const DrawInfo&) {};
-    statusGui.addItem(listHeader, "list_header");
+    statusGui.addItemP(listHeader, "list_header");
     
     //Pikmin list box.
     pikminList = new ListGuiItem();
-    statusGui.addItem(pikminList, "list");
+    statusGui.addItemP(pikminList, "list");
     
     //Pikmin list scrollbar.
     ScrollGuiItem* listScroll = new ScrollGuiItem();
     listScroll->listItem = pikminList;
-    statusGui.addItem(listScroll, "list_scroll");
+    statusGui.addItemP(listScroll, "list_scroll");
     
     //Pikmin totals box.
     ListGuiItem* totals = new ListGuiItem();
     totals->onDrawP =
     [] (const DrawInfo&) {};
-    statusGui.addItem(totals, "totals");
+    statusGui.addItemP(totals, "totals");
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&statusGui);
-    statusGui.addItem(tooltipText, "tooltip");
+    statusGui.addItemP(tooltipText, "tooltip");
     
     //Setup the list header.
     addNewPikminStatusLine(
@@ -2474,7 +2474,7 @@ void PauseMenu::initStatusPage() {
     );
     
     //Finishing touches.
-    statusGui.setFocusedItem(statusGui.backItem, true);
+    statusGui.setFocusedItemP(statusGui.backItem, true);
     statusGui.responsive = false;
     statusGui.visible = false;
 }

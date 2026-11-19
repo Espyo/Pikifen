@@ -47,7 +47,7 @@ void StatsMenu::addNewHeaderItem(const string& label) {
         )
     );
     statsList->addChild(labelText);
-    gui.addItem(labelText);
+    gui.addItemP(labelText);
 }
 
 
@@ -81,7 +81,7 @@ TextGuiItem* StatsMenu::addNewStatItem(
     );
     labelBullet->onGetTooltip = [description] () { return description; };
     statsList->addChild(labelBullet);
-    gui.addItem(labelBullet);
+    gui.addItemP(labelBullet);
     
     TextGuiItem* valueText =
         new TextGuiItem(
@@ -93,7 +93,7 @@ TextGuiItem* StatsMenu::addNewStatItem(
         )
     );
     statsList->addChild(valueText);
-    gui.addItem(valueText);
+    gui.addItemP(valueText);
     
     return valueText;
 }
@@ -124,7 +124,7 @@ void StatsMenu::initGuiMain() {
     };
     gui.backItem->onGetTooltip =
     [] () { return "Return to the previous menu."; };
-    gui.addItem(gui.backItem, "back");
+    gui.addItemP(gui.backItem, "back");
     
     //Back input icon.
     guiCreateBackInputIcon(&gui);
@@ -132,20 +132,20 @@ void StatsMenu::initGuiMain() {
     //Statistics list.
     statsList = new ListGuiItem();
     populateStatsList();
-    gui.addItem(statsList, "list");
+    gui.addItemP(statsList, "list");
     
     //Statistics list scrollbar.
     ScrollGuiItem* listScroll = new ScrollGuiItem();
     listScroll->listItem = statsList;
-    gui.addItem(listScroll, "list_scroll");
+    gui.addItemP(listScroll, "list_scroll");
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&gui);
-    gui.addItem(tooltipText, "tooltip");
+    gui.addItemP(tooltipText, "tooltip");
     
     //Finishing touches.
-    gui.setFocusedItem(gui.backItem, true);
+    gui.setFocusedItemP(gui.backItem, true);
 }
 
 

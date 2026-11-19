@@ -158,13 +158,13 @@ void Inventory::initGui() {
     //Item list box.
     itemList = new ListGuiItem();
     itemList->horizontal = true;
-    gui.addItem(itemList, "list");
+    gui.addItemP(itemList, "list");
     
     //Item list scrollbar.
     ScrollGuiItem* listScroll = new ScrollGuiItem();
     listScroll->horizontal = true;
     listScroll->listItem = itemList;
-    gui.addItem(listScroll, "list_scroll");
+    gui.addItemP(listScroll, "list_scroll");
     
     //Item info text.
     itemInfoItem = new GuiItem();
@@ -193,7 +193,7 @@ void Inventory::initGui() {
             );
         }
     };
-    gui.addItem(itemInfoItem, "info");
+    gui.addItemP(itemInfoItem, "info");
     
     //Close button.
     gui.backItem =
@@ -206,7 +206,7 @@ void Inventory::initGui() {
     };
     gui.backItem->onGetTooltip =
     [] () { return "Close inventory"; };
-    gui.addItem(gui.backItem, "close");
+    gui.addItemP(gui.backItem, "close");
     
     //Close input icon.
     guiCreateBackInputIcon(&gui, "close_input");
@@ -307,7 +307,7 @@ void Inventory::populateInventoryListGui() {
         button->onGetTooltip = [iPtr] () { return iPtr->name; };
         button->onFocused = [this, i] () { focusedItemIdx = i; };
         itemList->addChild(button);
-        gui.addItem(button);
+        gui.addItemP(button);
         
         iiPtr->button = button;
         
@@ -335,13 +335,13 @@ void Inventory::populateInventoryListGui() {
             );
         };
         itemList->addChild(placeholder);
-        gui.addItem(placeholder);
+        gui.addItemP(placeholder);
         
         nextSlot();
     }
     
     if(!itemList->children.empty()) {
-        gui.setFocusedItem(((GuiItem*) itemList->children[0]), true);
+        gui.setFocusedItemP(((GuiItem*) itemList->children[0]), true);
     }
 }
 

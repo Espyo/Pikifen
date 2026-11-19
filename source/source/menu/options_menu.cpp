@@ -136,7 +136,7 @@ void OptionsMenu::addNewBindEntryItems(
             )
         );
         bindsListBox->addChild(sectionText);
-        bindsGui.addItem(sectionText);
+        bindsGui.addItemP(sectionText);
         
         actionY =
             bindsListBox->getChildrenSpanRatio() +
@@ -157,7 +157,7 @@ void OptionsMenu::addNewBindEntryItems(
     nameBullet->onGetTooltip =
     [actionType] () { return actionType.description; };
     bindsListBox->addChild(nameBullet);
-    bindsGui.addItem(nameBullet);
+    bindsGui.addItemP(nameBullet);
     
     //Note that overrides the other items.
     if(!overrideNote.empty()) {
@@ -170,7 +170,7 @@ void OptionsMenu::addNewBindEntryItems(
             )
         );
         bindsListBox->addChild(overrideNoteText);
-        bindsGui.addItem(overrideNoteText);
+        bindsGui.addItemP(overrideNoteText);
         
     } else {
         //More button.
@@ -199,7 +199,7 @@ void OptionsMenu::addNewBindEntryItems(
         moreButton->onGetTooltip =
         [tooltip] () { return tooltip; };
         bindsListBox->addChild(moreButton);
-        bindsGui.addItem(moreButton);
+        bindsGui.addItemP(moreButton);
         if(actionType.id == curActionType) {
             *itemToFocus = moreButton;
         }
@@ -240,7 +240,7 @@ void OptionsMenu::addNewBindEntryItems(
             bindButton->onGetTooltip =
             [] () { return "Change the input for this action."; };
             bindsListBox->addChild(bindButton);
-            bindsGui.addItem(bindButton);
+            bindsGui.addItemP(bindButton);
             
             if(showingBindsMore && actionType.id == curActionType) {
                 //Delete bind button.
@@ -269,7 +269,7 @@ void OptionsMenu::addNewBindEntryItems(
                 deleteBindButton->onGetTooltip =
                 [] () { return "Deletes this input bind from this action."; };
                 bindsListBox->addChild(deleteBindButton);
-                bindsGui.addItem(deleteBindButton);
+                bindsGui.addItemP(deleteBindButton);
                 deleteBindButton->startJuiceAnimation(
                     GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
                 );
@@ -314,7 +314,7 @@ void OptionsMenu::addNewBindEntryItems(
             bindButton->onGetTooltip =
             [] () { return "Choose a new input to bind to this action."; };
             bindsListBox->addChild(bindButton);
-            bindsGui.addItem(bindButton);
+            bindsGui.addItemP(bindButton);
             bindButton->startJuiceAnimation(
                 GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
             );
@@ -340,7 +340,7 @@ void OptionsMenu::addNewBindEntryItems(
             createButton->onGetTooltip =
             [] () { return "Create another input to bind to this action."; };
             bindsListBox->addChild(createButton);
-            bindsGui.addItem(createButton);
+            bindsGui.addItemP(createButton);
             createButton->startJuiceAnimation(
                 GuiItem::JUICE_TYPE_GROW_TEXT_HIGH
             );
@@ -370,7 +370,7 @@ void OptionsMenu::addNewBindEntryItems(
             restoreButton->onGetTooltip =
             [] () { return "Restore this action's default inputs."; };
             bindsListBox->addChild(restoreButton);
-            bindsGui.addItem(restoreButton);
+            bindsGui.addItemP(restoreButton);
             restoreButton->startJuiceAnimation(
                 GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
             );
@@ -392,7 +392,7 @@ void OptionsMenu::addNewBindEntryItems(
                 )
             );
             bindsListBox->addChild(defaultLabelText);
-            bindsGui.addItem(defaultLabelText);
+            bindsGui.addItemP(defaultLabelText);
             defaultLabelText->startJuiceAnimation(
                 GuiItem::JUICE_TYPE_GROW_TEXT_MEDIUM
             );
@@ -415,7 +415,7 @@ void OptionsMenu::addNewBindEntryItems(
                 );
             };
             bindsListBox->addChild(defaultIcon);
-            bindsGui.addItem(defaultIcon);
+            bindsGui.addItemP(defaultIcon);
             
         }
     }
@@ -440,7 +440,7 @@ void OptionsMenu::addNewBindEntryItems(
         );
     };
     bindsListBox->addChild(line);
-    bindsGui.addItem(line);
+    bindsGui.addItemP(line);
 }
 
 
@@ -507,7 +507,7 @@ void OptionsMenu::addNewShortcutItemItems(
     shortcutButton->onGetTooltip =
     [] () { return "Set the shortcut to this."; };
     shortcutItemsListBox->addChild(shortcutButton);
-    shortcutsGui.addItem(shortcutButton);
+    shortcutsGui.addItemP(shortcutButton);
     shortcutButton->startJuiceAnimation(
         GuiItem::JUICE_TYPE_GROW_TEXT_ELASTIC_HIGH
     );
@@ -538,7 +538,7 @@ void OptionsMenu::addNewShortcutItems(unsigned char idx) {
     [this, idx] (const DrawInfo & draw) {
         drawShortcutName(draw, idx);
     };
-    shortcutsGui.addItem(text, "shortcut_" + shortcutLetter + "_label");
+    shortcutsGui.addItemP(text, "shortcut_" + shortcutLetter + "_label");
     
     //Assignment button.
     ButtonGuiItem* button = new ButtonGuiItem("", game.sysContent.fntStandard);
@@ -551,7 +551,7 @@ void OptionsMenu::addNewShortcutItems(unsigned char idx) {
     [] () {
         return "Choose what item to assign to this shortcut.";
     };
-    shortcutsGui.addItem(button, "shortcut_" + shortcutLetter);
+    shortcutsGui.addItemP(button, "shortcut_" + shortcutLetter);
     shortcutButtons.push_back(button);
 }
 
@@ -753,7 +753,7 @@ void OptionsMenu::initGuiAudioPage() {
     };
     audioGui.backItem->onGetTooltip =
     [] () { return "Return to the top-level options menu."; };
-    audioGui.addItem(audioGui.backItem, "back");
+    audioGui.addItemP(audioGui.backItem, "back");
     
     //Back input icon.
     guiCreateBackInputIcon(&audioGui);
@@ -794,7 +794,7 @@ void OptionsMenu::initGuiAudioPage() {
     );
     masterVolPicker->afterChange = updateVolumes;
     masterVolPicker->init();
-    audioGui.addItem(masterVolPicker, "master_volume");
+    audioGui.addItemP(masterVolPicker, "master_volume");
     
     //Gameplay sound effects volume picker.
     gameplaySoundVolPicker =
@@ -808,7 +808,7 @@ void OptionsMenu::initGuiAudioPage() {
     );
     gameplaySoundVolPicker->afterChange = updateVolumes;
     gameplaySoundVolPicker->init();
-    audioGui.addItem(gameplaySoundVolPicker, "gameplay_sound_volume");
+    audioGui.addItemP(gameplaySoundVolPicker, "gameplay_sound_volume");
     
     //Music volume picker.
     musicVolPicker =
@@ -822,7 +822,7 @@ void OptionsMenu::initGuiAudioPage() {
     );
     musicVolPicker->afterChange = updateVolumes;
     musicVolPicker->init();
-    audioGui.addItem(musicVolPicker, "music_volume");
+    audioGui.addItemP(musicVolPicker, "music_volume");
     
     //Ambiance sound volume picker.
     ambianceSoundVolPicker =
@@ -836,7 +836,7 @@ void OptionsMenu::initGuiAudioPage() {
     );
     ambianceSoundVolPicker->afterChange = updateVolumes;
     ambianceSoundVolPicker->init();
-    audioGui.addItem(ambianceSoundVolPicker, "ambiance_sound_volume");
+    audioGui.addItemP(ambianceSoundVolPicker, "ambiance_sound_volume");
     
     //UI sound effects volume picker.
     uiSoundVolPicker =
@@ -850,15 +850,15 @@ void OptionsMenu::initGuiAudioPage() {
     );
     uiSoundVolPicker->afterChange = updateVolumes;
     uiSoundVolPicker->init();
-    audioGui.addItem(uiSoundVolPicker, "ui_sound_volume");
+    audioGui.addItemP(uiSoundVolPicker, "ui_sound_volume");
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&audioGui);
-    audioGui.addItem(tooltipText, "tooltip");
+    audioGui.addItemP(tooltipText, "tooltip");
     
     //Finishing touches.
-    audioGui.setFocusedItem(masterVolPicker, true);
+    audioGui.setFocusedItemP(masterVolPicker, true);
     audioGui.responsive = false;
     audioGui.visible = false;
 }
@@ -895,19 +895,19 @@ void OptionsMenu::initGuiControlBindsPage() {
     };
     bindsGui.backItem->onGetTooltip =
     [] () { return "Return to the previous menu."; };
-    bindsGui.addItem(bindsGui.backItem, "back");
+    bindsGui.addItemP(bindsGui.backItem, "back");
     
     //Back input icon.
     guiCreateBackInputIcon(&bindsGui);
     
     //Controls list box.
     bindsListBox = new ListGuiItem();
-    bindsGui.addItem(bindsListBox, "list");
+    bindsGui.addItemP(bindsListBox, "list");
     
     //Controls list scrollbar.
     ScrollGuiItem* listScroll = new ScrollGuiItem();
     listScroll->listItem = bindsListBox;
-    bindsGui.addItem(listScroll, "list_scroll");
+    bindsGui.addItemP(listScroll, "list_scroll");
     
     //Controls warning button.
     bindsWarningButton = new ButtonGuiItem("", game.sysContent.fntStandard);
@@ -947,15 +947,15 @@ void OptionsMenu::initGuiControlBindsPage() {
     };
     bindsWarningButton->onGetTooltip =
     [] () { return "You have some warnings! Press here to see them."; };
-    bindsGui.addItem(bindsWarningButton, "warning");
+    bindsGui.addItemP(bindsWarningButton, "warning");
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&bindsGui);
-    bindsGui.addItem(tooltipText, "tooltip");
+    bindsGui.addItemP(tooltipText, "tooltip");
     
     //Finishing touches.
-    bindsGui.setFocusedItem(bindsGui.backItem, true);
+    bindsGui.setFocusedItemP(bindsGui.backItem, true);
     bindsGui.responsive = false;
     bindsGui.visible = false;
     game.hardware.updateControllers();
@@ -994,7 +994,7 @@ void OptionsMenu::initGuiControlsPage() {
     };
     controlsGui.backItem->onGetTooltip =
     [] () { return "Return to the top-level options menu."; };
-    controlsGui.addItem(controlsGui.backItem, "back");
+    controlsGui.addItemP(controlsGui.backItem, "back");
     
     //Back input icon.
     guiCreateBackInputIcon(&controlsGui);
@@ -1015,7 +1015,7 @@ void OptionsMenu::initGuiControlsPage() {
     };
     normalBindsButton->onGetTooltip =
     [] () { return "Choose what buttons do what regular actions."; };
-    controlsGui.addItem(normalBindsButton, "normal_binds");
+    controlsGui.addItemP(normalBindsButton, "normal_binds");
     
     //Special control binds button.
     ButtonGuiItem* specialBindsButton =
@@ -1033,7 +1033,7 @@ void OptionsMenu::initGuiControlsPage() {
     };
     specialBindsButton->onGetTooltip =
     [] () { return "Choose what buttons do what special features."; };
-    controlsGui.addItem(specialBindsButton, "special_binds");
+    controlsGui.addItemP(specialBindsButton, "special_binds");
     
     //Inventory shortcuts button.
     ButtonGuiItem* inventoryShortcutsButton =
@@ -1053,7 +1053,7 @@ void OptionsMenu::initGuiControlsPage() {
             "Assign certain inventory items to shortcuts, "
             "set in the control binds.";
     };
-    controlsGui.addItem(inventoryShortcutsButton, "shortcuts");
+    controlsGui.addItemP(inventoryShortcutsButton, "shortcuts");
     
     //Leader cursor mouse check.
     leaderCursorMouseCheck =
@@ -1072,7 +1072,7 @@ void OptionsMenu::initGuiControlsPage() {
             "Whether the leader's cursor is controlled with the mouse "
             "or with buttons/keys.";
     };
-    controlsGui.addItem(leaderCursorMouseCheck, "leader_cursor_mouse");
+    controlsGui.addItemP(leaderCursorMouseCheck, "leader_cursor_mouse");
     
     //Leader cursor speed picker.
     leaderCursorSpeedPicker =
@@ -1096,7 +1096,7 @@ void OptionsMenu::initGuiControlsPage() {
         return f2s(v);
     };
     leaderCursorSpeedPicker->init();
-    controlsGui.addItem(leaderCursorSpeedPicker, "leader_cursor_speed");
+    controlsGui.addItemP(leaderCursorSpeedPicker, "leader_cursor_speed");
     
     //Auto-throw mode.
     autoThrowPicker =
@@ -1113,7 +1113,7 @@ void OptionsMenu::initGuiControlsPage() {
         "Do the throw input once to auto-throw periodically, and again to stop."
     };
     autoThrowPicker->init();
-    controlsGui.addItem(autoThrowPicker, "auto_throw");
+    controlsGui.addItemP(autoThrowPicker, "auto_throw");
     
     //Inventory mode.
     fastInventoryCheck =
@@ -1127,16 +1127,16 @@ void OptionsMenu::initGuiControlsPage() {
             "Makes the inventory open as long as the button is held. "
             "Releasing uses the focused item.";
     };
-    controlsGui.addItem(fastInventoryCheck, "fast_inventory");
+    controlsGui.addItemP(fastInventoryCheck, "fast_inventory");
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&controlsGui);
-    controlsGui.addItem(tooltipText, "tooltip");
+    controlsGui.addItemP(tooltipText, "tooltip");
     
     //Finishing touches.
     updateControlsPage();
-    controlsGui.setFocusedItem(normalBindsButton, true);
+    controlsGui.setFocusedItemP(normalBindsButton, true);
     controlsGui.responsive = false;
     controlsGui.visible = false;
 }
@@ -1172,7 +1172,7 @@ void OptionsMenu::initGuiGraphicsPage() {
     };
     graphicsGui.backItem->onGetTooltip =
     [] () { return "Return to the top-level options menu."; };
-    graphicsGui.addItem(graphicsGui.backItem, "back");
+    graphicsGui.addItemP(graphicsGui.backItem, "back");
     
     //Back input icon.
     guiCreateBackInputIcon(&graphicsGui);
@@ -1194,7 +1194,7 @@ void OptionsMenu::initGuiGraphicsPage() {
             "Show the game in fullscreen, or in a window? Default: " +
             b2s(OPTIONS::GRAPHICS_D::WIN_FULLSCREEN) + ".";
     };
-    graphicsGui.addItem(fullscreenCheck, "fullscreen");
+    graphicsGui.addItemP(fullscreenCheck, "fullscreen");
     
     //Resolution picker.
     vector<string> resolutionPresetNames;
@@ -1224,7 +1224,7 @@ void OptionsMenu::initGuiGraphicsPage() {
         return i2s(v.first) + "x" + i2s(v.second);
     };
     resolutionPicker->init();
-    graphicsGui.addItem(resolutionPicker, "resolution");
+    graphicsGui.addItemP(resolutionPicker, "resolution");
     
     //VSync checkbox.
     CheckGuiItem* vsyncCheckbox =
@@ -1244,7 +1244,7 @@ void OptionsMenu::initGuiGraphicsPage() {
             "slight input delay. Default: " +
             b2s(OPTIONS::GRAPHICS_D::VSYNC) + ".";
     };
-    graphicsGui.addItem(vsyncCheckbox, "vsync");
+    graphicsGui.addItemP(vsyncCheckbox, "vsync");
     
     //Camera shake multiplier picker.
     OptionsMenuPickerGuiItem<float>* camShakeMultPicker =
@@ -1257,7 +1257,7 @@ void OptionsMenu::initGuiGraphicsPage() {
     "Strength of the camera shaking effects."
     );
     camShakeMultPicker->init();
-    graphicsGui.addItem(camShakeMultPicker, "cam_shake_mult");
+    graphicsGui.addItemP(camShakeMultPicker, "cam_shake_mult");
     
     //Warning text.
     warningText =
@@ -1267,15 +1267,15 @@ void OptionsMenu::initGuiGraphicsPage() {
         game.sysContent.fntStandard, COLOR_WHITE, ALLEGRO_ALIGN_CENTER
     );
     warningText->visible = false;
-    graphicsGui.addItem(warningText, "restart_warning");
+    graphicsGui.addItemP(warningText, "restart_warning");
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&graphicsGui);
-    graphicsGui.addItem(tooltipText, "tooltip");
+    graphicsGui.addItemP(tooltipText, "tooltip");
     
     //Finishing touches.
-    graphicsGui.setFocusedItem(fullscreenCheck, true);
+    graphicsGui.setFocusedItemP(fullscreenCheck, true);
     graphicsGui.responsive = false;
     graphicsGui.visible = false;
 }
@@ -1314,7 +1314,7 @@ void OptionsMenu::initGuiMiscPage() {
     };
     miscGui.backItem->onGetTooltip =
     [] () { return "Return to the top-level options menu."; };
-    miscGui.addItem(miscGui.backItem, "back");
+    miscGui.addItemP(miscGui.backItem, "back");
     
     //Back input icon.
     guiCreateBackInputIcon(&miscGui);
@@ -1339,7 +1339,7 @@ void OptionsMenu::initGuiMiscPage() {
         "Idle Pikmin join the leader when they are somewhat nearby."
     };
     pikminBumpPicker->init();
-    miscGui.addItem(pikminBumpPicker, "pikmin_bump");
+    miscGui.addItemP(pikminBumpPicker, "pikmin_bump");
     
     //Dismiss all checkbox.
     CheckGuiItem* dismissAllCheckbox =
@@ -1353,7 +1353,7 @@ void OptionsMenu::initGuiMiscPage() {
             "Do dismisses dismiss all Pikmin, or keep the standby type? "
             "Default: " + b2s(OPTIONS::MISC_D::DISMISS_ALL) + ".";
     };
-    miscGui.addItem(dismissAllCheckbox, "dismiss_all");
+    miscGui.addItemP(dismissAllCheckbox, "dismiss_all");
     
     //Leader cursor camera weight picker.
     leaderCursorCamWeightPicker =
@@ -1369,7 +1369,7 @@ void OptionsMenu::initGuiMiscPage() {
         return f2s(v);
     };
     leaderCursorCamWeightPicker->init();
-    miscGui.addItem(leaderCursorCamWeightPicker, "leader_cursor_cam_weight");
+    miscGui.addItemP(leaderCursorCamWeightPicker, "leader_cursor_cam_weight");
     
     //Show leader cursor counter checkbox.
     CheckGuiItem* showLeaderCursorCounterCheck =
@@ -1384,7 +1384,7 @@ void OptionsMenu::initGuiMiscPage() {
             "Default: " +
             b2s(OPTIONS::MISC_D::SHOW_LEADER_CURSOR_COUNTER) + ".";
     };
-    miscGui.addItem(showLeaderCursorCounterCheck, "show_leader_cursor_counter");
+    miscGui.addItemP(showLeaderCursorCounterCheck, "show_leader_cursor_counter");
     
     //Show control guide when idling checkbox.
     CheckGuiItem* showControlGuideCheck =
@@ -1398,7 +1398,7 @@ void OptionsMenu::initGuiMiscPage() {
             "Show a control guide on-screen when you're idling? "
             "Default: " + b2s(OPTIONS::MISC_D::SHOW_CONTROL_GUIDE) + ".";
     };
-    miscGui.addItem(showControlGuideCheck, "show_control_guide");
+    miscGui.addItemP(showControlGuideCheck, "show_control_guide");
     
     //Show GUI player input icons checkbox.
     CheckGuiItem* showGuiInputIconsCheck =
@@ -1412,7 +1412,7 @@ void OptionsMenu::initGuiMiscPage() {
             "Show icons of the player inputs near relevant GUI items? "
             "Default: " + b2s(OPTIONS::MISC_D::SHOW_GUI_INPUT_ICONS) + ".";
     };
-    miscGui.addItem(showGuiInputIconsCheck, "show_gui_input_icons");
+    miscGui.addItemP(showGuiInputIconsCheck, "show_gui_input_icons");
     
     //Leaving confirmation mode.
     leavingConfirmationPicker =
@@ -1433,7 +1433,7 @@ void OptionsMenu::initGuiMiscPage() {
         "When leaving from the pause menu, never ask to confirm."
     };
     leavingConfirmationPicker->init();
-    miscGui.addItem(leavingConfirmationPicker, "leaving_confirmation");
+    miscGui.addItemP(leavingConfirmationPicker, "leaving_confirmation");
     
     //Maker tools in play check.
     CheckGuiItem* makerToolsInPlayCheck =
@@ -1447,15 +1447,15 @@ void OptionsMenu::initGuiMiscPage() {
             "Freely allow maker tools in normal gameplay? Or ask to confirm? "
             "Default: " + b2s(OPTIONS::MISC_D::MAKER_TOOLS_IN_PLAY) + ".";
     };
-    miscGui.addItem(makerToolsInPlayCheck, "maker_tools_in_play");
+    miscGui.addItemP(makerToolsInPlayCheck, "maker_tools_in_play");
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&miscGui);
-    miscGui.addItem(tooltipText, "tooltip");
+    miscGui.addItemP(tooltipText, "tooltip");
     
     //Finishing touches.
-    miscGui.setFocusedItem(leaderCursorCamWeightPicker, true);
+    miscGui.setFocusedItemP(leaderCursorCamWeightPicker, true);
     miscGui.responsive = false;
     miscGui.visible = false;
 }
@@ -1499,7 +1499,7 @@ void OptionsMenu::initGuiShortcutsPage() {
     };
     shortcutsGui.backItem->onGetTooltip =
     [] () { return "Return to the previous menu."; };
-    shortcutsGui.addItem(shortcutsGui.backItem, "back");
+    shortcutsGui.addItemP(shortcutsGui.backItem, "back");
     
     //Back input icon.
     guiCreateBackInputIcon(&shortcutsGui);
@@ -1513,25 +1513,25 @@ void OptionsMenu::initGuiShortcutsPage() {
     //Items list explanation text.
     shortcutItemsListExplanation =
         new TextGuiItem("", game.sysContent.fntStandard);
-    shortcutsGui.addItem(shortcutItemsListExplanation, "list_explanation");
+    shortcutsGui.addItemP(shortcutItemsListExplanation, "list_explanation");
     
     //Items list box.
     shortcutItemsListBox = new ListGuiItem();
-    shortcutsGui.addItem(shortcutItemsListBox, "list");
+    shortcutsGui.addItemP(shortcutItemsListBox, "list");
     
     //Items list scrollbar.
     shortcutItemsListScroll = new ScrollGuiItem();
     shortcutItemsListScroll->listItem = shortcutItemsListBox;
-    shortcutsGui.addItem(shortcutItemsListScroll, "list_scroll");
+    shortcutsGui.addItemP(shortcutItemsListScroll, "list_scroll");
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&shortcutsGui);
-    shortcutsGui.addItem(tooltipText, "tooltip");
+    shortcutsGui.addItemP(tooltipText, "tooltip");
     
     //Finishing touches.
     updateShortcutsPage();
-    shortcutsGui.setFocusedItem(shortcutsGui.backItem, true);
+    shortcutsGui.setFocusedItemP(shortcutsGui.backItem, true);
     shortcutsGui.responsive = false;
     shortcutsGui.visible = false;
 }
@@ -1581,7 +1581,7 @@ void OptionsMenu::initGuiTopPage() {
     };
     topGui.backItem->onGetTooltip =
     [] () { return "Return to the previous menu."; };
-    topGui.addItem(topGui.backItem, "back");
+    topGui.addItemP(topGui.backItem, "back");
     
     //Back input icon.
     guiCreateBackInputIcon(&topGui);
@@ -1612,7 +1612,7 @@ void OptionsMenu::initGuiTopPage() {
     };
     controlsButton->onGetTooltip =
     [] () { return "Change the way you control the game."; };
-    topGui.addItem(controlsButton, "controls");
+    topGui.addItemP(controlsButton, "controls");
     
     //Graphics options button.
     ButtonGuiItem* graphicsButton =
@@ -1640,7 +1640,7 @@ void OptionsMenu::initGuiTopPage() {
     };
     graphicsButton->onGetTooltip =
     [] () { return "Change some options about how the game looks."; };
-    topGui.addItem(graphicsButton, "graphics");
+    topGui.addItemP(graphicsButton, "graphics");
     
     //Audio options button.
     ButtonGuiItem* audioButton =
@@ -1666,7 +1666,7 @@ void OptionsMenu::initGuiTopPage() {
     };
     audioButton->onGetTooltip =
     [] () { return "Change options about the way the game sounds."; };
-    topGui.addItem(audioButton, "audio");
+    topGui.addItemP(audioButton, "audio");
     
     //Packs options button.
     ButtonGuiItem* packsButton =
@@ -1702,7 +1702,7 @@ void OptionsMenu::initGuiTopPage() {
     };
     packsButton->onGetTooltip =
     [] () { return "Manage any content packs you have installed."; };
-    topGui.addItem(packsButton, "packs");
+    topGui.addItemP(packsButton, "packs");
     
     //Misc. options button.
     ButtonGuiItem* miscButton =
@@ -1729,7 +1729,7 @@ void OptionsMenu::initGuiTopPage() {
     };
     miscButton->onGetTooltip =
     [] () { return "Change some miscellaneous gameplay and game options."; };
-    topGui.addItem(miscButton, "misc");
+    topGui.addItemP(miscButton, "misc");
     
     //Advanced button.
     ButtonGuiItem* advancedButton =
@@ -1770,15 +1770,15 @@ void OptionsMenu::initGuiTopPage() {
         return
             "Information on how advanced option management works.";
     };
-    topGui.addItem(advancedButton, "advanced");
+    topGui.addItemP(advancedButton, "advanced");
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&topGui);
-    topGui.addItem(tooltipText, "tooltip");
+    topGui.addItemP(tooltipText, "tooltip");
     
     //Finishing touches.
-    topGui.setFocusedItem(controlsButton, true);
+    topGui.setFocusedItemP(controlsButton, true);
 }
 
 
@@ -1914,7 +1914,7 @@ void OptionsMenu::populateBinds() {
     }
     
     if(itemToFocus) {
-        bindsGui.setFocusedItem(itemToFocus, true);
+        bindsGui.setFocusedItemP(itemToFocus, true);
         //Try to center it.
         bindsListBox->onChildFocusedViaSN(itemToFocus);
     }
@@ -1945,7 +1945,7 @@ void OptionsMenu::populateShortcutItems() {
     }
     
     if(itemToFocus) {
-        bindsGui.setFocusedItem(itemToFocus, true);
+        bindsGui.setFocusedItemP(itemToFocus, true);
         //Try to center it.
         bindsListBox->onChildFocusedViaSN(itemToFocus);
     }

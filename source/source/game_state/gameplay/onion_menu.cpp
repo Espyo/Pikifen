@@ -94,7 +94,7 @@ OnionMenu::OnionMenu(
     };
     gui.backItem->onGetTooltip =
     [] () { return "Forget all changes and leave the Onion menu."; };
-    gui.addItem(gui.backItem, "cancel");
+    gui.addItemP(gui.backItem, "cancel");
     
     //Cancel input icon.
     guiCreateBackInputIcon(&gui, "cancel_input");
@@ -110,7 +110,7 @@ OnionMenu::OnionMenu(
     };
     okButton->onGetTooltip =
     [] () { return "Confirm changes."; };
-    gui.addItem(okButton, "ok");
+    gui.addItemP(okButton, "ok");
     
     //Ok input.
     GuiItem* okInput = new GuiItem();
@@ -122,7 +122,7 @@ OnionMenu::OnionMenu(
             true, game.sysContent.fntSlim, draw.tint
         );
     };
-    gui.addItem(okInput, "ok_input");
+    gui.addItemP(okInput, "ok_input");
     
     //Field amount text.
     fieldAmountText =
@@ -158,7 +158,7 @@ OnionMenu::OnionMenu(
             Point(1.0f + juicyGrowAmount)
         );
     };
-    gui.addItem(fieldAmountText, "field");
+    gui.addItemP(fieldAmountText, "field");
     
     //Change ten at a time button.
     changeTenButton = new ButtonGuiItem("", game.sysContent.fntStandard);
@@ -191,7 +191,7 @@ OnionMenu::OnionMenu(
                 "Press to change by ten.";
         }
     };
-    gui.addItem(changeTenButton, "change_ten");
+    gui.addItemP(changeTenButton, "change_ten");
     
     //Change ten at a time input.
     GuiItem* changeTenInput = new GuiItem();
@@ -203,7 +203,7 @@ OnionMenu::OnionMenu(
             true, game.sysContent.fntSlim, draw.tint
         );
     };
-    gui.addItem(changeTenInput, "change_ten_input");
+    gui.addItemP(changeTenInput, "change_ten_input");
     
     //Select all button.
     selectAllButton = new ButtonGuiItem("", game.sysContent.fntStandard);
@@ -238,7 +238,7 @@ OnionMenu::OnionMenu(
                 "Press to control all at once.";
         }
     };
-    gui.addItem(selectAllButton, "select_all");
+    gui.addItemP(selectAllButton, "select_all");
     
     //Select all input.
     GuiItem* selectAllInput = new GuiItem();
@@ -251,18 +251,18 @@ OnionMenu::OnionMenu(
         );
     };
     selectAllInput->visible = types.size() > 1;
-    gui.addItem(selectAllInput, "select_all_input");
+    gui.addItemP(selectAllInput, "select_all_input");
     
     //List box.
     listItem = new ListGuiItem();
     listItem->horizontal = true;
-    gui.addItem(listItem, "list");
+    gui.addItemP(listItem, "list");
     
     //List scrollbar.
     ScrollGuiItem* listScroll = new ScrollGuiItem();
     listScroll->horizontal = true;
     listScroll->listItem = listItem;
-    gui.addItem(listScroll, "list_scroll");
+    gui.addItemP(listScroll, "list_scroll");
     
     //Items for each Pikmin type.
     forIdx(t, types) {
@@ -281,7 +281,7 @@ OnionMenu::OnionMenu(
             }
         };
         listItem->addChild(onionIcon);
-        gui.addItem(onionIcon, "onion_button");
+        gui.addItemP(onionIcon, "onion_button");
         onionIconItems.push_back(onionIcon);
         
         //Onion button.
@@ -316,7 +316,7 @@ OnionMenu::OnionMenu(
                 tPtr->pikType->name + " inside.";
         };
         listItem->addChild(onionButton);
-        gui.addItem(onionButton, "onion_button");
+        gui.addItemP(onionButton, "onion_button");
         onionButtonItems.push_back(onionButton);
         
         //Onion amount text.
@@ -359,7 +359,7 @@ OnionMenu::OnionMenu(
             );
         };
         listItem->addChild(onionAmountText);
-        gui.addItem(onionAmountText, "onion_amount");
+        gui.addItemP(onionAmountText, "onion_amount");
         onionAmountItems.push_back(onionAmountText);
         
         //Group icon.
@@ -378,7 +378,7 @@ OnionMenu::OnionMenu(
             }
         };
         listItem->addChild(groupIcon);
-        gui.addItem(groupIcon, "group_button");
+        gui.addItemP(groupIcon, "group_button");
         groupIconItems.push_back(groupIcon);
         
         //Group button.
@@ -413,7 +413,7 @@ OnionMenu::OnionMenu(
                 tPtr->pikType->name + " to the group.";
         };
         listItem->addChild(groupButton);
-        gui.addItem(groupButton, "group_button");
+        gui.addItemP(groupButton, "group_button");
         groupButtonItems.push_back(groupButton);
         
         //Group amount text.
@@ -456,7 +456,7 @@ OnionMenu::OnionMenu(
             );
         };
         listItem->addChild(groupAmountText);
-        gui.addItem(groupAmountText, "group_amount");
+        gui.addItemP(groupAmountText, "group_amount");
         groupAmountItems.push_back(groupAmountText);
         
         //Full type item.
@@ -474,7 +474,7 @@ OnionMenu::OnionMenu(
                 tPtr->pikType->name + ".";
         };
         listItem->addChild(fullTypeItem);
-        gui.addItem(fullTypeItem, "full_type");
+        gui.addItemP(fullTypeItem, "full_type");
         fullTypeItems.push_back(fullTypeItem);
     }
     
@@ -508,7 +508,7 @@ OnionMenu::OnionMenu(
             " Pikmin of each type inside.";
     };
     listItem->addChild(onionAllButton);
-    gui.addItem(onionAllButton, "onion_all_button");
+    gui.addItemP(onionAllButton, "onion_all_button");
     
     //Group's all button.
     groupAllButton =
@@ -540,7 +540,7 @@ OnionMenu::OnionMenu(
             " Pikmin of each type to the group.";
     };
     listItem->addChild(groupAllButton);
-    gui.addItem(groupAllButton, "group_all_button");
+    gui.addItemP(groupAllButton, "group_all_button");
     
     //All types item.
     fullTypeAllItem = new GuiItem();
@@ -556,22 +556,22 @@ OnionMenu::OnionMenu(
             "Pikmin of each type.";
     };
     listItem->addChild(fullTypeAllItem);
-    gui.addItem(fullTypeAllItem, "full_type_all");
+    gui.addItemP(fullTypeAllItem, "full_type_all");
     fullTypeItems.push_back(fullTypeAllItem);
     
     //List padding dummy item.
     listPaddingDummyItem = new GuiItem();
     listItem->addChild(listPaddingDummyItem);
-    gui.addItem(listPaddingDummyItem);
+    gui.addItemP(listPaddingDummyItem);
     
     //Tooltip text.
     TooltipGuiItem* tooltipText =
         new TooltipGuiItem(&gui);
-    gui.addItem(tooltipText, "tooltip");
+    gui.addItemP(tooltipText, "tooltip");
     
     //Finishing touches.
     update();
-    gui.setFocusedItem(okButton, true);
+    gui.setFocusedItemP(okButton, true);
     gui.startAnimation(
         GUI_MANAGER_ANIM_UP_TO_CENTER,
         GAMEPLAY::MENU_ENTRY_HUD_MOVE_TIME

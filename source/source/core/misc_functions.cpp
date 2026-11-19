@@ -972,7 +972,7 @@ void guiCreateBackInputIcon(GuiManager* gui, const string& itemName) {
             true, game.sysContent.fntSlim, draw.tint
         );
     };
-    gui->addItem(backInput, itemName);
+    gui->addItemP(backInput, itemName);
 }
 
 

@@ -199,14 +199,14 @@ void ModalGuiManager::updateItems() {
     TextGuiItem* titleItem = new TextGuiItem(
         title, game.sysContent.fntAreaName
     );
-    addItem(titleItem, "title");
+    addItemP(titleItem, "title");
     
     //Prompt text.
     TextGuiItem* promptItem = new TextGuiItem(
         prompt, game.sysContent.fntStandard
     );
     promptItem->lineWrap = true;
-    addItem(promptItem, "prompt");
+    addItemP(promptItem, "prompt");
     
     //Text input.
     if(useTextInput) {
@@ -251,7 +251,7 @@ void ModalGuiManager::updateItems() {
                 );
             }
         };
-        addItem(textInputItem, "text_input");
+        addItemP(textInputItem, "text_input");
     }
     
     //Back button.
@@ -268,7 +268,7 @@ void ModalGuiManager::updateItems() {
         if(onBack) onBack();
         close();
     };
-    addItem(backItem, "button_area");
+    addItemP(backItem, "button_area");
     buttonItems.push_back(backItem);
     
     //Back input icon.
@@ -291,13 +291,13 @@ void ModalGuiManager::updateItems() {
         [this, b] () {
             return extraButtons[b].tooltip;
         };
-        addItem(button, "button_area");
+        addItemP(button, "button_area");
         buttonItems.push_back(button);
     }
     
     //Tooltip text.
     TooltipGuiItem* tooltipItem = new TooltipGuiItem(this);
-    addItem(tooltipItem, "tooltip");
+    addItemP(tooltipItem, "tooltip");
     
     //Position the buttons.
     Rect buttonArea = backItem->getRawRatioRect();
@@ -316,5 +316,5 @@ void ModalGuiManager::updateItems() {
     }
     
     //Finishing touches.
-    setFocusedItem(buttonItems[defaultFocusButtonIdx], true);
+    setFocusedItemP(buttonItems[defaultFocusButtonIdx], true);
 }
