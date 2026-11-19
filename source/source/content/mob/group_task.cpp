@@ -21,14 +21,14 @@
  * @param angle Starting angle.
  */
 GroupTask::GroupTask(
-    const Point& center, GroupTaskType* type, float angle
+    const Point& center, GroupTaskType* type, Angle angle
 ):
     Mob(center, type, angle),
     tasType(type),
     powerGoal(type->powerGoal) {
     
     //Initialize spots.
-    float rowAngle = getAngle(tasType->firstRowP1, tasType->firstRowP2);
+    Angle rowAngle = getAngle(tasType->firstRowP1, tasType->firstRowP2);
     size_t neededRows =
         ceil(tasType->maxPikmin / (float) tasType->pikminPerRow);
     float pointDist =

@@ -39,7 +39,7 @@ public:
     
     //--- Public function declarations ---
     
-    Drop(const Point& pos, DropType* type, float angle);
+    Drop(const Point& pos, DropType* type, Angle angle);
     void drawMob() override;
     
 protected:

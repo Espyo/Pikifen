@@ -732,7 +732,7 @@ void AnimationEditor::drawTopDownViewSprite(Sprite* s) {
     
     if(s->bitmap) {
         Point coords;
-        float angle;
+        Angle angle;
         Point scale;
         ALLEGRO_COLOR tint;
         bool doingComparisonColoring =
@@ -776,7 +776,7 @@ void AnimationEditor::drawTopDownViewSprite(Sprite* s) {
         topBmp[curMaturity]
     ) {
         Point coords;
-        float angle;
+        Angle angle;
         Point size;
         getSpriteBasicTopEffects(
             s, nextS, interpolationFactor,

@@ -24,7 +24,7 @@
  * @param angle Starting angle.
  */
 Decoration::Decoration(
-    const Point& center, DecorationType* type, float angle
+    const Point& center, DecorationType* type, Angle angle
 ) :
     Mob(center, type, angle),
     decType(type) {

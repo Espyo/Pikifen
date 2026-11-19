@@ -29,7 +29,7 @@ extern const float AUTO_THROW_RAMP_TIME;
 extern const float AUTO_THROW_SLOWEST_INTERVAL;
 extern const float BORED_ANIM_MAX_DELAY;
 extern const float BORED_ANIM_MIN_DELAY;
-extern const float DISMISS_ANGLE_RANGE;
+extern const Angle DISMISS_ANGLE_RANGE;
 extern const float DISMISS_MEMBER_SIZE_MULTIPLIER;
 extern const size_t DISMISS_PARTICLE_AMOUNT;
 extern const float DISMISS_PARTICLE_ALPHA;
@@ -42,14 +42,14 @@ extern const float DISMISS_PARTICLE_SIZE;
 extern const float DISMISS_SUBGROUP_DISTANCE;
 extern const float HEALTH_CAUTION_RATIO;
 extern const float HEALTH_CAUTION_RING_DURATION;
-extern const float HELD_GROUP_MEMBER_ANGLE;
+extern const Angle HELD_GROUP_MEMBER_ANGLE;
 extern const float HELD_GROUP_MEMBER_H_DIST;
 extern const float HELD_GROUP_MEMBER_V_DIST;
 extern const float INVULN_PERIOD_KB;
 extern const float INVULN_PERIOD_NORMAL;
 extern const float SWARM_ARROW_INTERVAL;
 extern const float SWARM_PARTICLE_ALPHA;
-extern const float SWARM_PARTICLE_ANGLE_DEVIATION;
+extern const Angle SWARM_PARTICLE_ANGLE_DEVIATION;
 extern const float SWARM_PARTICLE_FRICTION;
 extern const float SWARM_PARTICLE_MAX_DURATION;
 extern const float SWARM_PARTICLE_MIN_DURATION;
@@ -118,7 +118,7 @@ public:
     Mob* throwee = nullptr;
     
     //Provided there's a throw, this is the angle.
-    float throweeAngle = 0.0f;
+    Angle throweeAngle = 0.0f;
     
     //Provided there's a throw, this is the max Z.
     float throweeMaxZ = 0.0f;
@@ -161,7 +161,7 @@ public:
     
     //--- Public function declarations ---
     
-    Leader(const Point& pos, LeaderType* type, float angle);
+    Leader(const Point& pos, LeaderType* type, Angle angle);
     bool checkThrowOk() const;
     bool canGrabGroupMember(Mob* m) const;
     void dismiss(bool forceDismissAll, bool subtle = false);

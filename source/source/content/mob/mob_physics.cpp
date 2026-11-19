@@ -245,7 +245,7 @@ HORIZ_MOVE_RESULT Mob::getPhysicsHorizontalMovement(
                 hasFlag(chaseInfo.flags, CHASE_FLAG_ANY_ANGLE) ||
                 d <= MOB::FREE_MOVE_THRESHOLD;
                 
-            float movementAngle =
+            Angle movementAngle =
                 canFreeMove ?
                 getAngle(center, finalTargetPos) :
                 angle;
@@ -304,8 +304,8 @@ HORIZ_MOVE_RESULT Mob::getPhysicsHorizontalMovement(
  * if the mob can't slide against this wall.
  */
 HORIZ_MOVE_RESULT Mob::getWallSlideAngle(
-    const Edge* ePtr, unsigned char wallSector, float moveAngle,
-    float* slideAngle
+    const Edge* ePtr, unsigned char wallSector, Angle moveAngle,
+    Angle* slideAngle
 ) const {
     //The wall's normal is the direction the wall is facing.
     //i.e. the direction from the top floor to the bottom floor.
@@ -316,7 +316,7 @@ HORIZ_MOVE_RESULT Mob::getWallSlideAngle(
     //Sector 0 will always be on your left.
     
     float wallNormal;
-    float wallAngle =
+    Angle wallAngle =
         getAngle(v2p(ePtr->vertexes[0]), v2p(ePtr->vertexes[1]));
         
     if(wallSector == 0) {
@@ -451,16 +451,16 @@ void Mob::tickHorizontalMovementPhysics(
         if(bottomZ < stepSector->floorZ) newZ = stepSector->floorZ;
         
         //Figure out sliding logic now, if needed.
-        float moveAngle;
+        Angle moveAngle;
         float totalMoveSpeed;
         coordinatesToAngle(
             moveSpeed, &moveAngle, &totalMoveSpeed
         );
         
         //Angle to slide towards.
-        float slideAngle = moveAngle;
+        Angle slideAngle = moveAngle;
         //Difference between the movement angle and the slide.
-        float slideAngleDiff = 0;
+        Angle slideAngleDiff = 0;
         
         //Check the sector heights of the intersecting edges to figure out
         //which are really walls, and how to slide against them.
@@ -492,7 +492,7 @@ void Mob::tickHorizontalMovementPhysics(
             //wall the mob will slide on.
             
             if(!doingSlide) {
-                float tentativeSlideAngle;
+                Angle tentativeSlideAngle;
                 if(
                     getWallSlideAngle(
                         ePtr, wallSector, moveAngle, &tentativeSlideAngle
@@ -640,7 +640,7 @@ void Mob::tickRotationPhysics(
     if(intendedTurnAngle > TAU / 2)  intendedTurnAngle -= TAU;
     if(intendedTurnAngle < -TAU / 2) intendedTurnAngle += TAU;
     
-    float angleDiff = intendedTurnAngle - angle;
+    Angle angleDiff = intendedTurnAngle - angle;
     if(angleDiff > TAU / 2)  angleDiff -= TAU;
     if(angleDiff < -TAU / 2) angleDiff += TAU;
     

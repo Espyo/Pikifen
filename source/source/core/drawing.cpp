@@ -446,7 +446,7 @@ void drawHealth(
  * @param timeSpent Total time spent. Used for animating.
  */
 void drawHighlightedRectRegion(
-    const Point& center, const Point& size, float angle,
+    const Point& center, const Point& size, Angle angle,
     const ALLEGRO_COLOR& color, float timeSpent
 ) {
     const float CORNER_RADIUS = 2.0f;

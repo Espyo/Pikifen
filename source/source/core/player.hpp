@@ -128,7 +128,7 @@ struct Player {
     size_t selectedSpray = 0;
     
     //Angle of swarming.
-    float swarmAngle = 0.0f;
+    Angle swarmAngle = 0.0f;
     
     //General intensity of swarming in the specified angle.
     float swarmMagnitude = 0.0f;

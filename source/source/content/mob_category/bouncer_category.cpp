@@ -49,7 +49,7 @@ void BouncerCategory::clearTypes() {
  * @return The created mob.
  */
 Mob* BouncerCategory::createMob(
-    const Point& center, MobType* type, float angle
+    const Point& center, MobType* type, Angle angle
 ) {
     Bouncer* m = new Bouncer(center, (BouncerType*) type, angle);
     game.states.gameplay->mobs.bouncers.push_back(m);

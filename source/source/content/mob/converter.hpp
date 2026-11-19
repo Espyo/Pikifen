@@ -15,7 +15,7 @@
 
 namespace CONVERTER {
 extern const float NEW_SEED_Z_OFFSET;
-extern const float SPIT_ANGLE_SHIFT;
+extern const Angle SPIT_ANGLE_SHIFT;
 extern const float SPIT_H_SPEED;
 extern const float SPIT_H_SPEED_DEVIATION;
 extern const float SPIT_V_SPEED;
@@ -61,7 +61,7 @@ public:
     
     //--- Public function declarations ---
     
-    Converter(const Point& pos, ConverterType* type, float angle);
+    Converter(const Point& pos, ConverterType* type, Angle angle);
     void changeType();
     void close();
     void spit();

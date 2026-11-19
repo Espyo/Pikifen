@@ -31,6 +31,6 @@ public:
     
     //--- Public function declarations ---
     
-    Bouncer(const Point& pos, BouncerType* type, float angle);
+    Bouncer(const Point& pos, BouncerType* type, Angle angle);
     
 };

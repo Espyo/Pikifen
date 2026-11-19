@@ -111,7 +111,7 @@ public:
     float bottomZ = 0.0f;
     
     //Current facing angle. 0 = right, PI / 2 = up, etc.
-    float angle = 0.0f;
+    Angle angle = 0.0f;
     
     //The highest ground below the entire mob.
     Sector* groundSector = nullptr;
@@ -141,7 +141,7 @@ public:
     float pushAmount = 0.0f;
     
     //Angle that another mob is pushing it to.
-    float pushAngle = 0.0f;
+    Angle pushAngle = 0.0f;
     
     //How much the mob moved this frame, if it's walkable.
     Point walkableMoved;
@@ -187,7 +187,7 @@ public:
     ScriptVM scriptVM;
     
     //Angle the mob wants to be facing.
-    float intendedTurnAngle;
+    Angle intendedTurnAngle;
     
     //Variable that holds the position the mob wants to be facing.
     Point* intendedTurnPos = nullptr;
@@ -341,7 +341,7 @@ public:
     
     //--- Public function declarations ---
     
-    Mob(const Point& pos, MobType* type, float angle);
+    Mob(const Point& pos, MobType* type, Angle angle);
     virtual ~Mob();
     
     void tick(float deltaT);
@@ -372,7 +372,7 @@ public:
         Mob* attacker, Hitbox* attackH, Hitbox* victimH, float damage
     );
     bool addToGroup(Mob* newMember);
-    void applyKnockback(float knockback, float knockbackAngle);
+    void applyKnockback(float knockback, Angle knockbackAngle);
     bool calculateAttackBasics(
         Mob* victim, Hitbox* attackH, const Hitbox* victimH,
         float* outOffenseMultiplier, float* outDefenseMultiplier
@@ -391,7 +391,7 @@ public:
     void calculateAttackKnockback(
         const Mob* victim, const Hitbox* attackH, Hitbox* victimH,
         float offenseMultiplier, float defenseMultiplier,
-        bool* outKbExists, float* outKbStrength, float* outKbAngle
+        bool* outKbExists, float* outKbStrength, Angle* outKbAngle
     ) const;
     void causeSpikeDamage(Mob* victim, bool isIngestion);
     void chomp(Mob* m, const Hitbox* hitboxInfo);
@@ -402,7 +402,7 @@ public:
     ) const;
     void getHitboxHoldPoint(
         const Mob* mobToHold, const Hitbox* hPtr,
-        float* offsetDist, float* offsetAngle, float* verticalDist
+        float* offsetDist, Angle* offsetAngle, float* verticalDist
     ) const;
     size_t getLatchedPikminAmount() const;
     float getLatchedPikminWeight() const;
@@ -420,7 +420,7 @@ public:
     void leaveGroup();
     void hold(
         Mob* m, HOLD_TYPE type, size_t hitboxIdx,
-        float offsetDist, float offsetAngle,
+        float offsetDist, Angle offsetAngle,
         float verticalDist,
         bool forceAboveHolder, const HOLD_ROTATION_METHOD rotationMethod
     );
@@ -478,7 +478,7 @@ public:
     );
     void stopCircling();
     void face(
-        float newAngle, Point* newPos, bool instantly = false
+        Angle newAngle, Point* newPos, bool instantly = false
     );
     Point getChaseTarget(float* outZ = nullptr) const;
     virtual float getBaseSpeed() const;
@@ -547,8 +547,8 @@ protected:
         float deltaT, float moveSpeedMult, Point* moveSpeed
     );
     HORIZ_MOVE_RESULT getWallSlideAngle(
-        const Edge* ePtr, unsigned char wallSector, float moveAngle,
-        float* slideAngle
+        const Edge* ePtr, unsigned char wallSector, Angle moveAngle,
+        Angle* slideAngle
     ) const;
     void moveToPathEnd(float speed, float acceleration);
     void tickAnimation(float deltaT);

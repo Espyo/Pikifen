@@ -139,7 +139,7 @@ void Particle::tick(const float deltaT) {
     float t = 1.0f - time / duration;
     
     Point totalVelocity = linearSpeed.get(t);
-    float outwardsAngle = getAngle(center - origin);
+    Angle outwardsAngle = getAngle(center - origin);
     
     if(center == origin) {
         outwardsAngle = game.rng.f(-180, 180);
@@ -332,7 +332,7 @@ void ParticleGenerator::emit(ParticleManager& manager) {
             newP.size.setKeyframeValue((int) s, kf.second + sDev);
         }
         
-        float angleToUse =
+        Angle angleToUse =
             game.rng.f(
                 -linearSpeedAngleDeviation,
                 linearSpeedAngleDeviation

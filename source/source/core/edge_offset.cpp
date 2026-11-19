@@ -65,9 +65,9 @@ void drawEdgeOffsetOnBuffer(
         float length = caches[eIdx].lengths[end];
         if(length == 0.0f) continue;
         
-        float angle = caches[eIdx].angles[end];
+        Angle angle = caches[eIdx].angles[end];
         float elbowLength = caches[eIdx].elbowLengths[end];
-        float elbowAngle = caches[eIdx].elbowAngles[end];
+        Angle elbowAngle = caches[eIdx].elbowAngles[end];
         endColors[end] = caches[eIdx].colors[end];
         
         //This end of the effect starts at the vertex,
@@ -94,7 +94,7 @@ void drawEdgeOffsetOnBuffer(
                 //At least this small bump in the angle threshold makes it
                 //much less likely to happen.
                 nElbowTris[end] = 2;
-                float midElbowAngle =
+                Angle midElbowAngle =
                     end == 0 ?
                     angle - rectToElbowDiff / 2.0f :
                     angle + rectToElbowDiff / 2.0f;
@@ -260,19 +260,19 @@ void drawSectorEdgeOffsets(
  */
 void getEdgeOffsetEdgeInfo(
     Edge* ePtr, Vertex* endVertex, unsigned char endIdx,
-    float edgeProcessAngle,
+    Angle edgeProcessAngle,
     OffsetEffectChecker checker,
     OffsetEffectLengthGetter lengthGetter,
     OffsetEffectColorGetter colorGetter,
-    float* outAngle, float* outLength, ALLEGRO_COLOR* outColor,
-    float* outElbowAngle, float* outElbowLength
+    Angle* outAngle, float* outLength, ALLEGRO_COLOR* outColor,
+    Angle* outElbowAngle, float* outElbowLength
 ) {
     *outElbowAngle = 0.0f;
     *outElbowLength = 0.0f;
     *outColor = colorGetter(ePtr);
     
     float baseEffectLength = lengthGetter(ePtr);
-    float baseEffectAngle =
+    Angle baseEffectAngle =
         endIdx == 0 ?
         edgeProcessAngle - TAU / 4.0f :
         edgeProcessAngle + TAU / 4.0f;
@@ -280,13 +280,13 @@ void getEdgeOffsetEdgeInfo(
     bool edgeEffectCw = endIdx == 1;
     
     Edge* nextEdge = nullptr;
-    float nextEdgeAngle = 0.0f;
+    Angle nextEdgeAngle = 0.0f;
     float nextEdgeDiff = 0.0f;
     Edge* nextEffEdge = nullptr;
-    float nextEffEdgeAngle = 0.0f;
+    Angle nextEffEdgeAngle = 0.0f;
     float nextEffEdgeDiff = 0.0f;
     bool nextEffEdgeEffectCw = false;
-    float nextEffEdgeBaseEffectAngle = 0.0f;
+    Angle nextEffEdgeBaseEffectAngle = 0.0f;
     
     //Start by getting some information about the edges
     //that comes after this one.
@@ -439,9 +439,9 @@ void getEdgeOffsetEdgeInfo(
  */
 void getEdgeOffsetIntersection(
     const Edge* e1, const Edge* e2, const Vertex* commonVertex,
-    float baseEffectAngle1, float baseEffectAngle2,
+    Angle baseEffectAngle1, Angle baseEffectAngle2,
     float effectLength,
-    float* outAngle, float* outLength
+    Angle* outAngle, float* outLength
 ) {
     Vertex* otherVertex1 = e1->getOtherVertex(commonVertex);
     float baseCos1 = cos(baseEffectAngle1);
@@ -515,12 +515,12 @@ void getEdgeOffsetIntersection(
  * @param outDiff The difference in angle between the two is returned here.
  */
 void getNextEdge(
-    Vertex* vPtr, float pivotAngle, bool clockwise,
-    const Edge* ignore, Edge** outEdge, float* outAngle, float* outDiff
+    Vertex* vPtr, Angle pivotAngle, bool clockwise,
+    const Edge* ignore, Edge** outEdge, Angle* outAngle, float* outDiff
 ) {
     Edge* bestEdge = nullptr;
     float bestEdgeDiff = 0.0f;
-    float bestEdgeAngle = 0.0f;
+    Angle bestEdgeAngle = 0.0f;
     
     forIdx(e, vPtr->edges) {
         Edge* ePtr = vPtr->edges[e];
@@ -530,7 +530,7 @@ void getNextEdge(
         unsigned char otherVertexIdx = ePtr->vertexes[0] == vPtr ? 1 : 0;
         Vertex* otherVertex = ePtr->vertexes[otherVertexIdx];
         
-        float angle = getAngle(v2p(vPtr), v2p(otherVertex));
+        Angle angle = getAngle(v2p(vPtr), v2p(otherVertex));
         
         float diff =
             clockwise ?
@@ -570,15 +570,15 @@ void getNextEdge(
  * @param outEffectCw Whether the effect is cast clockwise is returned here.
  */
 void getNextOffsetEffectEdge(
-    Vertex* vPtr, float pivotAngle, bool clockwise,
+    Vertex* vPtr, Angle pivotAngle, bool clockwise,
     const Edge* ignore, OffsetEffectChecker edgeChecker,
-    Edge** outEdge, float* outAngle, float* outDiff,
-    float* outBaseEffectAngle,
+    Edge** outEdge, Angle* outAngle, float* outDiff,
+    Angle* outBaseEffectAngle,
     bool* outEffectCw
 ) {
     Edge* bestEdge = nullptr;
     float bestEdgeDiff = 0;
-    float bestEdgeAngle = 0;
+    Angle bestEdgeAngle = 0;
     bool bestEdgeEffectCw = false;
     
     forIdx(e, vPtr->edges) {
@@ -602,7 +602,7 @@ void getNextOffsetEffectEdge(
         //to what side does the effect go?
         bool effectIsCw = otherVertexIdx != unaffectedSectorIdx;
         
-        float angle = getAngle(v2p(vPtr), v2p(otherVertex));
+        Angle angle = getAngle(v2p(vPtr), v2p(otherVertex));
         
         float diff =
             clockwise ?
@@ -769,16 +769,16 @@ void updateOffsetEffectCaches (
             endsToProcess[1] = ePtr->vertexes[0];
             caches[e].firstEndVertexIdx = 1;
         }
-        float edgeProcessAngle =
+        Angle edgeProcessAngle =
             getAngle(v2p(endsToProcess[0]), v2p(endsToProcess[1]));
             
         for(unsigned char end = 0; end < 2; end++) {
             //For each end of the effect...
             
             float length = 0.0f;
-            float angle = 0.0f;
+            Angle angle = 0.0f;
             float elbowLength = 0.0f;
-            float elbowAngle = 0.0f;
+            Angle elbowAngle = 0.0f;
             ALLEGRO_COLOR endColor;
             
             //The edge's effect is simply a rectangle, although one or both

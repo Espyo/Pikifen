@@ -48,7 +48,7 @@ void CustomCategory::clearTypes() {
  * @return The mob.
  */
 Mob* CustomCategory::createMob(
-    const Point& center, MobType* type, float angle
+    const Point& center, MobType* type, Angle angle
 ) {
     Mob* m = new Mob(center, type, angle);
     return m;

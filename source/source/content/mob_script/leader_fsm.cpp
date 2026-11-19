@@ -1317,7 +1317,7 @@ void LeaderFsm::beAttacked(ScriptVM* scriptVM, void* info1, void* info2) {
     //Knockback.
     bool knockbackExists = false;
     float knockbackStrength = 0.0f;
-    float knockbackAngle = 0.0f;
+    Angle knockbackAngle = 0.0f;
     info->mob2->calculateAttackKnockback(
         leaPtr, info->h2, info->h1, offenseMultiplier, defenseMultiplier,
         &knockbackExists, &knockbackStrength, &knockbackAngle
@@ -2217,7 +2217,7 @@ void LeaderFsm::move(ScriptVM* scriptVM, void* info1, void* info2) {
     engineAssert(info1 != nullptr, scriptVM->fsm.getStateHistoryStr());
     
     Point finalCoords;
-    float dummyAngle;
+    Angle dummyAngle;
     float dummyMagnitude;
     mov->getInfo(
         &finalCoords, &dummyAngle, &dummyMagnitude
@@ -2518,7 +2518,7 @@ void LeaderFsm::spray(ScriptVM* scriptVM, void* info1, void* info2) {
         return;
     }
     
-    float shootAngle =
+    Angle shootAngle =
         leaPtr->angle + ((sprayTypeRef.angle) ? TAU / 2.0f : 0.0f);
         
     unordered_set<Mob*> affectedMobs;
@@ -2556,7 +2556,7 @@ void LeaderFsm::spray(ScriptVM* scriptVM, void* info1, void* info2) {
                 continue;
             }
             
-            float angleDiff =
+            Angle angleDiff =
                 getAngleSmallestDiff(
                     shootAngle,
                     getAngle(leaPtr->center, amPtr->center)

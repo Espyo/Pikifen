@@ -21,7 +21,7 @@ namespace CONVERTER {
 const float NEW_SEED_Z_OFFSET = 32.0f;
 
 //After spitting a seed, the next seed's angle shifts by this much.
-const float SPIT_ANGLE_SHIFT = TAU * 0.12345;
+const Angle SPIT_ANGLE_SHIFT = TAU * 0.12345;
 
 //A converter-spat seed is this quick, horizontally.
 const float SPIT_H_SPEED = 90.0f;
@@ -43,7 +43,7 @@ const float SPIT_V_SPEED = 1200.0f;
  * @param angle Starting angle.
  */
 Converter::Converter(
-    const Point& center, ConverterType* type, float angle
+    const Point& center, ConverterType* type, Angle angle
 ) :
     Mob(center, type, angle),
     conType(type),

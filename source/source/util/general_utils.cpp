@@ -102,7 +102,7 @@ size_t AutoRepeater::tick(float deltaT) {
  * @param magnitude Magnitude from the center.
  */
 void MovementInfo::getInfo(
-    Point* coords, float* angle, float* magnitude
+    Point* coords, Angle* angle, float* magnitude
 ) const {
     *coords = Point(right - left, down - up);
     coordinatesToAngle(*coords, angle, magnitude);
@@ -152,7 +152,7 @@ Shaker::Shaker(std::function<float(float, float)> getRandomFloat) :
  * returned here.
  */
 void Shaker::getOffsets(
-    float* xOffset, float* yOffset, float* angleOffset
+    float* xOffset, float* yOffset, Angle* angleOffset
 ) const {
     if(!getRandomFloat || trauma == 0.0f) {
         if(xOffset) *xOffset = 0.0f;

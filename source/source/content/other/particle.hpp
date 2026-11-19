@@ -191,7 +191,7 @@ struct Particle {
     ALLEGRO_BITMAP* bitmap = nullptr;
     
     //Angle the bitmap should be at.
-    float bmpAngle = 0.0f;
+    Angle bmpAngle = 0.0f;
     
     //Type of bitmap rotation.
     PARTICLE_ANGLE_TYPE bmpAngleType = PARTICLE_ANGLE_TYPE_FIXED;
@@ -343,13 +343,13 @@ struct ParticleGenerator : public Content {
     float followZOffset = 0.0f;
     
     //Follow the given angle. e.g. a mob's angle.
-    float* followAngle = nullptr;
+    Angle* followAngle = nullptr;
     
     //Whether it is currently allowed to emit.
     bool canEmit = true;
     
     //Maximum random deviation of the bitmap's rotation.
-    float bmpAngleDeviation = 0.0f;
+    Angle bmpAngleDeviation = 0.0f;
     
     //Maximum random deviation of duration.
     float durationDeviation = 0.0f;
@@ -369,8 +369,8 @@ struct ParticleGenerator : public Content {
     //Maximum random deviation of speed.
     Point linearSpeedDeviation = Point(0.0f);
     
-    //How many degrees linear speed can be rotated by.
-    float linearSpeedAngleDeviation = 0.0f;
+    //How much linear speed can be rotated by.
+    Angle linearSpeedAngleDeviation = 0.0f;
     
     //Are the directions and angles provided absolute, or relative (to a mob)?
     bool anglesAreAbsolute = false;

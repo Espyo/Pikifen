@@ -573,8 +573,8 @@ private:
     void drawPauseMenu();
     void drawPrecipitation();
     void drawReach(
-        const Point& center, float angle, float radius,
-        float reachAngle, float reachRadius,
+        const Point& center, Angle angle, float radius,
+        Angle reachAngle, float reachRadius,
         const ALLEGRO_COLOR& color
     );
     void drawThrowPreview(Player* player);

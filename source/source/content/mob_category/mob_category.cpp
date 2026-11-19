@@ -201,7 +201,7 @@ void NoneCategory::clearTypes() { }
  * @return The mob.
  */
 Mob* NoneCategory::createMob(
-    const Point& center, MobType* type, float angle
+    const Point& center, MobType* type, Angle angle
 ) { return nullptr; }
 
 

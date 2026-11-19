@@ -45,7 +45,7 @@ const unsigned char CONTROL_POINT_RING_AMOUNT = 4;
  * @param type Ship type this mob belongs to.
  * @param angle Starting angle.
  */
-Ship::Ship(const Point& center, ShipType* type, float angle) :
+Ship::Ship(const Point& center, ShipType* type, Angle angle) :
     Mob(center, type, angle),
     shiType(type),
     controlPointFinalPos(
@@ -185,7 +185,7 @@ void Ship::drawMob() {
             );
             
         float distance = controlPointToReceptacleDist * ringAnimRatio;
-        float angle = getAngle(controlPointFinalPos, receptacleFinalPos);
+        Angle angle = getAngle(controlPointFinalPos, receptacleFinalPos);
         Point ringPos(
             controlPointFinalPos.x + cos(angle) * distance,
             controlPointFinalPos.y + sin(angle) * distance

@@ -49,7 +49,7 @@ void GroupTaskCategory::clearTypes() {
  * @return The mob.
  */
 Mob* GroupTaskCategory::createMob(
-    const Point& center, MobType* type, float angle
+    const Point& center, MobType* type, Angle angle
 ) {
     GroupTask* m = new GroupTask(center, (GroupTaskType*) type, angle);
     game.states.gameplay->mobs.groupTasks.push_back(m);

@@ -805,7 +805,7 @@ void PauseMenu::drawGoHereSegment(
     }
     int bmpH = al_get_bitmap_height(bmpRadarPath);
     float textureScale = bmpH / PATH_SEGMENT_THICKNESS / radarView.cam.zoom;
-    float angle = getAngle(start, end);
+    Angle angle = getAngle(start, end);
     float distance = Distance(start, end).toFloat() * radarView.cam.zoom;
     float textureOffset = game.timePassed * PATH_SEGMENT_TIME_MULT;
     float textureStart = *texturePoint;
@@ -2671,7 +2671,7 @@ void PauseMenu::tick(float deltaT) {
     
     if(radarGui.responsive) {
         Point radarMovCoords;
-        float dummyAngle;
+        Angle dummyAngle;
         float dummyMagnitude;
         radarPan.getInfo(&radarMovCoords, &dummyAngle, &dummyMagnitude);
         if(radarMovCoords.x != 0.0f || radarMovCoords.y != 0.0f) {

@@ -617,12 +617,12 @@ const RectCorners RectCorners::readyForSearch(Point(FLT_MAX), Point(-FLT_MAX));
  * @return The coordinates.
  */
 Point angleToCoordinates(
-    float angle, float magnitude
+    Angle angle, float magnitude
 ) {
     return
         Point(
-            (float) cos(angle) * magnitude,
-            (float) sin(angle) * magnitude
+            (Angle) cos(angle) * magnitude,
+            (Angle) sin(angle) * magnitude
         );
 }
 
@@ -697,7 +697,7 @@ void calculateThrow(
     const Point& startXY, float startZ,
     const Point& targetXY, float targetZ,
     float maxH, float gravity,
-    Point* outSpeedXY, float* outSpeedZ, float* outHAngle
+    Point* outSpeedXY, float* outSpeedZ, Angle* outHAngle
 ) {
     if(targetZ - startZ > maxH) {
         //If the target is above the maximum height it can be thrown...
@@ -736,7 +736,8 @@ void calculateThrow(
     
     //Once we know the total flight time, we can divide the horizontal reach
     //by the total time to get the horizontal speed.
-    float hAngle, hReach;
+    Angle hAngle;
+    float hReach;
     coordinatesToAngle(targetXY - startXY, &hAngle, &hReach);
     
     float hSpeed = hReach / flightTime;
@@ -826,8 +827,8 @@ bool circleIntersectsLineSeg(
 bool circleIntersectsRectangle(
     const Point& circle, float radius,
     const Point& rectangle, const Point& rectDim,
-    float rectAngle,
-    float* outOverlapDist, float* outRectangleSideAngle
+    Angle rectAngle,
+    float* outOverlapDist, Angle* outRectangleSideAngle
 ) {
     Point circleRelPos = circle - rectangle;
     circleRelPos = rotatePoint(circleRelPos, -rectAngle);
@@ -880,14 +881,14 @@ bool circleIntersectsRectangle(
     }
     
     if(outRectangleSideAngle) {
-        float angle;
+        Angle angle;
         if(insideX && insideY) {
             angle = getAngle(circleRelPos, nearest);
         } else {
             angle = getAngle(nearest, circleRelPos);
         }
         
-        angle = (float) floor((angle + (TAU / 8)) / (TAU / 4)) * (TAU / 4);
+        angle = (Angle) floor((angle + (TAU / 8)) / (TAU / 4)) * (TAU / 4);
         *outRectangleSideAngle = angle + rectAngle;
     }
     
@@ -915,8 +916,8 @@ bool circleIntersectsRectangle(
  * @return
  */
 bool circlesOrRectanglesIntersect(
-    const Point& center1, float radius1, const Point& rectSize1, float angle1,
-    const Point& center2, float radius2, const Point& rectSize2, float angle2
+    const Point& center1, float radius1, const Point& rectSize1, Angle angle1,
+    const Point& center2, float radius2, const Point& rectSize2, Angle angle2
 ) {
     if(rectSize1.x != 0.0f && rectSize2.x != 0.0f) {
         //Rectangle vs rectangle.
@@ -1086,7 +1087,7 @@ Rect combineBBoxes(const Rect& bBox1, const Rect& bBox2) {
  * @param magnitude Variable to return the magnitude to.
  */
 void coordinatesToAngle(
-    const Point& coordinates, float* angle, float* magnitude
+    const Point& coordinates, Angle* angle, float* magnitude
 ) {
     if(angle) {
         *angle = (float) atan2(coordinates.y, coordinates.x);
@@ -1131,12 +1132,12 @@ float dotProduct(const Point& v1, const Point& v2) {
  * @param deltaT Time step amount.
  * @return The smoothened angle.
  */
-float expSmoothingAngle(
-    float currentAngle, float targetAngle,
+Angle expSmoothingAngle(
+    Angle currentAngle, Angle targetAngle,
     float smoothingFactor, float deltaT
 ) {
-    float angleDiff =
-        (float)
+    Angle angleDiff =
+        (Angle)
         fmod(targetAngle - currentAngle + TAU + TAU / 2.0f, TAU) - TAU / 2.0f;
     return
         currentAngle +
@@ -1150,8 +1151,8 @@ float expSmoothingAngle(
  * @param focus Point that the origin is focusing on.
  * @return The angle.
  */
-float getAngle(const Point& focus) {
-    return (float) atan2(focus.y, focus.x);
+Angle getAngle(const Point& focus) {
+    return (Angle) atan2(focus.y, focus.x);
 }
 
 
@@ -1164,8 +1165,8 @@ float getAngle(const Point& focus) {
  * @param focus Point that the center is focusing on.
  * @return The angle.
  */
-float getAngle(const Point& center, const Point& focus) {
-    return (float) atan2(focus.y - center.y, focus.x - center.x);
+Angle getAngle(const Point& center, const Point& focus) {
+    return (Angle) atan2(focus.y - center.y, focus.x - center.x);
 }
 
 
@@ -1176,7 +1177,7 @@ float getAngle(const Point& center, const Point& focus) {
  * @param a2 Second angle.
  * @return The distance.
  */
-float getAngleCwDiff(float a1, float a2) {
+Angle getAngleCwDiff(Angle a1, Angle a2) {
     a1 = normalizeAngle(a1);
     a2 = normalizeAngle(a2);
     if(a1 > a2) a1 -= TAU;
@@ -1191,7 +1192,7 @@ float getAngleCwDiff(float a1, float a2) {
  * @param a2 Second angle.
  * @return The distance.
  */
-float getAngleSmallestDiff(float a1, float a2) {
+Angle getAngleSmallestDiff(Angle a1, Angle a2) {
     return
         (float) M_PI -
         (float) std::abs(
@@ -1248,7 +1249,7 @@ Point getClosestPointInLineSeg(
  * @return The closest point.
  */
 Point getClosestPointInRotatedRectangle(
-    const Point& point, const Rect& rect, float rectAngle,
+    const Point& point, const Rect& rect, Angle rectAngle,
     bool* outIsInside
 ) {
     Point closestPoint;
@@ -1491,7 +1492,7 @@ Point getRandomPointInRectangularRing(
 Point getRandomPointInRing(
     float innerDist, float outerDist,
     float arc, float arcRot,
-    float radiusRandomFloat, float angleRandomFloat
+    float radiusRandomFloat, Angle angleRandomFloat
 ) {
     //https://stackoverflow.com/q/30564015
     
@@ -1526,12 +1527,12 @@ Point getRandomPointInRing(
  */
 Point getRatioPointInRing(
     float innerDist, float outerDist,
-    float arc, float arcRot, float ratio
+    float arc, Angle arcRot, float ratio
 ) {
     float radius = (innerDist + outerDist) / 2.0f;
-    float angle1 = -arc / 2.0f + arcRot;
-    float angle2 = arc / 2.0f + arcRot;
-    float finalAngle = (angle2 - angle1) * ratio + angle1;
+    Angle angle1 = -arc / 2.0f + arcRot;
+    Angle angle2 = arc / 2.0f + arcRot;
+    Angle finalAngle = (angle2 - angle1) * ratio + angle1;
     
     return angleToCoordinates(finalAngle, radius);
 }
@@ -1546,7 +1547,7 @@ Point getRatioPointInRing(
  * @param angle Angle of the rectangle's rotation.
  * @return The corners' coordinates.
  */
-RectCorners getTransformedRectangleBBox(const Rect& rect, float angle) {
+RectCorners getTransformedRectangleBBox(const Rect& rect, Angle angle) {
     bool gotMinX = false;
     bool gotMaxX = false;
     bool gotMinY = false;
@@ -1621,8 +1622,8 @@ float getVerticalAlignOffset(V_ALIGN_MODE mode, float height) {
  * regardless of inch direction.
  * @return The inched number.
  */
-float inchTowardsAngle(float start, float target, float maxStep) {
-    float delta = normalizeAngle(target - start);
+Angle inchTowardsAngle(Angle start, Angle target, Angle maxStep) {
+    Angle delta = normalizeAngle(target - start);
     if(fabs(delta) <= maxStep) return target;
     if(delta > 0) {
         return normalizeAngle(start + maxStep);
@@ -1646,12 +1647,12 @@ float inchTowardsAngle(float start, float target, float maxStep) {
  * @param outputEnd Angle on the ending tip of the interpolation.
  * @return The interpolated angle.
  */
-float interpolateAngle(
-    float input, float inputStart, float inputEnd,
-    float& outputStart, float& outputEnd
+Angle interpolateAngle(
+    Angle input, Angle inputStart, Angle inputEnd,
+    Angle& outputStart, Angle& outputEnd
 ) {
-    float angleCwDiff = getAngleCwDiff(outputStart, outputEnd);
-    float angleDelta;
+    Angle angleCwDiff = getAngleCwDiff(outputStart, outputEnd);
+    Angle angleDelta;
     if(angleCwDiff < TAU / 2.0f) {
         angleDelta = angleCwDiff;
     } else {
@@ -1757,7 +1758,7 @@ bool isPointInTriangle(
  * @param radius Radius of the circle.
  * @return The angular distance.
  */
-float linearDistToAngular(float linearDist, float radius) {
+Angle linearDistToAngular(float linearDist, float radius) {
     return (float) (2 * atan(linearDist / (2 * radius)));
 }
 
@@ -1836,7 +1837,7 @@ bool lineSegIntersectsRectangle(
  */
 bool lineSegIntersectsRotatedRectangle(
     const Point& lineSegPoint1, const Point& lineSegPoint2,
-    const Rect& rect, float rectAngle
+    const Rect& rect, Angle rectAngle
 ) {
     //First, transform the coordinates so the rectangle is axis-aligned, and
     //the rectangle's center is at the origin.
@@ -2087,7 +2088,7 @@ bool linesIntersect(
 void movePoint(
     const Point& start, const Point& target,
     float speed, float reachRadius,
-    Point* mov, float* angle, bool* reached, float deltaT
+    Point* mov, Angle* angle, bool* reached, float deltaT
 ) {
     Point diff = target - start;
     float dis = (float) sqrt(diff.x * diff.x + diff.y * diff.y);
@@ -2115,8 +2116,8 @@ void movePoint(
  * @param a Angle to normalize.
  * @return The normalized angle.
  */
-float normalizeAngle(float a) {
-    a = (float) fmod(a, (float) TAU);
+Angle normalizeAngle(Angle a) {
+    a = (Angle) fmod(a, (Angle) TAU);
     if(a < 0) a += TAU;
     return a;
 }
@@ -2234,9 +2235,9 @@ bool rectanglesIntersect(
  * @return Whether they intersect.
  */
 bool rectanglesIntersect(
-    const Rect& rect1, float rect1Angle,
-    const Rect& rect2, float rect2Angle,
-    float* outOverlapDist, float* outOverlapAngle
+    const Rect& rect1, Angle rect1Angle,
+    const Rect& rect2, Angle rect2Angle,
+    float* outOverlapDist, Angle* outOverlapAngle
 ) {
     //Start by getting the vertexes of the rectangles.
     RectCorners corners = rectToRectCorners(Rect(Point(), rect1.size));
@@ -2399,7 +2400,7 @@ Point resizeToBoxKeepingAspectRatio(
  * @param angle Angle to rotate by.
  * @return The rotated point.
  */
-Point rotatePoint(const Point& coords, float angle) {
+Point rotatePoint(const Point& coords, Angle angle) {
     float c = (float) cos(angle);
     float s = (float) sin(angle);
     return Point(c * coords.x - s * coords.y, s * coords.x + c * coords.y);

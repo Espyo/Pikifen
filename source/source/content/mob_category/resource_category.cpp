@@ -49,7 +49,7 @@ void ResourceCategory::clearTypes() {
  * @return The mob.
  */
 Mob* ResourceCategory::createMob(
-    const Point& center, MobType* type, float angle
+    const Point& center, MobType* type, Angle angle
 ) {
     Resource* m = new Resource(center, (ResourceType*) type, angle);
     game.states.gameplay->mobs.resources.push_back(m);

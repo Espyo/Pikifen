@@ -58,7 +58,7 @@ CarryInfo::CarryInfo(
     for(size_t c = 0; c < m->type->maxCarriers; c++) {
         Point p;
         if(m->type->customCarrySpots.empty()) {
-            float angle = TAU / m->type->maxCarriers * c;
+            Angle angle = TAU / m->type->maxCarriers * c;
             p =
                 Point(
                     cos(angle) *
@@ -207,9 +207,9 @@ bool CarryInfo::isFull() const {
  *
  * @param angle Angle to rotate to.
  */
-void CarryInfo::rotatePoints(float angle) {
+void CarryInfo::rotatePoints(Angle angle) {
     forIdx(s, spotInfo) {
-        float sAngle = angle + (TAU / m->type->maxCarriers * s);
+        Angle sAngle = angle + (TAU / m->type->maxCarriers * s);
         Point p(
             cos(sAngle) *
             (m->radius + game.config.pikmin.standardRadius),
@@ -544,7 +544,7 @@ void Group::initSpots(Mob* affectedMobPtr) {
         //Finally, we can calculate where the other spots are.
         size_t nSpotsOnWheel = floor(TAU / angularDist);
         //Get a better angle. One that can evenly distribute the spots.
-        float angle = TAU / nSpotsOnWheel;
+        Angle angle = TAU / nSpotsOnWheel;
         
         for(unsigned s = 0; s < nSpotsOnWheel; s++) {
             alphaSpots.push_back(
@@ -949,7 +949,7 @@ bool PikminNest::callPikmin(Mob* mPtr, size_t typeIdx) {
             mPtr->getHitbox(legHoleBPIdx)->getCurPos(
                 mPtr->center, mPtr->bottomZ, mPtr->angle, &spawnZ
             );
-        float spawnAngle =
+        Angle spawnAngle =
             getAngle(mPtr->center, spawnCoords);
             
         //Create the Pikmin.
@@ -1337,7 +1337,7 @@ float calculateMobPhysicalSpan(
  */
 Mob* createMob(
     MobCategory* category, const Point& center, MobType* type,
-    float angle, const string& varsStr,
+    Angle angle, const string& varsStr,
     std::function<void(Mob*)> codeAfterCreation,
     size_t firstStateOverride
 ) {
@@ -1669,7 +1669,7 @@ MobType::SpawnInfo* getSpawnInfoFromChildInfo(
  * @return Whether it's in reach.
  */
 bool isMobInReach(
-    MobType::Reach* reachTPtr, const Distance& distBetween, float angleDiff
+    MobType::Reach* reachTPtr, const Distance& distBetween, Angle angleDiff
 ) {
     bool inReach =
         (

@@ -19,7 +19,7 @@
  * @param angle Starting angle.
  */
 Bouncer::Bouncer(
-    const Point& center, BouncerType* type, float angle
+    const Point& center, BouncerType* type, Angle angle
 ):
     Mob(center, type, angle),
     bouType(type) {

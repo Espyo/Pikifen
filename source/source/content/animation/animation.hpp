@@ -323,7 +323,7 @@ public:
 
 
 void getSpriteBasicEffects(
-    const Point& basePos, float baseAngle,
+    const Point& basePos, Angle baseAngle,
     float baseAngleCosCache, float baseAngleSinCache,
     Sprite* curSpritePtr, Sprite* nextSpritePtr, float interpolationFactor,
     Point* outEffTrans, float* outEffAngle,

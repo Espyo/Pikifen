@@ -1808,7 +1808,7 @@ void AreaEditor::processGuiPanelDetailsBackground() {
         );
         
         //Background texture angle value.
-        float bgBmpAngle =
+        Angle bgBmpAngle =
             normalizeAngle(game.curArea->bgBmpTrans.rot);
         if(
             ImGui::SliderAngleWithContext(
@@ -2000,7 +2000,7 @@ void AreaEditor::processGuiPanelDetailsShadows() {
         setTooltip("Keep the aspect ratio when resizing the image.");
         
         //Tree shadow angle value.
-        float shadowAngle =
+        Angle shadowAngle =
             normalizeAngle(curShadow->pose.angle);
         if(
             ImGui::SliderAngleWithContext(
@@ -2102,7 +2102,7 @@ void AreaEditor::processGuiPanelEdge() {
                 );
                 
                 //Angle arrow widget.
-                float angle =
+                Angle angle =
                     getAngle(v2p(ePtr->vertexes[0]), v2p(ePtr->vertexes[1]));
                 angle +=
                     s == 0 ? -(TAU / 4.0f) : (TAU / 4.0f);
@@ -2473,7 +2473,7 @@ void AreaEditor::processGuiPanelGameplayRegions() {
         );
         
         //Region angle value.
-        float regionAngle = curRegion->pose.angle;
+        Angle regionAngle = curRegion->pose.angle;
         if(
             ImGui::SliderAngleWithContext(
                 "Angle", &regionAngle, 0, 360, "%.2f"
@@ -4474,7 +4474,7 @@ void AreaEditor::processGuiPanelMob() {
     }
     
     //Object angle value.
-    float mobAngle = normalizeAngle(mPtr->angle);
+    Angle mobAngle = normalizeAngle(mPtr->angle);
     ImGui::Spacer();
     if(ImGui::SliderAngleWithContext("Angle", &mobAngle, 0, 360, "%.2f")) {
         registerChange("object angle change");

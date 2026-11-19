@@ -49,7 +49,7 @@ void InteractableCategory::clearTypes() {
  * @return The mob.
  */
 Mob* InteractableCategory::createMob(
-    const Point& center, MobType* type, float angle
+    const Point& center, MobType* type, Angle angle
 ) {
     Interactable* m = new Interactable(center, (InteractableType*) type, angle);
     game.states.gameplay->mobs.interactables.push_back(m);

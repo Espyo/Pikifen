@@ -252,11 +252,11 @@ void Polygon::cut() {
             
             //Check which one makes the smallest angle compared to 0.
             bestVertex = vertexToCompare;
-            float closestAngle = FLT_MAX;
+            Angle closestAngle = FLT_MAX;
             
             forIdx(v, insideTriangle) {
                 Vertex* vPtr = insideTriangle[v];
-                float angle = getAngle(v2p(start), v2p(vPtr));
+                Angle angle = getAngle(v2p(start), v2p(vPtr));
                 if(fabs(angle) < closestAngle) {
                     closestAngle = fabs(angle);
                     bestVertex = vPtr;
@@ -287,7 +287,7 @@ void Polygon::cut() {
         } else {
             //Find where to insert.
             insertionVertexIdx = bridges.back();
-            float newBridgeAngle =
+            Angle newBridgeAngle =
                 getAngleCwDiff(
                     getAngle(v2p(bestVertex), v2p(start)),
                     0.0f
@@ -527,14 +527,14 @@ Triangle::Triangle(Vertex* v1, Vertex* v2, Vertex* v3) {
  */
 void findTraceEdge(
     Vertex* vPtr, const Vertex* prevVPtr, const Sector* sPtr,
-    float prevEAngle, bool bestIsClosestCw,
-    Edge** nextEPtr, float* nextEAngle, Vertex** nextVPtr,
+    Angle prevEAngle, bool bestIsClosestCw,
+    Edge** nextEPtr, Angle* nextEAngle, Vertex** nextVPtr,
     unordered_set<Edge*>* excludedEdges
 ) {
     //Info about the best candidate edge, if any.
     Edge* bestEPtr = nullptr;
-    float bestEAngle = 0;
-    float bestEAngleCwDiff = 0;
+    Angle bestEAngle = 0;
+    Angle bestEAngleCwDiff = 0;
     Vertex* bestVPtr = nullptr;
     
     //Go through each edge to check for the best.
@@ -559,10 +559,10 @@ void findTraceEdge(
         
         //Find this edge's angle,
         //between our vertex and this edge's other vertex.
-        float eAngle =
+        Angle eAngle =
             getAngle(v2p(vPtr), v2p(otherVPtr));
             
-        float angleCwDiff =
+        Angle angleCwDiff =
             getAngleCwDiff(prevEAngle + TAU / 2.0f, eAngle);
             
         //Check if this is the best.
@@ -763,7 +763,7 @@ bool getPolysIsOuter(
     //the sector can be this way. But let's start rotating the arrow clockwise
     //along the vertex's edges and find the one closest.
     Edge* closestEdgeCw = nullptr;
-    float closestEdgeCwAngle = FLT_MAX;
+    Angle closestEdgeCwAngle = FLT_MAX;
     
     forIdx(e, vPtr->edges) {
         Edge* ePtr = vPtr->edges[e];
@@ -777,8 +777,8 @@ bool getPolysIsOuter(
         }
         
         Vertex* eOtherVPtr = ePtr->getOtherVertex(vPtr);
-        float edgeAngle = getAngle(v2p(vPtr), v2p(eOtherVPtr));
-        float edgeCwAngle = getAngleCwDiff(0.0f, edgeAngle);
+        Angle edgeAngle = getAngle(v2p(vPtr), v2p(eOtherVPtr));
+        Angle edgeCwAngle = getAngleCwDiff(0.0f, edgeAngle);
         if(!closestEdgeCw || edgeCwAngle < closestEdgeCwAngle) {
             closestEdgeCw = ePtr;
             closestEdgeCwAngle = edgeCwAngle;
@@ -881,8 +881,8 @@ bool isVertexConvex(const vector<Vertex*>& vec, size_t idx) {
     const Vertex* curV = vec[idx];
     const Vertex* prevV = getPrevInVectorByIdx(vec, idx);
     const Vertex* nextV = getNextInVectorByIdx(vec, idx);
-    float anglePrev = getAngle(v2p(curV), v2p(prevV));
-    float angleNext = getAngle(v2p(curV), v2p(nextV));
+    Angle anglePrev = getAngle(v2p(curV), v2p(prevV));
+    Angle angleNext = getAngle(v2p(curV), v2p(nextV));
     return getAngleCwDiff(anglePrev, angleNext) < TAU / 2;
 }
 
@@ -948,11 +948,11 @@ TRIANGULATION_ERROR traceEdges(
     //At the start, no need to check if we're going to the previous vertex.
     Vertex* prevVPtr = nullptr;
     //At the start, assume the angle is left.
-    float prevEAngle = TAU / 2.0f;
+    Angle prevEAngle = TAU / 2.0f;
     
     Edge* nextEPtr = nullptr;
     Vertex* nextVPtr = nullptr;
-    float nextEAngle = 0.0f;
+    Angle nextEAngle = 0.0f;
     
     Edge* firstEPtr = nullptr;
     

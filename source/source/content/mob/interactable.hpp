@@ -31,6 +31,6 @@ public:
     
     //--- Public function declarations ---
     
-    Interactable(const Point& pos, InteractableType* type, float angle);
+    Interactable(const Point& pos, InteractableType* type, Angle angle);
     
 };

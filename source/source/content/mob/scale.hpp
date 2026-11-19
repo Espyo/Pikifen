@@ -34,7 +34,7 @@ public:
     
     //--- Public function declarations ---
     
-    Scale(const Point& pos, ScaleType* type, float angle);
+    Scale(const Point& pos, ScaleType* type, Angle angle);
     float calculateCurWeight() const;
     FRACTION_NR_VISIBILITY getFractionNumbersInfo(
         float* outValueNr, float* outReqNr, ALLEGRO_COLOR* outColor

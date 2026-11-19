@@ -84,23 +84,23 @@ enum TEXT_SETTING_FLAG {
 
 void drawBitmap(
     ALLEGRO_BITMAP* bmp, const Point& center,
-    const Point& size, float angle = 0,
+    const Point& size, Angle angle = 0,
     const ALLEGRO_COLOR& tint = COLOR_WHITE
 );
 void drawBitmapInBox(
     ALLEGRO_BITMAP* bmp, const Point& center,
     const Point& boxSize, bool scaleUp, bool stayInside,
-    float angle = 0, const ALLEGRO_COLOR& tint = COLOR_WHITE
+    Angle angle = 0, const ALLEGRO_COLOR& tint = COLOR_WHITE
 );
 void drawEquilateralTriangle(
-    const Point& center, float radius, float angle,
+    const Point& center, float radius, Angle angle,
     const ALLEGRO_COLOR& color, float thickness
 );
 void drawFilledDiamond(
     const Point& center, float radius, const ALLEGRO_COLOR& color
 );
 void drawFilledEquilateralTriangle(
-    const Point& center, float radius, float angle,
+    const Point& center, float radius, Angle angle,
     const ALLEGRO_COLOR& color
 );
 void drawFilledRoundedRatioRectangle(
@@ -117,10 +117,10 @@ void drawPrimRect(
 );
 void drawRotatedRectangle(
     const Point& center, const Point& dimensions,
-    float angle, const ALLEGRO_COLOR& color, float thickness
+    Angle angle, const ALLEGRO_COLOR& color, float thickness
 );
 void drawRotatedRoundedRectangle(
-    const Point& center, const Point& size, float angle,
+    const Point& center, const Point& size, Angle angle,
     float radii, const ALLEGRO_COLOR& color, float thickness
 );
 void drawRoundedRatioRectangle(

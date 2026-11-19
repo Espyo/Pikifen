@@ -49,7 +49,7 @@ void OnionCategory::clearTypes() {
  * @return The mob.
  */
 Mob* OnionCategory::createMob(
-    const Point& center, MobType* type, float angle
+    const Point& center, MobType* type, Angle angle
 ) {
     Onion* m = new Onion(center, (OnionType*) type, angle);
     game.states.gameplay->mobs.onions.push_back(m);

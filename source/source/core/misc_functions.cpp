@@ -725,12 +725,12 @@ Mob* getNextMobNearCursor(
  */
 void getPikminSpitData(
     uint32_t spitNr, float baseHorizontalSpeed,
-    float maxHorizontalSpeedDeviation, float* outAngle,
+    float maxHorizontalSpeedDeviation, Angle* outAngle,
     Point* outHorizontalSpeed
 ) {
     uint32_t angleI = hashNr(spitNr);
     uint32_t horizontalDevMultI = hashNr(spitNr + 1);
-    float angle = angleI / (float) UINT32_MAX;
+    Angle angle = angleI / (float) UINT32_MAX;
     angle *= TAU;
     float horizontalDevMult = horizontalDevMultI / (float) UINT32_MAX;
     horizontalDevMult = horizontalDevMult * 2.0f - 1.0f;
@@ -1551,7 +1551,7 @@ void spitPikminSeed(
     uint32_t spitNr, float baseHorizontalSpeed,
     float maxHorizontalSpeedDeviation, float verticalSpeed
 ) {
-    float angle;
+    Angle angle;
     Point horizontalSpeed;
     
     getPikminSpitData(

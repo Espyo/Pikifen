@@ -50,7 +50,7 @@ void LeaderCategory::clearTypes() {
  * @return The mob.
  */
 Mob* LeaderCategory::createMob(
-    const Point& center, MobType* type, float angle
+    const Point& center, MobType* type, Angle angle
 ) {
     Leader* m = new Leader(center, (LeaderType*) type, angle);
     game.states.gameplay->mobs.leaders.push_back(m);

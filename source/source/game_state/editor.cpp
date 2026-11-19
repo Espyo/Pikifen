@@ -127,7 +127,7 @@ Editor::Editor() :
  *
  * @param angle Angle to show.
  */
-void Editor::angleVisualizer(float angle) {
+void Editor::angleVisualizer(Angle angle) {
     //Setup.
     ImDrawList* drawList = ImGui::GetWindowDrawList();
     ImVec2 drawPos = ImGui::GetCursorScreenPos();
@@ -428,7 +428,7 @@ void Editor::drawSelectionAndTransformationThings(
     if(!skipTraWid) {
         //Transformation widget, if possible.
         Point selectionCenter, selectionSize;
-        float selectionAngle;
+        Angle selectionAngle;
         bool useSelectionAngle;
         Bitmask8 twFlags;
         RectCorners twPadding;
@@ -733,7 +733,7 @@ ALLEGRO_COLOR Editor::getSelectionEffectReplacementColor(
 bool Editor::getSelectionTransformationWidgetParams(
     const SelectionController& selCtrl,
     Point* outSelectionCenter, Point* outSelectionSize,
-    float* outSelectionAngle, bool* outUseAngle,
+    Angle* outSelectionAngle, bool* outUseAngle,
     Bitmask8* outFlags, RectCorners* outPadding
 ) const {
     bool canChange = true;
@@ -743,7 +743,7 @@ bool Editor::getSelectionTransformationWidgetParams(
     }
     
     Point selectionCenter, selectionSize;
-    float selectionAngle = 0.0f;
+    Angle selectionAngle = 0.0f;
     bool canChangeAngle = false;
     
     if(selCtrl.shouldDoSingleRotatingItem()) {
@@ -1266,7 +1266,7 @@ bool Editor::handleSelectionAndTransformationLmbDown(
     
     if(!skipTraWid) {
         Point selectionCenter, selectionSize;
-        float selectionAngle;
+        Angle selectionAngle;
         bool useSelectionAngle;
         Bitmask8 twFlags;
         RectCorners twPadding;
@@ -1338,7 +1338,7 @@ bool Editor::handleSelectionAndTransformationLmbDrag(
     //Transformation widget.
     if(!skipTraWid) {
         Point selectionCenter, selectionSize;
-        float selectionAngle;
+        Angle selectionAngle;
         bool useSelectionAngle;
         Bitmask8 twFlags;
         RectCorners twPadding;
@@ -4967,7 +4967,7 @@ Editor::PickerItem::PickerItem(
  * @return Whether it was able to apply.
  */
 bool Editor::SelectionController::applyTransformation(
-    const Rect& newRect, float newAngle
+    const Rect& newRect, Angle newAngle
 ) {
     if(!enabled) return false;
     if(state != STATE_TW_TRANSFORMING) return false;
@@ -5324,7 +5324,7 @@ size_t Editor::SelectionController::getSelectionTotalCount(
  * @param outAngle The item's angle is returned here.
  */
 void Editor::SelectionController::getSingleRotatingItemInfo(
-    Point* outCenter, Point* outSize, float* outAngle
+    Point* outCenter, Point* outSize, Angle* outAngle
 ) const {
     forIdx(m, managers) {
         if(!managers[m]->itemsCanRotate) continue;
@@ -5514,7 +5514,7 @@ bool Editor::SelectionController::startDragMove(const Point& cursorPos) {
         
         for(size_t i : list) {
             Point iCenter, iSize;
-            float iAngle;
+            Angle iAngle;
             managers[m]->getItemInfo(i, &iCenter, &iSize, &iAngle);
             Distance d(game.editorsView.mouseCursorWorldPos, iCenter);
             if(!gotClosest || d < closestDist) {
@@ -5659,7 +5659,7 @@ bool Editor::SelectionController::updateRubberBand(
         for(size_t i = 0; i < nrTotalItems; i++) {
             if(!managers[m]->getItemIsEligible(i)) continue;
             Point iCenter, iSize;
-            float iAngle;
+            Angle iAngle;
             managers[m]->getItemInfo(i, &iCenter, &iSize, &iAngle);
             RectCorners iCorners;
             
@@ -5910,7 +5910,7 @@ bool Editor::SelectionManager::addAll(size_t totalAmount) {
  * @return Whether it was able to apply.
  */
 bool Editor::SelectionManager::applyDirectTransformation(
-    const Rect& newRect, float newAngle
+    const Rect& newRect, Angle newAngle
 ) {
     if(!enabled) return false;
     if(preOpRect.size.x <= 0.0f && preOpRect.size.y <= 0.0f) return false;
@@ -5940,7 +5940,7 @@ bool Editor::SelectionManager::applyDragMove(const Point& offset) {
     for(size_t i : list) {
         Point origPos = preOpItemCenters[i];
         Point iCenter, iSize;
-        float iAngle;
+        Angle iAngle;
         onGetInfo(i, &iCenter, &iSize, &iAngle);
         onSetInfo(i, origPos + offset, iSize, iAngle);
     }
@@ -5962,7 +5962,7 @@ bool Editor::SelectionManager::applyDragMove(const Point& offset) {
  * @return Whether it was able to apply.
  */
 bool Editor::SelectionManager::applySharedTransformation(
-    const Rect& newRect, float newAngle
+    const Rect& newRect, Angle newAngle
 ) {
     //Setup.
     if(!enabled) return false;
@@ -5975,13 +5975,13 @@ bool Editor::SelectionManager::applySharedTransformation(
     const set<size_t>& list = selectedItems.getItemIdxs();
     for(size_t i : list) {
         Point iCenter, iSize;
-        float iAngle;
+        Angle iAngle;
         onGetInfo(i, &iCenter, &iSize, &iAngle);
         
         if(newAngle != 0.0f) {
             //Rotate the item about the center.
             Point oldRelCoords = preOpItemCenters[i] - preOpRect.center;
-            float oldAngle, oldMagnitude;
+            Angle oldAngle, oldMagnitude;
             coordinatesToAngle(oldRelCoords, &oldAngle, &oldMagnitude);
             iCenter =
                 angleToCoordinates(oldAngle + newAngle, oldMagnitude);
@@ -6155,7 +6155,7 @@ bool Editor::SelectionManager::getBBox(Rect* outRect) const {
     
     for(size_t i : list) {
         Point iCenter, iSize;
-        float iAngle;
+        Angle iAngle;
         getItemInfo(i, &iCenter, &iSize, &iAngle);
         RectCorners iCorners;
         
@@ -6219,7 +6219,7 @@ const set<size_t>& Editor::SelectionManager::getItemIdxs() const {
  * @return The info.
  */
 void Editor::SelectionManager::getItemInfo(
-    size_t idx, Point* outCenter, Point* outSize, float* outAngle
+    size_t idx, Point* outCenter, Point* outSize, Angle* outAngle
 ) const {
     if(onGetInfo) {
         onGetInfo(idx, outCenter, outSize, outAngle);
@@ -6266,7 +6266,7 @@ vector<size_t> Editor::SelectionManager::getItemsUnderCursor(
             isInside = onCheckUnderCursor(i, cursorPos);
         } else {
             Point iCenter, iSize;
-            float iAngle;
+            Angle iAngle;
             getItemInfo(i, &iCenter, &iSize, &iAngle);
             
             if(itemsAreRectangular) {
@@ -6428,7 +6428,7 @@ bool Editor::SelectionManager::startOperation() {
     const set<size_t>& list = getItemIdxs();
     for(size_t i : list) {
         Point iCenter, iSize;
-        float iAngle;
+        Angle iAngle;
         getItemInfo(i, &iCenter, &iSize, &iAngle);
         preOpItemCenters[i] = iCenter;
         preOpItemSizes[i] = iSize;
@@ -6723,7 +6723,7 @@ bool Editor::TransformationWidget::handleMouseDown(
  * @return Whether the user is dragging a handle.
  */
 bool Editor::TransformationWidget::handleMouseMove(
-    const Point& mouseCoords, Point* center, Point* size, float* angle,
+    const Point& mouseCoords, Point* center, Point* size, Angle* angle,
     float zoom, Bitmask8 flags, const RectCorners& padding, float minSize,
     const std::function<Point(const Point&)> snapFunc
 ) {
@@ -6772,8 +6772,8 @@ bool Editor::TransformationWidget::handleMouseMove(
     
     //Logic for moving the rotation handle.
     if(movingHandle == 9 && angle && !hasFlag(flags, TW_FLAG_DISABLE_ANGLE)) {
-        float oldMouseAngle = getAngle(oldCenter, oldMouseCoords);
-        float newMouseAngle = getAngle(oldCenter, mouseCoords);
+        Angle oldMouseAngle = getAngle(oldCenter, oldMouseCoords);
+        Angle newMouseAngle = getAngle(oldCenter, mouseCoords);
         *angle = oldAngle + (newMouseAngle) - (oldMouseAngle);
         return true;
     }

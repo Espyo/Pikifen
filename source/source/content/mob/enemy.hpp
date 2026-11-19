@@ -42,7 +42,7 @@ public:
     
     //--- Public function declarations ---
     
-    Enemy(const Point& pos, EnemyType* type, float angle);
+    Enemy(const Point& pos, EnemyType* type, Angle angle);
     bool canReceiveStatus(StatusType* s) const override;
     void drawMob() override;
     int getMissionPoints(bool* applicableInThisMission) const override;

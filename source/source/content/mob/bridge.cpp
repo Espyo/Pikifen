@@ -38,7 +38,7 @@ const float STEP_HEIGHT = 10;
  * @param type Bridge type this mob belongs to.
  * @param angle Starting angle.
  */
-Bridge::Bridge(const Point& center, BridgeType* type, float angle) :
+Bridge::Bridge(const Point& center, BridgeType* type, Angle angle) :
     Mob(center, type, angle),
     briType(type),
     startPos(center) {

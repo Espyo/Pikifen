@@ -103,18 +103,18 @@ Mob* getClosestMobToMouseCursor(
 );
 void getEdgeOffsetEdgeInfo(
     Edge* ePtr, Vertex* endVertex, unsigned char endIdx,
-    float edgeProcessAngle,
+    Angle edgeProcessAngle,
     OffsetEffectChecker checker,
     OffsetEffectLengthGetter lengthGetter,
     OffsetEffectColorGetter colorGetter,
-    float* outAngle, float* outLength, ALLEGRO_COLOR* outColor,
-    float* outElbowAngle, float* outElbowLength
+    Angle* outAngle, float* outLength, ALLEGRO_COLOR* outColor,
+    Angle* outElbowAngle, float* outElbowLength
 );
 void getEdgeOffsetIntersection(
     const Edge* e1, const Edge* e2, const Vertex* commonVertex,
-    float baseShadowAngle1, float baseShadowAngle2,
+    Angle baseShadowAngle1, Angle baseShadowAngle2,
     float shadowLength,
-    float* outAngle, float* outLength
+    Angle* outAngle, float* outLength
 );
 string getEngineVersionString(
     bool includeInDev = false, bool includeDate = false
@@ -124,17 +124,17 @@ ALLEGRO_COLOR getLiquidLimitColor(Edge* ePtr);
 float getLedgeSmoothingLength(Edge* ePtr);
 float getLiquidLimitLength(Edge* ePtr);
 void getNextEdge(
-    Vertex* vPtr, float pivotAngle, bool clockwise,
-    const Edge* ignore, Edge** outEdge, float* outAngle, float* outDiff
+    Vertex* vPtr, Angle pivotAngle, bool clockwise,
+    const Edge* ignore, Edge** outEdge, Angle* outAngle, float* outDiff
 );
 Mob* getNextMobNearCursor(
     const Viewport& view, Mob* pivot, bool mustHaveHealth = false
 );
 void getNextOffsetEffectEdge(
-    Vertex* vPtr, float pivotAngle, bool clockwise,
+    Vertex* vPtr, Angle pivotAngle, bool clockwise,
     const Edge* ignore, OffsetEffectChecker edgeChecker,
-    Edge** outEdge, float* outAngle, float* outDiff,
-    float* outBaseShadowAngle,
+    Edge** outEdge, Angle* outAngle, float* outDiff,
+    Angle* outBaseShadowAngle,
     bool* outShadowCw
 );
 unsigned char getThrowPreviewVertexes(
@@ -147,7 +147,7 @@ unsigned char getThrowPreviewVertexes(
 );
 void getPikminSpitData(
     uint32_t spitNr, float baseHorizontalSpeed,
-    float maxHorizontalSpeedDeviation, float* outAngle,
+    float maxHorizontalSpeedDeviation, Angle* outAngle,
     Point* outHorizontalSpeed
 );
 ALLEGRO_COLOR getWallShadowColor(Edge* ePtr);

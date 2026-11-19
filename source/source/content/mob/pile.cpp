@@ -25,7 +25,7 @@
  * @param type Pile type this mob belongs to.
  * @param angle Starting angle.
  */
-Pile::Pile(const Point& center, PileType* type, float angle) :
+Pile::Pile(const Point& center, PileType* type, Angle angle) :
     Mob(center, type, angle),
     pilType(type),
     amount(type->maxAmount) {

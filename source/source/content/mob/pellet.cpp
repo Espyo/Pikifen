@@ -21,7 +21,7 @@
  * @param type Pellet type this mob belongs to.
  * @param angle Starting angle.
  */
-Pellet::Pellet(const Point& center, PelletType* type, float angle) :
+Pellet::Pellet(const Point& center, PelletType* type, Angle angle) :
     Mob(center, type, angle),
     pelType(type) {
     

@@ -46,13 +46,13 @@ public:
     bool affectsUser = false;
     
     //If applied outside of the group, this is the angle of shooting.
-    float angle = 0.0f;
+    Angle angle = 0.0f;
     
     //If applied outside of the group, this is the distance range.
     float distanceRange = 0.0f;
     
     //If applied outside of the group, this is the angle range.
-    float angleRange = 0.0f;
+    Angle angleRange = 0.0f;
     
     //Main color that represents this spray.
     ALLEGRO_COLOR mainColor = COLOR_EMPTY;

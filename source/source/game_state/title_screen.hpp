@@ -126,7 +126,7 @@ private:
         Point center;
         
         //Current angle.
-        float angle = 0.0f;
+        Angle angle = 0.0f;
         
         //Forward movement speed.
         float speed = 0.0f;

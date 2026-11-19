@@ -29,7 +29,7 @@
  */
 void drawBitmap(
     ALLEGRO_BITMAP* bmp, const Point& center,
-    const Point& size, float angle, const ALLEGRO_COLOR& tint
+    const Point& size, Angle angle, const ALLEGRO_COLOR& tint
 ) {
     if(size.x == 0 && size.y == 0) return;
     
@@ -67,7 +67,7 @@ void drawBitmap(
  */
 void drawBitmapInBox(
     ALLEGRO_BITMAP* bmp, const Point& center, const Point& boxSize,
-    bool scaleUp, bool stayInside, float angle, const ALLEGRO_COLOR& tint
+    bool scaleUp, bool stayInside, Angle angle, const ALLEGRO_COLOR& tint
 ) {
     if(boxSize.x == 0 || boxSize.y == 0) return;
     int bmpW = al_get_bitmap_width(bmp);
@@ -99,7 +99,7 @@ void drawBitmapInBox(
  * @param thickness Thickness of the lines.
  */
 void drawEquilateralTriangle(
-    const Point& center, float radius, float angle,
+    const Point& center, float radius, Angle angle,
     const ALLEGRO_COLOR& color, float thickness
 ) {
     Point v1 = center + rotatePoint(Point(radius, 0.0f), angle);
@@ -147,7 +147,7 @@ void drawFilledDiamond(
  * @param color Its color.
  */
 void drawFilledEquilateralTriangle(
-    const Point& center, float radius, float angle,
+    const Point& center, float radius, Angle angle,
     const ALLEGRO_COLOR& color
 ) {
     Point v1 = center + rotatePoint(Point(radius, 0.0f), angle);
@@ -260,7 +260,7 @@ void drawPrimRect(
  */
 void drawRotatedRectangle(
     const Point& center, const Point& dimensions,
-    float angle, const ALLEGRO_COLOR& color, float thickness
+    Angle angle, const ALLEGRO_COLOR& color, float thickness
 ) {
     ALLEGRO_TRANSFORM rotTransform, oldTransform;
     al_copy_transform(&oldTransform, al_get_current_transform());
@@ -292,7 +292,7 @@ void drawRotatedRectangle(
  * @param thickness Line thickness.
  */
 void drawRotatedRoundedRectangle(
-    const Point& center, const Point& size, float angle,
+    const Point& center, const Point& size, Angle angle,
     float radii, const ALLEGRO_COLOR& color, float thickness
 ) {
     float finalRadii = std::min(radii, size.x / 2.0f);

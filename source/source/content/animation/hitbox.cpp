@@ -60,7 +60,7 @@ Hitbox::Hitbox(
  * @return The position.
  */
 Point Hitbox::getCurPos(
-    const Point& mobPos, float mobBottomZ, float mobAngle, float* outZ
+    const Point& mobPos, float mobBottomZ, Angle mobAngle, float* outZ
 ) const {
     float mobAngleCos = cos(mobAngle);
     float mobAngleSin = sin(mobAngle);

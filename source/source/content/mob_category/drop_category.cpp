@@ -49,7 +49,7 @@ void DropCategory::clearTypes() {
  * @return The mob.
  */
 Mob* DropCategory::createMob(
-    const Point& center, MobType* type, float angle
+    const Point& center, MobType* type, Angle angle
 ) {
     Drop* m = new Drop(center, (DropType*) type, angle);
     game.states.gameplay->mobs.drops.push_back(m);

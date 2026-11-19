@@ -49,7 +49,7 @@ const float SOUL_SIZE_MULT = 0.7;
  * @param type Enemy type this mob belongs to.
  * @param angle Starting angle.
  */
-Enemy::Enemy(const Point& center, EnemyType* type, float angle) :
+Enemy::Enemy(const Point& center, EnemyType* type, Angle angle) :
     Mob(center, type, angle),
     eneType(type),
     reviveTimer(type->reviveTime),

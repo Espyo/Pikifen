@@ -49,7 +49,7 @@ void ToolCategory::clearTypes() {
  * @return The mob.
  */
 Mob* ToolCategory::createMob(
-    const Point& center, MobType* type, float angle
+    const Point& center, MobType* type, Angle angle
 ) {
     Tool* m = new Tool(center, (ToolType*) type, angle);
     game.states.gameplay->mobs.tools.push_back(m);

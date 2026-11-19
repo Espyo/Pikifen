@@ -130,7 +130,7 @@ void BouncerFsm::handleMob(ScriptVM* scriptVM, void* info1, void* info2) {
     enableFlag(toucher->flags, MOB_FLAG_WAS_THROWN);
     toucher->startHeightEffect();
     
-    float angle;
+    Angle angle;
     //The maximum height has a guaranteed minimum (useful if the destination
     //is below the bouncer), and scales up with how much higher the thrown
     //mob needs to go, to make for a nice smooth arc.

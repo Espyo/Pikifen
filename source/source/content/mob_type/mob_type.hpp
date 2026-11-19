@@ -71,13 +71,13 @@ public:
         float radius1 = -1.0f;
         
         //Angle of possibility 1. -1 for none.
-        float angle1 = -1.0f;
+        Angle angle1 = -1.0f;
         
         //Radius of possibility 2. -1 for none.
         float radius2 = -1.0f;
         
         //Angle of possibility 2. -1 for none.
-        float angle2 = -1.0f;
+        Angle angle2 = -1.0f;
         
     };
     
@@ -104,7 +104,7 @@ public:
         float coordsZ = 0.0f;
         
         //Angle of the spawned object. Could be relative or absolute.
-        float angle = 0.0f;
+        Angle angle = 0.0f;
         
         //String representation of the script vars to give the spawned object.
         string varsStr;
@@ -146,7 +146,7 @@ public:
         float holdOffsetVertDist = 0.0f;
         
         //If the parent holds, this is in what direction from the body part.
-        float holdOffsetAngle = 0.0f;
+        Angle holdOffsetAngle = 0.0f;
         
         //Method by which the parent should hold the child.
         HOLD_ROTATION_METHOD holdRotationMethod = HOLD_ROTATION_METHOD_NEVER;

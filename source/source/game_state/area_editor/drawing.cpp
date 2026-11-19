@@ -65,7 +65,7 @@ void AreaEditor::drawArrow(
     );
     
     if(game.editorsView.cam.zoom >= 0.25) {
-        float angle =
+        Angle angle =
             getAngle(start, end);
         Point finalStart = Point(startOffset, 0);
         finalStart = rotatePoint(finalStart, angle);
@@ -1125,7 +1125,7 @@ void AreaEditor::drawEdges(const AreaEdCanvasStyle& style) {
                 (ePtr->vertexes[0]->x + ePtr->vertexes[1]->x) / 2.0f,
                 (ePtr->vertexes[0]->y + ePtr->vertexes[1]->y) / 2.0f
             );
-            float edgeAngle =
+            Angle edgeAngle =
                 getAngle(v2p(ePtr->vertexes[0]), v2p(ePtr->vertexes[1]));
             float distFromEdge = 16.0f / game.editorsView.cam.zoom;
             
@@ -1191,7 +1191,7 @@ void AreaEditor::drawLineDist(
     float d = Distance(other, focus).toFloat();
     if(d < 64) return;
     
-    float angle = getAngle(focus, other);
+    Angle angle = getAngle(focus, other);
     Point lengthNrPos;
     lengthNrPos.x = focus.x + cos(angle) * 64.0;
     lengthNrPos.y = focus.y + sin(angle) * 64.0;
@@ -1470,7 +1470,7 @@ void AreaEditor::drawPaths(const AreaEdCanvasStyle& style) {
             size_t s1Idx =
                 game.curArea->findPathStopIdx(elPtr->link1->startPtr);
             size_t s2Idx = elPtr->link1->endIdx;
-            float angle =
+            Angle angle =
                 getAngle(s1Ptr->center, s2Ptr->center);
             Point offset1 =
                 angleToCoordinates(angle, s1Ptr->radius);

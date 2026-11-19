@@ -124,7 +124,7 @@ struct MobGen {
     Point center;
     
     //Angle.
-    float angle = 0.0f;
+    Angle angle = 0.0f;
     
     //String representation of the script vars.
     string varsStr;
@@ -143,7 +143,7 @@ struct MobGen {
     
     explicit MobGen(
         const Point& center = Point(),
-        MobType* type = nullptr, float angle = 0, const string& vars = ""
+        MobType* type = nullptr, Angle angle = 0, const string& vars = ""
     );
     void clone(MobGen* destination, bool includePosition = true) const;
     
@@ -178,7 +178,7 @@ struct TreeShadow {
     
     explicit TreeShadow(
         const Point& center = Point(), const Point& size = Point(100.0f),
-        float angle = 0, const ALLEGRO_COLOR& tint = COLOR_WHITE,
+        Angle angle = 0, const ALLEGRO_COLOR& tint = COLOR_WHITE,
         const string& bmpName = "", const Point& sway = Point(1.0f)
     );
     ~TreeShadow();

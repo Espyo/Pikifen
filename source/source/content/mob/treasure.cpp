@@ -24,7 +24,7 @@
  * @param type Treasure type this mob belongs to.
  * @param angle Starting angle.
  */
-Treasure::Treasure(const Point& center, TreasureType* type, float angle) :
+Treasure::Treasure(const Point& center, TreasureType* type, Angle angle) :
     Mob(center, type, angle),
     treType(type) {
     

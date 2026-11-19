@@ -298,7 +298,7 @@ Hud::Hud() :
         //Width, from the center of the first dot to the center of the last.
         float dotsSpan = lastDotX - firstDotX;
         float dotInterval = dotsSpan / (float) nHours;
-        float sunMeterSunAngle =
+        Angle sunMeterSunAngle =
             game.states.gameplay->areaTimePassed *
             HUD::SUN_METER_SUN_SPIN_SPEED;
             
@@ -1020,7 +1020,7 @@ void Hud::setupMissionHudItem(MISSION_HUD_ITEM_ID which, GuiItem* item) {
                 game.sysContent.bmpClock,
                 draw.center, draw.size, 0.0f, draw.tint
             );
-            float clockHandAngle = (-TAU / 4.0f); //Start pointing upwards.
+            Angle clockHandAngle = (-TAU / 4.0f); //Start pointing upwards.
             float clockHandAlpha = 1.0f;
             if(game.states.gameplay->afterHours) {
                 clockHandAlpha = 0.3f;

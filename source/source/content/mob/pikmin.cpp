@@ -87,7 +87,7 @@ const float THROW_VER_SPEED = 900.0f;
  * @param type Pikmin type this mob belongs to.
  * @param angle Starting angle.
  */
-Pikmin::Pikmin(const Point& center, PikminType* type, float angle) :
+Pikmin::Pikmin(const Point& center, PikminType* type, Angle angle) :
     Mob(center, type, angle),
     pikType(type) {
     
@@ -169,7 +169,7 @@ void Pikmin::drawMob() {
     //Top.
     if(curSPtr->topVisible) {
         Point topCoords;
-        float topAngle;
+        Angle topAngle;
         Point topSize;
         BitmapEffect topEff = mobEff;
         ALLEGRO_BITMAP* topBmp = pikType->bmpTop[maturity];
@@ -523,7 +523,7 @@ void Pikmin::latch(Mob* m, const Hitbox* h) {
     center.y += game.rng.f(-2.0f, 2.0f);
     
     float hOffsetDist;
-    float hOffsetAngle;
+    Angle hOffsetAngle;
     float vOffsetDist;
     m->getHitboxHoldPoint(
         this, h, &hOffsetDist, &hOffsetAngle, &vOffsetDist

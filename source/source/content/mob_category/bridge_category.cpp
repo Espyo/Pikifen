@@ -49,7 +49,7 @@ void BridgeCategory::clearTypes() {
  * @return The mob.
  */
 Mob* BridgeCategory::createMob(
-    const Point& center, MobType* type, float angle
+    const Point& center, MobType* type, Angle angle
 ) {
     Bridge* m = new Bridge(center, (BridgeType*) type, angle);
     game.states.gameplay->mobs.bridges.push_back(m);

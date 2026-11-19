@@ -47,7 +47,7 @@ public:
     
     //--- Public function declarations ---
     
-    Treasure(const Point& pos, TreasureType* type, float angle);
+    Treasure(const Point& pos, TreasureType* type, Angle angle);
     int getMissionPoints(bool* applicableInThisMission) const override;
     
 };

@@ -37,7 +37,7 @@ const float BORED_ANIM_MAX_DELAY = 5.0f;
 const float BORED_ANIM_MIN_DELAY = 1.0f;
 
 //Members cannot go past this range from the angle of dismissal.
-const float DISMISS_ANGLE_RANGE = TAU / 2;
+const Angle DISMISS_ANGLE_RANGE = TAU / 2;
 
 //Multiply the space members take up by this. Lower = more compact subgroups.
 const float DISMISS_MEMBER_SIZE_MULTIPLIER = 0.75f;
@@ -76,7 +76,7 @@ const float HEALTH_CAUTION_RATIO = 0.3f;
 const float HEALTH_CAUTION_RING_DURATION = 1.5f;
 
 //Angle at which leaders hold their group members.
-const float HELD_GROUP_MEMBER_ANGLE = TAU / 2;
+const Angle HELD_GROUP_MEMBER_ANGLE = TAU / 2;
 
 //How far away from the leader is a held group member placed, horizontally.
 const float HELD_GROUP_MEMBER_H_DIST = 1.2f;
@@ -97,7 +97,7 @@ const float SWARM_ARROW_INTERVAL = 0.1f;
 const float SWARM_PARTICLE_ALPHA = 0.8f;
 
 //Swarm particle random angle deviation.
-const float SWARM_PARTICLE_ANGLE_DEVIATION = TAU * 0.04f;
+const Angle SWARM_PARTICLE_ANGLE_DEVIATION = TAU * 0.04f;
 
 //Swarm particle friction.
 const float SWARM_PARTICLE_FRICTION = 2.0f;
@@ -145,7 +145,7 @@ const float TIDY_SINGLE_DISMISS_DURATION = 3.0f;
  * @param type Leader type this mob belongs to.
  * @param angle Starting angle.
  */
-Leader::Leader(const Point& center, LeaderType* type, float angle) :
+Leader::Leader(const Point& center, LeaderType* type, Angle angle) :
     Mob(center, type, angle),
     leaType(type),
     autoThrowRepeater(&game.autoThrowSettings),
@@ -194,7 +194,7 @@ Leader::Leader(const Point& center, LeaderType* type, float angle) :
                 -LEADER::SWARM_PARTICLE_SPEED_DEVIATION,
                 LEADER::SWARM_PARTICLE_SPEED_DEVIATION
             );
-        float pAngle =
+        Angle pAngle =
             player->swarmAngle +
             game.rng.f(
                 -LEADER::SWARM_PARTICLE_ANGLE_DEVIATION,
@@ -386,7 +386,7 @@ void Leader::dismissDetails() {
                 LEADER::DISMISS_PARTICLE_MAX_SPEED
             );
         if(group->members.empty()) parSpeed *= 0.75f;
-        float parAngle = TAU / LEADER::DISMISS_PARTICLE_AMOUNT * p;
+        Angle parAngle = TAU / LEADER::DISMISS_PARTICLE_AMOUNT * p;
         par.linearSpeed =
             KeyframeInterpolator<Point>(
                 rotatePoint(Point(parSpeed, 0.0f), parAngle)
@@ -411,7 +411,7 @@ void Leader::dismissLogic(bool forceDismissAll) {
     
     //They are dismissed towards this angle.
     //This is then offset a bit for each subgroup, depending on a few factors.
-    float baseAngle;
+    Angle baseAngle;
     
     //First, calculate what direction the group should be dismissed to.
     if(player->swarmMagnitude > 0) {
@@ -558,7 +558,7 @@ void Leader::dismissLogic(bool forceDismissAll) {
         float thickness;
         
         //How much is taken up by Pikmin and padding.
-        float angleOccupation;
+        Angle angleOccupation;
         
         
         //--- Public function definitions ---
@@ -583,7 +583,7 @@ void Leader::dismissLogic(bool forceDismissAll) {
                 curRow.thickness, subgroupsInfo[curSubgroupIdx].radius * 2
             );
             
-        float newAngleOccupation = 0;
+        Angle newAngleOccupation = 0;
         forIdx(s, curRow.subgroups) {
             newAngleOccupation +=
                 linearDistToAngular(
@@ -646,12 +646,12 @@ void Leader::dismissLogic(bool forceDismissAll) {
     //Now that we know which subgroups go into which row,
     //simply decide the positioning.
     forIdx(r, rows) {
-        float startAngle = -(rows[r].angleOccupation / 2.0f);
-        float curAngle = startAngle;
+        Angle startAngle = -(rows[r].angleOccupation / 2.0f);
+        Angle curAngle = startAngle;
         
         forIdx(s, rows[r].subgroups) {
             size_t sIdx = rows[r].subgroups[s];
-            float subgroupAngle = curAngle;
+            Angle subgroupAngle = curAngle;
             
             curAngle +=
                 linearDistToAngular(
@@ -778,7 +778,7 @@ void Leader::drawMob() {
     
     if(curSPtr->topVisible && leaType->bmpLight && isGenerallyVisible()) {
         Point lightCoords;
-        float lightAngle;
+        Angle lightAngle;
         Point lightSize;
         BitmapEffect lightEff = mobEff;
         ALLEGRO_BITMAP* lightBmp = leaType->bmpLight;
@@ -1077,7 +1077,7 @@ void Leader::specificDismiss(
             //The first Pikmin always goes to the dead center.
             destination = relCenter;
         } else {
-            float memberAngle = ((float) curRowSpotIdx / curRowSpots) * TAU;
+            Angle memberAngle = ((float) curRowSpotIdx / curRowSpots) * TAU;
             destination =
                 relCenter +
                 angleToCoordinates(

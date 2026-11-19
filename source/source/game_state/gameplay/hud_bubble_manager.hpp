@@ -218,7 +218,7 @@ struct HudBubbleManager {
                         );
                     break;
                 } case HUD_BUBBLE_MOVE_METHOD_CIRCLE: {
-                    float matchStartAngle = getAngle(matchPivot, draw->center);
+                    Angle matchStartAngle = getAngle(matchPivot, draw->center);
                     draw->center =
                         matchPivot +
                         rotatePoint(
@@ -247,7 +247,7 @@ struct HudBubbleManager {
                         );
                     break;
                 } case HUD_BUBBLE_MOVE_METHOD_CIRCLE: {
-                    float matchStartAngle = getAngle(matchPivot, matchPos);
+                    Angle matchStartAngle = getAngle(matchPivot, matchPos);
                     draw->center =
                         matchPivot +
                         rotatePoint(

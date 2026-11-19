@@ -582,7 +582,7 @@ void GameplayState::drawDebugTools(Player* player) {
     //rawStickCoords.y = game.controls.mgr.rawSticks[0][0][1];
     rawStickCoords.x = inputAnalogStick[0];
     rawStickCoords.y = inputAnalogStick[1];
-    float rawStickAngle, rawStickMag;
+    Angle rawStickAngle, rawStickMag;
     coordinatesToAngle(
         rawStickCoords, &rawStickAngle, &rawStickMag
     );
@@ -692,7 +692,7 @@ void GameplayState::drawDebugTools(Player* player) {
     //cleanStickCoords.y =
     //    game.controls.getValueOfActionType(PLAYER_ACTION_TYPE_DOWN) -
     //    game.controls.getValueOfActionType(PLAYER_ACTION_TYPE_UP);
-    float cleanStickAngle;
+    Angle cleanStickAngle;
     float cleanStickMag;
     coordinatesToAngle(
         cleanStickCoords, &cleanStickAngle, &cleanStickMag
@@ -1163,7 +1163,7 @@ void GameplayState::drawLeaderCursor(
     
     //Whistle rings.
     size_t nRings = player->whistle.rings.size();
-    float leaderCursorAngle =
+    Angle leaderCursorAngle =
         getAngle(player->leaderPtr->center, player->leaderCursorWorld);
     float leaderCursorDist =
         Distance(
@@ -1219,7 +1219,7 @@ void GameplayState::drawLeaderCursor(
         for(unsigned char d = 0; d < WHISTLE::N_DOT_COLORS; d++) {
             for(unsigned char d2 = 0; d2 < 16; d2++) {
                 unsigned char currentDot = d2 * WHISTLE::N_DOT_COLORS + d;
-                float angle =
+                Angle angle =
                     TAU / nDots *
                     currentDot -
                     WHISTLE::DOT_SPIN_SPEED * areaTimePassed;
@@ -1529,16 +1529,16 @@ void GameplayState::drawPrecipitation() {
  * @param color Color to draw with.
  */
 void GameplayState::drawReach(
-    const Point& center, float angle, float radius,
-    float reachAngle, float reachRadius,
+    const Point& center, Angle angle, float radius,
+    Angle reachAngle, float reachRadius,
     const ALLEGRO_COLOR& color
 ) {
     const float THICKNESS = 3.0f;
     
     if(reachAngle <= 0.0f || reachRadius <= 0.0f) return;
     
-    float angle1 = angle - reachAngle / 2.0f;
-    float angle2 = angle + reachAngle / 2.0f;
+    Angle angle1 = angle - reachAngle / 2.0f;
+    Angle angle2 = angle + reachAngle / 2.0f;
     al_draw_arc(
         center.x, center.y, radius + reachRadius, angle1, angle2 - angle1,
         color, THICKNESS
@@ -1613,8 +1613,8 @@ void GameplayState::drawThrowPreview(Player* player) {
     Distance leaderToDestDist(
         player->leaderPtr->center, player->throwDest
     );
-    float throwHAngle = 0.0f;
-    float throwVAngle = 0.0f;
+    Angle throwHAngle = 0.0f;
+    Angle throwVAngle = 0.0f;
     float throwSpeed = 0.0f;
     float throwHSpeed = 0.0f;
     coordinatesToAngle(

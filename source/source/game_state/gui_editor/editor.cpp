@@ -78,7 +78,7 @@ GuiEditor::GuiEditor() :
     itemSelection.onSetInfo =
         [this] (
             size_t idx, const Point & newCenter,
-            const Point & newSize, float newAngle
+            const Point & newSize, Angle newAngle
     ) {
         allItems[idx]->rect.center = newCenter;
         allItems[idx]->rect.size = newSize;

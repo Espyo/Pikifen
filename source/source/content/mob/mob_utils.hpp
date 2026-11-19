@@ -128,7 +128,7 @@ struct CarryInfo {
     bool canFly() const;
     size_t getPlayerTeamIdx() const;
     float getSpeed() const;
-    void rotatePoints(float angle);
+    void rotatePoints(Angle angle);
     
 };
 
@@ -206,7 +206,7 @@ struct CirclingInfo {
     bool canFreeMove = false;
     
     //Angle of the circle to go to.
-    float curAngle = 0.0f;
+    Angle curAngle = 0.0f;
     
     
     //--- Public function declarations ---
@@ -310,7 +310,7 @@ struct Group {
     Point anchor;
     
     //Angle from the leader to the anchor.
-    float anchorAngle = TAU / 2.0f;
+    Angle anchorAngle = TAU / 2.0f;
     
     //Transformation to apply to the group, like from swarming.
     ALLEGRO_TRANSFORM transform;
@@ -392,7 +392,7 @@ struct HoldInfo {
     float offsetDist = 0.0f;
     
     //Angle the mob makes with the center of the hitbox/body.
-    float offsetAngle = 0.0f;
+    Angle offsetAngle = 0.0f;
     
     //Ratio of distance from the hitbox/body's bottom. 1 is the very top.
     float verticalDist = 0.0f;
@@ -810,7 +810,7 @@ float calculateMobPhysicalSpan(
 );
 Mob* createMob(
     MobCategory* category, const Point& pos, MobType* type,
-    float angle, const string& varsStr,
+    Angle angle, const string& varsStr,
     std::function<void(Mob*)> codeAfterCreation = nullptr,
     size_t firstStateOverride = INVALID
 );
@@ -824,5 +824,5 @@ MobType::SpawnInfo* getSpawnInfoFromChildInfo(
     MobType* type, const MobType::Child* childInfo
 );
 bool isMobInReach(
-    MobType::Reach* reachTPtr, const Distance& distBetween, float angleDiff
+    MobType::Reach* reachTPtr, const Distance& distBetween, Angle angleDiff
 );

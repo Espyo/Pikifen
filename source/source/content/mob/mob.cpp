@@ -164,7 +164,7 @@ const float SWARM_VERTICAL_SCALE = 0.5f;
  * @param type Mob type this mob belongs to.
  * @param angle Starting angle.
  */
-Mob::Mob(const Point& center, MobType* type, float angle) :
+Mob::Mob(const Point& center, MobType* type, Angle angle) :
     type(type),
     center(center),
     angle(angle),
@@ -322,7 +322,7 @@ void Mob::applyAttackDamage(
  * @param knockback Total knockback value.
  * @param knockbackAngle Angle to knockback towards.
  */
-void Mob::applyKnockback(float knockback, float knockbackAngle) {
+void Mob::applyKnockback(float knockback, Angle knockbackAngle) {
     if(knockback != 0) {
         stopChasing();
         speed.x = cos(knockbackAngle) * knockback * MOB::KNOCKBACK_H_POWER;
@@ -557,7 +557,7 @@ void Mob::arachnorbFootMoveLogic() {
         feetNormalDist = 175;
     }
     
-    float defaultAngle =
+    Angle defaultAngle =
         getAngle(
             Point(),
             parent->m->getHitbox(
@@ -567,7 +567,7 @@ void Mob::arachnorbFootMoveLogic() {
         
     Point finalPos;
     parent->m->scriptVM.vars.getValue("_destination_pos", finalPos);
-    float finalAngle;
+    Angle finalAngle;
     parent->m->scriptVM.vars.getValue("_destination_angle", finalAngle);
     
     Point offset = Point(feetNormalDist, 0);
@@ -587,7 +587,7 @@ void Mob::arachnorbFootMoveLogic() {
 void Mob::arachnorbHeadTurnLogic() {
     if(links.empty()) return;
     
-    float angleDeviationAvg = 0;
+    Angle angleDeviationAvg = 0;
     size_t nFeet = 0;
     
     forIdx(l, links) {
@@ -607,16 +607,16 @@ void Mob::arachnorbHeadTurnLogic() {
         
         nFeet++;
         
-        float defaultAngle =
+        Angle defaultAngle =
             getAngle(
                 Point(),
                 getHitbox(
                     links[l]->parent->limbParentBodyPart
                 )->center
             );
-        float curAngle =
+        Angle curAngle =
             getAngle(center, links[l]->center) - angle;
-        float angleDeviation =
+        Angle angleDeviation =
             getAngleCwDiff(defaultAngle, curAngle);
         if(angleDeviation > M_PI) {
             angleDeviation -= TAU;
@@ -639,10 +639,10 @@ void Mob::arachnorbPlanLogic(
 ) {
     float maxStepDistance;
     scriptVM.vars.getValue("max_step_distance", maxStepDistance);
-    float maxTurnAngle;
+    Angle maxTurnAngle;
     scriptVM.vars.getValue("max_turn_angle", maxTurnAngle);
     maxTurnAngle = degToRad(maxTurnAngle);
-    float minTurnAngle;
+    Angle minTurnAngle;
     scriptVM.vars.getValue("min_turn_angle", minTurnAngle);
     minTurnAngle = degToRad(minTurnAngle);
     
@@ -689,7 +689,7 @@ void Mob::arachnorbPlanLogic(
         std::min((double) fabs(amountToTurn), (double) maxTurnAngle);
         
     Point destinationPos = center;
-    float destinationAngle = angle + amountToTurn;
+    Angle destinationAngle = angle + amountToTurn;
     normalizeAngle(destinationAngle);
     
     Point offset = Point(amountToMove, 0);
@@ -857,7 +857,7 @@ bool Mob::calculateAttackDamage(
 void Mob::calculateAttackKnockback(
     const Mob* victim, const Hitbox* attackH, Hitbox* victimH,
     float offenseMultiplier, float defenseMultiplier,
-    bool* outKbExists, float* outKbStrength, float* outKbAngle
+    bool* outKbExists, float* outKbStrength, Angle* outKbAngle
 ) const {
     if(attackH) {
         switch(attackH->knockbackType) {
@@ -1462,7 +1462,7 @@ void Mob::chomp(Mob* m, const Hitbox* hitboxInfo) {
     }
     
     float hOffsetDist;
-    float hOffsetAngle;
+    Angle hOffsetAngle;
     float vOffsetDist;
     getHitboxHoldPoint(
         m, hitboxInfo, &hOffsetDist, &hOffsetAngle, &vOffsetDist
@@ -1759,7 +1759,7 @@ void Mob::doAttackEffects(
         victimH->getCurPos(center, bottomZ, angle, nullptr);
         
     float edgesD;
-    float aToVAngle;
+    Angle aToVAngle;
     coordinatesToAngle(
         victimHPos - attackHPos,
         &aToVAngle, &edgesD
@@ -1864,7 +1864,7 @@ void Mob::drawLimb() {
             )->getCurPos(center, bottomZ, angleCos, angleSin, nullptr);
     }
     
-    float p2cAngle = getAngle(parentEnd, childEnd);
+    Angle p2cAngle = getAngle(parentEnd, childEnd);
     
     if(parent->limbParentOffset) {
         parentEnd +=
@@ -1929,7 +1929,7 @@ void Mob::drawMob() {
  * @param instantly If true, the mob faces that angle instantly instead
  * of rotating towards that direction over time.
  */
-void Mob::face(float newAngle, Point* newPos, bool instantly) {
+void Mob::face(Angle newAngle, Point* newPos, bool instantly) {
     if(carryInfo) return; //If it's being carried, it shouldn't rotate.
     intendedTurnAngle = newAngle;
     intendedTurnPos = newPos;
@@ -2312,7 +2312,7 @@ Hitbox* Mob::getHitbox(size_t idx) const {
  */
 void Mob::getHitboxHoldPoint(
     const Mob* mobToHold, const Hitbox* hPtr,
-    float* offsetDist, float* offsetAngle, float* verticalDist
+    float* offsetDist, Angle* offsetAngle, float* verticalDist
 ) const {
     float actualHZ;
     Point actualHPos =
@@ -2454,7 +2454,7 @@ void Mob::getSpriteBitmapEffects(
     //Animation, position, angle, etc.
     if(hasFlag(effects, SPRITE_BMP_EFFECT_FLAG_STANDARD)) {
         Point effTrans;
-        float effAngle;
+        Angle effAngle;
         Point effScale;
         ALLEGRO_COLOR effTint;
         
@@ -3020,7 +3020,7 @@ bool Mob::hasClearLine(const Mob* targetMob) const {
  */
 void Mob::hold(
     Mob* m, HOLD_TYPE type, size_t hitboxIdx,
-    float offsetDist, float offsetAngle,
+    float offsetDist, Angle offsetAngle,
     float verticalDist,
     bool forceAboveHolder, const HOLD_ROTATION_METHOD rotationMethod
 ) {
@@ -3632,7 +3632,7 @@ Mob* Mob::spawn(const MobType::SpawnInfo* info, MobType* typePtr) {
     
     Point newXY;
     float newZ = 0;
-    float newAngle = 0;
+    Angle newAngle = 0;
     
     if(info->relative) {
         newXY = center + rotatePoint(info->coordsXY, angle);
@@ -4638,7 +4638,7 @@ void Mob::tickScript(float deltaT) {
         FsmEventDef* forEv = scriptVM.fsm.getEvent(FSM_EV_FOCUS_OFF_REACH);
         
         if(farReach != INVALID && forEv) {
-            float angleToFocus = getAngle(center, focus->center);
+            Angle angleToFocus = getAngle(center, focus->center);
             if(
                 !isMobInReach(
                     &type->reaches[farReach],
@@ -4785,7 +4785,7 @@ bool Mob::tickTrackRide() {
             trackInfo->curCpProgress, 0.0f, 1.0f, curCpZ, nextCpZ
         );
         
-    float destAngle = getAngle(curCpPos, nextCpPos);
+    Angle destAngle = getAngle(curCpPos, nextCpPos);
     
     chase(destXy, destZ, CHASE_FLAG_TELEPORT);
     face(destAngle, nullptr);

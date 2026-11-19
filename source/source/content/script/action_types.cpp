@@ -721,7 +721,7 @@ void ScriptActionRunners::getAngle(ScriptActionInstRunData& data) {
     //Main logic.
     Point center(s2f(xArg), s2f(yArg));
     Point focus(s2f(focusXArg), s2f(focusYArg));
-    float angle = getAngle(center, focus);
+    Angle angle = getAngle(center, focus);
     angle = radToDeg(angle);
     
     //Store the result.
@@ -741,8 +741,8 @@ void ScriptActionRunners::getAngleCwDiff(ScriptActionInstRunData& data) {
     const string& angle2Arg = data.args[2];
     
     //Main logic.
-    float angle1 = degToRad(s2f(angle1Arg));
-    float angle2 = degToRad(s2f(angle2Arg));
+    Angle angle1 = degToRad(s2f(angle1Arg));
+    Angle angle2 = degToRad(s2f(angle2Arg));
     float diff = ::getAngleCwDiff(angle1, angle2);
     diff = radToDeg(diff);
     
@@ -763,8 +763,8 @@ void ScriptActionRunners::getAngleSmallestDiff(ScriptActionInstRunData& data) {
     const string& angle2Arg = data.args[2];
     
     //Main logic.
-    float angle1 = degToRad(s2f(angle1Arg));
-    float angle2 = degToRad(s2f(angle2Arg));
+    Angle angle1 = degToRad(s2f(angle1Arg));
+    Angle angle2 = degToRad(s2f(angle2Arg));
     float diff = ::getAngleSmallestDiff(angle1, angle2);
     diff = radToDeg(diff);
     
@@ -831,7 +831,7 @@ void ScriptActionRunners::getCoordinatesFromAngle(
     const string& magnitudeArg = data.args[3];
     
     //Main logic.
-    float angle = s2f(angleArg);
+    Angle angle = s2f(angleArg);
     angle = degToRad(angle);
     float magnitude = s2f(magnitudeArg);
     Point p = angleToCoordinates(angle, magnitude);

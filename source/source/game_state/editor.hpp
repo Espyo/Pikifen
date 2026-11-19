@@ -366,10 +366,10 @@ protected:
         bool startOperation();
         bool applyDragMove(const Point& cursorPos);
         bool applyDirectTransformation(
-            const Rect& newRect, float newAngle
+            const Rect& newRect, Angle newAngle
         );
         bool applySharedTransformation(
-            const Rect& newRect, float newAngle
+            const Rect& newRect, Angle newAngle
         );
         bool setHomogenized(bool homogenized);
         bool isHomogenized() const;
@@ -380,7 +380,7 @@ protected:
         bool getBBox(Rect* outRect) const;
         vector<size_t> getItemsUnderCursor(const Point& cursorPos) const;
         void getItemInfo(
-            size_t idx, Point* outCenter, Point* outSize, float* outAngle
+            size_t idx, Point* outCenter, Point* outSize, Angle* outAngle
         ) const;
         bool getItemIsEligible(size_t idx) const;
         size_t getNrTotalItems() const;
@@ -475,7 +475,7 @@ protected:
         bool startTransforming();
         bool isTransforming() const;
         bool applyTransformation(
-            const Rect& newRect, float newAngle
+            const Rect& newRect, Angle newAngle
         );
         bool stopTransforming();
         
@@ -493,7 +493,7 @@ protected:
         
         bool getTotalBBox(Rect* outRect) const;
         void getSingleRotatingItemInfo(
-            Point* outCenter, Point* outSize, float* outAngle
+            Point* outCenter, Point* outSize, Angle* outAngle
         ) const;
         size_t getSelectionTotalCount(
             bool* outCanChange = nullptr, RectCorners* outPadding = nullptr
@@ -608,7 +608,7 @@ protected:
             const RectCorners& padding = RectCorners()
         );
         bool handleMouseMove(
-            const Point& mouseCoords, Point* center, Point* size, float* angle,
+            const Point& mouseCoords, Point* center, Point* size, Angle* angle,
             float zoom = 1.0f, Bitmask8 flags = 0,
             const RectCorners& padding = RectCorners(),
             float minSize = -FLT_MAX,
@@ -634,7 +634,7 @@ protected:
         Point oldSize;
         
         //Old angle, before the user started dragging handles.
-        float oldAngle = 0.0f;
+        Angle oldAngle = 0.0f;
         
         //Before a transformation began, the mouse cursor was in this position.
         Point oldMouseCoords;
@@ -1104,7 +1104,7 @@ protected:
     bool getSelectionTransformationWidgetParams(
         const SelectionController& selCtrl,
         Point* outSelectionCenter, Point* outSelectionSize,
-        float* outSelectionAngle, bool* outUseAngle,
+        Angle* outSelectionAngle, bool* outUseAngle,
         Bitmask8* outFlags, RectCorners* outPadding
     ) const;
     bool guiFocusedText();
@@ -1244,7 +1244,7 @@ protected:
     );
     void panelTitle(const char* title);
     
-    void angleVisualizer(float angle);
+    void angleVisualizer(Angle angle);
     void keyframeVisualizer(
         KeyframeInterpolator<ALLEGRO_COLOR>& interpolator,
         size_t selKeyframeIdx

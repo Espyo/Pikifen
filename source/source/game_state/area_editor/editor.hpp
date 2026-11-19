@@ -649,7 +649,7 @@ private:
     Point octeeDragStart;
     
     //Texture's original angle, when using on-canvas texture effect editing.
-    float octeeOrigAngle = 0.0f;
+    Angle octeeOrigAngle = 0.0f;
     
     //Texture's original offset, when using on-canvas texture effect editing.
     Point octeeOrigOffset;
@@ -997,8 +997,8 @@ private:
         Vertex** clickedVertex, Edge** clickedEdge, Sector** clickedSector
     ) const;
     Edge* getClosestEdgeToAngle(
-        Vertex* vPtr, float angle, bool clockwise,
-        float* outClosestEdgeAngle
+        Vertex* vPtr, Angle angle, bool clockwise,
+        Angle* outClosestEdgeAngle
     ) const;
     bool getCommonSector(
         vector<Vertex*>& vertexes, vector<Edge*>& edges, Sector** result

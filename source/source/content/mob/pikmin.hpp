@@ -113,7 +113,7 @@ public:
     
     //--- Public function declarations ---
     
-    Pikmin(const Point& pos, PikminType* type, float angle);
+    Pikmin(const Point& pos, PikminType* type, Angle angle);
     void forceCarry(Mob* m);
     bool processAttackMiss(HitboxInteraction* info);
     bool increaseMaturity(int amount);

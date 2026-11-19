@@ -35,7 +35,7 @@ const float NEW_SEED_Z_OFFSET = 320.0f;
 const float NEXT_GENERATION_INTERVAL = 0.10f;
 
 //After spitting a seed, the next seed's angle shifts by this much.
-const float SPIT_ANGLE_SHIFT = TAU * 0.12345;
+const Angle SPIT_ANGLE_SHIFT = TAU * 0.12345;
 
 //An Onion-spat seed is this quick, horizontally.
 const float SPIT_H_SPEED = 80.0f;
@@ -57,7 +57,7 @@ const float SPIT_V_SPEED = 600.0f;
  * @param type Onion type this mob belongs to.
  * @param angle Starting angle.
  */
-Onion::Onion(const Point& center, OnionType* type, float angle) :
+Onion::Onion(const Point& center, OnionType* type, Angle angle) :
     Mob(center, type, angle),
     oniType(type) {
     

@@ -104,7 +104,7 @@ public:
     size_t pikminPerRow = 10;
     
     //What (relative) angle the Pikmin should face when working.
-    float workerPikminAngle = 0.0f;
+    Angle workerPikminAngle = 0.0f;
     
     //Pose that worker Pikmin should take.
     GROUP_TASK_PIKMIN_POSE workerPikminPose = GROUP_TASK_PIKMIN_POSE_STOPPED;

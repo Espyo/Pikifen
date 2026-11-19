@@ -50,7 +50,7 @@ void ConverterCategory::clearTypes() {
  * @return The mob.
  */
 Mob* ConverterCategory::createMob(
-    const Point& center, MobType* type, float angle
+    const Point& center, MobType* type, Angle angle
 ) {
     Converter* m = new Converter(center, (ConverterType*) type, angle);
     game.states.gameplay->mobs.converters.push_back(m);

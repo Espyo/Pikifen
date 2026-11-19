@@ -36,7 +36,7 @@ public:
     MobType* createType() override;
     void registerType(const string& internalName, MobType* type) override;
     Mob* createMob(
-        const Point& pos, MobType* type, float angle
+        const Point& pos, MobType* type, Angle angle
     ) override;
     void deleteMob(Mob* m) override;
     void clearTypes() override;

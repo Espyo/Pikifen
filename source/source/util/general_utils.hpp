@@ -444,7 +444,7 @@ struct MovementInfo {
     
     //--- Public function declarations ---
     
-    void getInfo(Point* coords, float* angle, float* magnitude) const;
+    void getInfo(Point* coords, Angle* angle, float* magnitude) const;
     void reset();
     
 };
@@ -475,7 +475,7 @@ struct Shaker {
     void shake(float strength);
     void getOffsets(
         float* xOffset = nullptr, float* yOffset = nullptr,
-        float* angleOffset = nullptr
+        Angle* angleOffset = nullptr
     ) const;
     float getTrauma() const;
     void tick(float deltaT);

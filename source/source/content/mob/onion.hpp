@@ -24,7 +24,7 @@ namespace ONION {
 extern const float GENERATION_DELAY;
 extern const float NEW_SEED_Z_OFFSET;
 extern const float NEXT_GENERATION_INTERVAL;
-extern const float SPIT_ANGLE_SHIFT;
+extern const Angle SPIT_ANGLE_SHIFT;
 extern const float SPIT_H_SPEED;
 extern const float SPIT_H_SPEED_DEVIATION;
 extern const float SPIT_V_SPEED;
@@ -73,7 +73,7 @@ public:
     
     //--- Public function declarations ---
     
-    Onion(const Point& pos, OnionType* type, float angle);
+    Onion(const Point& pos, OnionType* type, Angle angle);
     ~Onion();
     void generate();
     void readScriptVars(const ScriptVarManager& varsMgr) override;

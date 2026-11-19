@@ -965,7 +965,7 @@ bool GuiManager::getItemDrawInfo(
         switch(animType) {
         case GUI_MANAGER_ANIM_OUT_TO_IN: {
             Point startCenter;
-            float angle =
+            Angle angle =
                 getAngle(
                     Point(game.winW, game.winH) / 2.0f,
                     finalRect.center
@@ -987,7 +987,7 @@ bool GuiManager::getItemDrawInfo(
             
         } case GUI_MANAGER_ANIM_IN_TO_OUT: {
             Point endCenter;
-            float angle =
+            Angle angle =
                 getAngle(
                     Point(game.winW, game.winH) / 2.0f,
                     finalRect.center

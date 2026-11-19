@@ -107,7 +107,7 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
     
     if(leaderToCursorDist > game.config.rules.whistleMaxDist) {
         whistleDist = game.config.rules.whistleMaxDist;
-        float whistleAngle =
+        Angle whistleAngle =
             getAngle(player->leaderPtr->center, player->leaderCursorWorld);
         whistlePos = angleToCoordinates(whistleAngle, whistleDist);
         whistlePos += player->leaderPtr->center;
@@ -125,7 +125,7 @@ void GameplayState::doAestheticLeaderLogic(Player* player, float deltaT) {
     player->leaderCursorHeightDiffLight = 0;
     
     if(leaderToCursorDist > game.config.rules.throwMaxDist) {
-        float throwAngle =
+        Angle throwAngle =
             getAngle(player->leaderPtr->center, player->leaderCursorWorld);
         player->throwDest =
             angleToCoordinates(throwAngle, game.config.rules.throwMaxDist);
@@ -272,7 +272,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     
     //Current leader movement.
     Point dummyCoords;
-    float dummyAngle;
+    Angle dummyAngle;
     float leaderMoveMagnitude;
     player->leaderMovement.getInfo(
         &dummyCoords, &dummyAngle, &leaderMoveMagnitude
@@ -623,7 +623,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
     
     float oldSwarmMagnitude = player->swarmMagnitude;
     Point swarmCoords;
-    float newSwarmAngle;
+    Angle newSwarmAngle;
     player->swarmMovement.getInfo(
         &swarmCoords, &newSwarmAngle, &player->swarmMagnitude
     );
@@ -633,7 +633,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         player->swarmAngle = newSwarmAngle;
     }
     
-    float leaderCursorAngle =
+    Angle leaderCursorAngle =
         getAngle(player->leaderPtr->center, player->leaderCursorWorld);
         
     if(player->swarmToLeaderCursor) {
@@ -727,7 +727,7 @@ void GameplayState::doGameplayLeaderLogic(Player* player, float deltaT) {
         moveStrength = interpolateNumber(moveStrength, 0.75f, 1.0f, 0.0f, 1.0f);
         moveStrength = std::clamp(moveStrength, 0.0f, 1.0f);
         
-        float leaderToMouseCursorAngle =
+        Angle leaderToMouseCursorAngle =
             getAngle(
                 player->leaderPtr->center,
                 player->view.mouseCursorWorldPos
@@ -785,7 +785,7 @@ void GameplayState::doGameplayLogic(float deltaT) {
             mov.up =
                 game.controls.getValueOfActionType(PLAYER_ACTION_TYPE_UP);
             Point movCoords;
-            float dummyAngle;
+            Angle dummyAngle;
             float dummyMagnitude;
             mov.getInfo(
                 &movCoords, &dummyAngle, &dummyMagnitude
@@ -1764,7 +1764,7 @@ void GameplayState::processLeaderCursor(Player* player, float deltaT) {
     );
     
     if(leaderToCursorDist > game.config.rules.leaderCursorMaxDist) {
-        float leaderCursorAngle =
+        Angle leaderCursorAngle =
             getAngle(player->leaderPtr->center, player->leaderCursorWorld);
         player->leaderCursorWorld.x =
             player->leaderPtr->center.x +
@@ -2017,7 +2017,7 @@ void GameplayState::processMobReaches(
     if(!obirEv && !opirEv) return;
     
     MobType::Reach* rPtr = &mPtr->type->reaches[mPtr->nearReach];
-    float angleDiff =
+    Angle angleDiff =
         getAngleSmallestDiff(
             mPtr->angle,
             getAngle(mPtr->center, m2Ptr->center)
@@ -2105,7 +2105,7 @@ void GameplayState::processMobTouches(
         )
     ) {
         float pushAmount = 0;
-        float pushAngle = 0;
+        Angle pushAngle = 0;
         
         if(m2Ptr->type->pushesWithHitboxes) {
             //Push with the hitboxes.
@@ -2148,7 +2148,7 @@ void GameplayState::processMobTouches(
         } else {
             bool xyCollision = false;
             float tempPushAmount = 0;
-            float tempPushAngle = 0;
+            Angle tempPushAngle = 0;
             if(
                 mPtr->rectangularDim.x != 0 &&
                 m2Ptr->rectangularDim.x != 0

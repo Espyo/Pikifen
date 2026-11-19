@@ -49,7 +49,7 @@ void PelletCategory::clearTypes() {
  * @return The mob.
  */
 Mob* PelletCategory::createMob(
-    const Point& center, MobType* type, float angle
+    const Point& center, MobType* type, Angle angle
 ) {
     Pellet* m = new Pellet(center, (PelletType*) type, angle);
     game.states.gameplay->mobs.pellets.push_back(m);

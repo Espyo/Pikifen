@@ -49,7 +49,7 @@ void ShipCategory::clearTypes() {
  * @return The mob.
  */
 Mob* ShipCategory::createMob(
-    const Point& center, MobType* type, float angle
+    const Point& center, MobType* type, Angle angle
 ) {
     Ship* m = new Ship(center, (ShipType*) type, angle);
     game.states.gameplay->mobs.ships.push_back(m);

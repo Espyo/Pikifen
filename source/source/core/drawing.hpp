@@ -176,7 +176,7 @@ void drawStringTokens(
     const Point& scale = Point(1.0f), const ALLEGRO_COLOR& tint = COLOR_WHITE
 );
 void drawHighlightedRectRegion(
-    const Point& center, const Point& size, float angle,
+    const Point& center, const Point& size, Angle angle,
     const ALLEGRO_COLOR& color, float timeSpent
 );
 

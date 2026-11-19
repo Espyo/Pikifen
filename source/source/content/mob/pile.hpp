@@ -38,7 +38,7 @@ public:
     
     //--- Public function declarations ---
     
-    Pile(const Point& pos, PileType* type, float angle);
+    Pile(const Point& pos, PileType* type, Angle angle);
     void changeAmount(int change);
     void recharge();
     void update();

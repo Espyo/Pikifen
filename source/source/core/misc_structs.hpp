@@ -1924,7 +1924,7 @@ struct EdgeOffsetCache {
     float lengths[2] = {0.0f, 0.0f};
     
     //Angle of the effect's "rectangle", per end vertex.
-    float angles[2] = {0.0f, 0.0f};
+    Angle angles[2] = {0.0f, 0.0f};
     
     //Color of the effect, per end vertex.
     ALLEGRO_COLOR colors[2] = {COLOR_EMPTY, COLOR_EMPTY};
@@ -1933,7 +1933,7 @@ struct EdgeOffsetCache {
     float elbowLengths[2] = {0.0f, 0.0f};
     
     //Angle of the effect's "elbow", per end vertex.
-    float elbowAngles[2] = {0.0f, 0.0f};
+    Angle elbowAngles[2] = {0.0f, 0.0f};
     
     //Index of the vertex that should be processed first.
     unsigned char firstEndVertexIdx = 0;

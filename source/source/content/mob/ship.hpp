@@ -70,7 +70,7 @@ public:
     
     //--- Public function declarations ---
     
-    Ship(const Point& pos, ShipType* type, float angle);
+    Ship(const Point& pos, ShipType* type, Angle angle);
     ~Ship();
     void healLeader(Leader* l) const;
     bool isLeaderOnCp(const Leader* l) const;

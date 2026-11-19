@@ -2138,7 +2138,7 @@ void PikminFsm::beAttacked(ScriptVM* scriptVM, void* info1, void* info2) {
         
         //Knockback.
         float knockbackStrength = 0.0f;
-        float knockbackAngle = 0.0f;
+        Angle knockbackAngle = 0.0f;
         info->mob2->calculateAttackKnockback(
             pikPtr, info->h2, info->h1,
             offenseMultiplier, defenseMultiplier,
@@ -2432,7 +2432,7 @@ void PikminFsm::beThrownAfterPluck(
 ) {
     Pikmin* pikPtr = (Pikmin*) scriptVM->mob;
     
-    float throwAngle = getAngle(pikPtr->center, scriptVM->focusedMob->center);
+    Angle throwAngle = getAngle(pikPtr->center, scriptVM->focusedMob->center);
     pikPtr->speedZ = PIKMIN::THROW_VER_SPEED;
     pikPtr->speed = angleToCoordinates(throwAngle, PIKMIN::THROW_HOR_SPEED);
     pikPtr->face(throwAngle + TAU / 2.0f, nullptr, true);
@@ -2908,7 +2908,7 @@ void PikminFsm::doImpactBounce(ScriptVM* scriptVM, void* info1, void* info2) {
     
     disableFlag(pikPtr->flags, MOB_FLAG_CAN_MOVE_MIDAIR);
     
-    float impactAngle = 0.0f;
+    Angle impactAngle = 0.0f;
     float impactSpeed = 0.0f;
     
     if(scriptVM->focusedMob) {
@@ -3733,7 +3733,7 @@ void PikminFsm::landOnMob(ScriptVM* scriptVM, void* info1, void* info2) {
     ) {
         if(hboxPtr->surfaceType == HITBOX_SURFACE_TYPE_BOUNCY) {
             //No good. Make it bounce back.
-            float throwAngle = getAngle(pikPtr->speed);
+            Angle throwAngle = getAngle(pikPtr->speed);
             throwAngle += TAU / 2.0f;
             pikPtr->speed = angleToCoordinates(throwAngle, 200.0f);
         } else {
@@ -3804,7 +3804,7 @@ void PikminFsm::landOnMobWhileHolding(
             tooPtr->scriptVM.focusedMob = m2Ptr;
             
             float hOffsetDist;
-            float hOffsetAngle;
+            Angle hOffsetAngle;
             float vOffsetDist;
             m2Ptr->getHitboxHoldPoint(
                 tooPtr, info->h2,

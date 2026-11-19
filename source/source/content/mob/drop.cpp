@@ -23,7 +23,7 @@
  * @param type Drop type this mob belongs to.
  * @param angle Starting angle.
  */
-Drop::Drop(const Point& center, DropType* type, float angle) :
+Drop::Drop(const Point& center, DropType* type, Angle angle) :
     Mob(center, type, angle),
     droType(type),
     dosesLeft(droType->totalDoses) {

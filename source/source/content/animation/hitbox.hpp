@@ -150,7 +150,7 @@ public:
     float knockbackStrength = 0.0f;
     
     //Knockback angle, if directional.
-    float knockbackAngle = 0.0f;
+    Angle knockbackAngle = 0.0f;
     
     //Chance of this attack withering a Pikmin's maturity [0 - 100].
     unsigned char witherChance = 0.0f;
@@ -167,7 +167,7 @@ public:
         float height = 128, float radius = 32
     );
     Point getCurPos(
-        const Point& mobPos, float mobBottomZ, float mobAngle, float* outZ
+        const Point& mobPos, float mobBottomZ, Angle mobAngle, float* outZ
     ) const;
     Point getCurPos(
         const Point& mobPos, float mobBottomZ,

@@ -75,7 +75,7 @@ private:
     bool genRunning = false;
     
     //Offset the generator's angle in the editor by this much.
-    float generatorAngleOffset = 0.0f;
+    Angle generatorAngleOffset = 0.0f;
     
     //Offset the generator's position in the editor by this much.
     Point generatorPosOffset;

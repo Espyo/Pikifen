@@ -3163,7 +3163,7 @@ size_t Blockmap::getRow(float y) const {
  * @param vars String representation of the script vars.
  */
 MobGen::MobGen(
-    const Point& center, MobType* type, float angle, const string& vars
+    const Point& center, MobType* type, Angle angle, const string& vars
 ) :
     type(type),
     center(center),
@@ -3202,7 +3202,7 @@ void MobGen::clone(MobGen* destination, bool includePosition) const {
  * vertically.
  */
 TreeShadow::TreeShadow(
-    const Point& center, const Point& size, float angle,
+    const Point& center, const Point& size, Angle angle,
     const ALLEGRO_COLOR& tint, const string& bmpName, const Point& sway
 ) :
     bmpName(bmpName),

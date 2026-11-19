@@ -137,7 +137,7 @@ AnimationEditor::AnimationEditor() :
     hitboxSelection.onSetInfo =
         [this] (
             size_t idx, const Point & newCenter,
-            const Point & newSize, float newAngle
+            const Point & newSize, Angle newAngle
     ) {
         if(!sideView) {
             curSprite->hitboxes[idx].center = newCenter;

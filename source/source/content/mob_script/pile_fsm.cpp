@@ -97,7 +97,7 @@ void PileFsm::beAttacked(ScriptVM* scriptVM, void* info1, void* info2) {
     for(size_t r = 0; r < (size_t) amountToSpawn; r++) {
         Point spawnPos;
         float spawnZ = 0;
-        float spawnAngle = 0;
+        Angle spawnAngle = 0;
         float spawnHSpeed = 0;
         float spawnVSpeed = 0;
         

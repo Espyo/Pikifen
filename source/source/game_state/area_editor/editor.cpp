@@ -210,7 +210,7 @@ AreaEditor::AreaEditor() :
     vertexSelection.onSetInfo =
         [this] (
             size_t idx, const Point & newCenter,
-            const Point & newSize, float newAngle
+            const Point & newSize, Angle newAngle
     ) {
         game.curArea->vertexes[idx]->x = newCenter.x;
         game.curArea->vertexes[idx]->y = newCenter.y;
@@ -249,7 +249,7 @@ AreaEditor::AreaEditor() :
     edgeSelection.onSetInfo =
         [this] (
             size_t idx, const Point & newCenter,
-            const Point & newSize, float newAngle
+            const Point & newSize, Angle newAngle
     ) {
     };
     edgeSelection.onGetTotal =
@@ -290,7 +290,7 @@ AreaEditor::AreaEditor() :
     sectorSelection.onSetInfo =
         [this] (
             size_t idx, const Point & newCenter,
-            const Point & newSize, float newAngle
+            const Point & newSize, Angle newAngle
     ) {
     };
     sectorSelection.onGetTotal =
@@ -325,7 +325,7 @@ AreaEditor::AreaEditor() :
     mobSelection.onSetInfo =
         [this] (
             size_t idx, const Point & newCenter,
-            const Point & newSize, float newAngle
+            const Point & newSize, Angle newAngle
     ) {
         game.curArea->mobGenerators[idx]->center = newCenter;
     };
@@ -358,7 +358,7 @@ AreaEditor::AreaEditor() :
     pathStopSelection.onSetInfo =
         [this] (
             size_t idx, const Point & newCenter,
-            const Point & newSize, float newAngle
+            const Point & newSize, Angle newAngle
     ) {
         game.curArea->pathStops[idx]->center = newCenter;
         game.curArea->pathStops[idx]->radius = newSize.x / 2.0f;
@@ -411,7 +411,7 @@ AreaEditor::AreaEditor() :
     pathLinkSelection.onSetInfo =
         [this] (
             size_t idx, const Point & newCenter,
-            const Point & newSize, float newAngle
+            const Point & newSize, Angle newAngle
     ) {
     };
     pathLinkSelection.onGetTotal =
@@ -445,7 +445,7 @@ AreaEditor::AreaEditor() :
     shadowSelection.onSetInfo =
         [this] (
             size_t idx, const Point & newCenter,
-            const Point & newSize, float newAngle
+            const Point & newSize, Angle newAngle
     ) {
         game.curArea->treeShadows[idx]->pose.pos = newCenter;
         game.curArea->treeShadows[idx]->pose.size = newSize;
@@ -476,7 +476,7 @@ AreaEditor::AreaEditor() :
     regionSelection.onSetInfo =
         [this] (
             size_t idx, const Point & newCenter,
-            const Point & newSize, float newAngle
+            const Point & newSize, Angle newAngle
     ) {
         game.curArea->regions[idx]->pose.pos = newCenter;
         game.curArea->regions[idx]->pose.size = newSize;
@@ -507,7 +507,7 @@ AreaEditor::AreaEditor() :
     reminderSelection.onSetInfo =
         [] (
             size_t idx, const Point & newCenter,
-            const Point & newSize, float newAngle
+            const Point & newSize, Angle newAngle
     ) {
         game.curArea->reminders[idx].center = newCenter;
     };
@@ -3612,15 +3612,15 @@ void AreaEditor::selectPathStopsWithLabel(const string& label) {
  * @brief Sets the vector of points that make up a new circle sector.
  */
 void AreaEditor::setNewCircleSectorPoints() {
-    float anchorAngle =
+    Angle anchorAngle =
         getAngle(newCircleSectorCenter, newCircleSectorAnchor);
-    float cursorAngle =
+    Angle cursorAngle =
         getAngle(newCircleSectorCenter, game.editorsView.mouseCursorWorldPos);
     float radius =
         Distance(
             newCircleSectorCenter, newCircleSectorAnchor
         ).toFloat();
-    float angleDiff =
+    Angle angleDiff =
         getAngleSmallestDiff(cursorAngle, anchorAngle);
         
     size_t nPoints = AREA_EDITOR::MAX_CIRCLE_SECTOR_POINTS;
@@ -4011,11 +4011,11 @@ void AreaEditor::traverseSectorForSplit(
     for(unsigned char s = 0; s < 2; s++) {
         Vertex* vPtr = begin;
         Vertex* prevVPtr = nullptr;
-        float prevEAngle = TAU / 2.0f;
+        Angle prevEAngle = TAU / 2.0f;
         
         while(true) {
             Edge* nextEPtr = nullptr;
-            float nextEAngle = 0.0f;
+            Angle nextEAngle = 0.0f;
             Vertex* nextVPtr = nullptr;
             
             findTraceEdge(

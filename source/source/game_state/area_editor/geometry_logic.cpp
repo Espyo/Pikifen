@@ -1824,12 +1824,12 @@ void AreaEditor::getAffectedSectors(
  * @return The closest edge.
  */
 Edge* AreaEditor::getClosestEdgeToAngle(
-    Vertex* vPtr, float angle, bool clockwise,
-    float* outClosestEdgeAngle
+    Vertex* vPtr, Angle angle, bool clockwise,
+    Angle* outClosestEdgeAngle
 ) const {
     Edge* bestEdge = nullptr;
-    float bestAngleDiff = 0;
-    float bestEdgeAngle = 0;
+    Angle bestAngleDiff = 0;
+    Angle bestEdgeAngle = 0;
     
     forIdx(e, vPtr->edges) {
         Edge* ePtr = vPtr->edges[e];

@@ -143,8 +143,8 @@ struct GeometryProblems {
 
 void findTraceEdge(
     Vertex* vptr, const Vertex* prevVPtr, const Sector* sPtr,
-    float prevEAngle, bool bestIsClosestCw,
-    Edge** nextEPtr, float* nextEAngle, Vertex** nextVPtr,
+    Angle prevEAngle, bool bestIsClosestCw,
+    Edge** nextEPtr, Angle* nextEAngle, Vertex** nextVPtr,
     unordered_set<Edge*>* excludedEdges
 );
 void getCCE(

@@ -1265,7 +1265,7 @@ void Sprite::setBitmap(
  * returned here.
  */
 void getSpriteBasicEffects(
-    const Point& basePos, float baseAngle,
+    const Point& basePos, Angle baseAngle,
     float baseAngleCosCache, float baseAngleSinCache,
     Sprite* curSpritePtr, Sprite* nextSpritePtr, float interpolationFactor,
     Point* outEffTrans, float* outEffAngle,
@@ -1307,7 +1307,7 @@ void getSpriteBasicEffects(
             baseAngleSinCache * nextSpritePtr->tf.trans.x +
             baseAngleCosCache * nextSpritePtr->tf.trans.y
         );
-        float nextAngle = baseAngle + nextSpritePtr->tf.rot;
+        Angle nextAngle = baseAngle + nextSpritePtr->tf.rot;
         Point nextScale = nextSpritePtr->tf.scale;
         ALLEGRO_COLOR nextTint = nextSpritePtr->tint;
         
@@ -1376,7 +1376,7 @@ void getSpriteBasicTopEffects(
     
     if(nextSpritePtr && interpolationFactor > 0.0f) {
         Point nextTrans = nextSpritePtr->topPose.pos;
-        float nextAngle = nextSpritePtr->topPose.angle;
+        Angle nextAngle = nextSpritePtr->topPose.angle;
         Point nextSize = nextSpritePtr->topPose.size;
         
         if(outEffTrans) {
