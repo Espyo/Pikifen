@@ -49,6 +49,8 @@ public:
      * @brief Represents an extra button.
      */
     struct Button {
+
+    public:
     
         //--- Public members ---
         

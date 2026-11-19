@@ -29,7 +29,7 @@ using std::size_t;
 
 
 /**
- * @brief Constructs a new carrier spot struct object.
+ * @brief Constructs a new carrier spot class object.
  *
  * @param pos The spot's relative coordinates.
  */
@@ -44,7 +44,7 @@ CarrierSpot::CarrierSpot(const Point& pos) :
 
 
 /**
- * @brief Constructs a new carry info struct object.
+ * @brief Constructs a new carry info class object.
  *
  * @param m The mob this info belongs to.
  * @param destination Where to deliver the mob.
@@ -226,9 +226,9 @@ void CarryInfo::rotatePoints(Angle angle) {
 
 
 /**
- * @brief Constructs a new circling info struct object.
+ * @brief Constructs a new circling info object.
  *
- * @param m Mob this circling info struct belongs to.
+ * @param m Mob this circling info belongs to.
  */
 CirclingInfo::CirclingInfo(Mob* m) :
     m(m) {
@@ -241,7 +241,7 @@ CirclingInfo::CirclingInfo(Mob* m) :
 
 
 /**
- * @brief Constructs a new delivery info struct object.
+ * @brief Constructs a new delivery info object.
  */
 DeliveryInfo::DeliveryInfo() :
     color(game.config.aestheticGen.carryingColorMove) {
@@ -253,9 +253,9 @@ DeliveryInfo::DeliveryInfo() :
 
 
 /**
- * @brief Constructs a new group info struct object.
+ * @brief Constructs a new group info object.
  *
- * @param leaderPtr Mob this group info struct belongs to.
+ * @param leaderPtr Mob this group info belongs to.
  */
 Group::Group(Mob* leaderPtr) :
     anchor(leaderPtr->center),
@@ -480,6 +480,8 @@ void Group::initSpots(Mob* affectedMobPtr) {
      * @brief Initial spot.
      */
     struct AlphaSpot {
+
+    public:
     
         //--- Public members ---
         
@@ -808,7 +810,7 @@ Point HoldInfo::getFinalPos(float* outZ) const {
 
 
 /**
- * @brief Constructs a new parent info struct object.
+ * @brief Constructs a new parent info object.
  *
  * @param m The parent mob.
  */
@@ -823,9 +825,9 @@ Parent::Parent(Mob* m) :
 
 
 /**
- * @brief Constructs a new path info struct object.
+ * @brief Constructs a new path info object.
  *
- * @param m Mob this path info struct belongs to.
+ * @param m Mob this path info belongs to.
  * @param settings Settings about how the path should be followed.
  */
 Path::Path(
@@ -889,7 +891,7 @@ bool Path::isDirect() const {
 
 
 /**
- * @brief Constructs a new Pikmin nest struct object.
+ * @brief Constructs a new Pikmin nest object.
  *
  * @param mPtr Nest mob responsible.
  * @param type Type of nest.
@@ -1274,9 +1276,9 @@ void PikminNestType::loadProperties(DataNode* file, MobType* mobType) {
 
 
 /**
- * @brief Constructs a new track ride info struct object.
+ * @brief Constructs a new track ride info object.
  *
- * @param m Mob this track info struct belongs to.
+ * @param m Mob this track info belongs to.
  * @param checkpoints List of checkpoints (body part indexes) to cross.
  * @param rideSpeed Speed to ride at, in ratio per second.
  */

@@ -72,7 +72,9 @@ enum REPLAY_EVENT {
  * @brief Represents a Pikmin, a leader, or any other object we want to keep in
  * the replay.
  */
-struct ReplayElement {
+class ReplayElement {
+
+public:
 
     //--- Public members ---
     
@@ -95,7 +97,9 @@ struct ReplayElement {
  * the replay, like a new element getting added, one getting removed,
  * the player switching leaders, etc.
  */
-struct ReplayEvent {
+class ReplayEvent {
+
+public:
 
     //--- Public members ---
     
@@ -119,7 +123,9 @@ struct ReplayEvent {
  * @brief Represents a point in time of the replay. This has a collection of
  * elements, as well as their state at this point in time.
  */
-struct ReplayState {
+class ReplayState {
+
+public:
 
     //--- Public members ---
     

@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Header for the struct that holds the game's configuration,
+ * Header for the object that holds the game's configuration,
  * and related functions.
  */
 
@@ -123,12 +123,16 @@ using namespace GAME_CONFIG;
 /**
  * @brief The game's configuration. It controls some rules about the game.
  */
-struct GameConfig {
+class GameConfig {
+
+public:
 
     //--- Public members ---
     
     //General aesthetic details.
     struct {
+
+    public:
     
         //Color that represents a non-Onion carriable object when moving.
         ALLEGRO_COLOR carryingColorMove =
@@ -163,6 +167,8 @@ struct GameConfig {
     
     //Radar aesthetic details.
     struct {
+
+    public:
     
         //Color of the background in the radar.
         ALLEGRO_COLOR backgroundColor = AESTHETIC_RADAR_D::BG_COLOR;
@@ -180,6 +186,8 @@ struct GameConfig {
     
     //Carrying information.
     struct {
+
+    public:
     
         //Used for the slowest carrying speed an object can go.
         float speedBaseMult = CARRYING_D::SPEED_BASE_MULT;
@@ -194,6 +202,8 @@ struct GameConfig {
     
     //General game info.
     struct {
+
+    public:
     
         //Name of the game.
         string name;
@@ -205,6 +215,8 @@ struct GameConfig {
     
     //Some general GUI colors.
     struct {
+
+    public:
     
         //"Back" buttons.
         ALLEGRO_COLOR back = GUI_COLORS_D::BACK;
@@ -240,6 +252,8 @@ struct GameConfig {
     
     //Leader-related properties.
     struct {
+
+    public:
     
         //A leader can grab a group member only within this range.
         float groupMemberGrabRange = LEADERS_D::GROUP_MEMBER_GRAB_RANGE;
@@ -269,6 +283,8 @@ struct GameConfig {
     
     //Misc.
     struct {
+
+    public:
     
         //The day ends when the in-game minutes reach this value.
         float dayMinutesEnd = GAME_CONFIG::MISC_D::DAY_MINUTES_END;
@@ -286,6 +302,8 @@ struct GameConfig {
     
     //Pikmin-related properties.
     struct {
+
+    public:
     
         //Pikmin will only chase enemies in this range.
         float chaseRange = PIKMIN_D::CHASE_RANGE;
@@ -321,6 +339,8 @@ struct GameConfig {
     
     //General gameplay rules.
     struct {
+
+    public:
     
         //Can a leader throw other leaders?
         bool canThrowLeaders = RULES_D::CAN_THROW_LEADERS;

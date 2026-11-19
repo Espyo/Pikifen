@@ -36,6 +36,8 @@ public:
      * @brief Settings for the cleaner.
      */
     struct Settings {
+
+    public:
     
         /**
          * @brief Values inside of a deadzone will all be considered the same
@@ -43,12 +45,16 @@ public:
          * by itself is being interpreted as purposeful player inputs.
          */
         struct Deadzones {
+
+        public:
         
             /**
              * @brief Deadzones related to the radius of an analog stick, i.e.
              * how far away from the center it is.
              */
             struct Radial {
+
+            public:
             
                 /**
                  * @brief This is your typical analog stick deadzone value.
@@ -128,6 +134,8 @@ public:
              * @brief Deadzones related to analog buttons.
              */
             struct Button {
+
+            public:
             
                 /**
                  * @brief Unpressed deadzone size, in pressure ratio [0 - 1].
@@ -167,6 +175,8 @@ public:
          * frame need to be provided too.
          */
         struct LowPassFilter {
+
+        public:
         
             /**
              * @brief Filter factor [0 - 1]. 0 to disable. This is how much
@@ -188,6 +198,8 @@ public:
          * @brief Other miscellaneous settings.
          */
         struct Misc {
+
+        public:
         
             /**
              * @brief Clamps the coordinates into a unit circle. This is useful

@@ -912,9 +912,6 @@ Small tasks (for when I'm feeling lazy)
         Document the code with comments
         Use #pragma region in header files?
         Remove parameter names in function declarations?
-        Standardize classes and structs -- there's barely any rhyme or reason for me choosing one or the other
-            Maybe place a public:, protected:, or private: tag before ALL sections of the class as relevant?
-            Maybe structs should be POD, everything else should be classes
         Templated function that iterates through a vector's indexes, and if the lambda returns true, deletes the element?
     Cleanup
         Remove magic numbers and magic strings (make numbers and strings into constants)

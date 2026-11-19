@@ -172,7 +172,9 @@ private:
 /**
  * @brief Info about how to run a specific instance of a script action.
  */
-struct ScriptActionInstRunData {
+class ScriptActionInstRunData {
+
+public:
 
     //--- Public members ---
     

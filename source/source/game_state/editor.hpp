@@ -251,7 +251,7 @@ protected:
      */
     struct SelectionList {
     
-        public:
+    public:
         
         //--- Public function declarations ---
         
@@ -288,7 +288,7 @@ protected:
      */
     struct SelectionManager {
     
-        public:
+    public:
         
         //--- Public members ---
         
@@ -417,7 +417,7 @@ protected:
      */
     struct SelectionController {
     
-        public:
+    public:
         
         //--- Public misc. declarations ---
         
@@ -563,7 +563,7 @@ protected:
      */
     struct TransformationWidget {
     
-        public:
+    public:
         
         //--- Public misc. declarations ---
         
@@ -667,7 +667,7 @@ protected:
     /**
      * @brief Info about a dialog box.
      */
-    class Dialog {
+    struct Dialog {
     
     public:
     
@@ -705,6 +705,8 @@ protected:
      * @brief An item of a picker dialog.
      */
     struct PickerItem {
+
+    public:
     
         //--- Public members ---
         
@@ -741,7 +743,7 @@ protected:
     /**
      * @brief Info about a picker dialog.
      */
-    class Picker {
+    struct Picker {
     
     public:
     
@@ -802,7 +804,7 @@ protected:
      */
     struct ChangesManager {
     
-        public:
+    public:
         
         //--- Public function declarations ---
         
@@ -861,6 +863,8 @@ protected:
     
     //Style of the different things to draw in the canvas.
     struct CanvasStyle {
+
+    public:
     
         //Grid alpha [0 - 1].
         float gridAlpha = 1.0f;
@@ -882,7 +886,7 @@ protected:
      */
     struct Command {
     
-        public:
+    public:
         
         //--- Public function declarations ---
         

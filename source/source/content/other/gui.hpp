@@ -172,7 +172,9 @@ class GuiManager;
  * @brief Definition of a GUI item. This has no data about the item's behavior,
  * just data about what it is and where.
  */
-struct GuiItemDef {
+class GuiItemDef {
+
+public:
 
     //--- Public members ---
     
@@ -193,7 +195,7 @@ struct GuiItemDef {
  * @brief Definition of a hardcoded GUI item, an item that must exist in the GUI
  * since the engine expects it.
  */
-struct HardcodedGuiItemDef : public GuiItemDef {
+class HardcodedGuiItemDef : public GuiItemDef {
 
 };
 
@@ -202,7 +204,9 @@ struct HardcodedGuiItemDef : public GuiItemDef {
  * @brief Definition of a custom GUI item, added by the user, that is not a part
  * of the items the engine expects for the GUI.
  */
-struct CustomGuiItemDef : public GuiItemDef {
+class CustomGuiItemDef : public GuiItemDef {
+
+public:
 
     //--- Public members ---
     
@@ -292,6 +296,8 @@ public:
     
     //Information about how the item should be drawn.
     struct DrawInfo {
+
+    public:
     
         //Center pixel coordinates.
         Point center;
@@ -768,6 +774,8 @@ protected:
     
     //Focus cursor.
     struct FocusCursor {
+
+    public:
     
         //Current center coordinates, and base width and height.
         Rect curRect;

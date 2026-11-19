@@ -175,7 +175,9 @@ enum PLAYER_INPUT_ICON_SPRITE {
 /**
  * @brief Mediates everything related to hardware, in the context of controls.
  */
-struct HardwareMediator {
+class HardwareMediator {
+
+public:
 
     //--- Public members ---
     
@@ -204,6 +206,8 @@ struct HardwareMediator {
     //--- Private misc. definitions ---
     
     struct Controller {
+
+    public:
     
         //--- Public members ---
         
@@ -216,6 +220,8 @@ struct HardwareMediator {
     };
     
     struct InputSourceMapEntry {
+
+    public:
     
         //--- Public members ---
         
@@ -245,6 +251,8 @@ struct HardwareMediator {
     };
     
     struct InputSourceIcon {
+
+    public:
     
         //--- Public members ---
         
@@ -258,6 +266,8 @@ struct HardwareMediator {
     };
     
     struct DeviceBrand {
+
+    public:
     
         //--- Public members ---
         

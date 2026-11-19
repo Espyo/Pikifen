@@ -19,14 +19,16 @@
 #include "geometry.hpp"
 
 
-struct Sector;
+class Sector;
 
 
 /**
  * @brief A line segment that delimits a sector -- an edge of a polygon.
  * In DOOM, these are what's known as linedefs.
  */
-struct Edge {
+class Edge {
+
+public:
 
     //--- Public members ---
     
@@ -78,7 +80,9 @@ struct Edge {
  * @brief Intersection between two edges.
  * Used to mark edges as red on the editor.
  */
-struct EdgeIntersection {
+class EdgeIntersection {
+
+public:
 
     //--- Public members ---
     

@@ -44,7 +44,7 @@ const float SLOT_PADDING = 0.1f;
 
 
 /**
- * @brief Constructs a new Inventory struct object.
+ * @brief Constructs a new Inventory object.
  *
  * @param player Whose player this inventory belongs to.
  */
@@ -65,7 +65,7 @@ Inventory::Inventory(Player* player) :
 
 
 /**
- * @brief Destroys the Inventory struct object.
+ * @brief Destroys the Inventory object.
  */
 Inventory::~Inventory() {
 }

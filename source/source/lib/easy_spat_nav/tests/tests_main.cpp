@@ -36,7 +36,9 @@ EasySpatNav::Interface spatNavManager;
 /**
  * @brief Represents a test interface item.
  */
-struct SpatNavTestItem {
+class SpatNavTestItem {
+
+public:
 
     //--- Public members ---
     
@@ -58,7 +60,9 @@ struct SpatNavTestItem {
 /**
  * @brief Represents a test interface.
  */
-struct SpatNavTestInterface {
+class SpatNavTestInterface {
+
+public:
 
     //--- Public members ---
     

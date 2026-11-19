@@ -142,13 +142,15 @@ enum BOSS_MUSIC_STATE {
 #pragma region Classes
 
 
-struct CutsceneMessageBox;
+class CutsceneMessageBox;
 
 
 /**
  * @brief Basic information about the current interlude.
  */
-struct InterludeInfo {
+class InterludeInfo {
+
+public:
 
     //--- Public function declarations ---
     
@@ -175,7 +177,9 @@ struct InterludeInfo {
 /**
  * @brief Basic information about the current big message.
  */
-struct BigMessageInfo {
+class BigMessageInfo {
+
+public:
 
     //--- Public function declarations ---
     
@@ -202,7 +206,9 @@ struct BigMessageInfo {
 /**
  * @brief Information about how an area region is doing.
  */
-struct AreaRegionStatus {
+class AreaRegionStatus {
+
+public:
 
     //--- Public members ---
     
@@ -215,7 +221,9 @@ struct AreaRegionStatus {
 /**
  * @brief Information about how a mission mob group is doing.
  */
-struct MissionMobGroupStatus {
+class MissionMobGroupStatus {
+
+public:
 
     //--- Public members ---
     
@@ -619,7 +627,9 @@ private:
 /**
  * @brief Info about the current cutscene message box, if any.
  */
-struct CutsceneMessageBox {
+class CutsceneMessageBox {
+
+public:
 
     //--- Public members ---
     

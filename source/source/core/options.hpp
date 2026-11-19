@@ -184,12 +184,16 @@ using namespace OPTIONS;
 /**
  * @brief Game options.
  */
-struct Options {
+class Options {
+
+    public:
 
     //--- Public members ---
     
     //Advanced. These typically don't appear in any options menu.
     struct {
+
+    public:
     
         //Draw a trail behind the mouse cursor?
         bool drawCursorTrail = ADVANCED_D::DRAW_CURSOR_TRAIL;
@@ -241,6 +245,8 @@ struct Options {
     
     //Animation editor.
     struct {
+
+    public:
     
         //Background texture for the animation editor, if any.
         string bgPath = ANIM_ED_D::BG_PATH;
@@ -256,6 +262,8 @@ struct Options {
     
     //Area editor.
     struct {
+
+    public:
     
         //Use the advanced interface mode in the area editor?
         bool advancedMode = AREA_ED_D::ADVANCED_MODE;
@@ -301,6 +309,8 @@ struct Options {
     
     //Audio.
     struct {
+
+    public:
     
         //Ambiance sound volume [0 - 1].
         float ambianceSoundVol = AUDIO_D::AMBIANCE_SOUND_VOl;
@@ -321,6 +331,8 @@ struct Options {
     
     //Controls. These do not include control binds.
     struct {
+
+    public:
     
         //Auto-throw mode.
         AUTO_THROW_MODE autoThrowMode = CONTROLS_D::AUTO_THROW;
@@ -354,6 +366,8 @@ struct Options {
     
     //Editors in general.
     struct {
+
+    public:
     
         //Editor's custom style highlight color.
         ALLEGRO_COLOR highlightColor = EDITORS_D::HIGHLIGHT_COLOR;
@@ -386,6 +400,8 @@ struct Options {
     
     //Graphics.
     struct {
+
+    public:
     
         //Camera shake strength multiplier.
         float camShakeMult = GRAPHICS_D::CAM_SHAKE_MULT;
@@ -411,6 +427,8 @@ struct Options {
     
     //GUI editor.
     struct {
+
+    public:
     
         //Grid interval in the GUI editor, in units.
         float gridInterval = GUI_ED_D::GRID_INTERVAL;
@@ -429,6 +447,8 @@ struct Options {
     
     //Misc.
     struct {
+
+    public:
     
         //Dismissing dismisses all.
         bool dismissAll = OPTIONS::MISC_D::DISMISS_ALL;
@@ -462,6 +482,8 @@ struct Options {
     
     //Packs.
     struct {
+
+    public:
     
         //Disabled packs.
         vector<string> disabled;
@@ -473,6 +495,8 @@ struct Options {
     
     //Particle editor.
     struct {
+
+    public:
     
         //Background texture for the particle editor, if any.
         string bgPath = PART_ED_D::BG_PATH;

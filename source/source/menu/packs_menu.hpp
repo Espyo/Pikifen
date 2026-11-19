@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Header for the pack management menu struct and related functions.
+ * Header for the pack management menu object and related functions.
  */
 
 #pragma once

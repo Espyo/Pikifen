@@ -50,7 +50,9 @@ enum HUD_BUBBLE_MOVE_METHOD {
  * @tparam ContentT Type of content the bubble holds.
  */
 template<typename ContentT>
-struct HudBubbleManager {
+class HudBubbleManager {
+
+public:
 
     //--- Public misc. declarations ---
     
@@ -58,6 +60,8 @@ struct HudBubbleManager {
      * @brief Represents a bubble GUI item.
      */
     struct Bubble {
+
+    public:
     
         //--- Public members ---
         

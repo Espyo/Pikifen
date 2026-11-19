@@ -17,14 +17,16 @@ using std::size_t;
 using std::vector;
 
 
-struct Edge;
+class Edge;
 
 
 /**
  * @brief A 2D point, used to determine the end-points of an edge.
  *
  */
-struct Vertex {
+class Vertex {
+
+public:
 
     //--- Public members ---
     

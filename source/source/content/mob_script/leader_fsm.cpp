@@ -3031,8 +3031,8 @@ void LeaderFsm::trySetCorrectStandingAnim(
  * another leader.
  *
  * @param scriptVM The script VM responsible.
- * @param info1 Points to the position struct with the final destination.
- *   If nullptr, the final destination is calculated in this function.
+ * @param info1 Points to the position object with the final destination.
+ * If nullptr, the final destination is calculated in this function.
  * @param info2 Unused.
  */
 void LeaderFsm::updateInGroupChasing(

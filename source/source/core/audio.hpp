@@ -211,7 +211,9 @@ enum MIX_TRACK_TYPE {
 /**
  * @brief Configuration about a given sound effect source.
  */
-struct SoundSourceConfig {
+class SoundSourceConfig {
+
+public:
 
     //--- Public members ---
     
@@ -255,7 +257,9 @@ struct SoundSourceConfig {
  * Typically this is tied to a mob, but it could also just be an
  * abstract source. All sound playback needs to come from a source.
  */
-struct SoundSource {
+class SoundSource {
+
+public:
 
     //--- Public members ---
     
@@ -284,7 +288,9 @@ struct SoundSource {
  * @brief An instance of a sound effect's playback.
  * This needs to be emitted from a sound source.
  */
-struct SoundPlayback {
+class SoundPlayback {
+
+public:
 
     //--- Public members ---
     
@@ -330,7 +336,9 @@ struct SoundPlayback {
  * responsible for setting the right statuses to true. Then the audio manager
  * is responsible for fading them in and out as necessary.
  */
-struct Song : public Content {
+class Song : public Content {
+
+public:
 
     //--- Public members ---
     
@@ -510,7 +518,9 @@ private:
 /**
  * @brief Info on a sound that can be emitted, from a data node.
  */
-struct DataNodeSound {
+class DataNodeSound {
+
+public:
 
     //--- Public members ---
     

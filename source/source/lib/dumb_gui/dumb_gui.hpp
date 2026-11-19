@@ -37,7 +37,9 @@ extern const int WINDOW_DEFAULT_PX_WIDTH;
 
 
 //Information about how an item should be drawn.
-struct DrawInfo {
+class DrawInfo {
+
+public:
 
     //Center X coordinate, in window pixels.
     float centerPxX = 0.0f;

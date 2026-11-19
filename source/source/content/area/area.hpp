@@ -74,7 +74,9 @@ extern const unsigned char DEF_DIFFICULTY;
  * a wall on the landing site part of TIS.
  * It's also used when checking sectors in a certain spot.
  */
-struct Blockmap {
+class Blockmap {
+
+public:
 
     //--- Public members ---
     
@@ -113,7 +115,9 @@ struct Blockmap {
  * but it doesn't have the data of a LIVING mob. This only holds its
  * position and type data, plus some other tiny things.
  */
-struct MobGen {
+class MobGen {
+
+public:
 
     //--- Public members ---
     
@@ -154,7 +158,9 @@ struct MobGen {
  * @brief Info about the shadows cast onto the area by a tree
  * (or whatever the game maker desires).
  */
-struct TreeShadow {
+class TreeShadow {
+
+public:
 
     //--- Public members ---
     
@@ -189,7 +195,9 @@ struct TreeShadow {
 /**
  * @brief A rectangular region within the area. Used for all sorts of purposes.
  */
-struct AreaRegion {
+class AreaRegion {
+
+public:
 
     //--- Public members ---
     
@@ -205,7 +213,9 @@ struct AreaRegion {
 /**
  * @brief A reminder that the area maker jotted down in the area.
  */
-struct AreaMakerReminder {
+class AreaMakerReminder {
+
+public:
 
     //--- Public members ---
     
@@ -224,7 +234,9 @@ struct AreaMakerReminder {
  * This structure is so that the sectors know how to communicate with
  * the edges, the edges with the vertexes, etc.
  */
-struct Area : public Content {
+class Area : public Content {
+
+public:
 
     //--- Public members ---
     

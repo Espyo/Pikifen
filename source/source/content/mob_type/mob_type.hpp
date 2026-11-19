@@ -61,6 +61,8 @@ public:
      * @brief Info about a mob's reach.
      */
     struct Reach {
+
+    public:
     
         //--- Public members ---
         
@@ -85,6 +87,8 @@ public:
      * @brief Info about how a mob spawns another.
      */
     struct SpawnInfo {
+
+    public:
     
         //--- Public members ---
         
@@ -124,6 +128,8 @@ public:
      * @brief Info about how a mob can be a child of another.
      */
     struct Child {
+
+    public:
     
         //--- Public members ---
         
@@ -197,6 +203,8 @@ public:
      * to better help users set the properties of a mob instance.
      */
     struct AreaEditorProp {
+
+    public:
     
         //--- Public members ---
         
@@ -233,6 +241,8 @@ public:
      * @brief Info on how vulnerable the object is to a certain source.
      */
     struct Vulnerability {
+
+    public:
     
         //--- Public members ---
         
@@ -256,6 +266,8 @@ public:
      * @brief Info on a sound effect this mob can emit.
      */
     struct Sound : public DataNodeSound {
+
+    public:
     
         //--- Public members ---
         

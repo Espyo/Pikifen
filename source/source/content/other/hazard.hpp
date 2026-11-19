@@ -25,7 +25,7 @@ using std::string;
 using std::vector;
 
 
-struct LiquidType;
+class LiquidType;
 class StatusType;
 
 
@@ -37,7 +37,9 @@ class StatusType;
  * this is not necessarily the case. A hazard is just an abstract danger,
  * not an object that emits said danger.
  */
-struct Hazard : public Content {
+class Hazard : public Content {
+
+public:
 
     //--- Public members ---
     

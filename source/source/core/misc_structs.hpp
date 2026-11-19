@@ -243,7 +243,9 @@ enum STRING_TOKEN {
  * @brief Info about the game camera. Where it is, where it wants
  * to go, etc.
  */
-struct Camera {
+class Camera {
+
+public:
 
     //--- Public members ---
     
@@ -289,7 +291,9 @@ struct Camera {
  * @brief A segment of the game window that shows a view into the game world.
  * For instance, regular gameplay, the radar, the area editor's canvas, etc.
  */
-struct Viewport {
+class Viewport {
+
+public:
 
     //--- Public members ---
     
@@ -334,7 +338,9 @@ struct Viewport {
  * @brief Info about a parameter that a command-like thing
  * can receive.
  */
-struct CommandParam {
+class CommandParam {
+
+public:
 
     //--- Public members ---
     
@@ -379,7 +385,9 @@ struct CommandParam {
  * @brief Manages any important log messages that occur with the engine's
  * content or logic.
  */
-struct LogManager {
+class LogManager {
+
+public:
 
     //--- Public function declarations ---
     
@@ -426,7 +434,9 @@ struct LogManager {
 /**
  * @brief Info about a token in a string.
  */
-struct StringToken {
+class StringToken {
+
+public:
 
     //--- Public members ---
     
@@ -445,7 +455,9 @@ struct StringToken {
 /**
  * @brief Info about the operative system's mouse cursor.
  */
-struct MouseCursor {
+class MouseCursor {
+
+public:
 
     //--- Public members ---
     
@@ -490,13 +502,15 @@ struct MouseCursor {
 
 
 
-struct Player;
+class Player;
 
 
 /**
  * @brief Represents a possible inventory item.
  */
-struct InventoryItem {
+class InventoryItem {
+
+public:
 
     //--- Public members ---
     
@@ -526,7 +540,9 @@ struct InventoryItem {
  * @brief Holds all of the possible inventory items; their names, icons,
  * what they do when used, etc.
  */
-struct InventoryItemDatabase {
+class InventoryItemDatabase {
+
+public:
 
     //--- Public function declarations ---
     
@@ -550,7 +566,9 @@ struct InventoryItemDatabase {
 /**
  * @brief Manages random number generation.
  */
-struct RngManager {
+class RngManager {
+
+public:
 
     //--- Public members ---
     
@@ -580,7 +598,9 @@ struct RngManager {
  * writing them in data files much easier.
  * On the get functions, specify the name of the child and the variable.
  */
-struct GetterWriter {
+class GetterWriter {
+
+public:
 
     //--- Public members ---
     
@@ -662,7 +682,9 @@ struct GetterWriter {
  * On the set functions, specify the name of the child and the variable.
  * If the child is empty, the variable will not be set.
  */
-struct ReaderSetter {
+class ReaderSetter {
+
+public:
 
     //--- Public members ---
     
@@ -736,7 +758,9 @@ struct ReaderSetter {
 /**
  * @brief Manages a collection of script vars and their values.
  */
-struct ScriptVarManager {
+class ScriptVarManager {
+
+public:
 
     //--- Public functions ---
     
@@ -779,7 +803,9 @@ struct ScriptVarManager {
 /**
  * @brief List of content that is needed system-wide.
  */
-struct SystemContentList {
+class SystemContentList {
+
+public:
 
     //--- Public members ---
     
@@ -1088,7 +1114,9 @@ struct SystemContentList {
 /**
  * @brief List of internal names of content that is needed by the system.
  */
-struct SystemContentNames {
+class SystemContentNames {
+
+public:
 
     //--- Public members ---
     
@@ -1475,7 +1503,9 @@ struct SystemContentNames {
 /**
  * @brief Manages fade ins/outs for transitions.
  */
-struct FadeManager {
+class FadeManager {
+
+public:
 
     public:
     
@@ -1516,7 +1546,9 @@ struct FadeManager {
 /**
  * @brief Manages system notifications, drawing them, queuing them, etc.
  */
-struct SystemNotificationManager {
+class SystemNotificationManager {
+
+public:
 
     //--- Public function declarations ---
     
@@ -1545,6 +1577,8 @@ struct SystemNotificationManager {
     
     //Represents a notification.
     struct Notification {
+    
+    public:
     
         //--- Public members ---
         
@@ -1576,9 +1610,9 @@ struct SystemNotificationManager {
  * @brief Information about any sort of GUI text input field,
  * with support for Allegro events.
  */
-struct TextInput {
+class TextInput {
 
-    public:
+public:
     
     //--- Public members ---
     
@@ -1615,9 +1649,9 @@ struct TextInput {
  * leader, telling the player what button to press to do something,
  * like plucking.
  */
-struct LeaderPrompt {
+class LeaderPrompt {
 
-    public:
+public:
     
     //--- Public function declarations ---
     
@@ -1658,7 +1692,9 @@ struct LeaderPrompt {
  * @brief Info on how a bitmap should be drawn, in regards to
  * translation, rotation, coloring, etc.
  */
-struct BitmapEffect {
+class BitmapEffect {
+
+public:
 
     //--- Public members ---
     
@@ -1690,9 +1726,9 @@ enum PERF_MON_STATE {
  * @brief Info about how long certain things took. Useful for makers
  * to monitor performance with.
  */
-struct PerformanceMonitor {
+class PerformanceMonitor {
 
-    public:
+public:
     
     //--- Public function declarations ---
     
@@ -1715,7 +1751,7 @@ struct PerformanceMonitor {
      */
     struct Page {
     
-        public:
+    public:
         
         //--- Public members ---
         
@@ -1782,16 +1818,16 @@ struct PerformanceMonitor {
 };
 
 
-struct SubgroupTypeManager;
+class SubgroupTypeManager;
 
 
 /**
  * @brief Represents a leader subgroup type;
  * a Red Pikmin, a Yellow Pikmin, a leader, etc.
  */
-struct SubgroupType {
+class SubgroupType {
 
-    public:
+public:
     
     //--- Public function declarations ---
     
@@ -1819,9 +1855,9 @@ private:
 /**
  * @brief Manages what types of subgroups exist.
  */
-struct SubgroupTypeManager {
+class SubgroupTypeManager {
 
-    public:
+public:
     
     //--- Public function declarations ---
     
@@ -1852,7 +1888,9 @@ struct SubgroupTypeManager {
 /**
  * @brief Info about the engine's lifetime statistics.
  */
-struct Statistics {
+class Statistics {
+
+public:
 
     //--- Public members ---
     
@@ -1916,7 +1954,9 @@ struct Statistics {
 /**
  * @brief Cached information about how an edge should draw its offset effects.
  */
-struct EdgeOffsetCache {
+class EdgeOffsetCache {
+
+public:
 
     //--- Public members ---
     
@@ -1944,7 +1984,9 @@ struct EdgeOffsetCache {
 /**
  * @brief Info about the current whistle usage.
  */
-struct Whistle {
+class Whistle {
+
+public:
 
     //--- Public members ---
     
@@ -2150,6 +2192,8 @@ protected:
      * @brief Info about an asset.
      */
     struct AssetUse {
+
+    public:
     
         //--- Public members ---
         

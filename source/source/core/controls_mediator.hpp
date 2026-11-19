@@ -331,7 +331,9 @@ enum CONTROLS_GAME_STATE {
  * @brief Data about a type of action that can be performed in the game.
  * This data is pertinent only to Pikifen, not the library.
  */
-struct PlayerActionType : public Inpution::ActionType {
+class PlayerActionType : public Inpution::ActionType {
+
+public:
 
     //--- Public members ---
     
@@ -362,9 +364,9 @@ struct PlayerActionType : public Inpution::ActionType {
 /**
  * @brief Mediates everything control-related in Pikifen.
  */
-struct ControlsMediator {
+class ControlsMediator {
 
-    public:
+public:
     
     //--- Public function declarations ---
     

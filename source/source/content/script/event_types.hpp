@@ -346,7 +346,9 @@ buildEnumNames(scriptEvScriptFileINames, FSM_EV)({
 /**
  * @brief Info about a type of FSM event.
  */
-struct FsmEventType {
+class FsmEventType {
+
+public:
 
     //--- Public members ---
     

@@ -76,7 +76,9 @@ Point fromString<Point>(const string& s);
  * @brief Customizes how an auto-repeater's triggers change in frequency
  * over time.
  */
-struct AutoRepeaterSettings {
+class AutoRepeaterSettings {
+
+public:
 
     //--- Public members ---
     
@@ -96,7 +98,9 @@ struct AutoRepeaterSettings {
  * @brief Allows something to be automatically repeated over time, with logic
  * to repeat more quickly the longer it's active for.
  */
-struct AutoRepeater {
+class AutoRepeater {
+
+public:
 
     //--- Public members ---
     
@@ -121,12 +125,14 @@ struct AutoRepeater {
 
 
 /**
- * @brief A struct that makes it simpler to obtain data
+ * @brief An object that makes it simpler to obtain data
  * for a given simple keyframe animation based on interpolation.
  * Keyframe times go from 0 (beginning) to 1 (end).
  */
 template<typename InterT>
-struct KeyframeInterpolator {
+class KeyframeInterpolator {
+
+public:
 
     public:
     
@@ -425,7 +431,9 @@ private:
  * @brief Info about where the player wants a leader
  * (or something else) to go, based on the player's inputs.
  */
-struct MovementInfo {
+class MovementInfo {
+
+public:
 
     //--- Public members ---
     
@@ -455,7 +463,9 @@ struct MovementInfo {
  *
  * Special thanks to https://www.youtube.com/watch?v=tu-Qe66AvtY
  */
-struct Shaker {
+class Shaker {
+
+public:
 
     //--- Public members ---
     
@@ -502,7 +512,9 @@ struct Shaker {
  * @brief A timer. You can set it to start at a pre-determined time,
  * to tick, etc.
  */
-struct Timer {
+class Timer {
+
+public:
 
     //--- Public members ---
     

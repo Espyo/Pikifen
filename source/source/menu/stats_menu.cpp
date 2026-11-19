@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Statistics menu struct and functions.
+ * Statistics menu object and functions.
  */
 
 #include "stats_menu.hpp"

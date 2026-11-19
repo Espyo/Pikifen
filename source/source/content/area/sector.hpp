@@ -50,7 +50,9 @@ buildEnumNames(sectorTypeINames, SECTOR_TYPE)({
 /**
  * @brief Info about a sector's texture.
  */
-struct SectorTexture {
+class SectorTexture {
+
+public:
 
     //--- Public members ---
     
@@ -76,7 +78,9 @@ struct SectorTexture {
  * a polygon (or multiple). It has a certain height, and its appearance
  * is determined by its floors.
  */
-struct Sector {
+class Sector {
+
+public:
 
     //--- Public members ---
     

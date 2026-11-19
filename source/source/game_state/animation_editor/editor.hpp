@@ -223,6 +223,8 @@ private:
     
     //Info about the "new" dialog.
     struct {
+
+    public:
     
         //Selected pack.
         string pack;

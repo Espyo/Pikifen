@@ -80,7 +80,7 @@ enum HITBOX_SURFACE_TYPE {
 #pragma region Classes
 
 
-struct Hazard;
+class Hazard;
 
 
 /**

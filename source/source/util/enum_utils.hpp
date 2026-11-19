@@ -35,10 +35,14 @@ using std::vector;
  * @tparam T Enum type.
  */
 template<class EnumT>
-struct EnumNamePair {
+class EnumNamePair {
+
+public:
+
     using SavedEnumT = EnumT;
     const EnumT value;
     const char* const name;
+    
 };
 
 

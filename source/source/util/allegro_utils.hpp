@@ -66,7 +66,9 @@ enum FS_DELETE_RESULT {
 /**
  * @brief State of the Allegro blender.
  */
-struct AllegroBlenderState {
+class AllegroBlenderState {
+
+public:
 
     //--- Public members ---
     

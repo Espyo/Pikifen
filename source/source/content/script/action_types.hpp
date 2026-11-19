@@ -23,7 +23,7 @@ class Mob;
 class MobType;
 class ScriptActionDef;
 class ScriptVM;
-struct ScriptActionInstRunData;
+class ScriptActionInstRunData;
 
 
 //Types of script action.
@@ -900,7 +900,9 @@ typedef void (ScriptActionTypeCode)(ScriptActionInstRunData& data);
 /**
  * @brief Info about a type of script action.
  */
-struct ScriptActionType {
+class ScriptActionType {
+
+public:
 
     //--- Public members ---
     

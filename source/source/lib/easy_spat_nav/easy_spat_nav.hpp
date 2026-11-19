@@ -72,6 +72,8 @@ public:
     
     //Settings for how it works.
     struct Settings {
+
+    public:
     
         //--- Public members ---
         
@@ -100,6 +102,8 @@ public:
     
     //Heuristics for how it decides on items.
     struct Heuristics {
+
+    public:
     
         //If true, only use the center coordinates of items when comparing them.
         //If false, use the closest point along the limits, which takes the
@@ -137,6 +141,8 @@ public:
      * @brief Represents an item when it was checked for the latest navigation.
      */
     struct DebugItem {
+
+    public:
     
         //--- Public members ---
         
@@ -197,6 +203,8 @@ protected:
      * item.
      */
     struct Item {
+
+    public:
     
         //--- Public members ---
         
@@ -234,6 +242,8 @@ protected:
      * @brief An item with its units changed to be relative to the focus.
      */
     struct ItemWithRelUnits {
+
+    public:
     
         //--- Public members ---
         

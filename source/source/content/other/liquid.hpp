@@ -25,10 +25,10 @@ using std::string;
 using std::vector;
 
 
-struct Hazard;
+class Hazard;
 class InWorldFraction;
 class Mob;
-struct Sector;
+class Sector;
 class StatusType;
 
 
@@ -68,7 +68,9 @@ enum LIQUID_STATE {
 /**
  * @brief Defines a body of water, or another liquid, within the area.
  */
-struct Liquid {
+class Liquid {
+
+public:
 
     //--- Public members ---
     
@@ -138,7 +140,9 @@ struct Liquid {
  * A hazard can be associated with a liquid. It's the way the
  * engine has to know if a sector is to be shown as a liquid or not.
  */
-struct LiquidType : public Content {
+class LiquidType : public Content {
+
+public:
 
     //--- Public members ---
     

@@ -28,7 +28,9 @@ using std::vector;
  * @brief Info about the current amount of sprays and ingredients
  * for the available spray types.
  */
-struct SprayStats {
+class SprayStats {
+
+public:
 
     //--- Public members ---
     
@@ -41,12 +43,14 @@ struct SprayStats {
 };
 
 
-struct Player;
+class Player;
 
 /**
  * @brief One of the player teams for when players are playing cooperatively.
  */
-struct PlayerTeam {
+class PlayerTeam {
+
+public:
 
     //--- Public members ---
     
@@ -62,7 +66,9 @@ struct PlayerTeam {
 /**
  * @brief Represents one of the players playing the game.
  */
-struct Player {
+class Player {
+
+public:
 
     //--- Public members ---
     

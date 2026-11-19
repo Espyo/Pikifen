@@ -61,13 +61,15 @@ enum BUBBLE_RELATION {
 };
 
 
-struct Player;
+class Player;
 
 
 /**
  * @brief Holds information about the in-game HUD.
  */
-struct Hud {
+class Hud {
+
+public:
 
     //--- Public misc. declarations ---
     
@@ -75,6 +77,8 @@ struct Hud {
      * @brief Bitmap and color of a leader's icon.
      */
     struct LeaderIconBubble {
+
+    public:
     
         //--- Public members ---
         
@@ -90,6 +94,8 @@ struct Hud {
      * @brief Health ratio and caution animation timer of a leader's health.
      */
     struct LeaderHealthBubble {
+
+    public:
     
         //--- Public members ---
         

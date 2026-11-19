@@ -126,9 +126,9 @@ public:
  * this contains data that can and should be instantiated once, and then
  * used globally.
  */
-struct ScriptExecutionAuxData {
+class ScriptExecutionAuxData {
 
-    public:
+public:
     
     //--- Public members ---
     

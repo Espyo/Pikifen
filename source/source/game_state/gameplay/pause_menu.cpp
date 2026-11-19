@@ -72,7 +72,7 @@ const string STATUS_GUI_FILE_NAME = "pause_menu_status";
 
 
 /**
- * @brief Constructs a new pause menu struct object.
+ * @brief Constructs a new pause menu object.
  *
  * @param startOnRadar True if the page to start on should be the radar,
  * false if it should be the system page.
@@ -149,7 +149,7 @@ PauseMenu::PauseMenu(bool startOnRadar) {
 
 
 /**
- * @brief Destroys the pause menu struct object.
+ * @brief Destroys the pause menu object.
  */
 PauseMenu::~PauseMenu() {
     gui.destroy();

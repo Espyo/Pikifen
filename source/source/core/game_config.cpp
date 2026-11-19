@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Struct that holds the game's configuration, and related functions.
+ * Object that holds the game's configuration, and related functions.
  */
 
 #include "game_config.hpp"

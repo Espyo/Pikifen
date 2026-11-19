@@ -111,6 +111,8 @@ private:
     bool useBg = false;
     
     struct {
+
+    public:
     
         //Selected pack.
         string pack;

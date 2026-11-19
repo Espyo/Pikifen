@@ -126,7 +126,7 @@ While DumbGui works out of the box, you can create classes that derive from `Man
   * Create classes that extend `Manager` and `Item`, and make their constructors fill in lambdas that will always be the same (`Manager::onGetWindowSizePx`, `Manager::on*ClippingRectangle`).
   * Create classes that inherit from your extended `Item` class for different types of widgets, like buttons, sliders, labels, etc. Their class members can include the text to show, and their constructors can automatically fill in lambdas that draw those things.
   * Add wrappers for getting and setting the raw centers (`Item::rawCenterRatio*`), raw sizes (`Item::rawSizeRatio*`), and so on, so you can use your own higher-level structs like a `Point` or a `Rect`.
-  * Create `Item` class members for drawing callbacks that instead use a custom [`DrawInfo`](#drawinfo) class with higher-level structs. Then, make the manager's drawing logic (`Item::draw`) convert the struct and call those callbacks instead.
+  * Create `Item` class members for drawing callbacks that instead use a custom [`DrawInfo`](#drawinfo) class with higher-level structs. Then, make the manager's drawing logic (`Item::draw`) convert the class and call those callbacks instead.
   * Have the `Manager` store a pointer to the "back button" or "confirm button", so users can hit their "menu back" or "menu OK" keys/buttons to instantly activate (`Item::activate`) that item.
 * For more interesting GUIs:
   * Add a menu animation system to `Manager` that can make items slide into view, fade away, etc. When it's time to obtain an item's coordinates for drawing (`Manager::getItemDrawInfo`), the manager can check if it's mid-animation and return the coordinates offset by some amount.

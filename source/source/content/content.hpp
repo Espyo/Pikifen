@@ -99,7 +99,9 @@ enum CONTENT_LOAD_LEVEL {
 /**
  * @brief A manifest record of a piece of content in the disk.
  */
-struct ContentManifest {
+class ContentManifest {
+
+public:
 
     //--- Public members ---
     
@@ -188,7 +190,9 @@ public:
 /**
  * @brief Data about an installed pack.
  */
-struct Pack {
+class Pack {
+
+public:
 
     //--- Public members ---
     

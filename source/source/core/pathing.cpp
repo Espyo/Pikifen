@@ -436,6 +436,9 @@ PATH_RESULT aStar(
      * @brief Represents a node's data in the algorithm.
      */
     struct Node {
+
+    public:
+        
         //In the best known path to this node, this is the known
         //distance from the start node to this one.
         float sinceStart = FLT_MAX;
@@ -446,6 +449,7 @@ PATH_RESULT aStar(
         
         //Estimated distance if the final path takes this node.
         float estimated = FLT_MAX;
+        
     };
     
     //All nodes that we want to visit.

@@ -136,6 +136,8 @@ private:
      * @brief Represents a suggested texture.
      */
     struct TextureSuggestion {
+
+    public:
     
         //--- Public members ---
         
@@ -157,6 +159,8 @@ private:
      * @brief Represents a point in the current layout drawing.
      */
     struct LayoutDrawingNode {
+
+    public:
     
         //--- Public members ---
         
@@ -201,6 +205,8 @@ private:
      * @brief Info pertaining to a sector split operation.
      */
     struct SectorSplit {
+
+    public:
     
         //--- Public members ---
         
@@ -229,6 +235,8 @@ private:
     
     //Style of the different things to draw in the canvas.
     struct AreaEdCanvasStyle : CanvasStyle {
+
+    public:
     
         //Texture alpha, [0 - 1].
         float textureAlpha = 1.0f;
@@ -878,6 +886,8 @@ private:
     MISSION_PRESET missionPresetDialogPreset = MISSION_PRESET_CUSTOM;
     
     struct {
+
+    public:
     
         //Selected pack.
         string pack;

@@ -43,7 +43,9 @@ enum V_ALIGN_MODE {
 /**
  * @brief Simple 2D point.
  */
-struct Point {
+class Point {
+
+public:
 
     //--- Public members ---
     
@@ -99,7 +101,9 @@ const Point operator/(float n, const Point& p);
  * only the squared and sqrt()'d numbers, and setting the sqrt()'d number
  * to LARGE_FLOAT if it is uncached.
  */
-struct Distance {
+class Distance {
+
+public:
 
     //--- Public function declarations ---
     
@@ -148,7 +152,9 @@ struct Distance {
  * Essentially the same as Pose2d, but separated for code clarity,
  * based on needs.
  */
-struct Transform2d {
+class Transform2d {
+
+public:
 
     //--- Public members ---
     
@@ -171,7 +177,9 @@ struct Transform2d {
  * Essentially the same as Transform2d, but separated for code clarity,
  * based on needs.
  */
-struct Pose2d {
+class Pose2d {
+
+public:
 
     //--- Public members ---
     
@@ -190,7 +198,9 @@ struct Pose2d {
 /**
  * @brief A rectangle, defined by a center point and a size.
  */
-struct Rect {
+class Rect {
+
+public:
 
     //--- Public members ---
     
@@ -212,7 +222,9 @@ struct Rect {
  * @brief A rectangle, defined by its top-left corner (minimum coordinates)
  * and its bottom-right corner (maximum coordinates).
  */
-struct RectCorners {
+class RectCorners {
+
+public:
 
     //--- Public members ---
     

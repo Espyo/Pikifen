@@ -453,7 +453,9 @@ enum MISSION_SCORE_CRITERIA_OLD {
 /**
  * @brief Represents an end condition definition in the mission.
  */
-struct MissionEndCond {
+class MissionEndCond {
+
+public:
 
     //--- Public members ---
     
@@ -495,7 +497,9 @@ struct MissionEndCond {
 /**
  * @brief Definition of a group of mobs that is relevant to a mission.
  */
-struct MissionMobGroup {
+class MissionMobGroup {
+
+public:
 
     //--- Public members ---
     
@@ -524,7 +528,9 @@ struct MissionMobGroup {
 /**
  * @brief One rule definition for how the score is determined.
  */
-struct MissionScoreCriterion {
+class MissionScoreCriterion {
+
+public:
 
     //--- Public members ---
     
@@ -549,7 +555,9 @@ struct MissionScoreCriterion {
 /**
  * @brief Represents the sort of stuff that should be in a mission HUD item.
  */
-struct MissionHudItem {
+class MissionHudItem {
+
+public:
 
     //--- Public members ---
     
@@ -585,7 +593,9 @@ struct MissionHudItem {
 /**
  * @brief Info about a given area's mission.
  */
-struct MissionData {
+class MissionData {
+
+public:
 
     //--- Public members ---
     
@@ -664,7 +674,9 @@ struct MissionData {
 /**
  * @brief Info about a given mission's best attempt record.
  */
-struct MissionRecord {
+class MissionRecord {
+
+public:
 
     //--- Public members ---
     
@@ -703,13 +715,15 @@ struct MissionRecord {
 };
 
 
-struct Area;
+class Area;
 
 
 /**
  * @brief Database of all of the player's mission records.
  */
-struct MissionRecords {
+class MissionRecords {
+
+public:
 
     //--- Public members ---
     
@@ -753,6 +767,8 @@ public:
      * @brief Static information about this type.
      */
     struct Info {
+
+    public:
     
         //Its name.
         string name;
@@ -1143,6 +1159,8 @@ public:
      * @brief Information about the type.
      */
     struct Info {
+    
+    public:
     
         //--- Public members ---
         

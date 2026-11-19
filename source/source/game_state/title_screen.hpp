@@ -119,6 +119,8 @@ private:
      * @brief Represents a Pikmin in the game's wordmark.
      */
     struct WordmarkPikmin {
+
+    public:
     
         //--- Public members ---
         

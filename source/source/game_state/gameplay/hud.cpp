@@ -105,7 +105,7 @@ const float UNNECESSARY_ITEMS_FADE_OUT_SPEED = 0.5f;
 
 
 /**
- * @brief Constructs a new HUD struct object.
+ * @brief Constructs a new HUD object.
  */
 Hud::Hud() :
     leaderIconMgr(&gui),
@@ -902,7 +902,7 @@ Hud::Hud() :
 
 
 /**
- * @brief Destroys the HUD struct object.
+ * @brief Destroys the HUD object.
  */
 Hud::~Hud() {
     game.content.bitmaps.list.free(bmpBubble);

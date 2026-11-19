@@ -23,7 +23,9 @@ using std::string;
 /**
  * @brief Manages everything regarding the installed game content packs.
  */
-struct PackManager {
+class PackManager {
+
+public:
 
     //--- Public members ---
     
@@ -56,7 +58,9 @@ struct PackManager {
  * @brief Manages everything regarding game content, be it assets, types of
  * mobs, etc.
  */
-struct ContentManager {
+class ContentManager {
+
+public:
 
     //--- Public members ---
     

@@ -607,6 +607,8 @@ void AreaEditor::drawCrossSectionGraph() {
          * @brief Info about a split.
          */
         struct Split {
+
+        public:
         
             //--- Public members ---
             

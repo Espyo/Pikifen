@@ -120,7 +120,9 @@ enum ACTION_VALUE_TYPE {
  * like a specific button on a specific game controller, a specific key on
  * the keyboard, etc.
  */
-struct InputSource {
+class InputSource {
+
+public:
 
     //--- Public members ---
     
@@ -152,7 +154,9 @@ struct InputSource {
  * @brief Defines an instance of a specific input: a specific gesture made
  * by a human on a specific source of a specific piece of hardware.
  */
-struct Input {
+class Input {
+
+public:
 
     //--- Public members ---
     
@@ -169,7 +173,9 @@ struct Input {
  * @brief Defines a bind between a specific input source and
  * an action type. This is what's typically set in the game's options.
  */
-struct Bind {
+class Bind {
+
+public:
 
     //--- Public members ---
     
@@ -196,7 +202,9 @@ struct Bind {
 /**
  * @brief Represents one of the game's possible actions.
  */
-struct ActionType {
+class ActionType {
+
+public:
 
     //--- Public members ---
     
@@ -248,7 +256,9 @@ struct ActionType {
  * gameplay activity, without any notion of hardware input. It's a pure
  * representation of what the player wants to do regardless of how they did it.
  */
-struct Action {
+class Action {
+
+public:
 
     //--- Public members ---
     
@@ -273,7 +283,9 @@ struct Action {
 /**
  * @brief Info about a control manager's options.
  */
-struct ManagerOptions {
+class ManagerOptions {
+
+public:
 
     //--- Public members ---
     
@@ -312,7 +324,9 @@ struct ManagerOptions {
  * It also has logic to do some cleanup like normalizing a game controller's
  * analog stick positions.
  */
-struct Manager {
+class Manager {
+
+public:
 
     //--- Public members ---
     
@@ -361,6 +375,8 @@ struct Manager {
      * @brief Information about an action type's current status.
      */
     struct ActionTypeStatus {
+
+    public:
     
         //--- Public members ---
         
@@ -383,6 +399,8 @@ struct Manager {
      * @brief Represents one of the game's macro states.
      */
     struct GameState {
+
+    public:
     
         //--- Public members ---
         
@@ -396,6 +414,8 @@ struct Manager {
      * @brief Rule for ignoring a given input source.
      */
     struct IgnoreRule {
+
+    public:
     
         //--- Public members ---
         

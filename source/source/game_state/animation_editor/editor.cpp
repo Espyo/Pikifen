@@ -1878,6 +1878,8 @@ void AnimationEditor::spriteBmpFloodFill(
      * @brief A point, but with integer coordinates.
      */
     struct IntPoint {
+
+    public:
     
         //--- Public members ---
         

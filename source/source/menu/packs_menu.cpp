@@ -6,7 +6,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Pack management menu struct and functions.
+ * Pack management menu object and functions.
  */
 
 #include "packs_menu.hpp"

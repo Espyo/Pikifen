@@ -27,8 +27,8 @@ using std::vector;
 
 
 class Mob;
-struct Sector;
-struct PathLink;
+class Sector;
+class PathLink;
 
 
 #pragma region Constants
@@ -177,7 +177,9 @@ extern const float MIN_STOP_RADIUS;
 /**
  * @brief Settings about how a mob should follow a path.
  */
-struct PathFollowSettings {
+class PathFollowSettings {
+
+public:
 
     //--- Public members ---
     
@@ -218,7 +220,9 @@ struct PathFollowSettings {
  * Then they move stop by stop, following the connections, until they
  * reach the final stop and go wherever they need.
  */
-struct PathStop {
+class PathStop {
+
+public:
 
     //--- Public members ---
     
@@ -263,7 +267,9 @@ struct PathStop {
  * @brief Info about a path link. A path stop can link to N other
  * path stops, and this structure holds information about a connection.
  */
-struct PathLink {
+class PathLink {
+
+public:
 
     //--- Public members ---
     
@@ -301,7 +307,9 @@ struct PathLink {
  * @brief Represents a path link in the editor. This can represent either one
  * one-way link, or both of the links that make up a two-way link.
  */
-struct EditorPathLink {
+class EditorPathLink {
+
+public:
 
     //--- Public members ---
     
@@ -326,7 +334,9 @@ struct EditorPathLink {
  * obstacle affected them or not, is because this obstacle could've freed
  * a different route.
  */
-struct PathManager {
+class PathManager {
+
+public:
 
     //--- Public members ---
     

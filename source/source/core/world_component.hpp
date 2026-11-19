@@ -13,9 +13,9 @@
 #include <cstdio>
 
 
-struct Sector;
+class Sector;
 class Mob;
-struct Particle;
+class Particle;
 
 
 /**

@@ -50,7 +50,9 @@ enum SHADER_TYPE {
 /**
  * @brief Manages everything regarding shaders.
  */
-struct ShaderManager {
+class ShaderManager {
+
+public:
 
     //--- Public members ---
     

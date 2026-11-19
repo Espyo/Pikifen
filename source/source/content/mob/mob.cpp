@@ -2444,7 +2444,7 @@ float Mob::getSpeedMultiplier() const {
  * @param nextSPtr Next sprite in the animation, if any.
  * @param interpolationFactor If we're meant to interpolate from the current
  * sprite to the next, specify the interpolation factor [0 - 1] here.
- * @param info Struct to fill the info with.
+ * @param info Object to fill the info with.
  * @param effects What effects to use. Use SPRITE_BMP_EFFECT_FLAG for this.
  */
 void Mob::getSpriteBitmapEffects(

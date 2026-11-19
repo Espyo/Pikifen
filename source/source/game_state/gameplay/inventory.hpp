@@ -26,13 +26,15 @@ extern const float SLOT_PADDING;
 }
 
 
-struct Player;
+class Player;
 
 
 /**
  * @brief Represents an instance of an item in the inventory.
  */
-struct InventoryItemInstance {
+class InventoryItemInstance {
+
+public:
 
     //--- Public members ---
     
@@ -48,7 +50,9 @@ struct InventoryItemInstance {
 /**
  * @brief Holds information about the player's in-game inventory GUI.
  */
-struct Inventory {
+class Inventory {
+
+public:
 
     //--- Public members ---
     

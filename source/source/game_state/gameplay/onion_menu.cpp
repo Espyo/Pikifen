@@ -39,7 +39,7 @@ const string TYPE_GUI_FILE_NAME = "onion_menu_pikmin_type";
 
 
 /**
- * @brief Constructs a new Onion menu struct object.
+ * @brief Constructs a new Onion menu object.
  *
  * @param nPtr Pointer to the nest information struct.
  * @param lPtr Leader responsible.
@@ -580,7 +580,7 @@ OnionMenu::OnionMenu(
 
 
 /**
- * @brief Destroys the Onion menu struct object.
+ * @brief Destroys the Onion menu object.
  */
 OnionMenu::~OnionMenu() {
     gui.destroy();
@@ -1180,7 +1180,7 @@ void OnionMenu::update() {
 
 
 /**
- * @brief Constructs a new Onion menu type struct object.
+ * @brief Constructs a new Onion menu type object.
  *
  * @param idx Index of the Pikmin type in the nest object.
  * @param pikType The Pikmin type.

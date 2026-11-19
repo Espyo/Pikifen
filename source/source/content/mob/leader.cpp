@@ -443,6 +443,8 @@ void Leader::dismissLogic(bool forceDismissAll) {
      * @brief Info about a group subgroup when being dismissed.
      */
     struct DismissSubgroup {
+
+    public:
     
         //--- Public members ---
         
@@ -545,6 +547,8 @@ void Leader::dismissLogic(bool forceDismissAll) {
      * etc. For every subgroup we place, we must update the thickness.
      */
     struct Row {
+
+    public:
     
         //--- Public members ---
         

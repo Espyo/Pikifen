@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Header for the area selection menu struct and related functions.
+ * Header for the area selection menu object and related functions.
  */
 
 #pragma once

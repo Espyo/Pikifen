@@ -284,7 +284,9 @@ public:
 /**
  * @brief Instance of an active status effect on a mob.
  */
-struct Status {
+class Status {
+
+public:
 
     //--- Public members ---
     
@@ -315,7 +317,9 @@ struct Status {
 /**
  * @brief Instance of the buildup of a status on a mob.
  */
-struct StatusBuildup {
+class StatusBuildup {
+
+public:
 
     //--- Public members ---
     
@@ -343,7 +347,9 @@ struct StatusBuildup {
 /**
  * @brief Instance of the cooldown of a status on a mob.
  */
-struct StatusCooldown {
+class StatusCooldown {
+
+public:
 
     //--- Public members ---
     
@@ -370,7 +376,9 @@ struct StatusCooldown {
  * with what statuses should be activated and deactivated, buildups, and
  * cooldowns. Anything more mob-centric is not handled here.
  */
-struct StatusManager {
+class StatusManager {
+
+public:
 
     //--- Public function declarations ---
     

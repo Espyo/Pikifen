@@ -157,7 +157,9 @@ public:
  *
  * Read the sector type manager's comments for more info.
  */
-struct CategoryManager {
+class CategoryManager {
+
+public:
 
     //--- Public function declarations ---
     

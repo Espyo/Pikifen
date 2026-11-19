@@ -27,7 +27,7 @@ using std::vector;
 #pragma region Constants
 
 
-struct MakerTools;
+class MakerTools;
 
 
 //List of maker tools.
@@ -211,7 +211,9 @@ typedef bool (MakerToolTypeCode)(MakerTools& mgr, const vector<string>& args);
 /**
  * @brief Information about a type of maker tool.
  */
-struct MakerToolType {
+class MakerToolType {
+
+public:
 
     //--- Public members ---
     
@@ -242,11 +244,15 @@ struct MakerToolType {
 /**
  * @brief Manager of all of the maker tools.
  */
-struct MakerTools {
+class MakerTools {
+
+public:
 
     //--- Public misc. definitions ---
     
     struct AreaImageSettings {
+
+    public:
     
         //Padding around the actual area, in area pixels. Each side
         //of the area receives these many pixels divided by two.

@@ -22,7 +22,9 @@ using std::string;
  * @brief Represents the non-interactive display that shows up at the top of
  * the screen, allowing makers to debug their content.
  */
-struct MakerDisplay {
+class MakerDisplay {
+
+public:
 
     //--- Public function declarations ---
     

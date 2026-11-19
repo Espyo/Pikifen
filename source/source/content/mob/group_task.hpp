@@ -31,6 +31,8 @@ public:
      * @brief Info about a spot.
      */
     struct GroupTaskSpot {
+
+    public:
     
         //--- Public members ---
         

@@ -26,7 +26,7 @@ using std::vector;
 
 
 class Mob;
-struct Viewport;
+class Viewport;
 
 
 #pragma region Constants
@@ -119,7 +119,7 @@ enum PARTICLE_BLEND_TYPE {
  * @brief A description of how a particle
  * generator should emit particles.
  */
-struct ParticleEmission {
+class ParticleEmission {
 
     public:
     
@@ -178,7 +178,9 @@ struct ParticleEmission {
  * There are several different types, which
  * change the way they look, how they behave over time, etc.
  */
-struct Particle {
+class Particle {
+
+public:
 
     //--- Public members ---
     
@@ -266,7 +268,9 @@ struct Particle {
 /**
  * @brief Manages a list of particles, allows the addition of new ones, etc.
  */
-struct ParticleManager {
+class ParticleManager {
+
+public:
 
     //--- Public members ---
     
@@ -320,7 +324,9 @@ struct ParticleManager {
  * @brief Base class for the particle generator.
  * A particle generator creates particles in a steady flow and/or in a pattern.
  */
-struct ParticleGenerator : public Content {
+class ParticleGenerator : public Content {
+
+public:
 
     //--- Public members ---
     

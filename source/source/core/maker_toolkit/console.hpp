@@ -50,7 +50,9 @@ extern const float VISIBILITY_CHANGE_SPEED;
  * @brief Represents the interactive terminal portion of the maker toolkit
  * console. Users can use this to write commands and see previous outputs.
  */
-struct MakerConsoleTerminal {
+class MakerConsoleTerminal {
+
+public:
 
     //--- Public function declarations ---
     
@@ -139,7 +141,9 @@ struct MakerConsoleTerminal {
  * any important warnings, errors, or other outputs, informing the user
  * to open the terminal for more information.
  */
-struct MakerConsoleNotifier {
+class MakerConsoleNotifier {
+
+public:
 
     //--- Public function declarations ---
     
@@ -178,7 +182,9 @@ struct MakerConsoleNotifier {
  * @brief Represents the interactive console that shows up at the top of
  * the screen, allowing makers to debug their content.
  */
-struct MakerConsole {
+class MakerConsole {
+
+public:
 
     //--- Public function declarations ---
     

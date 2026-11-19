@@ -23,12 +23,14 @@ class PikminType;
  * @brief Info about an event involving two mobs.
  *
  * When processing inter-mob events, we want the mob to follow them from the
- * closest mob to the one farthest away. As such, this struct saves data on
+ * closest mob to the one farthest away. As such, this object saves data on
  * a viable mob, its distance, and the corresponding event.
  * We can then go through a vector of these pending intermob events in order.
  *
  */
-struct PendingInterMobEvent {
+class PendingInterMobEvent {
+
+public:
 
     //--- Public members ---
     

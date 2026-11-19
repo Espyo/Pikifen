@@ -81,7 +81,9 @@ enum PAUSE_MENU_PAGE {
  * the player.
  *
  */
-struct PauseMenu {
+class PauseMenu {
+
+public:
 
     //--- Public misc. declarations ---
     
@@ -123,7 +125,7 @@ struct PauseMenu {
     //Time left until the menu finishes closing.
     float closingTimer = 0.0f;
     
-    //Is the struct meant to be deleted?
+    //Is the object meant to be deleted?
     bool toDelete = false;
     
     

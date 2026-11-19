@@ -5,7 +5,7 @@
  * Pikmin is copyright (c) Nintendo.
  *
  * === FILE DESCRIPTION ===
- * Header for the help menu struct and related functions.
+ * Header for the help menu object and related functions.
  */
 
 #pragma once
@@ -78,6 +78,8 @@ private:
      * @brief One of the help menu's tidbits.
      */
     struct Tidbit {
+
+    public:
     
         //--- Public members ---
         

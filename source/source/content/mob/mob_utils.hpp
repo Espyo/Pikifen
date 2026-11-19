@@ -46,12 +46,14 @@ using std::vector;
 
 
 class Mob;
-struct MobGen;
+class MobGen;
 
 /**
  * @brief Info on a carrying spot around a mob's perimeter.
  */
-struct CarrierSpot {
+class CarrierSpot {
+
+public:
 
     //--- Public members ---
     
@@ -75,11 +77,13 @@ struct CarrierSpot {
 /**
  * @brief Info on how the mob should be carried.
  */
-struct CarryInfo {
+class CarryInfo {
+
+public:
 
     //--- Public members ---
     
-    //Mob that this struct belongs to.
+    //Mob that this info belongs to.
     Mob* m = nullptr;
     
     //Generic type of delivery destination.
@@ -136,7 +140,9 @@ struct CarryInfo {
 /**
  * @brief Info on what point the mob is chasing after.
  */
-struct ChaseInfo {
+class ChaseInfo {
+
+public:
 
     //--- Public members ---
     
@@ -180,11 +186,13 @@ struct ChaseInfo {
  * @brief Info about what mob or point that this mob is circling around,
  * if any.
  */
-struct CirclingInfo {
+class CirclingInfo {
+
+public:
 
     //--- Public members ---
     
-    //Mob that this struct belongs to.
+    //Mob that this info belongs to.
     Mob* m = nullptr;
     
     //Mob that it is circling.
@@ -219,7 +227,9 @@ struct CirclingInfo {
 /**
  * @brief Info on a mob that's being delivered to an Onion, ship, etc.
  */
-struct DeliveryInfo {
+class DeliveryInfo {
+
+public:
 
     //--- Public members ---
     
@@ -255,7 +265,9 @@ struct DeliveryInfo {
  * and the location and info of the spots in the
  * circle, when the members are following the mob.
  */
-struct Group {
+class Group {
+
+public:
 
     //--- Public misc. declarations ---
     
@@ -277,6 +289,8 @@ struct Group {
      * @brief A spot in the group.
      */
     struct GroupSpot {
+
+    public:
     
         //--- Public members ---
         
@@ -346,7 +360,9 @@ struct Group {
 /**
  * @brief Info about how two hitboxes interacted.
  */
-struct HitboxInteraction {
+class HitboxInteraction {
+
+public:
 
     //--- Public members ---
     
@@ -374,7 +390,9 @@ struct HitboxInteraction {
  * @brief Info about how this mob is currently being held by
  * another, if it is.
  */
-struct HoldInfo {
+class HoldInfo {
+
+public:
 
     //--- Public members ---
     
@@ -438,7 +456,9 @@ class ShipType;
 /**
  * @brief Lists of all mobs in the area.
  */
-struct MobLists {
+class MobLists {
+
+public:
 
     //--- Public members ---
     
@@ -511,7 +531,9 @@ struct MobLists {
 /**
  * @brief Lists of all mob types.
  */
-struct MobTypeLists {
+class MobTypeLists {
+
+public:
 
     //--- Public members ---
     
@@ -581,7 +603,9 @@ struct MobTypeLists {
 /**
  * @brief Info about this mob's parent, if any.
  */
-struct Parent {
+class Parent {
+
+public:
 
     //--- Public members ---
     
@@ -639,11 +663,13 @@ struct Parent {
  * @brief Info on how to travel through the path graph that
  * the mob currently intends to travel.
  */
-struct Path {
+class Path {
+
+public:
 
     //--- Public members ---
     
-    //Mob that this struct belongs to.
+    //Mob that this info belongs to.
     Mob* m = nullptr;
     
     //Path to take the mob to while being carried.
@@ -680,7 +706,9 @@ struct Path {
  * @brief Info that a mob type may have about how to nest Pikmin inside,
  * like an Onion or a ship.
  */
-struct PikminNestType {
+class PikminNestType {
+
+public:
 
     //--- Public members ---
     
@@ -728,7 +756,9 @@ struct PikminNestType {
  * @brief Info that a mob may have about how to nest Pikmin inside,
  * like an Onion or a ship.
  */
-struct PikminNest {
+class PikminNest {
+
+public:
 
     //--- Public members ---
     
@@ -774,7 +804,9 @@ struct PikminNest {
  * @brief Info about the track mob that a mob is currently
  * riding. Includes things like current progress.
  */
-struct TrackRideInfo {
+class TrackRideInfo {
+
+public:
 
     //--- Public members ---
     

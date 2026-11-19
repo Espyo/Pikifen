@@ -116,6 +116,8 @@ private:
     TransformationWidget curTransformationWidget;
     
     struct {
+
+    public:
     
         //Selected pack.
         string pack;

@@ -1251,7 +1251,7 @@ void MouseCursor::updatePos(const ALLEGRO_EVENT& ev) {
 
 
 /**
- * @brief Constructs a new performance monitor struct object.
+ * @brief Constructs a new performance monitor object.
  */
 PerformanceMonitor::PerformanceMonitor() :
     curState(PERF_MON_STATE_LOADING),
@@ -3002,7 +3002,7 @@ void Viewport::updateWorldCorners() {
 
 
 /**
- * @brief Constructs a new whistle struct object.
+ * @brief Constructs a new whistle object.
  */
 Whistle::Whistle() {
     dotRadius[0] = -1;

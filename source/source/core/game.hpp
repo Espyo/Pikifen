@@ -56,7 +56,9 @@ extern const size_t MAX_CONSECUTIVE_SCRIPT_ACTIONS;
 /**
  * @brief List of all game states.
  */
-struct GameStateList {
+class GameStateList {
+
+public:
 
     //--- Public members ---
     
@@ -271,6 +273,8 @@ public:
     
     //Data for when the quick play feature is used in an editor.
     struct {
+
+    public:
     
         //--- Public members ---
         
@@ -293,6 +297,8 @@ public:
     
     //Engine debugging tools.
     struct {
+
+    public:
     
         //--- Public members ---
         

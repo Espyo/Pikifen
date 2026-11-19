@@ -4331,8 +4331,8 @@ void PikminFsm::startBoredomAnim(ScriptVM* scriptVM, void* info1, void* info2) {
  * (or the group spot belonging to the leader).
  *
  * @param scriptVM The script VM responsible.
- * @param info1 Points to the position struct with the final destination.
- *   If nullptr, the final destination is calculated in this function.
+ * @param info1 Points to the position object with the final destination.
+ * If nullptr, the final destination is calculated in this function.
  * @param info2 Unused.
  */
 void PikminFsm::startChasingLeader(
@@ -5020,8 +5020,8 @@ void PikminFsm::unlatch(ScriptVM* scriptVM, void* info1, void* info2) {
  * @brief When the Pikmin should update its destination when chasing the leader.
  *
  * @param scriptVM The script VM responsible.
- * @param info1 Points to the position struct with the final destination.
- *   If nullptr, the final destination is calculated in this function.
+ * @param info1 Points to the position object with the final destination.
+ * If nullptr, the final destination is calculated in this function.
  * @param info2 Unused.
  */
 void PikminFsm::updateInGroupChasing(
