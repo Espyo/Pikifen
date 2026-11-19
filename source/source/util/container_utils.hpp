@@ -18,6 +18,59 @@ using std::vector;
 
 
 /**
+ * @brief Shorthand for returning the iterator of an item in a container.
+ *
+ * @tparam ContainerT Type of container.
+ * @tparam ContentT Type of contents of the container.
+ * @param cont The container.
+ * @param item Item to check.
+ * @return Its iterator.
+ */
+template<typename ContainerT, typename ContentT>
+typename ContainerT::const_iterator findInContainer(
+    const ContainerT& cont, const ContentT& item
+) {
+    return std::find(cont.begin(), cont.end(), item);
+}
+
+
+/**
+ * @brief Shorthand for returning the iterator of an item that
+ * matches a comparison predicate in a container.
+ *
+ * @tparam ContainerT Type of container.
+ * @tparam PredicateT Type of the predicate.
+ * @param cont The container.
+ * @param item Item to check.
+ * @return Its iterator.
+ */
+template<typename ContainerT, typename PredicateT>
+typename ContainerT::iterator findInContainerIf(
+    ContainerT& cont, const PredicateT& pred
+) {
+    return std::find_if(cont.begin(), cont.end(), pred);
+}
+
+
+/**
+ * @brief Shorthand for returning the iterator of an item that
+ * matches a comparison predicate in a container.
+ *
+ * @tparam ContainerT Type of container.
+ * @tparam PredicateT Type of the predicate.
+ * @param cont The container.
+ * @param item Item to check.
+ * @return Its iterator.
+ */
+template<typename ContainerT, typename PredicateT>
+typename ContainerT::const_iterator findInContainerIf(
+    const ContainerT& cont, const PredicateT& pred
+) {
+    return std::find_if(cont.begin(), cont.end(), pred);
+}
+
+
+/**
  * @brief Shorthand for figuring out if a given item is in a container.
  *
  * @tparam ContainerT Type of container.
@@ -29,6 +82,24 @@ using std::vector;
 template<typename ContainerT, typename ContentT>
 bool isInContainer(const ContainerT& cont, const ContentT& item) {
     return std::find(cont.begin(), cont.end(), item) != cont.end();
+}
+
+
+/**
+ * @brief Shorthand for figuring out if a given item that
+ * matches a comparison predicate is in a container.
+ *
+ * @tparam ContainerT Type of container.
+ * @tparam PredicateT Type of the predicate.
+ * @param cont The container.
+ * @param item Item to check.
+ * @return Its iterator.
+ */
+template<typename ContainerT, typename PredicateT>
+bool isInContainerIf(
+    const ContainerT& cont, const PredicateT& pred
+) {
+    return std::find_if(cont.begin(), cont.end(), pred) != cont.end();
 }
 
 

@@ -290,10 +290,7 @@ void PauseMenu::addNewPageItems(
     PAUSE_MENU_PAGE curPage, GuiManager* curGui
 ) {
     size_t curPageIdx =
-        std::distance(
-            pages.begin(),
-            std::find(pages.begin(), pages.end(), curPage)
-        );
+        std::distance(pages.cbegin(), findInContainer(pages, curPage));
     size_t leftPageIdx = sumAndWrap((int) curPageIdx, -1, (int) pages.size());
     size_t rightPageIdx = sumAndWrap((int) curPageIdx, 1, (int) pages.size());
     

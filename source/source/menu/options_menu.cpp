@@ -2075,8 +2075,8 @@ void OptionsMenu::updateBindWarnings() {
         const PlayerActionType& actionType = actionTypes[a];
         if(!actionType.recommended) continue;
         const auto it =
-            std::find_if(
-                binds.begin(), binds.end(),
+            findInContainerIf(
+                binds,
         [actionType] (const Inpution::Bind & b) {
             return b.actionTypeId == actionType.id;
         }

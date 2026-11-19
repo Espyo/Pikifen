@@ -1020,7 +1020,7 @@ void AreaEditor::handleLmbDownMobs(const ALLEGRO_EVENT& ev) {
                     curMobGroupIdx
                 ].mobIdxs;
             registerChange("mission mob group choice change");
-            auto it = std::find(listRef.begin(), listRef.end(), clickedMobIdx);
+            auto it = findInContainer(listRef, clickedMobIdx);
             if(it == listRef.end()) {
                 listRef.push_back(clickedMobIdx);
             } else {

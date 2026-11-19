@@ -2107,7 +2107,7 @@ size_t MissionMobGroupStatus::getNrCleared() const {
  * @return Whether the mob is in the list.
  */
 bool MissionMobGroupStatus::remove(Mob* m) {
-    auto it = std::find(remaining.begin(), remaining.end(), m);
+    auto it = findInContainer(remaining, m);
     if(it == remaining.end()) {
         return false;
     }

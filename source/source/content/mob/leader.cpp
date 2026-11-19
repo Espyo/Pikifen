@@ -505,8 +505,8 @@ void Leader::dismissLogic(bool forceDismissAll) {
     //there will be a gap where that group would go, and dismissing again
     //will place those Pikmin in that missing group's place.
     auto firstSubgroup =
-        std::find_if(
-            subgroupsInfo.begin(), subgroupsInfo.end(),
+        findInContainerIf(
+            subgroupsInfo,
     [this] (const auto & s) -> bool {
         return s.type == this->group->curStandbyType;
     }

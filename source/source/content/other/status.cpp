@@ -105,8 +105,8 @@ Status* StatusManager::activate(StatusType* statusType) {
 bool StatusManager::applyBuildup(StatusType* statusType, float overrideAmount) {
     //Add it to the buildup list if it's not already there.
     auto buildupIt =
-        std::find_if(
-            buildups.begin(), buildups.end(),
+        findInContainerIf(
+            buildups,
     [statusType] (const StatusBuildup & s) {
         return s.type == statusType;
     }

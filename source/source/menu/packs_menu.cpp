@@ -195,10 +195,7 @@ void PacksMenu::initGuiMain() {
             check->defActivateCode();
             if(check->value) {
                 packsDisabled.erase(
-                    std::find(
-                        packsDisabled.begin(), packsDisabled.end(),
-                        packOrder[p]
-                    )
+                    findInContainer(packsDisabled, packOrder[p])
                 );
             } else {
                 packsDisabled.push_back(packOrder[p]);

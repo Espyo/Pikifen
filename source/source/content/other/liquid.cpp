@@ -342,14 +342,7 @@ void Liquid::tick(float deltaT) {
         Mob* mPtr = freezeCaughtMobs[m];
         
         bool mustRemove = false;
-        const auto it =
-            std::find(
-                game.states.gameplay->mobs.all.begin(),
-                game.states.gameplay->mobs.all.end(),
-                mPtr
-            );
-            
-        if(it == game.states.gameplay->mobs.all.end()) {
+        if(!isInContainer(game.states.gameplay->mobs.all, mPtr)) {
             mustRemove = true;
         }
         if(mPtr->health <= 0.0f) {
