@@ -504,6 +504,10 @@ void MakerConsoleTerminal::browseCommandHistory(int offset) {
  * @param offset Offset compared to the currently focused suggestion.
  */
 void MakerConsoleTerminal::browseSuggestions(int offset) {
+    if(suggestions.empty()) {
+        focusedSuggestionIdx = 0;
+        return;
+    }
     int newIdxInt = focusedSuggestionIdx + offset;
     newIdxInt = std::clamp(newIdxInt, 0, (int) suggestions.size() - 1);
     focusedSuggestionIdx = newIdxInt;
