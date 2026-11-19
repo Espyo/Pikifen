@@ -532,7 +532,7 @@ struct Timer {
 };
 
 
-bool adjustMisalignedIndex(
+bool adjustMisalignedIdx(
     size_t& idxToAlign, size_t changedItemIdx, bool addition
 );
 string incrementNameTillUnique(

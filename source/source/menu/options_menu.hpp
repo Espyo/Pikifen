@@ -365,8 +365,8 @@ private:
         const string& name, const string& internalName, GuiItem** itemToFocus,
         const ALLEGRO_COLOR& textColor = COLOR_WHITE
     );
-    void addNewShortcutItems(unsigned char index);
-    void drawShortcutName(const GuiItem::DrawInfo& draw, unsigned char index);
+    void addNewShortcutItems(unsigned char idx);
+    void drawShortcutName(const GuiItem::DrawInfo& draw, unsigned char idx);
     void initGuiAudioPage();
     void initGuiControlsPage();
     void initGuiControlBindsPage();

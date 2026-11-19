@@ -4103,7 +4103,7 @@ void AreaEditor::processGuiPanelMissionMobGroups() {
                     continue;
                 }
                 if(ePtr->idxParam == 0) continue;
-                adjustMisalignedIndex(
+                adjustMisalignedIdx(
                     ePtr->idxParam, prevCurMobGroupIdx, true
                 );
             }
@@ -4138,7 +4138,7 @@ void AreaEditor::processGuiPanelMissionMobGroups() {
                         continue;
                     }
                     if(ePtr->idxParam == 0) continue;
-                    adjustMisalignedIndex(
+                    adjustMisalignedIdx(
                         ePtr->idxParam, prevCurMobGroupIdx, false
                     );
                 }

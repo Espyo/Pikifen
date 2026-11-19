@@ -37,7 +37,7 @@ struct InventoryItemInstance {
     //--- Public members ---
     
     //Index of the item in the database of inventory items.
-    size_t dbIndex = INVALID;
+    size_t dbIdx = INVALID;
     
     //GUI button.
     ButtonGuiItem* button = nullptr;

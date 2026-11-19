@@ -1310,12 +1310,12 @@ void ScriptActionRunners::getMissionMetric(ScriptActionInstRunData& data) {
     }
     
     MissionMetricType* metricTypePtr = game.missionMetricTypes[metric];
-    size_t indexParam = s2i(numberArg) - 1;
+    size_t idxParam = s2i(numberArg) - 1;
     
     if(s2b(getAutoTargetArg)) {
-        result = i2s(metricTypePtr->getTarget(indexParam, INVALID));
+        result = i2s(metricTypePtr->getTarget(idxParam, INVALID));
     } else {
-        result = i2s(metricTypePtr->getAmount(indexParam));
+        result = i2s(metricTypePtr->getAmount(idxParam));
     }
     
     //Store the result.

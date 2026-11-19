@@ -544,7 +544,7 @@ void AreaEditor::deleteSelectedMobs() {
                     eraseInVector(m2Ptr->links, l);
                     eraseInVector(m2Ptr->linkIdxs, l);
                 } else {
-                    adjustMisalignedIndex(
+                    adjustMisalignedIdx(
                         m2Ptr->linkIdxs[l], mobIdxToDelete, false
                     );
                     l++;
@@ -555,7 +555,7 @@ void AreaEditor::deleteSelectedMobs() {
                 if(m2Ptr->storedInside == mobIdxToDelete) {
                     m2Ptr->storedInside = INVALID;
                 } else {
-                    adjustMisalignedIndex(
+                    adjustMisalignedIdx(
                         m2Ptr->storedInside, mobIdxToDelete, false
                     );
                 }
@@ -569,7 +569,7 @@ void AreaEditor::deleteSelectedMobs() {
                 if(cPtr->mobIdxs[m] == mobIdxToDelete) {
                     eraseInVector(cPtr->mobIdxs, m);
                 } else {
-                    adjustMisalignedIndex(
+                    adjustMisalignedIdx(
                         cPtr->mobIdxs[m], mobIdxToDelete, false
                     );
                     m++;
@@ -584,7 +584,7 @@ void AreaEditor::deleteSelectedMobs() {
         //Adjust the indexes of the next ones to process.
         mobIdxsToDelete.erase(mobIdxsToDelete.begin());
         forIdx(m, mobIdxsToDelete) {
-            adjustMisalignedIndex(mobIdxsToDelete[m], mobIdxToDelete, false);
+            adjustMisalignedIdx(mobIdxsToDelete[m], mobIdxToDelete, false);
         }
     }
 }
@@ -615,7 +615,7 @@ void AreaEditor::deleteSelectedPathLinks() {
         //Adjust the indexes of the next ones to process.
         linksIdxsToDelete.erase(linksIdxsToDelete.begin());
         forIdx(l, linksIdxsToDelete) {
-            adjustMisalignedIndex(linksIdxsToDelete[l], linkIdxToDelete, false);
+            adjustMisalignedIdx(linksIdxsToDelete[l], linkIdxToDelete, false);
         }
     }
 }
@@ -646,7 +646,7 @@ void AreaEditor::deleteSelectedPathStops() {
         //Adjust the indexes of the next ones to process.
         stopIdxsToDelete.erase(stopIdxsToDelete.begin());
         forIdx(s, stopIdxsToDelete) {
-            adjustMisalignedIndex(stopIdxsToDelete[s], stopIdxToDelete, false);
+            adjustMisalignedIdx(stopIdxsToDelete[s], stopIdxToDelete, false);
         }
     }
 }
@@ -672,7 +672,7 @@ void AreaEditor::deleteSelectedRegions() {
                 continue;
             }
             if(ePtr->idxParam == 0) continue;
-            adjustMisalignedIndex(
+            adjustMisalignedIdx(
                 ePtr->idxParam, regionIdxToDelete, false
             );
         }
@@ -684,7 +684,7 @@ void AreaEditor::deleteSelectedRegions() {
         //Adjust the indexes of the next ones to process.
         regionIdxsToDelete.erase(regionIdxsToDelete.begin());
         forIdx(r, regionIdxsToDelete) {
-            adjustMisalignedIndex(
+            adjustMisalignedIdx(
                 regionIdxsToDelete[r], regionIdxToDelete, false
             );
         }
@@ -711,7 +711,7 @@ void AreaEditor::deleteSelectedTreeShadows() {
         //Adjust the indexes of the next ones to process.
         shadowIdxsToDelete.erase(shadowIdxsToDelete.begin());
         forIdx(s, shadowIdxsToDelete) {
-            adjustMisalignedIndex(
+            adjustMisalignedIdx(
                 shadowIdxsToDelete[s], shadowIdxToDelete, false
             );
         }

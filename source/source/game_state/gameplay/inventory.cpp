@@ -53,7 +53,7 @@ Inventory::Inventory(Player* player) :
     
     for(size_t i = 0; i < game.inventoryItems.getAmount(); i++) {
         InventoryItemInstance item;
-        item.dbIndex = i;
+        item.dbIdx = i;
         items.push_back(item);
     }
     
@@ -80,7 +80,7 @@ Inventory::~Inventory() {
 bool Inventory::canUseItem(InventoryItemInstance* iiPtr) {
     if(!player->leaderPtr) return false;
     
-    InventoryItem* iPtr = game.inventoryItems.getByIndex(iiPtr->dbIndex);
+    InventoryItem* iPtr = game.inventoryItems.getByIdx(iiPtr->dbIdx);
     if(!iPtr->onUse) return false;
     if(iPtr->onGetAmount) {
         if(iPtr->onGetAmount(player) == 0) return false;
@@ -172,7 +172,7 @@ void Inventory::initGui() {
     [this] (const DrawInfo & draw) {
         if(focusedItemIdx == INVALID) return;
         InventoryItemInstance* iiPtr = &items[focusedItemIdx];
-        InventoryItem* iPtr = game.inventoryItems.getByIndex(iiPtr->dbIndex);
+        InventoryItem* iPtr = game.inventoryItems.getByIdx(iiPtr->dbIdx);
         string progressText;
         if(iPtr->onGetExtraInfo) {
             progressText = iPtr->onGetExtraInfo(player);
@@ -266,7 +266,7 @@ void Inventory::populateInventoryListGui() {
     
     forIdx(i, items) {
         InventoryItemInstance* iiPtr = &items[i];
-        InventoryItem* iPtr = game.inventoryItems.getByIndex(iiPtr->dbIndex);
+        InventoryItem* iPtr = game.inventoryItems.getByIdx(iiPtr->dbIdx);
         
         //Item button.
         ButtonGuiItem* button =
@@ -379,7 +379,7 @@ void Inventory::tick(float deltaT) {
  */
 bool Inventory::tryUseItem(size_t itemIdx) {
     InventoryItemInstance* iiPtr = &items[itemIdx];
-    InventoryItem* iPtr = game.inventoryItems.getByIndex(iiPtr->dbIndex);
+    InventoryItem* iPtr = game.inventoryItems.getByIdx(iiPtr->dbIdx);
     if(canUseItem(iiPtr)) {
         iPtr->onUse(player);
         return true;
@@ -408,7 +408,7 @@ void Inventory::update() {
 bool Inventory::useShortcut(const string& itemInternalName) {
     forIdx(i, items) {
         InventoryItemInstance* iiPtr = &items[i];
-        InventoryItem* iPtr = game.inventoryItems.getByIndex(iiPtr->dbIndex);
+        InventoryItem* iPtr = game.inventoryItems.getByIdx(iiPtr->dbIdx);
         if(iPtr->iName == itemInternalName) {
             return tryUseItem(i);
         }

@@ -1576,7 +1576,7 @@ void AnimationEditor::processGuiPanelFrameHeader(Frame*& framePtr) {
         )
     ) {
         animPlaying = false;
-        adjustMisalignedIndex(
+        adjustMisalignedIdx(
             curAnimInst.curAnim->loopFrame, prevCurFrameIdx, true
         );
         insertCopyInVector(

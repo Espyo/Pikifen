@@ -552,7 +552,7 @@ void Area::deleteEdge(size_t eIdx) {
         Vertex* vPtr = vertexes[v];
         forIdx(e, vPtr->edges) {
             if(vPtr->edgeIdxs[e] == INVALID) continue;
-            adjustMisalignedIndex(
+            adjustMisalignedIdx(
                 vPtr->edgeIdxs[e], eIdx, false
             );
         }
@@ -562,7 +562,7 @@ void Area::deleteEdge(size_t eIdx) {
         Sector* sPtr = sectors[s];
         forIdx(e, sPtr->edges) {
             if(sPtr->edgeIdxs[e] == INVALID) continue;
-            adjustMisalignedIndex(
+            adjustMisalignedIdx(
                 sPtr->edgeIdxs[e], eIdx, false
             );
         }
@@ -598,7 +598,7 @@ void Area::deleteSector(size_t sIdx) {
         Edge* ePtr = edges[e];
         for(size_t s = 0; s < 2; s++) {
             if(ePtr->sectorIdxs[s] == INVALID) continue;
-            adjustMisalignedIndex(
+            adjustMisalignedIdx(
                 ePtr->sectorIdxs[s], sIdx, false
             );
         }
@@ -634,7 +634,7 @@ void Area::deleteVertex(size_t vIdx) {
         Edge* ePtr = edges[e];
         for(size_t v = 0; v < 2; v++) {
             if(ePtr->vertexIdxs[v] == INVALID) continue;
-            adjustMisalignedIndex(
+            adjustMisalignedIdx(
                 ePtr->vertexIdxs[v], vIdx, false
             );
         }

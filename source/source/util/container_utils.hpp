@@ -42,7 +42,7 @@ bool isInContainer(const ContainerT& cont, const ContentT& item) {
  * @param v The vector.
  */
 template<typename IdxContainerT, typename ContentT>
-void eraseIndexesInVector(const IdxContainerT& idxs, vector<ContentT>& v) {
+void eraseIdxsInVector(const IdxContainerT& idxs, vector<ContentT>& v) {
     //First, get the list of indexes in vector format.
     vector<size_t> idxsV;
     for(auto i : idxs) {

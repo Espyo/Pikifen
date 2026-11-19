@@ -527,24 +527,24 @@ void OptionsMenu::addNewShortcutItemItems(
  * @brief Creates and adds the label and button for a shortcut in the inventory
  * item shortcuts menu.
  *
- * @param index Index of the shortcut.
+ * @param idx Index of the shortcut.
  */
-void OptionsMenu::addNewShortcutItems(unsigned char index) {
-    string shortcutLetter = string(1, 'a' + index);
+void OptionsMenu::addNewShortcutItems(unsigned char idx) {
+    string shortcutLetter = string(1, 'a' + idx);
     
     //Label text.
     GuiItem* text = new GuiItem();
     text->onDrawP =
-    [this, index] (const DrawInfo & draw) {
-        drawShortcutName(draw, index);
+    [this, idx] (const DrawInfo & draw) {
+        drawShortcutName(draw, idx);
     };
     shortcutsGui.addItem(text, "shortcut_" + shortcutLetter + "_label");
     
     //Assignment button.
     ButtonGuiItem* button = new ButtonGuiItem("", game.sysContent.fntStandard);
     button->onActivate =
-    [this, index] (float, float) {
-        curShortcutIdx = index;
+    [this, idx] (float, float) {
+        curShortcutIdx = idx;
         updateShortcutsPage();
     };
     button->onGetTooltip =
@@ -647,14 +647,14 @@ void OptionsMenu::draw() {
  * @brief Draws the text necessary for a shortcut, its name, and current input.
  *
  * @param draw Draw information.
- * @param index Shortcut index.
+ * @param idx Shortcut index.
  */
-void OptionsMenu::drawShortcutName(const DrawInfo& draw, unsigned char index) {
+void OptionsMenu::drawShortcutName(const DrawInfo& draw, unsigned char idx) {
     string text =
         "Shortcut " +
-        string(1, 'A' + index) +
+        string(1, 'A' + idx) +
         " (\\k inventory_shortcut_" +
-        string(1, 'a' + index) +
+        string(1, 'a' + idx) +
         " \\k)";
         
     int lineHeight = al_get_font_line_height(game.sysContent.fntSlim);
@@ -1938,7 +1938,7 @@ void OptionsMenu::populateShortcutItems() {
     );
     
     for(size_t i = 0; i < game.inventoryItems.getAmount(); i++) {
-        InventoryItem* iPtr = game.inventoryItems.getByIndex(i);
+        InventoryItem* iPtr = game.inventoryItems.getByIdx(i);
         addNewShortcutItemItems(
             iPtr->name, iPtr->iName, &itemToFocus
         );

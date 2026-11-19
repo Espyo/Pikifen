@@ -385,7 +385,7 @@ void GuiEditor::deleteSelectedItems() {
         //Adjust the indexes of the next ones to process.
         itemIdxsToDelete.erase(itemIdxsToDelete.begin());
         forIdx(i, itemIdxsToDelete) {
-            adjustMisalignedIndex(
+            adjustMisalignedIdx(
                 itemIdxsToDelete[i], itemIdxToDelete, false
             );
         }

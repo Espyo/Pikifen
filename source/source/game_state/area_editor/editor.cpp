@@ -1502,7 +1502,7 @@ void AreaEditor::deleteReminderCmd(float inputValue) {
     size_t nDeletions = reminderSelection.getCount();
     
     //Delete!
-    eraseIndexesInVector(
+    eraseIdxsInVector(
         reminderSelection.getItemIdxs(), game.curArea->reminders
     );
     

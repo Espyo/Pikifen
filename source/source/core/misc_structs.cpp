@@ -972,12 +972,12 @@ InventoryItem* InventoryItemDatabase::getByIName(const string& iName) {
 /**
  * @brief Returns an item, given its index.
  *
- * @param index The index.
+ * @param idx The index.
  * @return The item, or nullptr if not found.
  */
-InventoryItem* InventoryItemDatabase::getByIndex(size_t index) {
-    if(index >= items.size()) return nullptr;
-    return &items[index];
+InventoryItem* InventoryItemDatabase::getByIdx(size_t idx) {
+    if(idx >= items.size()) return nullptr;
+    return &items[idx];
 }
 
 

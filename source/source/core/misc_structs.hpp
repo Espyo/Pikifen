@@ -533,7 +533,7 @@ struct InventoryItemDatabase {
     void init();
     void clear();
     size_t getAmount() const;
-    InventoryItem* getByIndex(size_t index);
+    InventoryItem* getByIdx(size_t idx);
     InventoryItem* getByIName(const string& iName);
     
     

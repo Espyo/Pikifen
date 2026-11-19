@@ -310,7 +310,7 @@ void Timer::tick(float deltaT) {
  * @param addition True for a new index addition, false for a removal.
  * @return Whether the number changed.
  */
-bool adjustMisalignedIndex(
+bool adjustMisalignedIdx(
     size_t& idxToAlign, size_t changedItemIdx, bool addition
 ) {
     if(addition) {
